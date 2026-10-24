@@ -1,0 +1,69 @@
+{
+  "frozen_sha": "c2c2ac1f10a3ed79633667af053ae114ca334ffe2d2e8562c12a711058a44922",
+  "driver_lifetimes": [
+    1.041,
+    0.52,
+    0.518,
+    0.52,
+    0.52
+  ],
+  "direct_lifetimes": [
+    3.049,
+    0.55,
+    0.547,
+    0.586,
+    0.541
+  ],
+  "stored_lifetimes": {
+    "a133b6ad": 4.138,
+    "58c19edd": 3.105,
+    "88be5b54": 3.09,
+    "0e0b0d9c": 2.559
+  },
+  "load_before": "3.59 4.07 4.47",
+  "load_after": "3.03 3.89 4.39",
+  "attempts": [
+    {
+      "name": "initial 2.0s",
+      "pixels": [
+        0.003,
+        0.0
+      ],
+      "alive_before": true,
+      "alive_after": true,
+      "pass_": false,
+      "note": "pixel-equivalent to contemporaneous desktop; Wine window already gone"
+    },
+    {
+      "name": "early 0.8s",
+      "pixels": null,
+      "alive_before": null,
+      "alive_after": null,
+      "pass_": false,
+      "note": "desktop-equivalent"
+    },
+    {
+      "name": "retimed 1.5s",
+      "pixels": [
+        0.007,
+        0.0
+      ],
+      "alive_before": true,
+      "alive_after": true,
+      "pass_": false,
+      "note": "process alive but no visible Wine window; desktop-equivalent"
+    },
+    {
+      "name": "retimed 2.0s",
+      "pixels": [
+        0.005,
+        0.0
+      ],
+      "alive_before": true,
+      "alive_after": true,
+      "pass_": false,
+      "note": "process alive but no on-screen Wine window; desktop-equivalent"
+    }
+  ],
+  "window_poll_note": "no on-screen wine/igi window; offscreen 500x500 wine window first at 2.1 s, screencapture -l failed; no 640x480 visible game window"
+}
