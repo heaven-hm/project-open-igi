@@ -574,3 +574,30 @@ New dependency named: `0x004C04B0`. Its size/blocks are not yet captured, so `0x
 therefore `0x4BAAC0` remain unwritable. Chain for the NodeCriteria path is now:
 `0x5186C0 -> 0x4B8810 -> 0x4BAAC0 -> {0x4B0D60 (landed), 0x4B0C60 (landed), 0x4AF960/0x4AF8F0
 (landed), 0x4C0560 -> 0x4C04B0 (missing), 0x4B8830 (missing)}`.
+
+### 0x4C04B0 decoded shape (128 B, 12 blocks) - bucket walk with inlined string compare
+
+```
+push ebx,ebp,esi,edi
+ebx = arg4              ; the value
+esi = arg2              ; the list object
+eax = [esi+4]           ; salt/bucket count
+call 0x004C0530(ebx, [esi+4])   ; hash(value, bucket count) -> eax
+edx = [esi]             ; bucket array
+ecx = eax*3             ; lea ecx,[eax+eax*2]
+ebp = [edx + ecx*4]     ; bucket node = array[3*index]
+edi = [ebp]             ; first entry
+if (!edi) -> 0x4C0512   ; empty bucket path
+esi = arg3              ; the search key string
+loop: byte-by-byte compare of ebx vs esi with NUL termination (retail inlines the strcmp here,
+      with 1-byte increments - it is NOT a call to a CRT routine)
+```
+
+So the node-record hash list is: `hash(value, bucket_count)` at `0x004C0530` selects a bucket
+from an array of 3-dword bucket descriptors, then a hand-inlined string comparison walks the
+chain. The `*3`/`*4` indexing means bucket stride is 12 bytes.
+
+New dependency named: `0x004C0530` (hash routine). Chain to the NodeCriteria path is now:
+`0x5186C0 -> 0x4B8810 -> 0x4BAAC0 -> 0x4C0560 -> 0x4C04B0 -> 0x4C0530`, with `0x4B8830` a
+separate callback body. All decoded leaves so far are small or one-call wrappers; the 12-block
+`0x4C04B0` is the first substantial member and needs its tail captured before transcription.
