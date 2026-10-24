@@ -80,20 +80,16 @@ int __stdcall Main(void* const h_instance, void* const h_previous_instance,
 #else
     HANDLE const mutex = ::CreateMutexA(nullptr, TRUE, "IGIMUTEX");
 #endif
-    bool refuse_second_instance = mutex == nullptr;
-    if (!refuse_second_instance && ::GetLastError() == ERROR_ALREADY_EXISTS)
-    {
-        refuse_second_instance = true;
-    }
-    if (!refuse_second_instance && ::GetLastError() == ERROR_INVALID_HANDLE)
-    {
-        refuse_second_instance = true;
-    }
-    if (refuse_second_instance)
+    // Retail 0x0048F559-0x0048F573: one GetLastError result is compared with
+    // 0xB7 (ERROR_ALREADY_EXISTS) and 0x6 (ERROR_INVALID_HANDLE); BOTH values
+    // jump to the fatal 0x48F8F0 path. The handle itself is not tested.
+    DWORD const last_error = ::GetLastError();
+    if (last_error == ERROR_ALREADY_EXISTS || last_error == ERROR_INVALID_HANDLE)
     {
         ::MessageBoxA(nullptr, "IGI is already running.", "Error", MB_ICONERROR);
         return 0;
     }
+    (void)mutex;
 
     // 0x0048F579 CoInitialize(NULL); 0x0048F57F GetForegroundWindow.
     (void)::CoInitialize(nullptr);
