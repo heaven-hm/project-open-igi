@@ -240,3 +240,23 @@ framing implied two rounds ago.
 `0x004F1950` with that, then copies `*container * 16` bytes from `container+8` to
 `result+8` using `rep movsd`/`rep movsb` with the same 4-byte/1-byte split retail uses.
 Its own callee `0x4F1950` is the next leaf to check.
+
+### 0x4F1950 decoded (41 B, 1 block) - allocation helper for 0x4F1980
+
+```
+esi = arg            ; element count
+eax = count << 4; eax += 12
+call 0x4B0C60(eax, 4)        ; cdecl: push 4, push (count*16+12) -> allocator
+eax[4] = count
+eax[0] = 0
+eax[8] = eax + 12            ; payload pointer stored in header
+ret
+```
+
+So the container is a 12-byte header {0, count, payload} plus `count*16` bytes of
+payload allocated through `0x4B0C60` with flags 4. That explains `0x4F1980`: it grows
+the container by `count`, reallocates through this helper and copies the old payload with
+`rep movsd`/`rep movsb` in retail's 4/1 split.
+
+Next dependency: `0x004B0C60` (allocator). If it is not in the tree, both `0x4F1950` and
+`0x4F1980` stay blocked and the allocator is the leaf to land first.
