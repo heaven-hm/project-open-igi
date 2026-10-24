@@ -519,17 +519,55 @@ std::uint32_t NATIVE_DECL QTask_LinkQTaskEventHandlerNoContextFn(
 
 // Native: QTask_LinkQTaskEventHandler; retail VA 0x00401400.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x00401400..0x0040148F.
-// Behavior/CFG: the context variant of the link native. It reads the context handler count at
-//           0x00567C6C instead of 0x00567C70, increments both counters, computes the handler table
-//           index as class_id + phase * 384, stores the handler at 0x00A96AE0 + index * 4 and the
-//           first-link flag at 0x0054FF34 + index.
-// Status/limits: STRUCTURALLY_VERIFIED; the index arithmetic and the two table writes are the
-//           retail's.
+// Tools/evidence: radare2 6.2.0 on retail IGI.EXE; VA 0x00401400..0x004014A3, decoded instruction by instruction.
+// Behavior/CFG: the context variant. Increments the context handler count at 0x00567C6C and the linked-handler counter at
+//           0x00536148; derives the phase stride from the LOW BYTE of the first argument (and eax,0xff at 0x00401417) while
+//           the table index uses its LOW WORD (and eax,0xffff at 0x00401430), so index = (arg1 & 0xffff) + (arg1 & 0xff) *
+//           0x180; stores the handler at 0x00A96AE0 + index*4 and the first-link byte ((count==1)?1:0) at
+//           0x0054FF34 + index; walks type records 0x00AF5EE8..0x00AFA6E8 stride 0x30 and, for each record whose +0x1D byte
+//           is set, whose first word equals the SECOND argument's word and whose flag at (arg1 & 0xff) * 0x180 + slot is
+//           clear, recurses with (slot, arg1, handler); then calls 0x004014B0, decrements 0x00567C6C and returns it.
+// Status/limits: TRANSCRIBED (full body, statically derived); runtime UNOBSERVED.
 std::uint32_t NATIVE_DECL QTask_LinkQTaskEventHandler(
     std::uint16_t event_id, std::uint32_t context, igi::retail::core::FrameHandler handler)
 {
-    return link_handler(event_id, context, handler, QTask_ContextHandlerCount);
+    const std::uint32_t count = ++QTask_ContextHandlerCount;                // 0x00401400/0x00401415/0x00401435
+    ++QTask_LinkedHandlerCounter;                                          // 0x0040140D/0x00401416/0x0040141C
+    const std::uint32_t phase =
+        static_cast<std::uint32_t>(event_id) & 0xFFU;                       // 0x00401413/0x00401417: phase from the LOW BYTE
+    const std::uint32_t index =
+        (static_cast<std::uint32_t>(event_id) & 0xFFFFU) + phase * 0x180U;  // 0x00401426/0x0040142D/0x00401430/0x0040143B
+    const std::uint8_t first_link = (count == 1U) ? 1U : 0U;                // 0x0040143D/0x00401440
+    QTask_HandlerTable[index] = handler;                                   // 0x00401444
+    QTask_FirstLinkFlag[index] = first_link;                               // 0x0040144B
+
+    std::uint8_t* record = reinterpret_cast<std::uint8_t*>(&QTask_TypeTable[0]) + 8U; // 0x00401453: edi = 0x00AF5EE8
+    std::uint8_t* const record_end =
+        reinterpret_cast<std::uint8_t*>(&QTask_TypeTable[0]) + 0x1C08U;    // 0x00401487: cmp edi, 0x00AFA6E8
+    std::uint32_t slot = 0;                                                // 0x00401451: ebx = 0
+    while (record < record_end)                                            // 0x0040148D: jl 0x00401458
+    {
+        if (record[0x1D] != 0U)                                            // 0x00401458/0x0040145B/0x0040145D
+        {
+            if (*reinterpret_cast<std::uint16_t*>(record) ==
+                static_cast<std::uint16_t>(context))                       // 0x0040145F/0x00401464/0x00401467
+            {
+                if (QTask_FirstLinkFlag[phase * 0x180U + slot] == 0U)       // 0x00401469/0x00401470/0x00401472
+                {
+                    QTask_LinkQTaskEventHandler(
+                        static_cast<std::uint16_t>(slot), event_id, handler);   // 0x00401478: push handler (arg3)
+                                                                               // 0x00401479: push ebp = arg1
+                                                                               // 0x0040147A: push ebx = slot
+                }
+            }
+        }
+        record += 0x30U;                                                   // 0x00401483: add edi, 0x30
+        ++slot;                                                            // 0x00401486: inc ebx
+    }
+
+    TaskType_RefreshHandlerMask();                                         // 0x0040148F: call 0x004014B0
+    --QTask_ContextHandlerCount;                                           // 0x00401494/0x0040149A/0x0040149D
+    return QTask_ContextHandlerCount;                                      // 0x004014A3: ret
 }
 
 // Native: QTask_GetCurrentType; retail VA 0x004018F0.
