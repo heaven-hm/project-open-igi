@@ -13,4 +13,8 @@ std::uint8_t g_a7b440[0x28 * 16] = {}; // 0x00A7B440
 void* g_5c8e1c = nullptr;      // 0x005C8E1C
 std::uint8_t g_c28f80 = 0U;    // 0x00C28F80
 std::uint8_t g_c28f81 = 0U;    // 0x00C28F81
+std::int32_t g_5c8e10 = 0;     // 0x005C8E10
+std::int32_t g_5c8e0c = 0;     // 0x005C8E0C
+std::int32_t g_5c8e18 = 0;     // 0x005C8E18
+std::int32_t g_5c8e08 = 0;     // 0x005C8E08
 } // extern "C"

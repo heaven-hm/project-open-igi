@@ -14,5 +14,9 @@ extern std::uint8_t g_a7b440[0x28 * 16]; // retail 0x00A7B440, per-slot action s
 extern void* g_5c8e1c;          // retail 0x005C8E1C, IDirectInputDeviceA* (mouse)
 extern std::uint8_t g_c28f80;   // retail 0x00C28F80, mouse-capabilities valid flag
 extern std::uint8_t g_c28f81;   // retail 0x00C28F81, mouse device type byte
+extern std::int32_t g_5c8e10;   // retail 0x005C8E10, left button state
+extern std::int32_t g_5c8e0c;   // retail 0x005C8E0C, right button state
+extern std::int32_t g_5c8e18;   // retail 0x005C8E18, middle button state
+extern std::int32_t g_5c8e08;   // retail 0x005C8E08, accumulated wheel delta
 
 } // extern "C"
