@@ -1,0 +1,21 @@
+---
+tool: "bn_function_disassembly"
+function: "0x48f480"
+arch: "x86"
+name: "FX_SmokeEmit_27"
+platform: "windows-x86"
+offset: 0
+limit: 1000
+count: 7
+total: 7
+nextOffset: null
+truncated: false
+---
+
+````asm
+  int32_t FX_SmokeEmit_27(char arg1)
+
+0x48f480  mov     al, byte [esp+0x4]
+0x48f484  mov     byte [0x5c8de8], al
+0x48f489  retn
+````

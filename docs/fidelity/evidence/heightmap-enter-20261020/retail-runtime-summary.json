@@ -1,0 +1,56 @@
+{
+  "retail_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "capture": "build/runtime-traces/world-level1-20261020T012833Z",
+  "result": "observed-retail-only",
+  "count": 1599,
+  "unique_inputs": [
+    {
+      "flagBefore": 0,
+      "index": 0,
+      "sourceEnabled": true,
+      "stackCountBefore": 0,
+      "storedIndex": 0
+    },
+    {
+      "flagBefore": 0,
+      "index": 1,
+      "sourceEnabled": true,
+      "stackCountBefore": 0,
+      "storedIndex": 1
+    },
+    {
+      "flagBefore": 0,
+      "index": 2,
+      "sourceEnabled": true,
+      "stackCountBefore": 0,
+      "storedIndex": 2
+    },
+    {
+      "flagBefore": 1,
+      "index": 0,
+      "sourceEnabled": true,
+      "stackCountBefore": 0,
+      "storedIndex": 0
+    },
+    {
+      "flagBefore": 1,
+      "index": 1,
+      "sourceEnabled": true,
+      "stackCountBefore": 0,
+      "storedIndex": 1
+    },
+    {
+      "flagBefore": 1,
+      "index": 2,
+      "sourceEnabled": true,
+      "stackCountBefore": 0,
+      "storedIndex": 2
+    }
+  ],
+  "probe_errors": 0,
+  "overflow": false,
+  "limitations": [
+    "No candidate game calls observed; no runtime equivalence claim.",
+    "Frida values cover entry condition, DWORD flag, return and count, not full stack contents."
+  ]
+}

@@ -1,0 +1,24 @@
+---
+tool: "bn_function_disassembly"
+function: "0x402880"
+arch: "x86"
+name: "Game_GetContext"
+platform: "windows-x86"
+offset: 0
+limit: 1000
+count: 10
+total: 10
+nextOffset: null
+truncated: false
+---
+
+````asm
+  struct frames_ctx* Game_GetContext()
+
+0x402880  // Sig: void* Game_GetContext(void)
+0x402880  // Note: Returns the global IGI game-context pointer at DAT_00567C8C. Retail
+0x402880  // callers use it to dispatch context callbacks and initialize the main game
+0x402880  // state.
+0x402880  mov     eax, dword [0x567c8c]
+0x402885  retn
+````

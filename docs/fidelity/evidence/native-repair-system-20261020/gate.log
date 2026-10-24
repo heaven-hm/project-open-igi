@@ -1,0 +1,5 @@
+native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)
+native_gate: v4 catalog consistency checked for 0 selected entries
+native_gate: BLOCKED 1 changed native(s) (status>=VERIFIED, CFG>=0.85, behavioral-tests=required)
+  - 0x004B7570: status STRUCTURALLY_VERIFIED is below required VERIFIED
+Comments and manifest status labels alone do not authorize compilation.

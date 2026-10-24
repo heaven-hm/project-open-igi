@@ -1,0 +1,12 @@
+{
+  "status": "fulfilled",
+  "value": {
+    "content": [
+      {
+        "type": "text",
+        "text": "---\ntool: \"bn_function_disassembly\"\nfunction: \"0x4f1160\"\narch: \"x86\"\nname: \"Script_ParseEnumReal32_5\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 85\ncount: 17\ntotal: 17\nnextOffset: null\ntruncated: false\n---\n\n````asm\n  int32_t Script_ParseEnumReal32_5()\n\n0x4f1160  mov     al, byte [0xa758be]\n0x4f1165  test    al, al\n0x4f1167  jne     0x4f1175\n\n0x4f1169  mov     al, byte [0xa758bd]\n0x4f116e  test    al, al\n0x4f1170  je      0x4f1175\n\n0x4f1172  xor     eax, eax\n0x4f1174  retn\n\n0x4f1175  mov     eax, 0x1\n0x4f117a  retn\n````\n"
+      }
+    ],
+    "isError": false
+  }
+}

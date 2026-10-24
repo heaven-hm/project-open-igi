@@ -1,0 +1,14 @@
+# level1 root-motion run, 2026-10-20T15:57Z
+# exe sha256 a09c5d5e8148247b318abd86c84153b1847d615367f4d16af9608ccc999e7607
+# bottle project-igi-2 (the open-igi bottle was occupied by a retail level4 run)
+
+[2026-10-20T15:57:11.292Z] [INFO] [model-scene] Character skeletons loaded: 6 of 6 animation files
+[2026-10-20T15:57:11.323Z] [INFO] [model-scene] config.qvm: applied 27 action bindings
+[2026-10-20T15:57:11.332Z] [INFO] [model-scene] humanplayer.qvm: root-motion scale 1.750000, jump 17.500000/27.000000 km/h, air control 0.500000 km/h
+[2026-10-20T15:57:11.343Z] [INFO] [model-scene] Animation clips: Z:\Users\haseeb-mir\Downloads\IGI\COMMON\ANIMS\000.IFF clips=122 forward=3360.000000 ms
+[2026-10-20T15:57:11.588Z] [INFO] [model-scene] placement source=OBJECTS.QVM code_offset=144891 type=HumanPlayer model=000_01_1 position=24578514,-55852816,174421680 orientation=1,0,0,0,-0.99896019697189331,-0.045589763671159744,0,0.045589763671159744,-0.99896019697189331,
+[2026-10-20T15:57:14.281Z] [INFO] [model-scene] Input demo: scheduled configured movement, jump, crouch and walk-toggle bindings with mouse moves.
+[2026-10-20T15:57:14.648Z] [INFO] [model-scene] First 3D frame presented: terrain_batches=14 objects=919 model_draw_batches=4112 uploaded_textures=398
+[2026-10-20T15:57:14.648Z] [INFO] [model-scene] HumanPlayer feet=24578514.000/-55852816.000/174421680.000 eye=0.000/0.000/0.690 yaw=-3.096 pitch=0.000 on_ground=1 crouched=0 sliding=0 ground=174421680.000 key_msgs=0 mouse_msgs=0 look_dx=0.000 look_dy=0.000 mouse_xy=0/0
+[2026-10-20T15:57:18.911Z] [INFO] [model-scene] HumanPlayer feet=24574742.162/-55895927.621/174413141.334 eye=-0.921/-10.525/-1.735 yaw=-2.983 pitch=-0.038 on_ground=1 crouched=1 sliding=0 ground=174413141.334 key_msgs=5 mouse_msgs=10 look_dx=0.000 look_dy=0.000 mouse_xy=508/336
+[2026-10-20T15:57:23.400Z] [INFO] [model-scene] HumanPlayer feet=24574742.162/-55895927.621/174413141.334 eye=-0.921/-10.525/-1.735 yaw=-2.983 pitch=-0.038 on_ground=1 crouched=1 sliding=0 ground=174413141.334 key_msgs=8 mouse_msgs=10 look_dx=0.000 look_dy=0.000 mouse_xy=508/336

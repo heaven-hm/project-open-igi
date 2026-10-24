@@ -1,0 +1,9 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "---\ntool: \"bn_function_decompile\"\nfunction: \"0x48f1e0\"\narch: \"x86\"\nname: \"AppContext_SetDebugtextState\"\nplatform: \"windows-x86\"\nlanguage: \"Pseudo C\"\noffset: 0\nlimit: 55\ncount: 13\ntotal: 13\nnextOffset: null\ntruncated: false\nneedsUpdate: false\n---\n\n````bn-pseudoc\n  int32_t AppContext_SetDebugtextState(char arg1)\n\n// Sig: void App_ContextSetDebugtextState(int8_t state)\n// Note: Toggles on-screen DEBUG TEXT output (global 0x5C8BF4). Param: state = 1\n// show engine debug text, 0 hide. Handy while reverse-engineering other\n// systems.\n{\n    int32_t result = arg1;\n    g_5c8bf4 = result;\n    return result;\n}\n````\n"
+    }
+  ],
+  "isError": false
+}

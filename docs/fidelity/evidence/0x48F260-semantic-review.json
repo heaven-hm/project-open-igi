@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "result": "passed",
+  "address": "0x0048F260",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "b5bfa1f6de5589e87222437f10d5ec900a32e39a8b0cc6c0ff002c78ccdd12f8",
+  "reviewed": true,
+  "reviewed_by": "Codex static review",
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "rationale": "Binary Ninja identifies App_ContextSetTerrainLightmapsUsed at 0x0048F260; the address-qualified GameNatives body and candidate target the same entry."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "passed",
+      "rationale": "Retail MOVSX EAX, byte ptr [ESP+4] sign-extends the cdecl byte input; the candidate accepts std::int8_t."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "not_applicable",
+      "rationale": "No constants or scaling; the promoted input is stored and returned unchanged."
+    },
+    {
+      "name": "memory_layout_and_access",
+      "result": "passed",
+      "rationale": "Retail writes EAX to 0x005C8BE8. The port maps this global to AppContextState::terrain_lightmaps_used and stores the same 32-bit value."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "passed",
+      "rationale": "One retail global write and no calls; the candidate has one corresponding field write and no calls."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "passed",
+      "rationale": "RET leaves the MOVSX result in EAX; no branches or error paths."
+    },
+    {
+      "name": "floating_point_semantics",
+      "result": "not_applicable",
+      "rationale": "Integer-only function."
+    }
+  ],
+  "limits": [
+    "The retail x86 body is compared using Radare2 ESIL rather than a live IGI.exe process.",
+    "Candidate maps the retail absolute global to port-owned AppContextState."
+  ]
+}

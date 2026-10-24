@@ -1,0 +1,29 @@
+---
+tool: "bn_function_disassembly"
+function: "0x4d0cf0"
+arch: "x86"
+name: "Render_DrawBoneMesh_2"
+platform: "windows-x86"
+offset: 0
+limit: 1000
+count: 14
+total: 14
+nextOffset: null
+truncated: false
+---
+
+````asm
+  int32_t Render_DrawBoneMesh_2(void* arg1, int32_t arg2)
+
+0x4d0cf0  mov     eax, dword [esp+0x4 {arg1}]
+0x4d0cf4  mov     ecx, dword [eax+0xc]
+0x4d0cf7  mov     eax, dword [esp+0x8 {arg2}]
+0x4d0cfb  mov     edx, dword [ecx+0xc]
+0x4d0cfe  mov     ecx, eax
+0x4d0d00  shl     ecx, 0x4
+0x4d0d03  mov     edx, dword [edx+0x8c]
+0x4d0d09  add     ecx, eax
+0x4d0d0b  lea     eax, [edx+ecx*4]
+0x4d0d0e  retn     {__return_addr}
+````
+

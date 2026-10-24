@@ -1,0 +1,17 @@
+[35mWARN:[0m Relocs has not been applied. Please use `-e bin.relocs.apply=true` or `-e bin.cache=true` next time
+[33mINFO:[0m Analyze all flags starting with sym. and entry0 (aa)
+[33mINFO:[0m Analyze imports (af@@@i)
+[33mINFO:[0m Analyze entrypoint (af@ entry0)
+[33mINFO:[0m Analyze symbols (af@@@s)
+[33mINFO:[0m Running plugin pre-analysis hooks
+[33mINFO:[0m Analyze all functions arguments/locals (afva@@F)
+[33mINFO:[0m Analyze function calls (aac)
+[33mINFO:[0m Analyze len bytes of instructions for references (aar)
+[33mINFO:[0m Finding and parsing C++ vtables (avrr)
+[33mINFO:[0m Analyzing methods (af @@ method.*)
+[33mINFO:[0m Recovering local variables (afva@@@F)
+[33mINFO:[0m Type matching analysis for all functions (aaft)
+[33mINFO:[0m Propagate noreturn information (aanr)
+[33mINFO:[0m Use -AA or aaaa to perform additional experimental analysis
+[{"addr":4780640,"name":"fcn.0048f260","size":11,"is-pure":"false","realsz":11,"noreturn":false,"recursive":false,"stackframe":0,"calltype":"cdecl","cost":5,"cc":1,"bits":32,"type":"fcn","nbbs":1,"tracecov":0,"is-lineal":true,"ninstrs":3,"edges":0,"ebbs":1,"signature":"fcn.0048f260 (int8_t arg_4h);","minaddr":4780640,"maxaddr":4780651,"maxbbins":3,"midbbins":3.000,"ratbbins":1.000,"indegree":2,"outdegree":0,"nlocals":0,"nargs":1,"difftype":"new"}]
+[{"name":"fcn.0048f260","addr":4780640,"ninstr":3,"nargs":1,"nlocals":0,"size":11,"stack":0,"type":"fcn","blocks":[{"addr":4780640,"size":11,"ops":[{"addr":4780640,"esil":"8,0x4,esp,+,[1],~,eax,=","refptr":1,"fcn_addr":4780640,"fcn_last":4780646,"size":5,"opcode":"movsx eax, byte [esp + 4]","disasm":"movsx eax, byte [esp + 4]","bytes":"0fbe442404","family":"cpu","type":"mov","reloc":false,"type_num":9,"type2_num":0,"flags":["fcn.0048f260"],"xrefs":[{"addr":4219857,"type":"CALL","perm":"--x"},{"addr":4781629,"type":"CALL","perm":"--x"}]},{"addr":4780645,"ptr":6065128,"esil":"eax,0x5c8be8,=[4]","refptr":4,"fcn_addr":4780640,"fcn_last":4780646,"size":5,"opcode":"mov dword [0x5c8be8], eax","disasm":"mov dword [0x5c8be8], eax","bytes":"a3e88b5c00","family":"cpu","type":"mov","reloc":false,"type_num":9,"type2_num":0,"refs":[{"addr":6065128,"type":"DATA","perm":"-w-"}]},{"addr":4780650,"esil":"esp,[4],eip,=,4,esp,+=","refptr":0,"fcn_addr":4780640,"fcn_last":4780650,"size":1,"opcode":"ret","disasm":"ret","bytes":"c3","family":"cpu","type":"ret","reloc":false,"type_num":5,"type2_num":0}]}]}]

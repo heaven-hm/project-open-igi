@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "kind": "native-disassembly",
+  "tool": "radare2",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "function_entry": "0x004F1160",
+  "signature": "uint32_t Script_ParseEnumReal32_5(void)",
+  "cfg": {
+    "nodes": [
+      {
+        "address": "0x004F1160"
+      },
+      {
+        "address": "0x004F1169"
+      },
+      {
+        "address": "0x004F1172"
+      },
+      {
+        "address": "0x004F1175"
+      }
+    ],
+    "edges": [
+      {
+        "source": "0x004F1160",
+        "target": "0x004F1175",
+        "kind": "branch"
+      },
+      {
+        "source": "0x004F1160",
+        "target": "0x004F1169",
+        "kind": "fallthrough"
+      },
+      {
+        "source": "0x004F1169",
+        "target": "0x004F1175",
+        "kind": "branch"
+      },
+      {
+        "source": "0x004F1169",
+        "target": "0x004F1172",
+        "kind": "fallthrough"
+      }
+    ]
+  },
+  "limitations": [
+    "Names and C types are port annotations; raw register/stack behavior is retained separately."
+  ]
+}

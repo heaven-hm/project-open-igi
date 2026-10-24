@@ -1,0 +1,26 @@
+---
+tool: "bn_function_disassembly"
+function: "0x48f1e0"
+arch: "x86"
+name: "App_ContextSetDebugtextState"
+platform: "windows-x86"
+offset: 0
+limit: 1000
+count: 11
+total: 11
+nextOffset: null
+truncated: false
+---
+
+````asm
+  int32_t App_ContextSetDebugtextState(char arg1)
+
+0x48f1e0  // Sig: void App_ContextSetDebugtextState(int8_t state)
+0x48f1e0  // Note: Toggles on-screen DEBUG TEXT output (global 0x5C8BF4). Param: state = 1
+0x48f1e0  // show engine debug text, 0 hide. Handy while reverse-engineering other
+0x48f1e0  // systems.
+0x48f1e0  movsx   eax, byte [esp+0x4 {arg1}]
+0x48f1e5  mov     dword [g_5c8bf4], eax
+0x48f1ea  retn     {__return_addr}
+````
+

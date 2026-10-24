@@ -1,0 +1,12 @@
+{
+  "status": "fulfilled",
+  "value": {
+    "content": [
+      {
+        "type": "text",
+        "text": "---\ntool: \"bn_function_decompile\"\nfunction: \"0x4f82b0\"\narch: \"x86\"\nname: \"TerrainLightMap_Init_2\"\nplatform: \"windows-x86\"\nlanguage: \"Pseudo C\"\noffset: 0\nlimit: 1000\ncount: 33\ntotal: 33\nnextOffset: null\ntruncated: false\nneedsUpdate: false\n---\n\n````bn-pseudoc\n  void* TerrainLightMap_Init_2(void* pThis)\n\n{\n    bool cond:0 = Script_ParseEnumReal32_5();\n    int32_t ecx = *(pThis + 0x108);\n\n    if (cond:0)\n    {\n        if (ecx)\n        {\n            int32_t edx = *(pThis + 0xd8);\n            *(pThis + 0xe0) = 1;\n            int32_t b97d24_2 = g_b97d24;\n            *((b97d24_2 << 2) + &data_b97b20) = edx;\n            g_b97d24 = b97d24_2 + 1;\n            return b97d24_2 + 1;\n        }\n    }\n    else if (ecx)\n    {\n        int32_t ecx_1 = *(pThis + 0xd8);\n        *(pThis + 0xe0) = 1;\n        int32_t b97d24_1 = g_b97d24;\n        *((b97d24_1 << 2) + &data_b97b20) = ecx_1;\n        g_b97d24 = b97d24_1 + 1;\n        return b97d24_1 + 1;\n    }\n\n    *(pThis + 0xe0) = 0;\n    return pThis;\n}\n````\n"
+      }
+    ],
+    "isError": false
+  }
+}

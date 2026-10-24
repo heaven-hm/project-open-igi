@@ -1,0 +1,11 @@
+{
+  "profile": {
+    "offset": 16,
+    "pattern": "strict-nullable-s32-member-getter",
+    "codehex": "8b44240485c074048b4010c333c0c3",
+    "length": 15
+  },
+  "symbol": "igi::retail::sys::Ilff_GetFormType",
+  "runner": "scripts/nullable_getter_diff_runner.py",
+  "runner_sha256": "1457eecf1e7ff4d218af01956ce69d9a54aaa99de157bf4297fb08940c5b16e5"
+}

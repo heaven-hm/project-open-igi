@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "selected_decompiler": "binary_ninja",
+  "info": {
+    "content": [
+      {
+        "type": "text",
+        "text": "---\ntool: \"bn_function_info\"\nfunction: \"0x4f82b0\"\narch: \"x86\"\nname: \"TerrainLightMap_Init_2\"\nplatform: \"windows-x86\"\n---\n\n## Function\n\n| Field | Value |\n| --- | --- |\n| Function | 0x4f82b0 (x86) |\n| Name | TerrainLightMap_Init_2 |\n| Start | 0x4f82b0 |\n| Lowest Address | 0x4f82b0 |\n| Highest Address | 0x4f831b |\n| Architecture | x86 |\n| Platform | windows-x86 |\n| Definition | void*(void* pThis) |\n| Exported | true |\n| Auto Discovered | false |\n| Has User Annotations | true |\n| Needs Update | false |\n| Analysis Skipped | false |\n| Analysis Skip Reason | NoSkipReason |\n| Basic Blocks | 6 |\n| Ranges | 0x4f82b0-0x4f831c (108 bytes) |\n\n## Basic Blocks\n\n| Index | Range | Incoming | Outgoing |\n| --- | --- | --- | --- |\n| 0 | 0x4f82b0-0x4f82c3 (19 bytes) | 0 | 2 |\n| 1 | 0x4f82ea-0x4f82ee (4 bytes) | 1 | 2 |\n| 2 | 0x4f82c3-0x4f82c7 (4 bytes) | 1 | 2 |\n| 3 | 0x4f8311-0x4f831c (11 bytes) | 2 | 0 |\n| 4 | 0x4f82ee-0x4f8311 (35 bytes) | 1 | 0 |\n| 5 | 0x4f82c7-0x4f82ea (35 bytes) | 1 | 0 |\n"
+      }
+    ],
+    "isError": false
+  },
+  "blocks": {
+    "content": [
+      {
+        "type": "text",
+        "text": "---\ntool: \"bn_function_basic_blocks\"\nfunction: \"0x4f82b0\"\narch: \"x86\"\nname: \"TerrainLightMap_Init_2\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 1000\ncount: 6\ntotal: 6\nnextOffset: null\ntruncated: false\n---\n\n| Index | Range | Flags | Incoming Edges | Outgoing Edges |\n| --- | --- | --- | --- | --- |\n| 0 | 0x4f82b0-0x4f82c3 (19 bytes) | can-exit |  | TrueBranch #1 0x4f82ea-0x4f82ee (4 bytes)<br>FalseBranch #2 0x4f82c3-0x4f82c7 (4 bytes) fallthrough |\n| 1 | 0x4f82ea-0x4f82ee (4 bytes) | can-exit | TrueBranch #0 0x4f82b0-0x4f82c3 (19 bytes) | TrueBranch #3 0x4f8311-0x4f831c (11 bytes)<br>FalseBranch #4 0x4f82ee-0x4f8311 (35 bytes) fallthrough |\n| 2 | 0x4f82c3-0x4f82c7 (4 bytes) | can-exit | FalseBranch #0 0x4f82b0-0x4f82c3 (19 bytes) fallthrough | TrueBranch #3 0x4f8311-0x4f831c (11 bytes)<br>FalseBranch #5 0x4f82c7-0x4f82ea (35 bytes) fallthrough |\n| 3 | 0x4f8311-0x4f831c (11 bytes) | can-exit | TrueBranch #1 0x4f82ea-0x4f82ee (4 bytes)<br>TrueBranch #2 0x4f82c3-0x4f82c7 (4 bytes) |  |\n| 4 | 0x4f82ee-0x4f8311 (35 bytes) | can-exit | FalseBranch #1 0x4f82ea-0x4f82ee (4 bytes) fallthrough |  |\n| 5 | 0x4f82c7-0x4f82ea (35 bytes) | can-exit | FalseBranch #2 0x4f82c3-0x4f82c7 (4 bytes) fallthrough |  |\n"
+      }
+    ],
+    "isError": false
+  },
+  "assembly": {
+    "content": [
+      {
+        "type": "text",
+        "text": "---\ntool: \"bn_function_disassembly\"\nfunction: \"0x4f82b0\"\narch: \"x86\"\nname: \"TerrainLightMap_Init_2\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 1000\ncount: 34\ntotal: 34\nnextOffset: null\ntruncated: false\n---\n\n````asm\n  void* TerrainLightMap_Init_2(void* pThis)\n\n0x4f82b0  call    Script_ParseEnumReal32_5\n0x4f82b5  test    al, al\n0x4f82b7  mov     eax, dword [esp+0x4 {pThis}]\n0x4f82bb  mov     ecx, dword [eax+0x108]\n0x4f82c1  jne     0x4f82ea\n\n0x4f82c3  test    ecx, ecx\n0x4f82c5  je      0x4f8311\n\n0x4f82c7  mov     ecx, dword [eax+0xd8]\n0x4f82cd  mov     dword [eax+0xe0], 0x1\n0x4f82d7  mov     eax, dword [g_b97d24]\n0x4f82dc  mov     dword [eax*4+0xb97b20], ecx\n0x4f82e3  inc     eax\n0x4f82e4  mov     dword [g_b97d24], eax\n0x4f82e9  retn     {__return_addr}\n\n0x4f82ea  test    ecx, ecx\n0x4f82ec  je      0x4f8311\n\n0x4f82ee  mov     edx, dword [eax+0xd8]\n0x4f82f4  mov     dword [eax+0xe0], 0x1\n0x4f82fe  mov     eax, dword [g_b97d24]\n0x4f8303  mov     dword [eax*4+0xb97b20], edx\n0x4f830a  inc     eax\n0x4f830b  mov     dword [g_b97d24], eax\n0x4f8310  retn     {__return_addr}\n\n0x4f8311  mov     dword [eax+0xe0], 0x0\n0x4f831b  retn     {__return_addr}\n````\n"
+      }
+    ],
+    "isError": false
+  },
+  "decompilation": {
+    "content": [
+      {
+        "type": "text",
+        "text": "---\ntool: \"bn_function_decompile\"\nfunction: \"0x4f82b0\"\narch: \"x86\"\nname: \"TerrainLightMap_Init_2\"\nplatform: \"windows-x86\"\nlanguage: \"Pseudo C\"\noffset: 0\nlimit: 1000\ncount: 33\ntotal: 33\nnextOffset: null\ntruncated: false\nneedsUpdate: false\n---\n\n````bn-pseudoc\n  void* TerrainLightMap_Init_2(void* pThis)\n\n{\n    bool cond:0 = Script_ParseEnumReal32_5();\n    int32_t ecx = *(pThis + 0x108);\n\n    if (cond:0)\n    {\n        if (ecx)\n        {\n            int32_t edx = *(pThis + 0xd8);\n            *(pThis + 0xe0) = 1;\n            int32_t b97d24_2 = g_b97d24;\n            *((b97d24_2 << 2) + &data_b97b20) = edx;\n            g_b97d24 = b97d24_2 + 1;\n            return b97d24_2 + 1;\n        }\n    }\n    else if (ecx)\n    {\n        int32_t ecx_1 = *(pThis + 0xd8);\n        *(pThis + 0xe0) = 1;\n        int32_t b97d24_1 = g_b97d24;\n        *((b97d24_1 << 2) + &data_b97b20) = ecx_1;\n        g_b97d24 = b97d24_1 + 1;\n        return b97d24_1 + 1;\n    }\n\n    *(pThis + 0xe0) = 0;\n    return pThis;\n}\n````\n"
+      }
+    ],
+    "isError": false
+  }
+}

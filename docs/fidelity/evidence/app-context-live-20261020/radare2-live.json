@@ -1,0 +1,793 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"evidence_id\":\"ev_96eb83e95f5a5eebf3d8ed79678e44cd3f1258b42e9bfff908c46187057341ab\",\"subject\":{\"name\":\"igi.exe\",\"digest\":{\"sha256\":\"dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01\"},\"format\":\"pe\",\"architecture\":\"x86\",\"local_path\":\"/Users/haseeb-mir/Downloads/IGI/igi.exe\"},\"provider\":{\"id\":\"radare2\",\"name\":\"radare2 static analyzer\",\"version\":\"6.2.0\"},\"analysis_profile\":null,\"predicate_type\":\"rea.analysis\",\"operation\":\"inspect_radare2_disassembly\",\"parameters\":{\"address\":\"0x0048F1A0\",\"count\":100},\"raw_result\":null,\"normalized_result\":{\"artifact\":{\"path\":\"/Users/haseeb-mir/Downloads/IGI/igi.exe\",\"sha256\":\"dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01\",\"format\":\"pe\",\"architecture\":\"x86\",\"size_bytes\":1384448},\"engine\":{\"path\":\"/opt/homebrew/Cellar/radare2/6.2.0/bin/radare2\",\"sha256\":\"0706936e12301c2541818f6d3a1b58c60bbbf49f8d723459cd526a9153f3572d\",\"version\":\"6.2.0\"},\"selection\":{\"address\":\"0x48f1a0\",\"requested_instructions\":100},\"command\":{\"arguments\":[\"-q\",\"-c\",\"pdj 100 @ 0x48f1a0\",\"/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/rea-radare2-FvYdTo/target.exe\"],\"exit_code\":0,\"stdout\":{\"sha256\":\"3b2ce6e9a4458384deeedefdabd10257801bc2fe5182aeb541ec9a9a2bc2c698\",\"bytes\":19991,\"complete\":true},\"stderr\":{\"sha256\":\"3b37393b2359a00a919fdfc54ea0569e10d5fcc06f545e09220ca6c0213e3041\",\"bytes\":106}},\"coverage\":\"complete\",\"instructions\":[{\"address\":\"0x48f1a0\",\"size\":5,\"opcode\":\"movsx eax, byte [esp + 4]\",\"disassembly\":\"movsx eax, byte [esp + 4]\",\"bytes\":\"0fbe442404\"},{\"address\":\"0x48f1a5\",\"size\":5,\"opcode\":\"mov dword [0x5c8bf8], eax\",\"disassembly\":\"mov dword [0x5c8bf8], eax\",\"bytes\":\"a3f88b5c00\"},{\"address\":\"0x48f1aa\",\"size\":1,\"opcode\":\"ret\",\"disassembly\":\"ret\",\"bytes\":\"c3\"},{\"address\":\"0x48f1ab\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f1ac\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f1ad\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f1ae\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f1af\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f1b0\",\"size\":5,\"opcode\":\"mov eax, dword [0x5c8bf8]\",\"disassembly\":\"mov eax, dword [0x5c8bf8]\",\"bytes\":\"a1f88b5c00\"},{\"address\":\"0x48f1b5\",\"size\":1,\"opcode\":\"ret\",\"disassembly\":\"ret\",\"bytes\":\"c3\"},{\"address\":\"0x48f1b6\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f1b7\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f1b8\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f1b9\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f1ba\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f1bb\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f1bc\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f1bd\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f1be\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f1bf\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f1c0\",\"size\":5,\"opcode\":\"movsx eax, byte [esp + 4]\",\"disassembly\":\"movsx eax, byte [esp + 4]\",\"bytes\":\"0fbe442404\"},{\"address\":\"0x48f1c5\",\"size\":5,\"opcode\":\"mov dword [0x5c8bec], eax\",\"disassembly\":\"mov dword [0x5c8bec], eax\",\"bytes\":\"a3ec8b5c00\"},{\"address\":\"0x48f1ca\",\"size\":1,\"opcode\":\"ret\",\"disassembly\":\"ret\",\"bytes\":\"c3\"},{\"address\":\"0x48f1cb\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f1cc\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f1cd\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f1ce\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f1cf\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f1d0\",\"size\":5,\"opcode\":\"mov eax, dword [0x5c8bec]\",\"disassembly\":\"mov eax, dword [0x5c8bec]\",\"bytes\":\"a1ec8b5c00\"},{\"address\":\"0x48f1d5\",\"size\":1,\"opcode\":\"ret\",\"disassembly\":\"ret\",\"bytes\":\"c3\"},{\"address\":\"0x48f1d6\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f1d7\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f1d8\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f1d9\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f1da\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f1db\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f1dc\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f1dd\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f1de\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f1df\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f1e0\",\"size\":5,\"opcode\":\"movsx eax, byte [esp + 4]\",\"disassembly\":\"movsx eax, byte [esp + 4]\",\"bytes\":\"0fbe442404\"},{\"address\":\"0x48f1e5\",\"size\":5,\"opcode\":\"mov dword [0x5c8bf4], eax\",\"disassembly\":\"mov dword [0x5c8bf4], eax\",\"bytes\":\"a3f48b5c00\"},{\"address\":\"0x48f1ea\",\"size\":1,\"opcode\":\"ret\",\"disassembly\":\"ret\",\"bytes\":\"c3\"},{\"address\":\"0x48f1eb\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f1ec\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f1ed\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f1ee\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f1ef\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f1f0\",\"size\":5,\"opcode\":\"mov eax, dword [0x5c8bf4]\",\"disassembly\":\"mov eax, dword [0x5c8bf4]\",\"bytes\":\"a1f48b5c00\"},{\"address\":\"0x48f1f5\",\"size\":1,\"opcode\":\"ret\",\"disassembly\":\"ret\",\"bytes\":\"c3\"},{\"address\":\"0x48f1f6\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f1f7\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f1f8\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f1f9\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f1fa\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f1fb\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f1fc\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f1fd\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f1fe\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f1ff\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f200\",\"size\":4,\"opcode\":\"mov eax, dword [esp + 4]\",\"disassembly\":\"mov eax, dword [esp + 4]\",\"bytes\":\"8b442404\"},{\"address\":\"0x48f204\",\"size\":5,\"opcode\":\"mov dword [0x5c8c04], eax\",\"disassembly\":\"mov dword [0x5c8c04], eax\",\"bytes\":\"a3048c5c00\"},{\"address\":\"0x48f209\",\"size\":1,\"opcode\":\"ret\",\"disassembly\":\"ret\",\"bytes\":\"c3\"},{\"address\":\"0x48f20a\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f20b\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f20c\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f20d\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f20e\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f20f\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f210\",\"size\":4,\"opcode\":\"mov eax, dword [esp + 4]\",\"disassembly\":\"mov eax, dword [esp + 4]\",\"bytes\":\"8b442404\"},{\"address\":\"0x48f214\",\"size\":5,\"opcode\":\"mov dword [0x5c8c08], eax\",\"disassembly\":\"mov dword [0x5c8c08], eax\",\"bytes\":\"a3088c5c00\"},{\"address\":\"0x48f219\",\"size\":1,\"opcode\":\"ret\",\"disassembly\":\"ret\",\"bytes\":\"c3\"},{\"address\":\"0x48f21a\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f21b\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f21c\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f21d\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f21e\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f21f\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f220\",\"size\":5,\"opcode\":\"mov eax, dword [0x5c8c08]\",\"disassembly\":\"mov eax, dword [0x5c8c08]\",\"bytes\":\"a1088c5c00\"},{\"address\":\"0x48f225\",\"size\":1,\"opcode\":\"ret\",\"disassembly\":\"ret\",\"bytes\":\"c3\"},{\"address\":\"0x48f226\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f227\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f228\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f229\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f22a\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f22b\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f22c\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f22d\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f22e\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f22f\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f230\",\"size\":5,\"opcode\":\"mov eax, dword [0x5c8be4]\",\"disassembly\":\"mov eax, dword [0x5c8be4]\",\"bytes\":\"a1e48b5c00\"},{\"address\":\"0x48f235\",\"size\":1,\"opcode\":\"ret\",\"disassembly\":\"ret\",\"bytes\":\"c3\"},{\"address\":\"0x48f236\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f237\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f238\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f239\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f23a\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f23b\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f23c\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"},{\"address\":\"0x48f23d\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"}],\"limitations\":[\"Instructions are radare2's static decoding at the caller-selected address; this does not establish function boundaries or runtime reachability.\",\"The target is analyzed from a provider-owned byte-for-byte snapshot and is never executed by this operation.\",\"A short result can indicate undecodable bytes or an address outside mapped executable data; it is reported as partial or empty, not as a successful full decode.\"]},\"confidence\":\"observed\",\"authority\":\"shipped-artifact\",\"environment\":null,\"limitations\":[\"Instructions are radare2's static decoding at the caller-selected address; this does not establish function boundaries or runtime reachability.\",\"The target is analyzed from a provider-owned byte-for-byte snapshot and is never executed by this operation.\",\"A short result can indicate undecodable bytes or an address outside mapped executable data; it is reported as partial or empty, not as a successful full decode.\"],\"relationship_coverage\":null,\"locations\":[{\"kind\":\"artifact-path\",\"path\":\"/Users/haseeb-mir/Downloads/IGI/igi.exe\"}],\"evidence_links\":[]}"
+    }
+  ],
+  "structuredContent": {
+    "evidence_id": "ev_96eb83e95f5a5eebf3d8ed79678e44cd3f1258b42e9bfff908c46187057341ab",
+    "subject": {
+      "name": "igi.exe",
+      "digest": {
+        "sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01"
+      },
+      "format": "pe",
+      "architecture": "x86",
+      "local_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe"
+    },
+    "provider": {
+      "id": "radare2",
+      "name": "radare2 static analyzer",
+      "version": "6.2.0"
+    },
+    "analysis_profile": null,
+    "predicate_type": "rea.analysis",
+    "operation": "inspect_radare2_disassembly",
+    "parameters": {
+      "address": "0x0048F1A0",
+      "count": 100
+    },
+    "raw_result": null,
+    "normalized_result": {
+      "artifact": {
+        "path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+        "sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+        "format": "pe",
+        "architecture": "x86",
+        "size_bytes": 1384448
+      },
+      "engine": {
+        "path": "/opt/homebrew/Cellar/radare2/6.2.0/bin/radare2",
+        "sha256": "0706936e12301c2541818f6d3a1b58c60bbbf49f8d723459cd526a9153f3572d",
+        "version": "6.2.0"
+      },
+      "selection": {
+        "address": "0x48f1a0",
+        "requested_instructions": 100
+      },
+      "command": {
+        "arguments": [
+          "-q",
+          "-c",
+          "pdj 100 @ 0x48f1a0",
+          "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/rea-radare2-FvYdTo/target.exe"
+        ],
+        "exit_code": 0,
+        "stdout": {
+          "sha256": "3b2ce6e9a4458384deeedefdabd10257801bc2fe5182aeb541ec9a9a2bc2c698",
+          "bytes": 19991,
+          "complete": true
+        },
+        "stderr": {
+          "sha256": "3b37393b2359a00a919fdfc54ea0569e10d5fcc06f545e09220ca6c0213e3041",
+          "bytes": 106
+        }
+      },
+      "coverage": "complete",
+      "instructions": [
+        {
+          "address": "0x48f1a0",
+          "size": 5,
+          "opcode": "movsx eax, byte [esp + 4]",
+          "disassembly": "movsx eax, byte [esp + 4]",
+          "bytes": "0fbe442404"
+        },
+        {
+          "address": "0x48f1a5",
+          "size": 5,
+          "opcode": "mov dword [0x5c8bf8], eax",
+          "disassembly": "mov dword [0x5c8bf8], eax",
+          "bytes": "a3f88b5c00"
+        },
+        {
+          "address": "0x48f1aa",
+          "size": 1,
+          "opcode": "ret",
+          "disassembly": "ret",
+          "bytes": "c3"
+        },
+        {
+          "address": "0x48f1ab",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f1ac",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f1ad",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f1ae",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f1af",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f1b0",
+          "size": 5,
+          "opcode": "mov eax, dword [0x5c8bf8]",
+          "disassembly": "mov eax, dword [0x5c8bf8]",
+          "bytes": "a1f88b5c00"
+        },
+        {
+          "address": "0x48f1b5",
+          "size": 1,
+          "opcode": "ret",
+          "disassembly": "ret",
+          "bytes": "c3"
+        },
+        {
+          "address": "0x48f1b6",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f1b7",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f1b8",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f1b9",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f1ba",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f1bb",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f1bc",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f1bd",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f1be",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f1bf",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f1c0",
+          "size": 5,
+          "opcode": "movsx eax, byte [esp + 4]",
+          "disassembly": "movsx eax, byte [esp + 4]",
+          "bytes": "0fbe442404"
+        },
+        {
+          "address": "0x48f1c5",
+          "size": 5,
+          "opcode": "mov dword [0x5c8bec], eax",
+          "disassembly": "mov dword [0x5c8bec], eax",
+          "bytes": "a3ec8b5c00"
+        },
+        {
+          "address": "0x48f1ca",
+          "size": 1,
+          "opcode": "ret",
+          "disassembly": "ret",
+          "bytes": "c3"
+        },
+        {
+          "address": "0x48f1cb",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f1cc",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f1cd",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f1ce",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f1cf",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f1d0",
+          "size": 5,
+          "opcode": "mov eax, dword [0x5c8bec]",
+          "disassembly": "mov eax, dword [0x5c8bec]",
+          "bytes": "a1ec8b5c00"
+        },
+        {
+          "address": "0x48f1d5",
+          "size": 1,
+          "opcode": "ret",
+          "disassembly": "ret",
+          "bytes": "c3"
+        },
+        {
+          "address": "0x48f1d6",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f1d7",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f1d8",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f1d9",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f1da",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f1db",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f1dc",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f1dd",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f1de",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f1df",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f1e0",
+          "size": 5,
+          "opcode": "movsx eax, byte [esp + 4]",
+          "disassembly": "movsx eax, byte [esp + 4]",
+          "bytes": "0fbe442404"
+        },
+        {
+          "address": "0x48f1e5",
+          "size": 5,
+          "opcode": "mov dword [0x5c8bf4], eax",
+          "disassembly": "mov dword [0x5c8bf4], eax",
+          "bytes": "a3f48b5c00"
+        },
+        {
+          "address": "0x48f1ea",
+          "size": 1,
+          "opcode": "ret",
+          "disassembly": "ret",
+          "bytes": "c3"
+        },
+        {
+          "address": "0x48f1eb",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f1ec",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f1ed",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f1ee",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f1ef",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f1f0",
+          "size": 5,
+          "opcode": "mov eax, dword [0x5c8bf4]",
+          "disassembly": "mov eax, dword [0x5c8bf4]",
+          "bytes": "a1f48b5c00"
+        },
+        {
+          "address": "0x48f1f5",
+          "size": 1,
+          "opcode": "ret",
+          "disassembly": "ret",
+          "bytes": "c3"
+        },
+        {
+          "address": "0x48f1f6",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f1f7",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f1f8",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f1f9",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f1fa",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f1fb",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f1fc",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f1fd",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f1fe",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f1ff",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f200",
+          "size": 4,
+          "opcode": "mov eax, dword [esp + 4]",
+          "disassembly": "mov eax, dword [esp + 4]",
+          "bytes": "8b442404"
+        },
+        {
+          "address": "0x48f204",
+          "size": 5,
+          "opcode": "mov dword [0x5c8c04], eax",
+          "disassembly": "mov dword [0x5c8c04], eax",
+          "bytes": "a3048c5c00"
+        },
+        {
+          "address": "0x48f209",
+          "size": 1,
+          "opcode": "ret",
+          "disassembly": "ret",
+          "bytes": "c3"
+        },
+        {
+          "address": "0x48f20a",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f20b",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f20c",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f20d",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f20e",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f20f",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f210",
+          "size": 4,
+          "opcode": "mov eax, dword [esp + 4]",
+          "disassembly": "mov eax, dword [esp + 4]",
+          "bytes": "8b442404"
+        },
+        {
+          "address": "0x48f214",
+          "size": 5,
+          "opcode": "mov dword [0x5c8c08], eax",
+          "disassembly": "mov dword [0x5c8c08], eax",
+          "bytes": "a3088c5c00"
+        },
+        {
+          "address": "0x48f219",
+          "size": 1,
+          "opcode": "ret",
+          "disassembly": "ret",
+          "bytes": "c3"
+        },
+        {
+          "address": "0x48f21a",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f21b",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f21c",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f21d",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f21e",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f21f",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f220",
+          "size": 5,
+          "opcode": "mov eax, dword [0x5c8c08]",
+          "disassembly": "mov eax, dword [0x5c8c08]",
+          "bytes": "a1088c5c00"
+        },
+        {
+          "address": "0x48f225",
+          "size": 1,
+          "opcode": "ret",
+          "disassembly": "ret",
+          "bytes": "c3"
+        },
+        {
+          "address": "0x48f226",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f227",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f228",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f229",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f22a",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f22b",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f22c",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f22d",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f22e",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f22f",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f230",
+          "size": 5,
+          "opcode": "mov eax, dword [0x5c8be4]",
+          "disassembly": "mov eax, dword [0x5c8be4]",
+          "bytes": "a1e48b5c00"
+        },
+        {
+          "address": "0x48f235",
+          "size": 1,
+          "opcode": "ret",
+          "disassembly": "ret",
+          "bytes": "c3"
+        },
+        {
+          "address": "0x48f236",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f237",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f238",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f239",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f23a",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f23b",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f23c",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        },
+        {
+          "address": "0x48f23d",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        }
+      ],
+      "limitations": [
+        "Instructions are radare2's static decoding at the caller-selected address; this does not establish function boundaries or runtime reachability.",
+        "The target is analyzed from a provider-owned byte-for-byte snapshot and is never executed by this operation.",
+        "A short result can indicate undecodable bytes or an address outside mapped executable data; it is reported as partial or empty, not as a successful full decode."
+      ]
+    },
+    "confidence": "observed",
+    "authority": "shipped-artifact",
+    "environment": null,
+    "limitations": [
+      "Instructions are radare2's static decoding at the caller-selected address; this does not establish function boundaries or runtime reachability.",
+      "The target is analyzed from a provider-owned byte-for-byte snapshot and is never executed by this operation.",
+      "A short result can indicate undecodable bytes or an address outside mapped executable data; it is reported as partial or empty, not as a successful full decode."
+    ],
+    "relationship_coverage": null,
+    "locations": [
+      {
+        "kind": "artifact-path",
+        "path": "/Users/haseeb-mir/Downloads/IGI/igi.exe"
+      }
+    ],
+    "evidence_links": []
+  }
+}

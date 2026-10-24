@@ -1,0 +1,9 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "---\ntool: \"bn_function_decompile\"\nfunction: \"0x506f00\"\narch: \"x86\"\nname: \"HeightMap_Enter\"\nplatform: \"windows-x86\"\nlanguage: \"Pseudo C\"\noffset: 0\nlimit: 1000\ncount: 22\ntotal: 22\nnextOffset: null\ntruncated: false\nneedsUpdate: false\n---\n\n````bn-pseudoc\n  void* HeightMap_Enter(void* arg1)\n\n{\n    int32_t ecx = *(arg1 + 0xbc);\n\n    if (ecx < 0 || !*(*(*(arg1 + 0x68) + 0xdd0) + ecx * 0xc))\n    {\n        *(arg1 + 0xe8) = 0;\n        return arg1;\n    }\n\n    int32_t edx_3 = *(arg1 + 0xf8);\n    *(arg1 + 0xe8) = 1;\n    int32_t b97df4_1 = g_b97df4;\n    *((b97df4_1 << 2) + &g_b97d40) = edx_3 + 1;\n    int32_t eax_1 = *(arg1 + 0xf8) + 1;\n    g_ba2058 = eax_1;\n    g_b97df4 = b97df4_1 + 1;\n    return eax_1;\n}\n````\n"
+    }
+  ],
+  "isError": false
+}

@@ -1,0 +1,260 @@
+{
+  "evidence_id": "ev_4f85ac1e8bc8f36c001640282aceb8b9ae77c5f073e8cc116aa104a65e1d70fe",
+  "subject": {
+    "name": "igi.exe",
+    "digest": {
+      "sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01"
+    },
+    "format": "pe",
+    "architecture": "x86",
+    "local_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe"
+  },
+  "provider": {
+    "id": "radare2",
+    "name": "radare2 static analyzer",
+    "version": "6.2.0"
+  },
+  "analysis_profile": null,
+  "predicate_type": "rea.analysis",
+  "operation": "inspect_radare2_disassembly",
+  "parameters": {
+    "address": "0x004F82B0",
+    "count": 25
+  },
+  "raw_result": null,
+  "normalized_result": {
+    "artifact": {
+      "path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+      "sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "format": "pe",
+      "architecture": "x86",
+      "size_bytes": 1384448
+    },
+    "engine": {
+      "path": "/opt/homebrew/Cellar/radare2/6.2.0/bin/radare2",
+      "sha256": "0706936e12301c2541818f6d3a1b58c60bbbf49f8d723459cd526a9153f3572d",
+      "version": "6.2.0"
+    },
+    "selection": {
+      "address": "0x4f82b0",
+      "requested_instructions": 25
+    },
+    "command": {
+      "arguments": [
+        "-q",
+        "-c",
+        "pdj 25 @ 0x4f82b0",
+        "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/rea-radare2-6BTdBc/target.exe"
+      ],
+      "exit_code": 0,
+      "stdout": {
+        "sha256": "a2ec5478f197aa1dead9858453c3243a2911a0149f4ffa49d50ca8277f5a3cd7",
+        "bytes": 6561,
+        "complete": true
+      },
+      "stderr": {
+        "sha256": "3b37393b2359a00a919fdfc54ea0569e10d5fcc06f545e09220ca6c0213e3041",
+        "bytes": 106
+      }
+    },
+    "coverage": "complete",
+    "instructions": [
+      {
+        "address": "0x4f82b0",
+        "size": 5,
+        "opcode": "call 0x4f1160",
+        "disassembly": "call 0x4f1160",
+        "bytes": "e8ab8effff"
+      },
+      {
+        "address": "0x4f82b5",
+        "size": 2,
+        "opcode": "test al, al",
+        "disassembly": "test al, al",
+        "bytes": "84c0"
+      },
+      {
+        "address": "0x4f82b7",
+        "size": 4,
+        "opcode": "mov eax, dword [esp + 4]",
+        "disassembly": "mov eax, dword [esp + 4]",
+        "bytes": "8b442404"
+      },
+      {
+        "address": "0x4f82bb",
+        "size": 6,
+        "opcode": "mov ecx, dword [eax + 0x108]",
+        "disassembly": "mov ecx, dword [eax + 0x108]",
+        "bytes": "8b8808010000"
+      },
+      {
+        "address": "0x4f82c1",
+        "size": 2,
+        "opcode": "jne 0x4f82ea",
+        "disassembly": "jne 0x4f82ea",
+        "bytes": "7527"
+      },
+      {
+        "address": "0x4f82c3",
+        "size": 2,
+        "opcode": "test ecx, ecx",
+        "disassembly": "test ecx, ecx",
+        "bytes": "85c9"
+      },
+      {
+        "address": "0x4f82c5",
+        "size": 2,
+        "opcode": "je 0x4f8311",
+        "disassembly": "je 0x4f8311",
+        "bytes": "744a"
+      },
+      {
+        "address": "0x4f82c7",
+        "size": 6,
+        "opcode": "mov ecx, dword [eax + 0xd8]",
+        "disassembly": "mov ecx, dword [eax + 0xd8]",
+        "bytes": "8b88d8000000"
+      },
+      {
+        "address": "0x4f82cd",
+        "size": 10,
+        "opcode": "mov dword [eax + 0xe0], 1",
+        "disassembly": "mov dword [eax + 0xe0], 1",
+        "bytes": "c780e000000001000000"
+      },
+      {
+        "address": "0x4f82d7",
+        "size": 5,
+        "opcode": "mov eax, dword [0xb97d24]",
+        "disassembly": "mov eax, dword [0xb97d24]",
+        "bytes": "a1247db900"
+      },
+      {
+        "address": "0x4f82dc",
+        "size": 7,
+        "opcode": "mov dword [eax*4 + 0xb97b20], ecx",
+        "disassembly": "mov dword [eax*4 + 0xb97b20], ecx",
+        "bytes": "890c85207bb900"
+      },
+      {
+        "address": "0x4f82e3",
+        "size": 1,
+        "opcode": "inc eax",
+        "disassembly": "inc eax",
+        "bytes": "40"
+      },
+      {
+        "address": "0x4f82e4",
+        "size": 5,
+        "opcode": "mov dword [0xb97d24], eax",
+        "disassembly": "mov dword [0xb97d24], eax",
+        "bytes": "a3247db900"
+      },
+      {
+        "address": "0x4f82e9",
+        "size": 1,
+        "opcode": "ret",
+        "disassembly": "ret",
+        "bytes": "c3"
+      },
+      {
+        "address": "0x4f82ea",
+        "size": 2,
+        "opcode": "test ecx, ecx",
+        "disassembly": "test ecx, ecx",
+        "bytes": "85c9"
+      },
+      {
+        "address": "0x4f82ec",
+        "size": 2,
+        "opcode": "je 0x4f8311",
+        "disassembly": "je 0x4f8311",
+        "bytes": "7423"
+      },
+      {
+        "address": "0x4f82ee",
+        "size": 6,
+        "opcode": "mov edx, dword [eax + 0xd8]",
+        "disassembly": "mov edx, dword [eax + 0xd8]",
+        "bytes": "8b90d8000000"
+      },
+      {
+        "address": "0x4f82f4",
+        "size": 10,
+        "opcode": "mov dword [eax + 0xe0], 1",
+        "disassembly": "mov dword [eax + 0xe0], 1",
+        "bytes": "c780e000000001000000"
+      },
+      {
+        "address": "0x4f82fe",
+        "size": 5,
+        "opcode": "mov eax, dword [0xb97d24]",
+        "disassembly": "mov eax, dword [0xb97d24]",
+        "bytes": "a1247db900"
+      },
+      {
+        "address": "0x4f8303",
+        "size": 7,
+        "opcode": "mov dword [eax*4 + 0xb97b20], edx",
+        "disassembly": "mov dword [eax*4 + 0xb97b20], edx",
+        "bytes": "891485207bb900"
+      },
+      {
+        "address": "0x4f830a",
+        "size": 1,
+        "opcode": "inc eax",
+        "disassembly": "inc eax",
+        "bytes": "40"
+      },
+      {
+        "address": "0x4f830b",
+        "size": 5,
+        "opcode": "mov dword [0xb97d24], eax",
+        "disassembly": "mov dword [0xb97d24], eax",
+        "bytes": "a3247db900"
+      },
+      {
+        "address": "0x4f8310",
+        "size": 1,
+        "opcode": "ret",
+        "disassembly": "ret",
+        "bytes": "c3"
+      },
+      {
+        "address": "0x4f8311",
+        "size": 10,
+        "opcode": "mov dword [eax + 0xe0], 0",
+        "disassembly": "mov dword [eax + 0xe0], 0",
+        "bytes": "c780e000000000000000"
+      },
+      {
+        "address": "0x4f831b",
+        "size": 1,
+        "opcode": "ret",
+        "disassembly": "ret",
+        "bytes": "c3"
+      }
+    ],
+    "limitations": [
+      "Instructions are radare2's static decoding at the caller-selected address; this does not establish function boundaries or runtime reachability.",
+      "The target is analyzed from a provider-owned byte-for-byte snapshot and is never executed by this operation.",
+      "A short result can indicate undecodable bytes or an address outside mapped executable data; it is reported as partial or empty, not as a successful full decode."
+    ]
+  },
+  "confidence": "observed",
+  "authority": "shipped-artifact",
+  "environment": null,
+  "limitations": [
+    "Instructions are radare2's static decoding at the caller-selected address; this does not establish function boundaries or runtime reachability.",
+    "The target is analyzed from a provider-owned byte-for-byte snapshot and is never executed by this operation.",
+    "A short result can indicate undecodable bytes or an address outside mapped executable data; it is reported as partial or empty, not as a successful full decode."
+  ],
+  "relationship_coverage": null,
+  "locations": [
+    {
+      "kind": "artifact-path",
+      "path": "/Users/haseeb-mir/Downloads/IGI/igi.exe"
+    }
+  ],
+  "evidence_links": []
+}

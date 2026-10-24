@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "result": "passed",
+  "address": "0x004F82B0",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "7998aacdfa5fb3d65f6c367257b7e4c0038d7585a0bee39f7d7c24b66e4c12e4",
+  "reviewed": true,
+  "reviewed_by": "Codex with independent read-only critic /root/review_divergence_patch, 2026-10-20",
+  "scope": "Valid nonaliasing contexts, stack counters 0 and 19, byte-state fixtures only; natural integration and full storage extent remain unresolved.",
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "rationale": "Single selected Binary Ninja entry agrees with independent Radare2 CFG and exact angr recovery."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "passed",
+      "rationale": "One x86 stack context argument for 4F82B0; no stack arguments for 4F1160; mixed pointer/index EAX return is normalized explicitly."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "passed",
+      "rationale": "Offsets and byte/DWORD widths are from retail instructions; fixture values are declared test inputs, not gameplay defaults."
+    },
+    {
+      "name": "memory_layout_and_access",
+      "result": "passed",
+      "rationale": "DWORD +E0, +D8 payload, +108 flag and shared count/stack checked byte-for-byte. The existing 20-element port extent remains a limitation."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "passed",
+      "rationale": "Caller retains the 4F1160 call and both mode branches; externally observable native globals retain stack writes in the diagnostic Release image."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "passed",
+      "rationale": "Disabled context returns its input pointer and clears four bytes; enabled context returns incremented count. No unsupported null/cap guards retained."
+    },
+    {
+      "name": "floating_point_semantics",
+      "result": "passed",
+      "rationale": "Not applicable: the reviewed entries use integer and byte instructions, with no floating-point computation."
+    }
+  ]
+}

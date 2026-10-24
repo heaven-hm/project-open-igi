@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "result": "passed",
+  "address": "0x004F1160",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "bef5155c54f3c9e935577c85b4819aaa26f9c80e7aba287c74fb723d4f467679",
+  "reviewed": true,
+  "reviewed_by": "Codex with independent read-only critic /root/review_divergence_patch, 2026-10-20",
+  "scope": "Valid nonaliasing contexts, stack counters 0 and 19, byte-state fixtures only; natural integration and full storage extent remain unresolved.",
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "rationale": "Single selected Binary Ninja entry agrees with independent Radare2 CFG and exact angr recovery."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "passed",
+      "rationale": "No x86 stack arguments; EAX is exactly zero or one in the retained disassembly and eight concrete executions."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "passed",
+      "rationale": "Zero/one return values and nonzero byte tests are directly encoded in retail instructions; the catalog name is not a claim of enum or float parsing."
+    },
+    {
+      "name": "memory_layout_and_access",
+      "result": "passed",
+      "rationale": "Reads bytes 0x00A758BE and 0x00A758BD without writing them. The replay verifies both bytes and unrelated context/stack state remain unchanged."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "passed",
+      "rationale": "No calls and no memory writes in this leaf; caller integration is reviewed separately under 0x004F82B0."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "passed",
+      "rationale": "Returns zero only when BE==0 and BD!=0; returns one otherwise. Nonboolean byte values are included among the eight fixtures."
+    },
+    {
+      "name": "floating_point_semantics",
+      "result": "passed",
+      "rationale": "Not applicable: the reviewed entries use integer and byte instructions, with no floating-point computation."
+    }
+  ]
+}

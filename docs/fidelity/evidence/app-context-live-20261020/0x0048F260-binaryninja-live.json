@@ -1,0 +1,9 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "---\ntool: \"bn_function_decompile\"\nfunction: \"0x48f260\"\narch: \"x86\"\nname: \"AppContext_SetTerrainLightmapsUsed\"\nplatform: \"windows-x86\"\nlanguage: \"Pseudo C\"\noffset: 0\nlimit: 55\ncount: 13\ntotal: 13\nnextOffset: null\ntruncated: false\nneedsUpdate: false\n---\n\n````bn-pseudoc\n  int32_t AppContext_SetTerrainLightmapsUsed(char arg1)\n\n// Sig: void App_ContextSetTerrainLightmapsUsed(int8_t used)\n// Note: Enables/disables TERRAIN lightmaps globally (global 0x5C8BE8). Param:\n// used = 1 lit terrain, 0 unlit. Pair with AppContext_SetLightmapsUsed for full\n// lighting control.\n{\n    int32_t result = arg1;\n    g_5c8be8 = result;\n    return result;\n}\n````\n"
+    }
+  ],
+  "isError": false
+}

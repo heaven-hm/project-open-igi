@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "kind": "native-disassembly",
+  "tool": "binary_ninja",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "function_entry": "0x004F82B0",
+  "signature": "void* TerrainLightMap_Init_2(void* pThis)",
+  "cfg": {
+    "nodes": [
+      "0x004F82B0",
+      "0x004F82EA",
+      "0x004F82C3",
+      "0x004F8311",
+      "0x004F82EE",
+      "0x004F82C7"
+    ],
+    "edges": [
+      {
+        "source": "0x004F82B0",
+        "target": "0x004F82EA",
+        "kind": "branch"
+      },
+      {
+        "source": "0x004F82B0",
+        "target": "0x004F82C3",
+        "kind": "branch"
+      },
+      {
+        "source": "0x004F82EA",
+        "target": "0x004F8311",
+        "kind": "branch"
+      },
+      {
+        "source": "0x004F82EA",
+        "target": "0x004F82EE",
+        "kind": "branch"
+      },
+      {
+        "source": "0x004F82C3",
+        "target": "0x004F8311",
+        "kind": "branch"
+      },
+      {
+        "source": "0x004F82C3",
+        "target": "0x004F82C7",
+        "kind": "branch"
+      }
+    ]
+  }
+}

@@ -1,0 +1,26 @@
+---
+tool: "bn_function_disassembly"
+function: "0x48f260"
+arch: "x86"
+name: "App_ContextSetTerrainLightmapsUsed"
+platform: "windows-x86"
+offset: 0
+limit: 1000
+count: 11
+total: 11
+nextOffset: null
+truncated: false
+---
+
+````asm
+  int32_t App_ContextSetTerrainLightmapsUsed(char arg1)
+
+0x48f260  // Sig: void App_ContextSetTerrainLightmapsUsed(int8_t used)
+0x48f260  // Note: Enables/disables TERRAIN lightmaps globally (global 0x5C8BE8). Param:
+0x48f260  // used = 1 lit terrain, 0 unlit. Pair with AppContext_SetLightmapsUsed for full
+0x48f260  // lighting control.
+0x48f260  movsx   eax, byte [esp+0x4 {arg1}]
+0x48f265  mov     dword [g_5c8be8], eax
+0x48f26a  retn     {__return_addr}
+````
+

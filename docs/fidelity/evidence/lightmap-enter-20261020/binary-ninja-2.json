@@ -1,0 +1,12 @@
+{
+  "status": "fulfilled",
+  "value": {
+    "content": [
+      {
+        "type": "text",
+        "text": "---\ntool: \"bn_function_basic_blocks\"\nfunction: \"0x4f82b0\"\narch: \"x86\"\nname: \"TerrainLightMap_Init_2\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 1000\ncount: 6\ntotal: 6\nnextOffset: null\ntruncated: false\n---\n\n| Index | Range | Flags | Incoming Edges | Outgoing Edges |\n| --- | --- | --- | --- | --- |\n| 0 | 0x4f82b0-0x4f82c3 (19 bytes) | can-exit |  | TrueBranch #1 0x4f82ea-0x4f82ee (4 bytes)<br>FalseBranch #2 0x4f82c3-0x4f82c7 (4 bytes) fallthrough |\n| 1 | 0x4f82ea-0x4f82ee (4 bytes) | can-exit | TrueBranch #0 0x4f82b0-0x4f82c3 (19 bytes) | TrueBranch #3 0x4f8311-0x4f831c (11 bytes)<br>FalseBranch #4 0x4f82ee-0x4f8311 (35 bytes) fallthrough |\n| 2 | 0x4f82c3-0x4f82c7 (4 bytes) | can-exit | FalseBranch #0 0x4f82b0-0x4f82c3 (19 bytes) fallthrough | TrueBranch #3 0x4f8311-0x4f831c (11 bytes)<br>FalseBranch #5 0x4f82c7-0x4f82ea (35 bytes) fallthrough |\n| 3 | 0x4f8311-0x4f831c (11 bytes) | can-exit | TrueBranch #1 0x4f82ea-0x4f82ee (4 bytes)<br>TrueBranch #2 0x4f82c3-0x4f82c7 (4 bytes) |  |\n| 4 | 0x4f82ee-0x4f8311 (35 bytes) | can-exit | FalseBranch #1 0x4f82ea-0x4f82ee (4 bytes) fallthrough |  |\n| 5 | 0x4f82c7-0x4f82ea (35 bytes) | can-exit | FalseBranch #2 0x4f82c3-0x4f82c7 (4 bytes) fallthrough |  |\n"
+      }
+    ],
+    "isError": false
+  }
+}

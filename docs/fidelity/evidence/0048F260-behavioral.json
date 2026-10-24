@@ -1,0 +1,7212 @@
+{
+  "address": "0x0048F260",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "cases": [
+    {
+      "candidate_output": {
+        "return_value": 0,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 0
+      },
+      "categories": [
+        "boundary"
+      ],
+      "id": "byte-00",
+      "input": {
+        "args": [
+          0
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 0,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 0
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 1,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 1
+      },
+      "categories": [
+        "boundary"
+      ],
+      "id": "byte-01",
+      "input": {
+        "args": [
+          1
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 1,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 1
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 2,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 2
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-02",
+      "input": {
+        "args": [
+          2
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 2,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 2
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 3,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 3
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-03",
+      "input": {
+        "args": [
+          3
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 3,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 3
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 4,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 4
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-04",
+      "input": {
+        "args": [
+          4
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 4,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 4
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 5,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 5
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-05",
+      "input": {
+        "args": [
+          5
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 5,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 5
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 6,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 6
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-06",
+      "input": {
+        "args": [
+          6
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 6,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 6
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 7,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 7
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-07",
+      "input": {
+        "args": [
+          7
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 7,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 7
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 8,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 8
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-08",
+      "input": {
+        "args": [
+          8
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 8,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 8
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 9,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 9
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-09",
+      "input": {
+        "args": [
+          9
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 9,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 9
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 10,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 10
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-0a",
+      "input": {
+        "args": [
+          10
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 10,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 10
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 11,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 11
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-0b",
+      "input": {
+        "args": [
+          11
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 11,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 11
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 12,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 12
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-0c",
+      "input": {
+        "args": [
+          12
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 12,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 12
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 13,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 13
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-0d",
+      "input": {
+        "args": [
+          13
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 13,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 13
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 14,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 14
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-0e",
+      "input": {
+        "args": [
+          14
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 14,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 14
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 15,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 15
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-0f",
+      "input": {
+        "args": [
+          15
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 15,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 15
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 16,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 16
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-10",
+      "input": {
+        "args": [
+          16
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 16,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 16
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 17,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 17
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-11",
+      "input": {
+        "args": [
+          17
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 17,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 17
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 18,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 18
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-12",
+      "input": {
+        "args": [
+          18
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 18,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 18
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 19,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 19
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-13",
+      "input": {
+        "args": [
+          19
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 19,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 19
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 20,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 20
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-14",
+      "input": {
+        "args": [
+          20
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 20,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 20
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 21,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 21
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-15",
+      "input": {
+        "args": [
+          21
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 21,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 21
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 22,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 22
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-16",
+      "input": {
+        "args": [
+          22
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 22,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 22
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 23,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 23
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-17",
+      "input": {
+        "args": [
+          23
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 23,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 23
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 24,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 24
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-18",
+      "input": {
+        "args": [
+          24
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 24,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 24
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 25,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 25
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-19",
+      "input": {
+        "args": [
+          25
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 25,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 25
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 26,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 26
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-1a",
+      "input": {
+        "args": [
+          26
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 26,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 26
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 27,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 27
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-1b",
+      "input": {
+        "args": [
+          27
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 27,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 27
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 28,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 28
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-1c",
+      "input": {
+        "args": [
+          28
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 28,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 28
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 29,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 29
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-1d",
+      "input": {
+        "args": [
+          29
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 29,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 29
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 30,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 30
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-1e",
+      "input": {
+        "args": [
+          30
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 30,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 30
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 31,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 31
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-1f",
+      "input": {
+        "args": [
+          31
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 31,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 31
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 32,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 32
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-20",
+      "input": {
+        "args": [
+          32
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 32,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 32
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 33,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 33
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-21",
+      "input": {
+        "args": [
+          33
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 33,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 33
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 34,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 34
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-22",
+      "input": {
+        "args": [
+          34
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 34,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 34
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 35,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 35
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-23",
+      "input": {
+        "args": [
+          35
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 35,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 35
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 36,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 36
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-24",
+      "input": {
+        "args": [
+          36
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 36,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 36
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 37,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 37
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-25",
+      "input": {
+        "args": [
+          37
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 37,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 37
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 38,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 38
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-26",
+      "input": {
+        "args": [
+          38
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 38,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 38
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 39,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 39
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-27",
+      "input": {
+        "args": [
+          39
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 39,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 39
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 40,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 40
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-28",
+      "input": {
+        "args": [
+          40
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 40,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 40
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 41,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 41
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-29",
+      "input": {
+        "args": [
+          41
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 41,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 41
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 42,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 42
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-2a",
+      "input": {
+        "args": [
+          42
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 42,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 42
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 43,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 43
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-2b",
+      "input": {
+        "args": [
+          43
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 43,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 43
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 44,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 44
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-2c",
+      "input": {
+        "args": [
+          44
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 44,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 44
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 45,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 45
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-2d",
+      "input": {
+        "args": [
+          45
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 45,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 45
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 46,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 46
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-2e",
+      "input": {
+        "args": [
+          46
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 46,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 46
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 47,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 47
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-2f",
+      "input": {
+        "args": [
+          47
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 47,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 47
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 48,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 48
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-30",
+      "input": {
+        "args": [
+          48
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 48,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 48
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 49,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 49
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-31",
+      "input": {
+        "args": [
+          49
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 49,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 49
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 50,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 50
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-32",
+      "input": {
+        "args": [
+          50
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 50,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 50
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 51,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 51
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-33",
+      "input": {
+        "args": [
+          51
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 51,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 51
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 52,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 52
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-34",
+      "input": {
+        "args": [
+          52
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 52,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 52
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 53,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 53
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-35",
+      "input": {
+        "args": [
+          53
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 53,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 53
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 54,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 54
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-36",
+      "input": {
+        "args": [
+          54
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 54,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 54
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 55,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 55
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-37",
+      "input": {
+        "args": [
+          55
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 55,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 55
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 56,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 56
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-38",
+      "input": {
+        "args": [
+          56
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 56,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 56
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 57,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 57
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-39",
+      "input": {
+        "args": [
+          57
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 57,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 57
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 58,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 58
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-3a",
+      "input": {
+        "args": [
+          58
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 58,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 58
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 59,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 59
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-3b",
+      "input": {
+        "args": [
+          59
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 59,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 59
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 60,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 60
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-3c",
+      "input": {
+        "args": [
+          60
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 60,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 60
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 61,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 61
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-3d",
+      "input": {
+        "args": [
+          61
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 61,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 61
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 62,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 62
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-3e",
+      "input": {
+        "args": [
+          62
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 62,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 62
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 63,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 63
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-3f",
+      "input": {
+        "args": [
+          63
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 63,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 63
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 64,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 64
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-40",
+      "input": {
+        "args": [
+          64
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 64,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 64
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 65,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 65
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-41",
+      "input": {
+        "args": [
+          65
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 65,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 65
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 66,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 66
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-42",
+      "input": {
+        "args": [
+          66
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 66,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 66
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 67,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 67
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-43",
+      "input": {
+        "args": [
+          67
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 67,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 67
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 68,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 68
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-44",
+      "input": {
+        "args": [
+          68
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 68,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 68
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 69,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 69
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-45",
+      "input": {
+        "args": [
+          69
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 69,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 69
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 70,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 70
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-46",
+      "input": {
+        "args": [
+          70
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 70,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 70
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 71,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 71
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-47",
+      "input": {
+        "args": [
+          71
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 71,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 71
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 72,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 72
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-48",
+      "input": {
+        "args": [
+          72
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 72,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 72
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 73,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 73
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-49",
+      "input": {
+        "args": [
+          73
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 73,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 73
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 74,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 74
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-4a",
+      "input": {
+        "args": [
+          74
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 74,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 74
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 75,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 75
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-4b",
+      "input": {
+        "args": [
+          75
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 75,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 75
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 76,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 76
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-4c",
+      "input": {
+        "args": [
+          76
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 76,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 76
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 77,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 77
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-4d",
+      "input": {
+        "args": [
+          77
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 77,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 77
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 78,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 78
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-4e",
+      "input": {
+        "args": [
+          78
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 78,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 78
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 79,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 79
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-4f",
+      "input": {
+        "args": [
+          79
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 79,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 79
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 80,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 80
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-50",
+      "input": {
+        "args": [
+          80
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 80,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 80
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 81,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 81
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-51",
+      "input": {
+        "args": [
+          81
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 81,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 81
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 82,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 82
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-52",
+      "input": {
+        "args": [
+          82
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 82,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 82
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 83,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 83
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-53",
+      "input": {
+        "args": [
+          83
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 83,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 83
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 84,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 84
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-54",
+      "input": {
+        "args": [
+          84
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 84,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 84
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 85,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 85
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-55",
+      "input": {
+        "args": [
+          85
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 85,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 85
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 86,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 86
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-56",
+      "input": {
+        "args": [
+          86
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 86,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 86
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 87,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 87
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-57",
+      "input": {
+        "args": [
+          87
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 87,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 87
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 88,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 88
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-58",
+      "input": {
+        "args": [
+          88
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 88,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 88
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 89,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 89
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-59",
+      "input": {
+        "args": [
+          89
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 89,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 89
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 90,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 90
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-5a",
+      "input": {
+        "args": [
+          90
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 90,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 90
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 91,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 91
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-5b",
+      "input": {
+        "args": [
+          91
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 91,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 91
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 92,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 92
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-5c",
+      "input": {
+        "args": [
+          92
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 92,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 92
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 93,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 93
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-5d",
+      "input": {
+        "args": [
+          93
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 93,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 93
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 94,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 94
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-5e",
+      "input": {
+        "args": [
+          94
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 94,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 94
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 95,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 95
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-5f",
+      "input": {
+        "args": [
+          95
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 95,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 95
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 96,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 96
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-60",
+      "input": {
+        "args": [
+          96
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 96,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 96
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 97,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 97
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-61",
+      "input": {
+        "args": [
+          97
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 97,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 97
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 98,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 98
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-62",
+      "input": {
+        "args": [
+          98
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 98,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 98
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 99,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 99
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-63",
+      "input": {
+        "args": [
+          99
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 99,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 99
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 100,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 100
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-64",
+      "input": {
+        "args": [
+          100
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 100,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 100
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 101,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 101
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-65",
+      "input": {
+        "args": [
+          101
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 101,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 101
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 102,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 102
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-66",
+      "input": {
+        "args": [
+          102
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 102,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 102
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 103,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 103
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-67",
+      "input": {
+        "args": [
+          103
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 103,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 103
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 104,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 104
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-68",
+      "input": {
+        "args": [
+          104
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 104,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 104
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 105,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 105
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-69",
+      "input": {
+        "args": [
+          105
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 105,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 105
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 106,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 106
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-6a",
+      "input": {
+        "args": [
+          106
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 106,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 106
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 107,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 107
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-6b",
+      "input": {
+        "args": [
+          107
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 107,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 107
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 108,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 108
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-6c",
+      "input": {
+        "args": [
+          108
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 108,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 108
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 109,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 109
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-6d",
+      "input": {
+        "args": [
+          109
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 109,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 109
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 110,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 110
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-6e",
+      "input": {
+        "args": [
+          110
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 110,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 110
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 111,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 111
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-6f",
+      "input": {
+        "args": [
+          111
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 111,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 111
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 112,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 112
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-70",
+      "input": {
+        "args": [
+          112
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 112,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 112
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 113,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 113
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-71",
+      "input": {
+        "args": [
+          113
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 113,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 113
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 114,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 114
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-72",
+      "input": {
+        "args": [
+          114
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 114,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 114
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 115,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 115
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-73",
+      "input": {
+        "args": [
+          115
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 115,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 115
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 116,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 116
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-74",
+      "input": {
+        "args": [
+          116
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 116,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 116
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 117,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 117
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-75",
+      "input": {
+        "args": [
+          117
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 117,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 117
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 118,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 118
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-76",
+      "input": {
+        "args": [
+          118
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 118,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 118
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 119,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 119
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-77",
+      "input": {
+        "args": [
+          119
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 119,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 119
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 120,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 120
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-78",
+      "input": {
+        "args": [
+          120
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 120,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 120
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 121,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 121
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-79",
+      "input": {
+        "args": [
+          121
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 121,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 121
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 122,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 122
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-7a",
+      "input": {
+        "args": [
+          122
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 122,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 122
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 123,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 123
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-7b",
+      "input": {
+        "args": [
+          123
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 123,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 123
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 124,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 124
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-7c",
+      "input": {
+        "args": [
+          124
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 124,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 124
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 125,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 125
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-7d",
+      "input": {
+        "args": [
+          125
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 125,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 125
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 126,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 126
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-7e",
+      "input": {
+        "args": [
+          126
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 126,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 126
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 127,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 127
+      },
+      "categories": [
+        "boundary"
+      ],
+      "id": "byte-7f",
+      "input": {
+        "args": [
+          127
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 127,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": 127
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -128,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -128
+      },
+      "categories": [
+        "boundary"
+      ],
+      "id": "byte-80",
+      "input": {
+        "args": [
+          128
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -128,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -128
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -127,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -127
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-81",
+      "input": {
+        "args": [
+          129
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -127,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -127
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -126,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -126
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-82",
+      "input": {
+        "args": [
+          130
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -126,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -126
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -125,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -125
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-83",
+      "input": {
+        "args": [
+          131
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -125,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -125
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -124,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -124
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-84",
+      "input": {
+        "args": [
+          132
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -124,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -124
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -123,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -123
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-85",
+      "input": {
+        "args": [
+          133
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -123,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -123
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -122,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -122
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-86",
+      "input": {
+        "args": [
+          134
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -122,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -122
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -121,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -121
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-87",
+      "input": {
+        "args": [
+          135
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -121,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -121
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -120,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -120
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-88",
+      "input": {
+        "args": [
+          136
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -120,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -120
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -119,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -119
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-89",
+      "input": {
+        "args": [
+          137
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -119,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -119
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -118,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -118
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-8a",
+      "input": {
+        "args": [
+          138
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -118,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -118
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -117,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -117
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-8b",
+      "input": {
+        "args": [
+          139
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -117,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -117
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -116,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -116
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-8c",
+      "input": {
+        "args": [
+          140
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -116,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -116
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -115,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -115
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-8d",
+      "input": {
+        "args": [
+          141
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -115,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -115
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -114,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -114
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-8e",
+      "input": {
+        "args": [
+          142
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -114,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -114
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -113,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -113
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-8f",
+      "input": {
+        "args": [
+          143
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -113,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -113
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -112,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -112
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-90",
+      "input": {
+        "args": [
+          144
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -112,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -112
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -111,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -111
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-91",
+      "input": {
+        "args": [
+          145
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -111,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -111
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -110,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -110
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-92",
+      "input": {
+        "args": [
+          146
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -110,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -110
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -109,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -109
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-93",
+      "input": {
+        "args": [
+          147
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -109,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -109
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -108,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -108
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-94",
+      "input": {
+        "args": [
+          148
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -108,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -108
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -107,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -107
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-95",
+      "input": {
+        "args": [
+          149
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -107,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -107
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -106,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -106
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-96",
+      "input": {
+        "args": [
+          150
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -106,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -106
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -105,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -105
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-97",
+      "input": {
+        "args": [
+          151
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -105,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -105
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -104,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -104
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-98",
+      "input": {
+        "args": [
+          152
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -104,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -104
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -103,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -103
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-99",
+      "input": {
+        "args": [
+          153
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -103,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -103
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -102,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -102
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-9a",
+      "input": {
+        "args": [
+          154
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -102,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -102
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -101,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -101
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-9b",
+      "input": {
+        "args": [
+          155
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -101,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -101
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -100,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -100
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-9c",
+      "input": {
+        "args": [
+          156
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -100,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -100
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -99,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -99
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-9d",
+      "input": {
+        "args": [
+          157
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -99,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -99
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -98,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -98
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-9e",
+      "input": {
+        "args": [
+          158
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -98,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -98
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -97,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -97
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-9f",
+      "input": {
+        "args": [
+          159
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -97,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -97
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -96,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -96
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-a0",
+      "input": {
+        "args": [
+          160
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -96,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -96
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -95,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -95
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-a1",
+      "input": {
+        "args": [
+          161
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -95,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -95
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -94,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -94
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-a2",
+      "input": {
+        "args": [
+          162
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -94,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -94
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -93,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -93
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-a3",
+      "input": {
+        "args": [
+          163
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -93,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -93
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -92,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -92
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-a4",
+      "input": {
+        "args": [
+          164
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -92,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -92
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -91,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -91
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-a5",
+      "input": {
+        "args": [
+          165
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -91,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -91
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -90,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -90
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-a6",
+      "input": {
+        "args": [
+          166
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -90,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -90
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -89,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -89
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-a7",
+      "input": {
+        "args": [
+          167
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -89,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -89
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -88,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -88
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-a8",
+      "input": {
+        "args": [
+          168
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -88,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -88
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -87,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -87
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-a9",
+      "input": {
+        "args": [
+          169
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -87,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -87
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -86,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -86
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-aa",
+      "input": {
+        "args": [
+          170
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -86,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -86
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -85,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -85
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-ab",
+      "input": {
+        "args": [
+          171
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -85,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -85
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -84,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -84
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-ac",
+      "input": {
+        "args": [
+          172
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -84,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -84
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -83,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -83
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-ad",
+      "input": {
+        "args": [
+          173
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -83,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -83
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -82,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -82
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-ae",
+      "input": {
+        "args": [
+          174
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -82,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -82
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -81,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -81
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-af",
+      "input": {
+        "args": [
+          175
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -81,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -81
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -80,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -80
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-b0",
+      "input": {
+        "args": [
+          176
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -80,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -80
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -79,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -79
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-b1",
+      "input": {
+        "args": [
+          177
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -79,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -79
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -78,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -78
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-b2",
+      "input": {
+        "args": [
+          178
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -78,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -78
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -77,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -77
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-b3",
+      "input": {
+        "args": [
+          179
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -77,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -77
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -76,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -76
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-b4",
+      "input": {
+        "args": [
+          180
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -76,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -76
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -75,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -75
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-b5",
+      "input": {
+        "args": [
+          181
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -75,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -75
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -74,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -74
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-b6",
+      "input": {
+        "args": [
+          182
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -74,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -74
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -73,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -73
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-b7",
+      "input": {
+        "args": [
+          183
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -73,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -73
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -72,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -72
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-b8",
+      "input": {
+        "args": [
+          184
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -72,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -72
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -71,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -71
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-b9",
+      "input": {
+        "args": [
+          185
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -71,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -71
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -70,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -70
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-ba",
+      "input": {
+        "args": [
+          186
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -70,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -70
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -69,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -69
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-bb",
+      "input": {
+        "args": [
+          187
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -69,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -69
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -68,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -68
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-bc",
+      "input": {
+        "args": [
+          188
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -68,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -68
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -67,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -67
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-bd",
+      "input": {
+        "args": [
+          189
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -67,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -67
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -66,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -66
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-be",
+      "input": {
+        "args": [
+          190
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -66,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -66
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -65,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -65
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-bf",
+      "input": {
+        "args": [
+          191
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -65,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -65
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -64,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -64
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-c0",
+      "input": {
+        "args": [
+          192
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -64,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -64
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -63,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -63
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-c1",
+      "input": {
+        "args": [
+          193
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -63,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -63
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -62,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -62
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-c2",
+      "input": {
+        "args": [
+          194
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -62,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -62
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -61,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -61
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-c3",
+      "input": {
+        "args": [
+          195
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -61,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -61
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -60,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -60
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-c4",
+      "input": {
+        "args": [
+          196
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -60,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -60
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -59,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -59
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-c5",
+      "input": {
+        "args": [
+          197
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -59,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -59
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -58,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -58
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-c6",
+      "input": {
+        "args": [
+          198
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -58,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -58
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -57,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -57
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-c7",
+      "input": {
+        "args": [
+          199
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -57,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -57
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -56,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -56
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-c8",
+      "input": {
+        "args": [
+          200
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -56,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -56
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -55,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -55
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-c9",
+      "input": {
+        "args": [
+          201
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -55,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -55
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -54,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -54
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-ca",
+      "input": {
+        "args": [
+          202
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -54,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -54
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -53,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -53
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-cb",
+      "input": {
+        "args": [
+          203
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -53,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -53
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -52,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -52
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-cc",
+      "input": {
+        "args": [
+          204
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -52,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -52
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -51,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -51
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-cd",
+      "input": {
+        "args": [
+          205
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -51,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -51
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -50,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -50
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-ce",
+      "input": {
+        "args": [
+          206
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -50,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -50
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -49,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -49
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-cf",
+      "input": {
+        "args": [
+          207
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -49,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -49
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -48,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -48
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-d0",
+      "input": {
+        "args": [
+          208
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -48,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -48
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -47,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -47
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-d1",
+      "input": {
+        "args": [
+          209
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -47,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -47
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -46,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -46
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-d2",
+      "input": {
+        "args": [
+          210
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -46,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -46
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -45,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -45
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-d3",
+      "input": {
+        "args": [
+          211
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -45,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -45
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -44,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -44
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-d4",
+      "input": {
+        "args": [
+          212
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -44,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -44
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -43,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -43
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-d5",
+      "input": {
+        "args": [
+          213
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -43,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -43
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -42,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -42
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-d6",
+      "input": {
+        "args": [
+          214
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -42,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -42
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -41,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -41
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-d7",
+      "input": {
+        "args": [
+          215
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -41,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -41
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -40,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -40
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-d8",
+      "input": {
+        "args": [
+          216
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -40,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -40
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -39,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -39
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-d9",
+      "input": {
+        "args": [
+          217
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -39,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -39
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -38,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -38
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-da",
+      "input": {
+        "args": [
+          218
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -38,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -38
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -37,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -37
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-db",
+      "input": {
+        "args": [
+          219
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -37,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -37
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -36,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -36
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-dc",
+      "input": {
+        "args": [
+          220
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -36,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -36
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -35,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -35
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-dd",
+      "input": {
+        "args": [
+          221
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -35,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -35
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -34,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -34
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-de",
+      "input": {
+        "args": [
+          222
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -34,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -34
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -33,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -33
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-df",
+      "input": {
+        "args": [
+          223
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -33,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -33
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -32,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -32
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-e0",
+      "input": {
+        "args": [
+          224
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -32,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -32
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -31,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -31
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-e1",
+      "input": {
+        "args": [
+          225
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -31,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -31
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -30,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -30
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-e2",
+      "input": {
+        "args": [
+          226
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -30,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -30
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -29,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -29
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-e3",
+      "input": {
+        "args": [
+          227
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -29,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -29
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -28,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -28
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-e4",
+      "input": {
+        "args": [
+          228
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -28,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -28
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -27,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -27
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-e5",
+      "input": {
+        "args": [
+          229
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -27,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -27
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -26,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -26
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-e6",
+      "input": {
+        "args": [
+          230
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -26,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -26
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -25,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -25
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-e7",
+      "input": {
+        "args": [
+          231
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -25,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -25
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -24,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -24
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-e8",
+      "input": {
+        "args": [
+          232
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -24,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -24
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -23,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -23
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-e9",
+      "input": {
+        "args": [
+          233
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -23,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -23
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -22,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -22
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-ea",
+      "input": {
+        "args": [
+          234
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -22,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -22
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -21,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -21
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-eb",
+      "input": {
+        "args": [
+          235
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -21,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -21
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -20,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -20
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-ec",
+      "input": {
+        "args": [
+          236
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -20,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -20
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -19,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -19
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-ed",
+      "input": {
+        "args": [
+          237
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -19,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -19
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -18,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -18
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-ee",
+      "input": {
+        "args": [
+          238
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -18,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -18
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -17,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -17
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-ef",
+      "input": {
+        "args": [
+          239
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -17,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -17
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -16,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -16
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-f0",
+      "input": {
+        "args": [
+          240
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -16,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -16
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -15,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -15
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-f1",
+      "input": {
+        "args": [
+          241
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -15,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -15
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -14,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -14
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-f2",
+      "input": {
+        "args": [
+          242
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -14,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -14
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -13,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -13
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-f3",
+      "input": {
+        "args": [
+          243
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -13,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -13
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -12,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -12
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-f4",
+      "input": {
+        "args": [
+          244
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -12,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -12
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -11,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -11
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-f5",
+      "input": {
+        "args": [
+          245
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -11,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -11
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -10,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -10
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-f6",
+      "input": {
+        "args": [
+          246
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -10,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -10
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -9,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -9
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-f7",
+      "input": {
+        "args": [
+          247
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -9,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -9
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -8,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -8
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-f8",
+      "input": {
+        "args": [
+          248
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -8,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -8
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -7,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -7
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-f9",
+      "input": {
+        "args": [
+          249
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -7,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -7
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -6,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -6
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-fa",
+      "input": {
+        "args": [
+          250
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -6,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -6
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -5,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -5
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-fb",
+      "input": {
+        "args": [
+          251
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -5,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -5
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -4,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -4
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-fc",
+      "input": {
+        "args": [
+          252
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -4,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -4
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -3,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -3
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "byte-fd",
+      "input": {
+        "args": [
+          253
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -3,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -3
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -2,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -2
+      },
+      "categories": [
+        "boundary"
+      ],
+      "id": "byte-fe",
+      "input": {
+        "args": [
+          254
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -2,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -2
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": -1,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -1
+      },
+      "categories": [
+        "boundary"
+      ],
+      "id": "byte-ff",
+      "input": {
+        "args": [
+          255
+        ],
+        "initial_state": {
+          "global": 0
+        }
+      },
+      "reference_output": {
+        "return_value": -1,
+        "side_effects": [
+          "write:0X005C8BE8"
+        ],
+        "state_delta": -1
+      }
+    }
+  ],
+  "executed": true,
+  "float_tolerance": {
+    "absolute": 0,
+    "relative": 0
+  },
+  "implementation_sha256": "fd177b7af8f72f9234d3d846d4879411431c7566170f4e886919413b3d0dbd71",
+  "kind": "behavioral-test-report",
+  "method": "Retail x86 instructions from the selected igi.exe were executed in Radare2 ESIL; candidate compiled from current C++ source; exhaustive byte-domain comparison. ESIL emulation was used because this ARM64 macOS host cannot launch the Windows x86 game process.",
+  "observable_fields": [
+    "return_value",
+    "state_delta",
+    "side_effects"
+  ],
+  "oracle": "retail-binary-execution",
+  "result": "passed",
+  "schema_version": 1,
+  "tests_failed": 0,
+  "tests_passed": 256,
+  "tests_total": 256,
+  "runner": {
+    "path": "scripts/native_diff_runner.py",
+    "sha256": "12e8ed107734f172475fecb76b0e7f53f46ea27ba0737d0ca7ffdb4ac2af440b",
+    "command": [
+      "scripts/native_diff_runner.py",
+      "--address",
+      "0x0048F260",
+      "--binary",
+      "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+      "--binary-sha256",
+      "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "--implementation",
+      "/Users/haseeb-mir/Documents/Code/project-open-igi/engine/src/retail/core/app_context.cpp",
+      "--implementation-sha256",
+      "fd177b7af8f72f9234d3d846d4879411431c7566170f4e886919413b3d0dbd71",
+      "--root",
+      "/Users/haseeb-mir/Documents/Code/project-open-igi"
+    ]
+  }
+}

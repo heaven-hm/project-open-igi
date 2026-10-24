@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review",
+  "address": "0x004B59F0",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation": {
+    "path": "engine/src/retail/resource/sys_resource.cpp",
+    "sha256": "2c601f597dbf195fba1396c89649c97d200aa82d59254ea4c6258acb27952035"
+  },
+  "method": "Binary Ninja MCP and Radare2 CFG MCP on retail IGI.EXE; candidate reference scripts/GameNatives/*; host behavioral differential via native_leaves_runner.py.",
+  "observable_fields": [
+    "return_value",
+    "state_delta",
+    "side_effects"
+  ],
+  "scope": "Return-value and state-delta equivalence verified under native_leaves_runner.py differential harness with seeded C++ argument generation.",
+  "deviations": [],
+  "limits": "x87 FPU return-value checked via unicorn stub in native_unicorn_runner.py; differential harness uses seeded integer arguments not float comparison.",
+  "evidence_path": "docs/fidelity/evidence/0x0X004B59F0-semantic-review.json"
+}

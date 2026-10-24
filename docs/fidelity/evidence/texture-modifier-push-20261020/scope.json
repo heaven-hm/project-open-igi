@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "address": "0x00505E40",
+  "status": "VERIFIED_WITH_DOCUMENTED_SCOPE",
+  "scope": "Exactly the listed controlled replay and explicit live fixtures; not a game-integration acceptance.",
+  "implementation_sha256": "133d9ddb293c4f329a9db725b5c50e96412083975c604859f802f1645fe8cc1e",
+  "replay_case_ids": [
+    "negative-index",
+    "minimum-index",
+    "disabled-row",
+    "disabled-offset-row",
+    "push-zero",
+    "push-value",
+    "push-last-slot",
+    "push-wrap",
+    "push-wide-value",
+    "full-stack-fatal",
+    "overfull-stack-fatal",
+    "full-stack-disabled"
+  ],
+  "live_fixture_ids": [
+    "negative-index",
+    "minimum-index",
+    "disabled-row",
+    "disabled-offset-row",
+    "push-zero",
+    "push-value",
+    "push-last-slot",
+    "push-wrap",
+    "push-wide-value",
+    "full-stack-disabled"
+  ],
+  "levels": [
+    1,
+    4,
+    7
+  ],
+  "runtime_comparisons": [
+    "level1-paired.json",
+    "level4-paired.json",
+    "level7-paired.json"
+  ],
+  "results": {
+    "baseline": "2/12 passed",
+    "replay": "12/12 passed",
+    "live": "10/10 matching per level; 30 paired comparisons",
+    "globals_restored": true
+  },
+  "excluded": [
+    "Natural invocation and host wiring",
+    "Texture or terrain rendering",
+    "Arbitrary aliases and invalid pointers",
+    "Negative stack counters",
+    "Error_Show body; fatal cases replay-only with modeled callee return"
+  ],
+  "review": "Independent critic /root/review_divergence_patch; two probe false-pass risks corrected; build evidence refreshed from current x86 compile.",
+  "development_gate": "build/runtime-traces/texture-modifier-20261020/runtime-tested-gate.json"
+}

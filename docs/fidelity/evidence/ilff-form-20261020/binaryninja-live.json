@@ -1,0 +1,9 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "---\ntool: \"bn_function_decompile\"\nfunction: \"0x4b7570\"\narch: \"x86\"\nname: \"Ilff_GetFormType\"\nplatform: \"windows-x86\"\nlanguage: \"Pseudo C\"\noffset: 0\nlimit: 45\ncount: 10\ntotal: 10\nnextOffset: null\ntruncated: false\nneedsUpdate: false\n---\n\n````bn-pseudoc\n  int32_t Ilff_GetFormType(void* arg1)\n\n{\n    if (!arg1)\n        return 0;\n\n    return *(arg1 + 0x10);\n}\n````\n"
+    }
+  ],
+  "isError": false
+}

@@ -1,0 +1,17 @@
+[35mWARN:[0m Relocs has not been applied. Please use `-e bin.relocs.apply=true` or `-e bin.cache=true` next time
+[33mINFO:[0m Analyze all flags starting with sym. and entry0 (aa)
+[33mINFO:[0m Analyze imports (af@@@i)
+[33mINFO:[0m Analyze entrypoint (af@ entry0)
+[33mINFO:[0m Analyze symbols (af@@@s)
+[33mINFO:[0m Running plugin pre-analysis hooks
+[33mINFO:[0m Analyze all functions arguments/locals (afva@@F)
+[33mINFO:[0m Analyze function calls (aac)
+[33mINFO:[0m Analyze len bytes of instructions for references (aar)
+[33mINFO:[0m Finding and parsing C++ vtables (avrr)
+[33mINFO:[0m Analyzing methods (af @@ method.*)
+[33mINFO:[0m Recovering local variables (afva@@@F)
+[33mINFO:[0m Type matching analysis for all functions (aaft)
+[33mINFO:[0m Propagate noreturn information (aanr)
+[33mINFO:[0m Use -AA or aaaa to perform additional experimental analysis
+[{"addr":5049616,"name":"fcn.004d0d10","size":15,"is-pure":"true","realsz":15,"noreturn":false,"recursive":false,"stackframe":0,"calltype":"cdecl","cost":7,"cc":1,"bits":32,"type":"fcn","nbbs":1,"tracecov":0,"is-lineal":true,"ninstrs":5,"edges":0,"ebbs":1,"signature":"fcn.004d0d10 (int32_t arg_4h);","minaddr":5049616,"maxaddr":5049631,"maxbbins":5,"midbbins":5.000,"ratbbins":1.000,"indegree":2,"outdegree":0,"nlocals":0,"nargs":1,"difftype":"new"}]
+[{"name":"fcn.004d0d10","addr":5049616,"ninstr":5,"nargs":1,"nlocals":0,"size":15,"stack":0,"type":"fcn","blocks":[{"addr":5049616,"size":15,"ops":[{"addr":5049616,"esil":"0x4,esp,+,[4],eax,=","refptr":4,"fcn_addr":5049616,"fcn_last":5049627,"size":4,"opcode":"mov eax, dword [esp + 4]","disasm":"mov eax, dword [esp + 4]","bytes":"8b442404","family":"cpu","type":"mov","reloc":false,"type_num":9,"type2_num":0,"flags":["fcn.004d0d10"],"xrefs":[{"addr":4999535,"type":"CALL","perm":"--x"},{"addr":5110380,"type":"CALL","perm":"--x"}]},{"addr":5049620,"esil":"0xc,eax,+,[4],ecx,=","refptr":4,"fcn_addr":5049616,"fcn_last":5049628,"size":3,"opcode":"mov ecx, dword [eax + 0xc]","disasm":"mov ecx, dword [eax + 0xc]","bytes":"8b480c","family":"cpu","type":"mov","reloc":false,"type_num":9,"type2_num":0},{"addr":5049623,"esil":"0xc,ecx,+,[4],edx,=","refptr":4,"fcn_addr":5049616,"fcn_last":5049628,"size":3,"opcode":"mov edx, dword [ecx + 0xc]","disasm":"mov edx, dword [ecx + 0xc]","bytes":"8b510c","family":"cpu","type":"mov","reloc":false,"type_num":9,"type2_num":0},{"addr":5049626,"esil":"16,0x7e,edx,+,[2],~,eax,=","refptr":2,"fcn_addr":5049616,"fcn_last":5049627,"size":4,"opcode":"movsx eax, word [edx + 0x7e]","disasm":"movsx eax, word [edx + 0x7e]","bytes":"0fbf427e","family":"cpu","type":"mov","reloc":false,"type_num":9,"type2_num":0},{"addr":5049630,"esil":"esp,[4],eip,=,4,esp,+=","refptr":0,"fcn_addr":5049616,"fcn_last":5049630,"size":1,"opcode":"ret","disasm":"ret","bytes":"c3","family":"cpu","type":"ret","reloc":false,"type_num":5,"type2_num":0}]}]}]

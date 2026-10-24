@@ -1,0 +1,98 @@
+{
+  "analysis": "CFGFast",
+  "angr_version": "10.0.4.post1",
+  "batch_size": 1,
+  "batches": [
+    {
+      "addresses": [
+        "0x004F82B0"
+      ],
+      "result": "pass",
+      "stderr": ""
+    }
+  ],
+  "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "bits": 32,
+  "command": [
+    [
+      "/Users/haseeb-mir/Documents/Code/project-open-igi/.venv-angr/bin/python",
+      "/Users/haseeb-mir/Documents/Code/project-open-igi/scripts/angr_analyze.py",
+      "--binary",
+      "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+      "--address",
+      "0x004F82B0"
+    ]
+  ],
+  "functions": {
+    "0x004F82B0": {
+      "baseline_has_unresolved_jumps": false,
+      "block_count": 7,
+      "edges": [
+        {
+          "kind": "unknown",
+          "source": "0x004F82B0",
+          "target": "0x004F82B5"
+        },
+        {
+          "kind": "unknown",
+          "source": "0x004F82B5",
+          "target": "0x004F82C3"
+        },
+        {
+          "kind": "unknown",
+          "source": "0x004F82B5",
+          "target": "0x004F82EA"
+        },
+        {
+          "kind": "unknown",
+          "source": "0x004F82C3",
+          "target": "0x004F82C7"
+        },
+        {
+          "kind": "unknown",
+          "source": "0x004F82C3",
+          "target": "0x004F8311"
+        },
+        {
+          "kind": "unknown",
+          "source": "0x004F82EA",
+          "target": "0x004F82EE"
+        },
+        {
+          "kind": "unknown",
+          "source": "0x004F82EA",
+          "target": "0x004F8311"
+        }
+      ],
+      "function_entry": "0x004F82B0",
+      "has_unresolved_jumps": false,
+      "implicit_repeat_nodes": [],
+      "initialization_model": null,
+      "name": "sub_4f82b0",
+      "nodes": [
+        "0x004F82B0",
+        "0x004F82B5",
+        "0x004F82C3",
+        "0x004F82C7",
+        "0x004F82EA",
+        "0x004F82EE",
+        "0x004F8311"
+      ],
+      "reason": null,
+      "recovery_mode": "automatic",
+      "result": "pass",
+      "returning": true
+    }
+  },
+  "helper_sha256": "4ca38e65b37a3fdc4b2c15085c26ed5691db08b2acfed0653f8136babad59609",
+  "kind": "angr-analysis",
+  "limitations": [
+    "CFGFast is approximate static analysis",
+    "This result does not prove semantic or behavioral equivalence"
+  ],
+  "mapped_base": "0x400000",
+  "result": "pass",
+  "schema_version": 1,
+  "tool": "angr"
+}

@@ -1,0 +1,29 @@
+--- a/docs/fidelity/native-verification.json
++++ b/docs/fidelity/native-verification.json
+@@ -6892,6 +6892,26 @@
+         "semantic_review": {
+           "evidence_path": "docs/fidelity/evidence/0x004B7570-semantic-review.json",
+           "evidence_sha256": "cc2a2009b19c18e17f34a1eafbd2776c51ceb3c21f13b88d661df9430dd5ffa3"
++        },
++        "behavioral_runner": {
++          "path": "scripts/nullable_getter_diff_runner.py",
++          "timeout_seconds": 120,
++          "args": [
++            "--address",
++            "{address}",
++            "--binary",
++            "{binary}",
++            "--binary-sha256",
++            "{binary_sha256}",
++            "--implementation",
++            "{implementation}",
++            "--implementation-sha256",
++            "{implementation_sha256}",
++            "--root",
++            "{root}",
++            "--symbol",
++            "igi::retail::sys::Ilff_GetFormType"
++          ]
+         }
+       }
+     },

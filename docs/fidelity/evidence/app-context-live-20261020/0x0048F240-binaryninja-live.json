@@ -1,0 +1,9 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "---\ntool: \"bn_function_decompile\"\nfunction: \"0x48f240\"\narch: \"x86\"\nname: \"AppContext_SetLightmapsUsed\"\nplatform: \"windows-x86\"\nlanguage: \"Pseudo C\"\noffset: 0\nlimit: 55\ncount: 14\ntotal: 14\nnextOffset: null\ntruncated: false\nneedsUpdate: false\n---\n\n````bn-pseudoc\n  int32_t AppContext_SetLightmapsUsed(char arg1)\n\n// Sig: void App_ContextSetLightmapsUsed(int8_t used)\n// Note: Enables/disables OBJECT lightmaps globally (global 0x5C8BE4) - the\n// verified retail lightmap setter. Param: used = 1 use object lightmaps, 0\n// flat-lit. Use for graphics enhancers (this is what IGIPatch's lightmap\n// toggles call).\n{\n    int32_t result = arg1;\n    g_5c8be4 = result;\n    return result;\n}\n````\n"
+    }
+  ],
+  "isError": false
+}

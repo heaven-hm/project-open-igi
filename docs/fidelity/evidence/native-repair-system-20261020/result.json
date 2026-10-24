@@ -1,0 +1,45 @@
+{
+  "address": "0x004B7570",
+  "source": "engine/src/retail/sys/ilff_navigation.cpp",
+  "child": {
+    "returncode": 0,
+    "timed_out": false,
+    "interrupted": false,
+    "mode": "deterministic-nullable-member-getter"
+  },
+  "changed_files": [
+    "docs/fidelity/native-verification.json"
+  ],
+  "denied_changes": [],
+  "retail_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "source_sha256_before": "3ca6df6dd3baf32cdc903dc4b1bdf9aab830350570abbe1bc191c2b094724e43",
+  "source_sha256_after": "3ca6df6dd3baf32cdc903dc4b1bdf9aab830350570abbe1bc191c2b094724e43",
+  "result": "candidate-review-required",
+  "scope": "Isolated proposal only; no live changes and no runtime acceptance",
+  "requires_hunk_level_critic": true,
+  "interrupted": false,
+  "gate": {
+    "returncode": 1,
+    "timed_out": false,
+    "interrupted": false
+  },
+  "gate_source_mutations": [],
+  "baseline_mutations": [],
+  "gate_passed": false,
+  "handoff": "Review /Users/haseeb-mir/Documents/Code/project-open-igi/build/native-repair-ilff-frozen/0x004B7570-9c72fa91b9e3-1792499557238712000/proposal.patch and /Users/haseeb-mir/Documents/Code/project-open-igi/build/native-repair-ilff-frozen/0x004B7570-9c72fa91b9e3-1792499557238712000/result.json; independent review is required before applying selected hunks.",
+  "review_command": [
+    "git",
+    "-C",
+    "/Users/haseeb-mir/Documents/Code/project-open-igi/build/native-repair-ilff-deterministic-retry/0x004B7570-9c72fa91b9e3-1792499500713081000/baseline",
+    "apply",
+    "--check",
+    "/Users/haseeb-mir/Documents/Code/project-open-igi/build/native-repair-ilff-frozen/0x004B7570-9c72fa91b9e3-1792499557238712000/proposal.patch"
+  ],
+  "apply_after_independent_review": [
+    "git",
+    "-C",
+    "/Users/haseeb-mir/Documents/Code/project-open-igi/build/native-repair-ilff-deterministic-retry/0x004B7570-9c72fa91b9e3-1792499500713081000/baseline",
+    "apply",
+    "/Users/haseeb-mir/Documents/Code/project-open-igi/build/native-repair-ilff-frozen/0x004B7570-9c72fa91b9e3-1792499557238712000/proposal.patch"
+  ]
+}

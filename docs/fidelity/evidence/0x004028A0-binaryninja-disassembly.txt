@@ -1,0 +1,27 @@
+---
+tool: "bn_function_disassembly"
+function: "0x4028a0"
+arch: "x86"
+name: "Flow_SetState"
+platform: "windows-x86"
+offset: 0
+limit: 1000
+count: 13
+total: 13
+nextOffset: null
+truncated: false
+---
+
+````asm
+  int32_t Flow_SetState(int32_t arg1)
+
+0x4028a0  // Sig: void Flow_SetState(int stateId)
+0x4028a0  // Note: Stores a pending flow state in game-context field +0x2C. The main loop
+0x4028a0  // consumes it, copies it to +0x28, clears the pending field, and dispatches
+0x4028a0  // state IDs 1 through 8. Flow_RequestEvent reaches this setter after converting
+0x4028a0  // its event ID.
+0x4028a0  mov     ecx, dword [0x567c8c]
+0x4028a6  mov     eax, dword [esp+0x4]
+0x4028aa  mov     dword [ecx+0x2c {frames_ctx::pad_00[0x2c]}], eax {frames_ctx::pad_00[0x2d]} {frames_ctx::pad_00[0x2e]} {frames_ctx::pad_00[0x2f]}
+0x4028ad  retn
+````

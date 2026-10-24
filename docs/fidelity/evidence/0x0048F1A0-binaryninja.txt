@@ -1,0 +1,25 @@
+---
+tool: "bn_function_disassembly"
+function: "0x48f1a0"
+arch: "x86"
+name: "App_ContextSetDebugged"
+platform: "windows-x86"
+offset: 0
+limit: 1000
+count: 11
+total: 11
+nextOffset: null
+truncated: false
+---
+
+````asm
+  int32_t App_ContextSetDebugged(char arg1)
+
+0x48f1a0  // Sig: void App_ContextSetDebugged(int8_t state)
+0x48f1a0  // Note: Sets the app-level DEBUGGED flag (global 0x5C8BF8). Param: state = 1
+0x48f1a0  // mark debugger attached/debug mode, 0 clear. BlankName's IGIPatch calls this
+0x48f1a0  // by name. Use to toggle engine debug paths.
+0x48f1a0  movsx   eax, byte [esp+0x4 {arg1}]
+0x48f1a5  mov     dword [g_5c8bf8], eax
+0x48f1aa  retn     {__return_addr}
+````

@@ -1,0 +1,9 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "---\ntool: \"bn_function_decompile\"\nfunction: \"0x48f250\"\narch: \"x86\"\nname: \"App_ContextGetTerrainLightmapsUsed\"\nplatform: \"windows-x86\"\nlanguage: \"Pseudo C\"\noffset: 0\nlimit: 55\ncount: 7\ntotal: 7\nnextOffset: null\ntruncated: false\nneedsUpdate: false\n---\n\n````bn-pseudoc\n  int32_t App_ContextGetTerrainLightmapsUsed()\n\n{\n    return g_5c8be8;\n}\n````\n"
+    }
+  ],
+  "isError": false
+}

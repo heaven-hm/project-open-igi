@@ -1,0 +1,149 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"evidence_id\":\"ev_25ef7453959fb579fe46e3d9f2eda1dd4588beb382e4fa20e8d7666d9ec132ee\",\"subject\":{\"name\":\"igi.exe\",\"digest\":{\"sha256\":\"dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01\"},\"format\":\"pe\",\"architecture\":\"x86\",\"local_path\":\"/Users/haseeb-mir/Downloads/IGI/igi.exe\"},\"provider\":{\"id\":\"radare2\",\"name\":\"radare2 static analyzer\",\"version\":\"6.2.0\"},\"analysis_profile\":null,\"predicate_type\":\"rea.analysis\",\"operation\":\"inspect_radare2_disassembly\",\"parameters\":{\"address\":\"0x004B7570\",\"count\":8},\"raw_result\":null,\"normalized_result\":{\"artifact\":{\"path\":\"/Users/haseeb-mir/Downloads/IGI/igi.exe\",\"sha256\":\"dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01\",\"format\":\"pe\",\"architecture\":\"x86\",\"size_bytes\":1384448},\"engine\":{\"path\":\"/opt/homebrew/Cellar/radare2/6.2.0/bin/radare2\",\"sha256\":\"0706936e12301c2541818f6d3a1b58c60bbbf49f8d723459cd526a9153f3572d\",\"version\":\"6.2.0\"},\"selection\":{\"address\":\"0x4b7570\",\"requested_instructions\":8},\"command\":{\"arguments\":[\"-q\",\"-c\",\"pdj 8 @ 0x4b7570\",\"/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/rea-radare2-sZKvUp/target.exe\"],\"exit_code\":0,\"stdout\":{\"sha256\":\"5c33f5bc0c34c1507fd79be8b48fd192a673bb2624ed54b2f25cdf51bf72214e\",\"bytes\":1906,\"complete\":true},\"stderr\":{\"sha256\":\"3b37393b2359a00a919fdfc54ea0569e10d5fcc06f545e09220ca6c0213e3041\",\"bytes\":106}},\"coverage\":\"complete\",\"instructions\":[{\"address\":\"0x4b7570\",\"size\":4,\"opcode\":\"mov eax, dword [esp + 4]\",\"disassembly\":\"mov eax, dword [esp + 4]\",\"bytes\":\"8b442404\"},{\"address\":\"0x4b7574\",\"size\":2,\"opcode\":\"test eax, eax\",\"disassembly\":\"test eax, eax\",\"bytes\":\"85c0\"},{\"address\":\"0x4b7576\",\"size\":2,\"opcode\":\"je 0x4b757c\",\"disassembly\":\"je 0x4b757c\",\"bytes\":\"7404\"},{\"address\":\"0x4b7578\",\"size\":3,\"opcode\":\"mov eax, dword [eax + 0x10]\",\"disassembly\":\"mov eax, dword [eax + 0x10]\",\"bytes\":\"8b4010\"},{\"address\":\"0x4b757b\",\"size\":1,\"opcode\":\"ret\",\"disassembly\":\"ret\",\"bytes\":\"c3\"},{\"address\":\"0x4b757c\",\"size\":2,\"opcode\":\"xor eax, eax\",\"disassembly\":\"xor eax, eax\",\"bytes\":\"33c0\"},{\"address\":\"0x4b757e\",\"size\":1,\"opcode\":\"ret\",\"disassembly\":\"ret\",\"bytes\":\"c3\"},{\"address\":\"0x4b757f\",\"size\":1,\"opcode\":\"nop\",\"disassembly\":\"nop\",\"bytes\":\"90\"}],\"limitations\":[\"Instructions are radare2's static decoding at the caller-selected address; this does not establish function boundaries or runtime reachability.\",\"The target is analyzed from a provider-owned byte-for-byte snapshot and is never executed by this operation.\",\"A short result can indicate undecodable bytes or an address outside mapped executable data; it is reported as partial or empty, not as a successful full decode.\"]},\"confidence\":\"observed\",\"authority\":\"shipped-artifact\",\"environment\":null,\"limitations\":[\"Instructions are radare2's static decoding at the caller-selected address; this does not establish function boundaries or runtime reachability.\",\"The target is analyzed from a provider-owned byte-for-byte snapshot and is never executed by this operation.\",\"A short result can indicate undecodable bytes or an address outside mapped executable data; it is reported as partial or empty, not as a successful full decode.\"],\"relationship_coverage\":null,\"locations\":[{\"kind\":\"artifact-path\",\"path\":\"/Users/haseeb-mir/Downloads/IGI/igi.exe\"}],\"evidence_links\":[]}"
+    }
+  ],
+  "structuredContent": {
+    "evidence_id": "ev_25ef7453959fb579fe46e3d9f2eda1dd4588beb382e4fa20e8d7666d9ec132ee",
+    "subject": {
+      "name": "igi.exe",
+      "digest": {
+        "sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01"
+      },
+      "format": "pe",
+      "architecture": "x86",
+      "local_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe"
+    },
+    "provider": {
+      "id": "radare2",
+      "name": "radare2 static analyzer",
+      "version": "6.2.0"
+    },
+    "analysis_profile": null,
+    "predicate_type": "rea.analysis",
+    "operation": "inspect_radare2_disassembly",
+    "parameters": {
+      "address": "0x004B7570",
+      "count": 8
+    },
+    "raw_result": null,
+    "normalized_result": {
+      "artifact": {
+        "path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+        "sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+        "format": "pe",
+        "architecture": "x86",
+        "size_bytes": 1384448
+      },
+      "engine": {
+        "path": "/opt/homebrew/Cellar/radare2/6.2.0/bin/radare2",
+        "sha256": "0706936e12301c2541818f6d3a1b58c60bbbf49f8d723459cd526a9153f3572d",
+        "version": "6.2.0"
+      },
+      "selection": {
+        "address": "0x4b7570",
+        "requested_instructions": 8
+      },
+      "command": {
+        "arguments": [
+          "-q",
+          "-c",
+          "pdj 8 @ 0x4b7570",
+          "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/rea-radare2-sZKvUp/target.exe"
+        ],
+        "exit_code": 0,
+        "stdout": {
+          "sha256": "5c33f5bc0c34c1507fd79be8b48fd192a673bb2624ed54b2f25cdf51bf72214e",
+          "bytes": 1906,
+          "complete": true
+        },
+        "stderr": {
+          "sha256": "3b37393b2359a00a919fdfc54ea0569e10d5fcc06f545e09220ca6c0213e3041",
+          "bytes": 106
+        }
+      },
+      "coverage": "complete",
+      "instructions": [
+        {
+          "address": "0x4b7570",
+          "size": 4,
+          "opcode": "mov eax, dword [esp + 4]",
+          "disassembly": "mov eax, dword [esp + 4]",
+          "bytes": "8b442404"
+        },
+        {
+          "address": "0x4b7574",
+          "size": 2,
+          "opcode": "test eax, eax",
+          "disassembly": "test eax, eax",
+          "bytes": "85c0"
+        },
+        {
+          "address": "0x4b7576",
+          "size": 2,
+          "opcode": "je 0x4b757c",
+          "disassembly": "je 0x4b757c",
+          "bytes": "7404"
+        },
+        {
+          "address": "0x4b7578",
+          "size": 3,
+          "opcode": "mov eax, dword [eax + 0x10]",
+          "disassembly": "mov eax, dword [eax + 0x10]",
+          "bytes": "8b4010"
+        },
+        {
+          "address": "0x4b757b",
+          "size": 1,
+          "opcode": "ret",
+          "disassembly": "ret",
+          "bytes": "c3"
+        },
+        {
+          "address": "0x4b757c",
+          "size": 2,
+          "opcode": "xor eax, eax",
+          "disassembly": "xor eax, eax",
+          "bytes": "33c0"
+        },
+        {
+          "address": "0x4b757e",
+          "size": 1,
+          "opcode": "ret",
+          "disassembly": "ret",
+          "bytes": "c3"
+        },
+        {
+          "address": "0x4b757f",
+          "size": 1,
+          "opcode": "nop",
+          "disassembly": "nop",
+          "bytes": "90"
+        }
+      ],
+      "limitations": [
+        "Instructions are radare2's static decoding at the caller-selected address; this does not establish function boundaries or runtime reachability.",
+        "The target is analyzed from a provider-owned byte-for-byte snapshot and is never executed by this operation.",
+        "A short result can indicate undecodable bytes or an address outside mapped executable data; it is reported as partial or empty, not as a successful full decode."
+      ]
+    },
+    "confidence": "observed",
+    "authority": "shipped-artifact",
+    "environment": null,
+    "limitations": [
+      "Instructions are radare2's static decoding at the caller-selected address; this does not establish function boundaries or runtime reachability.",
+      "The target is analyzed from a provider-owned byte-for-byte snapshot and is never executed by this operation.",
+      "A short result can indicate undecodable bytes or an address outside mapped executable data; it is reported as partial or empty, not as a successful full decode."
+    ],
+    "relationship_coverage": null,
+    "locations": [
+      {
+        "kind": "artifact-path",
+        "path": "/Users/haseeb-mir/Downloads/IGI/igi.exe"
+      }
+    ],
+    "evidence_links": []
+  }
+}

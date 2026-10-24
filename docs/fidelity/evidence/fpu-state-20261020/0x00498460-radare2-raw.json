@@ -1,0 +1,128 @@
+[
+  {
+    "name": "fcn.00498460",
+    "addr": 4818016,
+    "ninstr": 5,
+    "nargs": 0,
+    "nlocals": 0,
+    "size": 23,
+    "stack": 0,
+    "type": "fcn",
+    "blocks": [
+      {
+        "addr": 4818016,
+        "size": 23,
+        "ops": [
+          {
+            "addr": 4818016,
+            "esil": "",
+            "refptr": 0,
+            "fcn_addr": 4818016,
+            "fcn_last": 4818038,
+            "size": 1,
+            "opcode": "wait",
+            "disasm": "wait",
+            "bytes": "9b",
+            "family": "cpu",
+            "type": "null",
+            "reloc": false,
+            "type_num": 0,
+            "type2_num": 0,
+            "flags": [
+              "fcn.00498460"
+            ]
+          },
+          {
+            "addr": 4818017,
+            "ptr": 7232452,
+            "esil": "",
+            "refptr": 2,
+            "fcn_addr": 4818016,
+            "fcn_last": 4818033,
+            "size": 6,
+            "opcode": "fnstcw word [0x6e5bc4]",
+            "disasm": "fnstcw word [0x6e5bc4]",
+            "bytes": "d93dc45b6e00",
+            "family": "fpu",
+            "type": "store",
+            "reloc": false,
+            "type_num": 31,
+            "type2_num": 0,
+            "refs": [
+              {
+                "addr": 7232452,
+                "type": "DATA",
+                "perm": "r--"
+              }
+            ]
+          },
+          {
+            "addr": 4818023,
+            "ptr": 7232452,
+            "val": 3072,
+            "esil": "3072,0x6e5bc4,|=[2],15,$s,sf,:=,$z,zf,:=,$p,pf,:=,0,of,:=,0,cf,:=",
+            "refptr": 2,
+            "fcn_addr": 4818016,
+            "fcn_last": 4818030,
+            "size": 9,
+            "opcode": "or word [0x6e5bc4], 0xc00",
+            "disasm": "or word [0x6e5bc4], 0xc00",
+            "bytes": "66810dc45b6e00000c",
+            "family": "cpu",
+            "type": "or",
+            "reloc": false,
+            "type_num": 26,
+            "type2_num": 0,
+            "refs": [
+              {
+                "addr": 7232452,
+                "type": "DATA",
+                "perm": "r--"
+              }
+            ]
+          },
+          {
+            "addr": 4818032,
+            "ptr": 7232452,
+            "esil": "",
+            "refptr": 2,
+            "fcn_addr": 4818016,
+            "fcn_last": 4818033,
+            "size": 6,
+            "opcode": "fldcw word [0x6e5bc4]",
+            "disasm": "fldcw word [0x6e5bc4]",
+            "bytes": "d92dc45b6e00",
+            "family": "fpu",
+            "type": "load",
+            "reloc": false,
+            "type_num": 32,
+            "type2_num": 0,
+            "refs": [
+              {
+                "addr": 7232452,
+                "type": "DATA",
+                "perm": "r--"
+              }
+            ]
+          },
+          {
+            "addr": 4818038,
+            "esil": "esp,[4],eip,=,4,esp,+=",
+            "refptr": 0,
+            "fcn_addr": 4818016,
+            "fcn_last": 4818038,
+            "size": 1,
+            "opcode": "ret",
+            "disasm": "ret",
+            "bytes": "c3",
+            "family": "cpu",
+            "type": "ret",
+            "reloc": false,
+            "type_num": 5,
+            "type2_num": 0
+          }
+        ]
+      }
+    ]
+  }
+]
