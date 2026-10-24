@@ -104,6 +104,7 @@ def compiled_inputs(root, build):
         if archive.is_relative_to(build.resolve()) and archive.name.startswith('lib'):
             object_dirs.add(archive.parent / 'CMakeFiles' / (archive.name[3:-2] + '.dir'))
     sources, dependencies, objects = set(), {}, {}
+    stale_dependencies = []
     for object_dir in sorted(object_dirs):
         for dependency_file in sorted(object_dir.rglob('*.obj.d')):
             object_file = dependency_file.with_suffix('')
@@ -111,6 +112,7 @@ def compiled_inputs(root, build):
             # from a target. It is not a compiled input unless its object still
             # exists in the clean build.
             if not object_file.is_file():
+                stale_dependencies.append(str(dependency_file))
                 continue
             entries = shlex.split(dependency_file.read_text().split(':', 1)[1].replace(chr(92) + chr(10), ' '))
             if not entries:
@@ -120,12 +122,19 @@ def compiled_inputs(root, build):
                 sources.add(str(source.relative_to(root)))
             for entry in entries:
                 path = Path(entry).resolve()
+                if not path.is_file():
+                    # A stale .obj.d can list a header or source that has since been
+                    # deleted from the tree (dead code is removed, not kept). It is
+                    # not a compiled input, so it is counted rather than hashed.
+                    stale_dependencies.append(str(path))
+                    continue
                 dependencies[str(path)] = digest(path)
             objects[str(object_file.relative_to(build))] = digest(object_file)
     if not sources or not objects:
         raise ValueError('configured target has no recorded compiler inputs')
     return dict(target=str(output), compiled_sources=sorted(sources),
-                dependencies=dependencies, objects=objects)
+                dependencies=dependencies, objects=objects,
+                stale_dependency_entries=sorted(stale_dependencies))
 
 
 def validate_receipt(path, root, candidate, required_sources=()):
