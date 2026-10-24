@@ -85,3 +85,40 @@ straight-line 83-byte body whose callees are `0x401860`, `0x4017C0`, `0x4018F0`
 and `0x401900`. Dependency check needed before writing: whether `0x401860` and
 `0x4017C0` exist in `engine/` (the latter apparently does, `0x4018F0`/`0x401900`
 do), and what `"QObj"`'s exact bytes are (`0x0054863C`, NUL-terminated).
+
+## Dependency check for landing 0x4D9730
+
+- `0x4017C0` **exists**: `QTask_AllocateEvent` in `engine/src/retail/core/task_types.cpp:511`
+  (also referenced by `native_401810.cpp`).
+- `0x4018F0`, `0x401900` exist (`QTask_GetCurrentType`, `TaskType_Register`).
+- **`0x401860` does not exist** in `engine/` - only mentioned in comments
+  (`task_types.cpp:585` says the retail's QTask handler links run through `0x401860`
+  and `0x401890`, which the port does not use). So `0x4D9730` cannot link until
+  `0x401860` is transcribed first.
+
+`0x401860` is 41 bytes (`0x00401860-0x00401888`), single block, no callees:
+
+```
+mov eax, [arg_8h]          ; dword parameter
+mov dx,  [arg_4h]          ; word parameter
+and eax, 0xFF
+mov cl, 1
+lea eax, [eax + eax*2]
+shl eax, 1                 ; eax = (arg_8 & 0xFF) * 6
+mov byte [eax + 0x54F932], cl   ; used flag  := 1
+mov word [eax + 0x54F930], dx   ; word value := arg_4
+mov byte [eax + 0x54F933], cl   ; second flag := 1
+ret
+```
+
+Reading: it claims the next free event-table slot for `(word value, table index)`
+- i.e. the "mark event id used and store its argument" writer that
+`QTask_AllocateEvent` scans for. Both the stride (6) and the three field offsets
+(`+0`, `+2`, `+3`) match the event table described at `task_types.hpp:58-63`.
+
+Landing order therefore becomes: `0x401860` (41 B, no callees) -> `0x4D9730` (83 B)
+-> unblock `0x4E5370` (id 2) and `0x4DA1D0` (id 3). Blocker to check before writing
+`0x401860`: the event table at `0x0054F930` needs a single engine definition with
+its retail VA (the header currently documents it but no symbol is defined there).
+
+`"QObj"` bytes confirmed at `0x0054863C` (`51 4F 62 6A 00`), size `0x50`.
