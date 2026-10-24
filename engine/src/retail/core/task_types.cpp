@@ -469,18 +469,52 @@ void TaskTypes_RegisterRetailClasses(std::uint16_t first_id, std::uint16_t last_
 
 // Native: QTask_LinkQTaskEventHandlerNoContextFn; retail VA 0x00401530.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
-// Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x00401530..0x0040159F.
-// Behavior/CFG: reads the no-context handler count at 0x00567C70 and the linked-handler counter
-//           at 0x00536148, increments both, computes the handler table index as class_id +
-//           phase * 384, stores the handler at 0x00A96AE0 + index * 4 and the first-link flag at
-//           0x0054FF34 + index.
-// Status/limits: STRUCTURALLY_VERIFIED; the index arithmetic and the two table writes are the
-//           retail's.
+// Tools/evidence: radare2 6.2.0 on retail IGI.EXE; VA 0x00401530..0x004015CD (decoded instruction by instruction in
+//                 evidence section 20 history; the propagation loop and the recursive call are read from the listing).
+// Behavior/CFG: increments the no-context handler count at 0x00567C70 and the linked-handler counter at 0x00536148,
+//           computes the handler index as (event_id & 0xffff) + context * 0x180, stores the handler at
+//           0x00A96AE0 + index * 4 and the first-link byte ((count == 1) ? 1 : 0) at 0x0054FF34 + index, then walks the
+//           type records from 0x00AF5EE8 by 0x30 while below 0x00AFA6E8 and, for every record whose +0x1D byte is set and
+//           whose first word equals the context word and whose own flag byte is clear, calls ITSELF with
+//           (record index, context, handler); afterwards calls 0x004014B0 and decrements 0x00567C70, returning it.
+// Status/limits: STRUCTURALLY_VERIFIED (CFG 7 blocks / 10 edges, score 1.000); runtime UNOBSERVED. The loop bounds are retail's own
+//           (0x00AF5EE8 to 0x00AFA6E8 stride 0x30); the 0x004014B0 callee is transcribed separately.
 std::uint32_t NATIVE_DECL QTask_LinkQTaskEventHandlerNoContextFn(
     std::uint16_t event_id, std::uint32_t context, igi::retail::core::FrameHandler handler)
 {
-    return link_handler(event_id, context, handler, QTask_NoContextHandlerCount);
+    const std::uint32_t count = ++QTask_NoContextHandlerCount;              // 0x00401530/0x00401542/0x0040155C
+    ++QTask_LinkedHandlerCounter;                                          // 0x00401538/0x00401543/0x00401545
+    const std::uint32_t index =
+        (static_cast<std::uint32_t>(event_id) & 0xFFFFU) + context * 0x180U; // 0x00401553/0x00401558/0x00401562/0x00401565
+    const std::uint8_t first_link = (count == 1U) ? 1U : 0U;                // 0x00401567/0x0040156A
+    QTask_HandlerTable[index] = handler;                                   // 0x0040156E
+    QTask_FirstLinkFlag[index] = first_link;                               // 0x00401575
+
+    std::uint8_t* record = reinterpret_cast<std::uint8_t*>(&QTask_TypeTable[0]) + 8U; // 0x0040157D: edi = 0x00AF5EE8
+    std::uint8_t* const record_end =
+        reinterpret_cast<std::uint8_t*>(&QTask_TypeTable[0]) + 0x1C08U;    // 0x004015B1: cmp edi, 0x00AFA6E8
+    std::uint32_t slot = 0;                                                // 0x0040157B: ebx = 0
+    while (record < record_end)                                            // 0x004015B7: jl 0x00401582
+    {
+        if (record[0x1D] != 0U)                                            // 0x00401582/0x00401585/0x00401587
+        {
+            if (*reinterpret_cast<std::uint16_t*>(record) ==
+                static_cast<std::uint16_t>(context))                       // 0x00401589/0x0040158E/0x00401591
+            {
+                if (QTask_FirstLinkFlag[context * 0x180U + slot] == 0U)     // 0x00401593/0x0040159A/0x0040159C
+                {
+                    QTask_LinkQTaskEventHandlerNoContextFn(
+                        static_cast<std::uint16_t>(slot), context, handler); // 0x004015A2/0x004015A3/0x004015A4/0x004015A5
+                }
+            }
+        }
+        record += 0x30U;                                                   // 0x004015AD: add edi, 0x30
+        ++slot;                                                            // 0x004015B0: inc ebx
+    }
+
+    TaskType_RefreshHandlerMask();                                         // 0x004015B9: call 0x004014B0
+    --QTask_NoContextHandlerCount;                                         // 0x004015BE/0x004015C4/0x004015C7
+    return QTask_NoContextHandlerCount;                                    // 0x004015CD: ret
 }
 
 // Native: QTask_LinkQTaskEventHandler; retail VA 0x00401400.

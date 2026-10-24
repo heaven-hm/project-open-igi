@@ -1,62 +1,60 @@
 {
- "schema_version": 1,
- "kind": "semantic-review-report",
- "result": "passed",
- "address": "0x00401530",
- "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "implementation_sha256": "b09076209a4b54f1f465f64da93cba9b159545696eee171f84dd5a99711fb505",
- "reviewed": true,
- "reviewed_by": "Automated static review (Binary Ninja + Radare2 CFG, signature, behaviour note)",
- "runtime_contract": {
-  "scope": "typed-per-native-probe",
-  "probe_sha256": "ae22655d68e5d4bee10a9e52aadd5fdda6bc3fbae6f79fda00166f75261fbdad",
-  "required_observables": {
-   "inputs": [
-    "args"
-   ],
-   "outputs": [
-    "outputs"
-   ],
-   "sideEffects": []
-  },
-  "no_side_effects": true,
-  "note": "The live differential compares the calls that naturally happened, with the argument words and the result of each call. A pointer value from one process is not the data of the other, so a non-scalar argument is compared as the word it was, and the report says which scope it used."
- },
- "checks": [
-  {
-   "name": "function_identity",
-   "result": "passed",
-   "rationale": "Binary Ninja and Radare2 both identify a single function entry at 0x00401530 with matching CFG node and edge sets (recorded similarity 1.000); the candidate implements that entry."
-  },
-  {
-   "name": "constants_and_scaling",
-   "result": "passed",
-   "rationale": "The chunk tag constants, the node offsets and the record sizes are the literal values the retail instructions compare and read."
-  },
-  {
-   "name": "argument_mapping",
-   "result": "passed",
-   "rationale": "The candidate takes the retail's arguments in the retail's order: the chunk list or form and the searched tag for the searches, and the chunk for the payload."
-  },
-  {
-   "name": "calls_and_side_effects",
-   "result": "passed",
-   "rationale": "The candidate performs the retail's sibling and child walk and returns the retail's null or payload pointer; it has no other side effect."
-  },
-  {
-   "name": "floating_point_semantics",
-   "result": "not_applicable",
-   "rationale": "The candidate reads the retail data as it is stored; it performs no float arithmetic."
-  },
-  {
-   "name": "memory_layout_and_access",
-   "result": "passed",
-   "rationale": "The chunk node layout and the payload offsets are the ones the retail instructions read, and the port reads the same fields."
-  },
-  {
-   "name": "return_and_error_paths",
-   "result": "passed",
-   "rationale": "The candidate returns the retail's null for a missing chunk and the retail's payload pointer for a found one, on the same branches as the retail code."
-  }
- ]
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "address": "0x00401530",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "eb4d4ab9e47058479d028f059188fe9914a7d9f59dc4e286aeafa31c2a49860e",
+  "implementation_path": "engine/src/retail/core/task_types.cpp",
+  "reviewed_by": "lead",
+  "reviewed": true,
+  "review_scope": "static: retail instructions and emitted candidate listing",
+  "result": "passed",
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "rationale": "VA 0x00401530..0x004015CD decoded instruction by instruction; the candidate emits 7 blocks / 10 edges against retail's 7/10, score 1.000."
+    },
+    {
+      "name": "cfg_match",
+      "result": "passed",
+      "rationale": "The propagation loop (0x00401582-0x004015B7), its two early exits and the trailing decrement are present, so the candidate has the loop and three exits retail has."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "passed",
+      "rationale": "Three cdecl arguments: event id word (masked with 0xFFFF at 0x00401553), context/phase (used as the 0x180 stride), handler pointer (stored into the table at 0x0040156E)."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "passed",
+      "rationale": "Recursive self-call at 0x004015A5 with (slot, context, handler) after pushing the handler, the context and the slot, then add esp,0xC; the 0x004014B0 call at 0x004015B9; counters at 0x00567C70 and 0x00536148 incremented then 0x00567C70 decremented before the return."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "passed",
+      "rationale": "Handler index 0x180 stride and *4 table scale; type-record walk from 0x00AF5EE8 to 0x00AFA6E8 by 0x30 with the +0x1D gate byte and the word compare at +0."
+    },
+    {
+      "name": "floating_point_semantics",
+      "result": "not_applicable",
+      "rationale": "No floating-point instruction."
+    },
+    {
+      "name": "memory_layout_and_access",
+      "result": "passed",
+      "rationale": "Store order preserved: handler first, then first-link byte, then the loop; the decrement happens after the 0x004014B0 call."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "passed",
+      "rationale": "Retail returns the decremented no-context count in EAX; the candidate returns the same global it just decremented."
+    }
+  ],
+  "evidence": "docs/fidelity/evidence/0x4EE970-data-extents.md section 20 (dependency ranking) and the retail listing of 0x00401530",
+  "limitations": [
+    "Static only; runtime unobserved and the native is unreachable before the 0x00402930 boundary.",
+    "The purpose of the type-record propagation and of the 0x004014B0 refresh is not established, only the mechanics.",
+    "The previous version of this native was a helper call that omitted the loop, the recursion and the refresh; that is what this change replaces."
+  ]
 }
