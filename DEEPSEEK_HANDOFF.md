@@ -409,3 +409,22 @@ three are far outside the family (0x427D70, 0x427F80, 0x487D90, 0x488700).
 Recommended order: transcribe the dense 0x4EF7F0-0x4F0790 family first (each small, each independently
 bindable), then the outliers, then 0x4EE970 last with a symbol reference per pointer. Section 1 of
 0x4EE970 is already committed (unwired, partial) and does not depend on any of the 83.
+
+## Handler catalogue progress (round 151)
+
+8 of the 83 handler natives are transcribed and bound: 0x4EF830, 0x4EF850, 0x4EF8B0, 0x4EF990, 0x4EF9B0,
+0x4EF9D0, 0x4EFA10, 0x4EFA90 - all bn=1/0 at 1.000. Frozen pair b2adaddc (173 compiled sources), Tester
+confirmed d6320c6b at artifact level and the six-handler batch is pending its check.
+
+Standing pre-freeze check added after 0x4EF830 lost its load to -O3: **disassemble the emitted object for every
+new native and confirm the retail-observable operations survived**. cfg_score cannot see an eliminated load.
+
+Next three handlers are NOT mechanical and were deliberately deferred rather than rushed:
+- 0x4EF9E0 (41 B): calls 0x4F1C20(1, esi), then 0x4B8A50([esi],[esi+4]) and stores the x87 result with
+  `fstp dword [ecx]`, then increments [esi]. Float ABI and x87 stack behaviour must be modelled exactly.
+- 0x4EF860 (66 B): pushes 0xB and calls 0x4F1C20, then loops 11 times calling 0x4B8A50([ebx]+esi, [ebx+4])
+  and storing each float result to arg2's buffer, finally advancing [ebx] by 0xB. Same float concerns plus a
+  literal loop bound of 11 that must be re-derived from `cmp esi,0xb` (already observed) and cross-checked
+  against the 11 dwords the sibling 0x4EF990 copies.
+- 0x4EFA20 (100 B, 3 blocks): string walk with `repne scasb` to a terminator, `fld dword`/`fstp qword` for a
+  vararg double, then `call 0x4A53B3` with the format string at 0x00547A60. Needs 0x4A53B3 identified first.
