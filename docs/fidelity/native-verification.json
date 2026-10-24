@@ -3371,7 +3371,8 @@
           "Retail 0x0048F220 is represented by an internal read of AppContext_StartupMode, not by a linked transcription of the retail getter; 0x0048F330 is mapped to the existing Script_SetForcePrecompiledFlag.",
           "AppContext_StartupMode is initialized to 1 because the candidate has no transcription of the retail writer 0x0048F210 that main calls at 0x0048F656; this is an evidence-backed scoped startup state, not a candidate runtime observation.",
           "cfg_similarity 1.0 is the Binary Ninja-vs-radare2 retail-image graph score; the candidate machine CFG was not proven isomorphic to the retail CFG.",
-          "The prior record pointed at scripts/GameNatives/qtask/00401000-QTask_CreateTask.cpp (sha256 de1bf9476c0f) and described a chunk walk; that description and binding are replaced here."
+          "The prior record pointed at scripts/GameNatives/qtask/00401000-QTask_CreateTask.cpp (sha256 de1bf9476c0f) and described a chunk walk; that description and binding are replaced here.",
+          "Section 19 shows the retail bytes at 0x00401000 are the startup function that calls 0x00402930 (with pushes for \"IGI\", 1 and 0 around it, and the call chain entry0 0x004A51BE -> WinMain 0x0048F530 -> 0x0048F7AA -> 0x00401000 -> 0x00401011 -> 0x00402930). The record name QTask_CreateTask contradicts the VA; the name is a candidate-repository label and is not evidence of the retail function's identity. Not renamed here: renaming requires the retail behaviour to be established by transcription, which has not been done for 0x00401000."
         ],
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -71305,14 +71306,15 @@
         "signature": "int Terrain_CalculateNormals_8(void)"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "ANALYZED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
           "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
         },
         "limitations": [
-          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
+          "Section 19 (docs/fidelity/evidence/0x4EE970-data-extents.md) shows this record's name/status contradict the retail bytes at the address: the function at 0x005183D0 calls 0x004ED510 InputPort_Init, 0x00530220 CamTask_Init and 0x004FAA60, so it is not Terrain_CalculateNormals_8 and its CFG evidence was computed for a different function. Status downgraded to ANALYZED; the candidate copy under scripts/GameNatives is not an implementation of this address."
         ],
         "behavioral_runner": {
           "path": "scripts/native_diff_runner.py",
@@ -71357,7 +71359,8 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x005183D0-behavioral.json",
           "evidence_sha256": "39e00f840877cf9155206bd5c4e32aee25119bfde8fbe4f76ad0428450344650"
-        }
+        },
+        "status_history_note": "Was STRUCTURALLY_VERIFIED with CFG evidence computed against a candidate that implements a different function; downgraded after section 19."
       }
     },
     {
