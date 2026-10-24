@@ -1375,3 +1375,29 @@ missing *records*, not incomplete implementations.
 Action for the ranking: treat an existing but incomplete implementation (0x00401530 is the known case) as a missing
 dependency, and re-rank the top of the list accordingly. Otherwise the sweep will keep selecting rows that cannot be
 landed faithfully, which is the same failure mode as choosing a native and then discovering its CFG extent was wrong.
+
+## The "cheap" 111-byte rows are not cheap either: they push handler pointers (round 200)
+
+0x004688B0 decoded in full (111 B, ends at 0x0046891E ret). It is the "ComputerLog" class registration:
+
+  push 0 / push 0 / call 0x004018F0            (QTask_GetCurrentType)
+  push eax / push 0x24 / push "ComputerLog" 0x0053F6E4 / call 0x00401900   (TaskType_Register -> class id)
+  mov word [0x005BDC98], ax                    (class id kept)
+  push 0x00468920 / push 0 / push class_id / call 0x00401400               (context handler link)
+  push 0x00488700 / push 1 / push class_id / call 0x00401530
+  push 0x00468BB0 / push 2 / push class_id / call 0x00401530
+  add esp, 0x38
+  push 0x00468BC0 / call 0x004E7530 / push eax / push class_id / call 0x00401530
+  add esp, 0xC / ret
+
+So it depends on FOUR function-pointer targets - 0x00468920, 0x00488700, 0x00468BB0, 0x00468BC0 - and NONE of the four
+exists in engine/ (checked by provenance line). They are handlers, of unknown extent and dependencies. The row is a
+registration shim that only looks small because its body is 111 bytes.
+
+Same trap as 0x004688B0's earlier ranking (which counted missing records rather than incomplete implementations): a "single
+missing dep" column that only counts callees misses code ADDRESSES passed as arguments. The re-ranking rule must be: a row
+is cheap only if every immediate that is a code address is already a transcribed native, and every data address it touches
+has an owner.
+
+Next action when work resumes: either transcribe the four handlers first (extents unknown, so triage them) or pick rows
+whose immediates are all data, not code.
