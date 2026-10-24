@@ -5576,3 +5576,332 @@ ndisasm -b32 -o0x402930 /tmp/fa19/f2930b.bin                                    
 # 4-byte little-endian immediate scan over the whole image for pointer references
 ```
 Raw slice for `ndisasm`: image offset `0x1000 + (0x402930 - 0x401000)` = `0x2930`, 780 bytes. The tail target's `rel32` was re-derived: `0x00402C37 + 5 + 0x000CC2F4 = 0x004CEF30`.
+
+
+## 20. Triage of the 133 remaining `0x00402930` callees (one-round landing order)
+
+Appended after §19. Own cross-decode only (r2 6.2.0 + NASM `ndisasm`, raw byte reads); no
+decompiler was used and no `engine/` file was touched. Nothing in this section is committed.
+
+### 20.0 Rows are 133, not 134 — and the manifest under-reports the tree
+
+§19 counted 134 missing callees (133 call targets + 1 tail target). After §19 the tail target
+`0x004CEF30` was landed: commit `d1db304a`, `engine/src/retail/core/native_4cef30.cpp`,
+manifest record `Core_CopyState_4CEF30` (STRUCTURALLY_VERIFIED). It is therefore **not a row**.
+The rows below are the **133 call targets of `0x00402930`** that have no implementation.
+
+Two facts that change how the "in tree" column must be read:
+
+1. **Four VAs have engine implementations but no manifest record**: `0x004F0F80`, `0x004F1000`,
+   `0x004F1A60`, `0x004F1A70` (`engine/src/retail/*/native_4f0f80.cpp`, `native_4f1000.cpp`,
+   `native_4f1a60.cpp`, `native_4f1a70.cpp` — each file names its VA in its provenance head).
+   **80 of the 133 rows call at least one of these four**, so a manifest-only "already in tree"
+   count overstates their blockers. The `L` column is computed from the tree, not the manifest.
+2. **All 133 rows have a `scripts/GameNatives/` candidate** whose provenance head names exactly
+   that VA (read and checked for every row; no row is candidate-less). The candidate *label* is
+   a reference name and is **unverified**: it is printed for orientation, not as a retail name.
+
+### 20.1 Method: how every extent, instruction count and CFG figure in the table was obtained
+
+- **Extent** = the contiguous run of radare2 6.2.0 `afbj` basic blocks starting at the entry,
+  stopping at the first address gap. r2 is used here **only as a block-structure oracle**; its
+  function `size`/`realsz` is deliberately not used, because r2 folds a tail-call target into
+  the caller's function. That fold is visible as a block at a non-adjacent address and is why
+  3 rows end earlier than r2's function record: `0x00484F30`→`0x00485150`, `0x00453550`→
+  `0x00453600`, `0x00508F80`→`0x00508FA0`. Taking the contiguous prefix is the only r2-derived
+  step in the extent; everything after it is independently decoded and checked below.
+- **Instructions** = NASM `ndisasm 2.16 -b32 -o<VA>` over exactly `extent` bytes. Wrapped
+  hex-dump continuation lines (instructions longer than 8 bytes, common in this image) are
+  joined before length accounting; ignoring that wrap desynchronises the decode.
+- **Tiling identity, checked per row**: Σ(instruction lengths) == extent, and the final
+  instruction of the extent is a terminator (`ret`/`retn` or a `jmp`). Result: **133/133 rows exact, 0 gaps, 0 non-terminated ends, 0 unreachable bytes** inside the extents.
+- **Cross-decode**: radare2 `pdj` linear decode over the same byte range, compared per
+  instruction on address and size: **15351/15351 instructions agree, 0 mismatches**.
+- **Blocks / edges**: block boundaries from r2 `afbj`; edges counted from each block's last
+  instruction (conditional jump = 2 successors, direct `jmp` = 1, `ret` = 0, indirect `jmp` = 0).
+  Table totals: **147 blocks, 21 edges**; 128 rows are single-block straight-line call sequences and 5 rows contain branches: `0x0043AD80` (3 blk/3 edg/410 B), `0x004464C0` (3 blk/3 edg/1072 B), `0x00449D30` (3 blk/3 edg/275 B), `0x004397C0` (5 blk/6 edg/653 B), `0x0043CC70` (5 blk/6 edg/925 B).
+- **Indirect calls**: none in any row (0/133). **Indirect exits**: none. The 3 rows that leave
+  through an unconditional `jmp` are tail calls into separate natives and are marked in `out`.
+
+### 20.2 Column key
+
+| column | meaning |
+|---|---|
+| `#` | rank position (sort: rank letter, then non-landed direct deps `blocked`, then `d2`, then extent) |
+| `VA` | retail entry address |
+| `site` | the `call` instruction inside `0x00402930`; the count is 1 for every row (only `0x004C1780` appears twice in §19.3 and it is already landed) |
+| `ext B` | byte extent, from 20.1 |
+| `instrs` | instructions in the extent (`ndisasm`) |
+| `ΣB` | Σ instruction bytes; equals `ext B` for every row (the tiling check, shown numerically) |
+| `blk/edg` | basic blocks / intra-function edges |
+| `L/C/N` | direct callees: **L**anded in tree (engine source, incl. the 4 record-less files) / **C**andidate only (GameNatives or external reference) / **N**either. Count of each. |
+| `d2` | next wall: distinct not-landed callees of the not-landed direct callees (and of the tail target) |
+| `data` | distinct absolute data addresses referenced (>= `0x00533000`, direct operands only) |
+| `out` | tail-exit target (a separate native; not part of the row's extent) |
+| `candidate label` | `scripts/GameNatives/` candidate for this VA — **label unverified**, orientation only |
+| `rank` | **A** cheap, self-contained (all direct deps landed) · **B** cheap, needs 1-2 deps · **C** blocked behind many deps · **D** do not start (mega-closure) |
+
+Rank counts today: **A=0, B=25, C=73, D=35**. No row is A yet: the four already-landed registrar-side natives are not enough to close any single row.
+
+### 20.3 Table — 133 rows, ranked
+
+`133` rows, `54858` bytes of code, `15351` instructions. Extents range 10 B (`0x00508F80`) to 2235 B
+(`0x00407290`), median 361 B; `708` distinct data addresses are referenced across the table.
+
+| # | VA | site | ext B | instrs | ΣB | blk/edg | L/C/N | d2 | data | out | candidate label (unverified) | rank |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 1 | `0x004688B0` | `0x00402A4D` | 111 | 31 | 111 | 1/0 | 4/1/0 | 0 | 2 | — | `ComputerLog_Init` | B |
+| 2 | `0x00468E20` | `0x00402A48` | 111 | 31 | 111 | 1/0 | 4/1/0 | 0 | 2 | — | `ComputerObjectives_Init` | B |
+| 3 | `0x004851B0` | `0x00402980` | 111 | 31 | 111 | 1/0 | 4/1/0 | 0 | 2 | — | `GameScreen_Init` | B |
+| 4 | `0x00424B90` | `0x00402BC9` | 121 | 33 | 121 | 1/0 | 5/1/0 | 0 | 2 | — | `Cursor_Init` | B |
+| 5 | `0x00485A40` | `0x00402976` | 133 | 36 | 133 | 1/0 | 5/1/0 | 0 | 3 | — | `StatusMessageScreen_Init` | B |
+| 6 | `0x00419760` | `0x00402C28` | 137 | 38 | 137 | 1/0 | 5/1/0 | 0 | 2 | — | `BackgroundFX_Init` | B |
+| 7 | `0x00453550` | `0x00402A9D` | 162 | 37 | 162 | 1/0 | 6/0/0 | 0 | 6 | `0x00453600` | `PatrolPath_Init` | B |
+| 8 | `0x0047B4B0` | `0x004029B7` | 172 | 45 | 172 | 1/0 | 6/1/0 | 0 | 4 | — | `GunShot_Init` | B |
+| 9 | `0x004533B0` | `0x00402AA2` | 183 | 56 | 183 | 1/0 | 7/1/0 | 0 | 3 | — | `PatrolPathCommand_Init` | B |
+| 10 | `0x00425C80` | `0x00402BBA` | 263 | 78 | 263 | 1/0 | 8/1/0 | 0 | 3 | — | `CarAI_Init` | B |
+| 11 | `0x00436B10` | `0x00402B4C` | 322 | 102 | 322 | 1/0 | 9/1/0 | 0 | 3 | — | `EnvironmentSound_Init` | B |
+| 12 | `0x00423FC0` | `0x00402BCE` | 500 | 126 | 500 | 1/0 | 8/1/0 | 0 | 17 | — | `MenuWindow_Init` | B |
+| 13 | `0x00484F30` | `0x00402985` | 39 | 10 | 39 | 1/0 | 2/0/0 | 1 | 2 | `0x00485150` | `FX_Definemission` | B |
+| 14 | `0x0046DF10` | `0x00402A11` | 81 | 22 | 81 | 1/0 | 3/2/0 | 0 | 3 | — | `KnifeStab_Init` | B |
+| 15 | `0x00472A70` | `0x004029EE` | 104 | 27 | 104 | 1/0 | 3/2/0 | 0 | 3 | — | `GunSPAS12_Init` | B |
+| 16 | `0x0047E700` | `0x00402999` | 129 | 34 | 129 | 1/0 | 5/2/0 | 0 | 7 | — | `FlashBang_Init` | B |
+| 17 | `0x004696B0` | `0x00402A43` | 141 | 37 | 141 | 1/0 | 5/2/0 | 0 | 5 | — | `ComputerMap_Init` | B |
+| 18 | `0x00488620` | `0x0040295D` | 202 | 56 | 202 | 1/0 | 8/2/0 | 0 | 3 | — | `SubLevel_Init` | B |
+| 19 | `0x004190E0` | `0x00402C2D` | 269 | 78 | 269 | 1/0 | 8/2/0 | 0 | 3 | — | `MenuLoader_Init` | B |
+| 20 | `0x0047CF20` | `0x004029A3` | 41 | 10 | 41 | 1/0 | 1/2/0 | 2 | 3 | — | `Weapon_AmmoId` | B |
+| 21 | `0x0046AB60` | `0x00402A3E` | 126 | 34 | 126 | 1/0 | 4/2/0 | 2 | 4 | — | `ComputerMenu_Init` | B |
+| 22 | `0x00486900` | `0x00402971` | 171 | 46 | 171 | 1/0 | 5/2/0 | 2 | 7 | — | `StatusScreen_Init` | B |
+| 23 | `0x00413DF0` | `0x004029AD` | 408 | 99 | 408 | 1/0 | 3/2/0 | 2 | 32 | — | `WEAPONTYPE_GUN` | B |
+| 24 | `0x00415070` | `0x0040296C` | 110 | 30 | 110 | 1/0 | 4/2/0 | 3 | 4 | — | `IntroScreen_Init` | B |
+| 25 | `0x00508F80` | `0x00402930` | 10 | 2 | 10 | 1/0 | 0/1/0 | 61 | 0 | `0x00508FA0` | `Physics_ApplyImpulse_7` | B |
+| 26 | `0x0042DAC0` | `0x00402B88` | 51 | 15 | 51 | 1/0 | 1/3/0 | 0 | 0 | — | `Menu_RequestScreen_22` | C |
+| 27 | `0x0042FE40` | `0x00402B7E` | 51 | 15 | 51 | 1/0 | 1/3/0 | 0 | 0 | — | `Menu_PlayMusic_23` | C |
+| 28 | `0x0046B510` | `0x00402A39` | 140 | 38 | 140 | 1/0 | 3/3/0 | 0 | 2 | — | `ComputerButtonItem_Init` | C |
+| 29 | `0x0046B7F0` | `0x00402A34` | 140 | 38 | 140 | 1/0 | 3/3/0 | 0 | 2 | — | `ComputerTextItem_Init` | C |
+| 30 | `0x0043E4F0` | `0x00402B0B` | 142 | 38 | 142 | 1/0 | 4/3/0 | 0 | 3 | — | `GenericPhysicsMagicObj_Init` | C |
+| 31 | `0x00476110` | `0x004029CB` | 150 | 39 | 150 | 1/0 | 4/3/0 | 0 | 5 | — | `M203_Init` | C |
+| 32 | `0x0046DD00` | `0x00402A16` | 190 | 50 | 190 | 1/0 | 5/3/0 | 0 | 3 | — | `Gunx2_Init` | C |
+| 33 | `0x00466E40` | `0x00402A61` | 203 | 61 | 203 | 1/0 | 7/3/0 | 0 | 3 | — | `DefineComputerLimit_Init` | C |
+| 34 | `0x00421430` | `0x00402BE7` | 223 | 61 | 223 | 1/0 | 7/3/0 | 0 | 3 | — | `MenuButton_Init` | C |
+| 35 | `0x0046DB40` | `0x00402A1B` | 224 | 67 | 224 | 1/0 | 8/3/0 | 0 | 3 | — | `AddAmmo_Init` | C |
+| 36 | `0x00449D30` | `0x00402AB6` | 275 | 69 | 275 | 3/3 | 3/3/0 | 3 | 8 | — | `GlassShatter_Init` | C |
+| 37 | `0x00438390` | `0x00402B42` | 163 | 42 | 163 | 1/0 | 4/4/0 | 0 | 7 | — | `GunShotEffect_Init` | C |
+| 38 | `0x0046BA60` | `0x00402A2F` | 167 | 45 | 167 | 1/0 | 3/4/0 | 0 | 2 | — | `Computer_Init` | C |
+| 39 | `0x004351E0` | `0x00402B65` | 190 | 50 | 190 | 1/0 | 4/4/0 | 0 | 3 | — | `CockpitShield_Init` | C |
+| 40 | `0x00435870` | `0x00402B60` | 190 | 50 | 190 | 1/0 | 4/4/0 | 0 | 3 | — | `Gear_Init` | C |
+| 41 | `0x00435D90` | `0x00402B5B` | 190 | 50 | 190 | 1/0 | 4/4/0 | 0 | 3 | — | `Hatch_Init` | C |
+| 42 | `0x004361D0` | `0x00402B56` | 238 | 62 | 238 | 1/0 | 4/4/0 | 0 | 7 | — | `Rudder_Init` | C |
+| 43 | `0x00472670` | `0x004029F3` | 376 | 99 | 376 | 1/0 | 4/4/0 | 0 | 6 | — | `GunCABarrel_Init` | C |
+| 44 | `0x00466F70` | `0x00402A5C` | 1080 | 342 | 1080 | 1/0 | 7/4/0 | 0 | 3 | — | `DefineComputerObjective_Init` | C |
+| 45 | `0x0043BFD0` | `0x00402B1A` | 215 | 57 | 215 | 1/0 | 4/5/0 | 0 | 3 | — | `ExplodeMagicObj_Init` | C |
+| 46 | `0x0046F2B0` | `0x00402A07` | 215 | 57 | 215 | 1/0 | 4/5/0 | 0 | 3 | — | `AIStationaryGun_Init` | C |
+| 47 | `0x004403E0` | `0x00402AF7` | 222 | 59 | 222 | 1/0 | 5/5/0 | 0 | 3 | — | `Ladder_Init` | C |
+| 48 | `0x0047CF70` | `0x0040299E` | 227 | 63 | 227 | 1/0 | 6/5/0 | 0 | 5 | — | `BulletHole_Init` | C |
+| 49 | `0x00448D30` | `0x00402AC5` | 243 | 64 | 243 | 1/0 | 5/5/0 | 0 | 3 | — | `RadarDish_Init` | C |
+| 50 | `0x00440C20` | `0x00402AED` | 262 | 71 | 262 | 1/0 | 7/5/0 | 0 | 3 | — | `SCameraControl_Init` | C |
+| 51 | `0x00440710` | `0x00402AF2` | 300 | 83 | 300 | 1/0 | 7/5/0 | 0 | 3 | — | `AlarmControl_Init` | C |
+| 52 | `0x00475AC0` | `0x004029D0` | 333 | 91 | 333 | 1/0 | 9/5/0 | 0 | 5 | — | `Mine_Init` | C |
+| 53 | `0x00470FA0` | `0x004029F8` | 372 | 101 | 372 | 1/0 | 8/5/0 | 0 | 7 | — | `BinocularOverlay_Init` | C |
+| 54 | `0x00436780` | `0x00402B51` | 454 | 123 | 454 | 1/0 | 9/5/0 | 0 | 12 | — | `RainEffect_Init` | C |
+| 55 | `0x00424E80` | `0x00402BBF` | 457 | 135 | 457 | 1/0 | 10/5/0 | 0 | 3 | — | `ConditionalSound_Init` | C |
+| 56 | `0x004223D0` | `0x00402BDD` | 535 | 159 | 535 | 1/0 | 8/5/0 | 0 | 5 | — | `MenuFrame_Init` | C |
+| 57 | `0x004733F0` | `0x004029E4` | 222 | 59 | 222 | 1/0 | 4/6/0 | 0 | 3 | — | `GunM16A2_Init` | C |
+| 58 | `0x004739D0` | `0x004029DF` | 222 | 59 | 222 | 1/0 | 4/6/0 | 0 | 3 | — | `GunMP5SD_Init` | C |
+| 59 | `0x00475380` | `0x004029D5` | 222 | 59 | 222 | 1/0 | 4/6/0 | 0 | 3 | — | `ProximityMine_Init` | C |
+| 60 | `0x004388B0` | `0x00402B3D` | 234 | 66 | 234 | 1/0 | 5/6/0 | 0 | 3 | — | `PlaceExplosiveTBA_Init` | C |
+| 61 | `0x00426D90` | `0x00402BB0` | 243 | 64 | 243 | 1/0 | 4/6/0 | 0 | 3 | — | `HeliWheel_Init` | C |
+| 62 | `0x0042FF00` | `0x00402B79` | 243 | 64 | 243 | 1/0 | 4/6/0 | 0 | 3 | — | `Wheel_Init` | C |
+| 63 | `0x00467700` | `0x00402A57` | 255 | 67 | 255 | 1/0 | 5/6/0 | 0 | 12 | — | `ComputerObject_Init` | C |
+| 64 | `0x00465BC0` | `0x00402A6B` | 263 | 72 | 263 | 1/0 | 5/6/0 | 0 | 4 | — | `DeathZone_Init` | C |
+| 65 | `0x004230A0` | `0x00402BD3` | 312 | 83 | 312 | 1/0 | 6/6/0 | 0 | 4 | — | `ControlsMenu_Init` | C |
+| 66 | `0x00488800` | `0x00402958` | 376 | 109 | 376 | 1/0 | 7/6/0 | 0 | 3 | — | `EditVariable_Init` | C |
+| 67 | `0x004485E0` | `0x00402ACA` | 382 | 106 | 382 | 1/0 | 10/6/0 | 0 | 4 | — | `Building_Init` | C |
+| 68 | `0x0041B310` | `0x00402C14` | 383 | 111 | 383 | 1/0 | 7/6/0 | 0 | 3 | — | `PictureBox_Init` | C |
+| 69 | `0x0044C130` | `0x00402AB1` | 392 | 118 | 392 | 1/0 | 8/6/0 | 0 | 5 | — | `AmbientArea_Init` | C |
+| 70 | `0x00420CC0` | `0x00402BEC` | 450 | 128 | 450 | 1/0 | 8/6/0 | 0 | 7 | — | `MenuText_Init` | C |
+| 71 | `0x0043A840` | `0x00402B2E` | 783 | 202 | 783 | 1/0 | 8/6/0 | 0 | 25 | — | `MineField_Init` | C |
+| 72 | `0x004663D0` | `0x00402A66` | 162 | 42 | 162 | 1/0 | 3/6/0 | 1 | 4 | — | `ComputerStartup_Init` | C |
+| 73 | `0x0042BEB0` | `0x00402B92` | 236 | 62 | 236 | 1/0 | 4/6/0 | 2 | 5 | — | `Afterburner_Init` | C |
+| 74 | `0x00470410` | `0x00402A02` | 229 | 61 | 229 | 1/0 | 3/7/0 | 0 | 3 | — | `Medipack_Init` | C |
+| 75 | `0x00426630` | `0x00402BB5` | 267 | 71 | 267 | 1/0 | 4/7/0 | 0 | 3 | — | `CarDoor_Init` | C |
+| 76 | `0x004272A0` | `0x00402BAB` | 267 | 71 | 267 | 1/0 | 4/7/0 | 0 | 3 | — | `HeliDoor_Init` | C |
+| 77 | `0x00427830` | `0x00402BA6` | 267 | 71 | 267 | 1/0 | 4/7/0 | 0 | 3 | — | `RocketPod_Init` | C |
+| 78 | `0x00472D00` | `0x004029E9` | 267 | 68 | 267 | 1/0 | 4/7/0 | 0 | 9 | — | `GunDRAGUNOV_Init` | C |
+| 79 | `0x00449970` | `0x00402ABB` | 270 | 71 | 270 | 1/0 | 4/7/0 | 0 | 3 | — | `Glass_Init` | C |
+| 80 | `0x00449360` | `0x00402AC0` | 361 | 102 | 361 | 1/0 | 7/7/0 | 0 | 3 | — | `Siren_Init` | C |
+| 81 | `0x0041DC50` | `0x00402C00` | 371 | 101 | 371 | 1/0 | 7/7/0 | 0 | 3 | — | `ToggleBox_Init` | C |
+| 82 | `0x0043AD80` | `0x00402B29` | 410 | 121 | 410 | 3/3 | 8/7/0 | 0 | 6 | — | `Radio_Init` | C |
+| 83 | `0x0043B2F0` | `0x00402B24` | 414 | 119 | 414 | 1/0 | 8/7/0 | 0 | 3 | — | `Generator_Init` | C |
+| 84 | `0x00487BE0` | `0x00402962` | 421 | 115 | 421 | 1/0 | 10/7/0 | 0 | 3 | — | `GuardGenerator_Init` | C |
+| 85 | `0x0043E8D0` | `0x00402B06` | 461 | 133 | 461 | 1/0 | 9/7/0 | 0 | 4 | — | `GenericPhysicsObj_Init` | C |
+| 86 | `0x004872C0` | `0x00402967` | 476 | 132 | 476 | 1/0 | 9/7/0 | 0 | 3 | — | `ConditionalContainer_Init` | C |
+| 87 | `0x004199F0` | `0x00402C23` | 496 | 139 | 496 | 1/0 | 8/7/0 | 0 | 5 | — | `DialogWindow_Init` | C |
+| 88 | `0x00420300` | `0x00402BF1` | 497 | 147 | 497 | 1/0 | 7/7/0 | 0 | 3 | — | `MenuTextConditional_Init` | C |
+| 89 | `0x0043B850` | `0x00402B1F` | 714 | 196 | 714 | 1/0 | 7/7/0 | 0 | 15 | — | `SimpointObjGenerator_Init` | C |
+| 90 | `0x0041A1E0` | `0x00402C1E` | 389 | 108 | 389 | 1/0 | 7/8/0 | 0 | 3 | — | `TypeWriterBox_Init` | C |
+| 91 | `0x0041AAF0` | `0x00402C19` | 421 | 124 | 421 | 1/0 | 7/8/0 | 0 | 3 | — | `TextBox_Init` | C |
+| 92 | `0x0043C6D0` | `0x00402B15` | 497 | 147 | 497 | 1/0 | 7/8/0 | 0 | 3 | — | `ElevatorFloorIndicator_Init` | C |
+| 93 | `0x004682F0` | `0x00402A52` | 498 | 147 | 498 | 1/0 | 8/8/0 | 0 | 6 | — | `ComputerHilight_Init` | C |
+| 94 | `0x0041D080` | `0x00402C05` | 520 | 149 | 520 | 1/0 | 8/8/0 | 0 | 3 | — | `InputBox_Init` | C |
+| 95 | `0x004801B0` | `0x00402994` | 615 | 164 | 615 | 1/0 | 4/8/0 | 0 | 14 | — | `Explosion0_Init` | C |
+| 96 | `0x00438DF0` | `0x00402B38` | 671 | 200 | 671 | 1/0 | 8/8/0 | 0 | 3 | — | `RotatingObject_Init` | C |
+| 97 | `0x00477220` | `0x004029C1` | 991 | 267 | 991 | 1/0 | 7/8/0 | 0 | 9 | — | `GunClip_Init` | C |
+| 98 | `0x004170A0` | `0x00402BC4` | 445 | 128 | 445 | 1/0 | 9/8/0 | 2 | 5 | — | `MenuManager_Init` | C |
+| 99 | `0x00470610` | `0x004029FD` | 330 | 87 | 330 | 1/0 | 5/9/0 | 0 | 3 | — | `Binocular_Init` | D |
+| 100 | `0x00476730` | `0x004029C6` | 366 | 95 | 366 | 1/0 | 5/9/0 | 0 | 6 | — | `Grenade_Init` | D |
+| 101 | `0x00427D90` | `0x00402BA1` | 410 | 114 | 410 | 1/0 | 6/9/0 | 0 | 3 | — | `HitZone_Init` | D |
+| 102 | `0x0041C700` | `0x00402C0A` | 460 | 132 | 460 | 1/0 | 7/9/0 | 0 | 3 | — | `AsciiBox_Init` | D |
+| 103 | `0x0041E690` | `0x00402BFB` | 558 | 161 | 558 | 1/0 | 7/9/0 | 0 | 3 | — | `ListBox_Init` | D |
+| 104 | `0x00485330` | `0x0040297B` | 571 | 166 | 571 | 1/0 | 8/9/0 | 0 | 6 | — | `StatusMessage_Init` | D |
+| 105 | `0x00488BB0` | `0x0040293F` | 580 | 171 | 580 | 1/0 | 10/9/0 | 0 | 9 | — | `LevelFlow_Init` | D |
+| 106 | `0x0041F340` | `0x00402BF6` | 596 | 173 | 596 | 1/0 | 8/9/0 | 0 | 3 | — | `SlideBar_Init` | D |
+| 107 | `0x00421750` | `0x00402BE2` | 596 | 173 | 596 | 1/0 | 7/9/0 | 0 | 3 | — | `MenuScreen_Init` | D |
+| 108 | `0x0046CB70` | `0x00402A25` | 425 | 118 | 425 | 1/0 | 8/10/0 | 0 | 4 | — | `GunPickup_Init` | D |
+| 109 | `0x0043F900` | `0x00402AFC` | 468 | 130 | 468 | 1/0 | 8/10/0 | 0 | 4 | — | `Fence_Init` | D |
+| 110 | `0x0046C0C0` | `0x00402A2A` | 486 | 134 | 486 | 1/0 | 9/10/0 | 0 | 3 | — | `GenericPickup_Init` | D |
+| 111 | `0x0041B8E0` | `0x00402C0F` | 559 | 162 | 559 | 1/0 | 7/10/0 | 0 | 3 | — | `ScrollListBox_Init` | D |
+| 112 | `0x00443680` | `0x00402AE3` | 433 | 118 | 433 | 1/0 | 7/11/0 | 0 | 3 | — | `Terminal_Init` | D |
+| 113 | `0x0046D420` | `0x00402A20` | 462 | 130 | 462 | 1/0 | 8/11/0 | 0 | 4 | — | `AmmoPickup_Init` | D |
+| 114 | `0x0043EFF0` | `0x00402B01` | 499 | 139 | 499 | 1/0 | 7/11/0 | 0 | 3 | — | `Wire_Init` | D |
+| 115 | `0x0046E370` | `0x00402A0C` | 576 | 165 | 576 | 1/0 | 8/11/0 | 0 | 7 | — | `AIStationaryGunHolder_Init` | D |
+| 116 | `0x004397C0` | `0x00402B33` | 653 | 185 | 653 | 5/6 | 8/11/0 | 0 | 9 | — | `AlarmLight_Init` | D |
+| 117 | `0x004813E0` | `0x0040298F` | 923 | 256 | 923 | 1/0 | 9/12/0 | 0 | 8 | — | `ExplodeObject_Init` | D |
+| 118 | `0x0043CC70` | `0x00402B10` | 925 | 267 | 925 | 5/6 | 9/12/0 | 0 | 14 | — | `Elevator_Init` | D |
+| 119 | `0x00437510` | `0x00402B47` | 1471 | 370 | 1471 | 1/0 | 10/12/0 | 0 | 52 | — | `Smoke_Init` | D |
+| 120 | `0x0042D2B0` | `0x00402B8D` | 390 | 104 | 390 | 1/0 | 4/12/0 | 2 | 5 | — | `Rotor_Init` | D |
+| 121 | `0x00407290` | `0x004029B2` | 2235 | 703 | 2235 | 1/0 | 9/12/0 | 2 | 11 | — | `WeaponConfig_Init` | D |
+| 122 | `0x00427FF0` | `0x00402B9C` | 631 | 171 | 631 | 1/0 | 8/13/0 | 0 | 13 | — | `Missile_Init` | D |
+| 123 | `0x00447DB0` | `0x00402ACF` | 570 | 157 | 570 | 1/0 | 8/14/0 | 0 | 5 | — | `GenericTBA_Init` | D |
+| 124 | `0x00443ED0` | `0x00402ADE` | 639 | 175 | 639 | 1/0 | 8/14/0 | 0 | 6 | — | `Cabinet_Init` | D |
+| 125 | `0x00473ED0` | `0x004029DA` | 695 | 194 | 695 | 1/0 | 7/14/0 | 0 | 5 | — | `StationaryGun_Init` | D |
+| 126 | `0x0042ACC0` | `0x00402B97` | 870 | 246 | 870 | 1/0 | 10/14/0 | 0 | 7 | — | `Train_Init` | D |
+| 127 | `0x004330F0` | `0x00402B6A` | 761 | 218 | 761 | 1/0 | 9/15/0 | 0 | 5 | — | `Plane_Init` | D |
+| 128 | `0x00444BF0` | `0x00402AD9` | 805 | 232 | 805 | 1/0 | 8/15/0 | 0 | 3 | — | `Switch_Init` | D |
+| 129 | `0x004464C0` | `0x00402AD4` | 1072 | 297 | 1072 | 3/3 | 8/16/0 | 0 | 18 | — | `Door_Init` | D |
+| 130 | `0x00440FD0` | `0x00402AE8` | 1515 | 437 | 1515 | 1/0 | 11/19/0 | 0 | 12 | — | `SCamera_Init` | D |
+| 131 | `0x004310F0` | `0x00402B74` | 1096 | 312 | 1096 | 1/0 | 10/24/0 | 0 | 7 | — | `Heli_Init` | D |
+| 132 | `0x0042DCF0` | `0x00402B83` | 1132 | 318 | 1132 | 1/0 | 10/24/0 | 0 | 7 | — | `Car_Init` | D |
+| 133 | `0x00477E30` | `0x004029BC` | 1110 | 295 | 1110 | 1/0 | 11/25/0 | 0 | 11 | — | `Gun_Init` | D |
+
+### 20.4 The next ten rounds, in order (with the prerequisite round 0)
+
+**Round 0 (not in the table, but it changes the table): `0x004E7530` — 6 B of code, 2 instructions.**
+`A1 C8 88 54 00` `mov eax,[0x005488C8]`; `C3` `ret` (r2 block 7 B including one alignment `nop`).
+0 callees, 88 call sites in `.text`, no manifest record, candidate label `StatusScreen_GetEvent`.
+**34 of the 133 rows call it.** Landing it flips 7 rows from B to A (self-contained) and 3 more
+from 2 blockers to 1 — one 6-byte native buys seven one-round rows.
+
+After round 0 the ten cheapest rows, in order:
+
+1. **`0x004688B0`** `ComputerLog_Init` — 111 B / 31 instrs / 1 block(s), 0 edge(s); 4/1/0 callees L/C/N, d2=0; missing `0x004E7530`.
+2. **`0x00468E20`** `ComputerObjectives_Init` — 111 B / 31 instrs / 1 block(s), 0 edge(s); 4/1/0 callees L/C/N, d2=0; missing `0x004E7530`.
+3. **`0x004851B0`** `GameScreen_Init` — 111 B / 31 instrs / 1 block(s), 0 edge(s); 4/1/0 callees L/C/N, d2=0; missing `0x004E7530`.
+4. **`0x00424B90`** `Cursor_Init` — 121 B / 33 instrs / 1 block(s), 0 edge(s); 5/1/0 callees L/C/N, d2=0; missing `0x004E7530`.
+5. **`0x00485A40`** `StatusMessageScreen_Init` — 133 B / 36 instrs / 1 block(s), 0 edge(s); 5/1/0 callees L/C/N, d2=0; missing `0x004E7530`.
+6. **`0x00419760`** `BackgroundFX_Init` — 137 B / 38 instrs / 1 block(s), 0 edge(s); 5/1/0 callees L/C/N, d2=0; missing `0x004E7530`.
+7. **`0x00453550`** `PatrolPath_Init` — 162 B / 37 instrs / 1 block(s), 0 edge(s); 6/0/0 callees L/C/N, d2=0; no call blocker; tail `0x00453600`.
+8. **`0x0047B4B0`** `GunShot_Init` — 172 B / 45 instrs / 1 block(s), 0 edge(s); 6/1/0 callees L/C/N, d2=0; missing `0x00413B20`.
+9. **`0x004533B0`** `PatrolPathCommand_Init` — 183 B / 56 instrs / 1 block(s), 0 edge(s); 7/1/0 callees L/C/N, d2=0; missing `0x004F0FA0`.
+10. **`0x00425C80`** `CarAI_Init` — 263 B / 78 instrs / 1 block(s), 0 edge(s); 8/1/0 callees L/C/N, d2=0; missing `0x004F0FA0`.
+
+Why not `0x00484F30` (39 B, the smallest row with 0 candidate callees): it sits at rank 13 because
+its single direct blocker is its tail target `0x00485150` (31 B), which itself calls
+`0x004B1420` — a 229 B / 14-block dispatcher with no implementation and three more absent
+callees (`0x004B1020`, `0x004B11A0`, `0x004B1DE0`). That is 6 natives for a 39-byte body, so it
+is not a one-round row. It is listed correctly as B with d2=1, not hidden.
+
+Rows 1-6 close with one leaf (`0x004E7530`, 6 B). Row 7 closes with its tail target
+`0x00453600` (39 B / 17 instrs / 3 blocks, calling `0x004B8810` which is landed). Row 8 closes
+with `0x00413B20` (6 B leaf). Rows 9-10 close with `0x004F0FA0` (6 B leaf). So the ten rows above
+cost ten row bodies (1,504 B) plus three leaf natives (18 B) and one 39-byte tail.
+
+### 20.5 Trampoline flag
+
+Exactly one row is a trampoline: **`0x00508F80`** — 10 B, 2 instructions (`call 0x005183D0`;
+`jmp 0x00508FA0`), 1 block, 0 data references. It is also the **first call of the sequence**,
+which makes it look like the natural first pick. It is not one: its call target `0x005183D0` is
+a 370 B / 74-instruction startup routine whose record is misnamed (20.7) and which has ~60
+not-landed callees; its tail target `0x00508FA0` is a 755 B / 196-instruction native. Round cost
+is 10 + 370 + 755 = **1,135 B of code plus a 61-deep dependency wall** — hence `d2=61` in the table
+even though `blocked=2`.
+
+### 20.6 Unresolved: none of the 133 — but six extents behind them are not established here
+
+Every one of the 133 extents passed the tiling + terminator + cross-decode checks, so there is no
+"unresolved" row. What is *not* established in this section, and must not be treated as known:
+
+- **The 3 tail targets** (separate natives, outside the row extents): `0x00485150` 31 B / 7 instrs
+  / 1 call (`0x004B1420`); `0x00453600` 39 B / 17 instrs / 3 blocks / 1 call (`0x004B8810`, landed);
+  `0x00508FA0` 755 B / 196 instrs (from r2 block sizes only — not tiled here).
+- **`0x004B1420`**: r2 reports 229 B / 14 blocks; not tiled here, no manifest record, and its only
+  candidate is labelled `Sys_IllegalDeviceNameInP` — a label that does not fit a 14-block
+  dispatcher. Treat its three non-landed callees `0x004B1020` / `0x004B11A0` / `0x004B1DE0` as
+unknown too (only `0x004AF7B0` of its four calls is landed).
+- **Extents of the deps themselves** are used only for the `d2` counts and are not tiled row by
+  row in this section.
+
+### 20.7 Defects found while building this table (fix before trusting any label)
+
+1. `0x00401000` is recorded as `QTask_CreateTask` in the manifest. Its bytes contradict that:
+   it is the startup function that calls `0x00402930` (§19), not a task constructor.
+2. `0x005183D0` is recorded as `Terrain_CalculateNormals_8` / ANALYZED. Its bytes are a 370 B
+   startup routine calling `0x004ED510 InputPort_Init`, `0x00530220 CamTask_Init`, `0x004FAA60`
+   and ~60 further startup routines. The record name and the candidate label are both wrong.
+   The same reasoning makes its `implementation.path` reference-only.
+3. `0x004F0F80`, `0x004F1000`, `0x004F1A60`, `0x004F1A70` have engine sources but no manifest
+   records (20.0). Add the records so the gate and any manifest-based count see them.
+4. Reference labels that do not fit their bytes: `0x004B1420` (`Sys_IllegalDeviceNameInP`),
+   `0x005183D0` (`Terrain_CalculateNormals_8`). Candidate labels in the table are printed with
+   that same caveat: they are file names, not verified retail names.
+
+### 20.8 Highest-leverage first picks: the leaf sweep
+
+The rank column answers "can this row close in one round". The complement is which *prerequisite*
+closes the most rows, and that is where the next rounds should start: the registrar's remaining
+callees are dominated by 6-byte leaves. Measured over the non-landed direct dependencies of the
+133 rows (any dependency with extent <= 20 B and no callees of its own):
+
+| leaf VA | ext B / instrs | rows gated by it | rows it flips to A on its own | candidate label (unverified) |
+|---|---|---|---|---|
+| `0x004F0FC0` | 6 / 2 | 43 | 0 | `Script_CallNativeHandler_3` |
+| `0x004F1220` | 6 / 2 | 38 | 0 | `Script_SpawnNewTask_6` |
+| `0x004F1210` | 6 / 2 | 38 | 0 | `Script_FormatString_5` |
+| `0x004E7530` | 6 / 2 | 34 | **7** | `StatusScreen_GetEvent` |
+| `0x004F1010` | 6 / 2 | 32 | 0 | `Script_ParseEnumReal32_4` |
+| `0x004F0FA0` | 6 / 2 | 28 | 2 (`0x004533B0`, `0x00425C80`) | `Script_ParseEnumString_3` |
+| `0x004F0FD0` | 6 / 2 | 27 | 1 (`0x00436B10`) | `Script_EvaluateCondition_3` |
+| `0x004D9FA0` | 7 / 2 | 24 | 0 | `MagicObj_GetTypeId` |
+| `0x00416840` | 6 / 2 | 23 | 0 | `Level_LoadLevel_3` |
+| `0x00413B20` | 6 / 2 | 4 | 1 (`0x0047B4B0`) | `HumanPlayer_UpdateHealth_10` |
+
+**First pick: `0x004E7530` — 6 B, 2 instructions.** It is the only prerequisite that closes rows
+on its own: 7 of them (rows 1-6 and row 12 of the table), and it is called from 34 rows in total
+plus 88 call sites across `.text`. Then, in order, `0x004F0FA0` (closes 2), `0x004F0FD0`
+(closes 1), `0x00413B20` (closes 1), with `0x004F0FC0` / `0x004F1220` / `0x004F1210` (43 / 38 /
+38 rows gated) paying off as the rows behind them come up.
+
+Projection, static call edges only: **6 leaves (36 B) => A=10, B=6**; **all 117 leaf deps
+(721 B total) => A=74, B=33**, leaving 26 rows still blocked by two or more deps. Each leaf is
+still a native: it needs its own transcription, provenance block, manifest record and gate run,
+so "6 B" is bytes of code, not free rounds. But auditing 721 B of leaves turns two thirds of the
+table into rows that can be transcribed independently.
+
+No row is A today because every row still has at least one non-landed callee: 13 rows are exactly
+one callee short (the "blocked=1" set), which is what the top of the table is.
+
+### 20.9 Cannot prove (explicit)
+
+- What any of the 133 rows *does*: only call order, call targets, block structure and data
+  addresses were recovered. The candidate labels are not evidence of semantics.
+- That the extents are the compiler's function boundaries: they are r2-block-bounded contiguous
+  runs that tile exactly with a terminating last instruction. A boundary inside a shared tail
+  would still tile if r2 split it there; the §19 `ret`-heuristic failure is why this method is
+  terminator + tiling rather than "first `ret`", but the method cannot prove a boundary it cannot
+  see.
+- Edge counts: structural (block terminators), not executed paths. No runtime evidence exists for
+  any row in this table.
+- That the `scripts/GameNatives/` candidates are correct transcriptions: none was byte-compared
+  here; two manifest records in this area are already contradicted by their bytes (20.7).
+- The A-projection in 20.8: it assumes each affected row has no additional dependency that only
+  appears at link time.

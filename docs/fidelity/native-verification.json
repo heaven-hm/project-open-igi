@@ -58163,6 +58163,46 @@
       "notes": "Renamed from `DynCubeObj_Init_4E5370` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
+      "address": "0x004E7530",
+      "name": "Core_GetEventWord_4E7530",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_4e7530.cpp",
+        "sha256": "86bdb7c9590e1620ff8ae87df0c2705dd617894c1378901594475fcea796ebae",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/screen/004E7530-StatusScreen_GetEvent 2.cpp",
+        "sha256": "a7d3165de72695e78697cf1f0bdefe3a624a1208cc8f53f2134864dad7bb7abe",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x004E7530",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004E7530-binaryninja.json",
+          "evidence_sha256": "32c9806cc72524bef1acd690a356042602195fb98eab0666a4fb1702f896965b"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x004E7530",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004E7530-radare2.json",
+          "evidence_sha256": "25d9c8065eaa572b6dff58da02521bf88f1cd0533f29560b254637c18282a9c6"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004E7530-semantic-review.json",
+          "evidence_sha256": "9ff34b78ef89e2164c5df07efbc013f06d39a675a73d39c907d93a2d7b61987d"
+        }
+      }
+    },
+    {
       "address": "0x004E7C50",
       "name": "CameraControlTask_Init",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
