@@ -17,6 +17,7 @@ import argparse
 import hashlib
 import json
 import pathlib
+import re
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 MANIFEST = ROOT / "docs/fidelity/native-verification.json"
@@ -42,7 +43,15 @@ def main() -> int:
             continue
         if ((row.get("verification") or {}).get("semantic_review") or {}).get("evidence_path"):
             continue
-        matches = sorted(EVIDENCE.glob(f"{row['address'].lower()}-semantic-review*.json"))
+        # Reviews live both at the evidence root and in dated subdirectories, and the
+        # filename may carry the address in either case form, so search recursively
+        # and match on the parsed address instead of on the filename spelling.
+        matches = []
+        for candidate in EVIDENCE.rglob("*-semantic-review*.json"):
+            found = re.search(r"0x([0-9a-fA-F]{6,8})", candidate.name)
+            if found and int(found.group(1), 16) == address:
+                matches.append(candidate)
+        matches.sort()
         unbound.append(row)
         if matches:
             bindable.append((row, matches[0]))
