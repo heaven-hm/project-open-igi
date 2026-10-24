@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "address": "0x00488700",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "0728fa5b8ade01a3ed32f95601310f78ea0b75a75fc8c7f6d2fc543f3d0ce27e",
+  "implementation_path": "engine/src/retail/core/native_488700.cpp",
+  "reviewed_by": "lead",
+  "reviewed": true,
+  "review_scope": "static: retail instructions and emitted candidate listing",
+  "result": "passed",
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "rationale": "Extent and instruction tiling from section 21; generated artifacts report 11 blocks / 15 edges, matching retail."
+    },
+    {
+      "name": "cfg_match",
+      "result": "passed",
+      "rationale": "Candidate CFG is 11 blocks / 15 edges, identical to the section 21 count for this address."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "passed",
+      "rationale": "One dword argument read from [esp+4] (or none), consistent with the one-word handler dispatch shape."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "passed",
+      "rationale": "Body shape: the dispatch-stack walk with the phase-1 table read at 0x00A970E0; every store and every table read is mapped to a retail address."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "passed",
+      "rationale": "Phase-1 table base 0x00A970E0 and the 0x00AFA6E0/0x00AFA7E0 stack pair; type word at +0x1C; depth index arithmetic preserved."
+    },
+    {
+      "name": "floating_point_semantics",
+      "result": "not_applicable",
+      "rationale": "No floating-point instruction in this function."
+    },
+    {
+      "name": "memory_layout_and_access",
+      "result": "passed",
+      "rationale": "Store order and reload-after-call positions follow the retail listing rather than a tidied equivalent."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "passed",
+      "rationale": "Retail returns void through plain ret; both exit paths are present."
+    }
+  ],
+  "evidence": "docs/fidelity/evidence/0x4EE970-data-extents.md section 21",
+  "limitations": [
+    "The candidate emits 11 blocks / 15 edges, exactly the section 21 count for retail.",
+    "The depth is re-read from 0x00AFA7E0 after the indirect handler call, which retail does at 0x0048874B; caching it would pop the wrong slot when a handler pushes or pops the stack.",
+    "The child-validity test reproduces retail's mov/neg/sbb/and sequence: the child is pushed only when its first word is non-zero.",
+    "The handler is called with one word, matching the phase-1 dispatch shape that section 21 derived from the real call sites; the phase-0 table is the two-word caller and is a different site.",
+    "Runtime unobserved; reachable only through the startup sequence behind the 0x00402930 boundary."
+  ]
+}

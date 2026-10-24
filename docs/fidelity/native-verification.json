@@ -38834,6 +38834,46 @@
       }
     },
     {
+      "address": "0x00468BB0",
+      "name": "Task_ClearPendingWord_468BB0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_468bb0.cpp",
+        "sha256": "64e649e17a98430ca5ebbda39de2e60e5f72b9799479d2d83fc9c5b5421de322",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/pickuptrigger/00468BB0-PickupTrigger_InvokeGetActiveMode 2.cpp",
+        "sha256": "e429797c57215f4b7c08333e77a2df2d8d655e4bb1fb5aa93720e9165b70ed4a",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x00468BB0",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x00468BB0-binaryninja.json",
+          "evidence_sha256": "e1c20eef3c88f2a72e597e257e56e059049fae7e86386fecbf05b390c069737b"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x00468BB0",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x00468BB0-radare2.json",
+          "evidence_sha256": "f327975221d650642dd0087153655c6c7cad61cad2cd0956320b6b16c0e3d373"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x00468BB0-semantic-review.json",
+          "evidence_sha256": "b4493955f73373e9858a29c302c8bacd07d97eb87c3241398bcb0dadeafbc42b"
+        }
+      }
+    },
+    {
       "address": "0x00471120",
       "name": "WeaponGun_ProcessWNES",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
@@ -39296,6 +39336,46 @@
           "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
           "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
         ]
+      }
+    },
+    {
+      "address": "0x00488700",
+      "name": "Task_WalkAndDispatch_488700",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_488700.cpp",
+        "sha256": "0728fa5b8ade01a3ed32f95601310f78ea0b75a75fc8c7f6d2fc543f3d0ce27e",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/00488700-EditVariable_Init_2 2.cpp",
+        "sha256": "e440387ea6d7fbcd45ca54c6f266f2b8f86feb4258e313c318cd6a52c73a9d1c",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x00488700",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x00488700-binaryninja.json",
+          "evidence_sha256": "13ec6380cd780910611e56f268b2ae7a2200bd3cff9667e03bfeb86f817a2106"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x00488700",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x00488700-radare2.json",
+          "evidence_sha256": "2313024607b1640ff02705c04f5cfb3db1a1a26fc7c4729974fdeaa8ffb185a0"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x00488700-semantic-review.json",
+          "evidence_sha256": "d26c5884d2858f95bd554aa63e62e157bc1c48d6f060cf990e184713c1683bd3"
+        }
       }
     },
     {

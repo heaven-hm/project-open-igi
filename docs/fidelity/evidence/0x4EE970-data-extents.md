@@ -5905,3 +5905,296 @@ one callee short (the "blocked=1" set), which is what the top of the table is.
   here; two manifest records in this area are already contradicted by their bytes (20.7).
 - The A-projection in 20.8: it assumes each affected row has no additional dependency that only
   appears at link time.
+
+## 21. The four handler addresses `0x004688B0` installs, and the cheapness rule they break
+
+### 21.0 What section 20 could not see
+
+Section 20 ranked `0x004688B0` first (`111` B, `31` instructions) with `L/C/N = 4/1/0` and read that
+as "all four call targets are candidates, one is in the tree, none is missing" — a rank of `B`,
+"one missing dependency". That count was taken over `call` instructions only. The body makes five
+calls; two of them link handlers and one gets the phase, and the four handler addresses are
+arguments to the two links: `0x004688B0` passes `0x00468920`,
+`0x00488700`, `0x00468BB0`, `0x00468BC0` as arguments to the two handler-link natives
+(`0x00401400`, `0x00401530`). Those four addresses are functions that must be transcribed before the
+registrar can be, and a callee scan cannot see an argument. `DEEPSEEK_HANDOFF.md` (round 200)
+already names this as the same class of error as counting records instead of implementations; the
+evidence sheet had not yet triaged the four addresses, which is what 21.1–21.5 do.
+
+None of the four has a manifest record or an engine file (`grep` of `docs/fidelity/native-verification.json`,
+`engine/`):
+
+| handler | extent B | instructions | called from `0x004688B0` at | installed at phase |
+|---|---|---|---|---|
+| `0x00468920` | 479 | 152 | `0x004688C6` (`push`), `0x004688D4` (`call 0x00401400`) | 0 (link argument 2 = `0`) |
+| `0x00488700` | 104 | 36 | `0x004688DF` (`push`), `0x004688E7` (`call 0x00401530`) | 1 (link argument 2 = `1`) |
+| `0x00468BB0` | 11 | 2 | `0x004688F3` (`push`), `0x004688FB` (`call 0x00401530`) | 2 (link argument 2 = `2`) |
+| `0x00468BC0` | 469 | 145 | `0x00468903` (`push`), `0x00468916` (`call 0x00401530`) | `[0x005488C8]` (link argument 2 = `0x004E7530` return) |
+
+The fourth install is worth reading in full, because it is not a three-push call:
+
+```
+00468900  83C438            add esp,byte +0x38        ; close the 14 pushes of the first three links
+00468903  68C08B4600        push dword 0x468bc0      ; handler -- left on the stack
+00468908  E823EC0700        call 0x4e7530            ; mov eax,[0x5488c8]; ret -- returns the phase
+0046890D  668B1598DC5B00    mov dx,[0x5bdc98]        ; class id, re-read from where the first link wrote it
+00468914  50                push eax                 ; argument 2 = phase
+00468915  52                push edx                 ; argument 1 = id
+00468916  E8158CF9FF        call 0x401530            ; argument 3 = the 0x468bc0 word left at [esp+0xC]
+0046891B  83C40C            add esp,byte +0xc        ; removes id + phase + handler
+0046891E  C3                ret
+```
+
+`0x004E7530` consumes no argument and does not clean the stack, so the `0x00468BC0` word pushed before
+it is still at `[esp+0xC]` when `0x00401530` starts; that slot is its third argument. The `add esp,0xC`
+after the call removes exactly the three dwords `0x00401530` used. The fourth install therefore links
+`0x00468BC0` at the phase returned by `[0x005488C8]`, not at a literal.
+
+### 21.1 Extents, decoders, dispatch ABI
+
+#### 21.1.1 Extents
+
+Method, same as sections 18–20: r2 `aaa` does not create a function for a handler that only ever appears
+as an immediate, so each entry was created with `af @ <VA>` (`afbj @` returned `[]` before that) and the
+extent is the contiguous block run from the entry (`afbj` folds tail jumps into the caller; a size field
+is not used); the bytes of exactly that extent are then tiled with NASM `ndisasm -b32 -o<VA>` and every
+instruction is compared against r2 `pdfj` by address and length.
+
+| handler | extent B | instructions | blocks/edges | `ndisasm` tiling (ΣB) | r2 `pdfj` (ops, ΣB) | agree |
+|---|---|---|---|---|---|---|
+| `0x00468920` | 479 | 152 | 3/3 | 479 | 152, 479 | 152/152 |
+| `0x00488700` | 104 | 36 | 11/15 | 104 | 36, 104 | 36/36 |
+| `0x00468BB0` | 11 | 2 | 1/0 | 11 | 2, 11 | 2/2 |
+| `0x00468BC0` | 469 | 145 | 13/20 | 469 | 145, 469 | 145/145 |
+| total | 1063 | 335 | 28/38 | 1063 | 335, 1063 | 0 mismatches |
+
+Every tiling has `Σ instruction bytes == extent`, the terminator (`ret`) last, no gap, no unreachable
+byte; every `pdfj` instruction address and size matches the `ndisasm` decode. The four bodies are
+`1063` B / `335` instructions in total — `952` B more than the `111`-byte section 20
+row (`0x004688B0`) that installs them.
+
+#### 21.1.2 What the dispatch passes a handler
+
+The table the two link natives write is `0xA96AE0`, cleared to `0x17D00` dwords (`254` phases ×
+`384` class ids, phase stride `0x180`) by the initialiser at `0x0040117D`; index = `id + phase*0x180`.
+Each phase has its own dispatch site, and the sites do not agree on the argument count:
+
+| phase / table | dispatch site | pushes before `call` | cleanup | handler sees |
+|---|---|---|---|---|
+| 0 / `0xA96AE0` | `0x004013D9`–`0x004013F0` | `push edx` (`[esp+0x14]` = walker argument 3), `push esi` (record) | `add esp,0x8` | **two dwords** `(record, context)` |
+| 1 / `0xA970E0` | `0x00488739`–`0x00488751` | `push ecx` (record) | `add esp,0x4` | one dword |
+| 2 / `0xA976E0` | `0x00401676`–`0x00401684` | `push esi` | `add esp,0x4` | one dword |
+| 3 / `0xA97CE0` | `0x00401643`–`0x00401651` | `push esi` | `add esp,0x4` | one dword |
+| `[0x005488C8]` / `0xA96AE0` | `0x00468D64`–`0x00468D72`, `0x004E747E`–`0x004E748C` | `push esi` / `push ecx` | `add esp,0x4` | one dword |
+
+No handler ends `ret n` (`0x00468BB0` `C3`, `0x00488700` `C3`, `0x00468BC0` `C3`, `0x00468920` `C3`), so
+the convention is `__cdecl` in every phase: the caller cleans. The phase-0 site is the exception that
+matters here: it is the only site that pushes a second argument, and the only handler in this set that
+is linked through `0x00401400` (the context variant) is `0x00468920`.
+
+| handler | link native | phase | dispatch arguments | body actually reads |
+|---|---|---|---|---|
+| `0x00468920` | `0x00401400` | 0 | **2** (record, context) | argument 1 only (`mov ebx,[esp+0x18]` at `0x0046893E`, frame `sub esp,8` + 3 pushes = 20) |
+| `0x00488700` | `0x00401530` | 1 | 1 | argument 1 (`mov eax,[esp+4]` at `0x00488711`) |
+| `0x00468BB0` | `0x00401530` | 2 | 1 | none (`mov dword [0x005BDD68],0` then `ret`) |
+| `0x00468BC0` | `0x00401530` | `[0x005488C8]` | 1 | argument 1 (`mov ebp,[esp+0x50]` at `0x00468C1F`, which is `E+4` after `sub esp,0x10`, 4 saved registers and 11 argument pushes) |
+
+Two consequences for the port. First, `engine/include/igi/retail/core/task_types.hpp` declares
+`FrameHandler = void (*)(void*)` — a one-argument type. The phase-0 walk passes two arguments; a
+transcription of `0x00468920` (or of any phase-0 handler) against that type is ABI-narrow, and the
+phase-0 walk itself is the two-argument caller. Second, the phase the fourth link uses is not the
+literal `0` of the first three: it is the dword at `0x005488C8` (image value `0xFF`, written at
+`0x004E737B` from `0x00401810(0)` and reset to `0xFF` at `0x004E7512`), so the one-dword sites
+`0x00468D70` and `0x004E747E` are the evidence for its caller contract, not a static phase constant.
+
+### 21.2 `0x00488700` — 104 B, zero natives, landable now
+
+- Extent `104` B, `36` instructions, `11` blocks/`15` edges; phase 1, one dword, caller cleans.
+- Calls: none. The only call is indirect at `0x00488749` through the phase-1 table `0xA970E0`
+  (`mov ax,[ecx+0x1C]; mov eax,[eax*4+0xA970E0]; push ecx; call eax; add esp,4`): it dispatches the
+  next handler of the same phase, which is a table read, not a new native.
+- Code-address immediates: none.
+- Data: writes `0x00AFA6E0` (`0x00488729`, `mov [edx*4+0x00AFA6E0],eax`) and `0x00AFA7E0`
+  (`0x00488733`, `0x0048875E`); reads `0x00AFA6DC`, which is `0x00AFA6E0 - 4`, i.e. the same array
+  addressed with `edx-1`; reads the table `0x00A970E0`. Both globals already have an owner:
+  `g_afa6e0[0x40]` / `g_afa7e0` are declared in `engine/src/retail/core/native_4015f0.cpp`, and
+  `0x00A970E0` is referenced from `engine/src/retail/core/flow.cpp` and `frame_natives.cpp`.
+- Consumes only the record: it walks a list (`[record]`, then `[record+0x1C]` class id), pushes each
+  list node on the dispatch stack and dispatches that node's phase-1 handler.
+- **Verdict: landable now** — `0` new natives, `0` code-address immediates, all written words owned.
+  This is the one body of the four to transcribe first: it is 104 B, it needs nothing, and it pays
+  back on six rows.
+- Leverage: it is passed as a code immediate by `6` of the `133` rows — rows 1, 2, 3, 12, 18, 42
+  (`0x004688B0`, `0x00468E20`, `0x004851B0`, `0x00423FC0`, `0x00488620`, `0x004361D0`). It is the only
+  body in this set that removes a blocker from more than one row.
+
+### 21.3 `0x00468BB0` — 11 B, zero natives, one data word
+
+- Extent `11` B, `2` instructions, `1` block, `0` edges: `mov dword [0x005BDD68],0x0` then `ret`.
+  Phase 2, one dword; the body reads no argument and returns nothing.
+- Calls: none. Code-address immediates: none.
+- Writes `0x005BDD68` — no owner: the address appears in no engine source (the owner scan in 21.7.2
+  covers `1112` data addresses and this is not one of them; neither are `0x005BDD6C` nor `0x005BDC98`).
+- **Verdict: landable now** — `0` new natives; the only condition is that the round also declares
+  the one word it zeroes (`0x005BDD68`). It is the cheapest body in the band (11 B).
+
+### 21.4 `0x00468BC0` — 469 B, six natives
+
+- Extent `469` B, `145` instructions, `13` blocks/`20` edges; phase `[0x005488C8]`, one dword.
+- Calls, `9` targets:
+  - in the tree: `0x004B0D60` (`engine/src/retail/core/native_4b0d60.cpp`), `0x004B0D90`
+    (`native_4b0d90.cpp`), `0x004E7530` (`native_4e7530.cpp`, `Core_GetEventWord_4E7530`);
+  - missing: `0x00418E40`, `0x00469450`, `0x0046B4D0`, `0x00491CF0`, `0x004B4910`, `0x004B5730`.
+- Code-address immediates: none. The apparent immediates `0x44079EB8`, `0x40040000`, `0x41800000`,
+  `0x42400000`, `0x42C00000`, `0x44029EB8` are float bit patterns, above the image end (`0xC35000`),
+  and are not code addresses.
+- Indirect call at `0x00468D70`: `[edx*4+0xA96AE0]` with `edx = phase*384` from `0x004E7530`, one
+  dword, `add esp,4`; a table read, not a new native.
+- Writes `0x00AFA6E0` / `0x00AFA7E0` (`0x00468D43`, `0x00468D4B`, `0x00468D7C`), both owned. Reads
+  `0x005BDC98` (array), `0x005BDD6C`, `0x00BC2360`, `0x00A96AE0`, `0x00AFA6E0`, `0x00AFA7E0`.
+- **Verdict: needs six more natives** (`0x00418E40`, `0x00469450`, `0x0046B4D0`, `0x00491CF0`,
+  `0x004B4910`, `0x004B5730`), and each of those pulls its own callees; the body is 469 B, so this
+  is a three-or-more-round row, not one.
+
+### 21.5 `0x00468920` — 479 B, ten natives, do not start
+
+- Extent `479` B, `152` instructions, `3` blocks/`3` edges; phase 0, **two** dwords.
+- Calls, `9` targets: in the tree only `0x004B5F00` (`Resource_Load`); missing `0x00418E40`,
+  `0x0046B060`, `0x0046B4D0`, `0x0046B660`, `0x0046B970`, `0x0046C0B0`, `0x00491CF0`, `0x00505600`.
+- Code-address immediates, `2`: `0x00468B00`, pushed at `0x00468970` and `0x004689D7`, and
+  `0x00468B30`, pushed at `0x00468A70` and `0x00468ABC`. Both are handler/callback addresses; both
+  are candidate-only in
+  `scripts/GameNatives` (`PickupTrigger_Invoke28`, `PickupTrigger_Invoke28_468B30`) and neither is in
+  the tree. These are the same trap as the row that installs `0x00468920` itself, one level down.
+- Data: `11` addresses, including the written `0x005BDD68` (unowned) and the float/string constants
+  `0x5333C8`, `0x5339F4`, `0x5339F8`, `0x5339FC`, `0x533A00`, `0x0053B55C`, `0x0053F6F0`, `0x0053F6FC`;
+  reads the class-id array `0x005BDC98` and `0x00BC2360`.
+- **Verdict: needs ten more natives then do not start it in this band** — `8` callees + `2` handler
+  addresses before the body can be written, plus `1` data owner and the closures of the eight callees.
+
+### 21.6 Does `0x004688B0` become landable after one, two, or all four?
+
+Its five call targets are all in the tree now (`0x004018F0` `QTask_GetCurrentType`, `0x00401900`
+`TaskType_Register`, `0x00401400` / `0x00401530` as landed in `task_types.cpp`, `0x004E7530`), which is
+why the current call-only scan reports `0` missing callees for the row. What remains is exactly what
+section 20 did not count:
+
+| blocker | count | after which handler |
+|---|---|---|
+| code-address immediates `0x00468920`, `0x00488700`, `0x00468BB0`, `0x00468BC0` | 4 | all four |
+| data word written `0x005BDC98` (`mov [0x5BDC98],ax` at `0x004688CE`) | 1 | no handler provides it; needs a data owner |
+| unowned write inside `0x00468BB0` / `0x00468920` (`0x005BDD68`) | 1 | lands with whichever of the two lands first, plus a declaration |
+
+Sequential cost of the four: `0x00488700` `+0`, `0x00468BB0` `+0` natives, `0x00468BC0` `+6`,
+`0x00468920` `+10` — `4` handler bodies plus `16` callees = `20` natives, plus the `2` data owners and
+the deeper closures of `0x0046B4D0`, `0x00418E40`, `0x00491CF0`, `0x00469450`, `0x004B4910`,
+`0x004B5730`. Answer: **not after one and not after two; after all four it is still one data owner
+short of two data words (`0x005BDC98`, `0x005BDD68`), and the four themselves are `20` natives, not one.** The 111-byte row is not a
+round-one row in any ordering that counts operands.
+
+### 21.7 The corrected cheapness rule
+
+#### 21.7.1 The rule
+
+`DEEPSEEK_HANDOFF.md` (round 200, commit `0ac3a4fc`) records the rule as "a row is cheap only if every
+immediate that is a code address is already a transcribed native, and every data address it touches
+has an owner". This section adds the callee condition and makes the owner test mechanical. The rule:
+
+A row is landable in one round only if:
+
+1. every `call` target is a transcribed native;
+2. every code-address immediate — any `imm32` in `0x00401000`–`0x005C9000` that is not a call or
+   branch target — is a transcribed native;
+3. every data word it writes (`mov [abs],...` and `mov [reg*4+abs],...`) has an owner declared in
+   `engine/`.
+
+Otherwise its cost is one round per missing native, not one round for the row. A callee count is a
+lower bound on a row's cost, and never an upper one.
+
+#### 21.7.2 The mechanical check on section 20
+
+Every one of the `133` rows was re-decoded and each instruction classified: `call` target, branch
+target, other immediate, write. "Transcribed" is `docs/fidelity/native-verification.json` plus a file
+in `engine/`; "owned" is "the address appears as a literal in some `engine/src` file" (`1112` data
+addresses qualify). Results:
+
+| measurement | rows | count |
+|---|---|---|
+| rows passing a code address as a non-call argument | 131 / 133 | 952 (row, address) pairs |
+| rows writing a data word with no engine owner | 129 / 133 | 373 (row, word) pairs |
+| rows with 0 missing `call` targets on the current tree | 13 / 133 | — |
+| rows landable under the rule | **0 / 133** | — |
+
+The single row with no code-address immediate and no unowned write is row 25 (`0x00508F80`, `10` B); it
+is a jump trampoline that fails rule 1 — it calls `0x005183D0` and tail-jumps to `0x00508FA0`, neither
+transcribed. The other `132` rows break at least one condition: the `24` other `B` rows on conditions 2
+and/or 3, and all `108` `C`/`D` rows on at least one of the three.
+
+#### 21.7.3 The `B` rows, with what section 20 did not count
+
+Columns 3–5 are the corrected counts of 21.7.2 for the current tree: missing callees, missing
+code-address immediates, unowned written words. "out" is the section 20 tail column.
+
+| §20 row | VA | ext B | missing calls | missing code-address immediates | unowned writes | out | rule blockers |
+|---|---|---|---|---|---|---|---|
+| 1 | `0x004688B0` | 111 | 0 | 4 | 1 | — | 5 |
+| 2 | `0x00468E20` | 111 | 0 | 3 | 1 | — | 4 |
+| 3 | `0x004851B0` | 111 | 0 | 3 | 1 | — | 4 |
+| 4 | `0x00424B90` | 121 | 0 | 4 | 1 | — | 5 |
+| 5 | `0x00485A40` | 133 | 0 | 5 | 1 | — | 6 |
+| 6 | `0x00419760` | 137 | 0 | 3 | 1 | — | 4 |
+| 7 | `0x00453550` | 162 | 0 | 4 | 5 | `0x00453600` | 10 |
+| 8 | `0x0047B4B0` | 172 | 0 | 5 | 2 | — | 7 |
+| 9 | `0x004533B0` | 183 | 0 | 3 | 2 | — | 5 |
+| 10 | `0x00425C80` | 263 | 0 | 4 | 2 | — | 6 |
+| 11 | `0x00436B10` | 322 | 0 | 4 | 2 | — | 6 |
+| 12 | `0x00423FC0` | 500 | 0 | 10 | 7 | — | 17 |
+| 13 | `0x00484F30` | 39 | 0 | 1 | 0 | `0x00485150` | 2 |
+| 14 | `0x0046DF10` | 81 | 1 | 1 | 1 | — | 3 |
+| 15 | `0x00472A70` | 104 | 2 | 2 | 1 | — | 5 |
+| 16 | `0x0047E700` | 129 | 2 | 2 | 4 | — | 8 |
+| 17 | `0x004696B0` | 141 | 1 | 4 | 2 | — | 7 |
+| 18 | `0x00488620` | 202 | 2 | 5 | 2 | — | 9 |
+| 19 | `0x004190E0` | 269 | 2 | 3 | 2 | — | 7 |
+| 20 | `0x0047CF20` | 41 | 2 | 0 | 1 | — | 3 |
+| 21 | `0x0046AB60` | 126 | 1 | 4 | 1 | — | 6 |
+| 22 | `0x00486900` | 171 | 1 | 4 | 2 | — | 7 |
+| 23 | `0x00413DF0` | 408 | 2 | 1 | 6 | — | 9 |
+| 24 | `0x00415070` | 110 | 2 | 3 | 1 | — | 6 |
+| 25 | `0x00508F80` | 10 | 1 | 0 | 0 | `0x00508FA0` | 2 |
+
+24 of the 25 `B` rows break a condition that section 20 could not see; row 25 breaks only rule 1
+(the callee column). Every other `B` row writes a word with no owner, passes a code address, or both;
+23 of them looked cheap for the wrong reason — section 20 counted the calls and not the operands.
+Section 20's call column is also stale in the other direction: it was taken before `0x004E7530`,
+`0x00401400` and `0x00401530` landed, so 13 rows now have no missing call targets at all.
+
+#### 21.7.4 What the corrected counts change in the ranking
+
+- The cheapest two rows under the rule are row 13 (`0x00484F30`, `39` B: missing `0x00484F60` and tail
+  `0x00485150` — `2` natives) and row 25 (`0x00508F80`, `10` B: `0x005183D0` + `0x00508FA0` — `2`
+  natives). Both are trampoline-sized bodies; neither is a `111`-byte registrar.
+- The highest-leverage single body in the table is `0x00488700` (21.2): one `104`-byte native clears a
+  code-address blocker from `6` rows.
+- The wide rows 1–12 lose their `B` rank: each needs its own set of 1–10 handler natives before the
+  body, and rows 1–3 additionally need the same `0x00488700` (so its `104` B pays back six times).
+  Rows 1, 2, 3, 12, 18 and 42 share `0x00488700`; the remaining wide rows share no single handler with
+  each other, so they stay one-per-round rows even after the rule is applied.
+
+### 21.8 Limits of this section
+
+- The phase used by the fourth link is a runtime dword (`[0x005488C8]`, image value `0xFF`); the
+  one-dword contract for `0x00468BC0` rests on its two actual dispatch sites (`0x00468D70`,
+  `0x004E747E`), not on a static phase value. Whoever transcribes the phase-0 walk must decide whether
+  it can ever dispatch a phase-`[0x005488C8]` entry.
+- The meaning of the second argument of the phase-0 site is not established here: `0x004013E8` loads
+  it from the walker's own third stack slot and the callers were not traced.
+- No decompiler was run for these four bodies on this host (r2 `pdfj` + `ndisasm` only, per the
+  tooling note in section 18), and no runtime capture exists for them; the section claims structure,
+  ABI and dependency counts, not behavior.
+- The owner test is textual (literal address in `engine/src`); it proves an owner is declared, not that
+  its layout matches retail. The `0x005BDC98` / `0x005BDD68` / `0x005BDD6C` words are the counterexample:
+  no file declares them, so every row that writes them fails condition 3 no matter how small it is.
+- The `133` row set, extents and instruction totals are those of section 20; the replay here re-decodes
+  each row from `igi.exe` SHA-256
+  `dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01` and keeps every extent unchanged.
