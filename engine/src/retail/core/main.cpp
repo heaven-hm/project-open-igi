@@ -220,6 +220,7 @@ int __stdcall Main(void* const h_instance, void* const h_previous_instance,
     // status byte is cleared.
     MSG message{};
     int exit_code = 0;
+    bool quit = false;
     for (;;)
     {
         igi::retail::core::FP_InitExtendedPrecision();
@@ -236,23 +237,32 @@ int __stdcall Main(void* const h_instance, void* const h_previous_instance,
             ::DestroyWindow(window);
         }
         // 0x48F841: the pump is entered only when PeekMessageA reports a
-        // message; the inner loop then gets/dispatches until nothing is pending.
+        // message; the inner drain repeats until nothing is pending.
         if (::PeekMessageA(&message, nullptr, 0, 0, PM_NOREMOVE) != 0)
         {
-            while (::GetMessageA(&message, nullptr, 0, 0) != 0)
+            for (;;)
             {
+                // 0x48F85F: only GetMessageA returning 0 (WM_QUIT) stores
+                // MSG.wParam into the exit-code local and leaves the loop.
+                if (::GetMessageA(&message, nullptr, 0, 0) == 0)
+                {
+                    exit_code = static_cast<int>(message.wParam);
+                    Loop_StatusByte = 0U;
+                    quit = true;
+                    break;
+                }
                 ::TranslateMessage(&message);
                 ::DispatchMessageA(&message);
+                // 0x48F884: PeekMessageA again; leave when nothing is pending.
                 if (::PeekMessageA(&message, nullptr, 0, 0, PM_NOREMOVE) == 0)
                 {
                     break;
                 }
             }
-            // 0x48F884: GetMessageA returned 0 -> MSG.wParam is the exit code.
-            exit_code = static_cast<int>(message.wParam);
         }
-        // 0x48F88A: the loop re-tests the status byte after the pump.
-        if (Loop_StatusByte == 0U)
+        // 0x48F88A: re-test the status byte, and 0x48F898 leaves
+        // unconditionally once WM_QUIT was seen.
+        if (quit || Loop_StatusByte == 0U)
         {
             break;
         }
