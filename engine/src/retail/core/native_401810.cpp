@@ -21,7 +21,7 @@ std::uint8_t QTask_NewQTaskEventNoContextFn(std::uint16_t value)
     }
     if (event_id >= igi::retail::core::event_table_entry_count)
     {
-        // 0x0040183A-0x0040184F: push "Unable to allocate event"; call Debug_Error; jmp $.
+        // 0x0040182B-0x00401838: push "Unable to allocate event"; call Debug_Error at 0x004AF7B0; add esp,4; jmp $ at 0x00401838.
         Debug_Error("Unable to allocate event");
         for (;;)
         {

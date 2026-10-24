@@ -1,0 +1,85 @@
+{
+  "candidate_sha256": "3bf85ed1e3560665150e21aaf2312f3bdb9cc1d0ed00a7b1cd2f3f0ecf239df2",
+  "candidate_source_commit": "commit:ab66fce3",
+  "candidate_commit": "ab66fce3",
+  "retail_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "probe": {
+    "path": "build/tester/20261024T042503Z/main-prefix/probes/probe_main_prefix_candidate.js",
+    "sha256": "6cb280de2e0334cbc375888d2826d861b7a242141f11b0218114a4354f1c4a21"
+  },
+  "main": {
+    "retail_va": "0x0048F530",
+    "candidate_va": "0x4182e0",
+    "hard_stop_candidate": "0x418635",
+    "hard_stop_retail": "0x0048F7AA"
+  },
+  "candidate_facts": {
+    "window_procedure": "0x417fa0",
+    "handler_pointers": {
+      "Window": "0x416910",
+      "WinInput": "0x416920",
+      "Germany": "0x416930",
+      "USA": "0x416950"
+    },
+    "globals": {
+      "window_handle": "0x5a3e40",
+      "window_handler_chain": "0x5a3f40",
+      "window_handler_terminator": "0x5a3f44",
+      "window_handler_tail": "0x5a3f48",
+      "loop_status_byte": "0x5a3dd0",
+      "debug_key_flag": "0x5a3e60"
+    },
+    "strings": {
+      "IGI1MUTEX": "0x5681b0",
+      "Error": "0x5681ba",
+      "IGI is already running.": "0x5681c0",
+      "Couldn't open window": "0x56820b",
+      "Innerloop": "0x5681d8",
+      "filesys.cfg": "0x5681e2",
+      "Window": "0x5681ef",
+      "WinInput": "0x5681f6",
+      "Germany": "0x5681ff",
+      "USA": "0x568207",
+      "HardcoreGerman": "0x568220"
+    },
+    "pool": "0x5a3e80"
+  },
+  "declared_build_divergences": [
+    {
+      "id": "mutex-name",
+      "what": "\"IGI_TESTING_MUTEX\" build switch makes the mutex name \"IGI1MUTEX\"",
+      "retail": "IGIMUTEX",
+      "candidate": "IGI1MUTEX",
+      "owner": "Lead-authorized side-by-side testing build",
+      "effect": "valued as MATCH with this divergence recorded, never a silent rename"
+    },
+    {
+      "id": "getlasterror-call-count",
+      "what": "candidate issues one GetLastError and compares it with both 0xB7 and 0x6; retail issues two GetLastError calls",
+      "retail": "2 calls (each compared against 0xB7 then 0x6)",
+      "candidate": "1 call tested against both constants",
+      "effect": "row count difference recorded; the observable (GetLastError value 0) is still compared"
+    },
+    {
+      "id": "dx-gate-absent",
+      "what": "retail 0x00498480 Display_ProbeDirectXVersion + <0x700 requirement box is not linked in the candidate",
+      "retail": "call row present",
+      "candidate": "row absent (recorded source gap)",
+      "effect": "declared absent, not a value mismatch"
+    },
+    {
+      "id": "0x498460-substitute",
+      "what": "retail 0x00498460 Display_ClearSurfaces_16 call before QTask_CreateTask is replaced by the port FP_InitExtendedPrecision helper (both x87 control-word initialisation)",
+      "retail": "call 0x00498460",
+      "candidate": "call FP_InitExtendedPrecision 0x00417AD0",
+      "effect": "declared substitution; not counted as a match of the retail native"
+    },
+    {
+      "id": "chain-container-relocation",
+      "what": "retail chain head/sentinel/tail cells at 0x005C8DF0/0x005C8DF4/0x005C8DF8; the candidate relocates the three-word container to its own image addresses",
+      "retail": "0x005C8DF0/0x005C8DF4/0x005C8DF8",
+      "candidate": "0x5a3f40, 0x5a3f44, 0x5a3f48",
+      "owner_authorization": "address relocation is inherent to the candidate image; the retail walk shape is compared by relation"
+    }
+  ]
+}

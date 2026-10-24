@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "kind": "native-disassembly",
+  "tool": "binary_ninja",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "function_entry": "0x004AB7F5",
+  "signature": "unknown",
+  "cfg": {
+    "nodes": [
+      {
+        "address": "0x004AB7F5"
+      },
+      {
+        "address": "0x004AB801"
+      },
+      {
+        "address": "0x004AB806"
+      },
+      {
+        "address": "0x004AB80B"
+      },
+      {
+        "address": "0x004AB811"
+      },
+      {
+        "address": "0x004AB813"
+      },
+      {
+        "address": "0x004AB817"
+      },
+      {
+        "address": "0x004AB828"
+      },
+      {
+        "address": "0x004AB848"
+      }
+    ],
+    "edges": [
+      {
+        "source": "0x004AB7F5",
+        "target": "0x004AB801",
+        "kind": "branch"
+      },
+      {
+        "source": "0x004AB801",
+        "target": "0x004AB806",
+        "kind": "branch"
+      },
+      {
+        "source": "0x004AB801",
+        "target": "0x004AB80B",
+        "kind": "branch"
+      },
+      {
+        "source": "0x004AB806",
+        "target": "0x004AB80B",
+        "kind": "branch"
+      },
+      {
+        "source": "0x004AB806",
+        "target": "0x004AB813",
+        "kind": "branch"
+      },
+      {
+        "source": "0x004AB80B",
+        "target": "0x004AB811",
+        "kind": "branch"
+      },
+      {
+        "source": "0x004AB80B",
+        "target": "0x004AB848",
+        "kind": "branch"
+      },
+      {
+        "source": "0x004AB811",
+        "target": "0x004AB801",
+        "kind": "branch"
+      },
+      {
+        "source": "0x004AB813",
+        "target": "0x004AB817",
+        "kind": "branch"
+      },
+      {
+        "source": "0x004AB813",
+        "target": "0x004AB848",
+        "kind": "branch"
+      },
+      {
+        "source": "0x004AB817",
+        "target": "0x004AB828",
+        "kind": "branch"
+      },
+      {
+        "source": "0x004AB817",
+        "target": "0x004AB848",
+        "kind": "branch"
+      }
+    ]
+  }
+}

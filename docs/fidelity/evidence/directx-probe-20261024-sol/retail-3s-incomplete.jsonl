@@ -1,0 +1,16 @@
+{"monotonic": 1792851911.722872, "message": {"type": "send", "payload": {"type": "observed", "phase": "entry", "address": "0x00498480", "callIndex": 1, "outputsAlias": false, "callerRva": "0x8f6e7", "scope": "retail startup DirectX capability output and imported call observations"}}, "data": null}
+{"monotonic": 1792851911.7232268, "message": {"type": "send", "payload": {"type": "directx_api", "phase": "entry", "name": "GetVersionExA", "callerRva": "0x984b9", "structureSize": 148}}, "data": null}
+{"monotonic": 1792851911.723365, "message": {"type": "send", "payload": {"type": "directx_api", "phase": "return", "name": "GetVersionExA", "eax": 1, "version": {"major": 6, "minor": 2, "build": 9200, "platform": 2}}}, "data": null}
+{"monotonic": 1792851911.72655, "message": {"type": "send", "payload": {"type": "directx_api", "phase": "entry", "name": "LoadLibraryA", "callerRva": "0x985a2", "text": "DDRAW.DLL"}}, "data": null}
+{"monotonic": 1792851911.7267609, "message": {"type": "send", "payload": {"type": "directx_api", "phase": "return", "name": "LoadLibraryA", "nonNull": true}}, "data": null}
+{"monotonic": 1792851911.7270029, "message": {"type": "send", "payload": {"type": "directx_api", "phase": "entry", "name": "GetProcAddress", "callerRva": "0x985d1", "procedure": "DirectDrawCreate"}}, "data": null}
+{"monotonic": 1792851911.727349, "message": {"type": "send", "payload": {"type": "directx_api", "phase": "return", "name": "GetProcAddress", "nonNull": true}}, "data": null}
+{"monotonic": 1792851914.542881, "message": {"type": "send", "payload": {"type": "directx_api", "phase": "entry", "name": "LoadLibraryA", "callerRva": "0x98694", "text": "DINPUT.DLL"}}, "data": null}
+{"monotonic": 1792851914.5433311, "message": {"type": "send", "payload": {"type": "directx_api", "phase": "return", "name": "LoadLibraryA", "nonNull": true}}, "data": null}
+{"monotonic": 1792851914.543402, "message": {"type": "send", "payload": {"type": "directx_api", "phase": "entry", "name": "GetProcAddress", "callerRva": "0x986cd", "procedure": "DirectInputCreateA"}}, "data": null}
+{"monotonic": 1792851914.543468, "message": {"type": "send", "payload": {"type": "directx_api", "phase": "return", "name": "GetProcAddress", "nonNull": true}}, "data": null}
+{"monotonic": 1792851914.543645, "message": {"type": "send", "payload": {"type": "directx_api", "phase": "entry", "name": "FreeLibrary", "callerRva": "0x9870c"}}, "data": null}
+{"monotonic": 1792851914.5438452, "message": {"type": "send", "payload": {"type": "directx_api", "phase": "return", "name": "FreeLibrary", "eax": 1}}, "data": null}
+{"monotonic": 1792851914.6721349, "message": {"type": "send", "payload": {"type": "directx_api", "phase": "entry", "name": "CoInitialize", "callerRva": "0x9883c", "reservedIsNull": true}}, "data": null}
+{"monotonic": 1792851914.6723342, "message": {"type": "send", "payload": {"type": "directx_api", "phase": "return", "name": "CoInitialize", "eax": 1}}, "data": null}
+{"monotonic": 1792851914.672816, "message": {"type": "send", "payload": {"type": "directx_api", "phase": "entry", "name": "CoCreateInstance", "callerRva": "0x98855", "classGuid": "109f6b637d0cd11195b20020afdc7421", "outerIsNull": true, "context": 1, "interfaceGuid": "5a1136652d7bd211ba180000f875ac12"}}, "data": null}

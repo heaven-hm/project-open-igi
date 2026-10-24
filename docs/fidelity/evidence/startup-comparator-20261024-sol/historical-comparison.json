@@ -1,0 +1,607 @@
+{
+  "kind": "igi-tester-main-prefix-candidate-comparison",
+  "schema_version": 1,
+  "verdict": "PREFIX_CANDIDATE_MATCH",
+  "candidate_sha256": "3bf85ed1e3560665150e21aaf2312f3bdb9cc1d0ed00a7b1cd2f3f0ecf239df2",
+  "probe_sha256": "6cb280de2e0334cbc375888d2826d861b7a242141f11b0218114a4354f1c4a21",
+  "retail_report": "retail-main.json",
+  "candidate_report": "candidate-main.json",
+  "first_divergence": null,
+  "declared_build_divergences": [
+    {
+      "id": "mutex-name",
+      "what": "\"IGI_TESTING_MUTEX\" build switch makes the mutex name \"IGI1MUTEX\"",
+      "retail": "IGIMUTEX",
+      "candidate": "IGI1MUTEX",
+      "owner": "Lead-authorized side-by-side testing build",
+      "effect": "valued as MATCH with this divergence recorded, never a silent rename"
+    },
+    {
+      "id": "getlasterror-call-count",
+      "what": "candidate issues one GetLastError and compares it with both 0xB7 and 0x6; retail issues two GetLastError calls",
+      "retail": "2 calls (each compared against 0xB7 then 0x6)",
+      "candidate": "1 call tested against both constants",
+      "effect": "row count difference recorded; the observable (GetLastError value 0) is still compared"
+    },
+    {
+      "id": "dx-gate-absent",
+      "what": "retail 0x00498480 Display_ProbeDirectXVersion + <0x700 requirement box is not linked in the candidate",
+      "retail": "call row present",
+      "candidate": "row absent (recorded source gap)",
+      "effect": "declared absent, not a value mismatch"
+    },
+    {
+      "id": "0x498460-substitute",
+      "what": "retail 0x00498460 Display_ClearSurfaces_16 call before QTask_CreateTask is replaced by the port FP_InitExtendedPrecision helper (both x87 control-word initialisation)",
+      "retail": "call 0x00498460",
+      "candidate": "call FP_InitExtendedPrecision 0x00417AD0",
+      "effect": "declared substitution; not counted as a match of the retail native"
+    },
+    {
+      "id": "chain-container-relocation",
+      "what": "retail chain head/sentinel/tail cells at 0x005C8DF0/0x005C8DF4/0x005C8DF8; the candidate relocates the three-word container to its own image addresses",
+      "retail": "0x005C8DF0/0x005C8DF4/0x005C8DF8",
+      "candidate": "0x5a3f40, 0x5a3f44, 0x5a3f48",
+      "owner_authorization": "address relocation is inherent to the candidate image; the retail walk shape is compared by relation"
+    }
+  ],
+  "boundary": {
+    "entry": "observed",
+    "candidate_return": "UNOBSERVED-until-reachable (throws inside QTask_RegisterClasses)",
+    "retail_return": "EAX 1"
+  },
+  "matches": 56,
+  "mismatches": 0,
+  "rows": [
+    {
+      "observable": "candidate image sha256",
+      "status": "MATCH",
+      "retail": "3bf85ed1e3560665150e21aaf2312f3bdb9cc1d0ed00a7b1cd2f3f0ecf239df2",
+      "candidate": "3bf85ed1e3560665150e21aaf2312f3bdb9cc1d0ed00a7b1cd2f3f0ecf239df2",
+      "note": ""
+    },
+    {
+      "observable": "candidate probe sha256",
+      "status": "MATCH",
+      "retail": "6cb280de2e0334cbc375888d2826d861b7a242141f11b0218114a4354f1c4a21",
+      "candidate": "6cb280de2e0334cbc375888d2826d861b7a242141f11b0218114a4354f1c4a21",
+      "note": ""
+    },
+    {
+      "observable": "candidate hook installation",
+      "status": "MATCH",
+      "retail": "no failures",
+      "candidate": [],
+      "note": ""
+    },
+    {
+      "observable": "candidate main entries",
+      "status": "MATCH",
+      "retail": 1,
+      "candidate": 1,
+      "note": ""
+    },
+    {
+      "observable": "candidate entry caller",
+      "status": "MATCH",
+      "retail": "non-null caller return address",
+      "candidate": "0x5617cd",
+      "note": ""
+    },
+    {
+      "observable": "candidate entry argument words",
+      "status": "MATCH",
+      "retail": "4 words [hInstance, hPrev, lpCmdLine, nShow]",
+      "candidate": [
+        4194304,
+        0,
+        1165807,
+        10
+      ],
+      "note": ""
+    },
+    {
+      "observable": "candidate declared-absent contract rows",
+      "status": "DECLARED_BUILD_DIVERGENCE",
+      "retail": "Display_DinputDll, sprintf, Camera_ApplyBandFilter_6, Display_ClearSurfaces_16",
+      "candidate": [
+        "Camera_ApplyBandFilter_6",
+        "Display_ClearSurfaces_16",
+        "Display_DinputDll",
+        "sprintf"
+      ],
+      "note": "dx-gate-absent / 0x498460-substitute"
+    },
+    {
+      "observable": "candidate declared-extra call",
+      "status": "DECLARED_BUILD_DIVERGENCE",
+      "retail": "none",
+      "candidate": [
+        "FP_InitExtendedPrecision(0x498460 substitute)"
+      ],
+      "note": "0x498460-substitute"
+    },
+    {
+      "observable": "GetLastError call count",
+      "status": "DECLARED_BUILD_DIVERGENCE",
+      "retail": "2 calls",
+      "candidate": "1 call(s)",
+      "note": "one GetLastError compared with both 0xB7 and 0x6 [getlasterror-call-count]"
+    },
+    {
+      "observable": "candidate missing contract rows (excluding declared)",
+      "status": "MATCH",
+      "retail": "none",
+      "candidate": [],
+      "note": ""
+    },
+    {
+      "observable": "candidate unexpected contract rows",
+      "status": "MATCH",
+      "retail": "none",
+      "candidate": [],
+      "note": ""
+    },
+    {
+      "observable": "candidate shared-row order",
+      "status": "MATCH",
+      "retail": [
+        "CreateMutexA",
+        "GetLastError",
+        "CoInitialize",
+        "GetForegroundWindow",
+        "LoadIconA",
+        "LoadCursorA",
+        "RegisterClassA",
+        "StoreCommandLine",
+        "SetAppPath(?)",
+        "StartupSetter_48F0F0",
+        "StartupSetter_48F100",
+        "StartupSetter_48F140",
+        "StartupSetter_48F120",
+        "StartupSetter_48F1A0",
+        "StartupSetter_48F1C0",
+        "StartupSetter_48F1E0",
+        "StartupSetter_48F240",
+        "StartupSetter_48F260",
+        "StartupSetter_48F280",
+        "StartupSetter_48F290",
+        "StartupSetter_48F2A0",
+        "StartupSetter_48F210",
+        "StartupSetter_48F2B0",
+        "StartupSetter_48F300",
+        "StartupSetter_48F200",
+        "AppMain_ParseCmdLineArgs",
+        "AppMain_ParseCmdLineArgs",
+        "AppMain_ParseCmdLineArgs",
+        "AppMain_ParseCmdLineArgs",
+        "GetSystemMetrics",
+        "GetSystemMetrics",
+        "Display_GetScreenMode(?)",
+        "CreateWindowExA",
+        "ShowCursor",
+        "ShowWindow",
+        "StoreWindowHandle",
+        "QTask_CreateTask"
+      ],
+      "candidate": [
+        "CreateMutexA",
+        "GetLastError",
+        "CoInitialize",
+        "GetForegroundWindow",
+        "LoadIconA",
+        "LoadCursorA",
+        "RegisterClassA",
+        "StoreCommandLine",
+        "SetAppPath(?)",
+        "StartupSetter_48F0F0",
+        "StartupSetter_48F100",
+        "StartupSetter_48F140",
+        "StartupSetter_48F120",
+        "StartupSetter_48F1A0",
+        "StartupSetter_48F1C0",
+        "StartupSetter_48F1E0",
+        "StartupSetter_48F240",
+        "StartupSetter_48F260",
+        "StartupSetter_48F280",
+        "StartupSetter_48F290",
+        "StartupSetter_48F2A0",
+        "StartupSetter_48F210",
+        "StartupSetter_48F2B0",
+        "StartupSetter_48F300",
+        "StartupSetter_48F200",
+        "AppMain_ParseCmdLineArgs",
+        "AppMain_ParseCmdLineArgs",
+        "AppMain_ParseCmdLineArgs",
+        "AppMain_ParseCmdLineArgs",
+        "GetSystemMetrics",
+        "GetSystemMetrics",
+        "Display_GetScreenMode(?)",
+        "CreateWindowExA",
+        "ShowCursor",
+        "ShowWindow",
+        "StoreWindowHandle",
+        "QTask_CreateTask"
+      ],
+      "note": ""
+    },
+    {
+      "observable": "candidate QTask_CreateTask entry",
+      "status": "MATCH",
+      "retail": "1 entry",
+      "candidate": "1 entry",
+      "note": ""
+    },
+    {
+      "observable": "candidate QTask_CreateTask return",
+      "status": "DECLARED_BOUNDARY_UNOBSERVED",
+      "retail": "retail EAX 1",
+      "candidate": "not returned (throws at 0x417EB0)",
+      "note": "boundary evidence only; everything after 0x4183BC is UNOBSERVED-until-reachable"
+    },
+    {
+      "observable": "CreateMutexA called once",
+      "status": "MATCH",
+      "retail": 1,
+      "candidate": 1,
+      "note": ""
+    },
+    {
+      "observable": "mutex name",
+      "status": "DECLARED_BUILD_DIVERGENCE",
+      "retail": "IGIMUTEX",
+      "candidate": "IGI1MUTEX",
+      "note": "IGI_TESTING_MUTEX testing build (side-by-side with retail) [mutex-name]"
+    },
+    {
+      "observable": "CreateMutexA handle non-null",
+      "status": "MATCH",
+      "retail": "non-null handle",
+      "candidate": [
+        256
+      ],
+      "note": ""
+    },
+    {
+      "observable": "GetLastError value(s)",
+      "status": "MATCH",
+      "retail": [
+        0
+      ],
+      "candidate": [
+        0
+      ],
+      "note": "candidate compares the single GetLastError with 0xB7 and 0x6"
+    },
+    {
+      "observable": "CoInitialize return",
+      "status": "MATCH",
+      "retail": 0,
+      "candidate": 0,
+      "note": ""
+    },
+    {
+      "observable": "GetForegroundWindow return",
+      "status": "MATCH",
+      "retail": 0,
+      "candidate": 0,
+      "note": ""
+    },
+    {
+      "observable": "LoadIconA return",
+      "status": "MATCH",
+      "retail": 0,
+      "candidate": 0,
+      "note": ""
+    },
+    {
+      "observable": "LoadCursorA return",
+      "status": "PROCESS_SCOPED_VALUE",
+      "retail": 11796670,
+      "candidate": 13762756,
+      "note": "IDC_ARROW handle; Wine USER handles are process-scoped, so the retail 0xB400BE and candidate value cannot be equal cross-process; the WNDCLASSA.hCursor relation is checked instead"
+    },
+    {
+      "observable": "RegisterClassA return nonzero",
+      "status": "MATCH",
+      "retail": "nonzero",
+      "candidate": 49202,
+      "note": ""
+    },
+    {
+      "observable": "GetSystemMetrics values",
+      "status": "MATCH",
+      "retail": [
+        1050,
+        1680
+      ],
+      "candidate": [
+        1050,
+        1680
+      ],
+      "note": ""
+    },
+    {
+      "observable": "CreateWindowExA X",
+      "status": "MATCH",
+      "retail": 520,
+      "candidate": 520,
+      "note": ""
+    },
+    {
+      "observable": "CreateWindowExA Y",
+      "status": "MATCH",
+      "retail": 285,
+      "candidate": 285,
+      "note": ""
+    },
+    {
+      "observable": "CreateWindowExA style",
+      "status": "MATCH",
+      "retail": 935854080,
+      "candidate": 935854080,
+      "note": ""
+    },
+    {
+      "observable": "CreateWindowExA size",
+      "status": "MATCH",
+      "retail": [
+        640,
+        480
+      ],
+      "candidate": [
+        640,
+        480
+      ],
+      "note": ""
+    },
+    {
+      "observable": "CreateWindowExA exstyle",
+      "status": "MATCH",
+      "retail": 0,
+      "candidate": 0,
+      "note": ""
+    },
+    {
+      "observable": "CreateWindowExA class+title",
+      "status": "MATCH",
+      "retail": [
+        "Innerloop",
+        "Innerloop"
+      ],
+      "candidate": [
+        "Innerloop",
+        "Innerloop"
+      ],
+      "note": ""
+    },
+    {
+      "observable": "CreateWindowExA hInstance",
+      "status": "MATCH",
+      "retail": 4194304,
+      "candidate": 4194304,
+      "note": ""
+    },
+    {
+      "observable": "CreateWindowExA parent/menu/param",
+      "status": "MATCH",
+      "retail": [
+        0,
+        0,
+        0
+      ],
+      "candidate": [
+        0,
+        0,
+        0
+      ],
+      "note": ""
+    },
+    {
+      "observable": "CreateWindowExA returned hwnd",
+      "status": "MATCH",
+      "retail": "nonzero hwnd",
+      "candidate": "0xd0009e",
+      "note": ""
+    },
+    {
+      "observable": "ShowCursor(0) return",
+      "status": "MATCH",
+      "retail": 4294967295,
+      "candidate": 4294967295,
+      "note": ""
+    },
+    {
+      "observable": "ShowWindow(hwnd,10) return",
+      "status": "MATCH",
+      "retail": "1",
+      "candidate": 1,
+      "note": ""
+    },
+    {
+      "observable": "StoreWindowHandle argument is the created hwnd",
+      "status": "MATCH",
+      "retail": 13631646,
+      "candidate": 13631646,
+      "note": ""
+    },
+    {
+      "observable": "WNDCLASSA.style",
+      "status": "MATCH",
+      "retail": 3,
+      "candidate": 3,
+      "note": ""
+    },
+    {
+      "observable": "WNDCLASSA.cbClsExtra",
+      "status": "MATCH",
+      "retail": 0,
+      "candidate": 0,
+      "note": ""
+    },
+    {
+      "observable": "WNDCLASSA.cbWndExtra",
+      "status": "MATCH",
+      "retail": 0,
+      "candidate": 0,
+      "note": ""
+    },
+    {
+      "observable": "WNDCLASSA.hInstance",
+      "status": "MATCH",
+      "retail": 4194304,
+      "candidate": 4194304,
+      "note": ""
+    },
+    {
+      "observable": "WNDCLASSA.hIcon",
+      "status": "MATCH",
+      "retail": 0,
+      "candidate": 0,
+      "note": ""
+    },
+    {
+      "observable": "WNDCLASSA.hCursor",
+      "status": "MATCH",
+      "retail": 13762756,
+      "candidate": 13762756,
+      "note": ""
+    },
+    {
+      "observable": "WNDCLASSA.hbrBackground",
+      "status": "MATCH",
+      "retail": 7,
+      "candidate": 7,
+      "note": ""
+    },
+    {
+      "observable": "WNDCLASSA.lpfnWndProc bound by symbol",
+      "status": "MATCH",
+      "retail": "0x0048F970",
+      "candidate": "0x417fa0",
+      "note": "candidate WindowProcedure at 0x417D20; retail address recorded as baseline, not compared across images"
+    },
+    {
+      "observable": "WNDCLASSA.lpszMenuName == lpszClassName",
+      "status": "MATCH",
+      "retail": true,
+      "candidate": true,
+      "note": ""
+    },
+    {
+      "observable": "WNDCLASSA menu/class strings",
+      "status": "MATCH",
+      "retail": [
+        "Innerloop",
+        "Innerloop"
+      ],
+      "candidate": [
+        "Innerloop",
+        "Innerloop"
+      ],
+      "note": ""
+    },
+    {
+      "observable": "WNDCLASSA.lpfnWndProc relocation",
+      "status": "DECLARED_BUILD_DIVERGENCE",
+      "retail": "0x0048F970",
+      "candidate": "0x417fa0",
+      "note": "candidate WindowProcedure is a different image address, bound by symbol [wndproc-address-relocation]"
+    },
+    {
+      "observable": "handler code pointer addresses",
+      "status": "DECLARED_BUILD_DIVERGENCE",
+      "retail": [
+        "0x0048F350",
+        "0x0048F920",
+        "0x0048F930",
+        "0x0048F950"
+      ],
+      "candidate": [
+        "0x416910",
+        "0x416920",
+        "0x416930",
+        "0x416950"
+      ],
+      "note": "same four handlers in a different image, bound by symbol [handler-address-relocation]"
+    },
+    {
+      "observable": "handler code pointers bound by symbol",
+      "status": "MATCH",
+      "retail": [
+        4286736,
+        4286752,
+        4286768,
+        4286800
+      ],
+      "candidate": [
+        4286736,
+        4286752,
+        4286768,
+        4286800
+      ],
+      "note": ""
+    },
+    {
+      "observable": "[0x5C8BC4] window handle == hwnd",
+      "status": "MATCH",
+      "retail": 13631646,
+      "candidate": 13631646,
+      "note": "candidate global g_window_handle at 0x005DCE60"
+    },
+    {
+      "observable": "[0x5C8DE8] loop status byte before the boundary",
+      "status": "MATCH",
+      "retail": 0,
+      "candidate": 0,
+      "note": "candidate Loop_StatusByte at 0x005DCDF0"
+    },
+    {
+      "observable": "chain head points at sentinel",
+      "status": "MATCH",
+      "retail": "head == sentinel",
+      "candidate": "0x5a3f44",
+      "note": ""
+    },
+    {
+      "observable": "sentinel.next == 0",
+      "status": "MATCH",
+      "retail": 0,
+      "candidate": 0,
+      "note": ""
+    },
+    {
+      "observable": "sentinel.prev_link == &head",
+      "status": "MATCH",
+      "retail": "prev_link == &head",
+      "candidate": "0x5a3f40",
+      "note": ""
+    },
+    {
+      "observable": "chain tail == &head",
+      "status": "MATCH",
+      "retail": "tail == &head",
+      "candidate": "0x5a3f40",
+      "note": ""
+    },
+    {
+      "observable": "sentinel.handler == 0 (empty chain)",
+      "status": "MATCH",
+      "retail": 0,
+      "candidate": 0,
+      "note": "retail does not initialize the sentinel handler in B3; empty chain skips it"
+    },
+    {
+      "observable": "chain container relocation",
+      "status": "DECLARED_BUILD_DIVERGENCE",
+      "retail": "0x005C8DF0/0x005C8DF4/0x005C8DF8",
+      "candidate": [
+        "0x5a3f40",
+        "0x5a3f44",
+        "0x5a3f48"
+      ],
+      "note": "candidate uses its own contiguous container; the retail walk shape is compared by relation [chain-container-relocation]"
+    }
+  ],
+  "note": "PREFIX_* only. A prefix match is not a native pass and promotes no status. Everything after the QTask_CreateTask boundary is UNOBSERVED-until-reachable."
+}

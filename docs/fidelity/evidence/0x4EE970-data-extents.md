@@ -3098,3 +3098,28 @@ r2 -q -e scr.color=0 -c 'pd 40 @ 0x4C5960' -c 'pd 30 @ 0x4C5AE0' -c q igi.exe
 ```
 
 Reference scans (call/push/immediate) are PE-aware byte scans; the exact method: find every `68 <le32(VA)>` for registration sites, enumerate every `e8` in `.text` and compute `target = site+5+rel` for call sites, and scan every 4-byte literal in a target range for reads/writes (used for `0x54F930`–`0x54FF28` and `0x936270`/`0x936274`).
+
+### 13.8 Follow-up (Lead verification round): flag #2 resolution, and the seventh Graph getter in full
+
+#### 13.8.1 Flag #2 — the divergence is real, but it is **not** in `native_401810`
+
+The candidate routine whose exhaustion path returns 0 is **`QTask_AllocateEvent`** in `engine/src/retail/core/task_types.cpp` (its own provenance comment records the retail VA `0x004017C0`), not `native_401810.cpp` (`0x00401810`). Retail `0x004017C0`'s exhaustion branch, byte for byte:
+
+- `0x4017D9 7c ef` = `jl 0x4017CA` (loop exit — the scan starts at `0x54F9F2`, id `0x20`)
+- `0x4017DB 68 a8 61 53 00` = `push 0x5361A8`; the bytes at `0x5361A8` are exactly `55 6e 61 62 6c 65 20 74 6f 20 61 6c 6c 6f 63 61 74 65 20 65 76 65 6e 74` = `"Unable to allocate event"`
+- `0x4017E0 e8 cb df 0a 00` = `call 0x4AF7B0` (the fatal dispatcher; `engine/src/retail/core/retail_error.cpp:8` records that VA as `Debug_Error`)
+- `0x4017E5 83 c4 04 add esp,4`; `0x4017E8 eb fe jmp 0x4017E8`
+
+The candidate instead has `if (event_id >= event_table_entry_count) { return 0U; }` in that branch. After `c5fdc2e1` (`event_table_entry_count = 0x5F4U/6U` = 254) the **bound arithmetic is now identical to retail**: the loop tests ids `0x20..0xFD` (222 ids), exactly retail's `0x54F9F2` → exit at `0x54FF26`; the "30 ids short" half of flag #2 is closed, only the exhaustion path remains. Two smaller byte-faithfulness points in the same routine: retail writes `+2` first (`0x4017F7`), then a single 16-bit store at `+0` (`0x4017FD 66 89 b1 30 f9 54 00`), then `+3` (`0x401804`), where the candidate writes `+0/+1`, `+2`, `+3`; and retail leaves the full id in EAX (`inc eax` from `0x20`) where the candidate returns `uint8_t`.
+
+`native_401810.cpp` itself is behaviourally faithful for `0x00401810` (same scan, same stores, same `Debug_Error` + self-spin on exhaustion). Only its comments are wrong: its exhaustion comment names `0x0040183A-0x0040184F`, but that range is the **success** path — retail exhaustion is `0x40182B`–`0x401838` (`push 0x5361A8` at `0x40182B`, `call 0x4AF7B0` at `0x401830`, `add esp,4` at `0x401835`, `eb fe` at `0x401838`); and its success comment names `0x00401826-0x00401839`, where retail's success block is `0x40183A`–`0x401859` (`mov dx,[esp+4]` at `0x40183A`, `+2`=1 at `0x401844`, 16-bit `+0` store at `0x40184B`, `+3`=0 at `0x401852`, `ret` at `0x401859`).
+
+#### 13.8.2 `0x4F9270` in full (flag #9)
+
+- **Body:** `a0 71 e3 54 00; c3` = `mov al,[0x54E371]; ret`, `0x4F9270`–`0x4F9275` (6 bytes). No other instruction, no call.
+- **Only caller in the image:** `0x5187F6`, inside the `"GraphNode"` class initialiser `0x518760` (`0x518760 sub esp,0x118`; `0x518775 push "GraphNode"` — string at `0x54ED0C`; `0x51877A call 0x401900`; class word stored at `0x54EC9C` by `0x518787`). The block is `0x5187F1 push 0x4D3710; 0x5187F6 call 0x4F9270; 0x5187FB mov cx,[0x54EC9C]; 0x518802 push eax; 0x518803 push ecx; 0x518804 call 0x401400` — the value is the **phase argument** of a class phase-handler registration whose handler is the ret-only `0x4D3710` (already transcribed as `native_4d3710.cpp`). The same initialiser registers `E5` at `0x5187C1` and `E4` at `0x5187DC` for the same class word, so the reader is a generic phase-id getter, not a Graph-only method.
+- **`0x518760`'s caller:** exactly one, `0x518489`, immediately after `0x518484 call 0x4FAA60` (`Graph_Init`) in the class-registration cascade that begins at `0x5183D0`.
+- **What `0x54E371` is:** the Graph class-word block **+ `0xD`**. `0x54E364` word = "Graph" class word (written at `0x4FAA82`); `0x54E366` word = image `0x0181` with **no code reference anywhere** (unexplained); `0x54E368`–`0x54E371` are ten one-byte ids, image `0xFF`.
+- **Writer:** exactly one — `0x4FAAD0 a2 71 e3 54 00` in `Graph_Init 0x4FAA60`, immediately after `0x4FAACA call 0x4017C0` (allocated with argument 0). Teardown `0x4FB110` reads it at `0x4FB184` (`mov cl,[0x54E371]`) and clears it through `0x4018C0` at `0x4FB18B`.
+- **Transcription status:** the writer is **not** transcribed (no `native_4faa60.cpp`; the six existing Graph getters document "runtime-written by the untranscribed Graph_Init 0x4FAA60"; `graph_state.hpp` marks them placeholders, `graph_state.cpp` does not exist — each getter file defines its own `g_...` byte). Adding `native_4f9270.cpp` now would be the same blocker as `0x401A60`: a reader whose retail writer is untranscribed, backed by a stand-in. Correct order is to transcribe `Graph_Init 0x4FAA60` first (it writes all ten slots, allocates the five-entry `0xA76D10` array, registers the class and its handlers), then `0x4F9270` reads real storage; the call site `0x518760` is also untranscribed, so end-to-end validation needs it too.
+- **Do not import** the external catalogue name `Script_CallNativeHandler_22` (BN/Re-Agent catalogues, CFG 1.000): a 6-byte `mov al,[mem]; ret` body contains no call and the name asserts behaviour the bytes contradict.

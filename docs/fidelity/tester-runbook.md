@@ -53,3 +53,51 @@ Prepares per-native probes + typed contracts for the QTask registration chain so
 4. Retail baseline (authorized lease, 30 s): `main-prefix/reports/retail-main.json` and `retail-main-comparison.json` → `PREFIX_RETAIL_MATCH` 178/179 (only the not-authorized candidate report missing). Values are summarized in `main-prefix/reports/MAIN-PREFIX-BASELINE.md`: CreateMutexA name `IGIMUTEX`, GetLastError 0/0, GetSystemMetrics 1050 then 1680, X=520/Y=285, style 0x37C80000, hwnd 0x00AF00A4, [0x5C8BC4]=hwnd, clear range zero, pointer chain [0x5C8DF0]=0x5C8DF4/[0x5C8DF4]=0/[0x5C8DF8]=0x5C8DF0, and **QTask_CreateTask EAX 1**.
 5. Candidate remained unrun. When authorized, the candidate probe must only reach QTask_CreateTask entry (RegisterClasses still throws) and that is boundary evidence, never a pass. The vision-corrected candidate identity for the next candidate binding is `6d39aa53216f2d0db4edb50afac1e217fa7dd8b5881f3f073404ba4621973e2e` (source `42490c2e`, commit `6f019e12`).
 6. Driver robustness fixes: the main probe's summary returns only plain values (Listener objects over RPC stall Frida on Wine), `session.detach()` is bounded by a 5 s watchdog because Wine can hang it while the game is idle, and driver dispatch recognizes both `observed` and `entry`/`return` event shapes.
+
+## Candidate main-prefix capture (authorized one-off, 2026-10-24)
+
+1. `build_main_prefix_gate.py` writes the retail probe and contract; the candidate run uses a generated `probes/probe_main_prefix_candidate.js` (probe sha `1b4f76…`) built from the same template with candidate addresses: main `0x004180A0` (= `Main@16`), hard stop `0x004183B7` (`call QTask_CreateTask`), candidate IAT slots, candidate symbol addresses for every native, candidate literal addresses and the candidate globals (`g_window_handle` 0x005DCE60, `WindowHandlerChain` 0x005DCE6C, `Loop_StatusByte` 0x005DCDF0). The mapping and declared divergences live in `main-prefix/contracts/candidate-profile.json`.
+2. `compare_main_prefix_candidate.py --profile ... --retail retail-main.json --candidate candidate-main.json --out ...` compares per observable and relation, not raw cross-process addresses. Verdicts are `PREFIX_CANDIDATE_MATCH` / `PREFIX_CANDIDATE_MISMATCH` / `PREFIX_CANDIDATE_BLOCKED`; never a native pass.
+3. Single authorized run (sha `6d39aa53…`): candidate entered main, executed the prefix, entered QTask_CreateTask at candidate callsite `0x4183BC`, threw inside QTask_RegisterClasses and exited 2.56 s after spawn. Result `PREFIX_CANDIDATE_MISMATCH` with exactly one undeclared divergence: `WindowHandlerChain` is all zero at the QTask entry while retail has `[0x5C8DF0]=0x5C8DF4/[+4]=0/[+8]=0x005C8DF0`; summary in `main-prefix/reports/CANDIDATE-MAIN-BASELINE.md`, typed result in `candidate-main-comparison.json`.
+4. Declared, not-hidden candidate differences: `IGI1MUTEX` name (testing switch), one GetLastError call tested against 0xB7 and 0x6, absent `0x00498480` DX gate, `0x00498460` substituted by `FP_InitExtendedPrecision`, relocated code/data addresses, and no candidate equivalent of the retail BSS clear range. `LoadCursorA`'s IDC_ARROW handle is process-scoped under Wine, so only the WNDCLASSA.hCursor relation is compared.
+5. Boundary: QTask entry is boundary evidence; its return/EAX, the pump, WM_QUIT/exit-code path and shutdown are UNOBSERVED-until-reachable and unscored. The candidate process was confirmed gone through Frida before releasing the lease. No registrar candidate run was performed.
+
+## Release screenshot: working Wine invocation for the internal build (TESTER notes, 2026-10-24)
+
+The CrossOver `winewrapper` rejects `igi1.exe window level1` as one string. The working launch for the internal build is the `igi1` bottle through **Wine Stable** with an explicit `WINEPREFIX` and separate argv:
+
+```sh
+cd /Users/haseeb-mir/Downloads/IGI
+WINEPREFIX="/Users/haseeb-mir/Library/Application Support/CrossOver/Bottles/igi1" \
+  "/Applications/Wine Stable.app/Contents/Resources/wine/bin/wine" ./igi1.exe window level1 &
+wine_pid=$!
+sleep 2
+screencapture -x /Users/haseeb-mir/Documents/Code/project-open-igi/screenshots/v0.0.1-candidate-startup-2s.png
+wait "$wine_pid"; echo "wine exit=$?"
+```
+
+- Use the absolute `WINEPREFIX` above; relative paths and the CrossOver wrapper fail.
+- Reliable screenshot offset: **2.0 s after starting `wine`**. The current candidate reaches its window before 2.0 s and exits ~3.0 s after spawn when QTask_RegisterClasses throws; 2.0 s is inside that window and is the offset used for `screenshots/v0.0.1-candidate-startup.png`. Safe band is roughly 1.2-2.4 s; if a frame is missed, retry at 1.5 s rather than increasing past 2.5 s.
+- `screencapture -x` is silent; keep the filename under `screenshots/`. The command returns only after Wine exits, so the exit code is the documented registrar throw exit, not the screenshot result.
+
+## Freeze-before-notify rule (TESTER, 2026-10-24)
+
+The Lead freezes each candidate before notifying the Tester. The Tester only tests the frozen artifact, never the live build directory:
+
+1. Freeze the artifact under `build/artifacts/` and give the Tester its sha256.
+2. Tester copies it into the run directory (`main-prefix/frozen/`), records the hash before and after the run, and passes that copy to the driver (`--exe`).
+3. Never test `build-win32-no-verify-gate/igi1.exe` or the deployed copy unless its hash equals the frozen hash at that moment.
+4. If the live build tree changes after the freeze, the receipt describes the live tree, not the frozen artifact; report the lineage mismatch and ask for a new frozen pair instead of regenerating evidence silently.
+5. Regenerate a receipt only with `scripts/candidate_build_receipt.py` (it runs the configured clean build and hashes the configured output); never hand-edit `candidate-receipt.json`.
+
+## Receipt/freeze ordering (TESTER, 2026-10-24)
+
+The PE is not rebuild-reproducible: each clean build changes the PE `TimeDateStamp`, so a receipt only matches the build it just performed. The correct order is:
+
+1. build the candidate;
+2. run `scripts/candidate_build_receipt.py` (it rebuilds and hashes the configured output);
+3. freeze **both** the receipt's binary and the receipt JSON together under `build/artifacts/`;
+4. deploy that exact binary;
+5. notify the Tester with the frozen pair and its sha256.
+
+The Tester verifies `receipt.candidate_sha256` equals the frozen binary's sha256, copies the pair into `main-prefix/frozen/`, and tests only that copy. Never pair a frozen binary with a later receipt; report the mismatch and wait for a new frozen pair.

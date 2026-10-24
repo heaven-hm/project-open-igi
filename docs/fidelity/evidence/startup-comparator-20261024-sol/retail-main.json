@@ -1,0 +1,1722 @@
+{
+  "kind": "igi-tester-native-probe",
+  "schema_version": 1,
+  "result": "observed",
+  "verified": false,
+  "captured_at": "2026-10-24T01:53:10.962984+00:00",
+  "targets": [
+    {
+      "address": "0x0048F530",
+      "name": "main",
+      "probe": "/Users/haseeb-mir/Documents/Code/project-open-igi/build/tester/20261024T004934Z/main-prefix/probes/probe_main_prefix.js",
+      "probe_sha256": "310158936e21aba2ca94b2d0922f4e3600a5a51c26d2dc907c0f5a39b1d2eab6",
+      "observations": {
+        "name": null,
+        "entries": 0,
+        "returns": 1
+      },
+      "retailName": "main"
+    }
+  ],
+  "executable": {
+    "path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+    "sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+    "preferred_base": "0x00400000",
+    "module": "igi.exe"
+  },
+  "probe_template_sha256": "8472074d6840df8a07f63fe4460771357e99b8b584e9a1bbc7997450359ad84c",
+  "environment": {
+    "frida_host": "127.0.0.1:27042",
+    "frida_client": "17.24.0",
+    "game_directory": "/Users/haseeb-mir/Downloads/IGI",
+    "level": 1,
+    "arguments": [
+      "window",
+      "level1"
+    ],
+    "scenario": {
+      "observe_seconds": 30.0,
+      "scripted_actions": "none (idle observation)"
+    }
+  },
+  "arguments": {
+    "arg_words": 4,
+    "mem_arg": null,
+    "return_mem": null,
+    "watch": [],
+    "max_calls": 256
+  },
+  "hooks": [
+    {
+      "address": "0x0048F530",
+      "name": "main",
+      "module": "igi.exe",
+      "moduleBase": "0x400000",
+      "target": "0x48f530",
+      "preferredBase": "0x400000",
+      "calls": [
+        {
+          "name": "CreateMutexA",
+          "kind": "import",
+          "va": "0x00533124",
+          "resolved": "0x7bebc294"
+        },
+        {
+          "name": "GetLastError",
+          "kind": "import",
+          "va": "0x00533128",
+          "resolved": "0x7bebd374"
+        },
+        {
+          "name": "CoInitialize",
+          "kind": "import",
+          "va": "0x0053321C",
+          "resolved": "0x7aa7b1e0"
+        },
+        {
+          "name": "GetForegroundWindow",
+          "kind": "import",
+          "va": "0x005331D8",
+          "resolved": "0x7b71a7a0"
+        },
+        {
+          "name": "LoadIconA",
+          "kind": "import",
+          "va": "0x005331A4",
+          "resolved": "0x7b74f150"
+        },
+        {
+          "name": "LoadCursorA",
+          "kind": "import",
+          "va": "0x005331A8",
+          "resolved": "0x7b74ef10"
+        },
+        {
+          "name": "RegisterClassA",
+          "kind": "import",
+          "va": "0x005331AC",
+          "resolved": "0x7b757b10"
+        },
+        {
+          "name": "MessageBoxA",
+          "kind": "import",
+          "va": "0x005331B0",
+          "resolved": "0x7b755620"
+        },
+        {
+          "name": "GetSystemMetrics",
+          "kind": "import",
+          "va": "0x005331E8",
+          "resolved": "0x7b743c30"
+        },
+        {
+          "name": "CreateWindowExA",
+          "kind": "import",
+          "va": "0x005331B4",
+          "resolved": "0x7b725ae0"
+        },
+        {
+          "name": "ShowCursor",
+          "kind": "import",
+          "va": "0x005331B8",
+          "resolved": "0x7b71a4c8"
+        },
+        {
+          "name": "ShowWindow",
+          "kind": "import",
+          "va": "0x005331BC",
+          "resolved": "0x7b71aad8"
+        },
+        {
+          "name": "StoreCommandLine",
+          "kind": "native",
+          "va": "0x0048F0C0",
+          "resolved": "0x48f0c0"
+        },
+        {
+          "name": "SetAppPath(?)",
+          "kind": "native",
+          "va": "0x0048F0D0",
+          "resolved": "0x48f0d0"
+        },
+        {
+          "name": "StartupSetter_48F0F0",
+          "kind": "native",
+          "va": "0x0048F0F0",
+          "resolved": "0x48f0f0"
+        },
+        {
+          "name": "StartupSetter_48F100",
+          "kind": "native",
+          "va": "0x0048F100",
+          "resolved": "0x48f100"
+        },
+        {
+          "name": "StartupSetter_48F140",
+          "kind": "native",
+          "va": "0x0048F140",
+          "resolved": "0x48f140"
+        },
+        {
+          "name": "StartupSetter_48F120",
+          "kind": "native",
+          "va": "0x0048F120",
+          "resolved": "0x48f120"
+        },
+        {
+          "name": "StartupSetter_48F1A0",
+          "kind": "native",
+          "va": "0x0048F1A0",
+          "resolved": "0x48f1a0"
+        },
+        {
+          "name": "StartupSetter_48F1C0",
+          "kind": "native",
+          "va": "0x0048F1C0",
+          "resolved": "0x48f1c0"
+        },
+        {
+          "name": "StartupSetter_48F1E0",
+          "kind": "native",
+          "va": "0x0048F1E0",
+          "resolved": "0x48f1e0"
+        },
+        {
+          "name": "StartupSetter_48F240",
+          "kind": "native",
+          "va": "0x0048F240",
+          "resolved": "0x48f240"
+        },
+        {
+          "name": "StartupSetter_48F260",
+          "kind": "native",
+          "va": "0x0048F260",
+          "resolved": "0x48f260"
+        },
+        {
+          "name": "StartupSetter_48F280",
+          "kind": "native",
+          "va": "0x0048F280",
+          "resolved": "0x48f280"
+        },
+        {
+          "name": "StartupSetter_48F290",
+          "kind": "native",
+          "va": "0x0048F290",
+          "resolved": "0x48f290"
+        },
+        {
+          "name": "StartupSetter_48F2A0",
+          "kind": "native",
+          "va": "0x0048F2A0",
+          "resolved": "0x48f2a0"
+        },
+        {
+          "name": "StartupSetter_48F210",
+          "kind": "native",
+          "va": "0x0048F210",
+          "resolved": "0x48f210"
+        },
+        {
+          "name": "StartupSetter_48F2B0",
+          "kind": "native",
+          "va": "0x0048F2B0",
+          "resolved": "0x48f2b0"
+        },
+        {
+          "name": "StartupSetter_48F300",
+          "kind": "native",
+          "va": "0x0048F300",
+          "resolved": "0x48f300"
+        },
+        {
+          "name": "StartupSetter_48F200",
+          "kind": "native",
+          "va": "0x0048F200",
+          "resolved": "0x48f200"
+        },
+        {
+          "name": "AppMain_ParseCmdLineArgs",
+          "kind": "native",
+          "va": "0x0048F360",
+          "resolved": "0x48f360"
+        },
+        {
+          "name": "Display_DinputDll",
+          "kind": "native",
+          "va": "0x00498480",
+          "resolved": "0x498480"
+        },
+        {
+          "name": "sprintf",
+          "kind": "native",
+          "va": "0x004A53B3",
+          "resolved": "0x4a53b3"
+        },
+        {
+          "name": "Camera_ApplyBandFilter_6",
+          "kind": "native",
+          "va": "0x004A5AD5",
+          "resolved": "0x4a5ad5"
+        },
+        {
+          "name": "Display_GetScreenMode(?)",
+          "kind": "native",
+          "va": "0x0048F130",
+          "resolved": "0x48f130"
+        },
+        {
+          "name": "StoreWindowHandle",
+          "kind": "native",
+          "va": "0x0048F0E0",
+          "resolved": "0x48f0e0"
+        },
+        {
+          "name": "Display_ClearSurfaces_16",
+          "kind": "native",
+          "va": "0x00498460",
+          "resolved": "0x498460"
+        },
+        {
+          "name": "QTask_CreateTask",
+          "kind": "native",
+          "va": "0x00401000",
+          "resolved": "0x401000"
+        }
+      ],
+      "failures": [],
+      "retailVA": "0x0048F530",
+      "sideAddress": "0x0048F530"
+    }
+  ],
+  "entries": [
+    {
+      "type": "entry",
+      "address": "0x0048F530",
+      "name": "main",
+      "argWords": [
+        {
+          "label": "stack[esp+4+0]",
+          "status": "read",
+          "value": 4194304,
+          "hex": "0x400000"
+        },
+        {
+          "label": "stack[esp+4+4]",
+          "status": "read",
+          "value": 0,
+          "hex": "0x0"
+        },
+        {
+          "label": "stack[esp+4+8]",
+          "status": "read",
+          "value": 1149034,
+          "hex": "0x11886a"
+        },
+        {
+          "label": "stack[esp+4+12]",
+          "status": "read",
+          "value": 10,
+          "hex": "0xa"
+        }
+      ],
+      "callerReturnAddress": "0x4a51c3",
+      "sequence": 1
+    }
+  ],
+  "returns": [],
+  "messages": 84,
+  "summary": null,
+  "limitations": [
+    "Finite idle observation interval only; no scripted gameplay actions.",
+    "Only the process this driver spawned is terminated; attach mode never terminates the target.",
+    "A pointer snapshot is read only after Process.findRangeByAddress proves the range readable; unknown pointer contents remain unobserved rather than guessed.",
+    "Observed calls are not proof of behavioral parity by themselves; a typed comparator is required.",
+    "Result 'unobserved' means only that this capture did not reach the native; it is not a pass or fail."
+  ],
+  "capture": {
+    "mode": "spawn-suspended",
+    "owned_pid": 1680,
+    "arguments": [
+      "Z:\\Users\\haseeb-mir\\Downloads\\IGI\\igi.exe",
+      "window",
+      "level1"
+    ],
+    "cwd": "Z:\\Users\\haseeb-mir\\Downloads\\IGI",
+    "exited_before_observe_end": null,
+    "alive_at_end": true
+  },
+  "events": [
+    {
+      "type": "globals",
+      "tag": "entry",
+      "phase": "call",
+      "snapshots": [
+        {
+          "label": "clear_range_5c8d28",
+          "va": "0x005C8D28",
+          "length": 192,
+          "status": "read",
+          "hex": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+        },
+        {
+          "label": "ptr_chain_5c8df0",
+          "va": "0x005C8DF0",
+          "length": 12,
+          "status": "read",
+          "hex": "000000000000000000000000"
+        },
+        {
+          "label": "window_handle_5c8bc4",
+          "va": "0x005C8BC4",
+          "length": 4,
+          "status": "read",
+          "hex": "00000000"
+        },
+        {
+          "label": "task_id_byte_5c8de8",
+          "va": "0x005C8DE8",
+          "length": 1,
+          "status": "read",
+          "hex": "00"
+        }
+      ],
+      "sequence": 2
+    },
+    {
+      "type": "api_call",
+      "name": "CreateMutexA",
+      "kind": "import",
+      "target": "0x00533124",
+      "callsite": "0x48f54a",
+      "argWords": [
+        {
+          "label": "stack[esp+4+0]",
+          "status": "read",
+          "value": 0,
+          "hex": "0x0"
+        },
+        {
+          "label": "stack[esp+4+4]",
+          "status": "read",
+          "value": 1,
+          "hex": "0x1"
+        },
+        {
+          "label": "stack[esp+4+8]",
+          "status": "read",
+          "value": 5512908,
+          "hex": "0x541ecc"
+        }
+      ],
+      "strings": [
+        {
+          "slot": 2,
+          "va": "0x00541ECC",
+          "text": "IGIMUTEX"
+        }
+      ],
+      "struct": null,
+      "structStrings": [],
+      "sequence": 3
+    },
+    {
+      "type": "api_return",
+      "name": "CreateMutexA",
+      "kind": "import",
+      "callsite": "0x48f54a",
+      "returnValue": 252,
+      "sequence": 4
+    },
+    {
+      "type": "api_call",
+      "name": "GetLastError",
+      "kind": "import",
+      "target": "0x00533128",
+      "callsite": "0x48f562",
+      "argWords": [],
+      "strings": [],
+      "struct": null,
+      "structStrings": [],
+      "sequence": 5
+    },
+    {
+      "type": "api_return",
+      "name": "GetLastError",
+      "kind": "import",
+      "callsite": "0x48f562",
+      "returnValue": 0,
+      "sequence": 6
+    },
+    {
+      "type": "api_call",
+      "name": "GetLastError",
+      "kind": "import",
+      "target": "0x00533128",
+      "callsite": "0x48f56f",
+      "argWords": [],
+      "strings": [],
+      "struct": null,
+      "structStrings": [],
+      "sequence": 7
+    },
+    {
+      "type": "api_return",
+      "name": "GetLastError",
+      "kind": "import",
+      "callsite": "0x48f56f",
+      "returnValue": 0,
+      "sequence": 8
+    },
+    {
+      "type": "api_call",
+      "name": "CoInitialize",
+      "kind": "import",
+      "target": "0x0053321C",
+      "callsite": "0x48f57f",
+      "argWords": [
+        {
+          "label": "stack[esp+4+0]",
+          "status": "read",
+          "value": 0,
+          "hex": "0x0"
+        }
+      ],
+      "strings": [],
+      "struct": null,
+      "structStrings": [],
+      "sequence": 9
+    },
+    {
+      "type": "api_return",
+      "name": "CoInitialize",
+      "kind": "import",
+      "callsite": "0x48f57f",
+      "returnValue": 0,
+      "sequence": 10
+    },
+    {
+      "type": "api_call",
+      "name": "GetForegroundWindow",
+      "kind": "import",
+      "target": "0x005331D8",
+      "callsite": "0x48f585",
+      "argWords": [],
+      "strings": [],
+      "struct": null,
+      "structStrings": [],
+      "sequence": 11
+    },
+    {
+      "type": "api_return",
+      "name": "GetForegroundWindow",
+      "kind": "import",
+      "callsite": "0x48f585",
+      "returnValue": 0,
+      "sequence": 12
+    },
+    {
+      "type": "api_call",
+      "name": "LoadIconA",
+      "kind": "import",
+      "target": "0x005331A4",
+      "callsite": "0x48f5b8",
+      "argWords": [
+        {
+          "label": "stack[esp+4+0]",
+          "status": "read",
+          "value": 4194304,
+          "hex": "0x400000"
+        },
+        {
+          "label": "stack[esp+4+4]",
+          "status": "read",
+          "value": 32512,
+          "hex": "0x7f00"
+        }
+      ],
+      "strings": [],
+      "struct": null,
+      "structStrings": [],
+      "sequence": 13
+    },
+    {
+      "type": "api_return",
+      "name": "LoadIconA",
+      "kind": "import",
+      "callsite": "0x48f5b8",
+      "returnValue": 0,
+      "sequence": 14
+    },
+    {
+      "type": "api_call",
+      "name": "LoadCursorA",
+      "kind": "import",
+      "target": "0x005331A8",
+      "callsite": "0x48f5c8",
+      "argWords": [
+        {
+          "label": "stack[esp+4+0]",
+          "status": "read",
+          "value": 0,
+          "hex": "0x0"
+        },
+        {
+          "label": "stack[esp+4+4]",
+          "status": "read",
+          "value": 32512,
+          "hex": "0x7f00"
+        }
+      ],
+      "strings": [],
+      "struct": null,
+      "structStrings": [],
+      "sequence": 15
+    },
+    {
+      "type": "api_return",
+      "name": "LoadCursorA",
+      "kind": "import",
+      "callsite": "0x48f5c8",
+      "returnValue": 11796670,
+      "sequence": 16
+    },
+    {
+      "type": "api_call",
+      "name": "RegisterClassA",
+      "kind": "import",
+      "target": "0x005331AC",
+      "callsite": "0x48f5ec",
+      "argWords": [
+        {
+          "label": "stack[esp+4+0]",
+          "status": "read",
+          "value": 2292332,
+          "hex": "0x22fa6c"
+        }
+      ],
+      "strings": [],
+      "struct": {
+        "offset": 0,
+        "requestedLength": 40,
+        "status": "read",
+        "hex": "0300000070f9480000000000000000000000400000000000be00b4000700000034b5530034b55300",
+        "label": "wndclass"
+      },
+      "structStrings": [
+        {
+          "slot": "struct+0x20",
+          "va": "0x0053B534",
+          "text": "Innerloop"
+        },
+        {
+          "slot": "struct+0x24",
+          "va": "0x0053B534",
+          "text": "Innerloop"
+        }
+      ],
+      "sequence": 17
+    },
+    {
+      "type": "api_return",
+      "name": "RegisterClassA",
+      "kind": "import",
+      "callsite": "0x48f5ec",
+      "returnValue": 49204,
+      "sequence": 18
+    },
+    {
+      "type": "api_call",
+      "name": "StoreCommandLine",
+      "kind": "native",
+      "target": "0x0048F0C0",
+      "callsite": "0x48f5f9",
+      "argWords": [
+        {
+          "label": "stack[esp+4+0]",
+          "status": "read",
+          "value": 1149034,
+          "hex": "0x11886a"
+        }
+      ],
+      "strings": [],
+      "struct": null,
+      "structStrings": [],
+      "sequence": 19
+    },
+    {
+      "type": "api_return",
+      "name": "StoreCommandLine",
+      "kind": "native",
+      "callsite": "0x48f5f9",
+      "returnValue": 1149034,
+      "sequence": 20
+    },
+    {
+      "type": "api_call",
+      "name": "SetAppPath(?)",
+      "kind": "native",
+      "target": "0x0048F0D0",
+      "callsite": "0x48f5ff",
+      "argWords": [
+        {
+          "label": "stack[esp+4+0]",
+          "status": "read",
+          "value": 4194304,
+          "hex": "0x400000"
+        }
+      ],
+      "strings": [],
+      "struct": null,
+      "structStrings": [],
+      "sequence": 21
+    },
+    {
+      "type": "api_return",
+      "name": "SetAppPath(?)",
+      "kind": "native",
+      "callsite": "0x48f5ff",
+      "returnValue": 4194304,
+      "sequence": 22
+    },
+    {
+      "type": "api_call",
+      "name": "StartupSetter_48F0F0",
+      "kind": "native",
+      "target": "0x0048F0F0",
+      "callsite": "0x48f609",
+      "argWords": [
+        {
+          "label": "stack[esp+4+0]",
+          "status": "read",
+          "value": 5512896,
+          "hex": "0x541ec0"
+        }
+      ],
+      "strings": [
+        {
+          "slot": 0,
+          "va": "0x00541EC0",
+          "text": "filesys.cfg"
+        }
+      ],
+      "struct": null,
+      "structStrings": [],
+      "sequence": 23
+    },
+    {
+      "type": "api_return",
+      "name": "StartupSetter_48F0F0",
+      "kind": "native",
+      "callsite": "0x48f609",
+      "returnValue": 5512896,
+      "sequence": 24
+    },
+    {
+      "type": "api_call",
+      "name": "StartupSetter_48F100",
+      "kind": "native",
+      "target": "0x0048F100",
+      "callsite": "0x48f613",
+      "argWords": [
+        {
+          "label": "stack[esp+4+0]",
+          "status": "read",
+          "value": 5485876,
+          "hex": "0x53b534"
+        }
+      ],
+      "strings": [
+        {
+          "slot": 0,
+          "va": "0x0053B534",
+          "text": "Innerloop"
+        }
+      ],
+      "struct": null,
+      "structStrings": [],
+      "sequence": 25
+    },
+    {
+      "type": "api_return",
+      "name": "StartupSetter_48F100",
+      "kind": "native",
+      "callsite": "0x48f613",
+      "returnValue": 5485876,
+      "sequence": 26
+    },
+    {
+      "type": "api_call",
+      "name": "StartupSetter_48F140",
+      "kind": "native",
+      "target": "0x0048F140",
+      "callsite": "0x48f61a",
+      "argWords": [
+        {
+          "label": "stack[esp+4+0]",
+          "status": "read",
+          "value": 1,
+          "hex": "0x1"
+        }
+      ],
+      "strings": [],
+      "struct": null,
+      "structStrings": [],
+      "sequence": 27
+    },
+    {
+      "type": "api_return",
+      "name": "StartupSetter_48F140",
+      "kind": "native",
+      "callsite": "0x48f61a",
+      "returnValue": 1,
+      "sequence": 28
+    },
+    {
+      "type": "api_call",
+      "name": "StartupSetter_48F120",
+      "kind": "native",
+      "target": "0x0048F120",
+      "callsite": "0x48f621",
+      "argWords": [
+        {
+          "label": "stack[esp+4+0]",
+          "status": "read",
+          "value": 1,
+          "hex": "0x1"
+        }
+      ],
+      "strings": [],
+      "struct": null,
+      "structStrings": [],
+      "sequence": 29
+    },
+    {
+      "type": "api_return",
+      "name": "StartupSetter_48F120",
+      "kind": "native",
+      "callsite": "0x48f621",
+      "returnValue": 1,
+      "sequence": 30
+    },
+    {
+      "type": "api_call",
+      "name": "StartupSetter_48F1A0",
+      "kind": "native",
+      "target": "0x0048F1A0",
+      "callsite": "0x48f627",
+      "argWords": [
+        {
+          "label": "stack[esp+4+0]",
+          "status": "read",
+          "value": 0,
+          "hex": "0x0"
+        }
+      ],
+      "strings": [],
+      "struct": null,
+      "structStrings": [],
+      "sequence": 31
+    },
+    {
+      "type": "api_return",
+      "name": "StartupSetter_48F1A0",
+      "kind": "native",
+      "callsite": "0x48f627",
+      "returnValue": 0,
+      "sequence": 32
+    },
+    {
+      "type": "api_call",
+      "name": "StartupSetter_48F1C0",
+      "kind": "native",
+      "target": "0x0048F1C0",
+      "callsite": "0x48f62e",
+      "argWords": [
+        {
+          "label": "stack[esp+4+0]",
+          "status": "read",
+          "value": 1,
+          "hex": "0x1"
+        }
+      ],
+      "strings": [],
+      "struct": null,
+      "structStrings": [],
+      "sequence": 33
+    },
+    {
+      "type": "api_return",
+      "name": "StartupSetter_48F1C0",
+      "kind": "native",
+      "callsite": "0x48f62e",
+      "returnValue": 1,
+      "sequence": 34
+    },
+    {
+      "type": "api_call",
+      "name": "StartupSetter_48F1E0",
+      "kind": "native",
+      "target": "0x0048F1E0",
+      "callsite": "0x48f634",
+      "argWords": [
+        {
+          "label": "stack[esp+4+0]",
+          "status": "read",
+          "value": 0,
+          "hex": "0x0"
+        }
+      ],
+      "strings": [],
+      "struct": null,
+      "structStrings": [],
+      "sequence": 35
+    },
+    {
+      "type": "api_return",
+      "name": "StartupSetter_48F1E0",
+      "kind": "native",
+      "callsite": "0x48f634",
+      "returnValue": 0,
+      "sequence": 36
+    },
+    {
+      "type": "api_call",
+      "name": "StartupSetter_48F240",
+      "kind": "native",
+      "target": "0x0048F240",
+      "callsite": "0x48f63b",
+      "argWords": [
+        {
+          "label": "stack[esp+4+0]",
+          "status": "read",
+          "value": 1,
+          "hex": "0x1"
+        }
+      ],
+      "strings": [],
+      "struct": null,
+      "structStrings": [],
+      "sequence": 37
+    },
+    {
+      "type": "api_return",
+      "name": "StartupSetter_48F240",
+      "kind": "native",
+      "callsite": "0x48f63b",
+      "returnValue": 1,
+      "sequence": 38
+    },
+    {
+      "type": "api_call",
+      "name": "StartupSetter_48F260",
+      "kind": "native",
+      "target": "0x0048F260",
+      "callsite": "0x48f642",
+      "argWords": [
+        {
+          "label": "stack[esp+4+0]",
+          "status": "read",
+          "value": 1,
+          "hex": "0x1"
+        }
+      ],
+      "strings": [],
+      "struct": null,
+      "structStrings": [],
+      "sequence": 39
+    },
+    {
+      "type": "api_return",
+      "name": "StartupSetter_48F260",
+      "kind": "native",
+      "callsite": "0x48f642",
+      "returnValue": 1,
+      "sequence": 40
+    },
+    {
+      "type": "api_call",
+      "name": "StartupSetter_48F280",
+      "kind": "native",
+      "target": "0x0048F280",
+      "callsite": "0x48f648",
+      "argWords": [
+        {
+          "label": "stack[esp+4+0]",
+          "status": "read",
+          "value": 0,
+          "hex": "0x0"
+        }
+      ],
+      "strings": [],
+      "struct": null,
+      "structStrings": [],
+      "sequence": 41
+    },
+    {
+      "type": "api_return",
+      "name": "StartupSetter_48F280",
+      "kind": "native",
+      "callsite": "0x48f648",
+      "returnValue": 0,
+      "sequence": 42
+    },
+    {
+      "type": "api_call",
+      "name": "StartupSetter_48F290",
+      "kind": "native",
+      "target": "0x0048F290",
+      "callsite": "0x48f64e",
+      "argWords": [
+        {
+          "label": "stack[esp+4+0]",
+          "status": "read",
+          "value": 0,
+          "hex": "0x0"
+        }
+      ],
+      "strings": [],
+      "struct": null,
+      "structStrings": [],
+      "sequence": 43
+    },
+    {
+      "type": "api_return",
+      "name": "StartupSetter_48F290",
+      "kind": "native",
+      "callsite": "0x48f64e",
+      "returnValue": 0,
+      "sequence": 44
+    },
+    {
+      "type": "api_call",
+      "name": "StartupSetter_48F2A0",
+      "kind": "native",
+      "target": "0x0048F2A0",
+      "callsite": "0x48f654",
+      "argWords": [
+        {
+          "label": "stack[esp+4+0]",
+          "status": "read",
+          "value": 0,
+          "hex": "0x0"
+        }
+      ],
+      "strings": [],
+      "struct": null,
+      "structStrings": [],
+      "sequence": 45
+    },
+    {
+      "type": "api_return",
+      "name": "StartupSetter_48F2A0",
+      "kind": "native",
+      "callsite": "0x48f654",
+      "returnValue": 0,
+      "sequence": 46
+    },
+    {
+      "type": "api_call",
+      "name": "StartupSetter_48F210",
+      "kind": "native",
+      "target": "0x0048F210",
+      "callsite": "0x48f65b",
+      "argWords": [
+        {
+          "label": "stack[esp+4+0]",
+          "status": "read",
+          "value": 1,
+          "hex": "0x1"
+        }
+      ],
+      "strings": [],
+      "struct": null,
+      "structStrings": [],
+      "sequence": 47
+    },
+    {
+      "type": "api_return",
+      "name": "StartupSetter_48F210",
+      "kind": "native",
+      "callsite": "0x48f65b",
+      "returnValue": 1,
+      "sequence": 48
+    },
+    {
+      "type": "api_call",
+      "name": "StartupSetter_48F2B0",
+      "kind": "native",
+      "target": "0x0048F2B0",
+      "callsite": "0x48f661",
+      "argWords": [
+        {
+          "label": "stack[esp+4+0]",
+          "status": "read",
+          "value": 0,
+          "hex": "0x0"
+        }
+      ],
+      "strings": [],
+      "struct": null,
+      "structStrings": [],
+      "sequence": 49
+    },
+    {
+      "type": "api_return",
+      "name": "StartupSetter_48F2B0",
+      "kind": "native",
+      "callsite": "0x48f661",
+      "returnValue": 0,
+      "sequence": 50
+    },
+    {
+      "type": "api_call",
+      "name": "StartupSetter_48F300",
+      "kind": "native",
+      "target": "0x0048F300",
+      "callsite": "0x48f66e",
+      "argWords": [
+        {
+          "label": "stack[esp+4+0]",
+          "status": "read",
+          "value": 5667956,
+          "hex": "0x567c74"
+        }
+      ],
+      "strings": [
+        {
+          "slot": 0,
+          "va": "0x00567C74",
+          "text": ""
+        }
+      ],
+      "struct": null,
+      "structStrings": [],
+      "sequence": 51
+    },
+    {
+      "type": "api_return",
+      "name": "StartupSetter_48F300",
+      "kind": "native",
+      "callsite": "0x48f66e",
+      "returnValue": 1,
+      "sequence": 52
+    },
+    {
+      "type": "api_call",
+      "name": "StartupSetter_48F200",
+      "kind": "native",
+      "target": "0x0048F200",
+      "callsite": "0x48f674",
+      "argWords": [
+        {
+          "label": "stack[esp+4+0]",
+          "status": "read",
+          "value": 0,
+          "hex": "0x0"
+        }
+      ],
+      "strings": [],
+      "struct": null,
+      "structStrings": [],
+      "sequence": 53
+    },
+    {
+      "type": "api_return",
+      "name": "StartupSetter_48F200",
+      "kind": "native",
+      "callsite": "0x48f674",
+      "returnValue": 0,
+      "sequence": 54
+    },
+    {
+      "type": "api_call",
+      "name": "AppMain_ParseCmdLineArgs",
+      "kind": "native",
+      "target": "0x0048F360",
+      "callsite": "0x48f6ab",
+      "argWords": [
+        {
+          "label": "stack[esp+4+0]",
+          "status": "read",
+          "value": 5512888,
+          "hex": "0x541eb8"
+        },
+        {
+          "label": "stack[esp+4+4]",
+          "status": "read",
+          "value": 4780880,
+          "hex": "0x48f350"
+        }
+      ],
+      "strings": [
+        {
+          "slot": 0,
+          "va": "0x00541EB8",
+          "text": "Window"
+        }
+      ],
+      "struct": null,
+      "structStrings": [],
+      "sequence": 55
+    },
+    {
+      "type": "api_return",
+      "name": "AppMain_ParseCmdLineArgs",
+      "kind": "native",
+      "callsite": "0x48f6ab",
+      "returnValue": 0,
+      "sequence": 56
+    },
+    {
+      "type": "api_call",
+      "name": "AppMain_ParseCmdLineArgs",
+      "kind": "native",
+      "target": "0x0048F360",
+      "callsite": "0x48f6ba",
+      "argWords": [
+        {
+          "label": "stack[esp+4+0]",
+          "status": "read",
+          "value": 5512876,
+          "hex": "0x541eac"
+        },
+        {
+          "label": "stack[esp+4+4]",
+          "status": "read",
+          "value": 4782368,
+          "hex": "0x48f920"
+        }
+      ],
+      "strings": [
+        {
+          "slot": 0,
+          "va": "0x00541EAC",
+          "text": "WinInput"
+        }
+      ],
+      "struct": null,
+      "structStrings": [],
+      "sequence": 57
+    },
+    {
+      "type": "api_return",
+      "name": "AppMain_ParseCmdLineArgs",
+      "kind": "native",
+      "callsite": "0x48f6ba",
+      "returnValue": 0,
+      "sequence": 58
+    },
+    {
+      "type": "api_call",
+      "name": "AppMain_ParseCmdLineArgs",
+      "kind": "native",
+      "target": "0x0048F360",
+      "callsite": "0x48f6c9",
+      "argWords": [
+        {
+          "label": "stack[esp+4+0]",
+          "status": "read",
+          "value": 5512544,
+          "hex": "0x541d60"
+        },
+        {
+          "label": "stack[esp+4+4]",
+          "status": "read",
+          "value": 4782384,
+          "hex": "0x48f930"
+        }
+      ],
+      "strings": [
+        {
+          "slot": 0,
+          "va": "0x00541D60",
+          "text": "Germany"
+        }
+      ],
+      "struct": null,
+      "structStrings": [],
+      "sequence": 59
+    },
+    {
+      "type": "api_return",
+      "name": "AppMain_ParseCmdLineArgs",
+      "kind": "native",
+      "callsite": "0x48f6c9",
+      "returnValue": 0,
+      "sequence": 60
+    },
+    {
+      "type": "api_call",
+      "name": "AppMain_ParseCmdLineArgs",
+      "kind": "native",
+      "target": "0x0048F360",
+      "callsite": "0x48f6d8",
+      "argWords": [
+        {
+          "label": "stack[esp+4+0]",
+          "status": "read",
+          "value": 5472968,
+          "hex": "0x5382c8"
+        },
+        {
+          "label": "stack[esp+4+4]",
+          "status": "read",
+          "value": 4782416,
+          "hex": "0x48f950"
+        }
+      ],
+      "strings": [
+        {
+          "slot": 0,
+          "va": "0x005382C8",
+          "text": "USA"
+        }
+      ],
+      "struct": null,
+      "structStrings": [],
+      "sequence": 61
+    },
+    {
+      "type": "api_return",
+      "name": "AppMain_ParseCmdLineArgs",
+      "kind": "native",
+      "callsite": "0x48f6d8",
+      "returnValue": 0,
+      "sequence": 62
+    },
+    {
+      "type": "api_call",
+      "name": "Display_DinputDll",
+      "kind": "native",
+      "target": "0x00498480",
+      "callsite": "0x48f6e7",
+      "argWords": [
+        {
+          "label": "stack[esp+4+0]",
+          "status": "read",
+          "value": 2292308,
+          "hex": "0x22fa54"
+        },
+        {
+          "label": "stack[esp+4+4]",
+          "status": "read",
+          "value": 2292316,
+          "hex": "0x22fa5c"
+        }
+      ],
+      "strings": [],
+      "struct": null,
+      "structStrings": [],
+      "sequence": 63
+    },
+    {
+      "type": "api_return",
+      "name": "Display_DinputDll",
+      "kind": "native",
+      "callsite": "0x48f6e7",
+      "returnValue": 1,
+      "sequence": 64
+    },
+    {
+      "type": "api_call",
+      "name": "GetSystemMetrics",
+      "kind": "import",
+      "target": "0x005331E8",
+      "callsite": "0x48f73b",
+      "argWords": [
+        {
+          "label": "stack[esp+4+0]",
+          "status": "read",
+          "value": 1,
+          "hex": "0x1"
+        }
+      ],
+      "strings": [],
+      "struct": null,
+      "structStrings": [],
+      "sequence": 65
+    },
+    {
+      "type": "api_return",
+      "name": "GetSystemMetrics",
+      "kind": "import",
+      "callsite": "0x48f73b",
+      "returnValue": 1050,
+      "sequence": 66
+    },
+    {
+      "type": "api_call",
+      "name": "GetSystemMetrics",
+      "kind": "import",
+      "target": "0x005331E8",
+      "callsite": "0x48f749",
+      "argWords": [
+        {
+          "label": "stack[esp+4+0]",
+          "status": "read",
+          "value": 0,
+          "hex": "0x0"
+        }
+      ],
+      "strings": [],
+      "struct": null,
+      "structStrings": [],
+      "sequence": 67
+    },
+    {
+      "type": "api_return",
+      "name": "GetSystemMetrics",
+      "kind": "import",
+      "callsite": "0x48f749",
+      "returnValue": 1680,
+      "sequence": 68
+    },
+    {
+      "type": "api_call",
+      "name": "Display_GetScreenMode(?)",
+      "kind": "native",
+      "target": "0x0048F130",
+      "callsite": "0x48f759",
+      "argWords": [],
+      "strings": [],
+      "struct": null,
+      "structStrings": [],
+      "sequence": 69
+    },
+    {
+      "type": "api_return",
+      "name": "Display_GetScreenMode(?)",
+      "kind": "native",
+      "callsite": "0x48f759",
+      "returnValue": 0,
+      "sequence": 70
+    },
+    {
+      "type": "api_call",
+      "name": "CreateWindowExA",
+      "kind": "import",
+      "target": "0x005331B4",
+      "callsite": "0x48f776",
+      "argWords": [
+        {
+          "label": "stack[esp+4+0]",
+          "status": "read",
+          "value": 0,
+          "hex": "0x0"
+        },
+        {
+          "label": "stack[esp+4+4]",
+          "status": "read",
+          "value": 5485876,
+          "hex": "0x53b534"
+        },
+        {
+          "label": "stack[esp+4+8]",
+          "status": "read",
+          "value": 5485876,
+          "hex": "0x53b534"
+        },
+        {
+          "label": "stack[esp+4+12]",
+          "status": "read",
+          "value": 935854080,
+          "hex": "0x37c80000"
+        },
+        {
+          "label": "stack[esp+4+16]",
+          "status": "read",
+          "value": 520,
+          "hex": "0x208"
+        },
+        {
+          "label": "stack[esp+4+20]",
+          "status": "read",
+          "value": 285,
+          "hex": "0x11d"
+        },
+        {
+          "label": "stack[esp+4+24]",
+          "status": "read",
+          "value": 640,
+          "hex": "0x280"
+        },
+        {
+          "label": "stack[esp+4+28]",
+          "status": "read",
+          "value": 480,
+          "hex": "0x1e0"
+        },
+        {
+          "label": "stack[esp+4+32]",
+          "status": "read",
+          "value": 0,
+          "hex": "0x0"
+        },
+        {
+          "label": "stack[esp+4+36]",
+          "status": "read",
+          "value": 0,
+          "hex": "0x0"
+        },
+        {
+          "label": "stack[esp+4+40]",
+          "status": "read",
+          "value": 4194304,
+          "hex": "0x400000"
+        },
+        {
+          "label": "stack[esp+4+44]",
+          "status": "read",
+          "value": 0,
+          "hex": "0x0"
+        }
+      ],
+      "strings": [
+        {
+          "slot": 1,
+          "va": "0x0053B534",
+          "text": "Innerloop"
+        },
+        {
+          "slot": 2,
+          "va": "0x0053B534",
+          "text": "Innerloop"
+        }
+      ],
+      "struct": null,
+      "structStrings": [],
+      "sequence": 71
+    },
+    {
+      "type": "api_return",
+      "name": "CreateWindowExA",
+      "kind": "import",
+      "callsite": "0x48f776",
+      "returnValue": 11468964,
+      "sequence": 72
+    },
+    {
+      "type": "api_call",
+      "name": "ShowCursor",
+      "kind": "import",
+      "target": "0x005331B8",
+      "callsite": "0x48f796",
+      "argWords": [
+        {
+          "label": "stack[esp+4+0]",
+          "status": "read",
+          "value": 0,
+          "hex": "0x0"
+        }
+      ],
+      "strings": [],
+      "struct": null,
+      "structStrings": [],
+      "sequence": 73
+    },
+    {
+      "type": "api_return",
+      "name": "ShowCursor",
+      "kind": "import",
+      "callsite": "0x48f796",
+      "returnValue": 4294967295,
+      "sequence": 74
+    },
+    {
+      "type": "api_call",
+      "name": "ShowWindow",
+      "kind": "import",
+      "target": "0x005331BC",
+      "callsite": "0x48f79f",
+      "argWords": [
+        {
+          "label": "stack[esp+4+0]",
+          "status": "read",
+          "value": 11468964,
+          "hex": "0xaf00a4"
+        },
+        {
+          "label": "stack[esp+4+4]",
+          "status": "read",
+          "value": 10,
+          "hex": "0xa"
+        }
+      ],
+      "strings": [],
+      "struct": null,
+      "structStrings": [],
+      "sequence": 75
+    },
+    {
+      "type": "api_return",
+      "name": "ShowWindow",
+      "kind": "import",
+      "callsite": "0x48f79f",
+      "returnValue": 1,
+      "sequence": 76
+    },
+    {
+      "type": "api_call",
+      "name": "StoreWindowHandle",
+      "kind": "native",
+      "target": "0x0048F0E0",
+      "callsite": "0x48f7a5",
+      "argWords": [
+        {
+          "label": "stack[esp+4+0]",
+          "status": "read",
+          "value": 11468964,
+          "hex": "0xaf00a4"
+        }
+      ],
+      "strings": [],
+      "struct": null,
+      "structStrings": [],
+      "sequence": 77
+    },
+    {
+      "type": "api_return",
+      "name": "StoreWindowHandle",
+      "kind": "native",
+      "callsite": "0x48f7a5",
+      "returnValue": 11468964,
+      "sequence": 78
+    },
+    {
+      "type": "api_call",
+      "name": "Display_ClearSurfaces_16",
+      "kind": "native",
+      "target": "0x00498460",
+      "callsite": "0x48f7aa",
+      "argWords": [],
+      "strings": [],
+      "struct": null,
+      "structStrings": [],
+      "sequence": 79
+    },
+    {
+      "type": "api_return",
+      "name": "Display_ClearSurfaces_16",
+      "kind": "native",
+      "callsite": "0x48f7aa",
+      "returnValue": 11468964,
+      "sequence": 80
+    },
+    {
+      "type": "api_call",
+      "name": "QTask_CreateTask",
+      "kind": "native",
+      "target": "0x00401000",
+      "callsite": "0x48f7af",
+      "argWords": [],
+      "strings": [],
+      "struct": null,
+      "structStrings": [],
+      "sequence": 81
+    },
+    {
+      "type": "globals",
+      "tag": "qtask",
+      "phase": "call",
+      "snapshots": [
+        {
+          "label": "clear_range_5c8d28",
+          "va": "0x005C8D28",
+          "length": 192,
+          "status": "read",
+          "hex": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+        },
+        {
+          "label": "ptr_chain_5c8df0",
+          "va": "0x005C8DF0",
+          "length": 12,
+          "status": "read",
+          "hex": "f48d5c0000000000f08d5c00"
+        },
+        {
+          "label": "window_handle_5c8bc4",
+          "va": "0x005C8BC4",
+          "length": 4,
+          "status": "read",
+          "hex": "a400af00"
+        },
+        {
+          "label": "task_id_byte_5c8de8",
+          "va": "0x005C8DE8",
+          "length": 1,
+          "status": "read",
+          "hex": "00"
+        }
+      ],
+      "sequence": 82
+    },
+    {
+      "type": "api_return",
+      "name": "QTask_CreateTask",
+      "kind": "native",
+      "callsite": "0x48f7af",
+      "returnValue": 1,
+      "sequence": 83
+    },
+    {
+      "type": "globals",
+      "tag": "qtask",
+      "phase": "return",
+      "snapshots": [
+        {
+          "label": "clear_range_5c8d28",
+          "va": "0x005C8D28",
+          "length": 192,
+          "status": "read",
+          "hex": "348d5c00f08d5c00504f4900408d5c00288d5c00200149004c8d5c00348d5c00d0fe4800f48d5c00408d5c00a04c4200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+        },
+        {
+          "label": "ptr_chain_5c8df0",
+          "va": "0x005C8DF0",
+          "length": 12,
+          "status": "read",
+          "hex": "288d5c00000000004c8d5c00"
+        },
+        {
+          "label": "window_handle_5c8bc4",
+          "va": "0x005C8BC4",
+          "length": 4,
+          "status": "read",
+          "hex": "a400af00"
+        },
+        {
+          "label": "task_id_byte_5c8de8",
+          "va": "0x005C8DE8",
+          "length": 1,
+          "status": "read",
+          "hex": "00"
+        }
+      ],
+      "sequence": 84
+    }
+  ],
+  "summaries": [
+    {
+      "target": {
+        "va": "0x0048F530",
+        "name": "main"
+      },
+      "entryCount": 1,
+      "returnCount": 0,
+      "sequence": 84,
+      "overflowed": false,
+      "listenerCount": 39,
+      "installationCount": 38,
+      "failureCount": 0
+    }
+  ],
+  "counts": {
+    "entry": 1,
+    "return_": 0,
+    "unmatched_entries": 1
+  },
+  "cleanup": {
+    "owned_process_exited": true
+  }
+}

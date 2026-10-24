@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "kind": "native-disassembly",
+  "tool": "radare2",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "function_entry": "0x004A6A50",
+  "signature": "unknown",
+  "cfg": {
+    "nodes": [
+      {
+        "address": "0x004A6A50"
+      },
+      {
+        "address": "0x004A6A5C"
+      },
+      {
+        "address": "0x004A6A66"
+      },
+      {
+        "address": "0x004A6A72"
+      },
+      {
+        "address": "0x004A6A7C"
+      },
+      {
+        "address": "0x004A6A81"
+      },
+      {
+        "address": "0x004A6A96"
+      },
+      {
+        "address": "0x004A6AA7"
+      },
+      {
+        "address": "0x004A6AA8"
+      },
+      {
+        "address": "0x004A6AB6"
+      }
+    ],
+    "edges": [
+      {
+        "source": "0x004A6A50",
+        "target": "0x004A6A5C",
+        "kind": "branch"
+      },
+      {
+        "source": "0x004A6A50",
+        "target": "0x004A6AB6",
+        "kind": "branch"
+      },
+      {
+        "source": "0x004A6A5C",
+        "target": "0x004A6A66",
+        "kind": "branch"
+      },
+      {
+        "source": "0x004A6A5C",
+        "target": "0x004A6A7C",
+        "kind": "branch"
+      },
+      {
+        "source": "0x004A6A66",
+        "target": "0x004A6A72",
+        "kind": "branch"
+      },
+      {
+        "source": "0x004A6A66",
+        "target": "0x004A6AA8",
+        "kind": "branch"
+      },
+      {
+        "source": "0x004A6A72",
+        "target": "0x004A6AB6",
+        "kind": "branch"
+      },
+      {
+        "source": "0x004A6A7C",
+        "target": "0x004A6A81",
+        "kind": "branch"
+      },
+      {
+        "source": "0x004A6A7C",
+        "target": "0x004A6AA7",
+        "kind": "branch"
+      },
+      {
+        "source": "0x004A6A81",
+        "target": "0x004A6A96",
+        "kind": "branch"
+      },
+      {
+        "source": "0x004A6A81",
+        "target": "0x004A6AA7",
+        "kind": "branch"
+      },
+      {
+        "source": "0x004A6A96",
+        "target": "0x004A6AB6",
+        "kind": "branch"
+      },
+      {
+        "source": "0x004A6AA7",
+        "target": "0x004A6AA8",
+        "kind": "branch"
+      },
+      {
+        "source": "0x004A6AA8",
+        "target": "0x004A6AB6",
+        "kind": "branch"
+      }
+    ]
+  }
+}

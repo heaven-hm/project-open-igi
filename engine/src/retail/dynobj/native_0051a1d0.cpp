@@ -17,7 +17,7 @@ std::int32_t SplinePathDynCubeObj_Init()
     g_54ed4e = TaskType_Register("SplinePathDynCubeObj", 0x200U, g_54875c, 0U); // 0x0051A1E5: call 0x401900
     QTask_LinkQTaskEventHandler(g_54ed4e, 0U, reinterpret_cast<igi::retail::core::FrameHandler>(0x0051A240)); // 0x0051A1F8
     QTask_LinkQTaskEventHandlerNoContextFn(g_54ed4e, 2U, reinterpret_cast<igi::retail::core::FrameHandler>(0x004D3710)); // 0x0051A20C
-    std::uint32_t const context = Script_Get_4F1A60();                        // 0x0051A219: call 0x4F1A60
+    std::uint32_t const context = Script_PhaseIdGetE4_4F1A60();                        // 0x0051A219: call 0x4F1A60
     return static_cast<std::int32_t>(QTask_LinkQTaskEventHandler(g_54ed4e, context, reinterpret_cast<igi::retail::core::FrameHandler>(0x0051A230))); // tail link
 }
 } // extern "C"
