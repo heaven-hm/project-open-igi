@@ -79,6 +79,10 @@ add_executable(igi WIN32
     engine/src/retail/script/native_4f1a60.cpp
     engine/src/retail/script/native_4f1a70.cpp
     engine/src/retail/mem/mem_alloc.cpp
+    engine/src/retail/mem/native_4b0d40.cpp
+    engine/src/retail/mem/native_4b0d50.cpp
+    engine/src/retail/mem/native_4b0d60.cpp
+    engine/src/retail/mem/native_4b0d90.cpp
     engine/src/retail/model/iff_chunk_tree.cpp
     engine/src/retail/model/iff_skeleton.cpp
     engine/src/retail/model/mef_bone_rig.cpp
