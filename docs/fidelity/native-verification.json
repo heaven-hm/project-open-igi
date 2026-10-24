@@ -42783,7 +42783,7 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 0.5272727272727272
+        "cfg_similarity": 1.0
       }
     },
     {
@@ -42876,7 +42876,7 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 0.675
+        "cfg_similarity": 1.0
       }
     },
     {
@@ -42912,7 +42912,7 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 0.48
+        "cfg_similarity": 1.0
       }
     },
     {
