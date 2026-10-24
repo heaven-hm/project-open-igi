@@ -451,3 +451,22 @@ Honest assessment: this is a **four-callee dispatcher**, not a leaf. Landing it 
 landing that pool-free family first. So the "chain to unblock ids 2/3" is deeper than
 the round-44 correction implied, and the cheap route to more landed natives is still
 the leaf batches (getters, slot helpers) rather than this subtree.
+
+## Round 69: locating the owner of the 0x009422xx/0x00A960xx state - tooling note
+
+Attempted to recover the writers of `0x009422FD`, `0x00A960E0` and `0x009422E8` with
+`axt`. The run returned **no output** in this environment (macOS has no `timeout` command,
+so a bounded run could not be enforced; plain `axt` without prior analysis also returns
+nothing, consistent with the earlier note in this file that `axt` requires `aaa`).
+A single `aaa`-backed call was issued but produced no result, so the writer set is
+**not yet established**.
+
+This is recorded rather than guessed: the next attempt should either (a) run `aaa` with a
+longer budget and persist its output, or (b) decode the neighbourhood directly - the cluster
+at `0x00A960E0`/`0x009422E8` sits in the same module as the heap-list state used by
+`Mem_Alloc` (0x004B0C60, already VERIFIED, which touches `g_9422fc`/`g_942300`), so the
+initializer is most likely in the `0x4B0Bxx-0x4B0Cxx` range rather than far away.
+
+Practical consequence: both `0x4B0D60` (stack pop) and `0x4AF810` (log emitter) remain
+blocked on **state ownership**, and that ownership is what the next round should chase -
+not more consumer decodes, which keep multiplying unowned globals.
