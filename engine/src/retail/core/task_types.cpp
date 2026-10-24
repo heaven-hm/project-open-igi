@@ -538,9 +538,13 @@ std::uint32_t NATIVE_DECL QTask_AllocateEvent(std::uint16_t value)
     const std::size_t entry = static_cast<std::size_t>(event_id) * 6U;
     // Retail store order and widths, 0x004017F7 / 0x004017FD / 0x00401804: byte +2 = 1, then ONE 16-bit store of
     // the value word at +0 (`mov word [ecx+0x54F930], si`), then byte +3 = 1. Do not split the word store.
-    QTask_EventTable[entry + 2U] = 1U;
-    *reinterpret_cast<std::uint16_t*>(&QTask_EventTable[entry]) = value;
-    QTask_EventTable[entry + 3U] = 1U;
+    // The three stores are volatile so the compiler keeps the retail's emission order: GCC reordered a plain
+    // sequence to +2, +3, +0 (defect found in artifact b4585618 at 0x41a3fc/0x41a403/0x41a40a). Volatile adds no
+    // instruction; it only forbids the reordering that separated the 0x004017FD word store from them.
+    volatile std::uint8_t* const record = &QTask_EventTable[entry];
+    record[2U] = 1U;
+    *reinterpret_cast<volatile std::uint16_t*>(const_cast<std::uint8_t*>(record)) = value;
+    record[3U] = 1U;
     // Retail keeps the full id in EAX (inc eax from 0x20 at 0x004017D2) and returns it; callers read AL.
     return static_cast<std::uint32_t>(event_id);
 }
