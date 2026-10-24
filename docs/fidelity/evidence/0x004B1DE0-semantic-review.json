@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "address": "0x004B1DE0",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "865c34c7461079fa2d3df3738e96c88e6d74271ef3d5778854e7deb537f237b1",
+  "implementation_path": "engine/src/retail/qfile/native_4b1de0.cpp",
+  "reviewed_by": "lead",
+  "reviewed": true,
+  "review_scope": "static: retail instructions and emitted candidate listing",
+  "result": "passed",
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "rationale": "Extent and tiling from the retail listing; generated artifacts report 1 block / 0 edges."
+    },
+    {
+      "name": "cfg_match",
+      "result": "passed",
+      "rationale": "Candidate CFG 1 block / 0 edges, identical to retail's count for this address."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "passed",
+      "rationale": "One dword argument, cdecl, caller cleans; no other stack use."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "passed",
+      "rationale": "Body: returns record[index].+0x40 through the *0x8C arithmetic retail performs at 0x004B1DE4-0x004B1DF0."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "passed",
+      "rationale": "Record stride 0x8C, table base 0x009436EC, name field +0x40 (0x0094372C for record 0), present word +0x1C, scan bounds 0x009437B8..0x009439E8."
+    },
+    {
+      "name": "floating_point_semantics",
+      "result": "not_applicable",
+      "rationale": "No floating-point instruction."
+    },
+    {
+      "name": "memory_layout_and_access",
+      "result": "passed",
+      "rationale": "Present test before the name compare, and the scan advances the record pointer before the bound check, as retail does."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "passed",
+      "rationale": "Both exits covered: the matched index and the 0 fall-through at 0x004B11E6."
+    }
+  ],
+  "evidence": "docs/fidelity/evidence/0x4EE970-data-extents.md section 21",
+  "limitations": [
+    "Owns the 0x009436EC table storage because the retail writer 0x004B1B90 is not transcribed; the table starts zeroed, so no record is present yet.",
+    "Structurally verified: one block, zero edges, six instructions, emitted arithmetic identical to retail.",
+    "Runtime unobserved; reachable only through the device-open wrappers behind the startup boundary."
+  ]
+}
