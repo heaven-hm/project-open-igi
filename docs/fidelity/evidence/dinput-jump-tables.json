@@ -1,0 +1,48 @@
+{
+ "schema_version": 1,
+ "kind": "retail-jump-tables",
+ "tool": "radare2",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "note": "Dword dumps read with r2 pxw at the retail VAs; each target is a basic-block start confirmed by r2 agfj. Used to cross-check the C++ switch order and as the source for indirect case edges.",
+ "tables": {
+  "0x00490174": {
+   "native": "0x00490120 Keyboard_WinProc",
+   "entries": [
+    "0x00490135",
+    "0x00490154",
+    "0x0049016d",
+    "0x0049016d",
+    "0x00490135",
+    "0x00490154"
+   ]
+  },
+  "0x004901f4": {
+   "native": "0x00490190 Keyboard_VkToStateIndex",
+   "entries": [
+    "0x004901cf",
+    "0x004901b1",
+    "0x004901ab",
+    "0x004901c3",
+    "0x004901b7",
+    "0x004901c9",
+    "0x004901bd",
+    "0x004901e8"
+   ]
+  },
+  "0x0048ff78": {
+   "native": "0x0048fed0 Mouse_WinProc",
+   "entries": [
+    "0x0048ff18",
+    "0x0048ff48",
+    "0x0048ff72",
+    "0x0048ff28",
+    "0x0048ff58",
+    "0x0048ff72",
+    "0x0048ff38",
+    "0x0048ff68",
+    "0x0048ff72",
+    "0x0048fee9"
+   ]
+  }
+ }
+}

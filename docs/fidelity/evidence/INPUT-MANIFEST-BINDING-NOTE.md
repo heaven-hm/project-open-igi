@@ -204,3 +204,21 @@ the threshold and not to copy BN's edge list wholesale.
 
 Same structure applies to `0x490120` (table `0x490174`) and `0x48FED0` (table
 `0x48FF78`); `0x48FA80` (0.939) is a jump table too but already passes.
+
+## Round 19: retail jump tables dumped - switch order independently confirmed
+
+`r2 pxw` dumps of the three dispatch tables, with every target also confirmed as a
+basic-block start by `agfj` (evidence: `dinput-jump-tables.json`):
+
+- `0x00490174` (Keyboard_WinProc 0x490120): `35 01 49 00 | 54 01 49 00 | 6d 01 49 00 |
+  6d 01 49 00 | 35 01 49 00 | 54 01 49 00` = down, up, char, char, sysdown, sysup.
+- `0x004901f4` (VK mapper 0x490190): `cf, b1, ab, c3, b7, c9, bd, e8` - the eight
+  selectors in the exact order used by the transcription.
+- `0x0048ff78` (Mouse_WinProc 0x48FED0): `18, 48, 72, 28, 58, 72, 38, 68, 72, e9` -
+  message 0x201..0x20A.
+
+This independently verifies the branch order in the three C++ bodies against the
+retail dispatch data (previously confirmed only from the disassembly listing), and
+it is the input the CFG repair needs. r2 itself still does not emit these as
+`switch_op` edges even with `anal.jmp.tbl=true` (verified: 10 blocks, 0 switches),
+so the edge repair must consume this table evidence explicitly.
