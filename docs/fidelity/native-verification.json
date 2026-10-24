@@ -39464,6 +39464,46 @@
       }
     },
     {
+      "address": "0x0046B4D0",
+      "name": "Sys_GetBlock5BDDB0_46B4D0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/resource/native_46b4d0.cpp",
+        "sha256": "12b047b384c859b9d15a720062567c1ec275b68372b352d162ed738b02c393ec",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/ai/0046B4D0-AI_MoveToNode_28 2.cpp",
+        "sha256": "127fd7b5a6b1846639296bbe8285d0622b68acc41538803d872398ebdd42e246",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x0046B4D0",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x0046B4D0-binaryninja.json",
+          "evidence_sha256": "1bb84587c22866e5d3152ba3591d9e75f635ffd66ecc5b5cf66174f0b816a46e"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x0046B4D0",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x0046B4D0-radare2.json",
+          "evidence_sha256": "e7387334616611e5cd76dc9be66558ed15be35ad2e78ebd71605c94699939794"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declaration preserves the observed x86 return boundary; both decoders agree on the entry."
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x0046B4D0-semantic-review.json",
+          "evidence_sha256": "18b98614aeebcc39f9ab0b9e70481dd07ddbd284710b9e8ee844e56edf16628d"
+        }
+      }
+    },
+    {
       "address": "0x00471120",
       "name": "WeaponGun_ProcessWNES",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",

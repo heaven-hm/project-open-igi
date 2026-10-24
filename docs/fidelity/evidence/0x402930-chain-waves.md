@@ -107,3 +107,19 @@ Every other ready native now falls into one of two classes:
 That is the real conclusion of the leaf-native strategy: it cannot continue without the extent-discovery work first. The
 next increment is therefore data ownership, not another transcription: enumerate every reference to one shared object,
 prove its extent from the widest access, record writers and readers, and only then land the natives that touch it.
+
+## Extent discovery started: 0x005BDDB0 (round 226)
+
+Method: an address-literal reference is only the tip. 0x005BDDB0 has exactly one direct reference in the image, the materialisation
+at 0x0046B4D0 (`mov $0x005BDDB0,%eax`), so the width cannot be read off a load. The writer in the following routine is what proves
+it: 0x0046B4E9 stores a four-byte value at `0x38(%eax)` where eax comes from the address helper 0x0046B040, so the block is at
+least 0x3C bytes. That lower bound is what the object is declared with - not a guessed size and not a claim about the whole object.
+
+0x0046B4D0 itself is landable now: 6 bytes, returns the block address, no memory access, CFG 1.000, retail observed 256/256 entries
+and returns in a level-1 startup window. It is the first native landed under the extent-discovery approach rather than under the
+leaf-native one.
+
+Still open for the same block: the routines that call 0x0046B040 and then touch other offsets; those need the same treatment before
+anything larger than a 0x3C-byte object can be declared. 0x005C10F0 and 0x005C8A4C remain undiscovered - the latter is filled by a
+`rep movsl` at 0x004869A6 whose count is set outside the visible window, so its extent needs the caller's copy length, not the
+address literal.
