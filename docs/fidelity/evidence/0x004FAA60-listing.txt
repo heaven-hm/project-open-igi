@@ -1,0 +1,231 @@
+#
+addr: 0x004faa60
+name: fcn.004faa60
+size: 837
+is-pure: false
+realsz: 837
+stackframe: 208
+callconv: cdecl
+cyclic-cost: 321
+cyclomatic-complexity: 3
+bits: 32
+type: fcn [NEW]
+num-bbs: 5
+num-instrs: 225
+edges: 6
+minaddr: 0x004faa60
+maxaddr: 0x004fada5
+is-lineal: true
+end-bbs: 1
+maxbbins: 153
+midbbins: 45.00
+ratbbins: 3.40
+noreturn: false
+recursive: false
+in-degree: 0
+out-degree: 46
+locals: 5
+args: 0
+
+/ 837: fcn.004faa60 ();
+| afv: vars(5:sp[0x17..0x80])
+|           0x004faa60      81ec80000000   sub esp, 0x80
+|           0x004faa66      56             push esi
+|           0x004faa67      57             push edi
+|           0x004faa68      33ff           xor edi, edi
+|           0x004faa6a      57             push edi
+|           0x004faa6b      57             push edi
+|           0x004faa6c      e85f8a0000     call fcn.005034d0
+|           0x004faa71      50             push eax
+|           0x004faa72      6880000000     push 0x80                   ; 128
+|           0x004faa77      6848df5400     push str.Graph              ; 0x54df48 ; "Graph"
+|           0x004faa7c      e87f6ef0ff     call fcn.00401900
+|           0x004faa81      57             push edi
+|           0x004faa82      66a364e35400   mov word [0x54e364], ax     ; [0x54e364:2]=385
+|           0x004faa88      e8336df0ff     call fcn.004017c0
+|           0x004faa8d      57             push edi
+|           0x004faa8e      a268e35400     mov byte [0x54e368], al     ; [0x54e368:1]=255
+|           0x004faa93      e8286df0ff     call fcn.004017c0
+|           0x004faa98      57             push edi
+|           0x004faa99      a269e35400     mov byte [0x54e369], al     ; [0x54e369:1]=255
+|           0x004faa9e      e81d6df0ff     call fcn.004017c0
+|           0x004faaa3      57             push edi
+|           0x004faaa4      a26ae35400     mov byte [0x54e36a], al     ; [0x54e36a:1]=255
+|           0x004faaa9      e8126df0ff     call fcn.004017c0
+|           0x004faaae      57             push edi
+|           0x004faaaf      a26be35400     mov byte [0x54e36b], al     ; [0x54e36b:1]=255
+|           0x004faab4      e8076df0ff     call fcn.004017c0
+|           0x004faab9      57             push edi
+|           0x004faaba      a26ce35400     mov byte [0x54e36c], al     ; [0x54e36c:1]=255
+|           0x004faabf      e8fc6cf0ff     call fcn.004017c0
+|           0x004faac4      57             push edi
+|           0x004faac5      a26fe35400     mov byte [0x54e36f], al     ; [0x54e36f:1]=255
+|           0x004faaca      e8f16cf0ff     call fcn.004017c0
+|           0x004faacf      57             push edi
+|           0x004faad0      a271e35400     mov byte [0x54e371], al     ; [0x54e371:1]=255
+|           0x004faad5      e8e66cf0ff     call fcn.004017c0
+|           0x004faada      57             push edi
+|           0x004faadb      a270e35400     mov byte [0x54e370], al     ; [0x54e370:1]=255
+|           0x004faae0      e8db6cf0ff     call fcn.004017c0
+|           0x004faae5      57             push edi
+|           0x004faae6      a26de35400     mov byte [0x54e36d], al     ; [0x54e36d:1]=255
+|           0x004faaeb      e8d06cf0ff     call fcn.004017c0
+|           0x004faaf0      a26ee35400     mov byte [0x54e36e], al     ; [0x54e36e:1]=255
+|           0x004faaf5      66a164e35400   mov ax, word [0x54e364]     ; [0x54e364:2]=385
+|           0x004faafb      68b0904f00     push 0x4f90b0
+|           0x004fab00      57             push edi
+|           0x004fab01      50             push eax
+|           0x004fab02      e8f968f0ff     call fcn.00401400
+|           0x004fab07      668b0d64e3..   mov cx, word [0x54e364]     ; [0x54e364:2]=385
+|           0x004fab0e      83c448         add esp, 0x48
+|           0x004fab11      6880174c00     push 0x4c1780
+|           0x004fab16      6a01           push 1                      ; 1
+|           0x004fab18      51             push ecx
+|           0x004fab19      e8126af0ff     call fcn.00401530
+|           0x004fab1e      668b1564e3..   mov dx, word [0x54e364]     ; [0x54e364:2]=385
+|           0x004fab25      6860914f00     push 0x4f9160
+|           0x004fab2a      6a02           push 2                      ; 2
+|           0x004fab2c      52             push edx
+|           0x004fab2d      e8fe69f0ff     call fcn.00401530
+|           0x004fab32      66a164e35400   mov ax, word [0x54e364]     ; [0x54e364:2]=385
+|           0x004fab38      68b0ad4f00     push 0x4fadb0
+|           0x004fab3d      6a03           push 3                      ; 3
+|           0x004fab3f      50             push eax
+|           0x004fab40      e8eb69f0ff     call fcn.00401530
+|           0x004fab45      83c424         add esp, 0x24
+|           0x004fab48      6880914f00     push 0x4f9180
+|           0x004fab4d      e81e6fffff     call fcn.004f1a70
+|           0x004fab52      668b0d64e3..   mov cx, word [0x54e364]     ; [0x54e364:2]=385
+|           0x004fab59      50             push eax
+|           0x004fab5a      51             push ecx
+|           0x004fab5b      e8a068f0ff     call fcn.00401400
+|           0x004fab60      83c40c         add esp, 0xc
+|           0x004fab63      6840ae4f00     push 0x4fae40
+|           0x004fab68      e8f36effff     call fcn.004f1a60
+|           0x004fab6d      668b1564e3..   mov dx, word [0x54e364]     ; [0x54e364:2]=385
+|           0x004fab74      50             push eax
+|           0x004fab75      52             push edx
+|           0x004fab76      e88568f0ff     call fcn.00401400
+|           0x004fab7b      83c40c         add esp, 0xc
+|           0x004fab7e      6850ae4f00     push 0x4fae50
+|           0x004fab83      e8d86fffff     call fcn.004f1b60
+|           0x004fab88      50             push eax
+|           0x004fab89      e89264ffff     call fcn.004f1020
+|           0x004fab8e      50             push eax
+|           0x004fab8f      e82c70ffff     call fcn.004f1bc0
+|           0x004fab94      6a05           push 5                      ; 5
+|           0x004fab96      e8b56dffff     call fcn.004f1950
+|           0x004fab9b      83c410         add esp, 0x10
+|           0x004fab9e      a3106da700     mov dword [0xa76d10], eax   ; [0xa76d10:4]=0
+|           0x004faba3      57             push edi
+|           0x004faba4      6a07           push 7                      ; 7
+|           0x004faba6      e86564ffff     call fcn.004f1010
+|           0x004fabab      8b15106da700   mov edx, dword [0xa76d10]   ; [0xa76d10:4]=0
+|           0x004fabb1      50             push eax
+|           0x004fabb2      8d442434       lea eax, [var_34h]
+|           0x004fabb6      8d4c2414       lea ecx, [var_14h]
+|           0x004fabba      50             push eax
+|           0x004fabbb      51             push ecx
+|           0x004fabbc      52             push edx
+|           0x004fabbd      e8be6effff     call fcn.004f1a80
+|           0x004fabc2      83c418         add esp, 0x18
+|           0x004fabc5      57             push edi
+|           0x004fabc6      6a07           push 7                      ; 7
+|           0x004fabc8      e82363ffff     call fcn.004f0ef0
+|           0x004fabcd      8b15106da700   mov edx, dword [0xa76d10]   ; [0xa76d10:4]=0
+|           0x004fabd3      50             push eax
+|           0x004fabd4      8d442479       lea eax, [var_79h]
+|           0x004fabd8      8d4c2414       lea ecx, [var_14h]
+|           0x004fabdc      50             push eax
+|           0x004fabdd      51             push ecx
+|           0x004fabde      52             push edx
+|           0x004fabdf      e89c6effff     call fcn.004f1a80
+|           0x004fabe4      83c418         add esp, 0x18
+|           0x004fabe7      57             push edi
+|           0x004fabe8      6a06           push 6                      ; 6
+|           0x004fabea      e81164ffff     call fcn.004f1000
+|           0x004fabef      8b15106da700   mov edx, dword [0xa76d10]   ; [0xa76d10:4]=0
+|           0x004fabf5      50             push eax
+|           0x004fabf6      8d44247c       lea eax, [var_7ch]
+|           0x004fabfa      8d4c2414       lea ecx, [var_14h]
+|           0x004fabfe      50             push eax
+|           0x004fabff      51             push ecx
+|           0x004fac00      52             push edx
+|           0x004fac01      e87a6effff     call fcn.004f1a80
+|           0x004fac06      83c418         add esp, 0x18
+|           0x004fac09      57             push edi
+|           0x004fac0a      6a06           push 6                      ; 6
+|           0x004fac0c      e8ef63ffff     call fcn.004f1000
+|           0x004fac11      8b15106da700   mov edx, dword [0xa76d10]   ; [0xa76d10:4]=0
+|           0x004fac17      50             push eax
+|           0x004fac18      8d44247d       lea eax, [var_7dh]
+|           0x004fac1c      8d4c2414       lea ecx, [var_14h]
+|           0x004fac20      50             push eax
+|           0x004fac21      51             push ecx
+|           0x004fac22      52             push edx
+|           0x004fac23      e8586effff     call fcn.004f1a80
+|           0x004fac28      83c418         add esp, 0x18
+|           0x004fac2b      57             push edi
+|           0x004fac2c      6a07           push 7                      ; 7
+|           0x004fac2e      e8ed63ffff     call fcn.004f1020
+|           0x004fac33      8b15106da700   mov edx, dword [0xa76d10]   ; [0xa76d10:4]=0
+|           0x004fac39      50             push eax
+|           0x004fac3a      8d442414       lea eax, [var_14h]
+|           0x004fac3e      8d4c2414       lea ecx, [var_14h]
+|           0x004fac42      50             push eax
+|           0x004fac43      51             push ecx
+|           0x004fac44      52             push edx
+|           0x004fac45      e8366effff     call fcn.004f1a80
+|           0x004fac4a      83c418         add esp, 0x18
+|           0x004fac4d      c7054872a7..   mov dword [0xa77248], 0xa7724c ; [0xa77248:4]=0
+|           0x004fac57      c7055072a7..   mov dword [0xa77250], 0xa77248 ; [0xa77250:4]=0
+|           0x004fac61      893d4c72a700   mov dword [0xa7724c], edi   ; [0xa7724c:4]=0
+|           0x004fac67      b82c72a700     mov eax, 0xa7722c
+|           0x004fac6c      b981010000     mov ecx, 0x181              ; 385
+|           0x004fac71      668948fc       mov word [eax - 4], cx
+|           0x004fac75      8938           mov dword [eax], edi
+|           0x004fac77      83c008         add eax, 8
+|           0x004fac7a      3d4c72a700     cmp eax, 0xa7724c
+|           0x004fac7f      7cf0           jl 0x4fac71
+|           0x004fac81      66a164e35400   mov ax, word [0x54e364]     ; [0x54e364:2]=385
+|           0x004fac87      6840020000     push 0x240                  ; 576
+|           0x004fac8c      50             push eax
+|           0x004fac8d      e8cee7ffff     call fcn.004f9460
+|           0x004fac92      83c408         add esp, 8
+|           0x004fac95      c705a074a7..   mov dword [0xa774a0], 0xa774a4 ; [0xa774a0:4]=0
+|           0x004fac9f      c705a874a7..   mov dword [0xa774a8], 0xa774a0 ; [0xa774a8:4]=0
+|           0x004faca9      893da474a700   mov dword [0xa774a4], edi   ; [0xa774a4:4]=0
+|           0x004facaf      c705186da7..   mov dword [0xa76d18], 0xa76d1c ; [0xa76d18:4]=0
+|           0x004facb9      c705206da7..   mov dword [0xa76d20], 0xa76d18 ; [0xa76d20:4]=0
+|           0x004facc3      893d1c6da700   mov dword [0xa76d1c], edi   ; [0xa76d1c:4]=0
+|           0x004facc9      be286da700     mov esi, 0xa76d28
+|           0x004facce      56             push esi
+|           0x004faccf      897e04         mov dword [esi + 4], edi
+|           0x004facd2      68186da700     push 0xa76d18
+|           0x004facd7      893e           mov dword [esi], edi
+|           0x004facd9      e8124cfbff     call fcn.004af8f0
+|           0x004facde      83c614         add esi, 0x14               ; 20
+|           0x004face1      83c408         add esp, 8
+|           0x004face4      81fe2872a700   cmp esi, 0xa77228
+|           0x004facea      7ce2           jl 0x4facce
+|           0x004facec      68e0ae4f00     push 0x4faee0
+|           0x004facf1      6a05           push 5                      ; 5
+|           0x004facf3      68a4e45400     push str.nMaxNodes          ; 0x54e4a4 ; "nMaxNodes"
+|           0x004facf8      e8f3f0ffff     call fcn.004f9df0
+|           0x004facfd      6850af4f00     push 0x4faf50
+|           0x004fad02      6a05           push 5                      ; 5
+|           0x004fad04      689ce45400     push str.nNodeID            ; 0x54e49c ; "nNodeID"
+|           0x004fad09      e8e2f0ffff     call fcn.004f9df0
+|           0x004fad0e      6880af4f00     push 0x4faf80
+|           0x004fad13      6a08           push 8                      ; 8
+|           0x004fad15      688ce45400     push str.tNodePosition      ; 0x54e48c ; "tNodePosition"
+|           0x004fad1a      e8d1f0ffff     call fcn.004f9df0
+|           0x004fad1f      68a0af4f00     push 0x4fafa0
+|           0x004fad24      6a06           push 6                      ; 6
+|           0x004fad26      6880e45400     push str.vNodeGamma         ; 0x54e480 ; "vNodeGamma"
+|           0x004fad2b      e8c0f0ffff     call fcn.004f9df0
+|           0x004fad30      68c0af4f00     push 0x4fafc0
+|           0x004fad35      6a06           push 6                      ; 6
+|           0x004fad37      6874e45400     push str.vNodeRadius        ; 0x54e474 ; "vNodeRadius"
+|           0x004fad3c      e8aff0ffff     call fcn.004f9df0
+|           0x004fad41      68e0af4f00     push 0x4fafe0

@@ -1470,3 +1470,37 @@ Concrete probe plan (small, no dereferencing of unknown pointers):
 
 That converts the static ambiguity into evidence. Until then this init stays untranscribed and
 `0x4F9DF0` stays blocked on its globals' owner boundary, not on its own decode (which is complete).
+
+### RESOLVED by retail runtime probe: stream init entry is 0x4FAA60, zero arguments
+
+Tester (retail only, retail sha256 unchanged, one process, Frida spawn-suspended) answered the
+boundary question decisively:
+
+```
+0x4FAA60-0x4FADA4   real entry, called ONCE from 0x518484 (E8), ZERO stack arguments, ret no imm
+                    returns eax = 0x00A774A0   (the graph-stream list base - matches the globals)
+0x4FAC09            NOT an entry: internal fallthrough after add esp,0x18 at 0x4FAC06
+0x4FAC2B            NOT an entry: internal fallthrough after add esp,0x18 at 0x4FAC28
+0x4FABFD            NOT an instruction boundary (last immediate byte of lea at 0x4FABFA)
+static E8/E9 target scan over 0x4FABF0-0x4FAF00 -> 0 targets (confirms the fallthrough reading)
+```
+
+So rounds 120-121 were chasing a boundary inside a single 837-byte function; the runtime observation
+settled it in one step and also corrected my "run of small leaf routines" hypothesis - it is ONE
+function, entered at 0x4FAA60 with no arguments and returning the list head.
+
+Capture: `docs/fidelity/evidence/0x004FAA60-listing.txt` (837 B, 5 blocks, 225 instructions,
+41 call sites), call inventory:
+
+```
+10x 0x4017C0     <- most called, provenance to check
+ 5x 0x4F9DF0     (graph-stream emitter, decoded)
+ 5x 0x4F1A80     (container append, landed)
+ 3x 0x401530     (event-handler link, landed)
+ 3x 0x401400     (task-type register, transcribed in task_types.cpp)
+ 2x 0x4F1020     <- to check
+... plus 0x4F9460/0x4AF8F0 and others
+```
+
+The caller `0x518484` sits immediately before `0x5186C0`'s region, consistent with the AI-graph
+registrar driving this init - so the goal chain is now: this init -> `0x4F9DF0` -> `0x508FA0`.
