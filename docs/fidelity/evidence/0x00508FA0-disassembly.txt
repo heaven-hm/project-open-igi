@@ -1228,3 +1228,33 @@ Remaining before `0x508FA0` can be written:
 1. the `0x00936274` global owner (needed by `0x4AF810`);
 2. `0x4AF810` (78 B, 3 blocks, warning-log emitter - already fully decoded, blocked only on that global);
 3. `0x4F9DF0` (120 B, 7 blocks, fully decoded, blocked on `0x4AF810`).
+
+### Owner of 0x00936274 located: setter at 0x4AF880 (error-callback family)
+
+Byte-reference search found the global used by 0x4AF810 and its writer:
+
+```
+0x4AF810  mov eax,[0x936274]      ; reader (the log emitter)
+0x4AF853  call [0x936274]         ; invoked as a callback
+0x4AF884  mov [0x936274], eax     ; writer
+```
+
+The writers sit in a regular 16-byte-spaced setter family:
+
+```
+0x4AF860  mov eax,[esp+4]; [0x936268]=eax; ret    ; setter for 0x936268 (already owned)
+0x4AF870  mov eax,[esp+4]; [0x936270]=eax; ret    ; setter for 0x936270
+0x4AF880  mov eax,[esp+4]; [0x936274]=eax; ret    ; setter for 0x936274  <-- OWNER
+```
+
+So `0x936274` is port storage that must be declared by the small setter at `0x4AF880` - the same
+"the retail writer owns the global" rule used successfully for `0x92E8`, `0xA43E88` and `0xA800F8`.
+`0x936270` (setter `0x4AF870`) is a sibling that is also absent from `error_show.cpp`, which
+currently owns only `0x936268`, `0x93626C` and `0xA84640`.
+
+Plan is now fully serialized and each step is a few bytes:
+1. transcribe `0x4AF880` (3 instructions) declaring `g_936274` - unblocks `0x4AF810`;
+2. optionally transcribe sibling `0x4AF870` (`g_936270`) for the same family;
+3. transcribe the already-decoded `0x4AF810` (78 B, 3 blocks);
+4. transcribe the already-decoded `0x4F9DF0` (120 B, 7 blocks);
+5. write `0x508FA0` (755 B, 1 block, listing already captured) and the `0x508F80` thunk.
