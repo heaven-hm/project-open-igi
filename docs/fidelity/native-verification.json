@@ -50502,6 +50502,46 @@
       }
     },
     {
+      "address": "0x004B13A0",
+      "name": "QFile_ClearEntryByName_4B13A0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/qfile/native_4b13a0.cpp",
+        "sha256": "78f47b0d8fd904149587f07a7b61c4308342e7db45b90513d1d160b4479cbb14",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/sys/004B13A0-Sys_OpenFileStream_4 2.cpp",
+        "sha256": "56a4283c0e90412165ae348ba08acca57fba5eab7693c67743194f3df6f757a2",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x004B13A0",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004B13A0-binaryninja.json",
+          "evidence_sha256": "0dd674ba55431a153c0d09ea5dea9226d025640763df56a23f4037d271b8183b"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x004B13A0",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004B13A0-radare2.json",
+          "evidence_sha256": "de0ddccd3e9d661ad006fc1ad95ac45e6b5d7a67f342f83d182836618a28f078"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004B13A0-semantic-review.json",
+          "evidence_sha256": "2ec4a90bb0d4dc2fa9bf63bb786c1ab6d998ec64b85feacc4b8d14651db078d6"
+        }
+      }
+    },
+    {
       "address": "0x004B1420",
       "name": "QFile_DispatchDevicePath_4B1420",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
