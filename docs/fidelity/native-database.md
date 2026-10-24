@@ -412,21 +412,21 @@ coverage, whatever the status word.
 | `ModelViewBox_Update` | `void * ModelViewBox_Update(void * context, int arg2)` | `0x00422E40` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `ModelViewBox_LoadParameters` | `int ModelViewBox_LoadParameters(int context)` | `0x00422F30` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `ModelViewBox_OnEvent` | `int ModelViewBox_OnEvent(void * context)` | `0x00423000` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
-| `Sys_GetGlobal32_424870` | `unestablished` | `0x00424870` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Sys_GetGlobal32_424880` | `unestablished` | `0x00424880` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Sys_GetGlobal32_424890` | `unestablished` | `0x00424890` | 1.000 | CFG 1.000; bn+r2 agree |
+| `Sys_GetGlobal32_424870` | `unestablished` | `0x00424870` | 1.000 | CFG 1.000; bn+r2 agree; review `0x00424870-semantic-review.json` |
+| `Sys_GetGlobal32_424880` | `unestablished` | `0x00424880` | 1.000 | CFG 1.000; bn+r2 agree; review `0x00424880-semantic-review.json` |
+| `Sys_GetGlobal32_424890` | `unestablished` | `0x00424890` | 1.000 | CFG 1.000; bn+r2 agree; review `0x00424890-semantic-review.json` |
 | `Sys_GetGlobal8_424B80` | `unestablished` | `0x00424B80` | 1.000 | CFG 1.000; bn+r2 agree |
 | `Script_SetConstant_427D70` | `unestablished` | `0x00427D70` | 1.000 | CFG 1.000; bn+r2 agree |
 | `Script_SetConstant_427F80` | `unestablished` | `0x00427F80` | 1.000 | CFG 1.000; bn+r2 agree |
 | `Sys_GetGlobal16_42FDC0` | `unestablished` | `0x0042FDC0` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Sys_GetGlobal16_430950` | `unestablished` | `0x00430950` | 1.000 | CFG 1.000; bn+r2 agree |
+| `Sys_GetGlobal16_430950` | `unestablished` | `0x00430950` | 1.000 | CFG 1.000; bn+r2 agree; review `0x00430950-semantic-review.json` |
 | `VehiclePhysics_ProcessVirModelsnotavai` | `int VehiclePhysics_ProcessVirModelsnotavai(int* arg1, float arg2)` | `0x00434E10` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `VehiclePhysics_ProcessVirModelsnotavai_435460` | `int VehiclePhysics_ProcessVirModelsnotavai_435460(int* arg1, float arg2)` | `0x00435460` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `VehiclePhysics_ProcessVirModelsnotavai_435C50` | `int VehiclePhysics_ProcessVirModelsnotavai_435C50(int* arg1, float arg2)` | `0x00435C50` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `Sys_GetGlobal16_443E80` | `unestablished` | `0x00443E80` | 1.000 | CFG 1.000; bn+r2 agree |
 | `Sys_GetGlobal32_443E90` | `unestablished` | `0x00443E90` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Sys_GetGlobal16_448550` | `unestablished` | `0x00448550` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Sys_GetGlobal32_448560` | `unestablished` | `0x00448560` | 1.000 | CFG 1.000; bn+r2 agree |
+| `Sys_GetGlobal16_448550` | `unestablished` | `0x00448550` | 1.000 | CFG 1.000; bn+r2 agree; review `0x00448550-semantic-review.json` |
+| `Sys_GetGlobal32_448560` | `unestablished` | `0x00448560` | 1.000 | CFG 1.000; bn+r2 agree; review `0x00448560-semantic-review.json` |
 | `HumanAI_Init` | `void * HumanAI_Init(void)` | `0x0044C8D0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `HumanAI_LoadParameters` | `int HumanAI_LoadParameters(void * context)` | `0x0044F060` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `HumanAI_Setup` | `void * HumanAI_Setup(int context)` | `0x0044F410` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
@@ -591,18 +591,18 @@ coverage, whatever the status word.
 | `Sys_GetGlobal8_47B100` | `unestablished` | `0x0047B100` | 1.000 | CFG 1.000; bn+r2 agree |
 | `DefineAmmoType` | `int32_t DefineAmmoType(long param_1, int32_t param_2, float param_3);` | `0x0047CAD0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `Sys_GetGlobal8_47E6F0` | `unestablished` | `0x0047E6F0` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Sys_GetGlobal16_481340` | `unestablished` | `0x00481340` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Sys_GetGlobal32_481350` | `unestablished` | `0x00481350` | 1.000 | CFG 1.000; bn+r2 agree |
+| `Sys_GetGlobal16_481340` | `unestablished` | `0x00481340` | 1.000 | CFG 1.000; bn+r2 agree; review `0x00481340-semantic-review.json` |
+| `Sys_GetGlobal32_481350` | `unestablished` | `0x00481350` | 1.000 | CFG 1.000; bn+r2 agree; review `0x00481350-semantic-review.json` |
 | `HumanCamera_Init` | `char * HumanCamera_Init(void)` | `0x004825C0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `Human_FindNextCamera` | `void * Human_FindNextCamera(void * context)` | `0x004828D0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `HumanCamera_CleanupList` | `void* HumanCamera_CleanupList(void* context)` | `0x00484CE0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `DefineMission` | `int32_t DefineMission(int32_t param_1, float param_2);` | `0x00484F60` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
-| `Sys_GetGlobal8_487190` | `unestablished` | `0x00487190` | 1.000 | CFG 1.000; bn+r2 agree |
+| `Sys_GetGlobal8_487190` | `unestablished` | `0x00487190` | 1.000 | CFG 1.000; bn+r2 agree; review `0x00487190-semantic-review.json` |
 | `Sys_GetBlock5C8A4C_4871B0` | `unestablished` | `0x004871B0` | 1.000 | CFG 1.000; bn+r2 agree |
 | `Task_WalkAndDispatch_488700` | `unestablished` | `0x00488700` | 1.000 | CFG 1.000; bn+r2 agree; review `0x00488700-semantic-review.json` |
-| `Sys_GetGlobal8_489610` | `unestablished` | `0x00489610` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Sys_GetGlobal8_489620` | `unestablished` | `0x00489620` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Sys_GetGlobal8_489630` | `unestablished` | `0x00489630` | 1.000 | CFG 1.000; bn+r2 agree |
+| `Sys_GetGlobal8_489610` | `unestablished` | `0x00489610` | 1.000 | CFG 1.000; bn+r2 agree; review `0x00489610-semantic-review.json` |
+| `Sys_GetGlobal8_489620` | `unestablished` | `0x00489620` | 1.000 | CFG 1.000; bn+r2 agree; review `0x00489620-semantic-review.json` |
+| `Sys_GetGlobal8_489630` | `unestablished` | `0x00489630` | 1.000 | CFG 1.000; bn+r2 agree; review `0x00489630-semantic-review.json` |
 | `Human_StateAnimation` | `int Human_StateAnimation(void * context, int arg2, float arg3)` | `0x00489E70` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `GetCommandLine` | `char const* __cdecl(void)` | `0x0048F080` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `GetInstanceHandle` | `unestablished` | `0x0048F090` | 1.000 | CFG 1.000; bn+r2 agree |
@@ -623,7 +623,7 @@ coverage, whatever the status word.
 | `DirectInput_ErrorText` | `unestablished` | `0x0048FA80` | 0.939 | CFG 0.939; bn+r2 agree |
 | `Input_MouseGetCaps` | `unestablished` | `0x0048FD90` | 1.000 | CFG 1.000; bn+r2 agree |
 | `Mouse_WinProc` | `unestablished` | `0x0048FED0` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Keyboard_WinProc` | `unestablished` | `0x00490120` | 1.000 | CFG 1.000; bn+r2 agree |
+| `Keyboard_WinProc` | `unestablished` | `0x00490120` | 1.000 | CFG 1.000; bn+r2 agree; review `0x00490120-semantic-review.json` |
 | `Keyboard_VkToStateIndex` | `unestablished` | `0x00490190` | 1.000 | CFG 1.000; bn+r2 agree |
 | `Keyboard_Update` | `unestablished` | `0x00490230` | 1.000 | CFG 1.000; bn+r2 agree |
 | `Display_SetVSyncFlag` | `unestablished` | `0x00490340` | 1.000 | CFG 1.000; bn+r2 agree |

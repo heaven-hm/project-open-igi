@@ -27829,7 +27829,11 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x00424870-semantic-review.json",
+          "evidence_sha256": "74b6ae237de3f4ac759977a6659e66a6222c6aab7d2b8d73107cf2d51cb9bb39"
+        }
       }
     },
     {
@@ -27865,7 +27869,11 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x00424880-semantic-review.json",
+          "evidence_sha256": "2e5f9ccba5ead6d104aab2b439553790458c357987a17821e636d78ccf7c36d9"
+        }
       }
     },
     {
@@ -27901,7 +27909,11 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x00424890-semantic-review.json",
+          "evidence_sha256": "73ecd55a0efee8e22472cbc5088c305df680019835c46a133272035a596747a6"
+        }
       }
     },
     {
@@ -28098,7 +28110,11 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x00430950-semantic-review.json",
+          "evidence_sha256": "9ff68fd2b2ad3a496e0f54f5d26f8d8df7c5b00d3da7e7efacfc04e298458963"
+        }
       }
     },
     {
@@ -28433,7 +28449,11 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x00448550-semantic-review.json",
+          "evidence_sha256": "a582a604a2a845f82cb6868dfc6d0541c1eda717a62f063230ea3e2546daccd3"
+        }
       }
     },
     {
@@ -28469,7 +28489,11 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x00448560-semantic-review.json",
+          "evidence_sha256": "56ab007274126381e6fe5bdc85e02203999c2829ec0d5f985ce69c98dc9194d0"
+        }
       }
     },
     {
@@ -40234,7 +40258,11 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x00481340-semantic-review.json",
+          "evidence_sha256": "06e808e4f77043d04eb06a12c4f0343bb8d532e03c7a0f71a0bf60a18ed54d84"
+        }
       }
     },
     {
@@ -40270,7 +40298,11 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x00481350-semantic-review.json",
+          "evidence_sha256": "1076340dde1d9d5845ea69c099dbab74a27c4c3c3343f4d3551c7f0d79723587"
+        }
       }
     },
     {
@@ -40613,7 +40645,11 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x00487190-semantic-review.json",
+          "evidence_sha256": "1e2f84141e6054692dab3744b19a96628b0c1c89eb45164721ae480ea2b5a679"
+        }
       }
     },
     {
@@ -40764,7 +40800,11 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x00489610-semantic-review.json",
+          "evidence_sha256": "2daf181af74bc713259eb1922a4a04ebfc1f89bd3a198e455d871935aa672988"
+        }
       }
     },
     {
@@ -40800,7 +40840,11 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x00489620-semantic-review.json",
+          "evidence_sha256": "661c38ba31ec488c318ee0b53c9be230589a15254dcc022f6e0c0b724abf1174"
+        }
       }
     },
     {
@@ -40836,7 +40880,11 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x00489630-semantic-review.json",
+          "evidence_sha256": "26d5610dbb538284b58093b837dbf453515ed568f680903d96bde61082502ecd"
+        }
       }
     },
     {
@@ -44544,7 +44592,11 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x00490120-semantic-review.json",
+          "evidence_sha256": "1987ee448fb111e9a2dd7f29a7702f9d3e9da5560aeb09b7563fe5e3fe94e067"
+        }
       },
       "notes": "Renamed from `Keyboard_WinProc_490120` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
