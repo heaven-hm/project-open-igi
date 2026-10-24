@@ -1,8 +1,8 @@
-// Native: QTask_DestroyTask_4015F0 (placeholder until VERIFIED; retail symbol unknown).
+// Native: QTask_DestroyTask_4015F0; retail VA 0x004015F0 (placeholder name until VERIFIED).
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x004015F0-0x00401776 (391 bytes, 25 blocks, 134 instructions).
 // Tools/evidence: radare2 6.2.0 pdj/afij/afbj and NASM ndisasm cross-decode (identical 134-instruction tiling); docs/fidelity/evidence/0x4EE970-data-extents.md section 18.
 // Behavior/CFG: decrements 0x00567C58; fixes the task's slot on the 0x00AFA6E0 dispatch stack; calls the phase-3 handler (0x00A97CE0) and the phase-2 handler (0x00A976E0), one argument each; destroys the child list from its tail with recursive self-calls; clears 0x00567C38 slot-table entries; unlinks through 0x004015D0; then either swap-removes a pooled object from its 0x00AF5EE0 class pool or frees through 0x004B0D10.
-// Status/limits: TRANSCRIBED (static only); runtime UNOBSERVED. Gaps in evidence section 18.8. Returns void because retail EAX differs per path and no caller reads it.
+// Status/limits: STRUCTURALLY_VERIFIED (CFG 25 blocks/37 edges, score 1.000); runtime UNOBSERVED. Gaps in evidence section 18.8. Returns void because retail EAX differs per path and no caller reads it.
 #include "igi/retail/core/qhash_slot_table.hpp"
 #include "igi/retail/core/task_types.hpp"
 
