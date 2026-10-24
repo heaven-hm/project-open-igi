@@ -1755,3 +1755,27 @@ that must land before `0x4F1020`/`0x4FAA60`; both listings captured
 `0x4F19C0` looks like the general "register a named thing, return its handle" primitive and `0x4F1BC0`
 the two-argument attribute/property writer. They are small enough to transcribe next and they unblock
 the chain that reaches `0x508FA0`.
+
+### 0x4F1BC0 decoded: recursive property write into a 19-wide descriptor table
+
+```
+push ebx; ebx = [E+8] = arg1 ; push ebp; ebp = [E+4] = arg0
+edx = (signed char)bl                    ; movsx edx, bl
+eax = ebp*9 ; ecx = ebp + eax*2 = ebp*19 ; add ecx, edx
+eax = [E+0xC] = arg2
+[ecx*4 + 0xA758E8] = arg2                ; table[arg0*19 + (char)arg1] = arg2
+for (edi = 0, esi = 0xA758E4; esi < 0xA76BE4; esi += 0x4C, edi += 1)
+    if ([esi+0x44] != 0 && [esi] == arg0)
+        0x4F1BC0(edi, arg1, arg2);       ; recurse with the descriptor's own index as base
+```
+
+So this is `set_property(base, sub, value)` writing into a **19-column** table at `0xA758E8`, then
+propagating the same value into every *active* descriptor (`[+0x44] != 0`) whose owner matches `base`,
+recursing with the child index. Stride 0x4C = 76; loop runs 10 iterations from 0xA758E4, i.e.
+`base` 0..9 but `edi` grows only to 9 and the recursion re-enters with that index - the table index
+span is `19*base + (signed char)sub`, i.e. **-128..298**, so the storage is at least 427 dwords.
+
+Deliberately NOT transcribed this round: the storage size and the descriptor-array boundary
+(`0xA758E4`, stride 0x4C, active byte at `+0x44`) are not yet established by any owner, and declaring
+them would be inventing layout. The semantics above are recorded so the routine can be written as soon
+as the descriptor array's owner is transcribed.
