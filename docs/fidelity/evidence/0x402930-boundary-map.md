@@ -206,3 +206,38 @@ they call that are not in the CRT range - and those are tractable in the same wa
 
 So the dependency tree of the boundary ends at CRT on one side and at game statics on the other. The next increment is one
 window-registration callee transcribed end to end, with every CRT call left to the toolchain and every game static owned explicitly.
+
+
+## Tractability ranking of the 133 callees (round 240)
+
+Sorted by instruction count, with the number of dependencies that are still missing game natives (CRT calls excluded):
+
+| callee | instructions | missing game deps | first calls |
+| --- | --- | --- | --- |
+| `0x47CF20` | 10 | 2 | `0x4F1CD0`, `0x4F1DB0` |
+| `0x42DAC0` | 15 | 2 | `0x4EE0E0`, `0x4EE0F0` |
+| `0x42FE40` | 15 | 2 | `0x4EE0E0`, `0x4EE0F0` |
+| `0x46DF10` | 22 | 1 | `0x4F45F0` |
+| `0x472A70` | 27 | 1 | `0x460C10` |
+| `0x415070` | 30 | 1 | `0x4E68D0` |
+| `0x4688B0` | 31 | 0 |  |
+| `0x468E20` | 31 | 0 |  |
+
+The smallest callee, `0x0047CF20` at 10 instructions, is the honest illustration of why none of these can be landed yet:
+
+    0x0047CF20: push $0x005C10F0        ; argument
+    0x0047CF25: call 0x004F1CD0        ; game, MISSING
+    0x0047CF2A: push $0x005408EC
+    0x0047CF2F: push $0x005C10F0
+    0x0047CF34: call 0x004F1DB0        ; game, MISSING
+    0x0047CF39: push $0x0
+    0x0047CF3B: call 0x004017C0        ; CRT range
+    0x0047CF43: mov %al,0x005C10E8     ; stores the result byte
+    0x0047CF48: ret
+
+Two of its three calls are missing game natives, so it cannot be transcribed without stubbing - which is forbidden. The same pattern holds
+for the rest of the ranking: every callee is small in itself and gated on one or two smaller missing routines.
+
+The correct order is therefore leaf-first inside the boundary, not boundary-first: close `0x004F1CD0` and `0x004F1DB0` (both small, both
+called from several registration routines), then the callee that uses them becomes landable. That is the same in-degree logic that worked
+for the getter waves, applied one level down from the boundary instead of at the leaves of the whole image.
