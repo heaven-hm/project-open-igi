@@ -1,4 +1,4 @@
-// Native: CamTask_Init (retail BN name; keep until VERIFIED); retail VA 0x00530220-0x00530243 (35 bytes).
+// Native: CamTask_Init; retail VA 0x00530220.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: Binary Ninja MCP + radare2 6.2.0; 1 block, 2 callees (0x004018F0 QTask_GetCurrentType, 0x00401900 TaskType_Register); no branches; spec build/audit/main-0x48F530/level1-closure/20261024T024343Z/REGISTRARS-AND-4014-SPEC.md §3.3.
 // Behavior/CFG: registers the "CamTask" class (object size 0x88, parent = the current task type) with a zero task-list count, stores the returned 16-bit class id at retail 0x0054F768 and returns the TaskType_Register result.
