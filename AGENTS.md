@@ -173,9 +173,13 @@ Commands: `python3 scripts/igi_workflow.py doctor --check`; `python3 scripts/igi
 
 ## Agent skills
 
-Issue tracker: 'GitHub Issues are the tracker. See `docs/agents/issue-tracker.md`.'
+### Issue tracker
 
-Domain docs: 'This is a single-context layout. See `docs/agents/domain.md`.'
+GitHub Issues are the tracker; skills use the `gh` CLI. See `docs/agents/issue-tracker.md`.
+
+### Domain docs
+
+Single-context layout: one `CONTEXT.md` and `docs/adr/` at the repo root, created lazily by `/domain-modeling`. See `docs/agents/domain.md`.
 
 ### 10.13 Owner instruction: matching decompilation only (recorded 2026-10-24)
 
