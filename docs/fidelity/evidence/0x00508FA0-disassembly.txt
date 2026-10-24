@@ -628,3 +628,28 @@ Open question recorded instead of guessed: with four callee-saved pushes the sta
 the `0x4C0560` call shape) and whether `0x4C04B0` takes 3 or 4 arguments is not yet settled -
 `0x4C0560` pushes exactly three. Transcription of this body waits until that is resolved,
 since writing the wrong out-pointer would corrupt a caller slot.
+
+### 0x4C04B0 ABI resolved: THREE arguments (list, out, value)
+
+All three call sites push three dwords and clean 12 bytes:
+
+```
+0x4C0470: push esi(value); push eax(&out); push ecx(list); call; add esp,0xC
+0x4C0571: push ebx(value); push eax(&out); push ebp(list); call; add esp,0xC
+0x4C062F: push eax(value); push ecx(&out); push edx(list); call; add esp,0xC
+```
+
+So the signature is `f(list /*arg1*/, out /*arg2*/, value /*arg3*/)` and `[esp+0x18]` inside the
+function is arg2 - the out-slot - which the hit path fills with the node and the miss path
+zeroes. The round-78 three-vs-four question is **closed**.
+
+**Second correction:** r2 printed `0x004C04D8  mov esi, dword [arg_18h]`, but the actual bytes
+are `8b 75 08` = `mov esi, [ebp+8]` - a dereference of the chain node, not a stack argument.
+r2's argument annotation was misleading; the operand is the node's key pointer at `+8`. This
+matters: a transcription following the printed label would compare against the wrong storage.
+
+Remaining semantic step before writing the body: pin down what `ebp` holds on entry to the
+compare loop (bucket descriptor vs node) so the hit path stores the matched node rather than
+its predecessor into `*out`. The loop's `mov ebp,edi; mov edi,[edi]` advance means `ebp` lags
+`edi` by one node, so the store target on the hit path must be checked against the compare
+target rather than assumed.
