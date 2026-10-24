@@ -18,5 +18,6 @@ extern std::int32_t g_5c8e10;   // retail 0x005C8E10, left button state
 extern std::int32_t g_5c8e0c;   // retail 0x005C8E0C, right button state
 extern std::int32_t g_5c8e18;   // retail 0x005C8E18, middle button state
 extern std::int32_t g_5c8e08;   // retail 0x005C8E08, accumulated wheel delta
+extern std::uint8_t g_c28e80[256]; // retail 0x00C28E80, keyboard scan-code state
 
 } // extern "C"

@@ -17,4 +17,5 @@ std::int32_t g_5c8e10 = 0;     // 0x005C8E10
 std::int32_t g_5c8e0c = 0;     // 0x005C8E0C
 std::int32_t g_5c8e18 = 0;     // 0x005C8E18
 std::int32_t g_5c8e08 = 0;     // 0x005C8E08
+std::uint8_t g_c28e80[256] = {}; // 0x00C28E80
 } // extern "C"
