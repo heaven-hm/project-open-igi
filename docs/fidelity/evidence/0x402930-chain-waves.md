@@ -123,3 +123,22 @@ Still open for the same block: the routines that call 0x0046B040 and then touch 
 anything larger than a 0x3C-byte object can be declared. 0x005C10F0 and 0x005C8A4C remain undiscovered - the latter is filled by a
 `rep movsl` at 0x004869A6 whose count is set outside the visible window, so its extent needs the caller's copy length, not the
 address literal.
+
+## Extent discovery: 0x005C8A4C and 0x005C8A74 (round 227)
+
+The `rep movsl` at 0x004869A6 is preceded by an explicit count and source:
+
+    0x486994: mov $0xa,%ecx          ; 10 dwords
+    0x486999: mov $0x540B70,%esi     ; source
+    0x48699E: mov $0x5C8A4C,%edi     ; destination
+    0x4869A6: rep movsl
+
+So the destination block 0x005C8A4C has exactly 0x28 bytes proven by the copy length, and the source 0x00540B70 has 0x28 bytes of
+measured read width. This is a stronger fact than the address-literal approach used for 0x005BDDB0: the width is dictated by the
+instruction, not inferred from the widest access seen so far.
+
+The same window proves a second object: 0x005C8A74 is used as a 16-bit value five times around the copy (`mov %ax,0x5c8a74`,
+`mov 0x5c8a74,%ax`, `%cx`, `%dx`), so it is a two-byte object with an established width.
+
+Both are now declarable without guessing. No native was landed from this discovery in this round: the routine that owns the copy is
+larger than the window inspected here, and its boundary needs the same treatment before transcription.
