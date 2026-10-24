@@ -7,7 +7,8 @@
 
 extern "C" {
 
-// Native: TaskType_RefreshHandlerMask; retail VA 0x004014B0.
+// Declares the retail native 0x004014B0, which this caller tail-jumps into. Its implementation lives in
+// native_4014b0.cpp: one file per retail address, so no provenance block for that VA is repeated here.
 void TaskType_RefreshHandlerMask();
 
 void TaskType_SetPhaseHandlerByte(std::int32_t const value, std::int32_t const slot)

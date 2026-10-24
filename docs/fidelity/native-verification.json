@@ -3911,7 +3911,7 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/core/native_4014b0.cpp",
-        "sha256": "120ad39b80ff6e76c518f57caa1b2856263480ad4edcb283fc8e1c8bf7676f1b",
+        "sha256": "180c851accae31766d76758005a37fb646958a9fa48a4775ba2ca55bde6636ea",
         "signature": "unknown"
       },
       "game_natives": {
@@ -3944,16 +3944,37 @@
     {
       "address": "0x004014E0",
       "name": "TaskType_HandlerPhaseMask",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/core/native_4014e0.cpp",
-        "sha256": "69e6013f5bd7fc9814f6c956835166ea8081f611d236a0fc498b05cf46fdfc99",
-        "signature": "std::int32_t __cdecl TaskType_HandlerPhaseMask(std::int16_t type_id)"
+        "sha256": "db594c218e3afd3d118335b018975a395af790fd266af4b1f3ce48cf502515d2",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/004014E0-QTask_ChangeParent 2.cpp",
+        "sha256": "c434fa4cde6403548daef970882bc6ce8e64160884e48851f0fc4d251a15aba7",
+        "signature": "unknown"
       },
       "verification": {
-        "status": "TRANSCRIBED",
-        "limitations": [
-          "CFG similarity not yet computed for this VA; status is source-level only. Retail body: 16-iteration loop over g_54ff24, handler-table presence test, bit i set per non-0xFF phase, then or ah,0x80."
-        ]
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x004014E0",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004014E0-binaryninja.json",
+          "evidence_sha256": "aa26f7cde2b2f19cde43d131fcd7bae4245f63ea95f90ed3a35e4941e41b370e"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x004014E0",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004014E0-radare2.json",
+          "evidence_sha256": "23e2d9ffe22eed70b1ebb016f770faf08ef0a7b4a44a6ae97f92f10b5c881005"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0
       }
     },
     {
