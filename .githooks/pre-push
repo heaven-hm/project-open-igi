@@ -1,8 +1,15 @@
 #!/usr/bin/env bash
-# Pre-push guard: refuse to push if the native gate/build/run scripts have been
-# modified away from the committed trust anchor.
-# Enable once with: git config core.hooksPath .githooks
+# Pre-push: integrity guard only, quiet on success.
+#
+# The gate/build/run scripts must still match their committed trust anchors, but
+# that check prints nothing when it passes (owner instruction: no verification
+# chatter on normal git operations). A failure is reported in full.
 set -euo pipefail
 
 root="$(git rev-parse --show-toplevel)"
-exec "$root/scripts/check_gate_integrity.sh"
+if ! out="$("$root/scripts/check_gate_integrity.sh" 2>&1)"; then
+    echo "$out" >&2
+    echo "pre-push: gate integrity check failed; refusing to push." >&2
+    exit 1
+fi
+exit 0

@@ -1,12 +1,8 @@
 #!/usr/bin/env bash
-# Pre-commit: integrity guard only.
+# Pre-commit: intentionally does nothing.
 #
-# Native verification is NOT run on commits. Per owner instruction (2026-10-24),
-# the strict native gate runs only from build.sh (and build.sh's release path);
-# build_no_verify.sh is deliberately verification-free for development builds.
-# This keeps small, reviewable commits possible while all native status promotion
-# remains gated by build.sh plus paired runtime evidence.
-set -euo pipefail
-
-root="$(git rev-parse --show-toplevel)"
-exec bash "$root/scripts/check_gate_integrity.sh"
+# Owner instruction (2026-10-24): commits must not run native verification or any
+# integrity/build reporting. Verification runs only from build.sh; build_no_verify.sh
+# is verification-free. Keeping this hook silent also stops the editor/agent commit
+# path from echoing the gate-integrity file list on every commit.
+exit 0
