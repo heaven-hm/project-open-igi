@@ -1,0 +1,279 @@
+[  2%] Building CXX object CMakeFiles/igi_humanplayer_defines_object.dir/engine/src/retail/script/humanplayer_defines.cpp.obj
+[  2%] Building CXX object CMakeFiles/igi_qvm_execute_object.dir/engine/src/retail/script/qvm_execute.cpp.obj
+[  2%] Built target igi_qvm_execute_object
+[  2%] Built target igi_humanplayer_defines_object
+[  2%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/audio/sound_adpcm_decoder.cpp.obj
+[  3%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/audio/sound_attenuation_table.cpp.obj
+[  3%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/audio/sound_ilsf_header.cpp.obj
+[  4%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/audio/sound_ilsf_stream_reader.cpp.obj
+[  4%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/audio/sound_key_functions.cpp.obj
+[  5%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/config/config_graphic_options.cpp.obj
+[  5%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/config/config_profile.cpp.obj
+[  6%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/config/input_remap.cpp.obj
+[  6%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/config/retail_config.cpp.obj
+[  7%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/config/retail_input_bindings.cpp.obj
+[  7%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/core/app_context.cpp.obj
+[  8%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/core/app_context_extra.cpp.obj
+[  8%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/core/app_main_commands.cpp.obj
+[  9%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/core/cam_task.cpp.obj
+[  9%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/core/native_4014b0.cpp.obj
+[ 10%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/core/native_4014e0.cpp.obj
+[ 10%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/core/native_4018c0.cpp.obj
+[ 11%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/core/native_401860.cpp.obj
+[ 11%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/core/native_401d30.cpp.obj
+[ 12%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/core/native_4d9730.cpp.obj
+[ 12%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/dynobj/native_004e5370.cpp.obj
+[ 13%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/core/native_4c5900.cpp.obj
+[ 13%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/mem/native_4aad48.cpp.obj
+[ 14%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/mem/native_4aad90.cpp.obj
+[ 14%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/mem/mode2_bucket_globals.cpp.obj
+[ 15%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/mem/native_4ab6dd.cpp.obj
+[ 15%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/mem/native_4ab733.cpp.obj
+[ 16%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/mem/native_4ab84c.cpp.obj
+[ 16%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/mem/native_4aadbb.cpp.obj
+[ 17%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/mem/native_4a6a50.cpp.obj
+[ 17%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/mem/native_4b0d10.cpp.obj
+[ 18%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/core/qhash_slot_table_globals.cpp.obj
+[ 18%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/core/native_401b20.cpp.obj
+[ 19%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4f0c90.cpp.obj
+[ 19%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4ef830.cpp.obj
+[ 20%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4ef850.cpp.obj
+[ 20%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_427d70.cpp.obj
+[ 21%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_427f80.cpp.obj
+[ 21%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4efb00.cpp.obj
+[ 22%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4efcd0.cpp.obj
+[ 22%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4eff20.cpp.obj
+[ 23%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4f00a0.cpp.obj
+[ 23%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4f01b0.cpp.obj
+[ 24%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4f64e0.cpp.obj
+[ 24%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_51baa0.cpp.obj
+[ 25%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4d3710.cpp.obj
+[ 25%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4f0610.cpp.obj
+[ 26%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4f0640.cpp.obj
+[ 27%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4f06f0.cpp.obj
+[ 27%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4f0710.cpp.obj
+[ 28%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4f0730.cpp.obj
+[ 28%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/script_state_globals_a758.cpp.obj
+[ 29%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4b8b00.cpp.obj
+[ 29%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4f1c20.cpp.obj
+[ 30%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4ef8b0.cpp.obj
+[ 30%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4ef990.cpp.obj
+[ 31%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4ef9b0.cpp.obj
+[ 31%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4ef9d0.cpp.obj
+[ 32%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4efa10.cpp.obj
+[ 33%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/hash_table_globals.cpp.obj
+[ 33%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4efa90.cpp.obj
+[ 33%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4f11a0.cpp.obj
+[ 34%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4f1180.cpp.obj
+[ 34%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/mem/native_4ab7f5.cpp.obj
+[ 35%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/core/app_startup_globals.cpp.obj
+[ 35%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/core/app_startup_natives.cpp.obj
+[ 36%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/core/class_registration.cpp.obj
+[ 36%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/core/debug_command_line.cpp.obj
+[ 37%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/core/flow.cpp.obj
+[ 37%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/core/fpu_state.cpp.obj
+[ 38%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/core/frame_natives.cpp.obj
+[ 38%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/core/game_flow.cpp.obj
+[ 39%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/core/native_0048f0e0.cpp.obj
+[ 39%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/core/native_0048f0f0.cpp.obj
+[ 40%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/core/native_0048f970.cpp.obj
+[ 40%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/core/qtask_create_task.cpp.obj
+[ 41%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/core/qtask_list.cpp.obj
+[ 41%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/core/retail_error.cpp.obj
+[ 42%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/core/native_48f490.cpp.obj
+[ 42%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/core/native_4c1780.cpp.obj
+[ 43%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/core/native_489560.cpp.obj
+[ 43%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/core/native_401810.cpp.obj
+/Users/haseeb-mir/Documents/Code/project-open-igi/engine/src/retail/core/native_489560.cpp:11:26: warning: 'g_5c8ac0' initialized and declared 'extern'
+   11 | extern "C" std::uint32_t g_5c8ac0 = 0U;      // retail 0x005C8AC0
+      |                          ^~~~~~~~
+/Users/haseeb-mir/Documents/Code/project-open-igi/engine/src/retail/core/native_489560.cpp:12:26: warning: 'g_5c8ac4' initialized and declared 'extern'
+   12 | extern "C" std::uint32_t g_5c8ac4[16] = {};  // retail 0x005C8AC4
+      |                          ^~~~~~~~
+/Users/haseeb-mir/Documents/Code/project-open-igi/engine/src/retail/core/native_489560.cpp:13:26: warning: 'g_5c8b0c' initialized and declared 'extern'
+   13 | extern "C" std::uint32_t g_5c8b0c = 0U;      // retail 0x005C8B0C
+      |                          ^~~~~~~~
+/Users/haseeb-mir/Documents/Code/project-open-igi/engine/src/retail/core/native_489560.cpp:14:26: warning: 'g_5c8b10' initialized and declared 'extern'
+   14 | extern "C" std::uint32_t g_5c8b10 = 0U;      // retail 0x005C8B10
+      |                          ^~~~~~~~
+/Users/haseeb-mir/Documents/Code/project-open-igi/engine/src/retail/core/native_489560.cpp:15:26: warning: 'g_5c8b14' initialized and declared 'extern'
+   15 | extern "C" std::uint32_t g_5c8b14 = 0U;      // retail 0x005C8B14
+      |                          ^~~~~~~~
+/Users/haseeb-mir/Documents/Code/project-open-igi/engine/src/retail/core/native_489560.cpp:16:25: warning: 'g_54127c' initialized and declared 'extern'
+   16 | extern "C" std::uint8_t g_54127c = 0U;       // retail 0x0054127C
+      |                         ^~~~~~~~
+/Users/haseeb-mir/Documents/Code/project-open-igi/engine/src/retail/core/native_489560.cpp:17:25: warning: 'g_54127d' initialized and declared 'extern'
+   17 | extern "C" std::uint8_t g_54127d = 0U;       // retail 0x0054127D
+      |                         ^~~~~~~~
+/Users/haseeb-mir/Documents/Code/project-open-igi/engine/src/retail/core/native_489560.cpp:18:25: warning: 'g_54127e' initialized and declared 'extern'
+   18 | extern "C" std::uint8_t g_54127e = 0U;       // retail 0x0054127E
+      |                         ^~~~~~~~
+[ 44%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/core/native_4f1ee0.cpp.obj
+[ 44%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/core/native_507e70.cpp.obj
+[ 45%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/core/native_4f9200.cpp.obj
+[ 45%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/core/native_4f9210.cpp.obj
+/Users/haseeb-mir/Documents/Code/project-open-igi/engine/src/retail/core/native_507e70.cpp:9:25: warning: 'g_a7b254' initialized and declared 'extern'
+    9 | extern "C" std::uint8_t g_a7b254 = 0U; // retail 0x00A7B254, .data zero-fill, image init 0
+      |                         ^~~~~~~~
+/Users/haseeb-mir/Documents/Code/project-open-igi/engine/src/retail/core/native_4f9200.cpp:8:26: warning: 'g_a76d10' initialized and declared 'extern'
+    8 | extern "C" std::uint32_t g_a76d10 = 0U; // retail 0x00A76D10, image value 0U
+      |                          ^~~~~~~~
+/Users/haseeb-mir/Documents/Code/project-open-igi/engine/src/retail/core/native_4f9210.cpp:8:26: warning: 'g_54e364' initialized and declared 'extern'
+    8 | extern "C" std::uint16_t g_54e364 = 0x0181U; // retail 0x0054E364, image value 0x0181U
+      |                          ^~~~~~~~
+[ 45%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/core/native_4f9230.cpp.obj
+[ 46%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/core/native_4f9220.cpp.obj
+[ 47%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/core/native_4f9240.cpp.obj
+/Users/haseeb-mir/Documents/Code/project-open-igi/engine/src/retail/core/native_4f9220.cpp:8:25: warning: 'g_54e36b' initialized and declared 'extern'
+    8 | extern "C" std::uint8_t g_54e36b = 0xFFU; // retail 0x0054E36B, image value 0xFFU
+      |                         ^~~~~~~~
+/Users/haseeb-mir/Documents/Code/project-open-igi/engine/src/retail/core/native_4f9230.cpp:8:25: warning: 'g_54e36c' initialized and declared 'extern'
+    8 | extern "C" std::uint8_t g_54e36c = 0xFFU; // retail 0x0054E36C, image value 0xFFU
+      |                         ^~~~~~~~
+/Users/haseeb-mir/Documents/Code/project-open-igi/engine/src/retail/core/native_4f9240.cpp:8:25: warning: 'g_54e36d' initialized and declared 'extern'
+    8 | extern "C" std::uint8_t g_54e36d = 0xFFU; // retail 0x0054E36D, image value 0xFFU
+      |                         ^~~~~~~~
+[ 47%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/core/native_4f9250.cpp.obj
+[ 48%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/core/native_4f9260.cpp.obj
+[ 48%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/core/native_4f9280.cpp.obj
+/Users/haseeb-mir/Documents/Code/project-open-igi/engine/src/retail/core/native_4f9250.cpp:8:25: warning: 'g_54e36e' initialized and declared 'extern'
+    8 | extern "C" std::uint8_t g_54e36e = 0xFFU; // retail 0x0054E36E, image value 0xFFU
+      |                         ^~~~~~~~
+/Users/haseeb-mir/Documents/Code/project-open-igi/engine/src/retail/core/native_4f9260.cpp:8:25: warning: 'g_54e36f' initialized and declared 'extern'
+    8 | extern "C" std::uint8_t g_54e36f = 0xFFU; // retail 0x0054E36F, image value 0xFFU
+      |                         ^~~~~~~~
+[ 48%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/core/task_types.cpp.obj
+[ 49%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/core/native_48f4f0.cpp.obj
+/Users/haseeb-mir/Documents/Code/project-open-igi/engine/src/retail/core/native_4f9280.cpp:8:25: warning: 'g_54e369' initialized and declared 'extern'
+    8 | extern "C" std::uint8_t g_54e369 = 0xFFU; // retail 0x0054E369, image value 0xFFU
+      |                         ^~~~~~~~
+[ 50%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/core/native_401890.cpp.obj
+[ 50%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/diagnostics/log_record.cpp.obj
+[ 51%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/dynobj/dynamic_cube.cpp.obj
+[ 52%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/dynobj/hash_lookup.cpp.obj
+[ 52%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/dynobj/local_models_mef.cpp.obj
+[ 53%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/dynobj/mtp_package_loader.cpp.obj
+[ 53%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/error/error_show.cpp.obj
+[ 54%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/error/native_4af810.cpp.obj
+[ 54%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/error/native_4af870.cpp.obj
+[ 55%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/error/native_4af880.cpp.obj
+[ 55%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/human/human_camera_eye.cpp.obj
+[ 56%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/human/human_view.cpp.obj
+[ 56%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/input/input_port_process.cpp.obj
+[ 57%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/mem/heap_list.cpp.obj
+[ 57%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/mem/task_list.cpp.obj
+[ 58%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/render/native_4f0f80.cpp.obj
+/Users/haseeb-mir/Documents/Code/project-open-igi/engine/src/retail/render/native_4f0f80.cpp:8:26: warning: 'g_a71874' initialized and declared 'extern'
+    8 | extern "C" std::uint32_t g_a71874 = 0U; // retail 0x00A71874
+      |                          ^~~~~~~~
+[ 58%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/render/native_4f1000.cpp.obj
+[ 59%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4ee960.cpp.obj
+/Users/haseeb-mir/Documents/Code/project-open-igi/engine/src/retail/render/native_4f1000.cpp:8:26: warning: 'g_a70c90' initialized and declared 'extern'
+    8 | extern "C" std::uint32_t g_a70c90 = 0U; // retail 0x00A70C90
+      |                          ^~~~~~~~
+[ 59%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4f19c0.cpp.obj
+[ 60%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4f1bc0.cpp.obj
+[ 60%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4f1b70.cpp.obj
+[ 61%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4f1b80.cpp.obj
+[ 61%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4f1b60.cpp.obj
+[ 62%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4f1b90.cpp.obj
+[ 62%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4f1ba0.cpp.obj
+[ 63%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4f1bb0.cpp.obj
+[ 63%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4f1a40.cpp.obj
+[ 64%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4f1a60.cpp.obj
+[ 64%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4f1a70.cpp.obj
+[ 65%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4af910.cpp.obj
+/Users/haseeb-mir/Documents/Code/project-open-igi/engine/src/retail/script/native_4f1a60.cpp:8:25: warning: 'g_54e0e4' initialized and declared 'extern'
+    8 | extern "C" std::uint8_t g_54e0e4 = 0xFFU; // retail 0x0054E0E4, image value 0xFF
+      |                         ^~~~~~~~
+/Users/haseeb-mir/Documents/Code/project-open-igi/engine/src/retail/script/native_4f1a70.cpp:8:25: warning: 'g_54e0e5' initialized and declared 'extern'
+    8 | extern "C" std::uint8_t g_54e0e5 = 0xFFU; // retail 0x0054E0E5, image value 0xFF
+      |                         ^~~~~~~~
+[ 65%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4b8810.cpp.obj
+[ 66%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4b8890.cpp.obj
+[ 66%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4cea10.cpp.obj
+[ 67%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4cea20.cpp.obj
+[ 67%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4baac0.cpp.obj
+[ 68%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4bacd0.cpp.obj
+[ 68%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4c0360.cpp.obj
+[ 69%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4c04b0.cpp.obj
+[ 69%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4c0530.cpp.obj
+[ 70%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4c0560.cpp.obj
+[ 70%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4f1840.cpp.obj
+[ 70%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4f1950.cpp.obj
+[ 71%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4f18c0.cpp.obj
+[ 72%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4f1980.cpp.obj
+[ 72%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4f1a80.cpp.obj
+[ 72%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4f1b50.cpp.obj
+[ 73%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4f1b20.cpp.obj
+[ 74%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4f9460.cpp.obj
+[ 74%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/native_4f9e70.cpp.obj
+[ 75%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/mem/mem_alloc.cpp.obj
+[ 75%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/mem/native_4b0d50.cpp.obj
+[ 76%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/mem/native_4b0d60.cpp.obj
+[ 77%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/mem/native_4b0d90.cpp.obj
+[ 77%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/model/iff_chunk_tree.cpp.obj
+[ 78%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/model/iff_skeleton.cpp.obj
+[ 78%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/model/mef_bone_rig.cpp.obj
+[ 79%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/model/mef_model_loader.cpp.obj
+[ 79%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/model/mef_native_attachments.cpp.obj
+[ 80%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/model/mef_render_data.cpp.obj
+[ 80%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/model/mef_skinner.cpp.obj
+[ 81%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/model/model_texture_package.cpp.obj
+[ 81%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/qfile/alias_resolve.cpp.obj
+[ 82%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/render/backend.cpp.obj
+[ 82%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/render/camera_transform.cpp.obj
+[ 83%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/render/lod_settings.cpp.obj
+[ 83%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/render/trans_context.cpp.obj
+[ 84%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/render/view_block.cpp.obj
+[ 84%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/resource/device_dispatch.cpp.obj
+[ 85%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/resource/is_resource_loaded.cpp.obj
+[ 85%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/resource/resource_archive.cpp.obj
+[ 86%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/resource/resource_cache.cpp.obj
+[ 86%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/resource/resource_lifecycle.cpp.obj
+[ 87%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/resource/resource_unpack.cpp.obj
+[ 87%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/resource/sys_resource.cpp.obj
+[ 88%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/qvm_compiled_program.cpp.obj
+[ 88%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/qvm_loader.cpp.obj
+[ 89%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/qvm_native_loader.cpp.obj
+[ 89%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/qvm_object_calls.cpp.obj
+[ 90%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/qvm_stack_natives.cpp.obj
+[ 90%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/script/script_mode.cpp.obj
+[ 91%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/sys/ilff_navigation.cpp.obj
+[ 91%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/sys/resource_lookup.cpp.obj
+[ 92%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/terrain/terrain_draw.cpp.obj
+[ 92%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/terrain/terrain_loaders.cpp.obj
+[ 93%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/terrain/terrain_mipmaps.cpp.obj
+[ 93%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/terrain/terrain_out_of_terrain_renderch.cpp.obj
+[ 94%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/terrain/terrain_quadtree.cpp.obj
+[ 94%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/terrain/terrain_scene_state.cpp.obj
+[ 95%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/terrain/terrain_storage.cpp.obj
+[ 95%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/terrain/terrain_unknown_blendmode.cpp.obj
+[ 96%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/texture/loop_terrain_texture.cpp.obj
+[ 96%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/texture/model_texture_pixels.cpp.obj
+[ 97%] Building CXX object CMakeFiles/igi.dir/engine/src/retail/texture/texture_loaders.cpp.obj
+[ 97%] Building CXX object CMakeFiles/igi.dir/engine/platform/windows/player_controller.cpp.obj
+[ 98%] Building CXX object CMakeFiles/igi.dir/engine/platform/windows/retail_animation.cpp.obj
+[ 98%] Building CXX object CMakeFiles/igi.dir/engine/platform/windows/direct_input_mouse.cpp.obj
+[ 99%] Building CXX object CMakeFiles/igi.dir/engine/platform/windows/retail_native_verification_support.cpp.obj
+[ 99%] Building CXX object CMakeFiles/igi.dir/build/native-analysis/directx-candidate-sol/main.cpp.obj
+[100%] Building CXX object CMakeFiles/igi.dir/scripts/GameNatives/display/00498480-Native_00498480.cpp.obj
+/Users/haseeb-mir/Documents/Code/project-open-igi/build/native-analysis/directx-candidate-sol/main.cpp: In function 'int WinMain(HINSTANCE, HINSTANCE, LPSTR, int)':
+/Users/haseeb-mir/Documents/Code/project-open-igi/build/native-analysis/directx-candidate-sol/main.cpp:174:36: warning: ISO C++ forbids converting a string constant to 'char*' [-Wwrite-strings]
+  174 |     (void)AppMain_ParseCmdLineArgs("Window", &AppMain_WindowCommand);
+      |                                    ^~~~~~~~
+/Users/haseeb-mir/Documents/Code/project-open-igi/build/native-analysis/directx-candidate-sol/main.cpp:175:36: warning: ISO C++ forbids converting a string constant to 'char*' [-Wwrite-strings]
+  175 |     (void)AppMain_ParseCmdLineArgs("WinInput", &AppMain_WinInputCommand);
+      |                                    ^~~~~~~~~~
+/Users/haseeb-mir/Documents/Code/project-open-igi/build/native-analysis/directx-candidate-sol/main.cpp:176:36: warning: ISO C++ forbids converting a string constant to 'char*' [-Wwrite-strings]
+  176 |     (void)AppMain_ParseCmdLineArgs("Germany", &AppMain_GermanyCommand);
+      |                                    ^~~~~~~~~
+/Users/haseeb-mir/Documents/Code/project-open-igi/build/native-analysis/directx-candidate-sol/main.cpp:177:36: warning: ISO C++ forbids converting a string constant to 'char*' [-Wwrite-strings]
+  177 |     (void)AppMain_ParseCmdLineArgs("USA", &AppMain_USACommand);
+      |                                    ^~~~~
+/Users/haseeb-mir/Documents/Code/project-open-igi/build/native-analysis/directx-candidate-sol/main.cpp:224:36: warning: ISO C++ forbids converting a string constant to 'char*' [-Wwrite-strings]
+  224 |     (void)AppMain_ParseCmdLineArgs("HardcoreGerman", &AppMain_HardcoreGermanCommand);
+      |                                    ^~~~~~~~~~~~~~~~
+[100%] Linking CXX executable igi1.exe
+[100%] Built target igi
+Diagnostic build receipt: build-directx-candidate-sol/diagnostic-receipt.json

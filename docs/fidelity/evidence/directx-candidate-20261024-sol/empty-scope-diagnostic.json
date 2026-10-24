@@ -1,0 +1,40 @@
+{
+  "angr_analysis": {
+    "functions": {}
+  },
+  "backup_analysis_tools": [],
+  "behavioral_tests_required": true,
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "cfg_threshold": 0.85,
+  "checked_files": [],
+  "checked_native_count": 0,
+  "checked_natives": [],
+  "deleted_files": [
+    "scripts/GameNatives/display/00498480-Display_DinputDll 2.cpp",
+    "scripts/GameNatives/display/00498480-Display_DinputDll.cpp",
+    "scripts/GameNatives/display/00498480-Display_DinputDll.hpp"
+  ],
+  "failures": [],
+  "frida_probes_required": false,
+  "mode": "changed",
+  "primary_analysis_tools": [
+    "selected_decompiler",
+    "radare2"
+  ],
+  "requested_addresses": [],
+  "result": "passed",
+  "root": "/Users/haseeb-mir/Documents/Code/project-open-igi",
+  "schema_version": 1,
+  "semantic_review_required": true,
+  "supplemental_analysis_tools": [
+    "angr"
+  ],
+  "threshold": "VERIFIED",
+  "v4_catalog": {
+    "binarySha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+    "catalog": "assets/IGINatives_v4.json",
+    "entries": 0,
+    "gameNativesNamesChecked": 270
+  },
+  "warnings": []
+}

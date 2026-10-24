@@ -1,0 +1,63 @@
+{
+  "kind": "igi-directx-native-diagnostic-pair",
+  "retail_va": "0x00498480",
+  "checks": [
+    {
+      "side": "retail",
+      "check": "complete native sequence and terminal marker",
+      "passed": true
+    },
+    {
+      "side": "retail",
+      "check": "no probe failures; owned process exited",
+      "passed": true
+    },
+    {
+      "side": "retail",
+      "check": "observed DLL references balanced",
+      "passed": true
+    },
+    {
+      "side": "candidate",
+      "check": "complete native sequence and terminal marker",
+      "passed": true
+    },
+    {
+      "side": "candidate",
+      "check": "no probe failures; owned process exited",
+      "passed": true
+    },
+    {
+      "side": "candidate",
+      "check": "observed DLL references balanced",
+      "passed": true
+    },
+    {
+      "check": "all ordered typed observations equal",
+      "passed": true
+    },
+    {
+      "check": "terminal identity counts and DLL effects equal",
+      "passed": true
+    }
+  ],
+  "differences": [],
+  "observations_match": true,
+  "verified": false,
+  "scope": "Natural DirectX 7 successful path on CrossOver, Level 1 startup",
+  "limits": [
+    "Failure branches and other OS versions are untested.",
+    "A native terminal marker covers only this native; later startup can fail.",
+    "No production intake, independent semantic approval or full WinMain acceptance."
+  ],
+  "identities": {
+    "/Users/haseeb-mir/Downloads/IGI/igi.exe": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+    "/Users/haseeb-mir/Documents/Code/project-open-igi/build-directx-candidate-sol/igi1.exe": "9e38a3a69437ca8e2ec741001ecb6c7e5e74932144f215ad9e2edbeff64a4079",
+    "/Users/haseeb-mir/Documents/Code/project-open-igi/scripts/tester/frida_directx_probe.js": "17ec12e5546582a8ff8f007e3cd12832852145678324527cf8c2df7518266fe2",
+    "build-directx-candidate-sol/diagnostic-receipt.json": "fb70657f6dfb75db8ca3652caaa4d747611952fd73b51a686271c72916d3fca3",
+    "/Users/haseeb-mir/Documents/Code/project-open-igi/scripts/tester/capture_directx_pair.py": "385c68154a95345fe870f30be34c4944312317b813c6a5e6fdefb1eda1dc635e",
+    "/Users/haseeb-mir/Documents/Code/project-open-igi/scripts/tester/frida_probe_driver.py": "0790f8118ad4459160713ef52c364a421b2aa62ac5c1f32b3a32b959607bf17f"
+  },
+  "candidate_va": "0x466eb0",
+  "candidate_extent": "0x700"
+}

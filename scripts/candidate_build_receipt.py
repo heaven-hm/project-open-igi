@@ -23,11 +23,35 @@ def snapshot(root, build):
         if folder.exists():
             paths.update(p for p in folder.rglob('*') if p.is_file() and
                          (p.name == 'CMakeLists.txt' or p.suffix in suffixes))
+    # A diagnostic target can compile a reviewed catalog source or staged startup
+    # copy outside engine/. Bind the actual configured sources before the clean
+    # build too; post-build dependency hashes alone cannot detect mid-build edits.
+    commands = build / 'compile_commands.json'
+    if commands.is_file():
+        paths.add(commands)
+        for command in json.loads(commands.read_text()):
+            source = Path(command['file'])
+            if not source.is_absolute():
+                source = Path(command['directory']) / source
+            source = source.resolve()
+            if source.is_relative_to(root) and source.is_file():
+                paths.add(source)
+                paths.update(p for p in source.parent.iterdir()
+                             if p.is_file() and p.suffix in {'.h', '.hpp', '.hh', '.hxx', '.inl'})
     paths.add(build / 'CMakeCache.txt')
     paths.update(build.rglob('flags.make'))
     paths.update(build.rglob('link.txt'))
     paths.update(build.glob('CMakeFiles/*/CMakeCXXCompiler.cmake'))
     cache = (build / 'CMakeCache.txt').read_text()
+    for line in cache.splitlines():
+        if line.split(':', 1)[0] in {'CMAKE_PROJECT_INCLUDE', 'CMAKE_PROJECT_INCLUDE_BEFORE',
+                                   'CMAKE_PROJECT_TOP_LEVEL_INCLUDES'} and '=' in line:
+            for name in line.split('=', 1)[1].split(';'):
+                path = Path(name)
+                if not path.is_absolute():
+                    path = root / path
+                if path.is_file():
+                    paths.add(path.resolve())
     compiler = next((line.split('=', 1)[1].strip(chr(34)) for line in cache.splitlines()
                      if line.startswith('CMAKE_CXX_COMPILER:')), None)
     compiler = Path(shutil.which(compiler) or compiler) if compiler else None

@@ -1,0 +1,121 @@
+{
+  "kind": "igi-workflow-self-check",
+  "schema_version": 1,
+  "result": "passed",
+  "native_verified": false,
+  "scope": "report-validator infrastructure only; generated fixtures are not game evidence",
+  "cases": [
+    {
+      "name": "complete_validator_fixture",
+      "expected_acceptance": true,
+      "checker_exit_code": 0,
+      "passed": true,
+      "stdout": "runtime verification: 1 natives, 1 observed in the retail game, 0 without a candidate implementation, 0 scalar mismatches\n",
+      "stderr": ""
+    },
+    {
+      "name": "empty_scope",
+      "expected_acceptance": false,
+      "checker_exit_code": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "native_gate: BLOCKED: runtime results must cover every required native exactly once\n"
+    },
+    {
+      "name": "duplicate_address",
+      "expected_acceptance": false,
+      "checker_exit_code": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "native_gate: BLOCKED: runtime results must cover every required native exactly once\n"
+    },
+    {
+      "name": "stale_gate_hash",
+      "expected_acceptance": false,
+      "checker_exit_code": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "native_gate: BLOCKED: runtime evidence is not bound to the current static/semantic report and retail image\n"
+    },
+    {
+      "name": "different_probe",
+      "expected_acceptance": false,
+      "checker_exit_code": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "native_gate: BLOCKED: runtime comparison lacks a matching reviewed scope/probe contract\n"
+    },
+    {
+      "name": "candidate_unobserved",
+      "expected_acceptance": false,
+      "checker_exit_code": 1,
+      "passed": true,
+      "stdout": "runtime verification: 1 natives, 1 observed in the retail game, 0 without a candidate implementation, 0 scalar mismatches\n  1 natives the retail game calls are transcribed in the reconstruction but the host never invokes them\n",
+      "stderr": "native_gate: BLOCKED: retail-used natives were not reached in OpenIGI\n"
+    },
+    {
+      "name": "dropped_call",
+      "expected_acceptance": false,
+      "checker_exit_code": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "native_gate: BLOCKED: typed comparison does not match the complete captured call sequences\n"
+    },
+    {
+      "name": "changed_side_effect",
+      "expected_acceptance": false,
+      "checker_exit_code": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "native_gate: BLOCKED: typed comparison does not match the complete captured call sequences\n"
+    },
+    {
+      "name": "missing_required_field",
+      "expected_acceptance": false,
+      "checker_exit_code": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "native_gate: BLOCKED: typed comparison does not match the complete captured call sequences\n"
+    },
+    {
+      "name": "historical_reference_is_not_current_implementation",
+      "passed": true,
+      "stdout": "False\nblocked: current source differs from its reviewed manifest record\nreport: /Users/haseeb-mir/Documents/Code/project-open-igi/build/native-one/0x00405850/20261024T151239Z-a0c7b1d2/report.json\n",
+      "stderr": ""
+    },
+    {
+      "name": "intake_rejects_native_without_current_engine_implementation",
+      "passed": true,
+      "intake_exit_code": 1,
+      "stdout": "False\nREJECTED: native 0x004036B0 static+runtime intake\nreport: /var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-report-check-co9yus6i/intake-report.json\n",
+      "stderr": "",
+      "intake_report": {
+        "schema_version": 1,
+        "kind": "igi-one-native-verification",
+        "address": "0x004036B0",
+        "run_id": "20261024T151240Z-a54fe6ef",
+        "result": "blocked",
+        "verified": false,
+        "phases": {},
+        "error": "native is not implemented in this clean branch; historical GameNatives cannot approve it"
+      }
+    },
+    {
+      "name": "static_only_cannot_be_accepted",
+      "passed": true,
+      "static_exit_code": 1,
+      "stdout": "False\nblocked: native is not implemented in this clean branch; historical GameNatives cannot approve it\nreport: /var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-report-check-co9yus6i/static-only-report.json\n",
+      "stderr": "",
+      "static_report": {
+        "schema_version": 1,
+        "kind": "igi-one-native-verification",
+        "address": "0x004036B0",
+        "run_id": "20261024T151240Z-d4a3c839",
+        "result": "blocked",
+        "verified": false,
+        "phases": {},
+        "error": "native is not implemented in this clean branch; historical GameNatives cannot approve it"
+      }
+    }
+  ]
+}

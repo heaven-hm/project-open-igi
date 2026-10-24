@@ -1,0 +1,11 @@
+{
+  "kind": "retained-trace-comparator-negative-controls",
+  "native_verified": false,
+  "checks": {
+    "baseline_observation_match": true,
+    "missing_terminal_rejected": true,
+    "wrong_output_rejected": true,
+    "missing_ordered_event_rejected": true,
+    "wrong_dll_role_rejected": true
+  }
+}

@@ -3,6 +3,24 @@
   "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
   "retired_files": [
     {
+      "path": "scripts/GameNatives/display/00498480-Display_DinputDll.cpp",
+      "reviewed": true,
+      "rationale": "Superseded erroneous generated transcription: invalid callable integer/pointer types, guessed BOOL result and incomplete COM typing. Original blob remains in Git history. New candidate is not accepted.",
+      "replacedBy": "scripts/GameNatives/display/00498480-Native_00498480.cpp"
+    },
+    {
+      "path": "scripts/GameNatives/display/00498480-Display_DinputDll 2.cpp",
+      "reviewed": true,
+      "rationale": "Duplicate implementation of the same retail VA; replaced by one evidence-bound provisional candidate. Original blob remains in Git history.",
+      "replacedBy": "scripts/GameNatives/display/00498480-Native_00498480.cpp"
+    },
+    {
+      "path": "scripts/GameNatives/display/00498480-Display_DinputDll.hpp",
+      "reviewed": true,
+      "rationale": "Guessed BOOL signature replaced by the observed raw 32-bit EAX/two DWORD-output interface; source-level original naming remains unknown.",
+      "replacedBy": "scripts/GameNatives/display/00498480-Native_00498480.hpp"
+    },
+    {
       "path": "scripts/GameNatives/ai/00460C80-AI_CheckHearing_18 2.cpp",
       "reviewed": true,
       "rationale": "Renamed to scripts/GameNatives/ai/00460C80-Human_printf 2.cpp; the retail body of 0x00460C80 adjudicated the function name and the new filename carries it. The transcription, its address and its content are unchanged.",
@@ -73274,6 +73292,45 @@
         "cfg_similarity": 1.0
       },
       "notes": "Renamed from `FreeCamera_Init_5310E0` when the address suffix was stripped; the retail VA in this record is unchanged."
+    },
+    {
+      "address": "0x00498480",
+      "name": "Native_00498480",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/display/00498480-Native_00498480.cpp",
+        "sha256": "de8cc4f52b7ffbc01061d717f3e5d27e3e80e40f9d1232ef6c69856e36422bf9",
+        "signature": "uint32_t __cdecl Native_00498480(uint32_t* capability, uint32_t* platform);"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/display/00498480-Native_00498480.cpp",
+        "sha256": "de8cc4f52b7ffbc01061d717f3e5d27e3e80e40f9d1232ef6c69856e36422bf9",
+        "signature": "uint32_t __cdecl Native_00498480(uint32_t* capability, uint32_t* platform);"
+      },
+      "verification": {
+        "status": "BUILD_VERIFIED",
+        "selected_decompiler": "binary_ninja",
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/directx-probe-20261024-sol/binary_ninja.json",
+          "evidence_sha256": "58a163bf26088c2bf0722a73f613e51a44626f87b6d1133fbc9b9b782cc3396f"
+        },
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/directx-probe-20261024-sol/radare2.json",
+          "evidence_sha256": "ac89fb311182a18168251a286d81df8c89eebd68d3b94fe7b25453a696298b1b"
+        },
+        "angr": {
+          "evidence_path": "docs/fidelity/evidence/directx-probe-20261024-sol/angr.json",
+          "evidence_sha256": "ad6d90a0ea9fe9c50a42b087f1fcbd14beec135013bc2eb15fe024bcd565cacc"
+        },
+        "cfg_similarity": 1.0,
+        "limitations": [
+          "Catalog candidate only; root production target is unchanged. Diagnostic linking uses a staged WinMain copy inserting the call at retail order, without inventing the unresolved <0x700 sprintf/exit path.",
+          "Paired typed successful-path observations are diagnostic evidence in docs/fidelity/evidence/directx-candidate-20261024-sol/; independent semantic/runtime-contract approval and strict intake remain pending.",
+          "Failure branches, NT4/older platform paths and other environments remain unobserved. No VERIFIED status or full WinMain equivalence is claimed.",
+          "Capability/platform and SDK interface names describe evidence-backed roles; original source variable names and function symbol are unavailable."
+        ]
+      },
+      "notes": "Historical alias Display_DinputDll was an incomplete guessed name. Raw EAX is not uniformly BOOL (one branch returns the output pointer). Address-qualified name remains provisional."
     },
     {
       "address": "0x004A5000",

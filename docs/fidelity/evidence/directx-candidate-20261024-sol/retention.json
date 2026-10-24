@@ -1,0 +1,98 @@
+{
+  "kind": "diagnostic-evidence-retention",
+  "verified": false,
+  "files": [
+    {
+      "source": "build/runtime-traces/directx-candidate-20261024-sol-pair2/retail.json",
+      "retained": "retail.json",
+      "sha256": "87ae2a4e605905e4fb9046924ed8a596b623b03b3c5bec065aec7e701f201917"
+    },
+    {
+      "source": "build/runtime-traces/directx-candidate-20261024-sol-pair2/retail.jsonl",
+      "retained": "retail.jsonl",
+      "sha256": "905ec15e27e3a7a9c3b37b312d24dea2c619ce5a23cfb72e729c3b057437c3c9"
+    },
+    {
+      "source": "build/runtime-traces/directx-candidate-20261024-sol-pair2/candidate.json",
+      "retained": "candidate.json",
+      "sha256": "5d95b20036d4f7f5325dac7534af5cee189b824296c0d598c88629d34f0319c9"
+    },
+    {
+      "source": "build/runtime-traces/directx-candidate-20261024-sol-pair2/candidate.jsonl",
+      "retained": "candidate.jsonl",
+      "sha256": "5c50f296a7db002ed586ba8ed7587d7d9b5785d33cb3722f9b10cbdb2d9306c2"
+    },
+    {
+      "source": "build/runtime-traces/directx-candidate-20261024-sol-pair2/comparison.json",
+      "retained": "comparison.json",
+      "sha256": "bb831c15dec1f0686e7a0aeda6d87e459f41a8656c5085474291d97cdca2879e"
+    },
+    {
+      "source": "build/runtime-traces/directx-candidate-20261024-sol-pair2/retail-driver.log",
+      "retained": "retail-driver.log",
+      "sha256": "3e0341babe72d752bff4a5112fe7155f6aaeacfde16994de20a18f059d5fbd7d"
+    },
+    {
+      "source": "build/runtime-traces/directx-candidate-20261024-sol-pair2/candidate-driver.log",
+      "retained": "candidate-driver.log",
+      "sha256": "0a3fcfb050c98f59d4137a3d8b15f4513d81c555ef0d1b29d912e52ff0d34b7d"
+    },
+    {
+      "source": "build-directx-candidate-sol/diagnostic-receipt.json",
+      "retained": "diagnostic-receipt.json",
+      "sha256": "fb70657f6dfb75db8ca3652caaa4d747611952fd73b51a686271c72916d3fca3"
+    },
+    {
+      "source": "build-directx-candidate-sol/build-final2.log",
+      "retained": "build.log",
+      "sha256": "2d2dfb3777430d2cf41478c35af0d2b8668fc98f739f19b035eedce94d0552cb"
+    },
+    {
+      "source": "build/native-analysis/directx-candidate-sol/main.cpp",
+      "retained": "diagnostic-main.cpp",
+      "sha256": "3129fdb5bde8213f8987299757c18ee3e2df4019e8d0fe60a8284148e4291300"
+    },
+    {
+      "source": "build/native-analysis/directx-candidate-sol/overlay.cmake",
+      "retained": "overlay.cmake",
+      "sha256": "7603167cdc78958d02732d51d2193950e2dc6065c7c84f803f853723cce6cd91"
+    },
+    {
+      "source": "scripts/tester/frida_directx_probe.js",
+      "retained": "probe.js",
+      "sha256": "17ec12e5546582a8ff8f007e3cd12832852145678324527cf8c2df7518266fe2"
+    },
+    {
+      "source": "scripts/tester/capture_directx_pair.py",
+      "retained": "capture-pair.py",
+      "sha256": "385c68154a95345fe870f30be34c4944312317b813c6a5e6fdefb1eda1dc635e"
+    },
+    {
+      "source": "scripts/tester/frida_probe_driver.py",
+      "retained": "probe-driver.py",
+      "sha256": "0790f8118ad4459160713ef52c364a421b2aa62ac5c1f32b3a32b959607bf17f"
+    },
+    {
+      "source": "scripts/GameNatives/display/00498480-Native_00498480.cpp",
+      "retained": "candidate-source.cpp",
+      "sha256": "de8cc4f52b7ffbc01061d717f3e5d27e3e80e40f9d1232ef6c69856e36422bf9"
+    },
+    {
+      "source": "scripts/GameNatives/display/00498480-Native_00498480.hpp",
+      "retained": "00498480-Native_00498480.hpp",
+      "sha256": "ca3948c32cc6d7adc2696e0c811c16c3c9319f58e321032dea449230c34cd13a"
+    },
+    {
+      "source": "build/native-analysis/directx-candidate-sol/strict-changed-gate.json",
+      "retained": "empty-scope-diagnostic.json",
+      "sha256": "d2e0b8a1ffb50a0a67eb09096995f01f15636106c3a7b6ba8288eae288d27310"
+    }
+  ],
+  "additional_files": {
+    "README.md": "062c0f086bc442f545f59e5d5c7e6fbd27a259dd5ba1582e6c465ba7f8e5f460",
+    "comparator-controls.json": "b38146652a6dae2995b29f343f77ac33ec35f6aee5fd269b071f9913460a34f5",
+    "infrastructure-self-check.json": "6aad06a3c083877bc55bbff96e1e2c43660d7bee44ae7a50b2aa8e4abf251c24",
+    "strict-changed-gate.json": "28ed24ee86b640668f47b95402df6fcb13f4988a2b4813abb14a5b28500c67a9",
+    "strict-changed-gate.log": "cc09648bbe5ec8f0c7967257ff77a5ae60416fa897f56b3fa21519eb74e053b3"
+  }
+}
