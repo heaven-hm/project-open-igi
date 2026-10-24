@@ -18,20 +18,6 @@
 namespace {
 
 
-// The retail's link native computes the handler table index as
-// class_id + phase * 384 and stores the handler at 0x00A96AE0 + index * 4.
-std::uint32_t link_handler(std::uint16_t class_id, std::uint32_t phase,
-                           igi::retail::core::FrameHandler handler, std::uint32_t& count)
-{
-    ++count;
-    ++QTask_LinkedHandlerCounter;
-    const std::uint32_t index = (static_cast<std::uint32_t>(class_id) & 0xFFFFU) +
-                                ((phase & 0xFFU) * igi::retail::core::task_phase_stride);
-    QTask_HandlerTable[index] = handler;
-    QTask_FirstLinkFlag[index] = (count == 1U) ? 1U : 0U;
-    return index;
-}
-
 // Port-side replay of the retail task-type registration sequence. The retail
 // assigns class ids in registration order, and the per-frame dispatch indexes
 // the handler table by class id, so one skipped class shifts every later id.

@@ -20,6 +20,13 @@
 
 #include <cstdint>
 
+extern "C" {
+
+// 0x004E7530: the phase getter, transcribed in native_4e7530.cpp with C linkage.
+std::uint32_t NATIVE_DECL Core_GetEventWord_4E7530();
+
+} // extern "C"
+
 namespace {
 
 // The retail's frame timer at 0x00490370: the tick count less the start time.
@@ -177,12 +184,7 @@ void Flow_DispatchTaskListPhaseN(void* object_void)
         g_task_stack_depth = depth;                             // 0x0040245C
         // 0x00402462: eax = 0x004E7530(), the current phase, and the handler is
         // table[class_id + phase * 384] at 0x00A96AE0.
-        // TODO(0x004E7530): transcribe the phase getter. The paired runtime
-        // trace (docs/fidelity/evidence/0x00401050-retail-flow-order.json)
-        // records frame 1 dispatching phase 0 (Level_Start 0x00415B30) and the
-        // later frames phase 1 (Game_Setup 0x00416260); the port runs the play
-        // phase, which is the phase the MVP demo enters.
-        const std::uint32_t phase = 1U;
+        const std::uint32_t phase = Core_GetEventWord_4E7530();
         const std::uint16_t class_id = *reinterpret_cast<const std::uint16_t*>(
             reinterpret_cast<const std::uint8_t*>(node) + 0x1C); // 0x0040246C
         const std::uint32_t index =
