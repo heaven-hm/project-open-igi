@@ -936,3 +936,25 @@ this block alone.
 
 This capture is a checkpoint, not a transcription: writing the 196-instruction body requires the
 three untranscribed targets first, so position 1 cannot advance until they land.
+
+### 0x401400 partial decode (164 B, 7 blocks) - ID range allocator touched 9x by the registrar
+
+```
+ecx = [0x00567C6C]              ; current id counter
+push ebx; push ebp; ebp = [arg3]
+push esi; esi = [0x00536148]    ; another live counter
+eax = ebp; inc ecx; inc esi
+eax &= 0xFF                     ; arg3 masked to a byte (same mask family as 0x401860)
+[0x00536148] = esi
+edx = [arg4]
+esi = eax*3                     ; lea esi,[eax+eax*2]
+eax = [arg3 again]
+```
+
+So this is a small allocator/ledger: it bumps two global counters, masks arg3 to 8 bits, and
+indexes a 3-dword-stride structure (the same 12-byte stride seen in the qhash buckets). Called
+nine times from `0x508FA0`, it is the id/bookkeeping primitive behind the registrar.
+
+Open: the rest of the 53 instructions (7 blocks) need capture, and global ownership for
+`0x00567C6C` / `0x00536148` was **not** yet checked in `engine/` - recorded as unchecked rather
+than claimed either way.
