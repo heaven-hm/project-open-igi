@@ -4029,6 +4029,45 @@
       }
     },
     {
+      "address": "0x004015D0",
+      "name": "QTask_UnlinkTask_4015D0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_4015d0.cpp",
+        "sha256": "d6a1fbedb3a2a553c527541dedbf1c446abbafa00f47955f8e11ff7c181424b2",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/004015D0-QTask_AllocateEvent 2.cpp",
+        "sha256": "06f43e5f28acb02bbbf9c1eb8a3964a76ac5cc856316d622bd3d87cd9e769ca0",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x004015D0",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004015D0-binaryninja.json",
+          "evidence_sha256": "351ffee5bc503c7ba6a3b593c76f5fd78d28ade1b968bb72aed7f6816646b30d"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x004015D0",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004015D0-radare2.json",
+          "evidence_sha256": "91b58a7cc713448b521236160da0b04d4ef7d2409c8189dfd872527c0f810592"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0,
+        "limitations": [
+          "Static transcription only: no runtime observation exists because the startup boundary throws before any caller runs, and the caller that matters (the destructor 0x004015F0) is still untranscribed. Depends on HeapList_Remove 0x004AF960."
+        ]
+      }
+    },
+    {
       "address": "0x004017C0",
       "name": "QTask_AllocateEvent",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
