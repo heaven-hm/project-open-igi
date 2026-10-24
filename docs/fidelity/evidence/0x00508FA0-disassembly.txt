@@ -958,3 +958,34 @@ nine times from `0x508FA0`, it is the id/bookkeeping primitive behind the regist
 Open: the rest of the 53 instructions (7 blocks) need capture, and global ownership for
 `0x00567C6C` / `0x00536148` was **not** yet checked in `engine/` - recorded as unchecked rather
 than claimed either way.
+
+### 0x401400 captured: RECURSIVE id-range allocator over a 48-byte-stride table
+
+Full listing saved as `docs/fidelity/evidence/0x00401400-listing.txt` (164 B, 7 blocks,
+53 instructions). Key structure:
+
+```
+ecx = [0x567C6C] + 1; [0x567C6C] = ecx        ; id counter, owned by task_types.cpp
+esi = [0x536148] + 1; [0x536148] = esi
+eax = (arg3 & 0xFF) * 3; esi <<= 7
+eax += esi; eax &= 0xFFFF of arg1 before add   ; index = ((arg1 & 0xFFFF) + 3*(arg3&0xFF))*... 
+[0xA96AE0 + eax*4] = arg4                      ; dword table entry
+[0x54FF34 + eax] = (ecx == 1)                  ; flag byte, set only when the counter hit 1
+loop edi = 0xAF5EE8; edi < 0xAFA6E8; edi += 0x30, ++ebx:
+    if (byte [edi+0x1D] != 0 && word [edi] == (word)[arg1]) 
+        if (byte [0x54FF34 + esi + ebx] == 0)
+            call 0x401400(arg?, ebp, ebx, [esp+0x1C])   ; SELF-RECURSIVE at 0x40147B
+call 0x4014B0
+```
+
+Two findings that change the plan:
+
+1. **`0x401400` is recursive** (calls itself at `0x40147B` inside its own table walk). A recursive
+   transcription must keep the argument order of that self-call exactly, and the CFG gate will
+   compare 7 blocks including the self-loop - this is the first recursive native in this arc.
+2. New storage/deps beyond the two owned counters: table `0x00A96AE0`, flag array `0x0054FF34`,
+   descriptor table `0x00AF5EE8` (21 entries at 48-byte stride, `{word at +0, byte at +0x1D}`),
+   and callee `0x4014B0`. None ownership-checked yet.
+
+So the "cheapest remaining target" assessment from round 98 was too optimistic: recursion plus
+three unowned tables means this is a substantial increment, not a quick leaf.
