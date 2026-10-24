@@ -50,6 +50,8 @@ add_executable(igi WIN32
     engine/src/retail/core/qhash_slot_table_globals.cpp
     engine/src/retail/core/native_401b20.cpp
     engine/src/retail/script/native_4f0c90.cpp
+    engine/src/retail/script/native_4ef830.cpp
+    engine/src/retail/script/native_4ef850.cpp
     engine/src/retail/script/hash_table_globals.cpp
     engine/src/retail/script/native_4f11a0.cpp
     engine/src/retail/script/native_4f1180.cpp
