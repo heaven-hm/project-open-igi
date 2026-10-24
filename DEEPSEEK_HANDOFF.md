@@ -756,3 +756,24 @@ Consequences for the transcription, recorded before writing it:
 Also confirmed from the same window: the registration at 0x401130 is `0x401900(str.QTask, 0x20, 0x181)` with the
 three pushes at 0x401122-0x401129 and `add esp,0x14` at 0x401135, and the current-type store at 0x401138 is
 `mov word [0x54F928], ax` - a WORD store, so the port's `QTask_CurrentType` must stay 16-bit.
+
+## CORRECTION to the phase-link note above: 0x4018F0 takes no arguments (round 161)
+
+The previous section says "0x4018F0 takes the phase (0..3) as a dword and returns the phase handler". That is
+wrong, and the port's own header disproves it: `engine/include/igi/retail/core/task_types.hpp:165` records
+0x004018F0 as `QTask_GetCurrentType()`, an already-transcribed native, and its retail body is
+`mov ax,[0x54F928]; ret` - no stack argument at all.
+
+So the four `push 0`/`push 1`/`push 2`/`push 3` instructions at 0x40113E, 0x401150, 0x401160, 0x401170 are dead
+caller-side padding, exactly like the fifth pushed word at the 0x401900 registration that was settled earlier
+(0x401900 reads only [esp+0x8], [esp+0xC], [esp+0x18], [esp+0x1C]). The word is pushed, never read, and the four
+calls all return the same value: the QTask class id just stored at 0x401138.
+
+That changes what the link sequence means: it is not "link each phase handler", it is four identical
+`link(0x401860 or 0x401890, current_type)` pairs where only the link native differs between phase 0 and phases
+1..3. Before wiring, the port must confirm what 0x401860 and 0x401890 actually do with that single argument - and
+since the pushed phase is dead, a solution that reads the phase from the stack would be adding logic retail does
+not have.
+
+Rule restated for the third time in this stretch: a dead pushed argument is not an argument. Verify the callee's
+own [esp+N] reads before assigning meaning to a push, and cite the callee, not the call site.
