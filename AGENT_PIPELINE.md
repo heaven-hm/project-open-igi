@@ -58,3 +58,11 @@ This pipeline reconstructs `igi.exe` as matching decompilation; it is not a re-i
 - Strings and messages byte-identical to `igi.exe` (option names, titles, file names, MessageBox texts, formats). No rewording.
 - Preserve retail statement order and branch shape even when less idiomatic.
 - Only allowed differences: the documented IGI_TESTING_MUTEX testing build and diagnostic logging, both absent from production builds.
+
+### Codebase structure gate (owner instruction, 2026-10-24)
+
+- One implementation per retail VA; no duplicate entry points, no parallel shells, no duplicate basenames defining the same native.
+- The Windows entry is `WinMain` at `engine/src/retail/core/main.cpp` (retail 0x0048F530); no `Main`, no forwarding `WinMain`.
+- All engine work lives under `engine/src/retail/<domain>/` + mirrored headers; `platform/windows/` is plumbing only.
+- Dead or superseded code is deleted with the change that replaces it.
+- Review one-definition-per-VA, duplicate symbols, helper functions and domain placement before committing.
