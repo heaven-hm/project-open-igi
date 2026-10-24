@@ -40,6 +40,9 @@ add_executable(igi WIN32
     engine/src/retail/core/native_4c5900.cpp
     engine/src/retail/mem/native_4aad48.cpp
     engine/src/retail/mem/native_4aad90.cpp
+    engine/src/retail/mem/mode2_bucket_globals.cpp
+    engine/src/retail/mem/native_4ab6dd.cpp
+    engine/src/retail/mem/native_4ab733.cpp
     engine/src/retail/mem/native_4ab7f5.cpp
     engine/src/retail/core/app_startup_globals.cpp
     engine/src/retail/core/app_startup_natives.cpp
