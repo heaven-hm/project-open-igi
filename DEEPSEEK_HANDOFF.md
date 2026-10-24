@@ -814,3 +814,31 @@ Semantics established: the pair writes a six-byte record per phase at 0x54F930 +
 
 So phases 1..3 differ from phase 0 only in that third byte. That is the real distinction the two natives encode,
 and it is why phase 0 uses 0x401860 while 1..3 use 0x401890.
+
+## §12 delivered: WinMain flow corrected, and 0x401A60 is blocked on its global's owner (round 160-164)
+
+flow-analyst appended §12 (952 lines) to docs/fidelity/evidence/0x4EE970-data-extents.md. Corrections that
+invalidate my own records:
+
+- **C1: 0x4010B0 is NOT a direct WinMain callee.** Its call site 0x48F9D4 is inside WndProc 0x48F970 (WM_DESTROY),
+  reached by dispatch through the WNDCLASS lpfnWndProc stored at 0x48F59E. My mvp-call-flow row for it is a WndProc
+  site, not a WinMain call, so the "70 call sites of WinMain" table mixes both. Do not cite it as a direct edge.
+- **C2:** 0x4010B0 has exactly one predecessor; the BN fall-through from 0x4010A0 is unreachable because 0x4A507C's
+  only ret sits behind an unconditional jmp [edx+0x14].
+- **C3:** 0x498480 takes 2 arguments (two write-only out-pointers), not r2's 3; the [esp+0x130] slot is counted twice
+  by afij. Frame 0x11C is exactly full.
+- **C4:** 0x402C40 is a separate 775-byte zero-arg entry reached only by the tail jmp from 0x4010B0 - 154 zero-arg
+  calls and a jmp 0x508F90. Do not merge it with 0x4010B0.
+- **C5:** 0x498480 is a pure platform probe (8 imports, COM/DirectX vtable calls, 2 GetProcAddress pointers); no
+  engine globals and no engine-native callees, so it adds nothing to the native queue.
+- **C6/C7:** 0x4A5AD5 and 0x4A5AE6 are real function entries (CRT exit wrappers over 0x4A5AF7), unlisted in the
+  manifest, and the catalogue name Camera_ApplyBandFilter_6 for that address is contradicted.
+
+Queue in call order from 0x4010B0: 0x401A60 (6 B) -> 0x4015F0 (391 B, 25 bb, recursive, 120 call sites) ->
+0x402C40 (775 B) + 0x4C1780 (1-byte ret no-op, called repeatedly).
+
+**0x401A60 is written but deliberately NOT wired.** engine/src/retail/script/native_401a60.cpp holds the exact body
+(`mov eax,[0x567c58]; ret`), but the global 0x00567C58 has NO transcribed writer anywhere in the tree. Under the
+only-the-writer-defines-a-global rule I cannot define it, and an extern-only declaration will not link. So the file
+stays out of CMakeLists until the writer is transcribed - the same blocker shape as 0xA96AE0 before QTask_Init's
+zero-fill was found. Do not "fix" it by defining the storage in the reader: that is the invented-global defect.

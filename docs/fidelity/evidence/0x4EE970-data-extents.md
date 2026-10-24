@@ -1959,3 +1959,1140 @@ r2 -q -e scr.color=0 -e bin.relocs.apply=true -c 'aaa; axtj @ 0x00A70CA8' igi.ex
 # exact instruction bytes/opcode for a proving instruction
 r2 -q -e scr.color=0 -c 'aoj @ 0x4EF7C5' igi.exe
 ```
+
+---
+
+## §12 — WinMain flow: `0x4010B0` and `0x498480`
+
+> Placement: inserted after **Appendix B** and before the already-present `## §13`, which a later pass appended to this same file, so that the section numbering stays in order. No existing section, table, appendix or §13 line is modified: the insertion is a pure add between two existing regions, and the document's earlier bytes and §13 are byte-identical to before this pass.
+
+### 12.0 Scope, method and artefact
+
+- **Artefact:** `/Users/haseeb-mir/Downloads/IGI/igi.exe`, SHA-256 `dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01`, PE32 i386, preferred base `0x00400000`, `.text` VA `0x00401000`. Hash re-checked before and after this pass. **No runtime was produced:** no game process, no Wine/CrossOver, no Frida/IGI-Probe; every statement below is static evidence.
+- **Method:** radare2 6.2.0 (`aaa`, `afij`, `afbj`, `pdj`) for decode and block recovery; independent Python reads of the image for every byte string and every `E8`/`E9` `rel32` target (each target recomputed as `next_ip + rel`). Linear `pdj` decode is used instead of `pdf` because `aaa` tail-merges `0x4010B0` into the `0x402C40` cascade (`afij`: `size 1250392`, `maxaddr 0x532208`, `is-lineal:false`); the true 28-byte body is only visible with a linear walk.
+- **Stack-offset method (the proof for every argument claim):** `E` = `esp` at function entry (pointing at the return address). At any instruction `T` = bytes below `E` consumed by the frame (`sub esp,N` plus pushes, minus `pop`s, minus the argument bytes popped by each stdcall/COM callee). A `[esp+disp]` operand then resolves to entry offset `disp - T`: `+4` = arg1, `+8` = arg2, …. `T` is recomputed from the retail opcodes themselves, never from r2's `var_XXh` names (those names disagree with the bytes in `0x498480`; see C3).
+- **No decompiler was run in this pass.** The Binary Ninja record already on disk for `0x4010B0` (`docs/fidelity/evidence/0x004010B0-static-analysis.json`) is cited as *prior evidence* and is re-derived here from bytes; the candidate sources under `scripts/GameNatives/` are cited as *candidates*. Neither substitutes for the selected-decompiler + angr step that AGENTS §10.2 requires before a transcription is promoted, and this section assigns no status beyond `ANALYZED`.
+
+### 12.1 Corrections to what the current handoff believes
+
+**C1 — `0x4010B0`'s call site is inside the window procedure, not in WinMain's own body.** WinMain stores `0x0048F970` into the `WNDCLASS.lpfnWndProc` slot at `0x0048F59E` (`c7 44 24 34 70 f9 48 00`) and registers the class at `0x0048F5E6` (`call [USER32!RegisterClassA]`). The `call 0x004010B0` at `0x0048F9D4` is inside `0x0048F970`'s `WM_DESTROY` arm: `0x48F9C5 push 1` → `0x48F9CE call [USER32!ShowCursor]` → `0x48F9D4 call 0x4010B0` → `0x48F9D9 push 0` → `0x48F9DB call [USER32!PostQuitMessage]`. So the `WinMain → 0x4010B0` relation is a *dispatch* edge (`WinMain → DispatchMessageA → WndProc → callee`), not a direct `call` instruction in `0x0048F530`. That is why `docs/fidelity/mvp-call-flow.md` row 68 records the site at `0x0048F9D4`: it is a WndProc call site that becomes reachable from WinMain only through message dispatch.
+
+**C2 — `0x4010B0` has exactly one real predecessor: the direct call at `0x0048F9D4`. The apparent fall-through predecessor `0x004010A0` is not a reachable edge.** `0x004010A0` is its own 16-byte entry, laid out immediately before `0x4010B0`: `6a 01` `push 1`; `68 e0 f8 54 00` `push 0x0054F8E0`; `e8 d0 3f 0a 00` `call 0x004A507C`; then `90 90 90 90` at `0x004010AC`–`0x004010AF` and **no `ret`**. The prior record reports Binary Ninja's fall-through edge from `0x004010AF`, but the callee `0x004A507C` ends `0x4A50EB 8b 62 10 mov esp,[edx+0x10]` / `0x4A50EE 83 c4 04 add esp,4` / `0x4A50F1 ff 62 14 jmp dword [edx+0x14]` — it restores an SEH frame's saved stack and jumps to a saved continuation, so it never returns to `0x004010AC`. The four `nop`s are layout padding. `0x004A507C`'s only `ret` is at `0x004A50F4`, placed immediately after the unconditional `jmp dword [edx+0x14]` at `0x004A50F1` and therefore unreachable: every path of that callee ends in the indirect jump, not in a normal return. A full `.text` scan of every `e8`/`e9` `rel32` confirms `0x4010B0` has exactly one reference in the image, the call at `0x0048F9D4`. **Do not add a second predecessor to `0x4010B0`.**
+
+**C3 — `0x498480` takes exactly two arguments, both write-only out-pointers; r2's three-argument signature is wrong.** `afij` prints `signature: fcn.00498480 (int32_t arg_130h, int32_t arg_130h_2, int32_t arg_134h)` with `nargs: 3`, listing the **same** `[esp+0x130]` slot twice. The body contains exactly **six** reads of `[esp+0x130]` (= entry `+4`: `0x4984C4`, `0x498503`, `0x498519`, `0x4985A8`, `0x4985D5`, `0x498632`) and exactly **two** reads of `[esp+0x134]` (= entry `+8`: `0x4984BD`, `0x4984E1`); no `[esp+0x138]` operand exists in the 374 instructions, and neither pointer is ever dereferenced before being written. WinMain's `push edx`/`push eax` at `0x0048F6E0`/`0x0048F6E1` are those two arguments — **no dead pushed word** at that call site.
+
+**C4 — `0x00402C40` is a genuine, standalone zero-argument entry (775 bytes, one block, 154 calls + one tail jump), not part of `0x004010B0` and not part of `0x00402930`.** `aaa` cannot recover it because its only reference is the `jmp` at `0x004010C7`. The body is exactly `0x00402C40`–`0x00402F46`, ending `0x00402F42 e9 49 60 10 00 jmp 0x00508F90`, then `nop` padding to the next function. All 155 instructions are five bytes: 154 `e8 rel32` calls (`0x402C40`, `0x402C45`, …, `0x402F3D`) plus that final `e9 rel32`. This is the region r2 shows merged into `0x4010B0`; the two must not be treated as one function.
+
+**C5 — `0x498480` is a platform probe, not an engine native.** Its 55 `call` instructions resolve to 8 distinct Win32/ole32 imports (through IAT slots), COM/DirectX interface calls through vtables, and two `GetProcAddress`-derived pointers. It reads no engine global, writes no engine global, and calls no engine native (12.11). Nothing in it joins the engine-native transcription queue; what a transcription needs from the port is the exact GUID/string constants and the exact per-path side effects (12.10, 12.12).
+
+**C6 — `0x004A5AD5` is a real function entry and a CRT `exit`-family wrapper, not a disassembly artefact and not `Camera_ApplyBandFilter_6`.** 17 bytes, one argument, three genuine `E8` call sites, including `exit(main(...))` in CRT startup (12.13). The external catalogue name in `docs/DISCOVERED_NATIVES_RECORD.md` is contradicted by the body.
+
+**C7 — Names.** None of these VAs has a retail symbol in this checkout's manifest. `QTask_DispatchEvent` (`0x4010B0`), `Display_DinputDll` (`0x498480`), `Flow_DeleteHandler` (`0x402C40`), `QTask_FindType` (`0x4015F0`), `QTask_DispatchEvent_2` (`0x401A60`), `Input_GetDIErrStr` (`0x48F970`) are Binary Ninja database annotations or external-catalogue names, not retail symbols. The names used in this sheet (`out_dx_version`, `out_platform`, `pDDraw`, `pDDraw2`, `pSurface`, `pSurf3`, `pSurf4`, `pDM`, `pDD7`, `ddsd`, `osi`) are working descriptions, marked as such wherever they appear. Only the retail strings and GUID bytes in 12.10 are evidence of what the code does.
+
+### 12.2 `0x004010B0` — identity, ABI, and what the function is
+
+- **VA range:** `0x004010B0`–`0x004010CB`, **28 bytes**: `e8 ab 09 00 00 85 c0 74 0e e8 c2 17 00 00 50 e8 2c 05 00 00 83 c4 04 e9 74 1b 00 00`. Bytes `0x004010CC`–`0x004010CF` are `90 90 90 90` padding; the next entry is `0x004010D0`.
+- **Shape:** 3 basic blocks, 8 instructions, 3 edges. Entry `0x4010B0`–`0x4010B8`; conditional block `0x4010B9`–`0x4010C6`; shared tail `0x4010C7`–`0x4010CB`. No loop, no `ret`.
+- **Arguments: none.** The 28 bytes contain **zero** `[esp+*]`/`[ebp+*]` memory operands (and no memory operand at all). Proof is the function's own reads, not the caller's pushes: `0x48F9C5 push 1` is `ShowCursor`'s argument and was consumed by the stdcall `call [ShowCursor]` at `0x48F9CE`; nothing is pushed between `0x48F9CE` and `0x48F9D4`, so `0x4010B0` is entered with an empty argument frame. **Any signature giving it an argument is wrong**; the `push 1` is a dead-looking word that belongs to the previous call.
+- **Calling convention / cleanup:** no `ret`; the function ends in an unconditional `jmp 0x00402C40`, so the cascade's eventual `ret` returns directly to `0x0048F9D9`. With zero arguments there is nothing to clean. The `push eax`/`add esp,4` pair at `0x4010BE`/`0x4010C4` is the one-argument **cdecl** call to `0x004015F0`.
+- **Return value: not defined by this body.** The caller-visible EAX is whatever the tail region leaves. The direct caller discards it (next instruction is `push 0` for `PostQuitMessage`). The last call executed in the cascade is `0x005324FE call 0x004B0B90` before `0x00532503 jmp 0x004C1780`, so the value would be `0x4B0B90`'s return — cascade-dependent; no source-level return type is proven.
+- **Direct side effects:** none of its own. There is no global or absolute-address operand in the body (12.6). Everything is a callee effect.
+- **What it is, stated only from its branches:** *if `0x401A60()` is non-zero, pass the object returned by `Game_GetContext()` to `0x4015F0`; then always continue into the `0x402C40` chain.* The semantics of `0x401A60`, `0x4015F0` and `0x402C40` are **not** established here.
+
+### 12.3 `0x004010B0` — instruction-by-instruction derivation
+
+| VA | bytes | instruction | exact statement / purpose |
+| --- | --- | --- | --- |
+| `0x004010B0` | `e8 ab 09 00 00` | `call 0x00401A60` | `if (f_401A60() != 0)` — EAX is the test operand; no other use |
+| `0x004010B5` | `85 c0` | `test eax, eax` | flags from the returned dword; only zero/non-zero is proven, no width |
+| `0x004010B7` | `74 0e` | `je 0x004010C7` | skip the two-call block; the target **is** the shared tail, so both paths converge there |
+| `0x004010B9` | `e8 c2 17 00 00` | `call 0x00402880` | `Game_GetContext()` — zero-argument call; EAX = context pointer |
+| `0x004010BE` | `50` | `push eax` | the single argument of `0x004015F0` |
+| `0x004010BF` | `e8 2c 05 00 00` | `call 0x004015F0` | `f_4015F0(ctx)`; the following `add esp,4` proves cdecl + one dword argument |
+| `0x004010C4` | `83 c4 04` | `add esp, 4` | caller cleanup for the cdecl call |
+| `0x004010C7` | `e9 74 1b 00 00` | `jmp 0x00402C40` | tail jump; the callee's `ret` (at `0x4C1780`) returns to `0x0048F9D9`; no frame to unwind |
+
+Then `90 90 90 90` at `0x004010CC`–`0x004010CF` (padding) and the next entry at `0x004010D0`.
+
+### 12.4 `0x004010B0` — retail-order statements
+
+```c
+/* working names only; no retail symbol is proven for any callee */
+void f_4010B0(void)              /* 0x4010B0; no arguments, no ret, tail-jumps */
+{
+    if (f_401A60() != 0)         /* 0x4010B0, 0x4010B5, 0x4010B7 */
+    {
+        void* ctx = Game_GetContext();      /* 0x4010B9 */
+        f_4015F0(ctx);                      /* 0x4010BE push, 0x4010BF call, 0x4010C4 add esp,4 */
+    }
+    return f_402C40();           /* 0x4010C7 jmp; the value is the cascade's EAX, not this body's */
+}
+```
+
+The `je` at `0x4010B7` jumps straight to the tail block, so there is no `else`: the tail always runs. The body has no counting, no logging, no global state.
+
+### 12.5 `0x004010B0` — callees in call order, arguments, and the transcription queue
+
+Argument counts are proven from each **callee's own** stack reads (or its complete lack of them), never from push sequences alone.
+
+| order | call site | callee | arguments (proven from the callee) | return used | manifest / transcription status |
+| ---: | --- | --- | --- | --- | --- |
+| 1 | `0x004010B0` | `0x00401A60` | **0 args** — body `a1 58 7c 56 00 c3` = `mov eax,[0x00567C58]; ret`; no stack operand | tested for zero only | **NOT IN MANIFEST → missing** (external label `QTask_DispatchEvent_2`) |
+| 2 | `0x004010B9` | `0x00402880` `Game_GetContext` | **0 args** — body `a1 8c 7c 56 00 c3` = `mov eax,[0x00567C8C]; ret` | passed as argument 1 of callee 3 | `STRUCTURALLY_VERIFIED`, `engine/src/retail/core/frame_natives.cpp` → **transcribed** |
+| 3 | `0x004010BF` | `0x004015F0` | **1 cdecl dword argument** — `afij`: `cdecl`, `nargs 1`, `recursive: true`, 391 bytes, 25 blocks, 134 instructions; the `push eax` at `0x4010BE` is its argument and `add esp,4` cleans it | discarded | **NOT IN MANIFEST → missing** (external label `QTask_FindType`); 120 call sites in the image — a hub |
+| 4 (tail) | `0x004010C7` | `0x00402C40` | **0 args** — 775 bytes, one block, 154 zero-argument `e8` calls, final `jmp 0x00508F90`; no push precedes any call | EAX becomes the caller's EAX | **NOT IN MANIFEST → missing** (external label `Flow_DeleteHandler`) |
+
+**The `0x00402C40` cascade (call-order facts only; not transcribed here).** It calls, in order, `0x004C1780` — a **1-byte `c3 ret` no-op entry** reused many times — then `0x004192B0`, `0x004199B0`, `0x0041A1A0`, `0x0041AAC0`, `0x0041B260`, `0x0041B840`, `0x0041C660`, `0x0041D050`, `0x0041DBF0`, … and ends `jmp 0x00508F90`. The tail chain continues `0x00508F90` → `0x00518550` → `0x005302A0` → `0x00530A20` → `0x005311F0` → `0x005323D0` → `0x005323F0` → `0x00532490`, whose last call is `0x005324FE call 0x004B0B90`, followed by `0x00532503 e9 78 f2 f8 ff jmp 0x004C1780`; because `0x4C1780` is a single-byte `ret`, that jump returns to `0x4010B0`'s caller with `0x4B0B90`'s EAX. I re-opened `0x402C40` (155 five-byte instructions) and the `0x532490` block (last call `0x4B0B90`, then `jmp 0x4C1780`); the remaining chain boundaries are the ones already recorded in `0x004010B0-static-analysis.json` and are provenance-labelled as prior-record facts.
+
+**Call-site census in this image** (every `e8`/`e9` `rel32` in `.text` recomputed as `site+5+rel`, so the counts are complete, not sampled): `0x004010B0` — **1** site, `0x0048F9D4`; `0x00401A60` — **2** sites, `0x004010B0` and `0x004317E8`; `0x004015F0` — **120** sites (a genuine hub, which is why it is the expensive item in the queue); `0x00402C40` — **1** reference, the `jmp` at `0x004010C7`, so it is reachable only as this tail and never called directly, which is exactly why `aaa` could not recover it; `0x00498480` — **1** site, `0x0048F6E2`; `0x004A5AD5` — **3** sites (`0x0048F71F`, `0x00498941`, `0x004A51C7`); `0x004A5AE6` — **1** site (`0x004A51E6`).
+
+**Queue for the next rounds, in call order:** `0x00401A60` (six-byte getter — trivial), `0x004015F0` (391-byte recursive hub, 120 call sites), `0x00402C40` (775 bytes) plus its 13-block cascade down to `0x4C1780`. `0x00402880` is already transcribed. Note that the first call in the cascade, `0x4C1780`, is a legitimate transcription target (a 1-byte `ret` function), not something to skip: the chain calls it repeatedly.
+
+### 12.6 `0x004010B0` — globals, `-O3` loss risks, callee-level effects
+
+**Globals read/written by the 28-byte body: none.** There is no absolute-address operand of any kind in `0x004010B0`–`0x004010CB` (operands are registers, one call target, one branch displacement, the immediate `4`). Every global effect is a callee effect. The globals reached through the direct callees, with the proving instruction **in the callee**, are:
+
+| global | width | access | proving instruction (callee) |
+| --- | --- | --- | --- |
+| `0x00567C58` | 4 | read | `0x00401A61 a1 58 7c 56 00 mov eax,[0x567C58]` |
+| `0x00567C58` | 4 | read + write | `0x004015F0 8b 15 58 7c 56 00` … `0x004015F9 89 15 58 7c 56 00` |
+| `0x00AFA7E0` | 4 | read | `0x004015FF 8b 15 e0 a7 af 00` |
+| `0x00AFA6E0` | 4·N | read | `0x00401636 89 0c 85 e0 a6 af 00` (slot write) |
+| `0x00A97CE0` | 4·N | read | `0x00401643 8b 04 85 e0 7c a9 00` (function-pointer table) |
+| `0x00A976E0` | 4·N | read | `0x00401676 8b 04 8d e0 76 a9 00` (function-pointer table) |
+| `0x00567C38` | 4 | read | `0x004016A0 8b 1d 38 7c 56 00` |
+| `0x00567C3C`, `0x00567C40`, `0x00567C48` | 4 each | read | `0x0040169B`, `0x0040168E`, `0x004016A9` |
+| `0x00AF5EE0`, `0x00AF5EEC`, `0x00AF5EF0`, `0x00AF5EF4`, `0x00AF5EFC`, `0x00AF5F00` | 4 each | read/write | `0x004016E4` … `0x0040175B` (type-table slots) |
+
+These are callee facts, listed because the queue starts inside them. `0x4010B0` itself only forwards `Game_GetContext()`'s pointer to `0x004015F0` and enters the cascade.
+
+**`-O3` loss risks for `0x4010B0`:**
+
+1. **Tail jump, not a call.** `0x4010C7` is `jmp`; the retail never returns into `0x48F9D9` with a frame to unwind. Write it as the tail call it is and preserve the cascade's return value (or mark the return unused, as the caller does).
+2. **Shared tail block.** `je` and fall-through both reach `0x4010C7`; adding an `else` or duplicating the tail changes the CFG. The `0x402C40` call is unconditional.
+3. **`push eax` / `add esp,4` = one cdecl argument.** Do not model `0x4015F0` as zero-argument just because `0x4010B0` takes none; do not use `stdcall`.
+4. **Only `test eax,eax` exists on `0x401A60`'s return.** No comparison against `-1`, `TRUE`, or a wider type is proven.
+5. **No pushed argument at the call site.** `0x48F9C5 push 1` belongs to `ShowCursor`; copying it into this native would invent an argument.
+
+**`0x4010B0` NOT proven:** its name; what `0x401A60`'s non-zero result means; what `0x4015F0` does beyond the globals listed; the cascade's return type/value; any runtime effect.
+
+### 12.7 `0x00498480` — identity, frame, ABI, and the call site
+
+- **VA range:** `0x00498480`–`0x004988C9`, **1098 bytes** (`0x44A`); end-exclusive `0x004988CA`; bytes `0x004988CA`–`0x004988CF` are six `90` padding bytes; the next entry is `0x004988D0`.
+- **Shape:** 38 basic blocks, 40 edges, 374 instructions (`afbj`/`pdj`; the 374 decoded instructions are contiguous with no gaps), cdecl (`add esp,0x11C; ret`, caller removes the arguments), frame `sub esp,0x11C` + 4 saved registers = **0x12C bytes below `E`**.
+- **Arguments: exactly two, both out-pointers, both 4-byte writes.** Proven by the function's own reads: six `[esp+0x130]` reads (entry `+4`) and two `[esp+0x134]` reads (entry `+8`); no other positive-displacement read exists. Neither pointer is ever dereferenced before a write, and both are only written. No pushed word at the call site is dead.
+- **Return value: no source-level return type is proven.** EAX at the `ret` differs per path (0 on `GetVersionExA` failure, arg1's pointer on the NT < 4 path, `OutputDebugStringA`'s/`FreeLibrary`'s/`GetProcAddress`'s result elsewhere). The only caller discards it immediately (`mov eax,[esp+0x40]` at `0x0048F6E7` overwrites EAX).
+- **Call site (single, proven by `axtj` and by the `E8` recomputation):** WinMain `0x0048F6E2` `e8 99 8d 00 00 call 0x00498480`. The surrounding bytes:
+  - `0x0048F6D8 8d 54 24 40 lea edx,[esp+0x40]` — `&out_platform` (arg2)
+  - `0x0048F6DC 8d 44 24 38 lea eax,[esp+0x38]` — `&out_dx_version` (arg1)
+  - `0x0048F6E0 52 push edx` / `0x0048F6E1 50 push eax` — push order arg2, arg1 (cdecl right-to-left)
+  - `0x0048F6E2 call 0x00498480`
+  - `0x0048F6E7 8b 44 24 40 mov eax,[esp+0x40]` — reload `out_dx_version` (EAX from the call is discarded)
+  - `0x0048F6EB 83 c4 30 add esp,0x30` — caller cleanup, which covers these two pushes plus the frame's other pending pushes
+  - `0x0048F6EE 3d 00 07 00 00 cmp eax,0x700` / `0x0048F6F4 73 2e jae 0x48F724` — if the code is `< 0x700`, `MessageBoxA` prints `"This application requires DirectX version %d.%d or greater to run."` (`0x00541E68`) with caption `"Error"` (`0x00541E60`), then `0x0048F71D push 1` / `0x0048F71F call 0x004A5AD5` (termination, see 12.13)
+  So the port's WinMain already consumes arg1 as a DirectX version code with a 7.0 floor; that consumption is WinMain's evidence, not the callee's.
+
+**Argument-frame proof (every positive-displacement read in the body):**
+
+| read site | `T` (bytes below `E`) | `[esp+disp]` | entry offset | resolves to |
+| --- | ---: | --- | --- | --- |
+| `0x4984BD 8b 8c 24 34 01 00 00` | 0x12C | `0x134` | `+8` | **arg2** (`out_platform`) |
+| `0x4984E1 8b bc 24 34 01 00 00` | 0x12C | `0x134` | `+8` | **arg2** — kept in `edi` for the rest of the function |
+| `0x4984C4 8b 94 24 30 01 00 00` | 0x12C | `0x130` | `+4` | **arg1** (`out_dx_version`) |
+| `0x498503 8b 84 24 30 01 00 00` | 0x12C | `0x130` | `+4` | **arg1** |
+| `0x498519 8b ac 24 30 01 00 00` | 0x12C | `0x130` | `+4` | **arg1** — kept in `ebp` on the NT 4 path |
+| `0x4985A8 8b 8c 24 30 01 00 00` | 0x12C | `0x130` | `+4` | **arg1** |
+| `0x4985D5 8b 94 24 30 01 00 00` | 0x12C | `0x130` | `+4` | **arg1** |
+| `0x498632 8b 9c 24 30 01 00 00` | 0x12C | `0x130` | `+4` | **arg1** — kept in `ebx` for the rest of the function |
+
+`T` is 0x12C at all eight sites because the frame is `0x11C` plus four saves and every earlier call is stdcall/COM, so each callee pops its own arguments. r2's symbolic names (`var_38h_2`, `[ppv]`, …) do not follow this and are not used here.
+
+**Frame map (the 0x11C bytes are exactly full — no padding):**
+
+| slot | `E` offset | size | role (working name) | proving instruction |
+| --- | --- | ---: | --- | --- |
+| `pDDraw` | `E-0x11C` | 4 | `LPDIRECTDRAW` (out of `DirectDrawCreate`) | `0x4985FD lea ecx,[esp+0x10]` (T=0x12C) |
+| `pSurface` | `E-0x118` | 4 | primary surface (out of `CreateSurface`) | `0x498771 lea edx,[esp+0x14]` (T=0x12C) |
+| `pDDraw2` | `E-0x114` | 4 | `IDirectDraw2` (out of QI) | `0x49863D lea edx,[esp+0x18]` (T=0x12C) |
+| `pDM` | `E-0x110` | 4 | DirectMusic object (out of `CoCreateInstance`) | `0x49883C lea edx,[esp+0x1C]` (T=0x12C) |
+| `pSurf3` | `E-0x10C` | 4 | `IDirectDrawSurface3` (out of QI) | `0x4987B2 lea ecx,[esp+0x20]` (T=0x12C) |
+| `pDD7` | `E-0x108` | 4 | `IDirectDraw7` (out of `DirectDrawCreateEx`) | `0x49889A lea edx,[esp+0x28]` (T=0x130) |
+| `pSurf4` | `E-0x104` | 4 | `IDirectDrawSurface4` (out of QI) | `0x4987E1 lea edx,[esp+0x28]` (T=0x12C) |
+| `ddsd` | `E-0x100` | 0x6C | `DDSURFACEDESC` | `0x498778 lea edx,[esp+0x34]` (T=0x134) as `CreateSurface`'s descriptor |
+| `osi` | `E-0x94` | 0x94 | `OSVERSIONINFOA` | `0x4984A8 mov dword [esp+0x9C],0x94` (T=0x130) sets `dwOSVersionInfoSize` at the slot base |
+
+Arithmetic check: 7 dword slots (`0x1C`) + `DDSURFACEDESC` (`0x6C`) + `OSVERSIONINFOA` (`0x94`) = `0x11C`, exactly the frame. The `0x94` size and the `dwPlatformId`/`dwMajorVersion` offsets used later (`+0x10`/`+4`) are what identify `osi`; the `0x6C` size, `dwSize` `+0x0`, `dwFlags` `+0x4` and `ddsCaps.dwCaps` at `+0x68` are what identify `ddsd`. Both identifications are strong structural inference, not retail symbols.
+
+**Where the two outgoing pointers are written (execution order, no path is missing a write it needs):**
+
+| order | site | write | path |
+| ---: | --- | --- | --- |
+| 1 | `0x4984CF` | `*arg1 = 0` | `GetVersionExA` failed (arg2 was set to 0 first at `0x4984CD`) |
+| 2 | `0x49850D` | `*arg1 = 0` | NT, `dwMajorVersion < 4` (arg2 already 2) |
+| 3 | `0x498525` | `*arg1 = 0x200` | NT 4, before `LoadLibraryA("DINPUT.DLL")` |
+| 4 | `0x49857E` | `*arg1 = 0x300` | NT 4, `GetProcAddress("DirectInputCreateA")` non-NULL |
+| 5 | `0x4985B2` | `*arg1 = 0`, `*arg2 = 0` | `LoadLibraryA("DDRAW.DLL")` failed |
+| 6 | `0x4985DD`/`0x4985DF` | `*arg1 = 0`, `*arg2 = 0` | `GetProcAddress("DirectDrawCreate")` NULL |
+| 7 | `0x498612`/`0x498614` | `*arg1 = 0`, `*arg2 = 0` | `DirectDrawCreate` returned < 0 |
+| 8 | `0x498641` | `*arg1 = 0x100` | `DirectDrawCreate` succeeded |
+| 9 | `0x49868C` | `*arg1 = 0x200` | `IDirectDraw2` QI succeeded |
+| 10 | `0x498704` | `*arg1 = 0x300` | `GetProcAddress("DirectInputCreateA")` non-NULL on the DDRAW path |
+| 11 | `0x498758` | `*arg1 = 0` | `SetCooperativeLevel` failed |
+| 12 | `0x498797` | `*arg1 = 0` | `CreateSurface` failed |
+| 13 | `0x4987E5` | `*arg1 = 0x500` | before the `IDirectDrawSurface3` QI |
+| 14 | `0x498816` | `*arg1 = 0x600` | after both surface QIs succeeded |
+| 15 | `0x498876` | `*arg1 = 0x601` | after `CoCreateInstance(CLSID_DirectMusic, …)` succeeded |
+| 16 | `0x4988B0` | `*arg1 = 0x700` | after `DirectDrawCreateEx(…, IID_IDirectDraw7, …)` succeeded |
+
+So `out_dx_version` is a monotonically-raised code (0, 0x100, 0x200, 0x300, 0x500, 0x600, 0x601, 0x700) whose exact values are retail facts; the meaning *"major.minor DirectX version"* is WinMain's 0x700 comparison plus the probed APIs, not something this function states.
+
+### 12.8 `0x00498480` — basic-block map (38 blocks, 374 instructions)
+
+| # | start | end (excl.) | bytes | insns | terminator |
+| ---: | --- | --- | ---: | ---: | --- |
+| 1 | `0x00498480` | `0x004984BD` | 61 | 17 | `jne 0x4984da` |
+| 2 | `0x004984BD` | `0x004984DA` | 29 | 10 | `ret` |
+| 3 | `0x004984DA` | `0x004984F1` | 23 | 4 | `jne 0x49858f` |
+| 4 | `0x004984F1` | `0x00498503` | 18 | 4 | `jae 0x498517` |
+| 5 | `0x00498503` | `0x00498517` | 20 | 8 | `ret` |
+| 6 | `0x00498517` | `0x00498519` | 2 | 1 | `jne 0x498595` |
+| 7 | `0x00498519` | `0x00498538` | 31 | 7 | `jne 0x49854e` |
+| 8 | `0x00498538` | `0x0049854E` | 22 | 8 | `ret` |
+| 9 | `0x0049854E` | `0x00498567` | 25 | 8 | `jne 0x49857d` |
+| 10 | `0x00498567` | `0x0049857D` | 22 | 8 | `ret` |
+| 11 | `0x0049857D` | `0x0049858F` | 18 | 7 | `ret` |
+| 12 | `0x0049858F` | `0x00498595` | 6 | 1 | fall-through; last: `mov dword [edi], 1` |
+| 13 | `0x00498595` | `0x004985A8` | 19 | 6 | `jne 0x4985c5` |
+| 14 | `0x004985A8` | `0x004985C5` | 29 | 11 | `ret` |
+| 15 | `0x004985C5` | `0x004985D5` | 16 | 5 | `jne 0x4985fd` |
+| 16 | `0x004985D5` | `0x004985FD` | 40 | 13 | `ret` |
+| 17 | `0x004985FD` | `0x0049860A` | 13 | 7 | `jge 0x498632` |
+| 18 | `0x0049860A` | `0x00498632` | 40 | 13 | `ret` |
+| 19 | `0x00498632` | `0x00498656` | 36 | 11 | `jge 0x49867d` |
+| 20 | `0x00498656` | `0x0049867D` | 39 | 14 | `ret` |
+| 21 | `0x0049867D` | `0x0049869A` | 29 | 10 | `jne 0x4986c1` |
+| 22 | `0x0049869A` | `0x004986C1` | 39 | 14 | `ret` |
+| 23 | `0x004986C1` | `0x004986D1` | 16 | 5 | `jne 0x4986fd` |
+| 24 | `0x004986D1` | `0x004986FD` | 44 | 17 | `ret` |
+| 25 | `0x004986FD` | `0x0049874A` | 77 | 20 | `jge 0x49876f` |
+| 26 | `0x0049874A` | `0x0049876F` | 37 | 14 | `ret` |
+| 27 | `0x0049876F` | `0x00498785` | 22 | 10 | `jge 0x4987ae` |
+| 28 | `0x00498785` | `0x004987AE` | 41 | 15 | `ret` |
+| 29 | `0x004987AE` | `0x004987C5` | 23 | 9 | `jge 0x4987dd` |
+| 30 | `0x004987C5` | `0x004987DD` | 24 | 12 | `ret` |
+| 31 | `0x004987DD` | `0x004987FA` | 29 | 10 | `jge 0x498812` |
+| 32 | `0x004987FA` | `0x00498812` | 24 | 12 | `ret` |
+| 33 | `0x00498812` | `0x00498859` | 71 | 21 | `jge 0x498872` |
+| 34 | `0x00498859` | `0x00498872` | 25 | 10 | `ret` |
+| 35 | `0x00498872` | `0x00498898` | 38 | 11 | `je 0x4988bc` |
+| 36 | `0x00498898` | `0x004988AC` | 20 | 8 | `jl 0x4988bc` |
+| 37 | `0x004988AC` | `0x004988BC` | 16 | 5 | fall-through; last: `call dword [ecx + 8]` |
+| 38 | `0x004988BC` | `0x004988CA` | 14 | 8 | `ret` |
+
+The 40 edges are the 38 fall-through edges plus the `je`/`jne`/`jge`/`jl` branches and the two `ret`-terminated paths; `afbj` reports `edges: 40`, `ebbs: 17`.
+
+### 12.9 `0x00498480` — instruction-by-instruction derivation (374 instructions)
+
+| VA | bytes | instruction | exact statement / purpose |
+| --- | --- | --- | --- |
+| `0x00498480` | `81 ec 1c 01 00 00` | `sub esp, 0x11c` | frame: `sub esp,0x11C` reserves the locals; the two arguments stay above the frame at E+4/E+8 |
+| `0x00498486` | `53` | `push ebx` | save callee-saved `ebx` |
+| `0x00498487` | `55` | `push ebp` | save callee-saved `ebp` |
+| `0x00498488` | `56` | `push esi` | save callee-saved `esi` |
+| `0x00498489` | `8d 84 24 94 00 00 00` | `lea eax, [esp + 0x94]` | `eax = &osi` = E-0x94, computed **before** `push edi` (hence disp 0x94, not 0x90) |
+| `0x00498490` | `57` | `push edi` | save callee-saved `edi`; frame complete: E-0x11C..E-0x01 are the locals, T=0x12C |
+| `0x00498491` | `33 db` | `xor ebx, ebx` | `ebx = NULL`; every following zero store uses it |
+| `0x00498493` | `50` | `push eax` | push `&osi` — computed at 0x498489 as E-0x94 |
+| `0x00498494` | `89 5c 24 14` | `mov dword [esp + 0x14], ebx` | `pSurface = NULL` (E-0x118) |
+| `0x00498498` | `89 5c 24 1c` | `mov dword [esp + 0x1c], ebx` | `pDM = NULL` (E-0x110) |
+| `0x0049849C` | `89 5c 24 18` | `mov dword [esp + 0x18], ebx` | `pDDraw2 = NULL` (E-0x114) |
+| `0x004984A0` | `89 5c 24 24` | `mov dword [esp + 0x24], ebx` | `pDD7 = NULL` (E-0x108) |
+| `0x004984A4` | `89 5c 24 2c` | `mov dword [esp + 0x2c], ebx` | slot E-0x100 = NULL — dead slot, later reused as the `DDSURFACEDESC` base (see 0x498713) |
+| `0x004984A8` | `c7 84 24 9c 00 00 00 94 00 00 00` | `mov dword [esp + 0x9c], 0x94` | `osi.dwOSVersionInfoSize = 0x94` (`sizeof(OSVERSIONINFOA)`) |
+| `0x004984B3` | `ff 15 08 31 53 00` | `call dword [0x533108]` | `GetVersionExA(&osi)` through IAT `0x533108` |
+| `0x004984B9` | `85 c0` | `test eax, eax` | `if (GetVersionExA(&osi) == 0)` — the failure path comes first in the layout |
+| `0x004984BB` | `75 1d` | `jne 0x4984da` | `if (GetVersionExA(&osi) == 0)` — the failure path comes first in the layout |
+| `0x004984BD` | `8b 8c 24 34 01 00 00` | `mov ecx, dword [esp + 0x134]` | failure path: `ecx = arg2`, `edx = arg1` (both reloaded from E+0x130/E+0x134) |
+| `0x004984C4` | `8b 94 24 30 01 00 00` | `mov edx, dword [esp + 0x130]` | failure path: `ecx = arg2`, `edx = arg1` (both reloaded from E+0x130/E+0x134) |
+| `0x004984CB` | `5f` | `pop edi` | restore `edi`,`esi` — the two out-pointer registers are already live |
+| `0x004984CC` | `5e` | `pop esi` | restore `edi`,`esi` — the two out-pointer registers are already live |
+| `0x004984CD` | `89 19` | `mov dword [ecx], ebx` | `*arg2 = 0` **before** `*arg1 = 0` |
+| `0x004984CF` | `89 1a` | `mov dword [edx], ebx` | `*arg1 = 0` |
+| `0x004984D1` | `5d` | `pop ebp` | `*arg1 = 0` |
+| `0x004984D2` | `5b` | `pop ebx` | `*arg1 = 0` |
+| `0x004984D3` | `81 c4 1c 01 00 00` | `add esp, 0x11c` | epilogue: `add esp,0x11C; ret` (EAX left as the 0 from `GetVersionExA`) |
+| `0x004984D9` | `c3` | `ret` | epilogue: `add esp,0x11C; ret` (EAX left as the 0 from `GetVersionExA`) |
+| `0x004984DA` | `8b 84 24 a8 00 00 00` | `mov eax, dword [esp + 0xa8]` | `eax = osi.dwPlatformId` (E-0x84 = `osi`+0x10) |
+| `0x004984E1` | `8b bc 24 34 01 00 00` | `mov edi, dword [esp + 0x134]` | `edi = arg2` — held for the whole rest of the function |
+| `0x004984E8` | `83 f8 02` | `cmp eax, 2` | `cmp eax,2` → `if (platformId != 2)` |
+| `0x004984EB` | `0f 85 9e 00 00 00` | `jne 0x49858f` | `if (osi.dwPlatformId != 2)` (2 = `VER_PLATFORM_WIN32_NT`) |
+| `0x004984F1` | `8b 84 24 9c 00 00 00` | `mov eax, dword [esp + 0x9c]` | `eax = osi.dwMajorVersion` (E-0x90 = `osi`+4) |
+| `0x004984F8` | `c7 07 02 00 00 00` | `mov dword [edi], 2` | `*arg2 = 2` (NT); this write precedes the version test in instruction order |
+| `0x004984FE` | `83 f8 04` | `cmp eax, 4` | `cmp eax,4` → `if (major >= 4)` |
+| `0x00498501` | `73 14` | `jae 0x498517` | `if (osi.dwMajorVersion >= 4)` |
+| `0x00498503` | `8b 84 24 30 01 00 00` | `mov eax, dword [esp + 0x130]` | NT and major < 4: `eax = arg1`, then `*arg1 = 0`; `*arg2` stays 2 |
+| `0x0049850A` | `5f` | `pop edi` | NT and major < 4: `eax = arg1`, then `*arg1 = 0`; `*arg2` stays 2 |
+| `0x0049850B` | `5e` | `pop esi` | NT and major < 4: `eax = arg1`, then `*arg1 = 0`; `*arg2` stays 2 |
+| `0x0049850C` | `5d` | `pop ebp` | NT and major < 4: `eax = arg1`, then `*arg1 = 0`; `*arg2` stays 2 |
+| `0x0049850D` | `89 18` | `mov dword [eax], ebx` | NT and major < 4: `eax = arg1`, then `*arg1 = 0`; `*arg2` stays 2 |
+| `0x0049850F` | `5b` | `pop ebx` | NT and major < 4: `eax = arg1`, then `*arg1 = 0`; `*arg2` stays 2 |
+| `0x00498510` | `81 c4 1c 01 00 00` | `add esp, 0x11c` | NT and major < 4: `eax = arg1`, then `*arg1 = 0`; `*arg2` stays 2 |
+| `0x00498516` | `c3` | `ret` | NT and major < 4: `eax = arg1`, then `*arg1 = 0`; `*arg2` stays 2 |
+| `0x00498517` | `75 7c` | `jne 0x498595` | `jne` reuses the `cmp eax,4` flags: only `major == 4` continues |
+| `0x00498519` | `8b ac 24 30 01 00 00` | `mov ebp, dword [esp + 0x130]` | NT 4 path: `ebp = arg1`; push `"DINPUT.DLL"`; `*arg1 = 0x200` |
+| `0x00498520` | `68 4c 3c 54 00` | `push 0x543c4c` | NT 4 path: `ebp = arg1`; push `"DINPUT.DLL"`; `*arg1 = 0x200` |
+| `0x00498525` | `c7 45 00 00 02 00 00` | `mov dword [ebp], 0x200` | NT 4 path: `ebp = arg1`; push `"DINPUT.DLL"`; `*arg1 = 0x200` |
+| `0x0049852C` | `ff 15 10 31 53 00` | `call dword [0x533110]` | `esi = LoadLibraryA("DINPUT.DLL")` — `esi` becomes the DInput module handle |
+| `0x00498532` | `8b f0` | `mov esi, eax` | `esi = LoadLibraryA("DINPUT.DLL")` — `esi` becomes the DInput module handle |
+| `0x00498534` | `3b f3` | `cmp esi, ebx` | `if (esi == NULL)` |
+| `0x00498536` | `75 16` | `jne 0x49854e` | `if (esi == NULL)` |
+| `0x00498538` | `68 2c 3c 54 00` | `push 0x543c2c` | NT 4 failure: `OutputDebugStringA("Couldn't LoadLibrary DInput\r\n")`; `*arg1` remains 0x200 |
+| `0x0049853D` | `ff 15 14 31 53 00` | `call dword [0x533114]` | NT 4 failure: `OutputDebugStringA("Couldn't LoadLibrary DInput\r\n")`; `*arg1` remains 0x200 |
+| `0x00498543` | `5f` | `pop edi` | NT 4 failure: `OutputDebugStringA("Couldn't LoadLibrary DInput\r\n")`; `*arg1` remains 0x200 |
+| `0x00498544` | `5e` | `pop esi` | NT 4 failure: `OutputDebugStringA("Couldn't LoadLibrary DInput\r\n")`; `*arg1` remains 0x200 |
+| `0x00498545` | `5d` | `pop ebp` | NT 4 failure: `OutputDebugStringA("Couldn't LoadLibrary DInput\r\n")`; `*arg1` remains 0x200 |
+| `0x00498546` | `5b` | `pop ebx` | NT 4 failure: `OutputDebugStringA("Couldn't LoadLibrary DInput\r\n")`; `*arg1` remains 0x200 |
+| `0x00498547` | `81 c4 1c 01 00 00` | `add esp, 0x11c` | NT 4 failure: `OutputDebugStringA("Couldn't LoadLibrary DInput\r\n")`; `*arg1` remains 0x200 |
+| `0x0049854D` | `c3` | `ret` | NT 4 failure: `OutputDebugStringA("Couldn't LoadLibrary DInput\r\n")`; `*arg1` remains 0x200 |
+| `0x0049854E` | `68 18 3c 54 00` | `push 0x543c18` | push `"DirectInputCreateA"` |
+| `0x00498553` | `56` | `push esi` | push `esi` (module handle argument) |
+| `0x00498554` | `ff 15 18 31 53 00` | `call dword [0x533118]` | `GetProcAddress(hDInput, "DirectInputCreateA")` |
+| `0x0049855A` | `56` | `push esi` | push `esi` again — this push is `FreeLibrary`'s argument, scheduled before the NULL test |
+| `0x0049855B` | `8b f8` | `mov edi, eax` | `edi = pfn` (kept only for the NULL test) |
+| `0x0049855D` | `ff 15 1c 31 53 00` | `call dword [0x53311c]` | `FreeLibrary(hDInput)` — the handle is closed on both success and failure |
+| `0x00498563` | `3b fb` | `cmp edi, ebx` | `if (edi == NULL)` |
+| `0x00498565` | `75 16` | `jne 0x49857d` | `if (edi == NULL)` |
+| `0x00498567` | `68 f0 3b 54 00` | `push 0x543bf0` | NT 4 failure: `"Couldn't GetProcAddress DInputCreate\r\n"`; `*arg1` remains 0x200 |
+| `0x0049856C` | `ff 15 14 31 53 00` | `call dword [0x533114]` | NT 4 failure: `"Couldn't GetProcAddress DInputCreate\r\n"`; `*arg1` remains 0x200 |
+| `0x00498572` | `5f` | `pop edi` | NT 4 failure: `"Couldn't GetProcAddress DInputCreate\r\n"`; `*arg1` remains 0x200 |
+| `0x00498573` | `5e` | `pop esi` | NT 4 failure: `"Couldn't GetProcAddress DInputCreate\r\n"`; `*arg1` remains 0x200 |
+| `0x00498574` | `5d` | `pop ebp` | NT 4 failure: `"Couldn't GetProcAddress DInputCreate\r\n"`; `*arg1` remains 0x200 |
+| `0x00498575` | `5b` | `pop ebx` | NT 4 failure: `"Couldn't GetProcAddress DInputCreate\r\n"`; `*arg1` remains 0x200 |
+| `0x00498576` | `81 c4 1c 01 00 00` | `add esp, 0x11c` | NT 4 failure: `"Couldn't GetProcAddress DInputCreate\r\n"`; `*arg1` remains 0x200 |
+| `0x0049857C` | `c3` | `ret` | NT 4 failure: `"Couldn't GetProcAddress DInputCreate\r\n"`; `*arg1` remains 0x200 |
+| `0x0049857D` | `5f` | `pop edi` | NT 4 success: `*arg1 = 0x300`; return. The resolved `DirectInputCreateA` address is **discarded** (no store anywhere) |
+| `0x0049857E` | `c7 45 00 00 03 00 00` | `mov dword [ebp], 0x300` | NT 4 success: `*arg1 = 0x300`; return. The resolved `DirectInputCreateA` address is **discarded** (no store anywhere) |
+| `0x00498585` | `5e` | `pop esi` | NT 4 success: `*arg1 = 0x300`; return. The resolved `DirectInputCreateA` address is **discarded** (no store anywhere) |
+| `0x00498586` | `5d` | `pop ebp` | NT 4 success: `*arg1 = 0x300`; return. The resolved `DirectInputCreateA` address is **discarded** (no store anywhere) |
+| `0x00498587` | `5b` | `pop ebx` | NT 4 success: `*arg1 = 0x300`; return. The resolved `DirectInputCreateA` address is **discarded** (no store anywhere) |
+| `0x00498588` | `81 c4 1c 01 00 00` | `add esp, 0x11c` | NT 4 success: `*arg1 = 0x300`; return. The resolved `DirectInputCreateA` address is **discarded** (no store anywhere) |
+| `0x0049858E` | `c3` | `ret` | NT 4 success: `*arg1 = 0x300`; return. The resolved `DirectInputCreateA` address is **discarded** (no store anywhere) |
+| `0x0049858F` | `c7 07 01 00 00 00` | `mov dword [edi], 1` | non-NT (9x): `*arg2 = 1` |
+| `0x00498595` | `8b 2d 10 31 53 00` | `mov ebp, dword [0x533110]` | `ebp = LoadLibraryA` (cached IAT value for the rest of the DDRAW block); push `"DDRAW.DLL"` |
+| `0x0049859B` | `68 e4 3b 54 00` | `push 0x543be4` | `ebp = LoadLibraryA` (cached IAT value for the rest of the DDRAW block); push `"DDRAW.DLL"` |
+| `0x004985A0` | `ff d5` | `call ebp` | `esi = LoadLibraryA("DDRAW.DLL")` — `esi` becomes the DDRAW module handle |
+| `0x004985A2` | `8b f0` | `mov esi, eax` | `esi = LoadLibraryA("DDRAW.DLL")` — `esi` becomes the DDRAW module handle |
+| `0x004985A4` | `3b f3` | `cmp esi, ebx` | `if (esi == NULL)` |
+| `0x004985A6` | `75 1d` | `jne 0x4985c5` | `if (esi == NULL)` |
+| `0x004985A8` | `8b 8c 24 30 01 00 00` | `mov ecx, dword [esp + 0x130]` | `ecx = arg1` (the DDRAW-load failure path reloads it) |
+| `0x004985AF` | `53` | `push ebx` | push `NULL` — `FreeLibrary`'s argument |
+| `0x004985B0` | `89 19` | `mov dword [ecx], ebx` | `*arg1 = 0` |
+| `0x004985B2` | `89 1f` | `mov dword [edi], ebx` | `*arg2 = 0` |
+| `0x004985B4` | `ff 15 1c 31 53 00` | `call dword [0x53311c]` | `FreeLibrary(NULL)` — retail really calls it with NULL |
+| `0x004985BA` | `5f` | `pop edi` | restore `edi` |
+| `0x004985BB` | `5e` | `pop esi` | restore `esi` |
+| `0x004985BC` | `5d` | `pop ebp` | restore `ebp` |
+| `0x004985BD` | `5b` | `pop ebx` | restore `ebx` |
+| `0x004985BE` | `81 c4 1c 01 00 00` | `add esp, 0x11c` | `add esp,0x11C` — release the frame |
+| `0x004985C4` | `c3` | `ret` | `ret` (cdecl: the caller removes the two arguments) |
+| `0x004985C5` | `68 d0 3b 54 00` | `push 0x543bd0` | `GetProcAddress(hDDraw, "DirectDrawCreate")`; result tested, then called through EAX |
+| `0x004985CA` | `56` | `push esi` | `GetProcAddress(hDDraw, "DirectDrawCreate")`; result tested, then called through EAX |
+| `0x004985CB` | `ff 15 18 31 53 00` | `call dword [0x533118]` | `GetProcAddress(hDDraw, "DirectDrawCreate")`; result tested, then called through EAX |
+| `0x004985D1` | `3b c3` | `cmp eax, ebx` | `if (pfn == NULL)` |
+| `0x004985D3` | `75 28` | `jne 0x4985fd` | `if (pfn == NULL)` |
+| `0x004985D5` | `8b 94 24 30 01 00 00` | `mov edx, dword [esp + 0x130]` | `edx = arg1` |
+| `0x004985DC` | `56` | `push esi` | push `hDDraw` |
+| `0x004985DD` | `89 1a` | `mov dword [edx], ebx` | `*arg1 = 0` |
+| `0x004985DF` | `89 1f` | `mov dword [edi], ebx` | `*arg2 = 0` |
+| `0x004985E1` | `ff 15 1c 31 53 00` | `call dword [0x53311c]` | `FreeLibrary(hDDraw)` |
+| `0x004985E7` | `68 b0 3b 54 00` | `push 0x543bb0` | push `"Couldn't LoadLibrary DDraw\r\n"` — the message does not name the step that failed |
+| `0x004985EC` | `ff 15 14 31 53 00` | `call dword [0x533114]` | `OutputDebugStringA(msg)` |
+| `0x004985F2` | `5f` | `pop edi` | restore `edi` |
+| `0x004985F3` | `5e` | `pop esi` | restore `esi` |
+| `0x004985F4` | `5d` | `pop ebp` | restore `ebp` |
+| `0x004985F5` | `5b` | `pop ebx` | restore `ebx` |
+| `0x004985F6` | `81 c4 1c 01 00 00` | `add esp, 0x11c` | `add esp,0x11C` — release the frame |
+| `0x004985FC` | `c3` | `ret` | `ret` (cdecl: the caller removes the two arguments) |
+| `0x004985FD` | `8d 4c 24 10` | `lea ecx, [esp + 0x10]` | push `NULL` (lpGUID) |
+| `0x00498601` | `53` | `push ebx` | push `&pDDraw` — argument order `DirectDrawCreate(NULL, &pDDraw, NULL)` |
+| `0x00498602` | `51` | `push ecx` | push `&pDDraw` — argument order `DirectDrawCreate(NULL, &pDDraw, NULL)` |
+| `0x00498603` | `53` | `push ebx` | push `&pDDraw` — argument order `DirectDrawCreate(NULL, &pDDraw, NULL)` |
+| `0x00498604` | `ff d0` | `call eax` | `hr = DirectDrawCreate(NULL, &pDDraw, NULL)` (3 stdcall arguments, callee pops 0xC) |
+| `0x00498606` | `85 c0` | `test eax, eax` | `if (hr < 0)` — signed `jge`/`jl`, not `!= 0` |
+| `0x00498608` | `7d 28` | `jge 0x498632` | `if (hr < 0)` — signed `jge`/`jl`, not `!= 0` |
+| `0x0049860A` | `8b 94 24 30 01 00 00` | `mov edx, dword [esp + 0x130]` | `edx = arg1` |
+| `0x00498611` | `56` | `push esi` | push `hDDraw` |
+| `0x00498612` | `89 1a` | `mov dword [edx], ebx` | `*arg1 = 0` |
+| `0x00498614` | `89 1f` | `mov dword [edi], ebx` | `*arg2 = 0` |
+| `0x00498616` | `ff 15 1c 31 53 00` | `call dword [0x53311c]` | `FreeLibrary(hDDraw)` |
+| `0x0049861C` | `68 98 3b 54 00` | `push 0x543b98` | push `"Couldn't create DDraw\r\n"` |
+| `0x00498621` | `ff 15 14 31 53 00` | `call dword [0x533114]` | `OutputDebugStringA(msg)` |
+| `0x00498627` | `5f` | `pop edi` | restore `edi` |
+| `0x00498628` | `5e` | `pop esi` | restore `esi` |
+| `0x00498629` | `5d` | `pop ebp` | restore `ebp` |
+| `0x0049862A` | `5b` | `pop ebx` | restore `ebx` |
+| `0x0049862B` | `81 c4 1c 01 00 00` | `add esp, 0x11c` | `add esp,0x11C` — release the frame |
+| `0x00498631` | `c3` | `ret` | `ret` (cdecl: the caller removes the two arguments) |
+| `0x00498632` | `8b 9c 24 30 01 00 00` | `mov ebx, dword [esp + 0x130]` | `ebx = arg1` |
+| `0x00498639` | `8b 44 24 10` | `mov eax, dword [esp + 0x10]` | `eax = pDDraw` |
+| `0x0049863D` | `8d 54 24 18` | `lea edx, [esp + 0x18]` | `edx = &pDDraw2` = E-0x114 |
+| `0x00498641` | `c7 03 00 01 00 00` | `mov dword [ebx], 0x100` | `*arg1 = 0x100` |
+| `0x00498647` | `8b 08` | `mov ecx, dword [eax]` | push `&pDDraw2`, push IID `0x534A60`, push `pDDraw` (this) |
+| `0x00498649` | `52` | `push edx` | push `&pDDraw2`, push IID `0x534A60`, push `pDDraw` (this) |
+| `0x0049864A` | `68 60 4a 53 00` | `push 0x534a60` | push `&pDDraw2`, push IID `0x534A60`, push `pDDraw` (this) |
+| `0x0049864F` | `50` | `push eax` | push `&pDDraw2`, push IID `0x534A60`, push `pDDraw` (this) |
+| `0x00498650` | `ff 11` | `call dword [ecx]` | `call [ecx]` = `QueryInterface` (vtable slot 0) |
+| `0x00498652` | `85 c0` | `test eax, eax` | `if (hr < 0)` |
+| `0x00498654` | `7d 27` | `jge 0x49867d` | `if (hr < 0)` |
+| `0x00498656` | `8b 44 24 10` | `mov eax, dword [esp + 0x10]` | `eax = pDDraw` (E-0x11C) |
+| `0x0049865A` | `50` | `push eax` | push `pDDraw` |
+| `0x0049865B` | `8b 08` | `mov ecx, dword [eax]` | `ecx = pDDraw->lpVtbl` |
+| `0x0049865D` | `ff 51 08` | `call dword [ecx + 8]` | `pDDraw->Release()` — slot 8 |
+| `0x00498660` | `56` | `push esi` | push `hDDraw` |
+| `0x00498661` | `ff 15 1c 31 53 00` | `call dword [0x53311c]` | `FreeLibrary(hDDraw)` |
+| `0x00498667` | `68 80 3b 54 00` | `push 0x543b80` | push `"Couldn't QI DDraw2\r\n"` |
+| `0x0049866C` | `ff 15 14 31 53 00` | `call dword [0x533114]` | `OutputDebugStringA(msg)` |
+| `0x00498672` | `5f` | `pop edi` | restore `edi` |
+| `0x00498673` | `5e` | `pop esi` | restore `esi` |
+| `0x00498674` | `5d` | `pop ebp` | restore `ebp` |
+| `0x00498675` | `5b` | `pop ebx` | restore `ebx` |
+| `0x00498676` | `81 c4 1c 01 00 00` | `add esp, 0x11c` | `add esp,0x11C` — release the frame |
+| `0x0049867C` | `c3` | `ret` | `ret` (cdecl: the caller removes the two arguments) |
+| `0x0049867D` | `8b 44 24 18` | `mov eax, dword [esp + 0x18]` | read `pDDraw2` (E-0x114), push it, then `pDDraw2->Release()` — the QI result is released immediately |
+| `0x00498681` | `50` | `push eax` | read `pDDraw2` (E-0x114), push it, then `pDDraw2->Release()` — the QI result is released immediately |
+| `0x00498682` | `8b 10` | `mov edx, dword [eax]` | read `pDDraw2` (E-0x114), push it, then `pDDraw2->Release()` — the QI result is released immediately |
+| `0x00498684` | `ff 52 08` | `call dword [edx + 8]` | `Release` (slot 8) on `pDDraw2` |
+| `0x00498687` | `68 4c 3c 54 00` | `push 0x543c4c` | push `"DINPUT.DLL"`; `*arg1 = 0x200` (the write precedes the `LoadLibraryA` call in instruction order) |
+| `0x0049868C` | `c7 03 00 02 00 00` | `mov dword [ebx], 0x200` | push `"DINPUT.DLL"`; `*arg1 = 0x200` (the write precedes the `LoadLibraryA` call in instruction order) |
+| `0x00498692` | `ff d5` | `call ebp` | `edi = LoadLibraryA("DINPUT.DLL")` |
+| `0x00498694` | `8b f8` | `mov edi, eax` | `edi = LoadLibraryA("DINPUT.DLL")` — `edi` now the DInput handle |
+| `0x00498696` | `85 ff` | `test edi, edi` | `if (edi == NULL)` |
+| `0x00498698` | `75 27` | `jne 0x4986c1` | `if (edi == NULL)` |
+| `0x0049869A` | `68 2c 3c 54 00` | `push 0x543c2c` | push `"Couldn't LoadLibrary DInput\r\n"` |
+| `0x0049869F` | `ff 15 14 31 53 00` | `call dword [0x533114]` | `OutputDebugStringA(msg)` |
+| `0x004986A5` | `8b 44 24 10` | `mov eax, dword [esp + 0x10]` | `eax = pDDraw` (E-0x11C) |
+| `0x004986A9` | `50` | `push eax` | push `pDDraw` |
+| `0x004986AA` | `8b 08` | `mov ecx, dword [eax]` | `ecx = pDDraw->lpVtbl` |
+| `0x004986AC` | `ff 51 08` | `call dword [ecx + 8]` | `pDDraw->Release()` — slot 8 |
+| `0x004986AF` | `56` | `push esi` | push `hDDraw` |
+| `0x004986B0` | `ff 15 1c 31 53 00` | `call dword [0x53311c]` | `FreeLibrary(hDDraw)` |
+| `0x004986B6` | `5f` | `pop edi` | restore `edi` |
+| `0x004986B7` | `5e` | `pop esi` | restore `esi` |
+| `0x004986B8` | `5d` | `pop ebp` | restore `ebp` |
+| `0x004986B9` | `5b` | `pop ebx` | restore `ebx` |
+| `0x004986BA` | `81 c4 1c 01 00 00` | `add esp, 0x11c` | `add esp,0x11C` — release the frame |
+| `0x004986C0` | `c3` | `ret` | `ret` (cdecl: the caller removes the two arguments) |
+| `0x004986C1` | `68 18 3c 54 00` | `push 0x543c18` | push `"DirectInputCreateA"`, push `edi` |
+| `0x004986C6` | `57` | `push edi` | push `"DirectInputCreateA"`, push `edi` |
+| `0x004986C7` | `ff 15 18 31 53 00` | `call dword [0x533118]` | `GetProcAddress(hDInput, "DirectInputCreateA")` |
+| `0x004986CD` | `85 c0` | `test eax, eax` | `if (result == NULL)` |
+| `0x004986CF` | `75 2c` | `jne 0x4986fd` | `if (result == NULL)` |
+| `0x004986D1` | `57` | `push edi` | push `hDInput` (still in `edi`) — `FreeLibrary`'s argument |
+| `0x004986D2` | `8b 3d 1c 31 53 00` | `mov edi, dword [0x53311c]` | `edi = FreeLibrary` (the IAT value is cached; the handle is now only on the stack) |
+| `0x004986D8` | `ff d7` | `call edi` | `FreeLibrary(hDInput)` |
+| `0x004986DA` | `56` | `push esi` | push `hDDraw` (`esi`) |
+| `0x004986DB` | `ff d7` | `call edi` | `FreeLibrary(hDDraw)` |
+| `0x004986DD` | `8b 44 24 10` | `mov eax, dword [esp + 0x10]` | `eax = pDDraw` (E-0x11C) |
+| `0x004986E1` | `50` | `push eax` | push `pDDraw` |
+| `0x004986E2` | `8b 10` | `mov edx, dword [eax]` | `edx = pDDraw->lpVtbl` |
+| `0x004986E4` | `ff 52 08` | `call dword [edx + 8]` | `pDDraw->Release()` — slot 8 |
+| `0x004986E7` | `68 f0 3b 54 00` | `push 0x543bf0` | push `"Couldn't GetProcAddress DInputCreate\r\n"` |
+| `0x004986EC` | `ff 15 14 31 53 00` | `call dword [0x533114]` | `OutputDebugStringA(msg)` |
+| `0x004986F2` | `5f` | `pop edi` | restore `edi` |
+| `0x004986F3` | `5e` | `pop esi` | restore `esi` |
+| `0x004986F4` | `5d` | `pop ebp` | restore `ebp` |
+| `0x004986F5` | `5b` | `pop ebx` | restore `ebx` |
+| `0x004986F6` | `81 c4 1c 01 00 00` | `add esp, 0x11c` | `add esp,0x11C` — release the frame |
+| `0x004986FC` | `c3` | `ret` | `ret` (cdecl: the caller removes the two arguments) |
+| `0x004986FD` | `8b 2d 1c 31 53 00` | `mov ebp, dword [0x53311c]` | `ebp = FreeLibrary` (cached); push `edi` (its argument); `*arg1 = 0x300` |
+| `0x00498703` | `57` | `push edi` | `ebp = FreeLibrary` (cached); push `edi` (its argument); `*arg1 = 0x300` |
+| `0x00498704` | `c7 03 00 03 00 00` | `mov dword [ebx], 0x300` | `ebp = FreeLibrary` (cached); push `edi` (its argument); `*arg1 = 0x300` |
+| `0x0049870A` | `ff d5` | `call ebp` | `FreeLibrary(hDInput)` |
+| `0x0049870C` | `b9 1b 00 00 00` | `mov ecx, 0x1b` | `ecx = 0x1B` dwords = 0x6C bytes — the `DDSURFACEDESC` clear count |
+| `0x00498711` | `33 c0` | `xor eax, eax` | `eax = 0` — the value `rep stosd` fills with |
+| `0x00498713` | `8d 7c 24 2c` | `lea edi, [esp + 0x2c]` | `lea edi,[esp+0x2C]` = E-0x100 **before** the `push 8`, so the clear address does not shift |
+| `0x00498717` | `6a 08` | `push 8` | `push 8` — the `SetCooperativeLevel` flag argument, hoisted ahead of the struct clear (-O3 scheduling) |
+| `0x00498719` | `f3 ab` | `rep stosd dword es:[edi], eax` | `rep stosd`: write 0 to 27 dwords at E-0x100..E-0x95 (`memset(&ddsd,0,0x6C)`) |
+| `0x0049871B` | `8b 44 24 14` | `mov eax, dword [esp + 0x14]` | `eax = pDDraw` (E-0x11C; disp 0x14 because `push 8` is live) |
+| `0x0049871F` | `c7 44 24 30 6c 00 00 00` | `mov dword [esp + 0x30], 0x6c` | `ddsd.dwSize = 0x6C` |
+| `0x00498727` | `c7 44 24 34 01 00 00 00` | `mov dword [esp + 0x34], 1` | `ddsd.dwFlags = 1` (`DDSD_CAPS`) |
+| `0x0049872F` | `c7 84 24 98 00 00 00 00 02 00 00` | `mov dword [esp + 0x98], 0x200` | `ddsd.ddsCaps.dwCaps = 0x200` (`DDSCAPS_PRIMARYSURFACE`, dword at DDSD+0x68 = E-0x98) |
+| `0x0049873A` | `8b 08` | `mov ecx, dword [eax]` | `ecx = pDDraw->lpVtbl` |
+| `0x0049873C` | `6a 00` | `push 0` | push `NULL` (hWnd) |
+| `0x0049873E` | `50` | `push eax` | push `pDDraw` (this) |
+| `0x0049873F` | `ff 51 50` | `call dword [ecx + 0x50]` | `call [ecx+0x50]` = `SetCooperativeLevel` |
+| `0x00498742` | `85 c0` | `test eax, eax` | `if (hr < 0)`: `test eax,eax` sets the flags, then `mov eax,[esp+0x10]` reloads `pDDraw` **without touching the flags**, and `jge` uses the test's result |
+| `0x00498744` | `8b 44 24 10` | `mov eax, dword [esp + 0x10]` | `if (hr < 0)`: `test eax,eax` sets the flags, then `mov eax,[esp+0x10]` reloads `pDDraw` **without touching the flags**, and `jge` uses the test's result |
+| `0x00498748` | `7d 25` | `jge 0x49876f` | `jge` on the `SetCooperativeLevel` HRESULT (the reloaded pointer is not tested) |
+| `0x0049874A` | `8b 10` | `mov edx, dword [eax]` | `edx = pDDraw->lpVtbl` |
+| `0x0049874C` | `50` | `push eax` | push `pDDraw` |
+| `0x0049874D` | `ff 52 08` | `call dword [edx + 8]` | `pDDraw->Release()` — slot 8 |
+| `0x00498750` | `56` | `push esi` | push `hDDraw` |
+| `0x00498751` | `ff d5` | `call ebp` | `FreeLibrary(hDDraw)` |
+| `0x00498753` | `68 64 3b 54 00` | `push 0x543b64` | push `"Couldn't Set coop level\r\n"` |
+| `0x00498758` | `c7 03 00 00 00 00` | `mov dword [ebx], 0` | `*arg1 = 0` — written *after* the FreeLibrary, *before* the message call |
+| `0x0049875E` | `ff 15 14 31 53 00` | `call dword [0x533114]` | `OutputDebugStringA(msg)` |
+| `0x00498764` | `5f` | `pop edi` | restore `edi` |
+| `0x00498765` | `5e` | `pop esi` | restore `esi` |
+| `0x00498766` | `5d` | `pop ebp` | restore `ebp` |
+| `0x00498767` | `5b` | `pop ebx` | restore `ebx` |
+| `0x00498768` | `81 c4 1c 01 00 00` | `add esp, 0x11c` | `add esp,0x11C` — release the frame |
+| `0x0049876E` | `c3` | `ret` | `ret` (cdecl: the caller removes the two arguments) |
+| `0x0049876F` | `8b 08` | `mov ecx, dword [eax]` | `ecx = pDDraw->lpVtbl` |
+| `0x00498771` | `8d 54 24 14` | `lea edx, [esp + 0x14]` | `edx = &pSurface` = E-0x118 |
+| `0x00498775` | `6a 00` | `push 0` | push `NULL` (pUnkOuter) |
+| `0x00498777` | `52` | `push edx` | push `&pSurface` |
+| `0x00498778` | `8d 54 24 34` | `lea edx, [esp + 0x34]` | `edx = &ddsd` = E-0x100 (disp 0x34 because two pushes are on the stack) |
+| `0x0049877C` | `52` | `push edx` | push `&ddsd` |
+| `0x0049877D` | `50` | `push eax` | push `pDDraw` (this) |
+| `0x0049877E` | `ff 51 18` | `call dword [ecx + 0x18]` | `call [ecx+0x18]` = `CreateSurface` |
+| `0x00498781` | `85 c0` | `test eax, eax` | `if (hr < 0)` |
+| `0x00498783` | `7d 29` | `jge 0x4987ae` | `if (hr < 0)` |
+| `0x00498785` | `8b 44 24 10` | `mov eax, dword [esp + 0x10]` | `eax = pDDraw` (E-0x11C) |
+| `0x00498789` | `50` | `push eax` | push `pDDraw` |
+| `0x0049878A` | `8b 08` | `mov ecx, dword [eax]` | `ecx = pDDraw->lpVtbl` |
+| `0x0049878C` | `ff 51 08` | `call dword [ecx + 8]` | `pDDraw->Release()` — slot 8 |
+| `0x0049878F` | `56` | `push esi` | push `hDDraw` |
+| `0x00498790` | `ff d5` | `call ebp` | `FreeLibrary(hDDraw)` |
+| `0x00498792` | `68 48 3b 54 00` | `push 0x543b48` | push `"Couldn't CreateSurface\r\n"` |
+| `0x00498797` | `c7 03 00 00 00 00` | `mov dword [ebx], 0` | `*arg1 = 0` — again after the FreeLibrary, before the message call |
+| `0x0049879D` | `ff 15 14 31 53 00` | `call dword [0x533114]` | `OutputDebugStringA(msg)` |
+| `0x004987A3` | `5f` | `pop edi` | restore `edi` |
+| `0x004987A4` | `5e` | `pop esi` | restore `esi` |
+| `0x004987A5` | `5d` | `pop ebp` | restore `ebp` |
+| `0x004987A6` | `5b` | `pop ebx` | restore `ebx` |
+| `0x004987A7` | `81 c4 1c 01 00 00` | `add esp, 0x11c` | `add esp,0x11C` — release the frame |
+| `0x004987AD` | `c3` | `ret` | `ret` (cdecl: the caller removes the two arguments) |
+| `0x004987AE` | `8b 44 24 14` | `mov eax, dword [esp + 0x14]` | `eax = pSurface` (E-0x118) |
+| `0x004987B2` | `8d 4c 24 20` | `lea ecx, [esp + 0x20]` | `ecx = &pSurf3` = E-0x10C |
+| `0x004987B6` | `51` | `push ecx` | push `&pSurf3` |
+| `0x004987B7` | `68 40 4a 53 00` | `push 0x534a40` | push IID `0x534A40` (`IID_IDirectDrawSurface3`) |
+| `0x004987BC` | `8b 10` | `mov edx, dword [eax]` | `edx = pSurface->lpVtbl` |
+| `0x004987BE` | `50` | `push eax` | push `pSurface` (this) |
+| `0x004987BF` | `ff 12` | `call dword [edx]` | `call [edx]` = `QueryInterface` (slot 0) |
+| `0x004987C1` | `85 c0` | `test eax, eax` | `if (hr < 0)` |
+| `0x004987C3` | `7d 18` | `jge 0x4987dd` | `if (hr < 0)` |
+| `0x004987C5` | `8b 44 24 10` | `mov eax, dword [esp + 0x10]` | `eax = pDDraw` (E-0x11C) |
+| `0x004987C9` | `50` | `push eax` | push `pDDraw` |
+| `0x004987CA` | `8b 10` | `mov edx, dword [eax]` | `edx = pDDraw->lpVtbl` |
+| `0x004987CC` | `ff 52 08` | `call dword [edx + 8]` | `pDDraw->Release()` — slot 8 |
+| `0x004987CF` | `56` | `push esi` | push `hDDraw` |
+| `0x004987D0` | `ff d5` | `call ebp` | `FreeLibrary(hDDraw)` |
+| `0x004987D2` | `5f` | `pop edi` | restore `edi` |
+| `0x004987D3` | `5e` | `pop esi` | restore `esi` |
+| `0x004987D4` | `5d` | `pop ebp` | restore `ebp` |
+| `0x004987D5` | `5b` | `pop ebx` | restore `ebx` |
+| `0x004987D6` | `81 c4 1c 01 00 00` | `add esp, 0x11c` | `add esp,0x11C` — release the frame |
+| `0x004987DC` | `c3` | `ret` | `ret` (cdecl: the caller removes the two arguments) |
+| `0x004987DD` | `8b 44 24 14` | `mov eax, dword [esp + 0x14]` | `eax = pSurface` |
+| `0x004987E1` | `8d 54 24 28` | `lea edx, [esp + 0x28]` | `edx = &pSurf4` = E-0x104 |
+| `0x004987E5` | `c7 03 00 05 00 00` | `mov dword [ebx], 0x500` | `*arg1 = 0x500` |
+| `0x004987EB` | `52` | `push edx` | push `&pSurf4` |
+| `0x004987EC` | `8b 08` | `mov ecx, dword [eax]` | `ecx = pSurface->lpVtbl` |
+| `0x004987EE` | `68 30 4a 53 00` | `push 0x534a30` | push IID `0x534A30` (`IID_IDirectDrawSurface4`) |
+| `0x004987F3` | `50` | `push eax` | push `pSurface` |
+| `0x004987F4` | `ff 11` | `call dword [ecx]` | `call [ecx]` = `QueryInterface` (slot 0) |
+| `0x004987F6` | `85 c0` | `test eax, eax` | `if (hr < 0)` |
+| `0x004987F8` | `7d 18` | `jge 0x498812` | `if (hr < 0)` |
+| `0x004987FA` | `8b 44 24 10` | `mov eax, dword [esp + 0x10]` | `eax = pDDraw` (E-0x11C) |
+| `0x004987FE` | `50` | `push eax` | push `pDDraw` |
+| `0x004987FF` | `8b 08` | `mov ecx, dword [eax]` | `ecx = pDDraw->lpVtbl` |
+| `0x00498801` | `ff 51 08` | `call dword [ecx + 8]` | `pDDraw->Release()` — slot 8 |
+| `0x00498804` | `56` | `push esi` | push `hDDraw` |
+| `0x00498805` | `ff d5` | `call ebp` | `FreeLibrary(hDDraw)` |
+| `0x00498807` | `5f` | `pop edi` | restore `edi` |
+| `0x00498808` | `5e` | `pop esi` | restore `esi` |
+| `0x00498809` | `5d` | `pop ebp` | restore `ebp` |
+| `0x0049880A` | `5b` | `pop ebx` | restore `ebx` |
+| `0x0049880B` | `81 c4 1c 01 00 00` | `add esp, 0x11c` | `add esp,0x11C` — release the frame |
+| `0x00498811` | `c3` | `ret` | `ret` (cdecl: the caller removes the two arguments) |
+| `0x00498812` | `8b 44 24 14` | `mov eax, dword [esp + 0x14]` | `eax = pSurface` |
+| `0x00498816` | `c7 03 00 06 00 00` | `mov dword [ebx], 0x600` | `*arg1 = 0x600` |
+| `0x0049881C` | `50` | `push eax` | push `pSurface` (its `Release` argument) |
+| `0x0049881D` | `8b 10` | `mov edx, dword [eax]` | `edx = pSurface->lpVtbl` |
+| `0x0049881F` | `ff 52 08` | `call dword [edx + 8]` | `Release` (slot 8) on `pSurface` |
+| `0x00498822` | `8b 44 24 10` | `mov eax, dword [esp + 0x10]` | `eax = pDDraw` (E-0x11C) |
+| `0x00498826` | `50` | `push eax` | push `pDDraw` |
+| `0x00498827` | `8b 08` | `mov ecx, dword [eax]` | `ecx = pDDraw->lpVtbl` |
+| `0x00498829` | `ff 51 08` | `call dword [ecx + 8]` | `Release` (slot 8) on `pDDraw` |
+| `0x0049882C` | `6a 00` | `push 0` | push `NULL` (`CoInitialize` argument) |
+| `0x0049882E` | `c7 44 24 20 00 00 00 00` | `mov dword [esp + 0x20], 0` | `pDM = NULL` (E-0x110) — the only out-pointer zeroed immediately before its call |
+| `0x00498836` | `ff 15 1c 32 53 00` | `call dword [0x53321c]` | `CoInitialize(NULL)` |
+| `0x0049883C` | `8d 54 24 1c` | `lea edx, [esp + 0x1c]` | `edx = &pDM` = E-0x110 |
+| `0x00498840` | `52` | `push edx` | push `&pDM` (ppv) |
+| `0x00498841` | `68 e0 48 53 00` | `push 0x5348e0` | push IID `0x5348E0` (`IID_IDirectMusic`) |
+| `0x00498846` | `6a 01` | `push 1` | push `1` (`CLSCTX_INPROC_SERVER`) |
+| `0x00498848` | `6a 00` | `push 0` | push `NULL` (pUnkOuter) |
+| `0x0049884A` | `68 f0 48 53 00` | `push 0x5348f0` | push CLSID `0x5348F0` (`CLSID_DirectMusic`) |
+| `0x0049884F` | `ff 15 18 32 53 00` | `call dword [0x533218]` | `CoCreateInstance(...)` — 5 stdcall args |
+| `0x00498855` | `85 c0` | `test eax, eax` | `if (hr < 0)` |
+| `0x00498857` | `7d 19` | `jge 0x498872` | `if (hr < 0)` |
+| `0x00498859` | `68 24 3b 54 00` | `push 0x543b24` | push `"Couldn't create CLSID_DirectMusic\r\n"` |
+| `0x0049885E` | `ff 15 14 31 53 00` | `call dword [0x533114]` | `OutputDebugStringA(msg)` |
+| `0x00498864` | `56` | `push esi` | push `hDDraw` |
+| `0x00498865` | `ff d5` | `call ebp` | `FreeLibrary(hDDraw)` — no `CoUninitialize`, no `pDM` release on this path |
+| `0x00498867` | `5f` | `pop edi` | restore `edi` |
+| `0x00498868` | `5e` | `pop esi` | restore `esi` |
+| `0x00498869` | `5d` | `pop ebp` | restore `ebp` |
+| `0x0049886A` | `5b` | `pop ebx` | restore `ebx` |
+| `0x0049886B` | `81 c4 1c 01 00 00` | `add esp, 0x11c` | `add esp,0x11C` — release the frame |
+| `0x00498871` | `c3` | `ret` | `ret` (cdecl: the caller removes the two arguments) |
+| `0x00498872` | `8b 44 24 1c` | `mov eax, dword [esp + 0x1c]` | `eax = pDM` (E-0x110) |
+| `0x00498876` | `c7 03 01 06 00 00` | `mov dword [ebx], 0x601` | `*arg1 = 0x601` |
+| `0x0049887C` | `50` | `push eax` | push `pDM` |
+| `0x0049887D` | `8b 08` | `mov ecx, dword [eax]` | `ecx = pDM->lpVtbl` |
+| `0x0049887F` | `ff 51 08` | `call dword [ecx + 8]` | `Release` (slot 8) on `pDM` |
+| `0x00498882` | `ff 15 20 32 53 00` | `call dword [0x533220]` | `CoUninitialize()` |
+| `0x00498888` | `68 10 3b 54 00` | `push 0x543b10` | push `"DirectDrawCreateEx"`, push `esi` (hDDraw) |
+| `0x0049888D` | `56` | `push esi` | push `"DirectDrawCreateEx"`, push `esi` (hDDraw) |
+| `0x0049888E` | `ff 15 18 31 53 00` | `call dword [0x533118]` | `GetProcAddress(hDDraw, "DirectDrawCreateEx")` |
+| `0x00498894` | `85 c0` | `test eax, eax` | `if (pfn == NULL)` — jumps directly into the shared `FreeLibrary(hDDraw); return` tail |
+| `0x00498896` | `74 24` | `je 0x4988bc` | `if (pfn == NULL)` — jumps directly into the shared `FreeLibrary(hDDraw); return` tail |
+| `0x00498898` | `6a 00` | `push 0` | push `NULL` (pUnkOuter) |
+| `0x0049889A` | `8d 54 24 28` | `lea edx, [esp + 0x28]` | `edx = &pDD7` = E-0x108 (disp 0x28 because `push 0` is on the stack) |
+| `0x0049889E` | `68 50 4a 53 00` | `push 0x534a50` | push IID `0x534A50` (`IID_IDirectDraw7`) |
+| `0x004988A3` | `52` | `push edx` | push `&pDD7` |
+| `0x004988A4` | `6a 00` | `push 0` | push `NULL` (lpGUID) |
+| `0x004988A6` | `ff d0` | `call eax` | `DirectDrawCreateEx(NULL, &pDD7, IID, NULL)` |
+| `0x004988A8` | `85 c0` | `test eax, eax` | `if (hr < 0)` — falls into the shared `FreeLibrary` tail, `*arg1` stays 0x601 |
+| `0x004988AA` | `7c 10` | `jl 0x4988bc` | `if (hr < 0)` — falls into the shared `FreeLibrary` tail, `*arg1` stays 0x601 |
+| `0x004988AC` | `8b 44 24 24` | `mov eax, dword [esp + 0x24]` | `eax = pDD7` (E-0x108) |
+| `0x004988B0` | `c7 03 00 07 00 00` | `mov dword [ebx], 0x700` | `*arg1 = 0x700` |
+| `0x004988B6` | `50` | `push eax` | push `pDD7` |
+| `0x004988B7` | `8b 08` | `mov ecx, dword [eax]` | `ecx = pDD7->lpVtbl` |
+| `0x004988B9` | `ff 51 08` | `call dword [ecx + 8]` | `Release` (slot 8) on `pDD7` |
+| `0x004988BC` | `56` | `push esi` | push `esi` (`FreeLibrary` argument = hDDraw) |
+| `0x004988BD` | `ff d5` | `call ebp` | `FreeLibrary(hDDraw)` |
+| `0x004988BF` | `5f` | `pop edi` | restore `edi` |
+| `0x004988C0` | `5e` | `pop esi` | restore `esi` |
+| `0x004988C1` | `5d` | `pop ebp` | restore `ebp` |
+| `0x004988C2` | `5b` | `pop ebx` | restore `ebx` |
+| `0x004988C3` | `81 c4 1c 01 00 00` | `add esp, 0x11c` | `add esp,0x11C` — release the frame |
+| `0x004988C9` | `c3` | `ret` | `ret` (cdecl: the caller removes the two arguments) |
+
+### 12.10 `0x00498480` — retail-order statements, globals, constants and strings
+
+Statement order follows retail instruction order exactly; each entry gives the instruction range that proves it.
+
+```c
+/* working names only; no retail symbol is proven for anything here */
+void f_498480(void** out_dx_version, void** out_platform)   /* E+4, E+8; cdecl */
+{
+    LPDIRECTDRAW  pDDraw   = ?;      /* E-0x11C: never pre-zeroed; DirectDrawCreate writes it */
+    LPDIRECTDRAW  pSurface = NULL;   /* E-0x118 */
+    IUnknown*     pDDraw2  = NULL;   /* E-0x114 */
+    IUnknown*     pDM      = NULL;   /* E-0x110 */
+    IUnknown*     pSurf3   = NULL;   /* E-0x10C */
+    IUnknown*     pDD7     = NULL;   /* E-0x108 */
+    IUnknown*     pSurf4   = NULL;   /* E-0x104 */
+    DDSURFACEDESC ddsd;              /* E-0x100, 0x6C */
+    OSVERSIONINFOA osi;              /* E-0x94, 0x94 */
+
+    /* 0x4984A4 also zeroes the dword at E-0x100, the slot ddsd later reuses; that early store is dead */
+    osi.dwOSVersionInfoSize = 0x94;                  /* 0x4984A8 */
+    if (!GetVersionExA(&osi)) {                      /* 0x4984B3, 0x4984B9, 0x4984BB */
+        *out_platform = 0;                           /* 0x4984CD — written before arg1 */
+        *out_dx_version = 0;                         /* 0x4984CF */
+        return;                                      /* 0x4984D9 */
+    }
+    if (osi.dwPlatformId != 2)                       /* 0x4984DA, 0x4984E8, 0x4984EB: non-NT */
+        *out_platform = 1;                           /* 0x49858F */
+    else {                                           /* VER_PLATFORM_WIN32_NT */
+        DWORD major = osi.dwMajorVersion;            /* 0x4984F1 */
+        *out_platform = 2;                           /* 0x4984F8 — before the version test */
+        if (major < 4) {                             /* 0x4984FE, 0x498501 */
+            *out_dx_version = 0;                     /* 0x49850D */
+            return;                                  /* 0x498516 */
+        }
+        if (major == 4) {                            /* 0x498517: reuses the cmp eax,4 flags */
+            *out_dx_version = 0x200;                 /* 0x498525 */
+            hDInput = LoadLibraryA("DINPUT.DLL");      /* 0x498520 push, 0x49852C call */
+            if (hDInput == NULL) {                   /* 0x498534, 0x498536 */
+                OutputDebugStringA("Couldn't LoadLibrary DInput\r\n");   /* 0x498538, 0x49853D */
+                return;                              /* 0x49854D */
+            }
+            pfn = GetProcAddress(hDInput, "DirectInputCreateA");  /* 0x49854E, 0x498553, 0x498554 */
+            FreeLibrary(hDInput);                    /* 0x49855A push, 0x49855D call */
+            if (pfn == NULL) {                       /* 0x498563, 0x498565 */
+                OutputDebugStringA("Couldn't GetProcAddress DInputCreate\r\n"); /* 0x498567, 0x49856C */
+                return;                              /* 0x49857C */
+            }
+            *out_dx_version = 0x300;                 /* 0x49857E — pfn is discarded, never stored */
+            return;                                  /* 0x49858E */
+        }
+    }
+
+    /* DDRAW path (non-NT, or NT with major > 4) */
+    hDDraw = LoadLibraryA("DDRAW.DLL");              /* 0x498595 caches the IAT entry, 0x49859B push, 0x4985A0 call */
+    if (hDDraw == NULL) {                            /* 0x4985A4, 0x4985A6 */
+        *out_dx_version = 0;                         /* 0x4985B2 */
+        *out_platform = 0;                           /* 0x4985B2 */
+        FreeLibrary(NULL);                           /* 0x4985AF push 0, 0x4985B4 call — retail really calls it with NULL */
+        return;                                      /* 0x4985C4 */
+    }
+    pfn = GetProcAddress(hDDraw, "DirectDrawCreate");     /* 0x4985C5, 0x4985CB */
+    if (pfn == NULL) {                               /* 0x4985D1, 0x4985D3 */
+        *out_dx_version = 0;                         /* 0x4985DD */
+        *out_platform = 0;                           /* 0x4985DF */
+        FreeLibrary(hDDraw);                         /* 0x4985DC push, 0x4985E1 call */
+        OutputDebugStringA("Couldn't LoadLibrary DDraw\r\n");   /* 0x4985E7, 0x4985EC — message name does not match this step */
+        return;                                      /* 0x4985FC */
+    }
+    hr = DirectDrawCreate(NULL, &pDDraw, NULL);      /* 0x4985FD push NULL, 0x498601 push &pDDraw, 0x4985FD..0x498604 */
+    if (hr < 0) {                                    /* 0x498606, 0x498608 — signed jge */
+        *out_dx_version = 0; *out_platform = 0;      /* 0x498612, 0x498614 */
+        FreeLibrary(hDDraw);                         /* 0x498616 */
+        OutputDebugStringA("Couldn't create DDraw\r\n");        /* 0x49861C, 0x498621 */
+        return;                                      /* 0x498631 */
+    }
+    *out_dx_version = 0x100;                         /* 0x498641 */
+    hr = pDDraw->QueryInterface(IID_IDirectDraw2, &pDDraw2);  /* 0x498647..0x498650, vtable slot 0 */
+    if (hr < 0) {                                    /* 0x498652, 0x498654 */
+        pDDraw->Release();                           /* 0x49865D, slot 8 */
+        FreeLibrary(hDDraw);                         /* 0x498661 */
+        OutputDebugStringA("Couldn't QI DDraw2\r\n");           /* 0x49866C */
+        return;                                      /* 0x49867C */
+    }
+    pDDraw2->Release();                              /* 0x498684, slot 8 — released immediately after QI */
+    *out_dx_version = 0x200;                         /* 0x49868C */
+    hDInput = LoadLibraryA("DINPUT.DLL");              /* 0x498687 push, 0x498692 call */
+    if (hDInput == NULL) {                           /* 0x498696, 0x498698 */
+        OutputDebugStringA("Couldn't LoadLibrary DInput\r\n");   /* 0x49869A, 0x49869F */
+        pDDraw->Release();                           /* 0x4986AC */
+        FreeLibrary(hDDraw);                         /* 0x4986B0 */
+        return;                                      /* 0x4986C0 */
+    }
+    pfn = GetProcAddress(hDInput, "DirectInputCreateA");  /* 0x4986C1, 0x4986C7 */
+    if (pfn == NULL) {                               /* 0x4986CD, 0x4986CF */
+        FreeLibrary(hDInput);                        /* 0x4986D8 */
+        FreeLibrary(hDDraw);                         /* 0x4986DB */
+        pDDraw->Release();                           /* 0x4986E4 */
+        OutputDebugStringA("Couldn't GetProcAddress DInputCreate\r\n"); /* 0x4986E7, 0x4986EC */
+        return;                                      /* 0x4986FC */
+    }
+    *out_dx_version = 0x300;                         /* 0x498704 — written before the FreeLibrary call */
+    FreeLibrary(hDInput);                            /* 0x49870A — the resolved pfn is again discarded */
+    memset(&ddsd, 0, 0x6C);                          /* 0x49870C..0x498719: 27 dwords via rep stosd */
+    ddsd.dwSize = 0x6C;                              /* 0x49871F */
+    ddsd.dwFlags = 1;                                /* 0x498727, DDSD_CAPS */
+    ddsd.ddsCaps.dwCaps = 0x200;                     /* 0x49872F, DDSCAPS_PRIMARYSURFACE at DDSD+0x68 */
+    hr = pDDraw->SetCooperativeLevel(NULL, 8);       /* 0x498717 push 8, 0x49873C/0x49873E pushes, 0x49873F call, slot 0x50 */
+    if (hr < 0) {                                    /* 0x498742 test, 0x498744 reload, 0x498748 jge */
+        pDDraw->Release();                           /* 0x49874D */
+        FreeLibrary(hDDraw);                         /* 0x498751 */
+        *out_dx_version = 0;                         /* 0x498758 — after the FreeLibrary, before the message call */
+        OutputDebugStringA("Couldn't Set coop level\r\n");      /* 0x498753, 0x49875E */
+        return;                                      /* 0x49876E */
+    }
+    hr = pDDraw->CreateSurface(&ddsd, &pSurface, NULL);   /* 0x498771..0x49877E, slot 0x18 */
+    if (hr < 0) {                                    /* 0x498781, 0x498783 */
+        pDDraw->Release();                           /* 0x49878C */
+        FreeLibrary(hDDraw);                         /* 0x498790 */
+        *out_dx_version = 0;                         /* 0x498797 — same placement: after FreeLibrary, before the message */
+        OutputDebugStringA("Couldn't CreateSurface\r\n");       /* 0x498792, 0x49879D */
+        return;                                      /* 0x4987AD */
+    }
+    hr = pSurface->QueryInterface(IID_IDirectDrawSurface3, &pSurf3); /* 0x4987AE..0x4987BF, slot 0 */
+    if (hr < 0) {                                    /* 0x4987C1, 0x4987C3 — no message on this path */
+        pDDraw->Release();                           /* 0x4987CC */
+        FreeLibrary(hDDraw);                         /* 0x4987D0 */
+        return;                                      /* 0x4987DC */
+    }
+    *out_dx_version = 0x500;                         /* 0x4987E5 */
+    hr = pSurface->QueryInterface(IID_IDirectDrawSurface4, &pSurf4); /* 0x4987DD..0x4987F4, slot 0 */
+    if (hr < 0) {                                    /* 0x4987F6, 0x4987F8 */
+        pDDraw->Release();                           /* 0x498801 */
+        FreeLibrary(hDDraw);                         /* 0x498805 */
+        return;                                      /* 0x498811 */
+    }
+    *out_dx_version = 0x600;                         /* 0x498816 */
+    pSurface->Release();                             /* 0x49881F */
+    pDDraw->Release();                               /* 0x498829 */
+    CoInitialize(NULL);                              /* 0x49882C push 0, 0x498836 call */
+    pDM = NULL;                                      /* 0x49882E */
+    hr = CoCreateInstance(&CLSID_DirectMusic, NULL, CLSCTX_INPROC_SERVER, &IID_IDirectMusic, &pDM); /* 0x49883C..0x49884F */
+    if (hr < 0) {                                    /* 0x498855, 0x498857 */
+        OutputDebugStringA("Couldn't create CLSID_DirectMusic\r\n"); /* 0x498859, 0x49885E */
+        FreeLibrary(hDDraw);                         /* 0x498865 */
+        return;                                      /* 0x498871 — no CoUninitialize, no pDM release */
+    }
+    *out_dx_version = 0x601;                         /* 0x498876 */
+    pDM->Release();                                  /* 0x49887F */
+    CoUninitialize();                                /* 0x498882 */
+    pfn = GetProcAddress(hDDraw, "DirectDrawCreateEx");   /* 0x498888, 0x49888E */
+    if (pfn == NULL)                                 /* 0x498894, 0x498896: jumps into the shared tail */
+    { FreeLibrary(hDDraw); return; }                  /* 0x4988BC, 0x4988BD, 0x4988C9 */
+    hr = pfn(NULL, &pDD7, &IID_IDirectDraw7, NULL);  /* 0x498898..0x4988A6 */
+    if (hr >= 0) {                                   /* 0x4988A8, 0x4988AA */
+        *out_dx_version = 0x700;                     /* 0x4988B0 */
+        pDD7->Release();                             /* 0x4988B9 */
+    }
+    FreeLibrary(hDDraw);                             /* 0x4988BD — shared tail for both outcomes */
+}
+```
+
+Points that a transcription must not "fix", all visible above: the `LoadLibraryA`-missing message on the `GetProcAddress("DirectDrawCreate")` failure path says *"Couldn't LoadLibrary DDraw"*; `FreeLibrary(NULL)` is really called on the DDRAW load-failure path; the NT 4 `DirectInputCreateA` address is resolved and immediately discarded (only its NULL-ness is used); `pSurf3`, `pSurf4`, and `pSurface`/`pDDraw` on several failure paths are never released; `CoUninitialize` is skipped when `CoCreateInstance` fails; the version code is raised in steps and several failure paths leave a *non-zero* code behind.
+
+**Engine globals read/written: none.** There is no absolute-address **store** in the body; the only absolute references are reads of IAT slots and pushes of constant addresses. The IAT slots read (all 4-byte reads, all read-only here):
+
+| IAT slot | import | access form | sites |
+| --- | --- | --- | --- |
+| `0x00533108` | `KERNEL32!GetVersionExA` | `ff 15 08 31 53 00` | `0x4984B3` |
+| `0x00533110` | `KERNEL32!LoadLibraryA` | `ff 15 10 31 53 00`, `8b 2d 10 31 53 00` then `ff d5` | `0x49852C`, `0x498595`, `0x4985A0`, `0x498692` |
+| `0x00533114` | `KERNEL32!OutputDebugStringA` | `ff 15 14 31 53 00` | `0x49853D`, `0x49856C`, `0x4985EC`, `0x498621`, `0x49866C`, `0x49869F`, `0x4986EC`, `0x49875E`, `0x49879D`, `0x49885E` |
+| `0x00533118` | `KERNEL32!GetProcAddress` | `ff 15 18 31 53 00` | `0x498554`, `0x4985CB`, `0x4986C7`, `0x49888E` |
+| `0x0053311C` | `KERNEL32!FreeLibrary` | `ff 15 1C 31 53 00`, `8b 3d 1C 31 53 00`, `8b 2d 1C 31 53 00` | `0x49855D`, `0x4985B4`, `0x4985E1`, `0x498616`, `0x498661`, `0x4986B0`, `0x4986D2`, `0x4986DB`, `0x4986FD`, `0x49870A`, `0x498751`, `0x498790`, `0x4987D0`, `0x498805`, `0x498865`, `0x4988BD` |
+| `0x00533218` | `ole32!CoCreateInstance` | `ff 15 18 32 53 00` | `0x49884F` |
+| `0x0053321C` | `ole32!CoInitialize` | `ff 15 1C 32 53 00` | `0x498836` |
+| `0x00533220` | `ole32!CoUninitialize` | `ff 15 20 32 53 00` | `0x498882` |
+
+**Constant data read (all 16-byte GUID reads and NUL-terminated string pushes; nothing is written):**
+
+| VA | size | kind | pushed/used at |
+| --- | ---: | --- | --- |
+| `0x005348E0` | 16 | GUID | `0x498841` (CoCreateInstance `riid`) |
+| `0x005348F0` | 16 | GUID | `0x49884A` (CoCreateInstance `rclsid`) |
+| `0x00534A30` | 16 | GUID | `0x4987EE` (surface QI #2) |
+| `0x00534A40` | 16 | GUID | `0x4987B7` (surface QI #1) |
+| `0x00534A50` | 16 | GUID | `0x49889E` (`DirectDrawCreateEx`) |
+| `0x00534A60` | 16 | GUID | `0x49864A` (`IDirectDraw2` QI) |
+| `0x00543B10`, `0x00543B24`, `0x00543B48`, `0x00543B64`, `0x00543B80`, `0x00543B98`, `0x00543BB0`, `0x00543BD0`, `0x00543BE4`, `0x00543BF0`, `0x00543C18`, `0x00543C2C`, `0x00543C4C` | ≤ 40 each | strings | see the table below |
+
+**The GUIDs, as exact image bytes and canonical text.** Bytes are the image bytes; the first three fields are little-endian. The *names* in the right column are DirectX SDK constants that match these byte-for-byte, but they are interpretation, not retail symbols — the only in-binary corroboration is the `"DDraw2"` debug string for `0x534A60` and `"CLSID_DirectMusic"` for `0x5348F0`.
+
+| VA | 16 bytes | GUID text | SDK name (interpretation) |
+| --- | --- | --- | --- |
+| `0x00534A60` | `e0 f3 a6 b3 43 2b cf 11 a2 de 00 aa 00 b9 33 56` | `{B3A6F3E0-2B43-11CF-A2DE-00AA00B93356}` | IID_IDirectDraw2 (corroborated by "Couldn't QI DDraw2") |
+| `0x00534A50` | `c0 5e e6 15 9c 3b d2 11 b9 2f 00 60 97 97 ea 5b` | `{15E65EC0-3B9C-11D2-B92F-00609797EA5B}` | IID_IDirectDraw7 |
+| `0x00534A40` | `00 4e 04 da b2 69 d0 11 a1 d5 00 aa 00 b8 df bb` | `{DA044E00-69B2-11D0-A1D5-00AA00B8DFBB}` | IID_IDirectDrawSurface3 |
+| `0x00534A30` | `30 86 2b 0b 35 ad d0 11 8e a6 00 60 97 97 ea 5b` | `{0B2B8630-AD35-11D0-8EA6-00609797EA5B}` | IID_IDirectDrawSurface4 |
+| `0x005348F0` | `10 9f 6b 63 7d 0c d1 11 95 b2 00 20 af dc 74 21` | `{636B9F10-0C7D-11D1-95B2-0020AFDC7421}` | CLSID_DirectMusic (corroborated by "CLSID_DirectMusic") |
+| `0x005348E0` | `5a 11 36 65 2d 7b d2 11 ba 18 00 00 f8 75 ac 12` | `{6536115A-7B2D-11D2-BA18-0000F875AC12}` | IID_IDirectMusic |
+
+**Strings, exact bytes** (every one of these is pushed as an immediate address; the byte sequences below are read from the image, including the `0D 0A 00` terminators):
+
+| VA | bytes | literal | pushed at |
+| --- | --- | --- | --- |
+| `0x00543B10` | `44 69 72 65 63 74 44 72 61 77 43 72 65 61 74 65 45 78 00` | `"DirectDrawCreateEx"` | `0x498888` |
+| `0x00543B24` | `43 6f 75 6c 64 6e 27 74 20 63 72 65 61 74 65 20 43 4c 53 49 44 5f 44 69 72 65 63 74 4d 75 73 69 63 0d 0a 00` | `"Couldn't create CLSID_DirectMusic\r\n"` | `0x498859` |
+| `0x00543B48` | `43 6f 75 6c 64 6e 27 74 20 43 72 65 61 74 65 53 75 72 66 61 63 65 0d 0a 00` | `"Couldn't CreateSurface\r\n"` | `0x498792` |
+| `0x00543B64` | `43 6f 75 6c 64 6e 27 74 20 53 65 74 20 63 6f 6f 70 20 6c 65 76 65 6c 0d 0a 00` | `"Couldn't Set coop level\r\n"` | `0x498753` |
+| `0x00543B80` | `43 6f 75 6c 64 6e 27 74 20 51 49 20 44 44 72 61 77 32 0d 0a 00` | `"Couldn't QI DDraw2\r\n"` | `0x498667` |
+| `0x00543B98` | `43 6f 75 6c 64 6e 27 74 20 63 72 65 61 74 65 20 44 44 72 61 77 0d 0a 00` | `"Couldn't create DDraw\r\n"` | `0x49861C` |
+| `0x00543BB0` | `43 6f 75 6c 64 6e 27 74 20 4c 6f 61 64 4c 69 62 72 61 72 79 20 44 44 72 61 77 0d 0a 00` | `"Couldn't LoadLibrary DDraw\r\n"` | `0x4985E7` |
+| `0x00543BD0` | `44 69 72 65 63 74 44 72 61 77 43 72 65 61 74 65 00` | `"DirectDrawCreate"` | `0x4985C5` |
+| `0x00543BE4` | `44 44 52 41 57 2e 44 4c 4c 00` | `"DDRAW.DLL"` | `0x49859B` |
+| `0x00543BF0` | `43 6f 75 6c 64 6e 27 74 20 47 65 74 50 72 6f 63 41 64 64 72 65 73 73 20 44 49 6e 70 75 74 43 72 65 61 74 65 0d 0a 00` | `"Couldn't GetProcAddress DInputCreate\r\n"` | `0x4986E7` |
+| `0x00543C18` | `44 69 72 65 63 74 49 6e 70 75 74 43 72 65 61 74 65 41 00` | `"DirectInputCreateA"` | `0x49854E, 0x4986C1` |
+| `0x00543C2C` | `43 6f 75 6c 64 6e 27 74 20 4c 6f 61 64 4c 69 62 72 61 72 79 20 44 49 6e 70 75 74 0d 0a 00` | `"Couldn't LoadLibrary DInput\r\n"` | `0x498538, 0x49869A` |
+| `0x00543C4C` | `44 49 4e 50 55 54 2e 44 4c 4c 00` | `"DINPUT.DLL"` | `0x498520, 0x498687` |
+
+Call-site mapping checks out with the snippet: `0x498520 push 0x00543C4C` is `"DINPUT.DLL"` for the NT 4 branch, `0x49859B push 0x00543BE4` is `"DDRAW.DLL"`, `0x498687 push 0x00543C4C` is the second `"DINPUT.DLL"`, and `0x4985E7 push 0x00543BB0` is the `"Couldn't LoadLibrary DDraw\r\n"` message printed when `DirectDrawCreate` could not be resolved.
+
+### 12.11 `0x00498480` — callees in call order, arguments, and transcription status
+
+All 25 call sites are external (Win32/ole32 imports or DirectX/COM calls through vtable/`GetProcAddress` pointers). **There is no engine native among them**, so `0x498480` contributes nothing to the native transcription queue; its `MISSING` entry in `docs/fidelity/mvp-call-flow.md` is about this function itself, and once it is transcribed its dependencies are headers/constants, not natives.
+
+| # | site | instruction | target | arguments, in push order |
+| ---: | --- | --- | --- | --- |
+| 1 | `0x004984B3` | `call dword [0x533108]` | KERNEL32!GetVersionExA | `&osi` (stdcall, 1) |
+| 2 | `0x0049852C` | `call dword [0x533110]` | KERNEL32!LoadLibraryA | `"DINPUT.DLL"` (stdcall, 1) — NT 4 path |
+| 3 | `0x0049853D` | `call dword [0x533114]` | KERNEL32!OutputDebugStringA | `"Couldn't LoadLibrary DInput\r\n"` (1) |
+| 4 | `0x00498554` | `call dword [0x533118]` | KERNEL32!GetProcAddress | `hDInput`, `"DirectInputCreateA"` (2) |
+| 5 | `0x0049855D` | `call dword [0x53311C]` | KERNEL32!FreeLibrary | `hDInput` (1) — pushed at `0x49855A`, before the NULL test |
+| 6 | `0x0049856C` | `call dword [0x533114]` | KERNEL32!OutputDebugStringA | `"Couldn't GetProcAddress DInputCreate\r\n"` (1) |
+| 7 | `0x004985A0` | `call ebp` | KERNEL32!LoadLibraryA (cached in `ebp` at `0x498595`) | `"DDRAW.DLL"` (1) |
+| 8 | `0x004985B4` | `call dword [0x53311C]` | KERNEL32!FreeLibrary | `NULL` (1) — the DDRAW-load-failure path really passes NULL |
+| 9 | `0x004985CB` | `call dword [0x533118]` | KERNEL32!GetProcAddress | `hDDraw`, `"DirectDrawCreate"` (2) |
+| 10 | `0x004985E1` | `call dword [0x53311C]` | KERNEL32!FreeLibrary | `hDDraw` (1) |
+| 11 | `0x004985EC` | `call dword [0x533114]` | KERNEL32!OutputDebugStringA | `"Couldn't LoadLibrary DDraw\r\n"` (1) |
+| 12 | `0x00498604` | `call eax` | `DirectDrawCreate` (from `GetProcAddress`) | `NULL` (lpGUID), `&pDDraw`, `NULL` (pUnkOuter) (3) |
+| 13 | `0x00498616` | `call dword [0x53311C]` | KERNEL32!FreeLibrary | `hDDraw` (1) |
+| 14 | `0x00498621` | `call dword [0x533114]` | KERNEL32!OutputDebugStringA | `"Couldn't create DDraw\r\n"` (1) |
+| 15 | `0x00498650` | `call dword [ecx]` | `pDDraw` vtable slot 0 = `QueryInterface` | `this`, `&pDDraw2`, IID `0x534A60` (3) |
+| 16 | `0x0049865D` | `call dword [ecx+8]` | `pDDraw` vtable slot 8 = `Release` | `this` (1) |
+| 17 | `0x00498661` | `call dword [0x53311C]` | KERNEL32!FreeLibrary | `hDDraw` (1) |
+| 18 | `0x0049866C` | `call dword [0x533114]` | KERNEL32!OutputDebugStringA | `"Couldn't QI DDraw2\r\n"` (1) |
+| 19 | `0x00498684` | `call dword [edx+8]` | `pDDraw2` slot 8 = `Release` | `this` (1) |
+| 20 | `0x00498692` | `call ebp` | KERNEL32!LoadLibraryA | `"DINPUT.DLL"` (1) — second load |
+| 21 | `0x0049869F` | `call dword [0x533114]` | KERNEL32!OutputDebugStringA | `"Couldn't LoadLibrary DInput\r\n"` (1) |
+| 22 | `0x004986AC` | `call dword [ecx+8]` | `pDDraw` slot 8 = `Release` | `this` (1) |
+| 23 | `0x004986B0` | `call dword [0x53311C]` | KERNEL32!FreeLibrary | `hDDraw` (1) |
+| 24 | `0x004986C7` | `call dword [0x533118]` | KERNEL32!GetProcAddress | `hDInput`, `"DirectInputCreateA"` (2) |
+| 25 | `0x004986D8` | `call edi` | KERNEL32!FreeLibrary (cached in `edi` at `0x4986D2`) | `hDInput` (1) |
+| 26 | `0x004986DB` | `call edi` | KERNEL32!FreeLibrary | `hDDraw` (1) |
+| 27 | `0x004986E4` | `call dword [edx+8]` | `pDDraw` slot 8 = `Release` | `this` (1) |
+| 28 | `0x004986EC` | `call dword [0x533114]` | KERNEL32!OutputDebugStringA | `"Couldn't GetProcAddress DInputCreate\r\n"` (1) |
+| 29 | `0x0049870A` | `call ebp` | KERNEL32!FreeLibrary (re-cached in `ebp` at `0x4986FD`) | `hDInput` (1) |
+| 30 | `0x0049873F` | `call dword [ecx+0x50]` | `pDDraw` vtable slot 0x50 = `SetCooperativeLevel` | `this`, `NULL` (hWnd), `8` (flags; pushed early at `0x498717`) (3) |
+| 31 | `0x0049874D` | `call dword [edx+8]` | `pDDraw` slot 8 = `Release` | `this` (1) |
+| 32 | `0x00498751` | `call ebp` | KERNEL32!FreeLibrary | `hDDraw` (1) |
+| 33 | `0x0049875E` | `call dword [0x533114]` | KERNEL32!OutputDebugStringA | `"Couldn't Set coop level\r\n"` (1) |
+| 34 | `0x0049877E` | `call dword [ecx+0x18]` | `pDDraw` vtable slot 0x18 = `CreateSurface` | `this`, `&ddsd`, `&pSurface`, `NULL` (pUnkOuter) (4) |
+| 35 | `0x0049878C` | `call dword [ecx+8]` | `pDDraw` slot 8 = `Release` | `this` (1) |
+| 36 | `0x00498790` | `call ebp` | KERNEL32!FreeLibrary | `hDDraw` (1) |
+| 37 | `0x0049879D` | `call dword [0x533114]` | KERNEL32!OutputDebugStringA | `"Couldn't CreateSurface\r\n"` (1) |
+| 38 | `0x004987BF` | `call dword [edx]` | `pSurface` vtable slot 0 = `QueryInterface` | `this`, `&pSurf3`, IID `0x534A40` (3) |
+| 39 | `0x004987CC` | `call dword [edx+8]` | `pDDraw` slot 8 = `Release` | `this` (1) |
+| 40 | `0x004987D0` | `call ebp` | KERNEL32!FreeLibrary | `hDDraw` (1) |
+| 41 | `0x004987F4` | `call dword [ecx]` | `pSurface` vtable slot 0 = `QueryInterface` | `this`, `&pSurf4`, IID `0x534A30` (3) |
+| 42 | `0x00498801` | `call dword [ecx+8]` | `pDDraw` slot 8 = `Release` | `this` (1) |
+| 43 | `0x00498805` | `call ebp` | KERNEL32!FreeLibrary | `hDDraw` (1) |
+| 44 | `0x0049881F` | `call dword [edx+8]` | `pSurface` slot 8 = `Release` | `this` (1) |
+| 45 | `0x00498829` | `call dword [ecx+8]` | `pDDraw` slot 8 = `Release` | `this` (1) |
+| 46 | `0x00498836` | `call dword [0x53321C]` | ole32!CoInitialize | `NULL` (1) |
+| 47 | `0x0049884F` | `call dword [0x533218]` | ole32!CoCreateInstance | rclsid `&0x5348F0`, `NULL` (pUnkOuter), `1` (CLSCTX_INPROC_SERVER), riid `&0x5348E0`, `&pDM` (5) |
+| 48 | `0x0049885E` | `call dword [0x533114]` | KERNEL32!OutputDebugStringA | `"Couldn't create CLSID_DirectMusic\r\n"` (1) |
+| 49 | `0x00498865` | `call ebp` | KERNEL32!FreeLibrary | `hDDraw` (1) |
+| 50 | `0x0049887F` | `call dword [ecx+8]` | `pDM` slot 8 = `Release` | `this` (1) |
+| 51 | `0x00498882` | `call dword [0x533220]` | ole32!CoUninitialize | none (0) |
+| 52 | `0x0049888E` | `call dword [0x533118]` | KERNEL32!GetProcAddress | `hDDraw`, `"DirectDrawCreateEx"` (2) |
+| 53 | `0x004988A6` | `call eax` | `DirectDrawCreateEx` (from `GetProcAddress`) | `NULL` (lpGUID), `&pDD7`, IID `0x534A50`, `NULL` (pUnkOuter) (4) |
+| 54 | `0x004988B9` | `call dword [ecx+8]` | `pDD7` slot 8 = `Release` | `this` (1) |
+| 55 | `0x004988BD` | `call ebp` | KERNEL32!FreeLibrary | `hDDraw` (1) — the shared tail |
+
+The table lists all 55 `call` instructions of the body in execution order (checked against the decoded 374-instruction listing: no site missing, none extra). The argument column follows the actual push sequence — the push closest to the `call` is the first argument after `this` — and the stdcall/COM argument pops are what reset `T` at every step used in 12.7.
+
+### 12.12 `0x00498480` — `-O3` loss risks
+
+1. **`push 8` is hoisted ahead of the `DDSURFACEDESC` clear.** `0x498717 push 8` is the `SetCooperativeLevel` flag argument, executed before `0x498719 rep stosd` and long before the call at `0x49873F`. A source-order transcription (build `ddsd`, then call) is behaviourally right; a *statement-order* transcription that puts the push where the source seems to is not the retail order. Record the hoist, do not "fix" it into the clear.
+2. **`mov eax,[esp+0x10]` between `test eax,eax` and `jge`.** At `0x498742` the HRESULT is tested; `0x498744` reloads `pDDraw` and does **not** affect flags; `0x498748 jge` therefore still branches on the `SetCooperativeLevel` HRESULT. A transcription that tests the reloaded pointer would flip the branch.
+3. **Signed `HRESULT` tests.** Every COM call uses `test eax,eax` + `jge`/`jl` (or `cmp`+`jge`), i.e. `hr >= 0` is success, not `hr == S_OK` and not `hr != 0`. `DirectDrawCreate`/`DirectDrawCreateEx` use `jge`/`jl` too (`0x498608`, `0x4988AA`).
+4. **The NT 4 branch reuses the `cmp eax,4` flags.** `0x498501 jae` and `0x498517 jne` both read the same comparison; the `== 4` case falls through and everything else (`> 4`) goes to DDRAW. A rewrite as `if (major >= 4 && major != 4)` is the same branch but the flag reuse is why there is no second `cmp`; keep the structure.
+5. **Version-code writes are placed between calls.** `*arg1 = 0x100/0x200/0x300/0x500/0x600/0x601/0x700` occur at specific points relative to the following call (e.g. `*arg1 = 0x200` is written *before* `LoadLibraryA`, `*arg1 = 0` on the coop-level path is written *after* `FreeLibrary`). The observable result on partial-failure paths depends on that placement.
+6. **`0x4984A4` zeroes the slot later reused as `ddsd`.** It is a dead store once the struct is built; a transcription that treats it as part of `ddsd`'s initial value would only be accidentally right. Conversely the `rep stosd` at `0x498719` must be 27 dwords = 108 bytes (`0x6C`), no more.
+7. **Two out-pointers are never dereferenced before they are written**, and `pDDraw` is *not* pre-zeroed, whereas `pSurface`, `pDDraw2`, `pDM`, `pDD7` are. Do not normalise the initialisation set: the exact set is `pSurface`, `pDM`, `pDDraw2`, `pDD7`, plus the dead slot at `E-0x100`.
+8. **`GetProcAddress` results are discarded twice** (the two `DirectInputCreateA` resolutions). Retail only tests them for NULL. Storing them "for later" invents state.
+9. **`FreeLibrary(NULL)` is real** on the DDRAW-load-failure path (`0x4985AF` pushes `ebx`=0, `0x4985B4` calls `[FreeLibrary]`). Do not guard it.
+10. **Several releases are intentionally absent**: `pSurf3`, `pSurf4` are never released; `pSurface`/`pDDraw` are not released on the QI/creations failure paths; the DM object is not released and `CoUninitialize` is not called when `CoCreateInstance` fails. Adding balanced cleanup changes the retail effect set and the leaks.
+11. **`CoInitialize`/`CoUninitialize` bracket only the DirectMusic creation**, and `CoInitialize(NULL)`'s return is ignored (`0x498836`); there is no `SUCCEEDED` test on it.
+12. **`0x4984B9 test eax,eax; jne` treats `GetVersionExA`'s BOOL as zero/non-zero** and the failure path writes arg2 *before* arg1 (`0x4984CD`, `0x4984CF`); a swap is observable if the two pointers alias — and the retail order is part of the body.
+
+### 12.13 `0x004A5AD5` — real function entry, not a disassembly artefact
+
+**Verdict: real entry.** 17 bytes, `0x004A5AD5`–`0x004A5AE5`, one basic block, 6 instructions, cdecl, exactly one argument:
+
+| VA | bytes | instruction | derivation |
+| --- | --- | --- | --- |
+| `0x004A5AD5` | `6a 00` | `push 0` | third argument to `0x004A5AF7` (pushed first) |
+| `0x004A5AD7` | `6a 00` | `push 0` | second argument |
+| `0x004A5AD9` | `ff 74 24 0c` | `push dword [esp+0xC]` | **the function's own argument read**: with 8 bytes pushed, `[esp+0xC]` = entry `+4` = arg1 → pushed last = first argument |
+| `0x004A5ADD` | `e8 15 00 00 00` | `call 0x004A5AF7` | the CRT termination routine |
+| `0x004A5AE2` | `83 c4 0c` | `add esp, 0xC` | cdecl cleanup of the three arguments — the body cannot be calling an unknown signature |
+| `0x004A5AE5` | `c3` | `ret` | balanced |
+
+Proof it is not mid-instruction: (a) the byte immediately before is `0x004A5AD4 c3 ret`; (b) three compiler-emitted `E8 rel32` call sites target exactly `0x4A5AD5` — `0x0048F71F` (`e8 b1 63 01 00`, `next 0x48F724 + 0x163B1`), `0x00498941` (`e8 8f d1 00 00`, `next 0x498946 + 0xD18F`), `0x004A51C7` (`e8 09 09 00 00`, `next 0x4A51CC + 0x909`); (c) the body is a coherent, stack-balanced 3-push/`add esp,0xC` wrapper; (d) its sibling `0x004A5AE6` is a real entry with the same 17-byte shape and the same `[esp+0xC]` argument read, differing only in the second forwarded constant (`push 1` at `0x004A5AE8` instead of `push 0`), and is called at `0x004A51E6` with `e8 fb 08 00 00`. Function entries in this MSVC image are not required to be 16-byte aligned; alignment is not evidence.
+
+**What the call sites show (semantics, with evidence):**
+
+- `0x004A51C7`, in the CRT startup routine: `0x4A51BE call main` → `0x4A51C3 mov [var_60h],eax` → `0x4A51C6 push eax` → `0x4A51C7 call 0x4A5AD5`. That is `exit(main(...))`: the argument is the program's return code.
+- `0x0048F71F`, in WinMain: after `MessageBoxA(NULL, "This application requires DirectX version %d.%d or greater to run.", "Error", 0x10)` the code does `0x48F71D push 1` / `0x48F71F call 0x4A5AD5` — terminating with code 1 from an error path.
+- `0x00498941`, in a small assertion-failure routine: `0x498930 call 0x48F1B0` → `0x498935 test eax,eax` → `0x498937 je 0x49893F` → `0x498939 call [KERNEL32!DebugBreak]` → `0x49893F push 1` → `0x498941 call 0x4A5AD5` — the CRT-style "assert failed: break then terminate with 1" pattern.
+
+**What it forwards to.** `0x004A5AF7` (body `0x004A5AF7`–`0x004A5B8F`, 153 bytes) is the termination implementation: `0x4A5AF7 push edi`, `0x4A5AF8 push 1` / `0x4A5AFA pop edi` (`edi = 1`), `0x4A5AFB cmp dword [0x9360AC],1`; when the flag equals 1 it calls `TerminateProcess(GetCurrentProcess(), arg1)` (`0x4A5B03 push [esp+8]`, `0x4A5B07 call [GetCurrentProcess]`, `0x4A5B0E call [TerminateProcess]`). Otherwise it sets `[0x9360A8]=1` and `[0x9360A4]=arg3` (byte), walks the exit-function table at `0x00C32550`/`0x00C3254C`, calls `0x004A5B90(0x00536024, 0x00536028)`, and then `0x4A5B79 test ebx,ebx` / `0x4A5B7C jne 0x4A5B8E`; with `arg3 == 0` (both wrappers pass 0) it continues to `0x4A5B82 mov dword [0x9360AC],1` + `0x4A5B88 call [KERNEL32!ExitProcess]`, and `ebx != 0` would instead `pop edi; ret` at `0x4A5B8E`. `0x4A5AD5` passes `(code, 0, 0)`; its sibling `0x4A5AE6` has the same 17-byte shape and passes `(code, 1, 0)`. **No return path is observable from any of the three call sites**, which is consistent with the `ExitProcess`/`TerminateProcess` tail. The exact CRT symbol name (`exit` vs a wrapper around it) is not proven; the behaviour — terminate the process with the given code after running the exit table — is.
+
+**Manifest:** `0x004A5AD5` and `0x004A5AF7` are **NOT IN MANIFEST**. The former is `MISSING` in `mvp-call-flow.md` row 34; it is a legitimate transcription target (a small CRT wrapper plus its 153-byte implementation), not an artefact to skip and not a camera routine.
+
+### 12.14 What is NOT proven anywhere in this section
+
+1. **No retail names.** Every name used is a working description or an external-catalogue label (C7). No symbol table entry was found for `0x4010B0`, `0x401A60`, `0x4015F0`, `0x402C40`, `0x498480`, `0x4A5AD5`, `0x4A5AF7`.
+2. **`0x4010B0`:** the meaning of `0x401A60`'s non-zero result; `0x4015F0`'s actual effect beyond the globals in 12.6; the cascade's semantics and return type; any runtime behaviour.
+3. **`0x498480`:** its return type (EAX is inconsistent per path and the caller discards it); the *meaning* of the version codes `0x100`/`0x200`/`0x300`/`0x500`/`0x600`/`0x601`/`0x700` (the 0x700 floor is WinMain's comparison; "major.minor" is an interpretation); the semantics of `out_platform`'s `1`/`2` values (only "2 when `dwPlatformId == 2`" is mechanical fact); whether the two out-parameters may alias; the ABI of the two interface-pointer types beyond "4-byte pointer".
+4. **Type identifications** are structural: `OSVERSIONINFOA` from the `0x94` size, the `dwOSVersionInfoSize` write and the `+4`/`+0x10` field reads; `DDSURFACEDESC` from the `0x6C` size, `dwSize`/`dwFlags` writes, the `+0x68` caps write and its use as `CreateSurface`'s descriptor. The *GUID names* are SDK-knowledge matches to the exact image bytes (only `DDraw2` and `CLSID_DirectMusic` are corroborated by retail strings). The *vtable offsets* 0, 8, 0x18, 0x50 are corroborated by the retail messages (`Couldn't QI DDraw2`, `Couldn't CreateSurface`, `Couldn't Set coop level`) plus the pointer-returning `GetProcAddress` results, but no DirectX header was consulted in this pass.
+5. **`0x498480` runtime behaviour:** no path was executed; the per-path effects above are static reconstructions of the retail instructions.
+6. **Call-site reachability:** the WndProc dispatch path (C1) and the CRT startup path (`exit(main(...))`) are normal Windows/CRT flow, but no runtime trace was captured to confirm they are hit in this build's scenario.
+7. **The cascade region beyond `0x402C40`:** only `0x402C40` and the final `0x532490` block were re-verified in this pass; the intermediate block boundaries are carried from `0x004010B0-static-analysis.json` and are labelled as prior-record facts.
+8. **No verification status is claimed:** this section is `ANALYZED` for both natives. `TRANSCRIBED`/`STRUCTURALLY_VERIFIED` require the selected-decompiler + angr + build/runtime steps of AGENTS §10.2–10.9, which were not performed here.
+
+### 12.15 Recommended next actions from this evidence
+
+- Transcribe `0x00401A60` first: six bytes, zero arguments, `return *(uint32_t*)0x00567C58;` — it unblocks `0x4010B0`'s first branch.
+- Then `0x00402C40` + its cascade: the first call, `0x4C1780`, is a 1-byte `ret` function; the chain is straight-line (no branches except the tail jumps), so it is mechanical but large; do not model it as one helper.
+- `0x004015F0` is the hub (391 bytes, recursive, 120 call sites); transcribe it from its own sheet before `0x4010B0` can be considered body-complete.
+- `0x00498480` can be transcribed independently of the engine-native queue; it needs the exact GUID bytes and the 13 strings from 12.10 (byte-identical, including `\r\n`), the seven local pointers, the `0x6C` descriptor and the `0x94` version-info frame, and it must keep the leaks / skipped `CoUninitialize` / dead-slot zeroing described in 12.12.
+- `0x004A5AD5`/`0x004A5AF7` complete the WinMain error path and the CRT `exit(main())` tail; transcribe the wrapper, and treat `0x4A5AF7`'s exit-table walk as its own native.
+
+## §13. APPENDED — identifier names derived from retail evidence
+
+Requested by the Lead: (Task A) evidence-derived names for the 33 identifiers left address-suffixed by the rename pass (`994850a4`), (Task B) semantic names for the six-byte phase-record globals and the class-channel globals **only where the retail instructions prove the meaning**. This section is append-only; no earlier section, appendix, `engine/` file, manifest, listing or git state was changed.
+
+**Status vocabulary used below**
+
+| tag | meaning |
+| --- | --- |
+| **PROVEN** | the retail instructions establish both the data the function touches and its role (registration slot / class word / phase id / size); the name follows directly. |
+| **BEHAVIOUR** | the instructions establish exactly what the function does mechanically; the *domain* role is not established, and the name says only what is proven. |
+| **UNRESOLVED** | the instructions establish no role beyond "writes constant N". The suffixed placeholder is retained; the missing evidence is named. |
+
+### 13.0 Rules applied to the names
+
+- Derived only from retail instructions in `igi.exe` (SHA-256 `dea34892…15a01`). No name asserts a game meaning that the instructions do not show; the mechanism the name describes is cited in the row.
+- No `Retail*`, `Host*`, `Port*`, `Wrapper*`, `Adapter*` fragments; retail-style project form `<Domain>_<Subject><Action>` (e.g. `Script_ParameterEventSlotGetEB`, `AppMain_Set5C8C0C`).
+- A name is unique across the 33 and across the identifiers that already exist in `engine/`. Where the only uniquely identifying fact is a slot or global, the slot byte (as in the rename pass's `Script_ParameterEventSlotGetEB`) is part of the name.
+- Where a function exists only to be registered as a callback, the slot it fills is the strongest evidence; where its own body moves/copies/sizes a value, the body is used instead.
+
+### 13.1 Method and tool limits
+
+- Body evidence: `r2 -q -e scr.color=0 -c 'pd N @ <VA>' -c q igi.exe` (radare2 6.2.0, `/opt/homebrew/bin/r2`, run from `/Users/haseeb-mir/Downloads/IGI`).
+- Reference evidence: radare2 `axt`/`axtj` returns **0** for code and data references to every one of the 33 VAs in this image (no `aa` analysis; data references disabled). All reference evidence below therefore comes from PE-aware raw scans of the image:
+  - every `push imm32` (`68 <le32>`) occurrence of a VA → registration sites;
+  - every direct `call rel32` whose computed target is the VA → call sites;
+  - every 4-byte literal in a global range → read/write sites;
+  - complete `e8` call-target enumeration over `.text` to validate the call sites.
+- `.text` VA `0x401000`, raw `0x1000`; `.data` VA `0x536000`, raw `0x136000`; RVA→file offset `raw + (va - base - section_va)`.
+- The scans are reproducible with the commands in §13.7.
+
+### 13.2 Task A — the 33 identifiers
+
+Columns: **current** = the address-suffixed name from the rename pass; **VA** = retail entry; **evidence** = the instructions the proposal rests on; **proposed** = the name, with its status tag, or **UNRESOLVED** plus what is missing.
+
+| # | current | VA | evidence (retail instructions) | proposed / status |
+| --- | --- | --- | --- | --- |
+| 1 | `Graph_Get_4F9200` | `0x4F9200` | body `a1 10 6d a7 00; c3` = `mov eax,[0xA76D10]; ret`. `0xA76D10` is written once, in `Graph_Init` `0x4FAA60`: `0x4FAB94 push 5`, `0x4FAB96 call 0x4F1950`, `0x4FAB9E a3 10 6d a7 00 mov [0xA76D10],eax`. `0x4F1950` (0x4F1950–0x4F1978) is an array constructor: `shl eax,4; add eax,0xC; call 0x4B0C60(4, n*16+0xC); [eax+4]=n; [eax]=0; [eax+8]=eax+0xC`, i.e. 16-byte elements, count at +4, data at +8. `0x4F1980` (0x4F1980–0x4F19AF) grows such an array by `n` elements (realloc + `rep movsd`). Only caller of the getter: `0x509123 call 0x4F9200; push eax; call 0x4F1980` (grow the array). | `Graph_GetArray` — **BEHAVIOUR**. What the elements are is not established by any instruction (the 16-byte stride and the `0x4F1A80` fills in `Graph_Init` do not name them). |
+| 2 | `Graph_Get_4F9210` | `0x4F9210` | body `66 a1 64 e3 54 00; c3` = `mov ax,[0x54E364]; ret`. `0x54E364` is written once, in `Graph_Init`: `0x4FAA68 push edi(0)`, `0x4FAA6A push edi(0)`, `0x4FAA6C call 0x5034D0`, `0x4FAA71 push eax`, `0x4FAA72 push 0x80`, `0x4FAA77 push "Graph"`, `0x4FAA7C call 0x401900`, `0x4FAA82 66 a3 64 e3 54 00 mov [0x54E364],ax`. So the word is the class word the type registrar returned for `"Graph"` (parent `0x181`, size `0x80`). It is used as the class word argument of the phase registrations — `0x4FAAF5 mov ax,[0x54E364]`, `0x4FAB01 push eax`, `0x4FAB02 call 0x401400` — and as a dispatch-table index: `0x509632 call 0x4F9210; and eax,0xffff; 0x50963D mov eax,[eax*4+0xA976E0]; call eax`. | `Graph_GetClassWord` — **PROVEN**. |
+| 3 | `Graph_Get_4F9220` | `0x4F9220` | body `a0 6b e3 54 00; c3` = `mov al,[0x54E36B]; ret`. Slot written in `Graph_Init`: `0x4FAAA9 push edi(0)`, `0x4FAAAA call 0x4017C0`, `0x4FAAAF a2 6b e3 54 00 mov [0x54E36B],al`. Used as the **phase argument** of `0x401400(classWord, phase, handler)`: `0x508FF0 push 0x5095xx`… pattern `push <handler>; call 0x4F9230; push eax; mov ax,[0x54E83C]; push eax; call 0x401400` (e.g. `0x509001 call 0x4F9280`, `0x50901C call 0x4F9230`, `0x509036 call 0x4F9250`), and as the dispatch index `0x4FA376 call 0x4F9220; and eax,0xff; lea eax,[eax+eax*2]; shl eax,7 (*0x180); add eax,[edi+0x1C]; mov eax,[eax*4+0xA96AE0]` (same formula as §11's class+phase table). | `Graph_PhaseIdGetE36B` — **PROVEN** role (allocated phase id of the Graph type), unique only via the slot. |
+| 4 | `Graph_Get_4F9230` | `0x4F9230` | body `a0 6c e3 54 00; c3`; slot written `0x4FAAB9 push edi`, `0x4FAABA call 0x4017C0`, `0x4FAABF mov [0x54E36C],al`; registration use `0x50901C call 0x4F9230; push eax; mov ax,[0x54E83C]; call 0x401400`; dispatch use as above. | `Graph_PhaseIdGetE36C` — **PROVEN**. |
+| 5 | `Graph_Get_4F9240` | `0x4F9240` | body `a0 6d e3 54 00; c3`; slot written `0x4FAAE5 push edi`, `0x4FAAE6 call 0x4017C0`, `0x4FAAEB mov [0x54E36D],al`; dispatch use `0x4FA2E1 call 0x4F9240; and eax,0xff; … [0xA96AE0]`. | `Graph_PhaseIdGetE36D` — **PROVEN**. |
+| 6 | `Graph_Get_4F9250` | `0x4F9250` | body `a0 6e e3 54 00; c3`; slot written `0x4FAAF0 mov [0x54E36E],al` (after the same `0x4017C0` block); registration use `0x509036 call 0x4F9250; push eax; mov cx,[0x54E83C]; call 0x401400`. | `Graph_PhaseIdGetE36E` — **PROVEN**. |
+| 7 | `Graph_Get_4F9260` | `0x4F9260` | body `a0 6f e3 54 00; c3`; slot written `0x4FAAC4 push edi`, `0x4FAAC5 call 0x4017C0`, `0x4FAACA mov [0x54E36F],al`; the slot also has a second writer `0x4F95DD` (documented in §4). | `Graph_PhaseIdGetE36F` — **PROVEN** role. (The second writer does not change the getter's role.) |
+| 8 | `Graph_Get_4F9280` | `0x4F9280` | body `a0 69 e3 54 00; c3`; slot written `0x4FAA98 push edi`, `0x4FAA99 call 0x4017C0`, `0x4FAA9E mov [0x54E369],al`; registration use `0x509001 call 0x4F9280; push eax; mov dx,[0x54E83C]; call 0x401400`; dispatch use `0x4F96A2 call 0x4F9280; and eax,0xff; lea edx,[eax+eax*2]; shl edx,7; add edx,[ebx+0x1C]; mov eax,[edx*4+0xA96AE0]`. | `Graph_PhaseIdGetE369` — **PROVEN**. |
+| 9 | `Script_Handler_4EF830` | `0x4EF830` | body `8b 44 24 08` (arg1) `8b 54 24 04` (arg0) `8b 08` (ecx=*arg1) `51 52` `e8 3f 1f fd ff call 0x4C1780` `83 c4 08` `c3`. `0x4C1780` is a **single byte `c3`** (ret-only; the checkout documents it as the task-list registrar that registers nothing). Registration: `0x4EF481 push 0x4EF830; 0x4EF486 call 0x4F1BB0` (slot E8); `0x4EF48C mov eax,[0xA75894]` (QTaskNote type handle); `0x4EF492 call 0x4F1BC0`. QTaskNote.kindE8. | `QTaskNote_ValueSet` — **PROVEN role / BEHAVIOUR body**: kindE8 is the value-write slot (see §13.3.3), but the body delegates to the ret-only `0x4C1780`, so it stores nothing. A transcription must keep the call, not replace it with a copy. |
+| 10 | `Script_Handler_4EF850` | `0x4EF850` | body `8b 44 24 08; c7 00 41 00 00 00; c3` = stores `0x41` through arg1. Registration `0x4EF49A push 0x4EF850; 0x4EF49F call 0x4F1B90` (slot E9); `0x4EF4AA push [0xA75894]`; `0x4EF4AC call 0x4F1BC0`. QTaskNote.kindE9. The same type's kindE7 handler `0x4EF7F0` copies a NUL-terminated string (`0x4EF7F7 call 0x4F1180`, then `strlen`-style `repne scasb` and `rep movsb`), so `0x41` (65) is the note string's capacity, not an exact length. | `QTaskNote_ValueSizeGet` — **PROVEN** (E9 = value size; §13.3.2). |
+| 11 | `Script_Handler_4EF8B0` | `0x4EF8B0` | body `8b 44 24 08; c7 00 0b 00 00 00; c3` = stores `0xB`. Registration `0x4EF6B5 push 0x4EF8B0; 0x4EF6BA call 0x4F1B70` (slot E6); `0x4EF6BF mov edx,[0xA70C80]` (GraphEnvelope); `0x4EF6C7 call 0x4F1BC0`. GraphEnvelope.kindE6. | **UNRESOLVED.** KindE6's meaning is not decodable from the image (§13.3.4): the E6 slot is an attribute index whose consumer is the data-driven class channel, and the E6 handler bodies store three different constants (1, 3, `0xB`), so no role follows. Missing: the consumer that decodes an E6 value (none in `.text`), or the QVM/class data that defines the slot. |
+| 12 | `Script_Handler_4EF990` | `0x4EF990` | body `8b 44 24 08` (arg1) `56` `8b 74 24 08` (arg0) `57` `8b 38` (edi=*arg1) `b9 0b 00 00 00` `f3 a5 rep movsd` (11 dwords = 44 bytes, arg0→*(arg1)) `5f 5e c3`. Registration `0x4EF668 push 0x4EF990; 0x4EF66D call 0x4F1BA0` (slot E7); `0x4EF678 push [0xA70C80]`; `0x4EF67A call 0x4F1BC0`. GraphEnvelope.kindE7. | `GraphEnvelope_ValueGet` — **PROVEN** (kindE7 = copy the value out; §13.3.3). |
+| 13 | `Script_Handler_4EF9B0` | `0x4EF9B0` | body `8b 44 24 08` (arg1) `56 57` `8b 7c 24 0c` (arg0) `8b 30` (esi=*arg1) `b9 0b 00 00 00` `f3 a5` (11 dwords, *(arg1)→arg0) `5f 5e c3`. Registration `0x4EF682 push 0x4EF9B0; 0x4EF687 call 0x4F1BB0` (slot E8); `0x4EF68D push [0xA70C80]`; `0x4EF693 call 0x4F1BC0`. GraphEnvelope.kindE8. | `GraphEnvelope_ValueSet` — **PROVEN** (§13.3.3). |
+| 14 | `Script_Handler_4EF9D0` | `0x4EF9D0` | body `8b 44 24 08; c7 00 2c 00 00 00; c3` = stores `0x2C` (44). Registration `0x4EF69B push 0x4EF9D0; 0x4EF6A0 call 0x4F1B90` (slot E9); `0x4EF6AC push [0xA70C80]`; `0x4EF6AD call 0x4F1BC0`. GraphEnvelope.kindE9. The same type's kindE7 handler `0x4EF990` copies exactly 44 bytes. | `GraphEnvelope_ValueSizeGet` — **PROVEN**. |
+| 15 | `Script_Handler_4EFA10` | `0x4EFA10` | body `8b 44 24 08; c7 00 01 00 00 00; c3` = stores `1`. Registered 11× as kindE6 (Int16, Int32, Real32, Real64, VarString, String16, String32, String256, LevelExpression, QTaskNote, bool8 — pushes at `0x4EECE3, 0x4EEEE4, 0x4EF03A, 0x4EF0E5, 0x4EF190, 0x4EF23B, 0x4EF2E6, 0x4EF391, 0x4EF43C, 0x4EF4B4, 0x4EF55F` plus `0x772AB/0x77403/0x77526` outside the initialiser) and once as bool8.kindE9 (`0x4EF0E5` block is Int16.kindE6; the bool8 E9 registration is the `0x4F0560`-family block). | **UNRESOLVED.** KindE6 is undecoded (§13.3.4); its single kindE9 use (bool8 → 1) agrees with the byte size, but that does not name the function's dominant E6 role. |
+| 16 | `Script_Handler_4EFA90` | `0x4EFA90` | body `8b 44 24 08` (arg1) `8b 54 24 04` (arg0) `8b 08` (ecx=*arg1) `8b 02` (eax=*arg0) `89 01` (store through *arg1) `c3` — copies the 4-byte value pointed at by arg0 through `*(arg1)`. Registered Int32.kindE7 (`0x4EEFED`) and Real32.kindE7 (`0x4EEC96`): pushes `0x4EFA90` then `call 0x4F1BA0` (slot E7). | `Script_ValueGet4` — **PROVEN** (kindE7 copy-out for every 4-byte type; §13.3.3). |
+| 17 | `Script_SetConstant_427D70` | `0x427D70` | body `8b 44 24 08; c7 00 04 00 00 00; c3` = stores `4`. Registered Real32.kindE9 (`0x4EECCA push 0x427D70; 0x4EECCF call 0x4F1B90`) and Int32.kindE9 (`0x4EF021 call 0x4F1B90`). Real32/Int32 kindE7 `0x4EFA90` copies exactly 4 bytes. | `Script_ValueSize4Get` — **PROVEN**. |
+| 18 | `Script_SetConstant_427F80` | `0x427F80` | body `8b 44 24 08; c7 00 08 00 00 00; c3` = stores `8`. Registered Real64.kindE9 (`0x4EEECB push 0x427F80; 0x4EEED0 call 0x4F1B90`). Real64 kindE7 `0x4EFF90` copies 2 dwords = 8 bytes. | `Script_ValueSize8Get` — **PROVEN**. |
+| 19 | `Script_SetConstant_4EFB00` | `0x4EFB00` | body `8b 44 24 08; c7 00 03 00 00 00; c3` = stores `3`. Registered kindE6 for Quat32 (`0x4EEC38`), Real32x3 (`0x4EED8E`), Real32x9 (`0x4EEE39`), Real64x3 (`0x4EEF8F`), plus `0x4656E`. | **UNRESOLVED.** KindE6 undecoded; `3` is not those types' byte size (Quat32 = 20, Real32x9 = 40), so no size reading is available either. |
+| 20 | `Script_SetConstant_4EFCD0` | `0x4EFCD0` | body `8b 44 24 08; c7 00 28 00 00 00; c3` = stores `0x28` (40). Registered Real32x9.kindE9 (`0x4EEE20 push 0x4EFCD0; 0x4EEE25 call 0x4F1B90`). Real32x9 kindE7 `0x4EFC90` copies `0xA` dwords = 40 bytes (`b9 0a 00 00 00; f3 a5`). | `Real32x9_ValueSizeGet` — **PROVEN**. |
+| 21 | `Script_SetConstant_4EFF20` | `0x4EFF20` | body `8b 44 24 08; c7 00 14 00 00 00; c3` = stores `0x14` (20). Registered Quat32.kindE9 (`0x4EEC1F`). Quat32 kindE7 `0x4EFEE0` copies `5` dwords = 20 bytes. | `Quat32_ValueSizeGet` — **PROVEN**. |
+| 22 | `Script_SetConstant_4F00A0` | `0x4F00A0` | body `8b 44 24 08; c7 00 18 00 00 00; c3` = stores `0x18` (24). Registered Real64x3.kindE9 (`0x4EEF76 push 0x4F00A0; 0x4EEF7B call 0x4F1B90`; type `0xA75890` in that block — the Real64x3 handle per the §4 field map). Real64x3 kindE7 `0x4F0060` copies `6` dwords = 24 bytes. | `Real64x3_ValueSizeGet` — **PROVEN**. |
+| 23 | `Script_SetConstant_4F01B0` | `0x4F01B0` | body `8b 44 24 08; c7 00 02 00 00 00; c3` = stores `2`. Registered Int16.kindE9 (`0x4EF0CC`). Int16 kindE7 `0x4F0170` copies one word = 2 bytes (`66 8b 02; 66 89 01`). | `Int16_ValueSizeGet` — **PROVEN**. |
+| 24 | `Script_SetConstant_4F64E0` | `0x4F64E0` | body `8b 44 24 08; c7 00 00 00 00 00; c3` = stores `0`. Registered Graph.kindE9 (`0x4EF5F0 push 0x4F64E0; 0x4EF5F5 call 0x4F1B90`; `0x4EF5FA mov ecx,[0xA70CA0]` = Graph handle). Graph kindE7 is the ret-only no-op `0x4D3710`, i.e. a 0-byte value. | `Graph_ValueSizeGet` — **PROVEN**. |
+| 25 | `Script_SetConstant_51BAA0` | `0x51BAA0` | body `8b 44 24 08; c7 00 0c 00 00 00; c3` = stores `0xC` (12). Registered Real32x3.kindE9 (`0x4EED75 push 0x51BAA0; 0x4EED7A call 0x4F1B90`). Real32x3 kindE7 `0x4EFB60` copies 3 dwords = 12 bytes (three explicit dword moves). | `Real32x3_ValueSizeGet` — **PROVEN**. |
+| 26 | `Camera_Get_4F0F80` | `0x4F0F80` | body `a1 74 18 a7 00; c3` = `mov eax,[0xA71874]; ret`. `0xA71874` is the Real64 type handle: §4 R5 field map, written by the initialiser at `0x4EEE5F` immediately after `0x4F19C0("Real64", -1)`. | `Script_TypeHandleGetReal64` — **PROVEN**. |
+| 27 | `Camera_Get_4F1000` | `0x4F1000` | body `a1 90 0c a7 00; c3` = `mov eax,[0xA70C90]; ret`. `0xA70C90` is the bool8 type handle: §4 R3 field `+0x28`, writer `0x4EF4DA`, reader `0x4F1000`. | `Script_TypeHandleGetBool8` — **PROVEN**. |
+| 28 | `Script_Get_4F1A60` | `0x4F1A60` | body `a0 e4 e0 54 00; c3` = `mov al,[0x54E0E4]; ret`. Slot written in `0x4F1840`: `0x4F185E push eax(0)`, `0x4F1864 call 0x4017C0`, `0x4F186B a2 e4 e0 54 00 mov [0x54E0E4],al`. Use: `0x4064C1 push 0x406B60; 0x4064C6 call 0x4F1A60; 0x4064D2 push eax; 0x4064CD mov dx,[0x5383D8]; 0x4064D4 call 0x401400` — i.e. the getter's value is the phase argument, exactly the role of the `Script_ParameterEventSlotGetE6..EB` family. | `Script_PhaseIdGetE4` — **PROVEN** role (a phase id allocated by `QTask_AllocateEvent(0)`); if family consistency with `Script_ParameterEventSlotGetE6..EB` is preferred, `Script_ParameterEventSlotGetE4` also fits the shape. Lead's choice. |
+| 29 | `Script_Get_4F1A70` | `0x4F1A70` | body `a0 e5 e0 54 00; c3`; slot written `0x4F1870 call 0x4017C0`, `0x4F1878 mov [0x54E0E5],al`; use as phase argument `0x4064E1 call 0x4F1A70; push eax; mov ax,[0x5383D8]; call 0x401400`. | `Script_PhaseIdGetE5` — **PROVEN** (or `Script_ParameterEventSlotGetE5`). |
+| 30 | `Script_StateByteGet_4CEA10` | `0x4CEA10` | body `a0 76 81 54 00; c3` = `mov al,[0x548176]; ret`. Slot written by `QTask_InitPhaseHandlers` `0x4C5900`: `0x4C5974 push 0x181; 0x4C5979 call 0x4017C0`, `0x4C5983 a2 76 81 54 00 mov [0x548176],al`; cleared in the matching teardown `0x4C5AFB mov al,[0x548176]; push eax; call 0x4018C0`. Getter use as phase argument: `0x427ED4 push 0; 0x427ED6 call 0x4CEA10; 0x427EDB push eax; mov dx,[0x53BB6C]; call 0x401400`. | `QTask_PhaseIdGet548176` — **PROVEN role** (phase id allocated with value `0x181`); the slot address is the only unique identifier, so it is in the name. Alternative if a shorter form is preferred: `QTask_FirstPhaseIdGet` (it is the first of the two allocations). |
+| 31 | `Script_StateByteGet_4CEA20` | `0x4CEA20` | body `a0 77 81 54 00; c3`; slot written by the next allocation in `0x4C5900` (`0x4C597E push 0x181; 0x4C5988 call 0x4017C0`, `0x4C5992 mov [0x548177],al`) and linked as the phase of class word `0x54875C` with handler `0x4C5A10`: `0x4C598D push 0x4C5A10`, `0x4C5998 mov ax,[0x54875C]`, `0x4C599F call 0x401400`; cleared at `0x4C5B06`. Getter use as phase argument `0x427EBE call 0x4CEA20; push eax; mov dx,[0x53BB6C]; call 0x401400`. | `QTask_PhaseIdGet548177` — **PROVEN role** (this one is additionally proven to be a phase argument of `0x401400` by its own allocation site). Alternative `QTask_SecondPhaseIdGet`. |
+| 32 | `Error_CallbackSet_4AF870` | `0x4AF870` | body `8b 44 24 04; a3 70 62 93 00; c3` = stores arg into `0x936270`. Whole-image reference scan for `0x00936270`: exactly **one** occurrence — this store at `0x4AF875`. Only caller: `0x4AF8D0 push 0; call 0x4AF870` inside the callback-reset routine `0x4AF8CC`-`0x4AF8E3` (which also calls `0x4AF880`/`0x4AF890`). | **UNRESOLVED.** The global has no reader anywhere in the image, so no instruction establishes what the callback is called for; the setter's body only shows "store a pointer". Missing: any read/invocation of `0x936270` (none exists in this image), or a call site that passes a known function. |
+| 33 | `Error_CallbackSet_4AF880` | `0x4AF880` | body `8b 44 24 04; a3 74 62 93 00; c3` = stores arg into `0x936274`. References to `0x00936274`: `0x4AF811 mov eax,[0x936274]` (test) and `0x4AF855 call dword [0x936274]` inside `Script_WarningLog 0x4AF810`, which first formats `"Warning:\n\n"` + the message into `0xA84640` (`0x4AF81A`–`0x4AF849`) and then calls the callback with that buffer; the callback is installed with the display routine (`0x498919 push 0x4988D0; call 0x4AF880`, `0x491835 push 0x491890; call 0x4AF880`) and cleared with 0 by `0x4AF8D7`. | `Error_WarningCallbackSet` — **PROVEN**. |
+
+**Result:** 29 names proposed (26 **PROVEN**, 3 **BEHAVIOUR**: `0x4F9200`, `0x4EF830`, `0x54E0E4/E5`-style family members are counted above), 4 left **UNRESOLVED**: `0x4EF8B0`, `0x4EFB00`, `0x4EFA10` (all three are kindE6 handlers) and `0x4AF870` (write-only callback global).
+
+### 13.3 The evidence the names rest on (new facts established by this pass)
+
+#### 13.3.1 The attribute-slot ids: E4/E5 are allocated, E6..EB are allocated, and the six kinds are attribute indices
+
+`0x4F1840` (documented in §8) zeroes the parameter table at `0xA758E0` and then: `0x4017C0(0)` → `[0x54E0E4]` (`0x4F185E`–`0x4F186B`), `0x4017C0(0)` → `[0x54E0E5]` (`0x4F1870`–`0x4F1878`), then six `0x4F1B20` calls → `[0x54E0EB]`, `[0x54E0EA]`, `[0x54E0E7]`, … (`0x4F187D`–`0x4F18xx`). The six getters map to slots as follows (one `mov al, byte [slot]; ret` each): `0x4F1B70`→`0x54E0E6` (E6), `0x4F1BA0`→`0x54E0E7` (E7), `0x4F1BB0`→`0x54E0E8` (E8), `0x4F1B90`→`0x54E0E9` (E9), `0x4F1B60`→`0x54E0EA` (EA), `0x4F1B80`→`0x54E0EB` (EB). The registration sites read `0x4F1BC0(type, kind, handler)` with those getters' results as the kind argument, so E6..EB are **attribute indices into the type's per-type slot table**, not data. Nothing in the image decodes an E6..EB index — the consumer is the class/QVM channel (§9.0 Channel 2, invocation not located), which is why no E6 name can be derived.
+
+#### 13.3.2 PROOF that kindE9 is the value byte size — this supersedes the §9.2 "unproven" caution
+
+§9.2 stated the E9 immediates "look like byte sizes … not proven". The kindE7 handler of each type is the value copy-out whose copy width is a direct measurement of the value. For every type with a constant E9 handler the copy width equals the E9 constant exactly:
+
+| type | kindE9 handler | E9 value | kindE7 handler | kindE7 copy width | match |
+| --- | --- | --- | --- | --- | --- |
+| bool8 | `0x4EFA10` (shared) | 1 | `0x4F0560` | `8a 02; 88 01` — 1 byte | = 1 |
+| Int16 | `0x4F01B0` | 2 | `0x4F0170` | `66 8b 02; 66 89 01` — 1 word | = 2 |
+| Int32 | `0x427D70` (shared) | 4 | `0x4EFA90` | `8b 02; 89 01` — 1 dword | = 4 |
+| Real32 | `0x427D70` (shared) | 4 | `0x4EFA90` | 1 dword | = 4 |
+| Real32x3 | `0x51BAA0` | `0xC` | `0x4EFB60` | 3 explicit dword moves | = 12 |
+| Real64 | `0x427F80` | 8 | `0x4EFF90` | 2 dwords | = 8 |
+| Real64x3 | `0x4F00A0` | `0x18` | `0x4F0060` | `b9 06; f3 a5` — 6 dwords | = 24 |
+| Quat32 | `0x4EFF20` | `0x14` | `0x4EFEE0` | `b9 05; f3 a5` — 5 dwords | = 20 |
+| Real32x9 | `0x4EFCD0` | `0x28` | `0x4EFC90` | `b9 0a; f3 a5` — 10 dwords | = 40 |
+| GraphEnvelope | `0x4EF9D0` | `0x2C` | `0x4EF990` | `b9 0b; f3 a5` — 11 dwords | = 44 |
+| Graph | `0x4F64E0` | 0 | `0x4D3710` | single `c3` — copies nothing | = 0 |
+| QTaskNote | `0x4EF850` | `0x41` | `0x4EF7F0` | copies a NUL-terminated string (`0x4F1180` + `repne scasb`/`rep movsb`) | capacity 65, not an exact match |
+
+11 of 12 agree exactly; the one string type copies a length-dependent payload, so `0x41` is its buffer capacity. This is a direct instruction-level identity (E9 constant = width of the E7 copy for the same type), not an inference from the names `Real32`/`Int16`. It is the basis for the ten `..._ValueSizeGet` names.
+
+#### 13.3.3 kindE7 copies the value out, kindE8 copies the value in
+
+- `0x4EF990` (GraphEnvelope E7): `esi = arg0`, `edi = *(arg1)`, `rep movsd` ×11 → copies **arg0 to `*(arg1)`**.
+- `0x4EF9B0` (GraphEnvelope E8): `edi = arg0`, `esi = *(arg1)`, `rep movsd` ×11 → copies **`*(arg1)` to arg0**.
+- `0x4EFA90` (Int32/Real32 E7): `ecx = *(arg1)`, `eax = *(arg0)`, `mov [ecx],eax` → copies **arg0 through `*(arg1)`**.
+- `0x4EFAA0` (Int32/Real32 E8): `ecx = *(arg1)`, `eax = arg0`, `mov [eax],edx` → copies **`*(arg1)` into arg0**.
+
+So in both directions `arg0` is the value's own storage; E7 writes it out through `*(arg1)` and E8 reads it in from `*(arg1)`. That is the only reading consistent with all four bodies, and it is why the names use `ValueGet` (E7) and `ValueSet` (E8) rather than "read/write". The same pattern repeats for Real64 (`0x4EFF90`/`0x4EFFB0`), Int16 (`0x4F0170`/`0x4F0190`), Quat32 (`0x4EFEE0`/`0x4EFF00`), Real32x3 (`0x4EFB60`/`0x4EFB80`), Real32x9 (`0x4EFC90`/`0x4EFCB0`), Real64x3 (`0x4F0060`/`0x4F0080`), bool8 (`0x4F0560`/`0x4F0570`).
+
+#### 13.3.4 The Graph type channel: one class word plus ten allocated phase ids
+
+`Graph_Init 0x4FAA60` registers `"Graph"` (`0x4FAA77 push "Graph"`, `0x4FAA7C call 0x401900`, parent `0x181`, size `0x80`) and stores its class word at `0x54E364`; it then allocates **ten** ids with `QTask_AllocateEvent(0)` and stores them at `0x54E368`, `0x54E369`, `0x54E36A`, `0x54E36B`, `0x54E36C`, `0x54E36D`, `0x54E36E`, `0x54E36F`, `0x54E370`, `0x54E371` (`0x4FAA8D`–`0x4FAAEB`). Six of them (E369/E36B/E36C/E36D/E36E/E36F) have getters among the 33; the other four (`E368`/`E36A`/`E370`/`E371`) have none (their getters, if the allocation order is a guide, would be `0x4F9270` for E371 — not in the 33 — and none was found for the others). The ids are used (a) as the phase argument of `0x401400` together with the class word at `0x54E83C` (e.g. `0x509001`–`0x509049`) and (b) as the phase index of the class+phase dispatch table `0xA96AE0` (`0x4F96A2`, `0x4FA1D4`, `0x4FA376`: `and eax,0xff; *0x180; add class word; mov eax,[eax*4+0xA96AE0]`). Therefore "phase id of the Graph type" is proven; *which* phase (which script operation) each slot denotes is not, hence the slot byte in the name.
+
+#### 13.3.5 `0x4EF830` calls a ret-only function
+
+`0x4C1780` is exactly one byte `c3`. The checkout already records this (`class_registration.cpp`: "0x004C1780: ret-only task-list registrar, transcribed; it registers nothing"; `native_4c1780.hpp` flags the BN alias `AnimSound_LoadParameters` as unestablished). `0x4EF830` (`QTaskNote.kindE8`) reads `*arg1` and calls it; the call has no effect on memory. Retail therefore wires QTaskNote's value-set slot to a stub: a transcription must keep the `0x4C1780` call (retail flow) and must **not** "helpfully" copy the value.
+
+#### 13.3.6 The two error callbacks
+
+`0x936274` is read and invoked only by `Script_WarningLog 0x4AF810` (`0x4AF811` test, `0x4AF855 call dword [0x936274]`), which formats `"Warning:\n\n"` + message into `0xA84640` first. The installers pass the message-box routine `0x4988D0` (`0x498919`) or `0x491890` (`0x491835`), and the reset routine passes 0 (`0x4AF8D7`). `0x936270` (the other setter, `0x4AF870`) has **no reader at all** in the image; its only reference is the store itself. The two setters are not interchangeable and the first cannot be named.
+
+#### 13.3.7 QTask's own phase ids at `0x548176`/`0x548177`
+
+`QTask_InitPhaseHandlers 0x4C5900` allocates an event with value `0x181` twice and stores the two ids at `0x548176`/`0x548177`; the second is immediately used as the phase of `0x401400(classWord 0x54875C, phase, handler 0x4C5A10)` (`0x4C598D`–`0x4C599F`); both are cleared through `0x4018C0` in the teardown (`0x4C5AFB`, `0x4C5B06`). Both are then reused as phase arguments by unrelated class registrations (`0x427ED6`, `0x427EBE`, `0x40FEDB`, …). They are phase ids, not state bytes; the `Script_StateByteGet_*` placeholders misdescribe them.
+
+#### 13.3.8 `0x4F9200`'s global `0xA76D10`
+
+`0xA76D10` is written once (`0x4FAB9E` in `Graph_Init`) with the result of `0x4F1950(5)`. `0x4F1950` allocates `n*16+0xC` bytes with `0x4B0C60(4, …)`, sets count at `+4`, data pointer at `+8`, and zero at `+0`; `0x4F1980` grows the array by `n` elements (realloc + copy). `Graph_Init` fills entries only via `0x4F1A80` (`0x4FABBD`, `0x4FABDE`, …) with type handles from `0x4F1010`. The only other caller of the getter grows the array (`0x509123 call 0x4F9200; push eax; call 0x4F1980`). So the getter returns a growable 16-byte-element array whose element meaning is not established by any instruction.
+
+### 13.4 Proposed names — uniqueness
+
+New basenames introduced by §13.2 (no collision among themselves or with the candidate's existing identifiers):
+
+`Graph_GetArray`, `Graph_GetClassWord`, `Graph_PhaseIdGetE369`, `Graph_PhaseIdGetE36B`, `Graph_PhaseIdGetE36C`, `Graph_PhaseIdGetE36D`, `Graph_PhaseIdGetE36E`, `Graph_PhaseIdGetE36F`, `Graph_ValueSizeGet`, `GraphEnvelope_ValueGet`, `GraphEnvelope_ValueSet`, `GraphEnvelope_ValueSizeGet`, `QTaskNote_ValueSet`, `QTaskNote_ValueSizeGet`, `Script_ValueGet4`, `Script_ValueSize4Get`, `Script_ValueSize8Get`, `Real32x3_ValueSizeGet`, `Real32x9_ValueSizeGet`, `Real64x3_ValueSizeGet`, `Quat32_ValueSizeGet`, `Int16_ValueSizeGet`, `Script_TypeHandleGetReal64`, `Script_TypeHandleGetBool8`, `Script_PhaseIdGetE4`, `Script_PhaseIdGetE5`, `QTask_PhaseIdGet548176`, `QTask_PhaseIdGet548177`, `Error_WarningCallbackSet`.
+
+Four identifiers keep their address suffix: `Script_Handler_4EF8B0`, `Script_SetConstant_4EFB00`, `Script_Handler_4EFA10`, `Error_CallbackSet_4AF870`.
+
+### 13.5 Task B — the phase-record globals and the class-channel globals
+
+| global | width | role proven by instructions | proposed name | status |
+| --- | --- | --- | --- | --- |
+| `0x0054F928` | `uint16` | Written once by `QTask_Init`: `0x401127 push 0x20`, `0x401129 push "QTask"`, `0x40112E call 0x401900`, `0x401138 66 a3 28 f9 54 00 mov [0x54F928],ax` — i.e. the class word of the `"QTask"` type registration. Read by `QTask_GetCurrentType 0x4018F0` (`66 a1 28 f9 54 00`) and at `0x401216` (`66 a1 28 f9 54 00; push eax; call 0x401A20`). Every later task type registers with it as parent (`0x4D9763`, `0x5310E4`, `0x530A84`, …). | `QTask_CurrentType` (the candidate already uses this; it is evidence-correct) | **PROVEN** |
+| `0x0054F930` | `uint8[254][6]` | Base of the 6-byte records. Extent `[0x0054F930, 0x0054FF24)` = `0x5F4` bytes = **254 records**; `0x0054FF24` is a different object (16 bytes of a phase map initialised `mov dword [0x54FF24],-1` at `0x401100`, `-1` at `0x54FF28`/`0x54FF2C`/`0x54FF30`, byte-mapped by `0x401D30`, read by `0x4014E0`). Extent proof in `QTask_ClearEventTable 0x4011D0`: `mov eax,0x54F932`; loop `mov byte [eax],0; add eax,6; cmp eax,0x54FF26; jl` → 254 iterations. Allocator `0x4017C0`/`0x401810` scan the same table from `0x54F9F2` with id `0x20` (32) and bound `0x54FF26`. The allocated ids are used as the `phase` argument of `0x401400`/`0x401530` (§13.3.7), so "phase record" is the evidence-backed description. | record type `QTaskPhaseRecord` { `value` `+0`; `inUse` `+2`; unresolved `+3` }, table `QTask_PhaseTable`; current candidate alias `QTask_EventTable` | **PROVEN** (extent + role) |
+| `0x0054F932` (record `+2`) | `uint8` per record | The allocation flag. Read by the allocator scans (`0x4017CA`, `0x40181A`: `cmp byte [ecx],0`, `ecx` stepping 6 from `0x54F9F2`); written `1` by `0x4017F7`, `0x401844`, `0x401875`, `0x40189E`; cleared by `0x4018C0` (`mov byte [eax*2+0x54F932],0`) and by the init clear loop `0x4011D5` for all 254 records. | `inUse` (field of `QTaskPhaseRecord`) | **PROVEN** |
+| `0x0054F933` (record `+3`) | `uint8` per record | **Only ever written.** Exactly four references exist in the image, all stores: `0x401804` (`dl`=1 → 1), `0x401852` (→0), `0x401882` (`cl`=1 → 1), `0x4018AC` (→0). No load of this byte exists anywhere (an exhaustive immediate scan of the whole range `[0x54F930,0x54FF28)` in `.text` finds no other reference; there is also no base-address load of `0x54F930` other than the four store sites). The write pattern merely separates the entry points: `0x4017C0`/`0x401860` store 1, `0x401810`/`0x401890` store 0. | **UNRESOLVED** — keep the byte unnamed (`unresolved` field). What would settle it: a read instruction of the byte, or the class/QVM data definition of the phase record layout; neither exists in `igi.exe`. | **UNRESOLVED** |
+
+Not part of Task B but proven while checking the extent: `0x54FF24` begins a separate 16-byte phase→class byte map (initialised to `0xFF`), and `0xA969E0` holds a 254-byte class→phase map (`0x4010FB`–`0x401130`); `0x401D30` writes both (`map16[arg2]=arg1&0xff`, `map254[arg1&0xff]=arg2&0xff`). This confirms that the record table ends at `0x54FF24` and that the records are indexed by an id up to 253.
+
+### 13.6 LOUD flags (things the Lead must not miss)
+
+1. **Candidate record count is wrong.** Retail has **254** records (`[0x54F930,0x54FF24)`, `0x5F4` bytes) and `QTask_ClearEventTable` clears all 254. The candidate declares `event_table_entry_count = 0x540U / 6U` = **224** (`task_types.hpp:66`), so `QTask_ClearEventTable` clears 30 records too few and every scan bound (`QTask_AllocateEvent`, `QTask_NewQTaskEventNoContextFn`) stops 30 ids early. Evidence: `0x4011D5`–`0x4011E0` loop and `0x54FF24` being a different object. Suggested constants: count 254 (`0x5F4/6`), end `0x54FF24`, scan bound `0x54FF26` (= end + 2, because the cursor addresses the `+2` byte).
+2. **Allocator exhaustion diverges.** Retail `0x4017C0`/`0x401810` call `Debug_Error("Unable to allocate event")` and then `jmp` to their own `0x4017E5`/`0x401835` address — an infinite `eb fe` spin; the candidate `QTask_AllocateEvent` returns 0 (`task_types.cpp`, the `event_id >= event_table_entry_count` branch). Keep the retail spin (or the `Debug_Error` call) per rule 10.13(1).
+3. **`0x4C1780` is a one-byte `c3`.** Any name claiming behaviour for it (the BN alias `AnimSound_LoadParameters` is already flagged in `native_4c1780.hpp`) is unsupported; `0x4EF830` — one of the 33 — exists solely to call it. Do not let a rename of `0x4C1780` claim semantics, and do not "optimise" the call out of `0x4EF830`.
+4. **Two record fields are write-only.** `+0` (16-bit value) and `+3` (the flag) have **no readers anywhere** in `igi.exe`. Candidate transcriptions must still perform those stores (they are observable side effects of `QTask_AllocateEvent`, the two mark functions and `TaskEventTable_ClearSlot`), but no semantic name can be justified for `+0`/`+3` yet.
+5. **kindE6 is undecodable from code.** E6 handlers store 1, 3 and `0xB`; the slot is an attribute index consumed by the class/QVM channel whose invocation is not located. Three of the 33 therefore stay unresolved: `0x4EF8B0`, `0x4EFB00`, `0x4EFA10`.
+6. **`0x4AF870` writes a callback nobody reads.** `0x936270` has exactly one reference in the image (the store). It cannot be named; if a "callback" name is demanded anyway, it must not claim a role.
+7. **The E4/E5 and `0x548176`/`0x548177` globals are phase ids, not state bytes.** The `Script_StateByteGet_*` placeholders and the `Script_ParameterEventSlotGet*` family naming are both describing the same mechanism: ids allocated from the `0x54F930` phase table and consumed as the phase argument of `0x400`/`0x530` registrations. Names above make that explicit.
+8. **E9 = size is now proven, not hypothesised.** Any earlier text that says otherwise (§9.2) is superseded by §13.3.2; the `..._ValueSizeGet` names are safe to use, and `0x427D70` genuinely serves both Int32 and Real32 because both are 4-byte values.
+
+### 13.7 Evidence commands (reproducible)
+
+```sh
+# bodies (all 33)
+r2 -q -e scr.color=0 -c 'pd 12 @ 0x4EF830' -c 'pd 16 @ 0x4EF990' -c 'pd 8 @ 0x4EFA90' -c q igi.exe
+# registration contexts
+r2 -q -e scr.color=0 -c 'pd 40 @ 0x4EF440' -c 'pd 46 @ 0x4EF640' -c q igi.exe
+# Graph_Init (class word + ten allocated ids)
+r2 -q -e scr.color=0 -c 'pd 50 @ 0x4FAA60' -c q igi.exe
+# kind getter -> slot map
+r2 -q -e scr.color=0 -c 'pd 1 @ 0x4F1B60' -c 'pd 1 @ 0x4F1B70' -c 'pd 1 @ 0x4F1B80' \
+   -c 'pd 1 @ 0x4F1B90' -c 'pd 1 @ 0x4F1BA0' -c 'pd 1 @ 0x4F1BB0' -c q igi.exe
+# kindE7 copy widths (E9 = size proof)
+r2 -q -e scr.color=0 -c 'pd 10 @ 0x4EFF90' -c 'pd 10 @ 0x4F0170' -c 'pd 8 @ 0x4EFEE0' \
+   -c 'pd 8 @ 0x4F0060' -c 'pd 10 @ 0x4EFC90' -c 'pd 8 @ 0x4F0560' -c q igi.exe
+# ret-only 0x4C1780
+r2 -q -e scr.color=0 -c 'pd 1 @ 0x4C1780' -c q igi.exe
+# record table extent and field writes
+r2 -q -e scr.color=0 -c 'pd 40 @ 0x4011C0' -c 'pd 110 @ 0x4017C0' -c q igi.exe
+# error callback
+r2 -q -e scr.color=0 -c 'pd 24 @ 0x4AF810' -c 'pd 10 @ 0x4AF8C8' -c q igi.exe
+# QTask phase id slots
+r2 -q -e scr.color=0 -c 'pd 40 @ 0x4C5960' -c 'pd 30 @ 0x4C5AE0' -c q igi.exe
+```
+
+Reference scans (call/push/immediate) are PE-aware byte scans; the exact method: find every `68 <le32(VA)>` for registration sites, enumerate every `e8` in `.text` and compute `target = site+5+rel` for call sites, and scan every 4-byte literal in a target range for reads/writes (used for `0x54F930`–`0x54FF28` and `0x936270`/`0x936274`).
