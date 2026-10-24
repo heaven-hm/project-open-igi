@@ -233,3 +233,30 @@ Method rules learned the hard way this arc:
   `g_c32428`), then `0x4B0D10` (`Mem_DeAllocFn`), which finally unblocks `QTaskList_Delete` (`0x4C1830`,
   documented as blocked in `engine/src/retail/core/qtask_list.cpp`) and the `0x4F1180` branch of the
   `0x4EE970` catalogue.
+
+## Round 150: mode-2 bucket finder landed; sentinel PE defect caught and fixed
+
+- Landed `0x4AB7F5` (`engine/src/retail/mem/native_4ab7f5.cpp`), bn=9/12 r2=9/12 **1.000**: walks the
+  bucket list headed by the `0x005446B0` sentinel for `[node+0x10] < value < [node+0x14]`, rejects
+  unaligned values and `(value & 0xFFF) < 0x100`, then writes the node and `(value & 0xF000)` through
+  two out-pointers and returns `(value - base - 0x100)/16 + base + 8`. The `0x100` immediate is retail's
+  own operand - r2 renders it as a PE symbol name, exactly like the `0x80000000` mask in `0x4AADBB`.
+- **Sentinel PE defect (Tester-caught):** the first version hard-coded retail's `0x005446C8` for the
+  sentinel's `+0x08`/`+0x0C` payload pointers. The candidate is `DYNAMIC_BASE` and its sentinel lands
+  at `0x00567038`, so `sentinel+0x18` is `0x00567050` in the candidate; the hard-coded retail address
+  had no relocation and was stale. Fixed by modelling the payload area as a real trailing member and
+  initialising both payload words with `&g_5446b0.payload[0]`; the object's `.data` now carries four
+  `dir32` relocations (offsets 0x00/0x04/0x08/0x0C) with addend 0x18. **Rule:** whenever retail static
+  data contains pointers, model them as candidate-relative addresses (relocatable), never as
+  hard-coded retail VAs, unless the field is genuinely a non-pointer constant. Self-links via `&object`
+  are correct; hard-coded image VAs are not.
+- **Rule that worked twice:** the Tester's independent disassembly/PE read caught two real defects that
+  bound 1.000 and would pass static-only review (`0x401D30`'s `cl` vs `al` store, this sentinel). Treat
+  a PE/data audit as mandatory for any native that models retail static data or uses `mov r8` stores.
+- Frozen sequence this round: `efc3cd15` (152 sources, bucket finder first cut) then `18103c6e`
+  (`18103c6e63c4cf61858408d8195c3da6154e92f3c1565458319347f824fb7437`, 152 sources, sentinel fixed),
+  both deployed hash-verified; Tester asked to re-audit the relocations on `18103c6e`.
+- Next: `0x4AB733` (194 bytes, 20 blocks - the bucket purge; body uses VirtualFree(addr, 0x1000,
+  MEM_DECOMMIT) at `0x4AB771`, `0x3ff000`/`0x1000` strides over a `0x2010`-byte node, `[0x936200]`
+  counter, and `[esi+0x0C]`/`[esi+0x18]` bound maintenance), then `0x4AB84C`, then `0x4AADBB`,
+  `0x4A6A50`, `0x4B0D10`.
