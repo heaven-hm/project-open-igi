@@ -47435,13 +47435,13 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/mem/heap_list.cpp",
-        "sha256": "1465553fdf323540f4ea79ac40cade281260ea7ef5919eabf9457640b175dc97",
-        "signature": "void __cdecl HeapList_Insert(void* node, void* head);"
+        "sha256": "87207084ffac4f5fd29e55548ac3e7214fc99b6b97fecbb958a07c09b53ca0ae",
+        "signature": "void* __cdecl HeapList_Insert(void* container, void** node);"
       },
       "game_natives": {
         "path": "scripts/GameNatives/camera/004AF8F0-HeapList_Insert.cpp",
         "sha256": "ed463d2f443a5cb24a09ada8e4356dc8ace5e3b6022408d0704dfae0e2dd7b92",
-        "signature": "void __cdecl HeapList_Insert(void* node, void* head);"
+        "signature": "void* __cdecl HeapList_Insert(void* container, void** node);"
       },
       "verification": {
         "status": "STRUCTURALLY_VERIFIED",
@@ -47515,7 +47515,8 @@
           "stale_reason": "verification.behavioral evidence_sha256 differed from the current behavioral file; the semantic-review runtime_contract probe hash predated scripts/frida_native_diff.js (expected current 028d60b7f0e1); source Status comments said STRUCTURALLY_VERIFIED while the manifest said VERIFIED.",
           "note": "Build, static CFG, semantic review and the behavioral differential were regenerated from the current translation unit and the retail image. No behavioral divergence was found; the status is retained with tightened limitations.",
           "observation_correction": "2026-10-23 runtime-claims audit: corrected from 'observed'. No live retail game-process trace exists for this record; the cited differential executes retail code bytes under angr VEX (retail code bytes executed in an emulator). A trace that merely lists this address in observed_order proves retail reachability only and does not supply typed arguments, returns or state."
-        }
+        },
+        "notes": "32-bit target only; 64-bit branch removed (build.sh cross-compiles i686-w64-mingw32-g++)."
       },
       "status": "STRUCTURALLY_VERIFIED"
     },
@@ -47525,13 +47526,13 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/mem/heap_list.cpp",
-        "sha256": "1465553fdf323540f4ea79ac40cade281260ea7ef5919eabf9457640b175dc97",
-        "signature": "void __cdecl HeapList_Remove(void* node);"
+        "sha256": "87207084ffac4f5fd29e55548ac3e7214fc99b6b97fecbb958a07c09b53ca0ae",
+        "signature": "void** __cdecl HeapList_Remove(void** node);"
       },
       "game_natives": {
         "path": "scripts/GameNatives/camera/004AF960-HeapList_Remove.cpp",
         "sha256": "013a9776ebe41c1d0a6ecefc93b9d760aa4f28195f8ad51047dcac056b477c28",
-        "signature": "void __cdecl HeapList_Remove(void* node);"
+        "signature": "void** __cdecl HeapList_Remove(void** node);"
       },
       "verification": {
         "status": "STRUCTURALLY_VERIFIED",

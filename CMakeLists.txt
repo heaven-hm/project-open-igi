@@ -57,6 +57,7 @@ add_executable(igi WIN32
     engine/src/retail/human/human_view.cpp
     engine/src/retail/input/input_port_process.cpp
     engine/src/retail/mem/heap_list.cpp
+    engine/src/retail/mem/task_list.cpp
     engine/src/retail/mem/mem_alloc.cpp
     engine/src/retail/model/iff_chunk_tree.cpp
     engine/src/retail/model/iff_skeleton.cpp

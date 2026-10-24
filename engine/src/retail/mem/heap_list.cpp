@@ -4,64 +4,20 @@
 
 namespace igi::retail::mem {
 
-// Native: HeapList_Insert; retail VA 0x004AF8F0; signature/calling convention unknown.
+// Native: HeapList_Insert; retail VA 0x004AF8F0; __cdecl (container, node).
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE (SHA256: dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01); VA 0x004AF8F0-0x004AF910, 32 bytes; CLEAN/camera/004AF8F0-Camera_SetFieldOfView_33.c.
-// Behavior/CFG: inserts `arg2` at the tail of an intrusive doubly-linked list whose header is at `context` (`context + 4` = head anchor, `context + 8` = tail pointer): writes `arg2[1] = *(context + 8)`, `*arg2 = context + 4`, `**(context + 8) = arg2`, `*(context + 8) = arg2`, and returns `context`. radare2 1 block/0 edges; Binary Ninja 1 block; 100.0% structural agreement.
+// Behavior/CFG: inserts `node` at the tail of an intrusive doubly-linked list whose header is at `container` (`+0x00` head word, `+0x04` terminator address stored in every new node's next, `+0x08` tail pointer-to-pointer): writes `node[1] = *(container + 8)`, `*node = container + 4`, `**(container + 8) = node`, `*(container + 8) = node`, and returns `container`. radare2 1 block/0 edges; Binary Ninja 1 block; 100.0% structural agreement. 32-bit target only: the 64-bit host branch was scaffolding and is removed, since build.sh cross-compiles i686-w64-mingw32-g++.
 // Status/limits: VERIFIED; high for exact pointer splice sequence.
-void* HeapList_Insert(void* context, void** arg2)
+void* HeapList_Insert(void* container, void** node)
 {
-    auto* const header = static_cast<std::uint8_t*>(context);
-    if constexpr (sizeof(void*) == 4)
-    {
-        void** const tail = reinterpret_cast<void**>(header + 0x08);
-        arg2[1] = *tail;
-        *arg2 = header + 0x04;
-        **reinterpret_cast<void***>(header + 0x08) = arg2;
-        *tail = arg2;
-    }
-    else
-    {
-        // On a 64-bit host an 8-byte write through `header + 0x04` spans `0x04..0x0B` and would
-        // clobber `header + 0x08` if the tail slot sat at `+0x08`. If the caller initialized the
-        // tail pointer at `+0x08` to `header + 0x04` (or `header`), use `+0x08` when it points
-        // outside `[header+0x04, header+0x0C)`, or mirror the tail pointer in `+0x10` when the
-        // head anchor is at `+0x04`.
-        void** const head_anchor = reinterpret_cast<void**>(header + 0x04);
-        void** const tail_slot_8 = reinterpret_cast<void**>(header + 0x08);
-        if (*tail_slot_8 == nullptr)
-        {
-            // MemGlobals layout: context[0] is head_anchor (`g_a960f0`), context[2] is `g_a960f8`.
-            auto** const slots = static_cast<void**>(context);
-            void** const tail = reinterpret_cast<void**>(&slots[2]);
-            if (*tail == nullptr)
-            {
-                *tail = &slots[0];
-            }
-            arg2[1] = *tail;
-            *arg2 = &slots[1];
-            **reinterpret_cast<void***>(&slots[2]) = arg2;
-            *tail = arg2;
-        }
-        else
-        {
-            void* prev_tail = *tail_slot_8;
-            arg2[1] = prev_tail;
-            *arg2 = head_anchor;
-            if (prev_tail == head_anchor)
-            {
-                // Empty list initialized with `*(header + 0x08) = header + 0x04`: store the head
-                // link at `header + 0x00` on 64-bit so it does not overwrite `header + 0x08`.
-                *reinterpret_cast<void**>(header) = arg2;
-            }
-            else
-            {
-                *static_cast<void**>(prev_tail) = arg2;
-            }
-            *tail_slot_8 = arg2;
-        }
-    }
-    return context;
+    auto* const header = static_cast<std::uint8_t*>(container);
+    void** const tail = reinterpret_cast<void**>(header + 0x08);
+    node[1] = *tail;
+    *node = header + 0x04;
+    **reinterpret_cast<void***>(header + 0x08) = node;
+    *tail = node;
+    return container;
 }
 
 // Native: HeapList_Remove; retail VA 0x004AF960; signature/calling convention unknown.
@@ -69,13 +25,13 @@ void* HeapList_Insert(void* context, void** arg2)
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004AF960-0x004AF981, 33 bytes, digest 4ada7252239e45e0b5ed56005655c50a7ca29e3c5e3be153590e183ca807eb46; CLEAN/camera/004AF960-Camera_ApplyHandiCam_33.c.
 // Behavior/CFG: unlinks `context` from an intrusive doubly-linked list by writing `*context[1] = *context`, `*(static_cast<void**>(*context) + 1) = context[1]`, clearing `context[1] = nullptr` and `context[0] = nullptr`, and returning `context`. radare2 1 block/0 edges; Binary Ninja 1 block; 100.0% structural agreement.
 // Status/limits: VERIFIED; high for exact pointer unlink steps.
-void** HeapList_Remove(void** context)
+void** HeapList_Remove(void** node)
 {
-    *static_cast<void**>(context[1]) = context[0];
-    static_cast<void**>(context[0])[1] = context[1];
-    context[1] = nullptr;
-    context[0] = nullptr;
-    return context;
+    *static_cast<void**>(node[1]) = node[0];
+    static_cast<void**>(node[0])[1] = node[1];
+    node[1] = nullptr;
+    node[0] = nullptr;
+    return node;
 }
 
 } // namespace igi::retail::mem

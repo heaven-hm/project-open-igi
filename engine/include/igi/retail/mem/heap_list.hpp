@@ -11,9 +11,9 @@ namespace igi::retail::mem {
 //                 VA 0x004AF8F0-0x004AF910, 32 bytes; CLEAN/camera/004AF8F0-Camera_SetFieldOfView_33.c.
 // CFG: radare2 1 block/0 edges; Binary Ninja 1 block; 100% structural agreement.
 // Confidence: high for exact pointer splice sequence.
-// Signature: x86 cdecl void*(void* context, void** arg2); ported as void* HeapList_Insert(void* context, void** arg2).
+// Signature: x86 cdecl void*(void* container, void** node); 32-bit target only (the 64-bit port branch was removed as scaffolding).
 // Usage/tests: links allocated heap blocks and model/instance nodes; exercised by heap_list_test.cpp and mem_alloc_test.cpp.
-void* HeapList_Insert(void* context, void** arg2);
+void* HeapList_Insert(void* container, void** node);
 inline void* Camera_SetFieldOfView_33(void* context, void** arg2) { return HeapList_Insert(context, arg2); }
 
 // Native: HeapList_Remove() - VA 0x004AF960 - complete port.
@@ -25,9 +25,9 @@ inline void* Camera_SetFieldOfView_33(void* context, void** arg2) { return HeapL
 //                 CLEAN/camera/004AF960-Camera_ApplyHandiCam_33.c.
 // CFG: radare2 1 block/0 edges; Binary Ninja 1 block; 100% structural agreement.
 // Confidence: high for exact pointer unlink steps.
-// Signature: x86 cdecl void**(void** context); ported as void** HeapList_Remove(void** context).
+// Signature: x86 cdecl void**(void** node); 32-bit target only.
 // Usage/tests: unlinks heap and resource nodes; exercised by heap_list_test.cpp.
-void** HeapList_Remove(void** context);
+void** HeapList_Remove(void** node);
 inline void** Camera_ApplyHandiCam_33(void** context) { return HeapList_Remove(context); }
 
 } // namespace igi::retail::mem
