@@ -61,6 +61,9 @@ coverage, whatever the status word.
 
 ## RUNTIME_TESTED (12)
 
+12 of these rows have no implementation file; their comment column says so and they are not
+coverage, whatever the status word.
+
 | native name | signature | retail address | CFG | verification comment |
 | --- | --- | --- | --- | --- |
 | `SetAppTitle` | `int32_t(const char* title)` | `0x0048F100` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
@@ -78,6 +81,9 @@ coverage, whatever the status word.
 
 ## BUILD_VERIFIED (5)
 
+5 of these rows have no implementation file; their comment column says so and they are not
+coverage, whatever the status word.
+
 | native name | signature | retail address | CFG | verification comment |
 | --- | --- | --- | --- | --- |
 | `QTask_CreateTask` | `int __cdecl int32_t(void)` | `0x00401000` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
@@ -88,6 +94,11 @@ coverage, whatever the status word.
 
 ## STRUCTURALLY_VERIFIED (1046)
 
+109 of these rows have code but no semantic review bound; the comment column says so per row.
+
+806 of these rows have no implementation file; their comment column says so and they are not
+coverage, whatever the status word.
+
 | native name | signature | retail address | CFG | verification comment |
 | --- | --- | --- | --- | --- |
 | `QTask_OpenEvent` | `void __cdecl QTask_OpenEvent(void);` | `0x00401050` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
@@ -95,19 +106,19 @@ coverage, whatever the status word.
 | `QTask_ClearTaskTypes` | `unestablished` | `0x004011B0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `QTask_ClearEventTable` | `unestablished` | `0x004011D0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `QTask_LinkQTaskEventHandler` | `unestablished` | `0x00401400` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
-| `TaskType_RefreshHandlerMask` | `unestablished` | `0x004014B0` | 1.000 | CFG 1.000; bn+r2 agree |
-| `TaskType_HandlerPhaseMask` | `unestablished` | `0x004014E0` | 1.000 | CFG 1.000; bn+r2 agree |
+| `TaskType_RefreshHandlerMask` | `unestablished` | `0x004014B0` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `TaskType_HandlerPhaseMask` | `unestablished` | `0x004014E0` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `QTask_LinkQTaskEventHandlerNoContextFn` | `unestablished` | `0x00401530` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
-| `QTask_UnlinkTask_4015D0` | `unestablished` | `0x004015D0` | 1.000 | CFG 1.000; bn+r2 agree |
+| `QTask_UnlinkTask_4015D0` | `unestablished` | `0x004015D0` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `QTask_DestroyTask_4015F0` | `unestablished` | `0x004015F0` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004015F0-semantic-review.json` |
 | `QTask_AllocateEvent` | `unestablished` | `0x004017C0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
-| `QTask_NewQTaskEventNoContextFn` | `unestablished` | `0x00401810` | 1.000 | CFG 1.000; bn+r2 agree |
-| `TaskEventTable_MarkSlot` | `unestablished` | `0x00401860` | 1.000 | CFG 1.000; bn+r2 agree |
-| `TaskEventTable_MarkSlotNoMask` | `unestablished` | `0x00401890` | 1.000 | CFG 1.000; bn+r2 agree |
-| `TaskEventTable_ClearSlot` | `unestablished` | `0x004018C0` | 1.000 | CFG 1.000; bn+r2 agree |
+| `QTask_NewQTaskEventNoContextFn` | `unestablished` | `0x00401810` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `TaskEventTable_MarkSlot` | `unestablished` | `0x00401860` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `TaskEventTable_MarkSlotNoMask` | `unestablished` | `0x00401890` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `TaskEventTable_ClearSlot` | `unestablished` | `0x004018C0` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `QTask_GetCurrentType` | `unestablished` | `0x004018F0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
-| `QHashSlotTable_Release` | `unestablished` | `0x00401B20` | 1.000 | CFG 1.000; bn+r2 agree |
-| `TaskType_SetPhaseHandlerByte` | `unestablished` | `0x00401D30` | 0.058 | CFG 0.058; bn+r2 agree |
+| `QHashSlotTable_Release` | `unestablished` | `0x00401B20` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `TaskType_SetPhaseHandlerByte` | `unestablished` | `0x00401D30` | 0.058 | CFG 0.058; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `Flow_Init` | `unestablished` | `0x00401FC0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `Flow_Start` | `unestablished` | `0x00402070` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `Flow_RunHandler` | `unestablished` | `0x00402260` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
@@ -416,8 +427,8 @@ coverage, whatever the status word.
 | `Sys_GetGlobal32_424880` | `unestablished` | `0x00424880` | 1.000 | CFG 1.000; bn+r2 agree; review `0x00424880-semantic-review.json` |
 | `Sys_GetGlobal32_424890` | `unestablished` | `0x00424890` | 1.000 | CFG 1.000; bn+r2 agree; review `0x00424890-semantic-review.json` |
 | `Sys_GetGlobal8_424B80` | `unestablished` | `0x00424B80` | 1.000 | CFG 1.000; bn+r2 agree; review `0x00424B80-semantic-review.json` |
-| `Script_SetConstant_427D70` | `unestablished` | `0x00427D70` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Script_SetConstant_427F80` | `unestablished` | `0x00427F80` | 1.000 | CFG 1.000; bn+r2 agree |
+| `Script_SetConstant_427D70` | `unestablished` | `0x00427D70` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Script_SetConstant_427F80` | `unestablished` | `0x00427F80` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `Sys_GetGlobal16_42FDC0` | `unestablished` | `0x0042FDC0` | 1.000 | CFG 1.000; bn+r2 agree; review `0x0042FDC0-semantic-review.json` |
 | `Sys_GetGlobal16_430950` | `unestablished` | `0x00430950` | 1.000 | CFG 1.000; bn+r2 agree; review `0x00430950-semantic-review.json` |
 | `VehiclePhysics_ProcessVirModelsnotavai` | `int VehiclePhysics_ProcessVirModelsnotavai(int* arg1, float arg2)` | `0x00434E10` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
@@ -605,29 +616,29 @@ coverage, whatever the status word.
 | `Sys_GetGlobal8_489630` | `unestablished` | `0x00489630` | 1.000 | CFG 1.000; bn+r2 agree; review `0x00489630-semantic-review.json` |
 | `Human_StateAnimation` | `int Human_StateAnimation(void * context, int arg2, float arg3)` | `0x00489E70` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `GetCommandLine` | `char const* __cdecl(void)` | `0x0048F080` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
-| `GetInstanceHandle` | `unestablished` | `0x0048F090` | 1.000 | CFG 1.000; bn+r2 agree |
-| `GetWindowHandle` | `unestablished` | `0x0048F0A0` | 1.000 | CFG 1.000; bn+r2 agree |
+| `GetInstanceHandle` | `unestablished` | `0x0048F090` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `GetWindowHandle` | `unestablished` | `0x0048F0A0` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `GetAppTitle` | `char const* __cdecl(void)` | `0x0048F0B0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `SetWindowHandle` | `x86 cdecl void*(void*)` | `0x0048F0E0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `App_ContextGetDebugged` | `int __cdecl App_ContextGetDebugged(void);` | `0x0048F1B0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `Script_GetDebugCompileState` | `int __cdecl Script_GetDebugCompileState(void);` | `0x0048F1D0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `App_ContextGetLightmapsUsed` | `int __cdecl App_ContextGetLightmapsUsed(void);` | `0x0048F230` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `App_ContextGetTerrainLightmapsUsed` | `int __cdecl App_ContextGetTerrainLightmapsUsed(void);` | `0x0048F250` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
-| `Input_GetInstance` | `unestablished` | `0x0048F270` | 1.000 | CFG 1.000; bn+r2 agree |
+| `Input_GetInstance` | `unestablished` | `0x0048F270` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `Script_GetForcePrecompiledState` | `int __cdecl Script_GetForcePrecompiledState(void);` | `0x0048F340` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `Loop_SetStatusByte` | `std::uint32_t __cdecl Loop_SetStatusByte(std::uint8_t value); returns the stored byte; retail defines only AL, candidate zero-extends` | `0x0048F480` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
-| `WinProc_RegisterHandler` | `unestablished` | `0x0048F490` | 1.000 | CFG 1.000; bn+r2 agree |
-| `WinProc_RemoveHandler` | `unestablished` | `0x0048F4F0` | 1.000 | CFG 1.000; bn+r2 agree |
+| `WinProc_RegisterHandler` | `unestablished` | `0x0048F490` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `WinProc_RemoveHandler` | `unestablished` | `0x0048F4F0` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `WinMain` | `int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)` | `0x0048F530` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `WindowProcedure` | `unestablished` | `0x0048F970` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
-| `DirectInput_ErrorText` | `unestablished` | `0x0048FA80` | 0.939 | CFG 0.939; bn+r2 agree |
-| `Input_MouseGetCaps` | `unestablished` | `0x0048FD90` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Mouse_WinProc` | `unestablished` | `0x0048FED0` | 1.000 | CFG 1.000; bn+r2 agree |
+| `DirectInput_ErrorText` | `unestablished` | `0x0048FA80` | 0.939 | CFG 0.939; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Input_MouseGetCaps` | `unestablished` | `0x0048FD90` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Mouse_WinProc` | `unestablished` | `0x0048FED0` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `Keyboard_WinProc` | `unestablished` | `0x00490120` | 1.000 | CFG 1.000; bn+r2 agree; review `0x00490120-semantic-review.json` |
-| `Keyboard_VkToStateIndex` | `unestablished` | `0x00490190` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Keyboard_Update` | `unestablished` | `0x00490230` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Display_SetVSyncFlag` | `unestablished` | `0x00490340` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Display_SetSwapFlag` | `unestablished` | `0x00490350` | 1.000 | CFG 1.000; bn+r2 agree |
+| `Keyboard_VkToStateIndex` | `unestablished` | `0x00490190` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Keyboard_Update` | `unestablished` | `0x00490230` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Display_SetVSyncFlag` | `unestablished` | `0x00490340` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Display_SetSwapFlag` | `unestablished` | `0x00490350` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `Display_SetGammaRamp` | `void __stdcall Display_SetGammaRamp(void);` | `0x004903A0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `Display_ComputeScreenAspect` | `x86 cdecl double()` | `0x00491D40` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `Display_SetGammaRamp_4` | `unestablished` | `0x00491DB0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
@@ -652,20 +663,20 @@ coverage, whatever the status word.
 | `Camera_UpdateFogPalette` | `unestablished` | `0x004A26C0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `Camera_ApplyHandiCam_3` | `int32_t Camera_ApplyHandiCam_3(void);` | `0x004A50F5` | 0.907 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `Camera_UpdateViewCone_8` | `void* __stdcall Camera_UpdateViewCone_8(int32_t* param_1);` | `0x004A68A9` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
-| `Mem_FreeBlock` | `unestablished` | `0x004A6A50` | 1.000 | CFG 1.000; bn+r2 agree |
+| `Mem_FreeBlock` | `unestablished` | `0x004A6A50` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `FP_SetDefaultPrecision` | `unestablished` | `0x004A7157` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
-| `String_FindCharacter_4AA0A0` | `unestablished` | `0x004AA0A0` | 0.014 | CFG 0.014; bn+r2 agree |
+| `String_FindCharacter_4AA0A0` | `unestablished` | `0x004AA0A0` | 0.014 | CFG 0.014; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `Mem_AllocChunk` | `void* __cdecl Mem_AllocChunk(std::uint32_t size);` | `0x004AA670` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `Mem_AllocWithRetry` | `void* __cdecl Mem_AllocWithRetry(std::uint32_t size, std::int32_t retry);` | `0x004AA682` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `Mem_AllocateRawBlock` | `unestablished` | `0x004AA6AE` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `Resource_MatchPrefix` | `int __cdecl Resource_MatchPrefix(const char* a, const char* b, std::uint32_t n);` | `0x004AAD10` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
-| `Pool_Init` | `unestablished` | `0x004AAD48` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Pool_FindBlock` | `unestablished` | `0x004AAD90` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Mem_FreeSmallBlock` | `unestablished` | `0x004AADBB` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Mem_FreeBucketNode` | `unestablished` | `0x004AB6DD` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Mem_PurgeBucketPages` | `unestablished` | `0x004AB733` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Mem_FindBucketBlock` | `unestablished` | `0x004AB7F5` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Mem_MarkBucketPage` | `unestablished` | `0x004AB84C` | 1.000 | CFG 1.000; bn+r2 agree |
+| `Pool_Init` | `unestablished` | `0x004AAD48` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Pool_FindBlock` | `unestablished` | `0x004AAD90` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Mem_FreeSmallBlock` | `unestablished` | `0x004AADBB` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Mem_FreeBucketNode` | `unestablished` | `0x004AB6DD` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Mem_PurgeBucketPages` | `unestablished` | `0x004AB733` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Mem_FindBucketBlock` | `unestablished` | `0x004AB7F5` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Mem_MarkBucketPage` | `unestablished` | `0x004AB84C` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `FP_MergeControlWord` | `unestablished` | `0x004AC620` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `FP_MergeControlWordNoDenormal` | `unestablished` | `0x004AC655` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `FP_ControlWordToFlags` | `unestablished` | `0x004AC66B` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
@@ -674,8 +685,8 @@ coverage, whatever the status word.
 | `Mem_InvokeNewHandler` | `int __cdecl Mem_InvokeNewHandler(std::uint32_t size);` | `0x004AD722` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `String_ToUpperChar` | `int __cdecl String_ToUpperChar(int ch);` | `0x004AD73D` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `Camera_ResetMatrix_29` | `void __stdcall Camera_ResetMatrix_29(void* param_1, void* param_2, EXCEPTION_RECORD* param_3, void* param_4);` | `0x004AE670` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
-| `DirectInputCreateEx` | `unestablished` | `0x004AE730` | 1.000 | CFG 1.000; bn+r2 agree |
-| `DirectInputCreateA` | `unestablished` | `0x004AF740` | 1.000 | CFG 1.000; bn+r2 agree |
+| `DirectInputCreateEx` | `unestablished` | `0x004AE730` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `DirectInputCreateA` | `unestablished` | `0x004AF740` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `Camera_ApplyHandiCam_30` | `int32_t Camera_ApplyHandiCam_30(void);` | `0x004AF746` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `Camera_ApplyWideScreen_30` | `HRESULT __stdcall Camera_ApplyWideScreen_30(LPDDENUMCALLBACKEXA param_1, void* param_2, uint32_t param_3);` | `0x004AF74C` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `Camera_ApplyPostProcess_30` | `HRESULT __stdcall Camera_ApplyPostProcess_30(GUID* param_1, void** param_2, GUID* param_3, struct param_4);` | `0x004AF752` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
@@ -693,24 +704,24 @@ coverage, whatever the status word.
 | `Camera_UpdateTransform_32` | `HIC __stdcall Camera_UpdateTransform_32(uint32_t param_1, uint32_t param_2, BITMAPINFOHEADER* param_3, BITMAPINFOHEADER* param_4, uint16_t param_5);` | `0x004AF79A` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `Camera_SetFieldOfView_32` | `uint32_t __stdcall Camera_SetFieldOfView_32(HIC param_1, uint32_t param_2, BITMAPINFOHEADER* param_3, void* param_4, BITMAPINFOHEADER* param_5, void* param_6);` | `0x004AF7A0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `Camera_ApplyLineFilter_32` | `HRESULT __stdcall Camera_ApplyLineFilter_32(struct param_1, int32_t param_2, int32_t param_3, void* param_4, int32_t param_5, int32_t* param_6, int32_t* param_7);` | `0x004AF7A6` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
-| `Script_WarningLog` | `unestablished` | `0x004AF810` | 1.000 | CFG 1.000; bn+r2 agree |
+| `Script_WarningLog` | `unestablished` | `0x004AF810` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `Sys_StoreWord_4AF860` | `unestablished` | `0x004AF860` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004AF860-semantic-review.json` |
-| `Error_CallbackSet_4AF870` | `unestablished` | `0x004AF870` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Error_CallbackSet_4AF880` | `unestablished` | `0x004AF880` | 1.000 | CFG 1.000; bn+r2 agree |
+| `Error_CallbackSet_4AF870` | `unestablished` | `0x004AF870` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Error_CallbackSet_4AF880` | `unestablished` | `0x004AF880` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `Sys_StoreWord_4AF890` | `unestablished` | `0x004AF890` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004AF890-semantic-review.json` |
 | `Sys_StoreWord_4AF8A0` | `unestablished` | `0x004AF8A0` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004AF8A0-semantic-review.json` |
 | `Sys_StoreWord_4AF8B0` | `unestablished` | `0x004AF8B0` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004AF8B0-semantic-review.json` |
-| `Script_QHashListInsert` | `unestablished` | `0x004AF910` | 1.000 | CFG 1.000; bn+r2 agree |
+| `Script_QHashListInsert` | `unestablished` | `0x004AF910` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `HeapList_Remove` | `void** __cdecl HeapList_Remove(void** node);` | `0x004AF960` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `Mem_AllocIndexedBlock` | `unestablished` | `0x004B0B00` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `QFile_ReleaseBlock_4B0B70` | `unestablished` | `0x004B0B70` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004B0B70-semantic-review.json` |
 | `Sys_ReadFileBlock_2` | `int32_t Sys_ReadFileBlock_2(void);` | `0x004B0B90` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `Mem_InitHeapState` | `unestablished` | `0x004B0BA0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
-| `Mem_DeAllocFn` | `unestablished` | `0x004B0D10` | 1.000 | CFG 1.000; bn+r2 agree |
+| `Mem_DeAllocFn` | `unestablished` | `0x004B0D10` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `QHash_ValueSet` | `unestablished` | `0x004B0D40` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
-| `Mem_QHashFlagClear` | `unestablished` | `0x004B0D50` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Mem_FlagStackPop` | `unestablished` | `0x004B0D60` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Mem_FlagStackPush` | `unestablished` | `0x004B0D90` | 1.000 | CFG 1.000; bn+r2 agree |
+| `Mem_QHashFlagClear` | `unestablished` | `0x004B0D50` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Mem_FlagStackPop` | `unestablished` | `0x004B0D60` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Mem_FlagStackPush` | `unestablished` | `0x004B0D90` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `QFile_GetByte_4B0DB0` | `unestablished` | `0x004B0DB0` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004B0DB0-semantic-review.json` |
 | `Sys_ResetRenderTables_4B0DC0` | `unestablished` | `0x004B0DC0` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004B0DC0-semantic-review.json` |
 | `Sys_AddRenderMode_4B0E00` | `unestablished` | `0x004B0E00` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004B0E00-semantic-review.json` |
@@ -789,27 +800,27 @@ coverage, whatever the status word.
 | `Ilff_GetChunkTag` | `std::uint32_t __cdecl Ilff_GetChunkTag(void* chunk);` | `0x004B7580` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `Ilff_FindChunk` | `void* __cdecl Ilff_FindChunk(void* chunk, std::uint32_t tag);` | `0x004B7590` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `Texture_UploadPalettePacket` | `unestablished` | `0x004B7CF0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
-| `Script_QHashNodeRegister` | `unestablished` | `0x004B8810` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Script_QHashNodeRegisterEx` | `unestablished` | `0x004B8890` | 1.000 | CFG 1.000; bn+r2 agree |
+| `Script_QHashNodeRegister` | `unestablished` | `0x004B8810` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Script_QHashNodeRegisterEx` | `unestablished` | `0x004B8890` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `Sys_SetItemWord_4B8970` | `unestablished` | `0x004B8970` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004B8970-semantic-review.json` |
 | `Qvm_SetGlobalState` | `int __cdecl Qvm_SetGlobalState(int state);` | `0x004B8A10` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `Qvm_GetFloatArg` | `extern "C" long double IGI_RETAIL_CDECL Qvm_GetFloatArg(void* argument_frame, std::int32_t index)` | `0x004B8A50` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
-| `Qvm_IndexBelowCount` | `unestablished` | `0x004B8B00` | 1.000 | CFG 1.000; bn+r2 agree |
+| `Qvm_IndexBelowCount` | `unestablished` | `0x004B8B00` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `BreakScript` | `int32_t BreakScript(int32_t param_1);` | `0x004B8C10` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `_Script_SetWarningLevel` | `int32_t _Script_SetWarningLevel(int32_t param_1, float param_2);` | `0x004B8C60` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
-| `Script_QHashNodeCreate` | `unestablished` | `0x004BAAC0` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Script_QHashSymbolTableInit` | `unestablished` | `0x004BACD0` | 1.000 | CFG 1.000; bn+r2 agree |
+| `Script_QHashNodeCreate` | `unestablished` | `0x004BAAC0` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Script_QHashSymbolTableInit` | `unestablished` | `0x004BACD0` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `DynObj_InvokeField18_4BF1E0` | `unestablished` | `0x004BF1E0` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004BF1E0-semantic-review.json` |
 | `DynObj_GetField0C_4C0230` | `unestablished` | `0x004C0230` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004C0230-semantic-review.json` |
 | `DynObj_GetField04_4C0240` | `unestablished` | `0x004C0240` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004C0240-semantic-review.json` |
 | `DynObj_ParseConfigFile` | `int32_t DynObj_ParseConfigFile(void);` | `0x004C0250` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
-| `Script_QHashTableCreate` | `unestablished` | `0x004C0360` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Script_QHashNodeLookup` | `unestablished` | `0x004C04B0` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Script_Hash32` | `unestablished` | `0x004C0530` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Script_QHashSymbolRegister` | `unestablished` | `0x004C0560` | 1.000 | CFG 1.000; bn+r2 agree |
+| `Script_QHashTableCreate` | `unestablished` | `0x004C0360` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Script_QHashNodeLookup` | `unestablished` | `0x004C04B0` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Script_Hash32` | `unestablished` | `0x004C0530` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Script_QHashSymbolRegister` | `unestablished` | `0x004C0560` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `DynObj_ParseConfigFile_2` | `int* DynObj_ParseConfigFile_2(int* context)` | `0x004C0660` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `DynObj_ParseConfigFile_3` | `void ** DynObj_ParseConfigFile_3(void ** context, int* arg2)` | `0x004C0F80` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
-| `AnimSound_LoadParameters` | `unestablished` | `0x004C1780` | 1.000 | CFG 1.000; bn+r2 agree |
+| `AnimSound_LoadParameters` | `unestablished` | `0x004C1780` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `DynObj_ParseConfigFile_4` | `int DynObj_ParseConfigFile_4(int* context)` | `0x004C2F90` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `DefineMagicObj` | `int32_t DefineMagicObj(int32_t param_1, float param_2);` | `0x004C4520` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `DynObj_GetByte_4C56D0` | `unestablished` | `0x004C56D0` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004C56D0-semantic-review.json` |
@@ -817,7 +828,7 @@ coverage, whatever the status word.
 | `DynObj_GetByte_4C56F0` | `unestablished` | `0x004C56F0` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004C56F0-semantic-review.json` |
 | `DynObj_GetByte_4C5700` | `unestablished` | `0x004C5700` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004C5700-semantic-review.json` |
 | `DynObj_GetByte_4C5800` | `unestablished` | `0x004C5800` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004C5800-semantic-review.json` |
-| `QTask_InitPhaseHandlers` | `unestablished` | `0x004C5900` | 1.000 | CFG 1.000; bn+r2 agree |
+| `QTask_InitPhaseHandlers` | `unestablished` | `0x004C5900` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `Terrain_LoadTexturesAndLightmaps` | `int32_t __cdecl Terrain_LoadTexturesAndLightmaps(void* context, const char* base_path);` | `0x004C5F00` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `Terrain_Load` | `void* __cdecl Terrain_Load(void* context, const char* base_path);` | `0x004C6240` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `Terrain_CreateMaterial` | `void* __cdecl Terrain_CreateMaterial(void* context, const float* args);` | `0x004C6670` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
@@ -828,8 +839,8 @@ coverage, whatever the status word.
 | `DynObj_ParseConfigFile_10` | `int DynObj_ParseConfigFile_10(float context, double* arg2)` | `0x004CB810` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `DynObj_ParseConfigFile_11` | `unsigned int DynObj_ParseConfigFile_11(int context, char arg2, int arg3, double* arg4, int arg5)` | `0x004CE390` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `DynObj_ParseConfigFile_12` | `int* DynObj_ParseConfigFile_12(int context, int* arg2, int arg3, int arg4)` | `0x004CE910` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
-| `QTask_PhaseIdGet548176_4CEA10` | `unestablished` | `0x004CEA10` | 1.000 | CFG 1.000; bn+r2 agree |
-| `QTask_PhaseIdGet548177_4CEA20` | `unestablished` | `0x004CEA20` | 1.000 | CFG 1.000; bn+r2 agree |
+| `QTask_PhaseIdGet548176_4CEA10` | `unestablished` | `0x004CEA10` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `QTask_PhaseIdGet548177_4CEA20` | `unestablished` | `0x004CEA20` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `Render_GetActiveBackendId` | `std::int32_t __cdecl Render_GetActiveBackendId(void);` | `0x004CEA80` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `Ilff_FindFormChunk` | `unestablished` | `0x004CEAA0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `DynObj_MtpNlodvirmodelD` | `void * DynObj_MtpNlodvirmodelD(int context)` | `0x004CEBA0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
@@ -857,7 +868,7 @@ coverage, whatever the status word.
 | `Terrain_TraverseContourQuadtree` | `std::int32_t Terrain_TraverseContourQuadtree(void* context)` | `0x004D14E0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `Render_BindTexture_4` | `int Render_BindTexture_4(void)` | `0x004D2C30` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `Render_BindTexture_5` | `int Render_BindTexture_5(float* context, float* arg2, int* arg3)` | `0x004D31C0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
-| `QTask_NoOpHandler` | `unestablished` | `0x004D3710` | 1.000 | CFG 1.000; bn+r2 agree |
+| `QTask_NoOpHandler` | `unestablished` | `0x004D3710` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `Render_BindTexture_6` | `int* Render_BindTexture_6(void * context)` | `0x004D3730` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `Render_BindTexture_7` | `int* Render_BindTexture_7(int context)` | `0x004D46E0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `Render_BindTexture_8` | `int* Render_BindTexture_8(int* context, int* arg2, int arg3, int arg4, int arg5, int arg6)` | `0x004D4F60` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
@@ -866,7 +877,7 @@ coverage, whatever the status word.
 | `AnimIff_LoadAnimationFile` | `std::optional<IffSkeleton> IffSkeleton_Read(const std::filesystem::path& path)` | `0x004D67A0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `Render_BindTexture_11` | `int Render_BindTexture_11(int* context, int arg2, int arg3)` | `0x004D74F0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `Render_VirmodelIsNull` | `int Render_VirmodelIsNull(void * context, int* arg2)` | `0x004D9700` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
-| `QObj_Init` | `unestablished` | `0x004D9730` | 1.000 | CFG 1.000; bn+r2 agree |
+| `QObj_Init` | `unestablished` | `0x004D9730` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `Sys_GetGlobal8_4D97E0` | `unestablished` | `0x004D97E0` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004D97E0-semantic-review.json` |
 | `Sys_GetGlobal8_4D9850` | `unestablished` | `0x004D9850` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004D9850-semantic-review.json` |
 | `MagicObj_ValidateVirModel` | `int MagicObj_ValidateVirModel(int context)` | `0x004D99E0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
@@ -884,7 +895,7 @@ coverage, whatever the status word.
 | `DefineGraph` | `int32_t DefineGraph(long param_1, long param_2, long param_3, long param_4, long param_5, long param_6, int32_t param_7, void* param_8, float param_9);` | `0x004EAD20` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `DefineGroup` | `int32_t DefineGroup(int32_t param_1, void* param_2, float param_3);` | `0x004EBA90` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `SoundSysMicrophone_Init` | `unestablished` | `0x004EBC60` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
-| `InputPort_Init` | `unestablished` | `0x004ED510` | 1.000 | CFG 1.000; bn+r2 agree |
+| `InputPort_Init` | `unestablished` | `0x004ED510` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `InputPort_Process` | `struct status_msg* InputPort_Process(void * context)` | `0x004ED5C0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `PhysicsTerrain_GetContext_4EDA70` | `void* PhysicsTerrain_GetContext_4EDA70(void* arg1)` | `0x004EDA70` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `LODSettings_LoadParameters` | `x86 cdecl void*(void* context, LODSettingsRecord* (*lookup)(const char*))` | `0x004EDB60` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
@@ -892,31 +903,31 @@ coverage, whatever the status word.
 | `PhysicsTerrain_ProcessLOCALgrab` | `int PhysicsTerrain_ProcessLOCALgrab()` | `0x004EE540` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `PhysicsTerrain_ProcessLOCALgrab_4EE5E0` | `int PhysicsTerrain_ProcessLOCALgrab_4EE5E0(void* arg1)` | `0x004EE5E0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `PhysicsTerrain_Invoke4` | `int* PhysicsTerrain_Invoke4(int* arg1)` | `0x004EE680` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
-| `Script_HashBucket` | `unestablished` | `0x004EE960` | 1.000 | CFG 1.000; bn+r2 agree |
+| `Script_HashBucket` | `unestablished` | `0x004EE960` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `PhysicsTerrain_Invoke5` | `int* PhysicsTerrain_Invoke5(int arg1, int* arg2)` | `0x004EF7F0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
-| `Script_Handler_4EF830` | `unestablished` | `0x004EF830` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Script_Handler_4EF850` | `unestablished` | `0x004EF850` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Script_Handler_4EF8B0` | `unestablished` | `0x004EF8B0` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Script_Handler_4EF990` | `unestablished` | `0x004EF990` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Script_Handler_4EF9B0` | `unestablished` | `0x004EF9B0` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Script_Handler_4EF9D0` | `unestablished` | `0x004EF9D0` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Script_Handler_4EFA10` | `unestablished` | `0x004EFA10` | 1.000 | CFG 1.000; bn+r2 agree |
+| `Script_Handler_4EF830` | `unestablished` | `0x004EF830` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Script_Handler_4EF850` | `unestablished` | `0x004EF850` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Script_Handler_4EF8B0` | `unestablished` | `0x004EF8B0` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Script_Handler_4EF990` | `unestablished` | `0x004EF990` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Script_Handler_4EF9B0` | `unestablished` | `0x004EF9B0` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Script_Handler_4EF9D0` | `unestablished` | `0x004EF9D0` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Script_Handler_4EFA10` | `unestablished` | `0x004EFA10` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `PhysicsTerrain_InvokeDataSymbolLoad` | `int PhysicsTerrain_InvokeDataSymbolLoad(float* arg1, void* arg2)` | `0x004EFA20` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
-| `Script_Handler_4EFA90` | `unestablished` | `0x004EFA90` | 1.000 | CFG 1.000; bn+r2 agree |
+| `Script_Handler_4EFA90` | `unestablished` | `0x004EFA90` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `PhysicsTerrain_InvokeTooFewParametersInLi_4EFAA0` | `int* PhysicsTerrain_InvokeTooFewParametersInLi_4EFAA0(int* arg1, int* arg2)` | `0x004EFAA0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `PhysicsTerrain_InvokeTooFewParametersInLi_4EFAB0` | `int PhysicsTerrain_InvokeTooFewParametersInLi_4EFAB0(long double arg1, long double arg2, long double arg3, float* arg4, int* arg5)` | `0x004EFAB0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
-| `Script_SetConstant_4EFB00` | `unestablished` | `0x004EFB00` | 1.000 | CFG 1.000; bn+r2 agree |
+| `Script_SetConstant_4EFB00` | `unestablished` | `0x004EFB00` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `PhysicsTerrain_InvokeDataSymbolLoad_4EFB10` | `int PhysicsTerrain_InvokeDataSymbolLoad_4EFB10(float* arg1, void* arg2)` | `0x004EFB10` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `PhysicsTerrain_GetContext_4EFB60` | `int PhysicsTerrain_GetContext_4EFB60(int* arg1, int* arg2)` | `0x004EFB60` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `PhysicsTerrain_GetContext_4EFB80` | `int PhysicsTerrain_GetContext_4EFB80(int* arg1, int* arg2)` | `0x004EFB80` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `PhysicsTerrain_Processfffffffff` | `int PhysicsTerrain_Processfffffffff(float* arg1, void* arg2)` | `0x004EFC10` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `PhysicsTerrain_GetContext_4EFC90` | `int* PhysicsTerrain_GetContext_4EFC90(int arg1, int* arg2)` | `0x004EFC90` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `PhysicsTerrain_GetContext_4EFCB0` | `int* PhysicsTerrain_GetContext_4EFCB0(int arg1, int* arg2)` | `0x004EFCB0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
-| `Script_SetConstant_4EFCD0` | `unestablished` | `0x004EFCD0` | 1.000 | CFG 1.000; bn+r2 agree |
+| `Script_SetConstant_4EFCD0` | `unestablished` | `0x004EFCD0` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `PhysicsTerrain_ExecutePipeline_4EFD50` | `int PhysicsTerrain_ExecutePipeline_4EFD50(float arg1, float arg2)` | `0x004EFD50` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `PhysicsTerrain_GetContext_4EFEE0` | `int* PhysicsTerrain_GetContext_4EFEE0(int arg1, int* arg2)` | `0x004EFEE0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `PhysicsTerrain_GetContext_4EFF00` | `int* PhysicsTerrain_GetContext_4EFF00(int arg1, int* arg2)` | `0x004EFF00` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
-| `Script_SetConstant_4EFF20` | `unestablished` | `0x004EFF20` | 1.000 | CFG 1.000; bn+r2 agree |
+| `Script_SetConstant_4EFF20` | `unestablished` | `0x004EFF20` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `PhysicsTerrain_InvokeDataSymbolLoad_4EFF60` | `int PhysicsTerrain_InvokeDataSymbolLoad_4EFF60(int* arg1, void* arg2)` | `0x004EFF60` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `PhysicsTerrain_GetContext_4EFF90` | `int PhysicsTerrain_GetContext_4EFF90(int* arg1, int* arg2)` | `0x004EFF90` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `PhysicsTerrain_GetContext_4EFFB0` | `int* PhysicsTerrain_GetContext_4EFFB0(int* arg1, int* arg2)` | `0x004EFFB0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
@@ -924,12 +935,12 @@ coverage, whatever the status word.
 | `PhysicsTerrain_InvokeDataSymbolLoad_4F0020` | `int PhysicsTerrain_InvokeDataSymbolLoad_4F0020(int* arg1, void* arg2)` | `0x004F0020` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `PhysicsTerrain_GetContext_4F0060` | `int* PhysicsTerrain_GetContext_4F0060(int arg1, int* arg2)` | `0x004F0060` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `PhysicsTerrain_GetContext_4F0080` | `int* PhysicsTerrain_GetContext_4F0080(int arg1, int* arg2)` | `0x004F0080` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
-| `Script_SetConstant_4F00A0` | `unestablished` | `0x004F00A0` | 1.000 | CFG 1.000; bn+r2 agree |
+| `Script_SetConstant_4F00A0` | `unestablished` | `0x004F00A0` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `PhysicsTerrain_InvokeDataSymbolLoad_4F00E0` | `int PhysicsTerrain_InvokeDataSymbolLoad_4F00E0(int* arg1, void* arg2)` | `0x004F00E0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `PhysicsTerrain_InvokeDataSymbolLoad_4F0140` | `int PhysicsTerrain_InvokeDataSymbolLoad_4F0140(short* arg1, void* arg2)` | `0x004F0140` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `PhysicsTerrain_GetContext_4F0170` | `int* PhysicsTerrain_GetContext_4F0170(short* arg1, int* arg2)` | `0x004F0170` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `PhysicsTerrain_GetContext_4F0190` | `short* PhysicsTerrain_GetContext_4F0190(short* arg1, int* arg2)` | `0x004F0190` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
-| `Script_SetConstant_4F01B0` | `unestablished` | `0x004F01B0` | 1.000 | CFG 1.000; bn+r2 agree |
+| `Script_SetConstant_4F01B0` | `unestablished` | `0x004F01B0` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `PhysicsTerrain_Invoke2` | `int* PhysicsTerrain_Invoke2(int* arg1, int* arg2)` | `0x004F0270` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `PhysicsTerrain_Invoke2_4F02B0` | `int PhysicsTerrain_Invoke2_4F02B0(int* arg1, int* arg2)` | `0x004F02B0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `PhysicsTerrain_InvokeTooFewParametersInLi_4F0320` | `int* PhysicsTerrain_InvokeTooFewParametersInLi_4F0320(int* arg1, int* arg2)` | `0x004F0320` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
@@ -941,55 +952,55 @@ coverage, whatever the status word.
 | `PhysicsTerrain_GetContext_4F0570` | `char* PhysicsTerrain_GetContext_4F0570(char* arg1, int* arg2)` | `0x004F0570` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `PhysicsTerrain_ExecutePipeline_4F0580` | `void* PhysicsTerrain_ExecutePipeline_4F0580(void* arg1)` | `0x004F0580` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `PhysicsTerrain_GetParam_4F0600` | `int PhysicsTerrain_GetParam_4F0600(int arg1)` | `0x004F0600` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
-| `Script_Clear_LevelState` | `unestablished` | `0x004F0610` | 1.000 | CFG 1.000; bn+r2 agree |
+| `Script_Clear_LevelState` | `unestablished` | `0x004F0610` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `PhysicsTerrain_ProcessStep_4F0620` | `int PhysicsTerrain_ProcessStep_4F0620(int arg1)` | `0x004F0620` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
-| `Script_ClearStaticState` | `unestablished` | `0x004F0640` | 1.000 | CFG 1.000; bn+r2 agree |
+| `Script_ClearStaticState` | `unestablished` | `0x004F0640` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `PhysicsTerrain_ExecutePipeline_4F0660` | `void* PhysicsTerrain_ExecutePipeline_4F0660(void* arg1)` | `0x004F0660` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `PhysicsTerrain_GetParam_4F06E0` | `int PhysicsTerrain_GetParam_4F06E0(int arg1)` | `0x004F06E0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
-| `Script_Clear_DynamicState` | `unestablished` | `0x004F06F0` | 1.000 | CFG 1.000; bn+r2 agree |
+| `Script_Clear_DynamicState` | `unestablished` | `0x004F06F0` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `PhysicsTerrain_GetParam_4F0700` | `int PhysicsTerrain_GetParam_4F0700(int arg1)` | `0x004F0700` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
-| `Script_Clear_IdleState` | `unestablished` | `0x004F0710` | 1.000 | CFG 1.000; bn+r2 agree |
+| `Script_Clear_IdleState` | `unestablished` | `0x004F0710` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `PhysicsTerrain_GetParam_4F0720` | `int PhysicsTerrain_GetParam_4F0720(int arg1)` | `0x004F0720` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
-| `Script_Clear_CameraBaseState` | `unestablished` | `0x004F0730` | 1.000 | CFG 1.000; bn+r2 agree |
-| `QHashNode_Release` | `unestablished` | `0x004F0C90` | 1.000 | CFG 1.000; bn+r2 agree |
+| `Script_Clear_CameraBaseState` | `unestablished` | `0x004F0730` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `QHashNode_Release` | `unestablished` | `0x004F0C90` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `Sys_GetGlobal32_4F0EF0` | `unestablished` | `0x004F0EF0` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004F0EF0-semantic-review.json` |
 | `Sys_GetGlobal32_4F0F00` | `unestablished` | `0x004F0F00` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004F0F00-semantic-review.json` |
 | `Sys_GetGlobal32_4F0F20` | `unestablished` | `0x004F0F20` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004F0F20-semantic-review.json` |
 | `Sys_GetGlobal32_4F0F30` | `unestablished` | `0x004F0F30` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004F0F30-semantic-review.json` |
 | `Sys_GetGlobal32_4F0F40` | `unestablished` | `0x004F0F40` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004F0F40-semantic-review.json` |
 | `Sys_GetGlobal32_4F0F60` | `unestablished` | `0x004F0F60` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004F0F60-semantic-review.json` |
-| `Camera_Get_4F0F80` | `unestablished` | `0x004F0F80` | 1.000 | CFG 1.000; bn+r2 agree |
+| `Camera_Get_4F0F80` | `unestablished` | `0x004F0F80` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `Sys_GetGlobal32_4F0F90` | `unestablished` | `0x004F0F90` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004F0F90-semantic-review.json` |
 | `Core_GetRenderWordA_4F0FA0` | `unestablished` | `0x004F0FA0` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004F0FA0-semantic-review.json` |
 | `Sys_GetGlobal32_4F0FB0` | `unestablished` | `0x004F0FB0` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004F0FB0-semantic-review.json` |
 | `Core_GetRenderWordB_4F0FD0` | `unestablished` | `0x004F0FD0` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004F0FD0-semantic-review.json` |
 | `Sys_GetGlobal32_4F0FF0` | `unestablished` | `0x004F0FF0` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004F0FF0-semantic-review.json` |
-| `Camera_Get_4F1000` | `unestablished` | `0x004F1000` | 1.000 | CFG 1.000; bn+r2 agree |
+| `Camera_Get_4F1000` | `unestablished` | `0x004F1000` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `Sys_GetGlobal32_4F1010` | `unestablished` | `0x004F1010` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004F1010-semantic-review.json` |
 | `Script_GetParseMode` | `int Script_ParseEnumReal32_5(void)` | `0x004F1160` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
-| `QHash_FindValue` | `unestablished` | `0x004F1180` | 1.000 | CFG 1.000; bn+r2 agree |
-| `QHashNode_Find` | `unestablished` | `0x004F11A0` | 1.000 | CFG 1.000; bn+r2 agree |
+| `QHash_FindValue` | `unestablished` | `0x004F1180` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `QHashNode_Find` | `unestablished` | `0x004F11A0` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `Sys_GetGlobal32_4F1210` | `unestablished` | `0x004F1210` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004F1210-semantic-review.json` |
 | `Sys_GetGlobal32_4F1220` | `unestablished` | `0x004F1220` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004F1220-semantic-review.json` |
-| `Script_ParameterEventInit` | `unestablished` | `0x004F1840` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Script_ParameterEventReset` | `unestablished` | `0x004F18C0` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Script_TaskContainer_Alloc` | `unestablished` | `0x004F1950` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Script_TaskContainer_Grow` | `unestablished` | `0x004F1980` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Script_ParameterTypeRegister` | `unestablished` | `0x004F19C0` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Script_ParameterTypeFree` | `unestablished` | `0x004F1A40` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Script_PhaseIdGetE4_4F1A60` | `unestablished` | `0x004F1A60` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Script_PhaseIdGetE5_4F1A70` | `unestablished` | `0x004F1A70` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Script_TaskContainer_Append` | `unestablished` | `0x004F1A80` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Script_ParameterEventSlotAlloc` | `unestablished` | `0x004F1B20` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Script_ParameterEventSlotClear` | `unestablished` | `0x004F1B50` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Script_ParameterEventSlotGetEA` | `unestablished` | `0x004F1B60` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Script_ParameterEventSlotGetE6` | `unestablished` | `0x004F1B70` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Script_ParameterEventSlotGetEB` | `unestablished` | `0x004F1B80` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Script_ParameterEventSlotGetE9` | `unestablished` | `0x004F1B90` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Script_ParameterEventSlotGetE7` | `unestablished` | `0x004F1BA0` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Script_ParameterEventSlotGetE8` | `unestablished` | `0x004F1BB0` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Script_ParameterPropertySet` | `unestablished` | `0x004F1BC0` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Qvm_CheckParameterCount` | `unestablished` | `0x004F1C20` | 1.000 | CFG 1.000; bn+r2 agree |
+| `Script_ParameterEventInit` | `unestablished` | `0x004F1840` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Script_ParameterEventReset` | `unestablished` | `0x004F18C0` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Script_TaskContainer_Alloc` | `unestablished` | `0x004F1950` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Script_TaskContainer_Grow` | `unestablished` | `0x004F1980` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Script_ParameterTypeRegister` | `unestablished` | `0x004F19C0` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Script_ParameterTypeFree` | `unestablished` | `0x004F1A40` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Script_PhaseIdGetE4_4F1A60` | `unestablished` | `0x004F1A60` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Script_PhaseIdGetE5_4F1A70` | `unestablished` | `0x004F1A70` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Script_TaskContainer_Append` | `unestablished` | `0x004F1A80` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Script_ParameterEventSlotAlloc` | `unestablished` | `0x004F1B20` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Script_ParameterEventSlotClear` | `unestablished` | `0x004F1B50` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Script_ParameterEventSlotGetEA` | `unestablished` | `0x004F1B60` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Script_ParameterEventSlotGetE6` | `unestablished` | `0x004F1B70` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Script_ParameterEventSlotGetEB` | `unestablished` | `0x004F1B80` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Script_ParameterEventSlotGetE9` | `unestablished` | `0x004F1B90` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Script_ParameterEventSlotGetE7` | `unestablished` | `0x004F1BA0` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Script_ParameterEventSlotGetE8` | `unestablished` | `0x004F1BB0` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Script_ParameterPropertySet` | `unestablished` | `0x004F1BC0` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Qvm_CheckParameterCount` | `unestablished` | `0x004F1C20` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `Sys_InitFloatPair_4F1C90` | `unestablished` | `0x004F1C90` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004F1C90-semantic-review.json` |
 | `PhysicsTerrain_Invoke25` | `int PhysicsTerrain_Invoke25(int arg1)` | `0x004F1CF0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `PhysicsTerrain_Invoke3` | `void PhysicsTerrain_Invoke3(int arg1, int* arg2, int arg3)` | `0x004F1D10` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
@@ -1012,14 +1023,14 @@ coverage, whatever the status word.
 | `PhysicsTerrain_Invoke12` | `int* PhysicsTerrain_Invoke12(int* arg1)` | `0x004F43D0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `PhysicsTerrain_Invoke12_4F44A0` | `int PhysicsTerrain_Invoke12_4F44A0(void* arg1, int arg2)` | `0x004F44A0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `PhysicsTerrain_Invoke3_4F4560` | `int* PhysicsTerrain_Invoke3_4F4560(int* arg1)` | `0x004F4560` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
-| `Script_SetConstant_4F64E0` | `unestablished` | `0x004F64E0` | 1.000 | CFG 1.000; bn+r2 agree |
+| `Script_SetConstant_4F64E0` | `unestablished` | `0x004F64E0` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `TerrainLightMap_PushEntry` | `void* __cdecl TerrainLightMap_PushEntry(void* self);` | `0x004F82B0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `TerrainLightMap_Render` | `void* TerrainLightMap_Render(void* context)` | `0x004F8320` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `TerrainLightMap_Init` | `int* TerrainLightMap_Init(void)` | `0x004F8340` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `TerrainLightMap_LoadParameters` | `int TerrainLightMap_LoadParameters(void * context)` | `0x004F86E0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `TerrainLightMap_Setup` | `int TerrainLightMap_Setup(int* context)` | `0x004F8780` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
-| `Script_NodeSizeTable_Set` | `unestablished` | `0x004F9460` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Script_StringHash` | `unestablished` | `0x004F9E70` | 1.000 | CFG 1.000; bn+r2 agree |
+| `Script_NodeSizeTable_Set` | `unestablished` | `0x004F9460` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Script_StringHash` | `unestablished` | `0x004F9E70` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `Physics_VirmodelIsNull` | `struct status_msg* Physics_VirmodelIsNull(void * context, int arg2, int arg3, int arg4, int* arg5)` | `0x00503CC0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `TextureModifier_Push` | `void* __cdecl TextureModifier_Push(void* self);` | `0x00505E40` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `TextureModifier_Create` | `void* TextureModifier_Create(void* context)` | `0x00505ED0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
@@ -1032,9 +1043,9 @@ coverage, whatever the status word.
 | `Sys_GetWord_509880` | `unestablished` | `0x00509880` | 1.000 | CFG 1.000; bn+r2 agree; review `0x00509880-semantic-review.json` |
 | `Sys_TestWordMask_509890` | `unestablished` | `0x00509890` | 1.000 | CFG 1.000; bn+r2 agree; review `0x00509890-semantic-review.json` |
 | `Sys_GetWord16_5098A0` | `unestablished` | `0x005098A0` | 1.000 | CFG 1.000; bn+r2 agree; review `0x005098A0-semantic-review.json` |
-| `Joypad_IsAcquired` | `unestablished` | `0x00509CC0` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Joypad_ReleaseAll` | `unestablished` | `0x00509E90` | 1.000 | CFG 1.000; bn+r2 agree |
-| `Joypad_InitActionFlags` | `unestablished` | `0x00509F00` | 1.000 | CFG 1.000; bn+r2 agree |
+| `Joypad_IsAcquired` | `unestablished` | `0x00509CC0` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Joypad_ReleaseAll` | `unestablished` | `0x00509E90` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Joypad_InitActionFlags` | `unestablished` | `0x00509F00` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `QFile_DeviceCallback_A0_50A5A0` | `unestablished` | `0x0050A5A0` | 1.000 | CFG 1.000; bn+r2 agree; review `0x0050A5A0-semantic-review.json` |
 | `QFile_DeviceCallback_9C_50A5B0` | `unestablished` | `0x0050A5B0` | 1.000 | CFG 1.000; bn+r2 agree; review `0x0050A5B0-semantic-review.json` |
 | `Terrain_DecodeChunkCommands` | `std::int32_t __cdecl Terrain_DecodeChunkCommands();` | `0x00510010` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
@@ -1102,7 +1113,7 @@ coverage, whatever the status word.
 | `Terrain_ConnectGraphNode_8` | `int Terrain_ConnectGraphNode_8(void)` | `0x00518290` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `Terrain_SampleHeightmap_8` | `int Terrain_SampleHeightmap_8(int* context, float* arg2, float* arg3)` | `0x005182B0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `Terrain_BuildMipMaps_8` | `int Terrain_BuildMipMaps_8(void)` | `0x00518550` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
-| `Script_NodeCriteriaRegister` | `unestablished` | `0x005186C0` | 1.000 | CFG 1.000; bn+r2 agree |
+| `Script_NodeCriteriaRegister` | `unestablished` | `0x005186C0` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `Terrain_SelectTerrainLOD_9` | `int Terrain_SelectTerrainLOD_9(int context)` | `0x00518720` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `Terrain_UpdateWaterWaves_9` | `unsigned int Terrain_UpdateWaterWaves_9(void)` | `0x00519650` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `Terrain_RenderWaterSurface_9` | `void * Terrain_RenderWaterSurface_9(int context)` | `0x00519690` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
@@ -1118,7 +1129,7 @@ coverage, whatever the status word.
 | `Terrain_ConnectGraphNode_10` | `int Terrain_ConnectGraphNode_10(void * context)` | `0x0051ACB0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `Terrain_SampleHeightmap_10` | `void * Terrain_SampleHeightmap_10(void * context)` | `0x0051B0B0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `Terrain_CalculateNormals_10` | `unsigned int Terrain_CalculateNormals_10(void)` | `0x0051B3A0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
-| `Script_SetConstant_51BAA0` | `unestablished` | `0x0051BAA0` | 1.000 | CFG 1.000; bn+r2 agree |
+| `Script_SetConstant_51BAA0` | `unestablished` | `0x0051BAA0` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `Terrain_BuildMipMaps_10` | `unsigned int Terrain_BuildMipMaps_10(void)` | `0x0051BF90` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `Terrain_RenderQuadtree_11` | `int Terrain_RenderQuadtree_11(void)` | `0x0051C290` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `Terrain_RenderWaterSurface_11` | `unsigned int Terrain_RenderWaterSurface_11(void)` | `0x0051DDB0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
@@ -1168,7 +1179,7 @@ Records written in the Level 1 MVP session (2026-10-25). They carry static struc
 | `Sys_GetSettingByte_416890` | `unsigned char __cdecl(void)` | `0x00416890` | 1.000 | CFG 1.000; bn+r2 agree; review `0x00416890-semantic-review.json` |
 | `Sys_GetGlobal16_424850` | `unestablished` | `0x00424850` | 1.000 | CFG 1.000; bn+r2 agree; review `0x00424850-semantic-review.json` |
 | `WeaponGun_ProcessWNES` | `int32_t __convention WeaponGun_ProcessWNES("regparm")(int32_t param_1, int32_t param_2, int32_t param_3, void* param_4);` | `0x00471120` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
-| `AI_Detection_Init` | `unestablished` | `0x00489560` | 1.000 | CFG 1.000; bn+r2 agree; static only |
+| `AI_Detection_Init` | `unestablished` | `0x00489560` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND; static only |
 | `Camera_ResetMatrix_5` | `int32_t Camera_ResetMatrix_5(long param_1);` | `0x004A5955` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `MathSys_Invoke7_4A67E4` | `int32_t __convention MathSys_Invoke7_4A67E4("regparm")(char* param_1, int16_t param_2, void* param_3, void* param_4, int32_t param_5);` | `0x004A67E4` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `Camera_ResetMatrix_14` | `long double(double arg1, int16_t arg2 @ 0xa) __pure Camera_ResetMatrix_14(void);` | `0x004A8A91` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |

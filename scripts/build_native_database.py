@@ -63,6 +63,8 @@ def comment_of(row: dict) -> str:
     if not has_code(row):
         return "NO IMPLEMENTATION FILE: record exists, no code backs it"
     review = verification.get("semantic_review")
+    if not (isinstance(review, dict) and review.get("evidence_path")):
+        bits.append("CODE BUT NO SEMANTIC REVIEW BOUND")
     if isinstance(review, dict) and review.get("evidence_path"):
         bits.append(f"review `{pathlib.Path(review['evidence_path']).name}`")
     if verification.get("runtime_contract"):
@@ -157,7 +159,12 @@ def main() -> int:
         if status == "TRANSCRIBED":
             lines.append(SESSION_EXPLANATION)
             lines.append("")
-        if status in ("VERIFIED", "VERIFIED_WITH_DOCUMENTED_SCOPE"):
+        if status in ("VERIFIED", "VERIFIED_WITH_DOCUMENTED_SCOPE", "STRUCTURALLY_VERIFIED", "RUNTIME_TESTED", "BUILD_VERIFIED"):
+            unreviewed = sum(1 for row in rows_for_status
+                             if has_code(row) and not ((row.get("verification") or {}).get("semantic_review") or {}).get("evidence_path"))
+            if unreviewed:
+                lines.append(f"{unreviewed} of these rows have code but no semantic review bound; the comment column says so per row.")
+                lines.append("")
             no_code = sum(1 for row in rows_for_status if not has_code(row))
             if no_code:
                 lines.append(f"{no_code} of these rows have no implementation file; their comment column says so and they are not")
