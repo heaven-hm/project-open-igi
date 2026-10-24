@@ -46,7 +46,7 @@ def process_ids(exe_name):
     return ids
 
 
-def windows_for(pid, title_pattern=None):
+def windows_for(pid, title_pattern=None, min_size=200, min_area=0):
     found = []
     for window in Quartz.CGWindowListCopyWindowInfo(Quartz.kCGWindowListOptionAll, Quartz.kCGNullWindowID):
         if int(window.get(Quartz.kCGWindowOwnerPID, 0)) != pid:
@@ -54,7 +54,7 @@ def windows_for(pid, title_pattern=None):
         title = window.get(Quartz.kCGWindowName, '') or ''
         bounds = window.get(Quartz.kCGWindowBounds, {})
         width, height = int(bounds.get('Width', 0)), int(bounds.get('Height', 0))
-        if width < 200 or height < 200:
+        if width < min_size or height < min_size or width * height < min_area:
             continue
         if title_pattern and not re.search(title_pattern, title, re.IGNORECASE):
             continue
@@ -118,7 +118,10 @@ def main():
     parser.add_argument('--exe', required=True)
     parser.add_argument('--level', required=True)
     parser.add_argument('--out', type=Path, required=True)
-    parser.add_argument('--title', default='IGI')
+    parser.add_argument('--title', default='IGI', help="title regex; pass an empty string to accept any title")
+    parser.add_argument('--min-size', type=int, default=200)
+    parser.add_argument('--poll', type=float, default=0.2, help='window poll interval in seconds')
+    parser.add_argument('--min-area', type=int, default=0, help='minimum window area in points (500x500 helpers are 250000)')
     parser.add_argument('--load-seconds', type=float, default=22.0)
     parser.add_argument('--window-timeout', type=float, default=60.0)
     parser.add_argument('--settle', type=float, default=1.5)
@@ -143,12 +146,12 @@ def main():
     windows = []
     while time.time() < deadline:
         for pid in process_ids(args.exe):
-            windows = windows_for(pid, args.title)
+            windows = windows_for(pid, args.title or None, args.min_size, args.min_area)
             if windows:
                 break
         if windows:
             break
-        time.sleep(0.2)
+        time.sleep(args.poll)
     if not windows:
         report['result'] = 'no-window'
         report['log'] = str(log)
@@ -165,7 +168,7 @@ def main():
         report['escape'] = send_escape(window['pid'])
         time.sleep(args.settle)
         # Re-read the window: the title or size can change after the level loads.
-        refreshed = windows_for(window['pid'], args.title) or windows_for(window['pid'])
+        refreshed = windows_for(window['pid'], args.title or None, args.min_size, args.min_area) or windows_for(window['pid'], None, args.min_size, args.min_area)
         if refreshed:
             window = refreshed[0]
             report['window'] = window

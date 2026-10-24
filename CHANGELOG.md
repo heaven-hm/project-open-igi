@@ -11,6 +11,23 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - paired level 1 scene capture, both games, window-scoped (internal build, no release)
+
+- **Tool fix**: `scripts/tester/game_scene_capture.py` now supports an open title (`--title ''`), a minimum window area, and a
+  configurable poll interval. The candidate's window appears for well under a second before the `0x00402930` guard terminates the
+  process, so the default 200 ms poll missed it entirely; at a 10 ms poll the window is found and captured.
+- **Retail capture**: `igi.exe window level1`, Escape sent to skip the intro, window `igi.exe` title `IGI`, id `11744`, pid `45132`,
+  bounds `1024x668`, captured by CGWindowID at `2048x1336` (scale 2, `matches_window: true`) ->
+  `screenshots/pair-2026-10-25/retail-level1-scene.png`.
+- **Candidate capture**: `igi1.exe window level1`, window owner `igi1.exe`, **title `Innerloop`** (the retail `WNDCLASSA` class name the
+  candidate transcribes), id `11763`, pid `46311`, bounds `634x476` at `523,286`, captured at `1268x952` (scale 2,
+  `matches_window: true`) -> `screenshots/pair-2026-10-25/candidate-level1-scene.png`. The window capture fell back to a region capture
+  of the window rectangle because `screencapture -l` cannot build an image for a wine Direct3D-backed window; the region is exactly the
+  window's bounds, which is why `matches_window` is true.
+- **Comparison**: the images are not comparable as renders - the candidate dies at the guard before it draws a frame, so its capture is a
+  window shell, not Level 1. Different pixel content is expected and no equivalence is claimed. The capture tooling itself is verified on
+  both programs: pid, window id, bounds, image size and scale agree for each.
+
 ### 2026-10-25 - reverse-engineering skills applied: retail registrar names mined (internal build, no release)
 
 - **Selected skills** (recorded in `docs/agents/re-skills-applied.md`): `igi-auto-re-agent` for registrar push-pair mining,
