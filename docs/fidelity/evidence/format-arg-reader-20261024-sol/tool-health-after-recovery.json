@@ -1,0 +1,88 @@
+{
+  "kind": "igi-tool-health",
+  "schema_version": 1,
+  "result": "blocked",
+  "checked_at": "2026-10-24T18:22:02.144163+00:00",
+  "checks": {
+    "binary_ninja_mcp": {
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/scripts/bn_mcp_call.py",
+        "bn_binary_view_info"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"binaryView\":{\"handle\":\"view_1\",\"openItem\":\"item_1\",\"viewType\":\"PE\",\"longName\":\"PE\",\"created\":true,\"active\":true,\"available\":true,\"recommended\":false,\"architecture\":\"x86\",\"platform\":\"windows-x86\",\"addressSize\":4,\"start\":\"0x400000\",\"end\":\"0xc35058\",\"entryPoint\":\"0x4a50f5\",\"modified\":false,\"analysisModified\":false},\"warnings\":[]}\n",
+      "stderr": ""
+    },
+    "radare2": {
+      "command": [
+        "r2",
+        "-v"
+      ],
+      "exit_code": 0,
+      "stdout": "radare2 6.2.0 +0 abi:132 @ darwin-arm_64\nbirth: git.6.2.0 2026-08-07__17:28:34\ncommit: 6.2.0\noptions: gpl release -Os cs:5 cl:2 make\n",
+      "stderr": ""
+    },
+    "angr": {
+      "command": [
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.venv-angr/bin/python",
+        "-c",
+        "import angr; print(angr.__version__)"
+      ],
+      "exit_code": 0,
+      "stdout": "10.0.4.post1\n",
+      "stderr": ""
+    },
+    "frida_server": {
+      "command": [
+        "/Users/haseeb-mir/Library/Application Support/pipx/venvs/frida-tools/bin/python",
+        "-c",
+        "import frida,json,sys; d=frida.get_device_manager().add_remote_device(sys.argv[1]); print(json.dumps([dict(pid=p.pid,name=p.name) for p in d.enumerate_processes()]))",
+        "127.0.0.1:27042"
+      ],
+      "exit_code": 0,
+      "stdout": "[{\"pid\": 32, \"name\": \"winewrapper.exe\"}, {\"pid\": 56, \"name\": \"services.exe\"}, {\"pid\": 68, \"name\": \"winedevice.exe\"}, {\"pid\": 104, \"name\": \"plugplay.exe\"}, {\"pid\": 116, \"name\": \"explorer.exe\"}, {\"pid\": 136, \"name\": \"svchost.exe\"}, {\"pid\": 160, \"name\": \"winedevice.exe\"}, {\"pid\": 228, \"name\": \"igi-frida-server-17.24.0-windows-x86.exe\"}, {\"pid\": 240, \"name\": \"conhost.exe\"}, {\"pid\": 256, \"name\": \"rpcss.exe\"}, {\"pid\": 464, \"name\": \"igi1.exe\"}]\n",
+      "stderr": ""
+    },
+    "re_agent_cli": {
+      "command": [
+        "node",
+        "/Users/haseeb-mir/Documents/Code/re-agent/scripts/rea.mjs",
+        "--version"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "node:internal/modules/cjs/loader:1251\n  throw err;\n  ^\n\nError: Cannot find module '/Users/haseeb-mir/Documents/Code/re-agent/scripts/rea.mjs'\n    at Module._resolveFilename (node:internal/modules/cjs/loader:1248:15)\n    at Module._load (node:internal/modules/cjs/loader:1074:27)\n    at TracingChannel.traceSync (node:diagnostics_channel:315:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:217:24)\n    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:166:5)\n    at node:internal/main/run_main_module:30:49 {\n  code: 'MODULE_NOT_FOUND',\n  requireStack: []\n}\n\nNode.js v22.9.0\n"
+    },
+    "re_agent_frida_module": {
+      "command": [
+        "node",
+        "--input-type=module",
+        "-e",
+        "await import('frida'); console.log('Frida JS module loaded')"
+      ],
+      "exit_code": 1,
+      "error": "[Errno 2] No such file or directory: PosixPath('/Users/haseeb-mir/Documents/Code/re-agent')"
+    },
+    "compiler": {
+      "command": [
+        "i686-w64-mingw32-g++",
+        "--version"
+      ],
+      "exit_code": 0,
+      "stdout": "i686-w64-mingw32-g++ (GCC) 16.2.0\nCopyright (C) 2026 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+      "stderr": ""
+    },
+    "retail_identity": {
+      "exit_code": 0
+    },
+    "catalog": {
+      "exit_code": 0
+    }
+  },
+  "limitations": [
+    "Tool readiness does not establish game parity.",
+    "Ghidra is fallback only; no function was analyzed with Ghidra.",
+    "RE-Agent CLI and its optional Frida module are checked separately; CLI health is not proof of a live MCP connection."
+  ]
+}

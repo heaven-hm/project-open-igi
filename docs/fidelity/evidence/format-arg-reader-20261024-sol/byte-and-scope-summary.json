@@ -1,0 +1,25 @@
+{
+  "body_bytes": 13,
+  "retail_byte_hex": "8b4424048300048b008b40fcc3",
+  "body_sha256": "639148f2f162bda27c1f66ab90d68794bac59a533c7cbf65580a2c6853ef771f",
+  "calls": 16441,
+  "unique_input_words": 2065,
+  "zero_words": 80,
+  "high_bit_words": 2,
+  "retail_cleanup": {
+    "owned_process_exited": true
+  },
+  "candidate_host_cleanup": {
+    "owned_process_exited": true
+  },
+  "candidate_dll_artifact": {
+    "name": "candidate.dll",
+    "path": "Z:\\Users\\haseeb-mir\\Documents\\Code\\project-open-igi\\build\\runtime-traces\\format-arg-reader-20261025-sol-dll-final\\candidate.dll",
+    "base": "0x784d0000",
+    "codeHex": "8b4424048300048b008b40fcc3",
+    "export": "Native_004A7EFF",
+    "target": "0x784d1000"
+  },
+  "natural_candidate_flow": false,
+  "verified": false
+}

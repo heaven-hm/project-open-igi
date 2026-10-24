@@ -1,0 +1,22 @@
+DEBUG attaching owned PID 848
+DEBUG attached
+DEBUG script load start
+DEBUG script load done
+DEBUG typed hook RPC start
+blocked: 0x4a7eff Native_004A7EFF entries=0 returns=0
+report: /Users/haseeb-mir/Documents/Code/project-open-igi/build/runtime-traces/format-arg-reader-20261025-sol-dll-pair2/candidate.json
+Traceback (most recent call last):
+  File "/Users/haseeb-mir/Documents/Code/project-open-igi/scripts/tester/frida_probe_driver.py", line 467, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/Users/haseeb-mir/Documents/Code/project-open-igi/scripts/tester/frida_probe_driver.py", line 328, in main
+    hook = script.exports_sync.hook(spec["side_target"], layout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haseeb-mir/Library/Application Support/pipx/venvs/frida-tools/lib/python3.12/site-packages/frida/__init__.py", line 371, in method
+    return script._rpc_request(["call", js_name, params], data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haseeb-mir/Library/Application Support/pipx/venvs/frida-tools/lib/python3.12/site-packages/frida/__init__.py", line 1783, in _rpc_request
+    cond.wait()
+  File "/opt/homebrew/Cellar/python@3.12/3.12.8/Frameworks/Python.framework/Versions/3.12/lib/python3.12/threading.py", line 355, in wait
+    waiter.acquire()
+KeyboardInterrupt

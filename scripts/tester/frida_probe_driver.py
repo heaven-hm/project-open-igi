@@ -149,9 +149,17 @@ def main() -> int:
                     help="OFFSET:LENGTH bounded snapshot of the pointer in EAX on return, or none")
     ap.add_argument("--max-calls", type=int, default=256)
     ap.add_argument("--process-name", help="attach-mode target process name (default: executable name)")
+    ap.add_argument("--probe-input-json", type=Path,
+                    help="Diagnostic probe input recorded from retail; passed unchanged as layout.evidenceInput")
+    ap.add_argument('--diagnostic-resume-before-hook', action='store_true',
+                    help='Replay diagnostics only: resume before RPC; earlier startup calls remain unobserved')
+    ap.add_argument('--stream-probe-cases', action='store_true',
+                    help='Send recorded cases in ordered batches instead of one large setup RPC')
     ap.add_argument("--game-arg", action="append", default=[],
                     help="extra command-line token appended after 'window level<N>' (e.g. WinInput)")
     args = ap.parse_args()
+    if args.diagnostic_resume_before_hook and args.mode != 'spawn':
+        ap.error('diagnostic early resume requires owned spawn mode')
     if args.native_size is not None and not 1 <= args.native_size <= 65536:
         ap.error('--native-size must be 1..65536 bytes')
 
@@ -178,10 +186,27 @@ def main() -> int:
             raise SystemExit(f"probe missing: {spec['probe']}")
     if not (2.0 <= args.observe <= 300.0):
         raise SystemExit("observe must be 2..300 seconds")
-    args.max_calls = max(1, min(4096, args.max_calls))
+    args.max_calls = max(1, min(65536, args.max_calls))
     return_mem = args.return_mem
 
     exe_sha = sha256(args.exe)
+    evidence_input = None
+    evidence_input_identity = None
+    replay_cases = None
+    if args.probe_input_json:
+        if args.probe_input_json.stat().st_size > 8 * 1024 * 1024:
+            raise SystemExit('probe input exceeds 8 MiB')
+        evidence_input = json.loads(args.probe_input_json.read_text())
+        evidence_input_identity = dict(path=str(args.probe_input_json.resolve()),
+                                       sha256=sha256(args.probe_input_json))
+    if args.stream_probe_cases:
+        if not isinstance(evidence_input, dict) or not isinstance(evidence_input.get('cases'), list):
+            raise SystemExit('streaming requires a probe-input JSON object with cases')
+        replay_cases = evidence_input['cases']
+        if not 1 <= len(replay_cases) <= 65536:
+            raise SystemExit('streamed case count must be 1..65536')
+        evidence_input = {k: v for k, v in evidence_input.items() if k != 'cases'}
+        evidence_input.update(caseCount=len(replay_cases), casesStreamed=True)
     if args.expect_exe_sha256 and exe_sha != args.expect_exe_sha256.lower():
         print(f"BLOCKED: executable sha256 {exe_sha} != expected {args.expect_exe_sha256}", file=sys.stderr)
         return 1
@@ -203,7 +228,8 @@ def main() -> int:
                       probe_sha256=sha256(spec["probe"])) for spec in hook_specs],
         executable=dict(path=str(args.exe.resolve()), sha256=exe_sha,
                         preferred_base=f"0x{preferred_base:08X}", module=args.exe.name),
-        probe_template_sha256=sha256(Path(__file__).parent / "frida_native_probe_template.js"),
+        probe_template_sha256=(sha256(Path(__file__).parent / "frida_native_probe_template.js")
+                               if (Path(__file__).parent / "frida_native_probe_template.js").is_file() else None),
         environment=dict(
             frida_host=host,
             frida_client=getattr(frida, "__version__", "unknown"),
@@ -215,6 +241,7 @@ def main() -> int:
         arguments=dict(arg_words=args.arg_words, native_size=args.native_size, mem_arg=args.mem_arg,
                        return_mem=return_mem, watch=args.watch, max_calls=args.max_calls),
         hooks=[],
+        evidence_input=evidence_input_identity,
         entries=[],
         returns=[],
         messages=0,
@@ -270,7 +297,12 @@ def main() -> int:
             pid = device.spawn(spawn_args, cwd=win_path(args.game_dir))
             report["capture"] = dict(mode="spawn-suspended", owned_pid=pid,
                                      arguments=spawn_args, cwd=win_path(args.game_dir))
+            args.out.with_suffix('.owned.json').write_text(json.dumps(dict(
+                kind='igi-owned-capture-start', pid=pid, executable=report['executable'],
+                capture=report['capture'], captured_at=report['captured_at']), indent=2) + '\n')
+            print(f'DEBUG attaching owned PID {pid}', flush=True)
             session = device.attach(pid)
+            print('DEBUG attached', flush=True)
         else:
             name = args.process_name or args.exe.name
             pid = device.get_process(name).pid
@@ -285,21 +317,55 @@ def main() -> int:
                                     crash=(str(crash) if crash else None)))
         session.on("detached", on_detached)
         scripts = []
+        resumed = False
         for spec in hook_specs:
             script = session.create_script(spec["probe"].read_text())
             script.on("message", on_message)
+            print('DEBUG script load start', flush=True)
             script.load()
+            print('DEBUG script load done', flush=True)
             layout = dict(preferredBase=preferred_base, argWords=args.arg_words,
                           memArg=args.mem_arg, maxCalls=args.max_calls,
                           returnMem=return_mem, watch=args.watch,
                           moduleName=args.exe.name, nativeSize=args.native_size)
+            layout['evidenceInput'] = evidence_input
+            if args.diagnostic_resume_before_hook and not resumed:
+                device.resume(pid)
+                resumed = True
+                report['capture']['diagnostic_resume_before_hook'] = True
+                report['limitations'].append(
+                    'Diagnostic early resume: startup before hook installation is unobserved; '
+                    'this mode cannot establish startup-call parity.')
+            print('DEBUG typed hook RPC start', flush=True)
             hook = script.exports_sync.hook(spec["side_target"], layout)
+            print('DEBUG typed hook RPC done', flush=True)
             hook["name"] = spec["name"]
             hook["retailVA"] = spec["target"]
             hook["sideAddress"] = spec["side_target"]
             report["hooks"].append(hook)
             scripts.append(script)
-        if args.mode == "spawn":
+            if hook.get('pendingReplay'):
+                total = hook.get('replayTotal')
+                if not isinstance(total, int) or not 1 <= total <= 65536:
+                    raise ValueError('invalid diagnostic replay count')
+                previous = 0
+                for _ in range(256):
+                    progress = (script.exports_sync.replaynext(replay_cases[previous:previous+256])
+                                if replay_cases is not None else script.exports_sync.replaynext())
+                    completed = progress.get('completed')
+                    if (progress.get('total') != total or not isinstance(completed, int) or
+                            not previous < completed <= total):
+                        raise ValueError('invalid or stalled diagnostic replay progress')
+                    previous = completed
+                    report.setdefault('replay_progress', []).append(progress)
+                    print(f'DEBUG recorded-input replay {completed}/{total}', flush=True)
+                    if progress.get('done') is True:
+                        if completed != total:
+                            raise ValueError('diagnostic replay stopped before all inputs')
+                        break
+                else:
+                    raise ValueError('diagnostic replay did not finish within 256 bounded batches')
+        if args.mode == "spawn" and not resumed:
             device.resume(pid)
         observe_started = time.time()
         observe_deadline = observe_started + args.observe

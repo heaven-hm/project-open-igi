@@ -1,0 +1,3 @@
+2026-10-24 23:59:39.877 igi1.exe[80047:6155339] +[IMKClient subclass]: chose IMKClient_Modern
+terminate called after throwing an instance of 'std::logic_error'
+  what():  QTask_RegisterClasses (0x00402930): the retail function at this address is the startup init sequence, 155 ordered init/open/load calls ending in a tail jump to 0x004CEF30, not a class registrar; it is not transcribed, 134 of its 155 callees are absent, and it stops at AI graph

@@ -1,0 +1,24 @@
+{
+  "kind": "native-disassembly",
+  "schema_version": 1,
+  "tool": "binary_ninja",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "function_entry": "0x004A7EFF",
+  "signature": "int32_t(int32_t* arg1)",
+  "cfg": {
+    "nodes": [
+      {
+        "address": "0x004A7EFF"
+      }
+    ],
+    "edges": []
+  },
+  "raw_capture": "docs/fidelity/evidence/format-arg-reader-20261024-sol/capture.json",
+  "raw_capture_sha256": "de38ab896212bff47681eff8208ce109551ca35c402356d30b1fb375df069ae0",
+  "verified": false,
+  "limits": [
+    "Signature is a decompiler annotation, not an original source declaration.",
+    "Single basic block is established by the raw capture; source semantic acceptance remains separate."
+  ],
+  "tool_version": "6.0.10601"
+}

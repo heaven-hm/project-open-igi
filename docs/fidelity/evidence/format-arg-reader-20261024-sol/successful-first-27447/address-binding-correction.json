@@ -1,0 +1,10 @@
+{
+  "kind": "diagnostic-address-metadata-correction",
+  "verified": false,
+  "retail_native_va": "0x004A7EFF",
+  "original_comparison_candidate_va_was_preferred_image_address": "0x64701000",
+  "loaded_candidate_native_va": "0x784d1000",
+  "loaded_candidate_module_base": "0x784d0000",
+  "loaded_candidate_code": "8b4424048300048b008b40fcc3",
+  "note": "Original comparison artifact is preserved. Candidate runtime location comes from the actual loaded-module hook; address metadata does not affect the per-call typed comparisons."
+}

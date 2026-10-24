@@ -1,0 +1,182 @@
+[
+  {
+    "capture": "build/runtime-traces/format-arg-reader-20261024-sol-pair1",
+    "accepted": false,
+    "retained_files": [
+      {
+        "path": "failed-attempts/format-arg-reader-20261024-sol-pair1/retail-driver.log",
+        "sha256": "010e052c71fd423015afe2e05d3095c10815793353cfbce41ab806704364d21e"
+      }
+    ],
+    "raw_files": [
+      {
+        "path": "build/runtime-traces/format-arg-reader-20261024-sol-pair1/retail.jsonl",
+        "sha256": "5df0325e17b6f5535201491626d4487c7fdcb122d378b9e8d29084f188a54d3d"
+      },
+      {
+        "path": "build/runtime-traces/format-arg-reader-20261024-sol-pair1/retail.json",
+        "sha256": "19e136da200ccd2b7096c3c1dd0e3c3b8710655cfcd9bc767e82082c8ababab4"
+      }
+    ]
+  },
+  {
+    "capture": "build/runtime-traces/format-arg-reader-20261024-sol-pair2",
+    "accepted": false,
+    "retained_files": [
+      {
+        "path": "failed-attempts/format-arg-reader-20261024-sol-pair2/retail-driver.log",
+        "sha256": "ca70a5af6b70cd54664fc6311d12d0f9e5b59413567656c0810356e56d9028d4"
+      }
+    ],
+    "raw_files": [
+      {
+        "path": "build/runtime-traces/format-arg-reader-20261024-sol-pair2/retail.jsonl",
+        "sha256": "8159ae3304a0f5fe5bdb65a24e447f5c35218903e6aff2383d4d0a844a6c7f78"
+      },
+      {
+        "path": "build/runtime-traces/format-arg-reader-20261024-sol-pair2/retail.json",
+        "sha256": "bb885dd6871a19b22b5b38ea6e78b3b492001734f52965764eee994082ac9334"
+      }
+    ]
+  },
+  {
+    "capture": "build/runtime-traces/format-arg-reader-20261024-sol-pair3",
+    "accepted": false,
+    "retained_files": [
+      {
+        "path": "failed-attempts/format-arg-reader-20261024-sol-pair3/retail-driver.log",
+        "sha256": "0088137da82c69499b80b30414e310f75fa490f9854711a892768b91bd632611"
+      }
+    ],
+    "raw_files": [
+      {
+        "path": "build/runtime-traces/format-arg-reader-20261024-sol-pair3/candidate.jsonl",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "build/runtime-traces/format-arg-reader-20261024-sol-pair3/retail.jsonl",
+        "sha256": "195d0ac552500cc9c60f9bab65dabaccab627dc090b54a8b39da1e69f2000bca"
+      },
+      {
+        "path": "build/runtime-traces/format-arg-reader-20261024-sol-pair3/retail.json",
+        "sha256": "9e831eb6c9e01bd8bdb2e73831ad2f4b710f5f8eda2406622a70da4b5739fd20"
+      }
+    ]
+  },
+  {
+    "capture": "build/runtime-traces/format-arg-reader-20261024-sol-pair4",
+    "accepted": false,
+    "retained_files": [
+      {
+        "path": "failed-attempts/format-arg-reader-20261024-sol-pair4/retail.owned.json",
+        "sha256": "12121a96788d45589742b65728452669dc6d4e134253183663f6234b14f62694"
+      },
+      {
+        "path": "failed-attempts/format-arg-reader-20261024-sol-pair4/candidate-driver.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "failed-attempts/format-arg-reader-20261024-sol-pair4/candidate.owned.json",
+        "sha256": "720cde46c0ab1114abf026615a00b99bdb60c7d88c7e3eafa68b09a65c978e70"
+      },
+      {
+        "path": "failed-attempts/format-arg-reader-20261024-sol-pair4/retail-driver.log",
+        "sha256": "43a88ba9e8638788b8db2b83b6fc98556db27ee5684f2b792b4fe675d43e9791"
+      }
+    ],
+    "raw_files": [
+      {
+        "path": "build/runtime-traces/format-arg-reader-20261024-sol-pair4/candidate.jsonl",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "build/runtime-traces/format-arg-reader-20261024-sol-pair4/retail.jsonl",
+        "sha256": "e00e1dbc0d9be416433ad76f447ed135c0a890959eabc898dacea9b50427f477"
+      },
+      {
+        "path": "build/runtime-traces/format-arg-reader-20261024-sol-pair4/retail.json",
+        "sha256": "1706c8f291fa88fc8b185aefd3a971f879437a6629046212984b25ed80f0a6c5"
+      }
+    ]
+  },
+  {
+    "capture": "build/runtime-traces/format-arg-reader-20261025-sol-dll-pair1",
+    "accepted": false,
+    "retained_files": [
+      {
+        "path": "failed-attempts/format-arg-reader-20261025-sol-dll-pair1/retail.owned.json",
+        "sha256": "6182faa33b5cd945256b844c7ddd2081201f51ea422ea03830cb6c963556dbeb"
+      },
+      {
+        "path": "failed-attempts/format-arg-reader-20261025-sol-dll-pair1/candidate-driver.log",
+        "sha256": "f05992d0bfd9e94fba58b5c95ebc3fddc282ad7c692107546100fb406836fb85"
+      },
+      {
+        "path": "failed-attempts/format-arg-reader-20261025-sol-dll-pair1/candidate.owned.json",
+        "sha256": "6becea81428ecae68f96682bc87aa23ce03d9580b95be4b4cb9014d6dfce174e"
+      },
+      {
+        "path": "failed-attempts/format-arg-reader-20261025-sol-dll-pair1/retail-driver.log",
+        "sha256": "82e23403b7a2ce001a86ad039b74745a39261d78a829de215ebd72b87d9b8ba3"
+      }
+    ],
+    "raw_files": [
+      {
+        "path": "build/runtime-traces/format-arg-reader-20261025-sol-dll-pair1/candidate.jsonl",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "build/runtime-traces/format-arg-reader-20261025-sol-dll-pair1/candidate.json",
+        "sha256": "6adcb811151b550ffede428f0e6a7a35a40a78679636ca1027c599e4af09a6c6"
+      },
+      {
+        "path": "build/runtime-traces/format-arg-reader-20261025-sol-dll-pair1/retail.jsonl",
+        "sha256": "340e6496ccf3dc152ff340839005b492d36940ab17b8e2689a7ca01f648c9499"
+      },
+      {
+        "path": "build/runtime-traces/format-arg-reader-20261025-sol-dll-pair1/retail.json",
+        "sha256": "669867cae24cced2dcad2888336af988194860b90bacd4f22a188fc523061d95"
+      }
+    ]
+  },
+  {
+    "capture": "build/runtime-traces/format-arg-reader-20261025-sol-dll-pair2",
+    "accepted": false,
+    "retained_files": [
+      {
+        "path": "failed-attempts/format-arg-reader-20261025-sol-dll-pair2/retail.owned.json",
+        "sha256": "3c0331d6a4cb19f0c487c2b8898b69d6fc52fa9659e703433523f8e9dbe5de62"
+      },
+      {
+        "path": "failed-attempts/format-arg-reader-20261025-sol-dll-pair2/candidate-driver.log",
+        "sha256": "a37d12634fde4c7872345c1e6c2f44398c216997179dde755838bde2833818ff"
+      },
+      {
+        "path": "failed-attempts/format-arg-reader-20261025-sol-dll-pair2/candidate.owned.json",
+        "sha256": "53fe0633c9a5bce4040d58188156a04104d3c2ab633c50c06a0e3063cd9b40a2"
+      },
+      {
+        "path": "failed-attempts/format-arg-reader-20261025-sol-dll-pair2/retail-driver.log",
+        "sha256": "609229e3a37375d6131fda7bb7050d14b27d3b17b759cecd22339f50a13025a2"
+      }
+    ],
+    "raw_files": [
+      {
+        "path": "build/runtime-traces/format-arg-reader-20261025-sol-dll-pair2/candidate.jsonl",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "build/runtime-traces/format-arg-reader-20261025-sol-dll-pair2/candidate.json",
+        "sha256": "ac10e9310dd7c2693b447f2cabc698415ffd0f685604dc968b1c2cddca0f2dc8"
+      },
+      {
+        "path": "build/runtime-traces/format-arg-reader-20261025-sol-dll-pair2/retail.jsonl",
+        "sha256": "c2559ef2d456ef8b65d13f37e48f785e5ab7a726fadb0f3ee6ec7100f482ba47"
+      },
+      {
+        "path": "build/runtime-traces/format-arg-reader-20261025-sol-dll-pair2/retail.json",
+        "sha256": "dc77e4948a0bddbaff36991e1b3d9c605712509404b48c62d439db97949d5ee3"
+      }
+    ]
+  }
+]

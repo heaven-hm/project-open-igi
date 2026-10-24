@@ -28,7 +28,7 @@ Rules that apply to every tool below:
 | angr | 10.0.4.post1 | `/Users/haseeb-mir/Documents/Code/project-open-igi/.venv-angr/bin/python` (Python 3.12.1) | Exact entry recovery + CFGFast, `scripts/angr_analyze.py` |
 | Ghidra | homebrew `ghidraRun` | `/opt/homebrew/bin/ghidraRun`; data under `/Users/haseeb-mir/ghidra` | Fallback decompiler ONLY when BN unavailable |
 | Frida | 17.24.0 | `/Users/haseeb-mir/.local/bin/frida`, `frida-ps`; python env at `/Users/haseeb-mir/Library/Application Support/pipx/venvs/frida-tools/bin/python` | Runtime instrumentation of retail and candidate |
-| frida-server | listens `127.0.0.1:27042` | started on demand by the tester scripts | Device-side agent for Frida |
+| frida-server | 17.24.0, Windows x86; listens `127.0.0.1:27042` | `/Users/haseeb-mir/.cache/frida-crossover/frida-server-x86.exe` | Device-side agent for Frida; restored from the official release on 2026-10-25 |
 | CUA (CuaDriver) | `cua-driver` 0.17.0 | app `/Applications/CuaDriver.app`; CLI `/Users/haseeb-mir/.local/bin/cua-driver`; config `~/.config/cua` | Computer-use automation: drive/observe game windows, screenshots, clicks, keys (MCP capable) |
 | CUA python stack | cua-agent 0.8.4, cua-computer 0.5.19, cua-core 0.3.1 | pipx-installed (see `pipx list`) | Higher-level CUA agent/computer APIs over the same driver |
 | CrossOver / Wine | CrossWine build | `/Users/haseeb-mir/Documents/Code/CrossWine` | Runs both Windows executables; `winedbg`/`wine*` helpers appear under it |
@@ -125,6 +125,25 @@ frida-ps -H 127.0.0.1:27042     # list processes through a running frida-server
   code/termination reason.
 
 Known environment notes:
+
+- 2026-10-25 recovery: the server process and its documented cache executable
+  were both absent. The official `frida-server-17.24.0-windows-x86.exe.xz` release
+  was downloaded from `github.com/frida/frida/releases/download/17.24.0/`, decoded
+  and checked as PE32/i386. Executable SHA-256:
+  `d4b0b8af908b13c673d9e40b805b446182b051a61b4f62f519793ddaaa651d3b`.
+  The cache path above has been restored. The currently started service uses
+  the identical file at `/private/tmp/igi-frida-server-17.24.0-windows-x86.exe`
+  in CrossOver bottle `open-igi`. Actual process enumeration succeeded. The
+  independent RE-Agent CLI and module checks remain blocked; this is not a
+  claim that every provider is healthy.
+- A new diagnostic candidate imported UCRT API-set DLLs despite `-static` and
+  the older CMake comment. A normal launch reached the explicit 0x00402930
+  startup exception, so those imports did not establish the observed Frida
+  setup timeout's cause. Do not claim that build flags removed those imports.
+- Large recorded-input arrays must use bounded `--stream-probe-cases` RPC
+  transfers. Complete 27,447-case DLL replay passed after this change. Its
+  `--diagnostic-resume-before-hook` mode deliberately leaves earlier startup
+  unobserved and cannot authorize startup or whole-game parity.
 
 - Frida 17 removed the static `Memory.read*` helpers and the write/read `Interceptor` shortcuts; use
   `NativePointer.readU32`/`readByteArray`.

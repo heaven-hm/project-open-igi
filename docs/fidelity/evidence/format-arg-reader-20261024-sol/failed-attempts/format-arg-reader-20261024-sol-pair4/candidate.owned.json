@@ -1,0 +1,21 @@
+{
+  "kind": "igi-owned-capture-start",
+  "pid": 464,
+  "executable": {
+    "path": "/Users/haseeb-mir/Documents/Code/project-open-igi/build-format-arg-candidate-sol/igi1.exe",
+    "sha256": "8108c027b43f958e36d3ecee4c3cb8233167256c3bb7797a7c5a3a47f7967fad",
+    "preferred_base": "0x00400000",
+    "module": "igi1.exe"
+  },
+  "capture": {
+    "mode": "spawn-suspended",
+    "owned_pid": 464,
+    "arguments": [
+      "Z:\\Users\\haseeb-mir\\Documents\\Code\\project-open-igi\\build-format-arg-candidate-sol\\igi1.exe",
+      "window",
+      "level1"
+    ],
+    "cwd": "Z:\\Users\\haseeb-mir\\Downloads\\IGI"
+  },
+  "captured_at": "2026-10-24T18:21:58.440738+00:00"
+}

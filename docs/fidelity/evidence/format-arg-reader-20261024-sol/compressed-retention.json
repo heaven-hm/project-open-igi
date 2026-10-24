@@ -1,0 +1,37 @@
+[
+  {
+    "source": "build/runtime-traces/format-arg-reader-20261025-sol-dll-final/candidate.jsonl",
+    "retained": "candidate.jsonl.gz",
+    "compression": "gzip",
+    "uncompressed_sha256": "6e015b47109fc320782da95d12809c30027e660463aa4f566e0a02e1321018a8",
+    "sha256": "8f27a5f919adc600a1edc673323dd94d2e57c1d5199fccc93e829058556a628f"
+  },
+  {
+    "source": "build/runtime-traces/format-arg-reader-20261025-sol-dll-final/candidate.json",
+    "retained": "candidate.json.gz",
+    "compression": "gzip",
+    "uncompressed_sha256": "aded6fd397f1880b9d5557055c3265ee0a78513504cc5d0da069b85f586a1852",
+    "sha256": "b995c47d10b992d668187ae5e407e6b0af5036da708b5402ff36e2aaeb783c98"
+  },
+  {
+    "source": "build/runtime-traces/format-arg-reader-20261025-sol-dll-final/retail.jsonl",
+    "retained": "retail.jsonl.gz",
+    "compression": "gzip",
+    "uncompressed_sha256": "7645ca1ec7646430f1ccf210176ee57be6c30e70036d5b935ca488cd7a528023",
+    "sha256": "5d49b236db46825c94d63251c241206773d5a47fd4bc080cdabf874b8ce127af"
+  },
+  {
+    "source": "build/runtime-traces/format-arg-reader-20261025-sol-dll-final/retail-inputs.json",
+    "retained": "retail-inputs.json.gz",
+    "compression": "gzip",
+    "uncompressed_sha256": "7e2a5dba5e5bcec0f15dcb4fe525a908ee029d13e323be7f0e060958b71b7e7d",
+    "sha256": "46dae439d45d8e95d2c8aa5824f969d9f6952e5df6687991fa69bd4fce1b45ab"
+  },
+  {
+    "source": "build/runtime-traces/format-arg-reader-20261025-sol-dll-final/retail.json",
+    "retained": "retail.json.gz",
+    "compression": "gzip",
+    "uncompressed_sha256": "ac1059da569ece61e2ad39e213894d10edce0a61c02a2f20507bee2e2ab90db8",
+    "sha256": "815ee043e2176ced3dfff2b17cd5ea866a2be4b90dcbe374e57391bacea1d478"
+  }
+]

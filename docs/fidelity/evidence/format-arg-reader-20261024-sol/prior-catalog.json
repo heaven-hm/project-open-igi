@@ -1,0 +1,27 @@
+[
+  {
+    "path": "scripts/GameNatives/004A7EFF-Camera_UpdateTransform_12 2.cpp",
+    "sha256": "9db35d92c6ef79b58c843d4de9b7755c9f437720cd35fd6a8f4d766fb130d26b",
+    "retained": "prior-catalog/004A7EFF-Camera_UpdateTransform_12 2.cpp"
+  },
+  {
+    "path": "scripts/GameNatives/004A7EFF-Camera_UpdateTransform_12.cpp",
+    "sha256": "eb7c26ce1d1de6dfae2f6397ae03b04d9930e1687739f9abdcfb617fb08193ff",
+    "retained": "prior-catalog/004A7EFF-Camera_UpdateTransform_12.cpp"
+  },
+  {
+    "path": "scripts/GameNatives/camera/004A7EFF-Camera_UpdateTransform_12 2.cpp",
+    "sha256": "9db35d92c6ef79b58c843d4de9b7755c9f437720cd35fd6a8f4d766fb130d26b",
+    "retained": "prior-catalog/camera/004A7EFF-Camera_UpdateTransform_12 2.cpp"
+  },
+  {
+    "path": "scripts/GameNatives/camera/004A7EFF-Camera_UpdateTransform_12.cpp",
+    "sha256": "eb7c26ce1d1de6dfae2f6397ae03b04d9930e1687739f9abdcfb617fb08193ff",
+    "retained": "prior-catalog/camera/004A7EFF-Camera_UpdateTransform_12.cpp"
+  },
+  {
+    "path": "scripts/GameNatives/camera/004A7EFF-Camera_UpdateTransform_12.hpp",
+    "sha256": "c189037ce26c48d1d77ba668029eaa4d549a5fa9244e840653841fc3a20c4143",
+    "retained": "prior-catalog/camera/004A7EFF-Camera_UpdateTransform_12.hpp"
+  }
+]

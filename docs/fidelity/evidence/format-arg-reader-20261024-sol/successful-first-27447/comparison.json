@@ -1,0 +1,29 @@
+{
+  "kind": "igi-format-arg-reader-recorded-input-replay",
+  "verified": false,
+  "natural_candidate_flow": false,
+  "retail_va": "0x004A7EFF",
+  "candidate_va": "0x64701000",
+  "identities": {
+    "/Users/haseeb-mir/Downloads/IGI/igi.exe": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+    "/Users/haseeb-mir/Documents/Code/project-open-igi/scripts/tester/frida_format_arg_reader.js": "d519a148f98ef264e462d80b069dbd4eee158a369c3babc937304fbd7954c439",
+    "/Users/haseeb-mir/Documents/Code/project-open-igi/build/native-analysis/format-arg-reader-sol/004A7EFF-Native_004A7EFF.cpp": "38c8964ea3d23441a36e0664efa2f682e4085a18a34d29aaf19db8b17b2b5188",
+    "/Users/haseeb-mir/Documents/Code/project-open-igi/build/native-analysis/format-arg-reader-sol/004A7EFF-Native_004A7EFF.hpp": "12189ea6631c8e824b3c97cc15b1c3946e0fb9484357a3666acbd72ae978cb55",
+    "/Users/haseeb-mir/Documents/Code/project-open-igi/scripts/tester/frida_probe_driver.py": "533d7858471ac856b004135e90a17c3ad652970ad60ddcf71747849590cba2f3",
+    "/Users/haseeb-mir/Documents/Code/project-open-igi/scripts/tester/capture_format_arg_pair.py": "b96f4910b4229fa6c6a018ec19a6fdba8ea51436c14b98dc191bf7064e4edfbd",
+    "/Users/haseeb-mir/Documents/Code/project-open-igi/build/runtime-traces/format-arg-reader-20261025-sol-dll-pair3/candidate.dll": "da0f3c0b267f3cb08f3e7b4402e3e976009469f66c645199f2b62dc069331639",
+    "/Users/haseeb-mir/Documents/Code/project-open-igi/build/runtime-traces/format-arg-reader-20261025-sol-dll-pair3/dll-build.json": "a16439d6158be3cbfd793355c7864bf35f86bb1e64b725f2b7ca2b6fed1cc8b6",
+    "/Users/haseeb-mir/Documents/Code/project-open-igi/build/runtime-traces/format-arg-reader-20261025-sol-dll-pair3/retail-inputs.json": "21bbe6221ed7e9617ce480010edcae01d2bd5ad8fcbad6bf350a6a8b1a0b36a8"
+  },
+  "calls": 27447,
+  "mismatched_calls": [],
+  "observations_match": true,
+  "semantic_checks": true,
+  "scope": "All naturally observed retail inputs replayed on the compiled x86 DLL in a second retail host",
+  "replay_host": "retail",
+  "limits": [
+    "Replay uses owned memory and the RPC thread, not the candidate formatter call graph.",
+    "No aliasing, invalid-pointer or concurrency claim follows from these disjoint recorded inputs.",
+    "No production intake, reviewed runtime contract or full-game acceptance."
+  ]
+}

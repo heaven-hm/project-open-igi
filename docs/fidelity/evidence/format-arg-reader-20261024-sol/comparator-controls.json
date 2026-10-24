@@ -1,0 +1,10 @@
+{
+  "verified": false,
+  "calls": 16441,
+  "checks": {
+    "all_current_rows_equal": true,
+    "wrong_resultWord_rejected": true,
+    "wrong_cursorAdvance_rejected": true,
+    "missing_return_rejected": true
+  }
+}

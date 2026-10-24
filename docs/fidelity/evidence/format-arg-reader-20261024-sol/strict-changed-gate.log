@@ -1,0 +1,16 @@
+native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)
+native_gate: v4 catalog consistency checked for 0 selected entries
+native_gate: checking 0x004A7EFF (scripts/GameNatives/string/004A7EFF-Native_004A7EFF.cpp)
+native_gate: 0x004A7EFF BLOCKED: 6 issue(s)
+native_gate: checking 0x004A7EFF (scripts/GameNatives/string/004A7EFF-Native_004A7EFF.hpp)
+native_gate: 0x004A7EFF BLOCKED: 1 issue(s)
+native_gate: WARNING: scripts/GameNatives/string/004A7EFF-Native_004A7EFF.hpp:4 0x004A7EFF: missing Behavior/CFG: line
+native_gate: BLOCKED 2 changed native(s) (status>=VERIFIED, CFG>=0.85, behavioral-tests=required)
+  - 0x004A7EFF: status BUILD_VERIFIED is below required VERIFIED
+  - 0x004A7EFF: function symbol/signature comparison has not passed review
+  - 0x004A7EFF: binary_ninja/Radare2 signatures disagree without a reviewed adaptation
+  - 0x004A7EFF: binary_ninja/Radare2 signature disagreement requires a written rationale
+  - 0x004A7EFF: missing build report reference
+  - 0x004A7EFF: missing semantic review report reference
+  - 0x004A7EFF: implementation path does not match scripts/GameNatives/string/004A7EFF-Native_004A7EFF.hpp
+Comments and manifest status labels alone do not authorize compilation.

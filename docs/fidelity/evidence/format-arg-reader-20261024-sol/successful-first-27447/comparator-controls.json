@@ -1,0 +1,11 @@
+{
+  "kind": "retained-observation-negative-controls",
+  "verified": false,
+  "checks": {
+    "all_recorded_rows_equal": true,
+    "wrong_return_rejected": true,
+    "wrong_cursor_advance_rejected": true,
+    "missing_return_rejected": true,
+    "missing_terminal_rejected": true
+  }
+}

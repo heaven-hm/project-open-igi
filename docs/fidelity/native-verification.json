@@ -44884,13 +44884,13 @@
         "selected_decompiler": "binary_ninja",
         "binary_ninja": {
           "evidence_path": "docs/fidelity/evidence/format-arg-reader-20261024-sol/binary_ninja.json",
-          "evidence_sha256": "4a2949f01925df76c44668653b57feb09cc934b00e623ed153557aa8714e3eba",
+          "evidence_sha256": "ed33b1642705baa99bbbd17303d90f9e4d82a79833b9a80eed099f5e91c78c11",
           "evidence_id": "bn:live:0x004A7EFF:20261024-sol",
           "signature": "int32_t(int32_t* arg1)"
         },
         "radare2": {
           "evidence_path": "docs/fidelity/evidence/format-arg-reader-20261024-sol/radare2.json",
-          "evidence_sha256": "d963a395cd525dbdf5f75878cc4489438653990239a70dfdc9e4b4e9d74be4dc",
+          "evidence_sha256": "5951c9c037f4d3cd33184ae10a272a96cce2f739cc5a948c872f7208b75d735a",
           "evidence_id": "r2:live:0x004A7EFF:20261024-sol",
           "signature": "one x86 DWORD stack argument; source type annotation unavailable"
         },
@@ -44902,6 +44902,7 @@
         "limitations": [
           "One block, 13 bytes; compiled and loaded candidate body equals retail. Byte SHA256 639148f2f162bda27c1f66ab90d68794bac59a533c7cbf65580a2c6853ef771f.",
           "27,447 natural retail inputs matched a compiled-DLL replay in a second retail host: return bits, cursor advance and source word after the call. This is diagnostic runtime evidence, not natural reconstructed-game formatter reachability.",
+          "Final repeat with the current header and driver compared all 16,441 observed calls without mismatch; both successful captures and their exact source/probe identities are retained in docs/fidelity/evidence/format-arg-reader-20261024-sol/.",
           "No reviewed production runtime_contract, independent acceptance or engine intake is claimed. Invalid pointers, overlapping cursor/value storage and concurrency are not covered by the recorded disjoint inputs.",
           "Original source identifiers and signedness are unknown. The placeholder name and uint32_t result describe the observed raw ABI only."
         ]
