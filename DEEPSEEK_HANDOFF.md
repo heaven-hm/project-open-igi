@@ -1154,3 +1154,26 @@ IMPORTANT: candidate_build_receipt.py wrote build/diagnostic-candidate-build.jso
 strict-gate release attestation. It is deployed for observation only and must not be presented as a verified release.
 The boundary-at-exit-3 result therefore has to be re-established on this artifact by the Tester before any runtime claim
 about the current source is repeated.
+
+## Runtime lease blocked by two orphaned game sessions (round 188)
+
+The Tester could not take the lease for b071553f because game processes were already running. Verified independently:
+
+  41746  PPID 1  14m05s  Ss  build-format-arg-candidate-sol/igi1.exe window level1   - nobody's: no listed teammate
+                                                                                      owns it, no children, from a
+                                                                                      build directory no one is using
+  93434  PPID 1  17h53m  S   bash -c cd .../project-open-igi && RUN="$PWD/$(cat /tmp/tester-run...)"
+  93436  93434   17h53m  S   CrossOver x86_64 wine loader (child of 93434)
+
+The 93434/93436 tree reads /tmp/tester-run*, so it is the Tester's OWN earlier run, orphaned 17+ hours ago and still
+holding the mutex. Both trees have PPID 1, i.e. they were reparented to launchd - nothing ties them to a live session.
+
+Disposition given to the Tester: record the PIDs and command lines first, then clear 41746 (unowned) and the 93434 tree
+(its own orphan, parent then child), leave winedevice/CrossWine/CrossOver GUI processes alone as shared infrastructure,
+and take the lease only when `pgrep -f 'igi1?\.exe'` is empty. If anything still holds the mutex and cannot be
+attributed, report and stop rather than force a second instance.
+
+Process lesson for the one-process rule: a crashed or abandoned run reparents to launchd and becomes invisible to
+`list_agents` while still holding the mutex. The lease protocol needs a liveness check that includes PPID-1 game
+processes, not just teammate status - otherwise every future runtime pass can be silently blocked by a session nobody
+can see.
