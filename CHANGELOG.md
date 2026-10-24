@@ -11,6 +11,22 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - correction: the candidate "scene" capture was the desktop, not candidate output (internal build, no release)
+
+- **Correction of the 2026-10-25 paired scene entry above**: the candidate image was not the candidate's output. Captured region
+  `523,286 634x476` is **pixel-identical** to the same rectangle captured after the candidate process died (identical fraction 1.0,
+  mean absolute difference 0.0), so the window contributed no pixels at all and the image shows the desktop behind it.
+- **Why**: the candidate creates its window (`owner igi1.exe`, title `Innerloop`, `634x476` at `523,286`) and then terminates at the
+  `0x00402930` guard within milliseconds - before DirectDraw/Direct3D initialisation and before any frame is painted. `screencapture -l`
+  additionally reports `could not create image from window`, which is the same fact from the window server side: no composited surface
+  exists because nothing was drawn.
+- **Tooling gap and fix**: `matches_window` only compares the window's bounds with the image size - it proves the capture rectangle is
+  the window, **not** that the window drew anything. `scripts/tester/game_scene_capture.py` now has `--verify-painted`: it re-captures the
+  same rectangle after terminating the process and compares. Measured on this run: retail `painted: true` (`painted_fraction` 1.0),
+  candidate `painted: false` (`painted_fraction` 0.0).
+- **Artifact renamed** to `screenshots/pair-2026-10-25/candidate-level1-window-unpainted.png` so it cannot be mistaken for game evidence.
+  It records window geometry only. No candidate render exists for Level 1 until the startup sequence runs.
+
 ### 2026-10-25 - paired level 1 scene capture, both games, window-scoped (internal build, no release)
 
 - **Tool fix**: `scripts/tester/game_scene_capture.py` now supports an open title (`--title ''`), a minimum window area, and a

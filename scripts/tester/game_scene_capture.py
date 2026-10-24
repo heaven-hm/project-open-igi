@@ -126,6 +126,8 @@ def main():
     parser.add_argument('--window-timeout', type=float, default=60.0)
     parser.add_argument('--settle', type=float, default=1.5)
     parser.add_argument('--skip-intro', action='store_true')
+    parser.add_argument('--verify-painted', action='store_true',
+                        help='after the kill, re-capture the same rectangle and report whether the window contributed pixels')
     parser.add_argument('--keep-running', action='store_true')
     args = parser.parse_args()
 
@@ -180,6 +182,27 @@ def main():
     if not args.keep_running:
         subprocess.run(['pkill', '-f', args.exe])
         time.sleep(0.5)
+    if args.verify_painted and report.get('capture_mode') in ('window', 'region'):
+        # A window that never painted leaves no composited surface, so the rectangle it occupies is the
+        # desktop behind it. Re-capture the same rectangle after the process is gone and compare: identical
+        # pixels mean the window contributed nothing and the image is NOT evidence of the program's output.
+        bounds = report['window']['bounds']
+        report['painted_check_bounds'] = bounds
+        after = Path('/tmp') / f"{Path(args.out).stem}-afterdeath.png"
+        subprocess.run([SCREENCAPTURE, '-x', '-o', '-R', f"{bounds['x']},{bounds['y']},{bounds['w']},{bounds['h']}",
+                        str(after)], capture_output=True, text=True)
+        try:
+            import numpy
+            before_pixels = numpy.asarray(Image.open(args.out).convert('RGB')).astype(numpy.int16)
+            after_pixels = numpy.asarray(Image.open(after).convert('RGB')).astype(numpy.int16)
+            if before_pixels.shape == after_pixels.shape:
+                identical = float((numpy.abs(before_pixels - after_pixels).sum(2) == 0).mean())
+                report['painted_fraction'] = round(1.0 - identical, 6)
+                report['painted'] = report['painted_fraction'] > 0.0
+                report['painted_note'] = ('identical to the same rectangle after the process died: the window never painted, so this image '
+                                          'is the desktop behind it, not program output') if not report['painted'] else 'window contributed pixels'
+        except Exception as error:
+            report['painted_error'] = str(error)
     report['log'] = str(log)
     report['still_running'] = bool(process_ids(args.exe))
     print(json.dumps(report))
