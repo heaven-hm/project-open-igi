@@ -34,53 +34,52 @@ not sufficient and produced at least one wrong classification.
 5. **Address ranges are a hint, never the evidence.** The 0x00401000-0x00402000 range was treated as CRT in earlier rounds; that was
    an inference, and the case below shows it was wrong for at least one function.
 
-## Case study: 0x00401400 is game code, not CRT
+## Case study: 0x00401400 is game code - and it was already transcribed
 
-Earlier rounds parked 0x00401400 as a "printf-family CRT internal" because it lives at 0x00401400 and writes through a table. The
-evidence says otherwise:
+Earlier rounds parked 0x00401400 as a "printf-family CRT internal" because it lives at 0x00401400 and writes through a table. Two parts
+of that were wrong, and both are recorded here rather than quietly dropped.
 
-- 1312 call sites across the image - more than any CRT internal would need, and consistent with a project-wide trace/log dispatcher.
-- Frida observation at level-1 startup, caller 0x004C59A4: arguments `(2, 36, 0x004C5A10)` - a small category, a small id, and a
-  pointer, not a printf format-and-values pattern.
-- Its body increments counters 0x00567C6C and 0x00536148, writes the third argument into `0x00A96AE0 + (id*384 + (arg1 & 0xFFFF))*4`,
-  sets a byte in 0x0054FF34, then walks 2048 records of 0x30 bytes from 0x00AF5EE8 to 0x00AFA6E8 and **recursively calls itself**
-  for records whose category matches and whose byte is clear, before calling 0x004014B0.
-- The table at 0x00AF5EE8 is game data, not CRT data; the recursion distributes one trace value over a category tree.
+**It is game code.** 1312 call sites; Frida-observed startup call from 0x004C59A4 with arguments `(2, 36, 0x004C5A10)`; counters at
+0x00567C6C and 0x00536148; a table at 0x00A96AE0 indexed by `(id & 0xFF) * 0x180 + (id & 0xFFFF)`; a recursive walk over 2048 records of
+0x30 bytes from 0x00AF5EE0; and the table is later called indirectly at 0x004012DE (`call *%eax`) - it is a QTask event-handler table.
 
-So 0x00401400 must be transcribed as its own native. The same re-examination is owed to 0x00401530 (623 callers), 0x00401900 (279),
-0x004017C0 (150) and 0x004018F0 (118): the caller counts alone rule out CRT internals, and each needs the same evidence check before it
-is either transcribed or excluded.
+**It was already transcribed.** The tree already owns it as `QTask_LinkQTaskEventHandler` in
+`engine/src/retail/core/task_types.cpp`, status STRUCTURALLY_VERIFIED, CFG 1.000, together with 0x004014B0
+(`TaskType_RefreshHandlerMask`) and 0x004014E0 (`TaskType_HandlerPhaseMask`). Round 1 of this goal briefly re-derived all three and wrote
+duplicate implementations under `engine/src/retail/sys/`; the build did not catch it because the duplicates used different symbol names,
+which is exactly the duplicate-implementation smell rule 13 forbids. Those files were deleted, the CMake entries and the extra manifest
+record were reverted, and the originals stay the single implementation.
 
-## Consequence for the boundary work
+**Why the false blocker happened.** The landability analysis built its "implemented" set by globbing `engine/src/retail/*/native_*.cpp`.
+That misses every native implemented in a hand-named file - `task_types.cpp`, `flow.cpp`, `game_flow.cpp` and others. The set is now taken
+from `docs/fidelity/native-verification.json`, which is the single owner of implementation paths: **1285 addresses implemented**, of which
+88 are inside the CRT ranges.
 
-The 0x00402930 chain is gated on these game utilities, not on CRT. That is worse news than the earlier reading, and it is the honest
-one: the boundary needs the utilities transcribed too, which is why it is 133 callees each with closures rather than 133 wrappers over
-the C runtime.
+## Recomputed chain landability
 
-## Next increment prepared: 0x00401400's shape (measured, not yet transcribed)
+With the manifest as the implementation set, these direct callees of 0x00402930 have **zero unimplemented direct call targets**:
 
-Extent 0x00401400-0x004014A4, 53 instructions, 0xA4 bytes. Everything below is read from the retail instructions; the transcription is
-deliberately not attempted in this round because its storage extents are not yet proven.
+| VA | instructions | note |
+| --- | --- | --- |
+| 0x0042DAC0 | 15 | registers two QTask handlers |
+| 0x0042FE40 | 15 | registers two handlers of the same shape |
+| 0x0046DF10 | 22 | - |
+| 0x00415070 | 30 | - |
+| 0x004688B0 | 31 | - |
+| 0x00468E20 | 31 | - |
+| 0x004851B0 | 31 | - |
+| 0x00424B90 | 33 | - |
 
-- Arguments: `arg1` at [esp+4] (category/id word, used as `(arg1 & 0xFFFF) + (arg1 & 0xFF) * 384`), `arg2` at [esp+8] (a 16-bit
-  selector compared against the word at each record), `arg3` at [esp+0xC] (a value stored into the table).
-- Counters: 0x00567C6C incremented on entry and decremented at 0x0040149A; 0x00536148 incremented once per call.
-- Stores: `arg3` into `0x00A96AE0 + index*4`; `(counter == 1)` byte into `0x0054FF34 + index`.
-- Recursion: walks records of 0x30 bytes from 0x00AF5EE8 while the pointer is below 0x00AFA6E8 (2048 records). For a record whose
-  byte at +0x1D is set, whose word at +0x00 equals `arg2`, and whose byte at `0x0054FF34 + index + i` is zero, it calls itself with
-  `(i, arg1, arg3)`. Then it calls 0x004014B0 once.
-- 0x004014B0 (0x2B bytes, 18 instructions) walks the same 2048 records from 0x00AF5F08 in 0x30 strides up to 0x00AFA708, and for each
-  record whose byte at -0x03 is set calls 0x004014E0(record index) and stores the returned word at record+0x30. 0x004014E0 is already
-  transcribed (this tree owns native_4014e0.cpp), so 0x004014B0 is gated only on 0x00401400 and its storage.
-- Section arithmetic confirms the data is real, not unmapped: image base 0x00400000, .data covers RVA 0x00136000..0x00832558, so
-  0x00A96AE0, 0x00AF5EE8 and 0x00AFA6E8 all fall inside .data at RVAs 0x00696AE0, 0x006F5EE8 and 0x006FA6E8.
+They are not yet transcribed for a newly established reason: the registrars push **code addresses as handler arguments**, and those
+handlers are functions that the CFG recovery never listed as function starts.
 
-Open questions that block a faithful transcription and must be answered from the image, not guessed:
+- 0x0042DAC0 pushes 0x0042DB00 and 0x0042DCE0.
+- 0x0042FE40 pushes 0x0042FE80 and 0x0042FEF0.
 
-1. the extent of the 0x00A96AE0 table (the index formula can reach 163359 dwords, which fits inside .data, but "it fits" is not proof of
-   the declared size);
-2. the record type at 0x00AF5EE8: which fields at +0x00, +0x1D and -0x03 are, and how a record's word relates to `arg2`;
-3. whether 0x0054FF34 is one byte per index or a wider per-index record.
+0x0042DCE0 is `mov 0x8(%esp),%eax; movl $0x2C0,(%eax); ret` (11 bytes) and 0x0042FEF0 is the same shape writing `0x2F0`; 0x0042DB00 and
+0x0042FE80 are real bodies with prologues (`push ebx; push ebp; push esi; ...`) that end before the next detected entry. Neither has a
+known extent from CFG recovery, so their boundaries have to be established from the instructions before they can be transcribed - the
+registrar cannot link without them, and inventing a signature for a handler the ABI does not establish would fabricate the call contract.
 
-Only after those are established can 0x00401400 be transcribed without inventing structure. That is the next increment, and it is what
-unblocks 0x0042DAC0, 0x0042FE40 and every other registration routine that reports through it.
+Next increment: establish the extent and ABI of 0x0042DCE0/0x0042FEF0 (trivial, three instructions each) and of 0x0042DB00/0x0042FE80, then
+transcribe the four handlers and the two registrars. That is the shortest real path into the startup chain.
