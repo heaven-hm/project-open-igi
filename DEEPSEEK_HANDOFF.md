@@ -727,3 +727,32 @@ Spot-checked the analyst's claims in the current source rather than trusting the
 
 Rule for this verification pass: take each correction to the file and line that would show it, publish only what
 the source shows, and withdraw the ones the source disproves - as with correction 3 here.
+
+## QTask_Init phase-link sequence, read byte by byte (round 160)
+
+The links retail performs between the current-type store (0x401138) and the handler-table clear (0x40117B), with
+the exact instruction order. They are hardcoded per phase, not a loop, and the two link natives differ:
+
+    0x40113E push 0           0x40114E push 1           0x40115E push 2           0x40116E push 3
+    0x401140 call 0x4018F0    0x401150 call 0x4018F0    0x401160 call 0x4018F0    0x401170 call 0x4018F0
+    0x401145 push eax         0x401155 push eax         0x401165 push eax         0x401175 push eax
+    0x401146 call 0x401860    0x401156 call 0x401890    0x401166 call 0x401890    0x401176 call 0x401890
+    0x40114B add esp,8        0x40115B add esp,8        0x40116B add esp,8
+
+So: phase 0 links through 0x401860, phases 1..3 link through 0x401890, and each pair is
+`0x401890(0x4018F0(phase))` with the handler returned in EAX pushed straight back as the argument. 0x4018F0 takes
+the phase (0..3) as a dword and returns the phase handler; the link call takes that handler.
+
+Consequences for the transcription, recorded before writing it:
+- The four links must be four explicit call pairs at retail order, never a `for (phase = 0; phase < 4; ...)` loop.
+  A loop is the obvious tidier form and would be a fabricated control flow.
+- Phase 0 uses a DIFFERENT link native (0x401860) from phases 1..3 (0x401890); a single shared call would be a
+  fidelity defect even though both take one argument.
+- `add esp,8` after each pair shows both pushes are caller-cleaned in the same group, so the two calls compose as
+  one expression, not two statements with separate cleanups.
+- The clear at 0x40117B follows the four pairs and precedes 0x4B0B00 (0x401191) and 0x4B8810 (0x4011A5), which is
+  exactly what the INTERMEDIATE PLACEMENT note in task_types.cpp already says must happen once these land.
+
+Also confirmed from the same window: the registration at 0x401130 is `0x401900(str.QTask, 0x20, 0x181)` with the
+three pushes at 0x401122-0x401129 and `add esp,0x14` at 0x401135, and the current-type store at 0x401138 is
+`mov word [0x54F928], ax` - a WORD store, so the port's `QTask_CurrentType` must stay 16-bit.
