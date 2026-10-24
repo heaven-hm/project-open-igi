@@ -1,0 +1,106 @@
+{
+  "kind": "paired-native-runtime-differential",
+  "schema": 1,
+  "captured_utc": "20261024T202242Z",
+  "natives": [
+    "0x004B0E70",
+    "0x004B12F0",
+    "0x004B0F90"
+  ],
+  "level": 1,
+  "retail_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "candidate_path": "/Users/haseeb-mir/Documents/Code/project-open-igi/build-win32-no-verify-gate/igi1.exe",
+  "candidate_sha256": "bfb35cdfe529fd19f5d27eacb597c74442b81be4f205726d2be56a69fdb103c1",
+  "requested_cwd": "Z:\\Users\\haseeb-mir\\Downloads\\IGI",
+  "order": "retail first, candidate second, never concurrent",
+  "limitations": [
+    "Hooks capture entry argument words and return values only; they do not interpret pointed-to memory.",
+    "A side that exits before reaching a native is recorded as not reached, never as agreeing.",
+    "Retail and candidate are separate processes; pointer values are not compared across them."
+  ],
+  "retail": {
+    "executable": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+    "sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+    "arguments": [
+      "window",
+      "level1"
+    ],
+    "frida_python": "17.24.3",
+    "result": "reached",
+    "pid": 460,
+    "observed_cwd": "Z:\\Users\\haseeb-mir\\Downloads\\IGI",
+    "ready": {
+      "type": "ready",
+      "installed": 3,
+      "failures": [],
+      "targets": [
+        4918896,
+        4920048,
+        4919184
+      ]
+    },
+    "hooks_before_resume": true,
+    "module": {
+      "type": "module",
+      "name": "igi.exe",
+      "base": "0x400000"
+    },
+    "resumed": true,
+    "counts": {
+      "4918896": 64,
+      "4919184": 2,
+      "4920048": 6
+    },
+    "samples": {
+      "4918896": [
+        "0x542430",
+        "0x0",
+        "0x4b1228"
+      ],
+      "4919184": [
+        "0x5c8de8",
+        "0x2300b4",
+        "0x3030307b"
+      ],
+      "4920048": [
+        "0x5394a4",
+        "0x5394b4",
+        "0x82"
+      ]
+    },
+    "game_processes_after": []
+  },
+  "candidate": {
+    "executable": "/Users/haseeb-mir/Documents/Code/project-open-igi/build-win32-no-verify-gate/igi1.exe",
+    "sha256": "bfb35cdfe529fd19f5d27eacb597c74442b81be4f205726d2be56a69fdb103c1",
+    "arguments": [
+      "window",
+      "level1"
+    ],
+    "frida_python": "17.24.3",
+    "result": "failed",
+    "pid": 648,
+    "error": "TransportError: timeout was reached",
+    "game_processes_after": []
+  },
+  "comparison": {
+    "0x004B0E70": {
+      "retail_calls": 64,
+      "candidate_calls": 0,
+      "candidate_result": "failed",
+      "verdict": "retail_only"
+    },
+    "0x004B12F0": {
+      "retail_calls": 6,
+      "candidate_calls": 0,
+      "candidate_result": "failed",
+      "verdict": "retail_only"
+    },
+    "0x004B0F90": {
+      "retail_calls": 2,
+      "candidate_calls": 0,
+      "candidate_result": "failed",
+      "verdict": "retail_only"
+    }
+  }
+}
