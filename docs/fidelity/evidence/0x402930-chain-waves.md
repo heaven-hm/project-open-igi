@@ -59,3 +59,21 @@ missing entries needs at least one more native first, and the blockers are callb
 The next measurement therefore has to be the dependency closure: repeatedly take the natives whose body's calls, code
 immediates *and* tail targets are all transcribed, and land that frontier. That is the only ordering that shrinks the
 closure, and it is what the following rounds do.
+
+## Dependency closure, measured (round 217)
+
+The frontier was recomputed against real function extents rather than by scanning to the first return: radare2's analysed
+function list gives each entry's size, so a body is the instructions inside [entry, entry+size).
+
+- Chain calls: 155 (154 distinct). Missing from the catalog: 133.
+- Missing natives reachable from the chain by calls, jumps, tail jumps and code immediates: **1708**.
+- Of those, **180** are ready now (every dependency already transcribed), and that frontier is where landing has to start.
+
+A caution discovered while selecting the batch: some call targets are *inner entries* of an existing function rather than
+distinct routines (for example 0x004A892E and 0x004A8C89 reference -0x90(%ebp) without setting ebp, so they are mid-function
+code that the decoder splits out). Transcribing those as separate natives would duplicate code that already exists inside
+another body. Each frontier address therefore has to be checked for a real prologue and a boundary before it is landed, and
+four such inner entries were rejected during this round's selection for that reason.
+
+Natives landed from the frontier this round: 0x004AD36E, 0x004C0230, 0x004C0240, 0x004F1C90 - all measured 1 block / 0
+edges at score 1.000.

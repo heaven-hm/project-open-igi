@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "address": "0x004AD36E",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "b5af81f66061f1a42a287c60ff5568048e6c162588b6d57a95b809674f9a59b6",
+  "implementation_path": "engine/src/retail/sys/native_4ad36e.cpp",
+  "reviewed_by": "lead",
+  "reviewed": true,
+  "review_scope": "static: retail instructions and emitted candidate listing",
+  "result": "passed",
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "rationale": "3 retail bytes, 2 instructions, 1 block, 0 edges; candidate 1/0, score 1.000."
+    },
+    {
+      "name": "cfg_match",
+      "result": "passed",
+      "rationale": "Both decoders and the candidate report 1/0."
+    },
+    {
+      "name": "behavior",
+      "result": "passed",
+      "rationale": "xor eax,eax; ret - returns 0 with no argument and no side effect."
+    },
+    {
+      "name": "extent",
+      "result": "passed",
+      "rationale": "The next entry at 0x004AD371 is a different routine's push ebp prologue, so the extent is exactly these two instructions."
+    }
+  ],
+  "evidence": "docs/fidelity/evidence/0x402930-chain-waves.md",
+  "limitations": [
+    "Runtime unobserved.",
+    "Reached from the 0x00402930 chain as a callback; the callback's purpose is unknown, only its body."
+  ]
+}

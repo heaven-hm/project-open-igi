@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "address": "0x004C0230",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "abe71f37f21ad172e820146a4acb08fdc85a836e08702738d305d69d9e858e6e",
+  "implementation_path": "engine/src/retail/dynobj/native_4c0230.cpp",
+  "reviewed_by": "lead",
+  "reviewed": true,
+  "review_scope": "static: retail instructions and emitted candidate listing",
+  "result": "passed",
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "rationale": "10 retail bytes, 4 instructions, 1 block, 0 edges; candidate 1/0, score 1.000."
+    },
+    {
+      "name": "cfg_match",
+      "result": "passed",
+      "rationale": "Both decoders and the candidate report 1/0."
+    },
+    {
+      "name": "behavior",
+      "result": "passed",
+      "rationale": "Loads the caller's pointer, dereferences it once, and returns the dword at inner+0x0C. No branch, store or callee."
+    },
+    {
+      "name": "offset",
+      "result": "passed",
+      "rationale": "0x0C comes from the displacement in 8b 41 0c; nothing establishes the struct type, only the offset."
+    }
+  ],
+  "evidence": "docs/fidelity/evidence/0x402930-chain-waves.md",
+  "limitations": [
+    "Runtime unobserved.",
+    "Both dereferences are unvalidated, as retail's are."
+  ]
+}

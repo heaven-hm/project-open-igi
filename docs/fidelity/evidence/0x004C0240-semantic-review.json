@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "address": "0x004C0240",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "8b7e770677ecc2b0e249851d91ee492ad72f1a27b2add8ad923b5c98fdd32130",
+  "implementation_path": "engine/src/retail/dynobj/native_4c0240.cpp",
+  "reviewed_by": "lead",
+  "reviewed": true,
+  "review_scope": "static: retail instructions and emitted candidate listing",
+  "result": "passed",
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "rationale": "10 retail bytes, 4 instructions, 1 block, 0 edges; candidate 1/0, score 1.000."
+    },
+    {
+      "name": "cfg_match",
+      "result": "passed",
+      "rationale": "Both decoders and the candidate report 1/0."
+    },
+    {
+      "name": "behavior",
+      "result": "passed",
+      "rationale": "Same shape as 0x004C0230 with field +0x04."
+    }
+  ],
+  "evidence": "docs/fidelity/evidence/0x402930-chain-waves.md",
+  "limitations": [
+    "Runtime unobserved.",
+    "Unvalidated dereferences, as retail."
+  ]
+}
