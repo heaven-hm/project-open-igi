@@ -1,0 +1,314 @@
+{
+ "schema_version": 1,
+ "kind": "native-runtime-contract",
+ "address": "0x0048F530",
+ "native": "Main",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "function_size": 994,
+ "function_bytes_sha256": "5943afb642a14dd07c38700980335c9120dfd625f741da0dc6694eb2c1780a0d",
+ "implementation_sha256": "dfe71228f959b72acef649e51faa974efcba43af72d10d7d793fe95426d123f7",
+ "candidate_binary_sha256": "6a64cf2c1e84ce95f02a97a734a10cf7d04dddb55952df6f3d8f419dd16e1aa0",
+ "scope": {
+  "range": "0x0048F530-0x48F7AA",
+  "label": "startup-prefix",
+  "rationale": "The candidate reaches QTask_CreateTask 0x48F7AA and throws inside QTask_RegisterClasses (untranscribed). The prefix before that call is the provable window; the loop/shutdown and the AL spill after the call stay unobserved until QTask registration lands.",
+  "unobservable_after": "0x0048F7AA (QTask_CreateTask) \u2014 record AL spill/Loop_StatusByte/HardcoreGerman/loop/shutdown as NOT OBSERVED, never as passed",
+  "note_pump": "Pump exit path now matches retail: exit code is written only when GetMessageA returns 0 (0x48F85F -> 0x48F898), and WM_QUIT leaves the loop unconditionally (candidate quit flag == retail 0x48F898). Tester should encode the retail pump order and exit-code path; remaining source gaps are B3/B4, not the pump."
+ },
+ "probe": {
+  "sha256": "REQUIRED \u2014 Tester must capture with the reviewed probe, bind its SHA-256 here and to both images",
+  "binding": {
+   "retail_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+   "candidate_sha256": "754a378a1cd1d300316a0d5475dc86d988f8cdc185a8d248a6dd3577973c5a09",
+   "same_probe_required": true
+  },
+  "must_observe": "ordered import/native calls with argument words, returns, C-string contents, and the listed memory side effects; compare pointer contents, never pointer addresses across processes"
+ },
+ "required_observables": [
+  {
+   "order": 1,
+   "site": "0x0048F544",
+   "native": "CreateMutexA",
+   "args": [
+    "NULL",
+    "TRUE",
+    "\"IGIMUTEX\""
+   ],
+   "returns": "non-NULL handle",
+   "side_effects": [],
+   "note": "IGI1MUTEX only in IGI_TESTING_MUTEX builds; document as build divergence, not parity"
+  },
+  {
+   "order": 2,
+   "site": "0x48F579",
+   "native": "CoInitialize",
+   "args": [
+    "NULL"
+   ],
+   "returns": "HRESULT (retail ignores)"
+  },
+  {
+   "order": 3,
+   "site": "0x48F57F",
+   "native": "GetForegroundWindow",
+   "args": [],
+   "returns": "HWND",
+   "side_effects": [
+    "stored to local S+0x1C; later consumed by SetForegroundWindow at 0x48F8A7 and on the failed-task path"
+   ]
+  },
+  {
+   "order": 4,
+   "site": "0x48F58C",
+   "native": "LoadIconA",
+   "args": [
+    "hInstance",
+    "0x7F00"
+   ],
+   "returns": "HICON",
+   "side_effects": [
+    "wndClass.hIcon"
+   ]
+  },
+  {
+   "order": 5,
+   "site": "0x48F5B8",
+   "native": "LoadCursorA",
+   "args": [
+    "NULL",
+    "0x7F00"
+   ],
+   "returns": "HCURSOR",
+   "side_effects": [
+    "wndClass.hCursor"
+   ]
+  },
+  {
+   "order": 6,
+   "site": "0x48F5E6",
+   "native": "RegisterClassA",
+   "args": [
+    "&wndClass"
+   ],
+   "returns": "ATOM \u2014 retail ignores it",
+   "side_effects": [
+    "wndClass bytes: +0 style=3, +4 lpfnWndProc=0x0048F970, +8 cbClsExtra=0, +0xC cbWndExtra=0, +0x10 hInstance=arg1, +0x14 hIcon, +0x18 hCursor, +0x1C hbrBackground=7, +0x20 lpszMenuName, +0x24 lpszClassName, both pointing to \"Innerloop\\0\""
+   ]
+  },
+  {
+   "order": 7,
+   "site": "0x48F5F4-0x48F6D3",
+   "native": "startup setters/registrations",
+   "args": [
+    "StoreCommandLine(lpCmdLine = 3rd WinMain arg)",
+    "StoreInstanceHandle(arg1)",
+    "SetConfigFileName(\"filesys.cfg\")",
+    "SetAppTitle(\"Innerloop\")",
+    "SetIsActive(1)",
+    "SetScreenMode(1)",
+    "SetDebugged(0)",
+    "SetDebugCompileState(1)",
+    "SetDebugtextState(0)",
+    "SetLightmapsUsed(1)",
+    "SetTerrainLightmapsUsed(1)",
+    "SetWinInput(0)",
+    "Set5C8C0C(0)",
+    "Set5C8C10(0)",
+    "SetStartupMode(1)",
+    "SetGermanVersion(0)",
+    "SetLanguage(empty-string pointer)",
+    "Set5C8C04(0)"
+   ],
+   "returns": "per native",
+   "side_effects": [
+    "in retail order"
+   ]
+  },
+  {
+   "order": 8,
+   "site": "0x48F674-0x48F6A6",
+   "native": "WinProc registry init (retail inline block)",
+   "args": [],
+   "side_effects": [
+    "[0x5C8D28..0x5C8DA7] == 0 (0x180 bytes)",
+    "[0x5C8DF0] == 0x005C8DF4",
+    "[0x5C8DF8] == 0x005C8DF0",
+    "[0x5C8DF4] == 0"
+   ],
+   "note": "CURRENTLY MISSING in candidate \u2014 expected to differ; must be observed as a divergence until B3 lands"
+  },
+  {
+   "order": 9,
+   "site": "0x48F687-0x48F6D3",
+   "native": "ParseCmdLineArgs",
+   "args": [
+    "\"Window\"",
+    4780880
+   ],
+   "returns": "n/a",
+   "side_effects": [
+    "registration only, no dispatch"
+   ]
+  },
+  {
+   "order": 10,
+   "site": "0x48F6B0/0x48F6C4/0x48F6D3",
+   "native": "ParseCmdLineArgs",
+   "args": [
+    "\"WinInput\"",
+    4782368
+   ],
+   "returns": "n/a"
+  },
+  {
+   "order": 11,
+   "site": "0x48F6B5/0x48F6C4/0x48F6D3",
+   "native": "ParseCmdLineArgs",
+   "args": [
+    "\"Germany\"",
+    4782384
+   ],
+   "returns": "n/a"
+  },
+  {
+   "order": 12,
+   "site": "0x48F6CE/0x48F6D3",
+   "native": "ParseCmdLineArgs",
+   "args": [
+    "\"USA\"",
+    4782416
+   ],
+   "returns": "n/a"
+  },
+  {
+   "order": 13,
+   "site": "0x48F6E2",
+   "native": "Display_ProbeDirectXVersion 0x498480",
+   "args": [
+    "&tier",
+    "&platform"
+   ],
+   "returns": "cmp tier,0x700",
+   "note": "NOT LINKED in candidate \u2014 DX gate absent, documented gap; observe absence, do not fake"
+  },
+  {
+   "order": 14,
+   "site": "0x48F739",
+   "native": "GetSystemMetrics",
+   "args": [
+    "SM_CYSCREEN=1"
+   ],
+   "returns": "cy",
+   "note": "first of the two metric calls; Y=(cy-480)/2 (cdq/sub/sar)"
+  },
+  {
+   "order": 15,
+   "site": "0x48F747",
+   "native": "GetSystemMetrics",
+   "args": [
+    "SM_CXSCREEN=0"
+   ],
+   "returns": "cx",
+   "note": "second; X=(cx-640)/2"
+  },
+  {
+   "order": 16,
+   "site": "0x48F754",
+   "native": "GetScreenMode 0x48F130",
+   "args": [],
+   "returns": "mode",
+   "note": "called AFTER both metric calls; style = mode? 0x96000000 : 0x37C80000 via neg/sbb/and/add"
+  },
+  {
+   "order": 17,
+   "site": "0x48F770",
+   "native": "CreateWindowExA",
+   "args": [
+    0,
+    "\"Innerloop\"",
+    "\"Innerloop\"",
+    "style",
+    "X",
+    "Y",
+    "640",
+    "480",
+    "NULL",
+    "NULL",
+    "hInstance",
+    "NULL"
+   ],
+   "returns": "HWND",
+   "side_effects": [
+    "window created"
+   ],
+   "note": "push order: lpParam(0x48F6F3), hInstance, hMenu, hWndParent, 480, 640, Y, X, style, window name, class name, dwExStyle"
+  },
+  {
+   "order": 18,
+   "site": "0x48F790",
+   "native": "ShowCursor",
+   "args": [
+    0
+   ],
+   "returns": "previous count"
+  },
+  {
+   "order": 19,
+   "site": "0x48F799",
+   "native": "ShowWindow",
+   "args": [
+    "hwnd",
+    "10 (SW_SHOWDEFAULT)"
+   ],
+   "returns": "BOOL"
+  },
+  {
+   "order": 20,
+   "site": "0x48F7A0",
+   "native": "StoreWindowHandle 0x0048F0E0",
+   "args": [
+    "hwnd"
+   ],
+   "side_effects": [
+    "dword [0x005C8BC4] == hwnd"
+   ]
+  },
+  {
+   "order": 21,
+   "site": "0x48F7A5",
+   "native": "0x00498460 (x87 truncate rounding)",
+   "args": [],
+   "side_effects": [
+    "[0x006E5BC4] low word bits 0x0C00 set (fstcw/or/fldcw)"
+   ],
+   "note": "CURRENTLY MISSING \u2014 expected divergence until B4 lands"
+  },
+  {
+   "order": 22,
+   "site": "0x48F7AA",
+   "native": "QTask_CreateTask 0x00401000",
+   "args": [],
+   "returns": "AL",
+   "note": "candidate throws inside QTask_RegisterClasses; prefix scope ends here"
+  }
+ ],
+ "proven_absences": [
+  "No UpdateWindow call anywhere in 0x0048F530 (retail executes only ShowCursor(0) 0x48F790, ShowWindow(hwnd,10) 0x48F799, StoreWindowHandle 0x48F7A0).",
+  "No branch on RegisterClassA's return value (0x48F5E6 falls through to 0x48F5EC).",
+  "No static HWND in 0x0048F530; the only HWND persistence from this block is the StoreWindowHandle write [0x005C8BC4].",
+  "No GetSystemMetrics(SM_CXSCREEN) before GetSystemMetrics(SM_CYSCREEN); retail does SM_CYSCREEN first (0x48F739), SM_CXSCREEN second (0x48F747).",
+  "No MessageBoxA on the normal startup path before the window exists; the only early box is the duplicate-instance box (0x48F8F0 block).",
+  "No exit-code write on the normal queue-drain path: the exit local is written only on the WM_QUIT path 0x48F898.",
+  "No further loop iteration after GetMessageA returns 0 (0x48F898 goes straight to shutdown)."
+ ],
+ "unobserved_after_scope": [
+  "0x48F7B9 AL spill into [0x005C8DE8] and the HardcoreGerman ParseCmdLineArgs (reachable only when QTask_CreateTask returns)",
+  "loop: FPU self-check 0x48F7E5-0x48F807 + error 0x48F8E1, 0x498460 0x48F80D, GetIsActive 0x48F170, QTask_OpenEvent 0x401050 / Sleep(500), DestroyWindow, Peek/Get/Translate/Dispatch pump",
+  "shutdown 0x48F8A7: SetForegroundWindow(previous_foreground), UnregisterClassA(\"Innerloop\",hInstance), CoUninitialize, ReleaseMutex, return exit code",
+  "failed-task path 0x48F8A7 via 0x48F7CD je (when AL==0)"
+ ],
+ "authorization": {
+  "semantic_review": "semantic-review-0x0048F530.md (verdict BLOCKED; contract is valid only for the listed prefix and absences)",
+  "requires": "Tester must (a) capture retail with spawn-suspended probe, (b) capture candidate, (c) record every observable, (d) mark missing/mismatched items failed, (e) bind probe sha256 + both image hashes before authorizing"
+ }
+}

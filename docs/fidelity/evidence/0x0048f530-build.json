@@ -1,12 +1,11 @@
 {
  "schema_version": 1,
  "kind": "build-report",
- "result": "passed",
  "address": "0x0048F530",
+ "result": "candidate_built_hash_verified",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "implementation_sha256": "e447db16d0b97c16462359bae7df654cefb184005939bd3027ae4bd24c145232",
- "executed": true,
- "command": "i686-w64-mingw32-g++ -std=c++20 -I engine/include -c engine/src/retail/core/retail_main.cpp -o /tmp/native-main.o",
- "target": "Windows x86 (Intel 80386 COFF object)",
- "note": "Compiled with the env-gated startup settle window used only by the observation driver."
+ "implementation_sha256": "dfe71228f959b72acef649e51faa974efcba43af72d10d7d793fe95426d123f7",
+ "candidate_path": "/Users/haseeb-mir/Downloads/IGI/igi1.exe",
+ "candidate_sha256": "6a64cf2c1e84ce95f02a97a734a10cf7d04dddb55952df6f3d8f419dd16e1aa0",
+ "note": "candidate binary hash re-verified locally (6a64cf2c\u2026); rebuild reproducibility not performed in this read-only packet"
 }

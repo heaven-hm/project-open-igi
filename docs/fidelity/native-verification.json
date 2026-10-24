@@ -42257,7 +42257,7 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/core/main.cpp",
-        "sha256": "0af26b6b748415bd9154c72c225f204614700fb542c1086811389437b05d1205",
+        "sha256": "ced7488dc534541b44c180ebf6b1f034242ec1d420617e383aef24bbcccbb391",
         "signature": "int __stdcall Main(void* const h_instance, void* const h_previous_instance, char* const command_line, int const show_command)"
       },
       "game_natives": {
@@ -42334,6 +42334,36 @@
             "reason": "candidate declaration used during early reconstruction; provenance only"
           }
         ]
+      },
+      "evidence": {
+        "binaryninja": {
+          "path": "docs/fidelity/evidence/0x0048f530-binaryninja.json",
+          "sha256": "6d7bcf86b0a1a54933ab62e7667cabcb42e93ed9aed6f941fb5a1844610650cc"
+        },
+        "radare2": {
+          "path": "docs/fidelity/evidence/0x0048f530-radare2.json",
+          "sha256": "636c09931834fa018d8ce735182ac60e303f13f4e90c4c663d75cf310ba2d294"
+        },
+        "semantic-review": {
+          "path": "docs/fidelity/evidence/0x0048f530-semantic-review.json",
+          "sha256": "08bf855ab7ab062034c6368e873b941644b2a3b4f6008267f899b0ed6d94bcae"
+        },
+        "build": {
+          "path": "docs/fidelity/evidence/0x0048f530-build.json",
+          "sha256": "a7bf7705e1dd077b8c0705d1a506f4d78664114c0b1a1e6e9865250f30b70256"
+        },
+        "behavioral": {
+          "path": "docs/fidelity/evidence/0x0048f530-behavioral.json",
+          "sha256": "8ff21ad864d5717e9a03501eddbab3773de1c9339df2cea67df35c4590bc038f"
+        },
+        "angr": {
+          "path": "docs/fidelity/evidence/0x0048f530-angr.json",
+          "sha256": "6d1fe797098fb02e1a724cc6c4a77515fdd2e4ef4994102391d923bc1a096f29"
+        }
+      },
+      "runtime_contract": {
+        "path": "docs/fidelity/evidence/runtime-contract-0x0048F530.json",
+        "sha256": "179c1f4b7a3a35dbfcdf310cadaeb72ae86892b3482a45f4574ca5d6a5f69c65"
       }
     },
     {

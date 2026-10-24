@@ -1,52 +1,30 @@
 {
  "schema_version": 1,
  "kind": "semantic-review-report",
- "result": "passed",
  "address": "0x0048F530",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "implementation_sha256": "e447db16d0b97c16462359bae7df654cefb184005939bd3027ae4bd24c145232",
+ "implementation_sha256": "dfe71228f959b72acef649e51faa974efcba43af72d10d7d793fe95426d123f7",
+ "candidate_binary_sha256": "6a64cf2c1e84ce95f02a97a734a10cf7d04dddb55952df6f3d8f419dd16e1aa0",
  "reviewed": true,
- "reviewed_by": "Re-reviewed 2026-10-23 after the env-gated startup settle window (IGI2_ATTACH_SETTLE_MS), which no normal run sets",
- "scope_note": "This review covers the startup order and the per-frame loop the MVP transcription keeps. The retail main also runs a DirectX version check, a script setup, about twenty startup getter/registration calls and the movie, particle, debug-key, sound and joystick backends; those are enumerated in the implementation's Status/limits and are not claimed by this review.",
- "checks": [
-  {
-   "name": "function_identity",
-   "result": "passed",
-   "rationale": "Radare2 and Binary Ninja both identify a single function entry at 0x0048F530 (26 blocks, 37 edges, recorded similarity 1.000), and this unit implements that entry as Main."
-  },
-  {
-   "name": "argument_mapping",
-   "result": "passed",
-   "rationale": "Retail takes the WinMain triple (HINSTANCE, int show command, char* command line) on the stack; the port carries instance and show_command in RetailMainConfig and consumes them for RegisterClassExW, CreateWindowExW and ShowWindow."
-  },
-  {
-   "name": "constants_and_scaling",
-   "result": "passed",
-   "rationale": "The transcribed window creation uses the retail 640x480 size and window styles, the 0x7F00 icon and cursor resource id, the 500 ms idle sleep and the x87 extended-precision setup the retail loop performs."
-  },
-  {
-   "name": "memory_layout_and_access",
-   "result": "not_applicable",
-   "rationale": "The startup body reads no packed retail structure; the WNDCLASSEX and MSG records it fills are the Win32 ABI's own and are populated field by field."
-  },
-  {
-   "name": "calls_and_side_effects",
-   "result": "passed",
-   "rationale": "The body now mirrors the retail's startup calls as well as the frame loop: AppContext_SetIsActive(1) and App_ContextSetTerrainLightmapsUsed(1) before the loop, then FP_InitExtendedPrecision, AppContext_GetIsActive and QTask_OpenEvent inside it, with Loop_StatusByte driving DestroyWindow. Retail's sprintf/Error_Show sit on its startup-error path, which the candidate reaches only on initialisation failure. An env-gated Sleep at entry (IGI2_ATTACH_SETTLE_MS) exists only so the observation driver can install hooks before the startup calls run; without the variable the body is unchanged."
-  },
-  {
-   "name": "return_and_error_paths",
-   "result": "passed",
-   "rationale": "Each retail failure branch - null mutex, mutex already held, class registration failure, window creation failure - returns 1, and the WM_QUIT exit returns 0, as the retail code does."
-  },
-  {
-   "name": "floating_point_semantics",
-   "result": "not_applicable",
-   "rationale": "The transcribed loop only loads the x87 control word to set extended precision; it performs no floating-point arithmetic in this scope."
-  }
+ "reviewed_by": "level1-closure (independent static reviewer)",
+ "result": "blocked",
+ "scope": "startup prefix 0x0048F530-0x48F7AA + static loop/pump/shutdown body",
+ "cleared_since_previous_review": [
+  "B5c1/M1 exit_code only on GetMessageA==0",
+  "B5c2/M2 WM_QUIT leaves unconditionally"
  ],
+ "blocking_findings": [
+  "B3 WinProc registry init 0x48F674-0x48F6A6 missing",
+  "B4 FPU self-check 0x48F7E5-0x48F807 + error path 0x48F8E1 missing and 0x48F7A5 setter call missing"
+ ],
+ "nits": [
+  "N1 quit-branch store order",
+  "N2 redundant L270 status clear",
+  "N3 invented quit flag",
+  "N4 stale comments"
+ ],
+ "runtime_contract": "runtime-contract-0x0048F530.json (startup-prefix scope)",
  "limitations": [
-  "The executable's actual entry point is engine/main.cpp, which registers the retail \"Innerloop\" class; this unit's Main is a second transcription that registers \"IGI\" and is not the entry the built candidate runs. The two have not been reconciled.",
-  "The mutex name is IGI2MUTEX rather than the retail IGIMUTEX, a deliberate tooling divergence for paired observation, not a fidelity claim."
+  "static only; runtime lease is Tester's"
  ]
 }
