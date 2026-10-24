@@ -281,3 +281,29 @@ honestly needs the two callees read first, which is a round of its own, so no tr
 What this does mean for the boundary: 0x004F1DB0's dependence on 0x004AF9D0 does not make 0x004F1DB0 landable now, and 0x004F1CD0 is
 gated on the code-address constant 0x004F1CF0 (which has no function body at all - the address is referenced as data only). The two
 small boundary dependencies turned out to be a list helper that is already landed (0x004AF8F0) and a 329-instruction pattern compiler.
+
+## The 0x004AF000-0x004B0000 region is CRT, and one landed native belongs to it (round 244)
+
+Two measurements settle the region's nature.
+
+First, its callers are the CRT startup code, not game code:
+
+    0x0040124A -> 0x004AF810
+    0x00401280 -> 0x004AF810
+    0x004012BF -> 0x004AF8F0
+    0x004013CF -> 0x004AF910
+    0x004015DC -> 0x004AF960
+
+Second, its own helpers are CRT idioms: 0x004AFF90 is a 0x40-dword fill with 0x01010101 followed by `movl $1,(%eax)` - a
+class-table initialiser - and 0x004AFFB0 sets up a 0x414-byte frame and walks the same structures. Combined with 0x004AF9D0's
+bracket/escape compiler, the region is the C runtime's pattern and list support, supplied by the toolchain rather than transcribed.
+
+### Correction to an earlier landing
+
+0x004AF8F0 - which was landed as `Sys_InsertListTail_4AF8F0` and reviewed as game code - is called from 0x004012BF, inside the CRT
+startup region. On this evidence it is almost certainly CRT list support (the same list layout 0x004F1D60/0x004AF8F0 manipulate is a
+runtime list), not a game native. It must not be counted as boundary progress.
+
+It stays in the tree as a TRANSCRIBED record with its evidence, because deleting transcribed retail code would hide the work, but its
+classification is corrected here: the record's role is "CRT helper mistakenly landed as a game native", and it should not be used to
+justify further boundary work. The honest count of boundary-relevant landings from rounds 242-243 is therefore zero, not one.
