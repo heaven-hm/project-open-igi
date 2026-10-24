@@ -1,4 +1,4 @@
-// Native: Pool_Init_4AAD48 (placeholder until VERIFIED); retail VA 0x004AAD48-0x004AAD8F (71 bytes, 1 block, 0 edges).
+// Native: Pool_Init (placeholder until VERIFIED); retail VA 0x004AAD48-0x004AAD8F (71 bytes, 1 block, 0 edges).
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: radare2 6.2.0 complete listing (6840010000 6a00 ff352824c300 ff15ac305300 85c0 a3f821c300 7501 c3 8b4c2404 8325f021c3..00 8325f421c3..00 6a01 a3ec21c300 890dfc21c300 c705e421c3..10000000 58 c3); imports KERNEL32 HeapAlloc directly.
 // Behavior/CFG: allocates the 0x140-byte small-block pool with HeapAlloc(g_c32428, 0, 0x140), stores the block at 0x00C321F8 and returns 0 immediately when the allocation fails; otherwise clears 0x00C321F0 and 0x00C321F4, stores the block at 0x00C321EC, stores the argument at 0x00C321FC, stores 0x10 at 0x00C321E4 and returns 1 (retail's trailing push 1 / pop eax).
@@ -19,7 +19,7 @@ using igi::retail::mem::g_c321e4;
 extern "C" {
 
 
-std::int32_t Pool_Init_4AAD48(void* const argument)
+std::int32_t Pool_Init(void* const argument)
 {
     void* const block = igi::retail::mem::Mem_HeapAlloc(0x140U); // 0x004AAD48..0x004AAD55: push 0x140; push 0; push [0xc32428]; call HeapAlloc
     g_c321f8 = block;                          // 0x004AAD5D: mov dword [0xc321f8], eax

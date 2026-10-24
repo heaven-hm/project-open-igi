@@ -64,7 +64,7 @@ int NATIVE_DECL QTask_CreateTask();
 // Native: WinMain; VA 0x0048F530.
 // Artifact: original igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: Binary Ninja MCP (selected decompiler), Radare2 CFG and angr CFGFast on IGI.EXE; full disassembly build/main-0048f530.disasm.txt; static packets build/audit/p05b..p05e; Tester retail records build/tester/20261023T220230Z/.
-// Behavior/CFG: retail opens with CreateMutexA(NULL,TRUE,"IGIMUTEX") and the duplicate path to MessageBoxA("IGI is already running.","Error",MB_ICONERROR)/return 0, CoInitialize, LoadIconA/LoadCursorA/RegisterClassA for class "Innerloop" (WNDCLASSA style 3, lpfnWndProc 0x48F970, hbrBackground 7, menu+class name "Innerloop"), then the startup block 0x48F5F4-0x48F6EE (StoreCommandLine, StoreInstanceHandle, SetConfigFileName "filesys.cfg", SetAppTitle_48F100 "Innerloop", SetIsActive 1, SetScreenMode 1, SetDebugged 0, SetDebugCompileState 1, SetDebugtextState 0, SetLightmapsUsed 1, SetTerrainLightmapsUsed 1, SetWinInput 0, Set5C8C0C 0, Set5C8C10 0, SetStartupMode 1, SetGermanVersion 0, SetLanguage 0x567C74, Set5C8C04 0), WinProc list init, four ParseCmdLineArgs registrations, DX-tier gate (0x498480, currently NOT linked), CreateWindowExA (style from GetScreenMode, 640x480 centered), ShowCursor(0)/ShowWindow(10)/UpdateWindow, StoreWindowHandle 0x48F0E0, QTask_CreateTask 0x401000 with AL spilled to 0x5C8DE8, ParseCmdLineArgs "HardcoreGerman", then the loop with FPU self-check, 0x498460, GetIsActive/Sleep(500) or QTask_OpenEvent, DestroyWindow when 0x5C8DE8==0, Peek/Get/Translate/Dispatch pump, and shutdown SetForegroundWindow/UnregisterClassA "Innerloop"/CoUninitialize/ReleaseMutex with `add esp,0x464; retn 0x10`.
+// Behavior/CFG: retail opens with CreateMutexA(NULL,TRUE,"IGIMUTEX") and the duplicate path to MessageBoxA("IGI is already running.","Error",MB_ICONERROR)/return 0, CoInitialize, LoadIconA/LoadCursorA/RegisterClassA for class "Innerloop" (WNDCLASSA style 3, lpfnWndProc 0x48F970, hbrBackground 7, menu+class name "Innerloop"), then the startup block 0x48F5F4-0x48F6EE (StoreCommandLine, StoreInstanceHandle, SetConfigFileName "filesys.cfg", SetAppTitle "Innerloop", SetIsActive 1, SetScreenMode 1, SetDebugged 0, SetDebugCompileState 1, SetDebugtextState 0, SetLightmapsUsed 1, SetTerrainLightmapsUsed 1, SetWinInput 0, Set5C8C0C 0, Set5C8C10 0, SetStartupMode 1, SetGermanVersion 0, SetLanguage 0x567C74, Set5C8C04 0), WinProc list init, four ParseCmdLineArgs registrations, DX-tier gate (0x498480, currently NOT linked), CreateWindowExA (style from GetScreenMode, 640x480 centered), ShowCursor(0)/ShowWindow(10)/UpdateWindow, StoreWindowHandle 0x48F0E0, QTask_CreateTask 0x401000 with AL spilled to 0x5C8DE8, ParseCmdLineArgs "HardcoreGerman", then the loop with FPU self-check, 0x498460, GetIsActive/Sleep(500) or QTask_OpenEvent, DestroyWindow when 0x5C8DE8==0, Peek/Get/Translate/Dispatch pump, and shutdown SetForegroundWindow/UnregisterClassA "Innerloop"/CoUninitialize/ReleaseMutex with `add esp,0x464; retn 0x10`.
 // Status/limits: STRUCTURALLY_VERIFIED; startup call order/arguments checked against the retail disassembly and Tester individual retail records; the mutex name, the absent DX gate, the absent 0x498460 and the throwing QTask_CreateTask are recorded divergences; candidate runtime parity is not claimed.
 int WINAPI WinMain(HINSTANCE const h_instance, HINSTANCE const h_previous_instance,
                    LPSTR const command_line, int const show_command)
@@ -131,26 +131,26 @@ int WINAPI WinMain(HINSTANCE const h_instance, HINSTANCE const h_previous_instan
     (void)StoreInstanceHandle(h_instance);
     // 0x48F5FF push "filesys.cfg" (0x541EC0) -> 0x0048F0F0 stores the pointer.
     (void)SetConfigFileName(static_cast<std::int32_t>(reinterpret_cast<std::uintptr_t>("filesys.cfg")));
-    (void)SetAppTitle_48F100("Innerloop"); // 0x48F609 push "Innerloop" (0x53B534)
+    (void)SetAppTitle("Innerloop"); // 0x48F609 push "Innerloop" (0x53B534)
     (void)AppContext_SetIsActive(1);
-    (void)Display_SetScreenMode_48F120(1);
+    (void)Display_SetScreenMode(1);
     (void)igi::retail::core::App_ContextSetDebugged(0);
-    (void)SetDebugCompileState_48F1C0(1);
+    (void)SetDebugCompileState(1);
     (void)igi::retail::core::App_ContextSetDebugtextState(0);
     (void)igi::retail::core::App_ContextSetLightmapsUsed(1);
     (void)igi::retail::core::App_ContextSetTerrainLightmapsUsed(1);
-    (void)Input_SetUseWin32Input_48F280(0);
-    (void)AppMain_Set5C8C0C_48F290(0);
-    (void)AppMain_Set5C8C10_48F2A0(0);
-    (void)Game_SetStartupMode_48F210(1);
-    (void)AppContext_SetGermanVersion_48F2B0(0);
+    (void)Input_SetUseWin32Input(0);
+    (void)AppMain_Set5C8C0C(0);
+    (void)AppMain_Set5C8C10(0);
+    (void)Game_SetStartupMode(1);
+    (void)AppContext_SetGermanVersion(0);
     // 0x48F6B2 push 0x567C74: the retail argument is the address of an empty
     // string in static data (the language selector default). The bytes are the
     // faithful part; a retail VA would be meaningless in this image, so the same
     // empty-string bytes are passed. SetLanguage 0x48F300 returns length+1, which
     // retail observes as 1 for this call.
-    (void)AppContext_SetLanguage_48F300("");
-    (void)AppMain_Set5C8C04_48F200(0);
+    (void)AppContext_SetLanguage("");
+    (void)AppMain_Set5C8C04(0);
 
     // 0x48F674-0x48F6A6: WinProc handler-chain container init.
     // 0x48F674 mov ecx,0x30; xor eax,eax; mov edi,0x005C8D28; rep stosd -> the
@@ -169,10 +169,10 @@ int WINAPI WinMain(HINSTANCE const h_instance, HINSTANCE const h_previous_instan
     // 0x0048F680/0x48F687-0x48F6D3: four parser registrations with the retail
     // handler bodies. Registration alone never dispatches a handler; dispatch is
     // token-gated inside the parser.
-    (void)AppMain_ParseCmdLineArgs_48F360("Window", &AppMain_WindowCommand_48F350);
-    (void)AppMain_ParseCmdLineArgs_48F360("WinInput", &AppMain_WinInputCommand_48F920);
-    (void)AppMain_ParseCmdLineArgs_48F360("Germany", &AppMain_GermanyCommand_48F930);
-    (void)AppMain_ParseCmdLineArgs_48F360("USA", &AppMain_USACommand_48F950);
+    (void)AppMain_ParseCmdLineArgs("Window", &AppMain_WindowCommand);
+    (void)AppMain_ParseCmdLineArgs("WinInput", &AppMain_WinInputCommand);
+    (void)AppMain_ParseCmdLineArgs("Germany", &AppMain_GermanyCommand);
+    (void)AppMain_ParseCmdLineArgs("USA", &AppMain_USACommand);
 
     // 0x0048F6E2 Display_ProbeDirectXVersion(&tier, &platform) + the < 0x700
     // requirement box is NOT wired: the native is not linked yet (recorded gap).
@@ -187,7 +187,7 @@ int WINAPI WinMain(HINSTANCE const h_instance, HINSTANCE const h_previous_instan
     int const screen_width = ::GetSystemMetrics(SM_CXSCREEN);  // 0x48F73B push 0
     int const window_x = (screen_width - 640) / 2;            // cdq/sub/sar
     std::uintptr_t const style =
-        (Display_GetScreenMode_48F130() != 0)
+        (Display_GetScreenMode() != 0)
             ? (static_cast<std::uintptr_t>(0x5E380000U) + 0x37C80000U)
             : static_cast<std::uintptr_t>(0x37C80000U);
     // 0x0048F770 CreateWindowExA(0, "Innerloop", "Innerloop", style, x, y, 640,
@@ -215,7 +215,7 @@ int WINAPI WinMain(HINSTANCE const h_instance, HINSTANCE const h_previous_instan
     Loop_StatusByte = static_cast<std::uint8_t>(task_result);
     bool const loop_enabled = Loop_StatusByte != 0U;
     // 0x0048F7B9 spills AL into byte [0x5C8DE8] across the parser call.
-    (void)AppMain_ParseCmdLineArgs_48F360("HardcoreGerman", &AppMain_HardcoreGermanCommand_48F960);
+    (void)AppMain_ParseCmdLineArgs("HardcoreGerman", &AppMain_HardcoreGermanCommand);
     if (!loop_enabled)
     {
         ::SetForegroundWindow(previous_foreground);

@@ -59,13 +59,13 @@ void* NATIVE_DECL DefineHumanPlayerGeneral(void* context, std::int32_t argument_
     // what the long double intermediates and the final float cast reproduce.
     HumanPlayer_GeneralParameters.argument_1 = static_cast<float>(
         Qvm_GetFloatArg(frame, 1) * igi::retail::script::human_player_scale_4096000 *
-        igi::retail::script::human_player_scale_inverse_108000);
+        igi::retail::script::human_player_scale_inverse);
     HumanPlayer_GeneralParameters.argument_2 = static_cast<float>(
         Qvm_GetFloatArg(frame, 2) * igi::retail::script::human_player_scale_4096000 *
-        igi::retail::script::human_player_scale_inverse_108000);
+        igi::retail::script::human_player_scale_inverse);
     HumanPlayer_GeneralParameters.argument_3 = static_cast<float>(
         Qvm_GetFloatArg(frame, 3) * igi::retail::script::human_player_scale_4096000 *
-        igi::retail::script::human_player_scale_inverse_108000);
+        igi::retail::script::human_player_scale_inverse);
 
     // 0x004100D9-0x004100F8: arguments 4 and 5 are multiplied by the 4096.0 double at 0x00533498
     // (fmul qword).

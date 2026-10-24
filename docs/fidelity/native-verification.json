@@ -4044,7 +4044,7 @@
     },
     {
       "address": "0x00401860",
-      "name": "TaskEventTable_MarkSlot_401860",
+      "name": "TaskEventTable_MarkSlot",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/core/native_401860.cpp",
@@ -4076,11 +4076,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `TaskEventTable_MarkSlot_401860` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x00401890",
-      "name": "TaskEventTable_MarkSlotNoMask_401890",
+      "name": "TaskEventTable_MarkSlotNoMask",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/core/native_401890.cpp",
@@ -4112,11 +4113,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `TaskEventTable_MarkSlotNoMask_401890` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004018C0",
-      "name": "TaskEventTable_ClearSlot_4018C0",
+      "name": "TaskEventTable_ClearSlot",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/core/native_4018c0.cpp",
@@ -4148,7 +4150,8 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `TaskEventTable_ClearSlot_4018C0` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004018F0",
@@ -4310,7 +4313,7 @@
     },
     {
       "address": "0x00401B20",
-      "name": "QHashSlotTable_Release_401B20",
+      "name": "QHashSlotTable_Release",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/core/native_401b20.cpp",
@@ -4342,11 +4345,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `QHashSlotTable_Release_401B20` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x00401D30",
-      "name": "TaskType_SetPhaseHandlerByte_401D30",
+      "name": "TaskType_SetPhaseHandlerByte",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/core/native_401d30.cpp",
@@ -4378,7 +4382,8 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 0.05833333333333333
-      }
+      },
+      "notes": "Renamed from `TaskType_SetPhaseHandlerByte_401D30` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x00401FC0",
@@ -39369,7 +39374,7 @@
     },
     {
       "address": "0x0048F090",
-      "name": "GetInstanceHandle_48F090",
+      "name": "GetInstanceHandle",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/input/native_48f090.cpp",
@@ -39401,11 +39406,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `GetInstanceHandle_48F090` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x0048F0A0",
-      "name": "GetWindowHandle_48F0A0",
+      "name": "GetWindowHandle",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/input/native_48f0a0.cpp",
@@ -39437,7 +39443,8 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `GetWindowHandle_48F0A0` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x0048F0B0",
@@ -40289,7 +40296,7 @@
     },
     {
       "address": "0x0048F120",
-      "name": "Display_SetScreenMode_48F120",
+      "name": "Display_SetScreenMode",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/core/app_startup_globals.cpp",
@@ -40406,11 +40413,12 @@
         ]
       },
       "status": "STRUCTURALLY_VERIFIED",
-      "cfg_similarity": 1.0
+      "cfg_similarity": 1.0,
+      "notes": "Renamed from `Display_SetScreenMode_48F120` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x0048F130",
-      "name": "Display_GetScreenMode_48F130",
+      "name": "Display_GetScreenMode",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/core/app_startup_globals.cpp",
@@ -40467,7 +40475,8 @@
           "build/tester/20261024T002148Z/runtime/batch-comparison.json"
         ]
       },
-      "cfg_similarity": 1.0
+      "cfg_similarity": 1.0,
+      "notes": "Renamed from `Display_GetScreenMode_48F130` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x0048F140",
@@ -41486,7 +41495,7 @@
     },
     {
       "address": "0x0048F200",
-      "name": "AppMain_Set5C8C04_48F200",
+      "name": "AppMain_Set5C8C04",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/core/app_startup_globals.cpp",
@@ -41543,11 +41552,12 @@
           "build/tester/20261024T002148Z/runtime/batch-comparison.json"
         ]
       },
-      "cfg_similarity": 1.0
+      "cfg_similarity": 1.0,
+      "notes": "Renamed from `AppMain_Set5C8C04_48F200` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x0048F210",
-      "name": "Game_SetStartupMode_48F210",
+      "name": "Game_SetStartupMode",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/core/app_startup_globals.cpp",
@@ -41604,7 +41614,8 @@
           "build/tester/20261024T002148Z/runtime/batch-comparison.json"
         ]
       },
-      "cfg_similarity": 1.0
+      "cfg_similarity": 1.0,
+      "notes": "Renamed from `Game_SetStartupMode_48F210` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x0048F230",
@@ -42050,7 +42061,7 @@
     },
     {
       "address": "0x0048F270",
-      "name": "Input_GetInstance_48F270",
+      "name": "Input_GetInstance",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/input/native_48f270.cpp",
@@ -42082,11 +42093,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Input_GetInstance_48F270` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x0048F280",
-      "name": "Input_SetUseWin32Input_48F280",
+      "name": "Input_SetUseWin32Input",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/core/app_startup_globals.cpp",
@@ -42143,11 +42155,12 @@
           "build/tester/20261024T002148Z/runtime/batch-comparison.json"
         ]
       },
-      "cfg_similarity": 1.0
+      "cfg_similarity": 1.0,
+      "notes": "Renamed from `Input_SetUseWin32Input_48F280` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x0048F290",
-      "name": "AppMain_Set5C8C0C_48F290",
+      "name": "AppMain_Set5C8C0C",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/core/app_startup_globals.cpp",
@@ -42204,11 +42217,12 @@
           "build/tester/20261024T002148Z/runtime/batch-comparison.json"
         ]
       },
-      "cfg_similarity": 1.0
+      "cfg_similarity": 1.0,
+      "notes": "Renamed from `AppMain_Set5C8C0C_48F290` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x0048F2A0",
-      "name": "AppMain_Set5C8C10_48F2A0",
+      "name": "AppMain_Set5C8C10",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/core/app_startup_globals.cpp",
@@ -42265,11 +42279,12 @@
           "build/tester/20261024T002148Z/runtime/batch-comparison.json"
         ]
       },
-      "cfg_similarity": 1.0
+      "cfg_similarity": 1.0,
+      "notes": "Renamed from `AppMain_Set5C8C10_48F2A0` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x0048F2B0",
-      "name": "AppContext_SetGermanVersion_48F2B0",
+      "name": "AppContext_SetGermanVersion",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/core/app_startup_globals.cpp",
@@ -42326,11 +42341,12 @@
           "build/tester/20261024T002148Z/runtime/batch-comparison.json"
         ]
       },
-      "cfg_similarity": 1.0
+      "cfg_similarity": 1.0,
+      "notes": "Renamed from `AppContext_SetGermanVersion_48F2B0` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x0048F300",
-      "name": "AppContext_SetLanguage_48F300",
+      "name": "AppContext_SetLanguage",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/core/app_startup_globals.cpp",
@@ -42388,7 +42404,8 @@
           "build/tester/20261024T002148Z/runtime/batch-comparison.json"
         ]
       },
-      "cfg_similarity": 1.0
+      "cfg_similarity": 1.0,
+      "notes": "Renamed from `AppContext_SetLanguage_48F300` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x0048F340",
@@ -42595,7 +42612,7 @@
     },
     {
       "address": "0x0048F490",
-      "name": "WinProc_RegisterHandler_48F490",
+      "name": "WinProc_RegisterHandler",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/core/native_48f490.cpp",
@@ -42609,11 +42626,12 @@
           "Retail direct callers: exactly 6 (0x424C00 Cursor_Init, 0x48A728 FX_DebrisSpawn_16, 0x48FEB8 FX_CouldNotCreateDirect, 0x490109 FX_CouldNotCreateDirect_2, 0x49065F Display_OpenDevice_2, 0x493803 Display_Direct3D); none of those caller functions is transcribed in engine/ or the manifest."
         ],
         "notes": "Only reachable from the six untranscribed callers today; do not claim runtime reachability."
-      }
+      },
+      "notes": "Renamed from `WinProc_RegisterHandler_48F490` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x0048F4F0",
-      "name": "WinProc_RemoveHandler_48F4F0",
+      "name": "WinProc_RemoveHandler",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/core/native_48f4f0.cpp",
@@ -42627,7 +42645,8 @@
           "Retail direct callers: exactly 5 (0x48A8A5 FX_TrailUpdate_16, 0x48FFE9 FX_DebrisSpawn_27, 0x490339 Display_SetDisplayMode, 0x4903C1 Display_CreateSurface, 0x49506F Display_RestoreDevice_7); none of those caller functions is transcribed in engine/ or the manifest."
         ],
         "notes": "Only reachable from the five untranscribed callers today; do not claim runtime reachability."
-      }
+      },
+      "notes": "Renamed from `WinProc_RemoveHandler_48F4F0` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x0048F530",
@@ -42913,7 +42932,7 @@
     },
     {
       "address": "0x0048FA80",
-      "name": "DirectInput_ErrorText_48FA80",
+      "name": "DirectInput_ErrorText",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/input/native_48fa80.cpp",
@@ -42945,11 +42964,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 0.9390625
-      }
+      },
+      "notes": "Renamed from `DirectInput_ErrorText_48FA80` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x0048FD90",
-      "name": "Input_MouseGetCaps_48FD90",
+      "name": "Input_MouseGetCaps",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/input/native_48fd90.cpp",
@@ -42981,11 +43001,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Input_MouseGetCaps_48FD90` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x0048FED0",
-      "name": "Mouse_WinProc_48FED0",
+      "name": "Mouse_WinProc",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/input/native_48fed0.cpp",
@@ -43017,7 +43038,8 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Mouse_WinProc_48FED0` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x0048a440",
@@ -43078,7 +43100,7 @@
     },
     {
       "address": "0x00490120",
-      "name": "Keyboard_WinProc_490120",
+      "name": "Keyboard_WinProc",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/input/native_490120.cpp",
@@ -43110,11 +43132,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Keyboard_WinProc_490120` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x00490190",
-      "name": "Keyboard_VkToStateIndex_490190",
+      "name": "Keyboard_VkToStateIndex",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/input/native_490190.cpp",
@@ -43146,11 +43169,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Keyboard_VkToStateIndex_490190` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x00490230",
-      "name": "Keyboard_Update_490230",
+      "name": "Keyboard_Update",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/input/native_490230.cpp",
@@ -43182,11 +43206,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Keyboard_Update_490230` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x00490340",
-      "name": "Display_SetVSyncFlag_490340",
+      "name": "Display_SetVSyncFlag",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/render/native_490340.cpp",
@@ -43218,11 +43243,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Display_SetVSyncFlag_490340` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x00490350",
-      "name": "Display_SetSwapFlag_490350",
+      "name": "Display_SetSwapFlag",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/render/native_490350.cpp",
@@ -43254,7 +43280,8 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Display_SetSwapFlag_490350` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004903A0",
@@ -43401,7 +43428,7 @@
     },
     {
       "address": "0x00491DB0",
-      "name": "Display_SetGammaRamp_4_491DB0",
+      "name": "Display_SetGammaRamp_4",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/render/native_00491db0.cpp",
@@ -43433,11 +43460,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Display_SetGammaRamp_4_491DB0` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x00491DC0",
-      "name": "Display_CreateSurface_4_491DC0",
+      "name": "Display_CreateSurface_4",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/render/native_00491dc0.cpp",
@@ -43469,11 +43497,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Display_CreateSurface_4_491DC0` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x00491DD0",
-      "name": "Display_OpenDevice_5_491DD0",
+      "name": "Display_OpenDevice_5",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/render/native_00491dd0.cpp",
@@ -43505,11 +43534,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Display_OpenDevice_5_491DD0` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x00491DE0",
-      "name": "Display_CloseDevice_5_491DE0",
+      "name": "Display_CloseDevice_5",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/render/native_00491de0.cpp",
@@ -43541,11 +43571,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Display_CloseDevice_5_491DE0` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x00491DF0",
-      "name": "Display_SetDisplayMode_5_491DF0",
+      "name": "Display_SetDisplayMode_5",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/render/native_00491df0.cpp",
@@ -43577,11 +43608,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Display_SetDisplayMode_5_491DF0` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x00491E00",
-      "name": "Display_SyncVSync_5_491E00",
+      "name": "Display_SyncVSync_5",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/render/native_00491e00.cpp",
@@ -43613,11 +43645,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Display_SyncVSync_5_491E00` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x00491E10",
-      "name": "Display_SwapBuffers_5_491E10",
+      "name": "Display_SwapBuffers_5",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/render/native_00491e10.cpp",
@@ -43649,11 +43682,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Display_SwapBuffers_5_491E10` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x00491E20",
-      "name": "Display_ClearSurfaces_5_491E20",
+      "name": "Display_ClearSurfaces_5",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/render/native_00491e20.cpp",
@@ -43685,11 +43719,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Display_ClearSurfaces_5_491E20` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x00491E30",
-      "name": "Display_RestoreDevice_5_491E30",
+      "name": "Display_RestoreDevice_5",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/render/native_00491e30.cpp",
@@ -43721,11 +43756,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Display_RestoreDevice_5_491E30` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x00491E40",
-      "name": "Display_CheckCapabilities_5_491E40",
+      "name": "Display_CheckCapabilities_5",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/render/native_00491e40.cpp",
@@ -43757,11 +43793,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Display_CheckCapabilities_5_491E40` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x00491E50",
-      "name": "Display_SetGammaRamp_5_491E50",
+      "name": "Display_SetGammaRamp_5",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/render/native_00491e50.cpp",
@@ -43793,11 +43830,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Display_SetGammaRamp_5_491E50` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x00491E60",
-      "name": "Display_CreateSurface_5_491E60",
+      "name": "Display_CreateSurface_5",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/render/native_00491e60.cpp",
@@ -43829,7 +43867,8 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Display_CreateSurface_5_491E60` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x00491a90",
@@ -45118,7 +45157,7 @@
     },
     {
       "address": "0x004A6A50",
-      "name": "Mem_FreeBlock_4A6A50",
+      "name": "Mem_FreeBlock",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/mem/native_4a6a50.cpp",
@@ -45150,7 +45189,8 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Mem_FreeBlock_4A6A50` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004A7157",
@@ -46898,7 +46938,7 @@
     },
     {
       "address": "0x004AAD48",
-      "name": "Pool_Init_4AAD48",
+      "name": "Pool_Init",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/mem/native_4aad48.cpp",
@@ -46930,11 +46970,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Pool_Init_4AAD48` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004AAD90",
-      "name": "Pool_FindBlock_4AAD90",
+      "name": "Pool_FindBlock",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/mem/native_4aad90.cpp",
@@ -46966,11 +47007,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Pool_FindBlock_4AAD90` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004AADBB",
-      "name": "Mem_FreeSmallBlock_4AADBB",
+      "name": "Mem_FreeSmallBlock",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/mem/native_4aadbb.cpp",
@@ -47002,11 +47044,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Mem_FreeSmallBlock_4AADBB` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004AB6DD",
-      "name": "Mem_FreeBucketNode_4AB6DD",
+      "name": "Mem_FreeBucketNode",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/mem/native_4ab6dd.cpp",
@@ -47038,11 +47081,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Mem_FreeBucketNode_4AB6DD` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004AB733",
-      "name": "Mem_PurgeBucketPages_4AB733",
+      "name": "Mem_PurgeBucketPages",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/mem/native_4ab733.cpp",
@@ -47074,11 +47118,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Mem_PurgeBucketPages_4AB733` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004AB7F5",
-      "name": "Mem_FindBucketBlock_4AB7F5",
+      "name": "Mem_FindBucketBlock",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/mem/native_4ab7f5.cpp",
@@ -47110,11 +47155,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Mem_FindBucketBlock_4AB7F5` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004AB84C",
-      "name": "Mem_MarkBucketPage_4AB84C",
+      "name": "Mem_MarkBucketPage",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/mem/native_4ab84c.cpp",
@@ -47146,7 +47192,8 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Mem_MarkBucketPage_4AB84C` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004AC620",
@@ -48775,7 +48822,7 @@
     },
     {
       "address": "0x004AF810",
-      "name": "Script_WarningLog_4AF810",
+      "name": "Script_WarningLog",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/error/native_4af810.cpp",
@@ -48807,7 +48854,8 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Script_WarningLog_4AF810` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004AF870",
@@ -48974,7 +49022,7 @@
     },
     {
       "address": "0x004AF910",
-      "name": "Script_QHashListInsert_4AF910",
+      "name": "Script_QHashListInsert",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/script/native_4af910.cpp",
@@ -49006,7 +49054,8 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Script_QHashListInsert_4AF910` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004AF960",
@@ -49100,7 +49149,7 @@
     },
     {
       "address": "0x004B0B00",
-      "name": "Mem_AllocIndexedBlock_4B0B00",
+      "name": "Mem_AllocIndexedBlock",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/mem/task_list.cpp",
@@ -49115,7 +49164,8 @@
           "Static reachability: 32 direct retail callers; transcribed callers are listed below, the remainder are untranscribed and not exercised."
         ],
         "notes": "New native added by the commit 800fec7f lineage; status must remain TRANSCRIBED until a typed runtime comparison exists."
-      }
+      },
+      "notes": "Renamed from `Mem_AllocIndexedBlock_4B0B00` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004B0B90",
@@ -49398,7 +49448,7 @@
     },
     {
       "address": "0x004B0D10",
-      "name": "Mem_DeAllocFn_4B0D10",
+      "name": "Mem_DeAllocFn",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/mem/native_4b0d10.cpp",
@@ -49430,7 +49480,8 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Mem_DeAllocFn_4B0D10` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004B0D40",
@@ -49470,7 +49521,7 @@
     },
     {
       "address": "0x004B0D50",
-      "name": "Mem_QHashFlagClear_4B0D50",
+      "name": "Mem_QHashFlagClear",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/mem/native_4b0d50.cpp",
@@ -49502,11 +49553,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Mem_QHashFlagClear_4B0D50` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004B0D60",
-      "name": "Mem_FlagStackPop_4B0D60",
+      "name": "Mem_FlagStackPop",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/mem/native_4b0d60.cpp",
@@ -49538,11 +49590,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Mem_FlagStackPop_4B0D60` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004B0D90",
-      "name": "Mem_FlagStackPush_4B0D90",
+      "name": "Mem_FlagStackPush",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/mem/native_4b0d90.cpp",
@@ -49574,7 +49627,8 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Mem_FlagStackPush_4B0D90` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004B0F80",
@@ -52421,7 +52475,7 @@
     },
     {
       "address": "0x004B8810",
-      "name": "Script_QHashNodeRegister_4B8810",
+      "name": "Script_QHashNodeRegister",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/script/native_4b8810.cpp",
@@ -52453,11 +52507,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Script_QHashNodeRegister_4B8810` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004B8890",
-      "name": "Script_QHashNodeRegisterEx_4B8890",
+      "name": "Script_QHashNodeRegisterEx",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/script/native_4b8890.cpp",
@@ -52489,7 +52544,8 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Script_QHashNodeRegisterEx_4B8890` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004B8A10",
@@ -52697,7 +52753,7 @@
     },
     {
       "address": "0x004B8B00",
-      "name": "Qvm_IndexBelowCount_4B8B00",
+      "name": "Qvm_IndexBelowCount",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/script/native_4b8b00.cpp",
@@ -52729,7 +52785,8 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Qvm_IndexBelowCount_4B8B00` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004B8C10",
@@ -52813,7 +52870,7 @@
     },
     {
       "address": "0x004BAAC0",
-      "name": "Script_QHashNodeCreate_4BAAC0",
+      "name": "Script_QHashNodeCreate",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/script/native_4baac0.cpp",
@@ -52845,11 +52902,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Script_QHashNodeCreate_4BAAC0` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004BACD0",
-      "name": "Script_QHashSymbolTableInit_4BACD0",
+      "name": "Script_QHashSymbolTableInit",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/script/native_4bacd0.cpp",
@@ -52881,7 +52939,8 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Script_QHashSymbolTableInit_4BACD0` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004BCFD0",
@@ -53237,7 +53296,7 @@
     },
     {
       "address": "0x004C0360",
-      "name": "Script_QHashTableCreate_4C0360",
+      "name": "Script_QHashTableCreate",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/script/native_4c0360.cpp",
@@ -53269,11 +53328,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Script_QHashTableCreate_4C0360` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004C04B0",
-      "name": "Script_QHashNodeLookup_4C04B0",
+      "name": "Script_QHashNodeLookup",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/script/native_4c04b0.cpp",
@@ -53305,11 +53365,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Script_QHashNodeLookup_4C04B0` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004C0530",
-      "name": "Script_Hash32_4C0530",
+      "name": "Script_Hash32",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/script/native_4c0530.cpp",
@@ -53341,11 +53402,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Script_Hash32_4C0530` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004C0560",
-      "name": "Script_QHashSymbolRegister_4C0560",
+      "name": "Script_QHashSymbolRegister",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/script/native_4c0560.cpp",
@@ -53377,7 +53439,8 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Script_QHashSymbolRegister_4C0560` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004C0660",
@@ -53877,7 +53940,7 @@
     },
     {
       "address": "0x004C5900",
-      "name": "QTask_InitPhaseHandlers_4C5900",
+      "name": "QTask_InitPhaseHandlers",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/core/native_4c5900.cpp",
@@ -53909,7 +53972,8 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `QTask_InitPhaseHandlers_4C5900` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004C5F00",
@@ -56547,7 +56611,7 @@
     },
     {
       "address": "0x004D3710",
-      "name": "QTask_NoOpHandler_4D3710",
+      "name": "QTask_NoOpHandler",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/script/native_4d3710.cpp",
@@ -56579,7 +56643,8 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `QTask_NoOpHandler_4D3710` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004D3730",
@@ -57181,7 +57246,7 @@
     },
     {
       "address": "0x004D9730",
-      "name": "QObj_Init_4D9730",
+      "name": "QObj_Init",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/core/native_4d9730.cpp",
@@ -57213,7 +57278,8 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `QObj_Init_4D9730` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004D99E0",
@@ -57357,7 +57423,7 @@
     },
     {
       "address": "0x004DA1D0",
-      "name": "Hazinglayers_Init_4DA1D0",
+      "name": "Hazinglayers_Init",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/render/native_004da1d0.cpp",
@@ -57389,7 +57455,8 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Hazinglayers_Init_4DA1D0` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004DA880",
@@ -57673,7 +57740,7 @@
     },
     {
       "address": "0x004E5370",
-      "name": "DynCubeObj_Init_4E5370",
+      "name": "DynCubeObj_Init",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/dynobj/native_004e5370.cpp",
@@ -57705,11 +57772,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `DynCubeObj_Init_4E5370` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004E7C50",
-      "name": "CameraControlTask_Init_4E7C50",
+      "name": "CameraControlTask_Init",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/render/native_004e7c50.cpp",
@@ -57741,7 +57809,8 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `CameraControlTask_Init_4E7C50` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004E8C60",
@@ -57905,7 +57974,7 @@
     },
     {
       "address": "0x004EBC60",
-      "name": "SoundSysMicrophone_Init_4EBC60",
+      "name": "SoundSysMicrophone_Init",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/audio/native_004ebc60.cpp",
@@ -57937,7 +58006,8 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `SoundSysMicrophone_Init_4EBC60` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004EC070",
@@ -58012,7 +58082,7 @@
     },
     {
       "address": "0x004ED510",
-      "name": "InputPort_Init_4ED510",
+      "name": "InputPort_Init",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/input/native_4ed510.cpp",
@@ -58044,7 +58114,8 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `InputPort_Init_4ED510` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004ED5C0",
@@ -58616,7 +58687,7 @@
     },
     {
       "address": "0x004EE960",
-      "name": "Script_HashBucket_4EE960",
+      "name": "Script_HashBucket",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/script/native_4ee960.cpp",
@@ -58648,7 +58719,8 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Script_HashBucket_4EE960` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004EF7F0",
@@ -61570,7 +61642,7 @@
     },
     {
       "address": "0x004F0610",
-      "name": "Script_Clear_LevelState_4F0610",
+      "name": "Script_Clear_LevelState",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/script/native_4f0610.cpp",
@@ -61602,7 +61674,8 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Script_Clear_LevelState_4F0610` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004F0620",
@@ -61676,7 +61749,7 @@
     },
     {
       "address": "0x004F0640",
-      "name": "Script_ClearStaticState_4F0640",
+      "name": "Script_ClearStaticState",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/script/native_4f0640.cpp",
@@ -61708,7 +61781,8 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Script_ClearStaticState_4F0640` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004F0660",
@@ -61852,7 +61926,7 @@
     },
     {
       "address": "0x004F06F0",
-      "name": "Script_Clear_DynamicState_4F06F0",
+      "name": "Script_Clear_DynamicState",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/script/native_4f06f0.cpp",
@@ -61884,7 +61958,8 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Script_Clear_DynamicState_4F06F0` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004F0700",
@@ -61958,7 +62033,7 @@
     },
     {
       "address": "0x004F0710",
-      "name": "Script_Clear_IdleState_4F0710",
+      "name": "Script_Clear_IdleState",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/script/native_4f0710.cpp",
@@ -61990,7 +62065,8 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Script_Clear_IdleState_4F0710` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004F0720",
@@ -62064,7 +62140,7 @@
     },
     {
       "address": "0x004F0730",
-      "name": "Script_Clear_CameraBaseState_4F0730",
+      "name": "Script_Clear_CameraBaseState",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/script/native_4f0730.cpp",
@@ -62096,11 +62172,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Script_Clear_CameraBaseState_4F0730` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004F0C90",
-      "name": "QHashNode_Release_4F0C90",
+      "name": "QHashNode_Release",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/script/native_4f0c90.cpp",
@@ -62132,7 +62209,8 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `QHashNode_Release_4F0C90` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004F0CF0",
@@ -62298,7 +62376,7 @@
     },
     {
       "address": "0x004F1180",
-      "name": "QHash_FindValue_4F1180",
+      "name": "QHash_FindValue",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/script/native_4f1180.cpp",
@@ -62330,11 +62408,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `QHash_FindValue_4F1180` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004F11A0",
-      "name": "QHashNode_Find_4F11A0",
+      "name": "QHashNode_Find",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/script/native_4f11a0.cpp",
@@ -62366,11 +62445,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `QHashNode_Find_4F11A0` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004F1840",
-      "name": "Script_ParameterEventInit_4F1840",
+      "name": "Script_ParameterEventInit",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/script/native_4f1840.cpp",
@@ -62402,11 +62482,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Script_ParameterEventInit_4F1840` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004F18C0",
-      "name": "Script_ParameterEventReset_4F18C0",
+      "name": "Script_ParameterEventReset",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/script/native_4f18c0.cpp",
@@ -62438,11 +62519,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Script_ParameterEventReset_4F18C0` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004F1950",
-      "name": "Script_TaskContainer_Alloc_4F1950",
+      "name": "Script_TaskContainer_Alloc",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/script/native_4f1950.cpp",
@@ -62474,11 +62556,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Script_TaskContainer_Alloc_4F1950` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004F1980",
-      "name": "Script_TaskContainer_Grow_4F1980",
+      "name": "Script_TaskContainer_Grow",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/script/native_4f1980.cpp",
@@ -62510,11 +62593,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Script_TaskContainer_Grow_4F1980` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004F19C0",
-      "name": "Script_ParameterTypeRegister_4F19C0",
+      "name": "Script_ParameterTypeRegister",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/script/native_4f19c0.cpp",
@@ -62546,11 +62630,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Script_ParameterTypeRegister_4F19C0` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004F1A40",
-      "name": "Script_ParameterTypeFree_4F1A40",
+      "name": "Script_ParameterTypeFree",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/script/native_4f1a40.cpp",
@@ -62582,11 +62667,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Script_ParameterTypeFree_4F1A40` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004F1A80",
-      "name": "Script_TaskContainer_Append_4F1A80",
+      "name": "Script_TaskContainer_Append",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/script/native_4f1a80.cpp",
@@ -62618,11 +62704,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Script_TaskContainer_Append_4F1A80` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004F1B20",
-      "name": "Script_ParameterEventSlotAlloc_4F1B20",
+      "name": "Script_ParameterEventSlotAlloc",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/script/native_4f1b20.cpp",
@@ -62654,11 +62741,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Script_ParameterEventSlotAlloc_4F1B20` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004F1B50",
-      "name": "Script_ParameterEventSlotClear_4F1B50",
+      "name": "Script_ParameterEventSlotClear",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/script/native_4f1b50.cpp",
@@ -62690,11 +62778,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Script_ParameterEventSlotClear_4F1B50` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004F1B60",
-      "name": "Script_ParameterEventSlotGetEA_4F1B60",
+      "name": "Script_ParameterEventSlotGetEA",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/script/native_4f1b60.cpp",
@@ -62726,11 +62815,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Script_ParameterEventSlotGetEA_4F1B60` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004F1B70",
-      "name": "Script_ParameterEventSlotGetE6_4F1B70",
+      "name": "Script_ParameterEventSlotGetE6",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/script/native_4f1b70.cpp",
@@ -62762,11 +62852,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Script_ParameterEventSlotGetE6_4F1B70` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004F1B80",
-      "name": "Script_ParameterEventSlotGetEB_4F1B80",
+      "name": "Script_ParameterEventSlotGetEB",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/script/native_4f1b80.cpp",
@@ -62798,11 +62889,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Script_ParameterEventSlotGetEB_4F1B80` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004F1B90",
-      "name": "Script_ParameterEventSlotGetE9_4F1B90",
+      "name": "Script_ParameterEventSlotGetE9",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/script/native_4f1b90.cpp",
@@ -62834,11 +62926,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Script_ParameterEventSlotGetE9_4F1B90` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004F1BA0",
-      "name": "Script_ParameterEventSlotGetE7_4F1BA0",
+      "name": "Script_ParameterEventSlotGetE7",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/script/native_4f1ba0.cpp",
@@ -62870,11 +62963,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Script_ParameterEventSlotGetE7_4F1BA0` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004F1BB0",
-      "name": "Script_ParameterEventSlotGetE8_4F1BB0",
+      "name": "Script_ParameterEventSlotGetE8",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/script/native_4f1bb0.cpp",
@@ -62906,11 +63000,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Script_ParameterEventSlotGetE8_4F1BB0` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004F1BC0",
-      "name": "Script_ParameterPropertySet_4F1BC0",
+      "name": "Script_ParameterPropertySet",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/script/native_4f1bc0.cpp",
@@ -62942,11 +63037,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Script_ParameterPropertySet_4F1BC0` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004F1C20",
-      "name": "Qvm_CheckParameterCount_4F1C20",
+      "name": "Qvm_CheckParameterCount",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/script/native_4f1c20.cpp",
@@ -62978,7 +63074,8 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Qvm_CheckParameterCount_4F1C20` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004F1CF0",
@@ -64533,7 +64630,7 @@
     },
     {
       "address": "0x004F9460",
-      "name": "Script_NodeSizeTable_Set_4F9460",
+      "name": "Script_NodeSizeTable_Set",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/script/native_4f9460.cpp",
@@ -64565,11 +64662,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Script_NodeSizeTable_Set_4F9460` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004F9E70",
-      "name": "Script_StringHash_4F9E70",
+      "name": "Script_StringHash",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/script/native_4f9e70.cpp",
@@ -64601,7 +64699,8 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Script_StringHash_4F9E70` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x004a5350",
@@ -65916,7 +66015,7 @@
     },
     {
       "address": "0x00509CC0",
-      "name": "Joypad_IsAcquired_509CC0",
+      "name": "Joypad_IsAcquired",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/input/native_509cc0.cpp",
@@ -65948,11 +66047,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Joypad_IsAcquired_509CC0` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x00509E90",
-      "name": "Joypad_ReleaseAll_509E90",
+      "name": "Joypad_ReleaseAll",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/input/native_509e90.cpp",
@@ -65984,11 +66084,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Joypad_ReleaseAll_509E90` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x00509F00",
-      "name": "Joypad_InitActionFlags_509F00",
+      "name": "Joypad_InitActionFlags",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/input/native_509f00.cpp",
@@ -66020,7 +66121,8 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Joypad_InitActionFlags_509F00` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x00509cf0",
@@ -70984,7 +71086,7 @@
     },
     {
       "address": "0x005186C0",
-      "name": "Script_NodeCriteriaRegister_5186C0",
+      "name": "Script_NodeCriteriaRegister",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/script/native_5186c0.cpp",
@@ -71016,7 +71118,8 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `Script_NodeCriteriaRegister_5186C0` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x00518720",
@@ -71650,7 +71753,7 @@
     },
     {
       "address": "0x0051A1D0",
-      "name": "SplinePathDynCubeObj_Init_51A1D0",
+      "name": "SplinePathDynCubeObj_Init",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/dynobj/native_0051a1d0.cpp",
@@ -71682,7 +71785,8 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `SplinePathDynCubeObj_Init_51A1D0` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x0051A4A0",
@@ -73092,7 +73196,7 @@
     },
     {
       "address": "0x00530A80",
-      "name": "FlashTask_Init_530A80",
+      "name": "FlashTask_Init",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/core/native_00530a80.cpp",
@@ -73124,11 +73228,12 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `FlashTask_Init_530A80` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
       "address": "0x005310E0",
-      "name": "FreeCamera_Init_5310E0",
+      "name": "FreeCamera_Init",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/core/native_005310e0.cpp",
@@ -73160,7 +73265,8 @@
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0
-      }
+      },
+      "notes": "Renamed from `FreeCamera_Init_5310E0` when the address suffix was stripped; the retail VA in this record is unchanged."
     }
   ],
   "integration": {

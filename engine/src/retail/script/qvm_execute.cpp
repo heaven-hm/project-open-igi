@@ -83,41 +83,41 @@ extern "C" {
 
 // 0x004BD080 - runs the resolved precompiled program and returns the interpreter's error code
 // (0 when the program ran); it drives Qvm_ExecuteInstructions (0x004BCFD0).
-std::int32_t NATIVE_DECL Qvm_RunProgram_4BD080(std::uint32_t program);
+std::int32_t NATIVE_DECL Qvm_RunProgram(std::uint32_t program);
 
 // 0x004C0200 - initialises the script-source buffer over the loaded resource.
-void NATIVE_DECL Qvm_SourceBufferInit_4C0200(void* buffer, void* source_stack, void* text,
+void NATIVE_DECL Qvm_SourceBufferInit(void* buffer, void* source_stack, void* text,
                                                  std::int32_t text_size);
 
 // 0x004BF1C0 - attaches the loaded script bytes to the source reader.
-void NATIVE_DECL Qvm_SourceReaderInit_4BF1C0(void* source_stack, std::uint32_t data,
+void NATIVE_DECL Qvm_SourceReaderInit(void* source_stack, std::uint32_t data,
                                                   std::uint32_t size);
 
 // 0x004BFC70 - reads the next source block; returns 0 at the end of the buffer.
-std::int32_t NATIVE_DECL Qvm_ReadNextBlock_4BFC70(void* buffer, void* out_block);
+std::int32_t NATIVE_DECL Qvm_ReadNextBlock(void* buffer, void* out_block);
 
 // 0x004BF1F0 - parses one block; returns non-zero when a block was produced.
-std::int32_t NATIVE_DECL Qvm_ParseBlock_4BF1F0(void* buffer, void* out_block);
+std::int32_t NATIVE_DECL Qvm_ParseBlock(void* buffer, void* out_block);
 
 // 0x004BFA80 - recursively releases a parsed block tree.
-void NATIVE_DECL Qvm_ReleaseBlockTree_4BFA80(void* block);
+void NATIVE_DECL Qvm_ReleaseBlockTree(void* block);
 
 // 0x004BF8F0 - releases one parsed block.
-void NATIVE_DECL Qvm_ReleaseBlock_4BF8F0(void* block);
+void NATIVE_DECL Qvm_ReleaseBlock(void* block);
 
 // 0x004BEFC0 - releases the source reader. Its EAX is returned unchanged as Qvm_Execute's
 // result on the source path.
-std::int32_t NATIVE_DECL Qvm_ReleaseSourceReader_4BEFC0(void* source_stack);
+std::int32_t NATIVE_DECL Qvm_ReleaseSourceReader(void* source_stack);
 
 // 0x004BD010 - reads argument `index` from the interpreter frame and returns it as a real in
 // ST0 (the retail body ends with `fld dword [esp+0x14]`).
-long double NATIVE_DECL Qvm_ReadIndexedArgument_4BD010(void* argument_frame,
+long double NATIVE_DECL Qvm_ReadIndexedArgument(void* argument_frame,
                                                             std::int32_t index);
 
 // 0x004B9660 - evaluates one argument expression node and leaves its real value in ST0
 // (`fild` / `fld dword` / `fld qword`); its recursion, type dispatch, "Unknown identifier
 // '%s' in expression, line %d" error report and 0x00A965A8 error store live inside it.
-long double NATIVE_DECL Qvm_EvaluateArgumentValue_4B9660(const void* node);
+long double NATIVE_DECL Qvm_EvaluateArgumentValue(const void* node);
 
 } // extern "C"
 
@@ -134,7 +134,7 @@ extern "C" std::int32_t NATIVE_DECL Qvm_Execute(void* qvm)
         // Precompiled-program path: the retail executes qvm+0x8C directly and only reports
         // when the program runner returns a non-zero error code.
         const std::int32_t run_result =
-            Qvm_RunProgram_4BD080(static_cast<std::uint32_t>(program));
+            Qvm_RunProgram(static_cast<std::uint32_t>(program));
         g_a965a4 = 0;
         if (run_result == 0)
         {
@@ -156,8 +156,8 @@ extern "C" std::int32_t NATIVE_DECL Qvm_Execute(void* qvm)
     QvmSourceBuffer source_buffer;
     std::byte text[0x800];
 
-    Qvm_SourceBufferInit_4C0200(&source_buffer, &source_stack, text, 0x800);
-    Qvm_SourceReaderInit_4BF1C0(&source_stack, load_word(qvm, kQvmDataOffset),
+    Qvm_SourceBufferInit(&source_buffer, &source_stack, text, 0x800);
+    Qvm_SourceReaderInit(&source_stack, load_word(qvm, kQvmDataOffset),
                                 load_word(qvm, kQvmDataSizeOffset));
 
     for (;;)
@@ -168,16 +168,16 @@ extern "C" std::int32_t NATIVE_DECL Qvm_Execute(void* qvm)
         }
 
         std::uint32_t parsed_block = 0;
-        if (Qvm_ReadNextBlock_4BFC70(&source_buffer, &source_buffer.block_slot) == 0)
+        if (Qvm_ReadNextBlock(&source_buffer, &source_buffer.block_slot) == 0)
         {
             break;
         }
 
-        if (Qvm_ParseBlock_4BF1F0(&source_buffer, &parsed_block) != 0)
+        if (Qvm_ParseBlock(&source_buffer, &parsed_block) != 0)
         {
             void* const block = pointer_from_word(parsed_block);
-            Qvm_ReleaseBlockTree_4BFA80(block);
-            Qvm_ReleaseBlock_4BF8F0(block);
+            Qvm_ReleaseBlockTree(block);
+            Qvm_ReleaseBlock(block);
             if (g_a965a8 == 0)
             {
                 continue;
@@ -192,7 +192,7 @@ extern "C" std::int32_t NATIVE_DECL Qvm_Execute(void* qvm)
         break;
     }
 
-    const std::int32_t release_result = Qvm_ReleaseSourceReader_4BEFC0(&source_stack);
+    const std::int32_t release_result = Qvm_ReleaseSourceReader(&source_stack);
     g_a965a4 = 0;
     return release_result;
 }
@@ -201,14 +201,14 @@ extern "C" long double NATIVE_DECL Qvm_GetFloatArg(void* argument_frame, std::in
 {
     if (load_word(argument_frame, kArgumentTableFlagOffset) != 0U)
     {
-        return Qvm_ReadIndexedArgument_4BD010(argument_frame, index);
+        return Qvm_ReadIndexedArgument(argument_frame, index);
     }
 
     const std::uint32_t table = load_word(argument_frame, kArgumentTableOffset);
     const auto* entries = reinterpret_cast<const std::uint32_t*>(
         static_cast<std::uintptr_t>(table));
     const std::uint32_t node = entries[static_cast<std::uint32_t>(index)];
-    return Qvm_EvaluateArgumentValue_4B9660(pointer_from_word(node));
+    return Qvm_EvaluateArgumentValue(pointer_from_word(node));
 }
 
 } // namespace igi::retail::script

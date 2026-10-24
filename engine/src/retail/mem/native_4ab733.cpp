@@ -1,4 +1,4 @@
-// Native: Mem_PurgeBucketPages_4AB733 (placeholder until VERIFIED); retail VA 0x004AB733-0x004AB7F4 (194 bytes, 20 blocks, 22 edges).
+// Native: Mem_PurgeBucketPages (placeholder until VERIFIED); retail VA 0x004AB733-0x004AB7F4 (194 bytes, 20 blocks, 22 edges).
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: radare2 6.2.0 complete listing (55 8bec 51 53 56 8b35b4465400 57 837e10ff 0f8494000000 8365fc00 8dbe10200000 bb00f03f00 813ff0000000 ... 0f8f50ffffff 5f 5e 5b c9 c3); imports KERNEL32 VirtualFree.
 // Behavior/CFG: walks the circular node list from 0x005446B4, decommitting committed pages. For each real node it scans walk entries from node+0x2010 downwards by 8 while the page offset falls from 0x3FF000 by 0x1000; a 0xF0 entry means a committed page, so it VirtualFree(base + offset, 0x1000, MEM_DECOMMIT), writes -1 over the entry, decrements the committed-page count 0x00936200, records the lowest decommitted slot in [node+0x0C], and stops the whole walk once `count` pages have been decommitted. After a node that purged anything, if its first entry is -1 and every one of the 0x400 entries is -1, it frees the node through 0x4AB6DD. It stops when it returns to the list anchor or when `count` is exhausted.
@@ -14,9 +14,9 @@ using igi::retail::mem::Mode2BucketNode;
 
 extern "C" {
 
-void Mem_FreeBucketNode_4AB6DD(Mode2BucketNode* node); // 0x004AB7D8: call 0x4ab6dd
+void Mem_FreeBucketNode(Mode2BucketNode* node); // 0x004AB7D8: call 0x4ab6dd
 
-void Mem_PurgeBucketPages_4AB733(std::int32_t count)
+void Mem_PurgeBucketPages(std::int32_t count)
 {
     Mode2BucketNode* node = g_5446b0.next;                                              // 0x004AB739: mov esi,[0x5446b4]
     for (;;)                                                                            // 0x004AB740
@@ -77,7 +77,7 @@ void Mem_PurgeBucketPages_4AB733(std::int32_t count)
                     }
                     if (filled == 0x400)                                                // 0x004AB7CF/0x004AB7D5: cmp edx,0x400; jne
                     {
-                        Mem_FreeBucketNode_4AB6DD(previous);                            // 0x004AB7D7/0x004AB7D8: push ecx; call 0x4ab6dd
+                        Mem_FreeBucketNode(previous);                            // 0x004AB7D7/0x004AB7D8: push ecx; call 0x4ab6dd
                     }
                 }
             }

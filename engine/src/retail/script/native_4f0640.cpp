@@ -1,4 +1,4 @@
-// Native: Script_ClearStaticState_4F0640 (placeholder until VERIFIED); retail VA 0x004F0640-0x004F0653 (0x13 bytes, 3 blocks, 3 edges).
+// Native: Script_ClearStaticState (placeholder until VERIFIED); retail VA 0x004F0640-0x004F0653 (0x13 bytes, 3 blocks, 3 edges).
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: radare2 6.2.0 complete listing (a1b058a700 85c0 740a c705b058a700000000 c3); one of the 84 code pointers registered by the
 // 0x004EE970 catalogue, analysed in docs/fidelity/evidence/0x4EE970-data-extents.md section 8.
@@ -10,7 +10,7 @@
 extern "C" {
 
 extern std::uint32_t g_a758b0;                      // 0x00A758B0, region R8 +0x0C (read and conditionally cleared)
-std::uint32_t Script_ClearStaticState_4F0640()
+std::uint32_t Script_ClearStaticState()
 {
     const std::uint32_t previous = g_a758b0;              // 0x004F0640: mov eax,[0xa758b0]
     if (previous != 0)                                   // 0x004F0645/0x004F0647: test eax,eax; je

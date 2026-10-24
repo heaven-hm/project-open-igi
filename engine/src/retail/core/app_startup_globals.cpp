@@ -48,89 +48,89 @@ extern "C"
 extern "C"
 {
 
-// Native: Display_SetScreenMode_48F120; retail VA 0x0048F120
+// Native: Display_SetScreenMode; retail VA 0x0048F120
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01
 // Tools/evidence: Binary Ninja MCP (Pseudo C + disassembly; selected decompiler), Radare2 CFG and angr CFGFast; static capture build/native-analysis/0x0048F120/capture.json; Tester retail record build/tester/20261023T220230Z/handoff/0x0048F120.json
 // Behavior/CFG: one block `movsx eax,byte [esp+4]; mov [0x5C8C00],eax; retn` (bytes 0f be 44 24 04 a3 00 8c 5c 00 c3); stores the sign-extended low byte, returns it; observed calls: main 0x0048F61C with 1, Window CLI handler 0x48F352 with 0
 // Status/limits: STRUCTURALLY_VERIFIED; retail full-game runtime observed (2 calls, values 1 then 0); candidate runtime unobserved until the retail main/handler order is wired
-std::int32_t NATIVE_DECL Display_SetScreenMode_48F120(std::int32_t mode)
+std::int32_t NATIVE_DECL Display_SetScreenMode(std::int32_t mode)
 {
     const std::int32_t value = static_cast<std::int8_t>(static_cast<std::uint8_t>(mode));
     g_5c8c00 = value;
     return value;
 }
 
-// Native: Display_GetScreenMode_48F130; retail VA 0x0048F130
+// Native: Display_GetScreenMode; retail VA 0x0048F130
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01
 // Tools/evidence: Binary Ninja MCP (Pseudo C + disassembly; selected decompiler), Radare2 CFG and angr CFGFast; static capture build/native-analysis/0x0048F130/capture.json; Tester retail record build/tester/20261023T220230Z/handoff/0x0048F130.json
 // Behavior/CFG: one block `mov eax,dword [0x5C8C00]; retn` (bytes a1 00 8c 5c 00 c3); returns the current screen-mode word; main calls it at 0x0048F754 and the observed EAX is 0 after the Window handler, giving the 0x37C80000 CreateWindowExA style branch; 64 calls observed in the window (1 from main, 63 later display/menu callers)
 // Status/limits: STRUCTURALLY_VERIFIED; retail full-game runtime observed; candidate runtime unobserved until the retail main/handler order is wired
-std::int32_t NATIVE_DECL Display_GetScreenMode_48F130()
+std::int32_t NATIVE_DECL Display_GetScreenMode()
 {
     return g_5c8c00;
 }
 
-// Native: Input_SetUseWin32Input_48F280; retail VA 0x0048F280
+// Native: Input_SetUseWin32Input; retail VA 0x0048F280
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01
 // Tools/evidence: Binary Ninja MCP (Pseudo C + disassembly; selected decompiler), Radare2 CFG and angr CFGFast; static capture build/native-analysis/0x0048F280/capture.json; Tester retail record build/tester/20261023T220230Z/handoff/0x0048F280.json
 // Behavior/CFG: one block `mov eax,[esp+4]; mov [0x5C8BE0],eax; retn` (bytes 8b 44 24 04 a3 e0 8b 5c 00 c3); returns the argument; main calls with 0 at 0x48F643, the "WinInput" CLI handler with 1 (input-path flag; name proposed from that caller)
 // Status/limits: STRUCTURALLY_VERIFIED; retail runtime observed (1 call, arg 0, store 0); candidate runtime unobserved until wiring
-std::int32_t NATIVE_DECL Input_SetUseWin32Input_48F280(std::int32_t value)
+std::int32_t NATIVE_DECL Input_SetUseWin32Input(std::int32_t value)
 {
     g_5c8be0 = value;
     return value;
 }
 
-// Native: AppMain_Set5C8C0C_48F290; retail VA 0x0048F290
+// Native: AppMain_Set5C8C0C; retail VA 0x0048F290
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01
 // Tools/evidence: Binary Ninja MCP (Pseudo C + disassembly; selected decompiler), Radare2 CFG and angr CFGFast; static capture build/native-analysis/0x0048F290/capture.json; Tester retail record build/tester/20261023T220230Z/handoff/0x0048F290.json
 // Behavior/CFG: one block `mov eax,[esp+4]; mov [0x5C8C0C],eax; retn`; returns the argument; main calls at 0x48F649 with 0; no reader of 0x5C8C0C was found, so the label stays address-derived
 // Status/limits: STRUCTURALLY_VERIFIED; retail runtime observed (1 call, arg 0); candidate runtime unobserved until wiring
-std::int32_t NATIVE_DECL AppMain_Set5C8C0C_48F290(std::int32_t value)
+std::int32_t NATIVE_DECL AppMain_Set5C8C0C(std::int32_t value)
 {
     g_5c8c0c = value;
     return value;
 }
 
-// Native: AppMain_Set5C8C10_48F2A0; retail VA 0x0048F2A0
+// Native: AppMain_Set5C8C10; retail VA 0x0048F2A0
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01
 // Tools/evidence: Binary Ninja MCP (Pseudo C + disassembly; selected decompiler), Radare2 CFG and angr CFGFast; static capture build/native-analysis/0x0048F2A0/capture.json; Tester retail record build/tester/20261023T220230Z/handoff/0x0048F2A0.json
 // Behavior/CFG: one block `mov eax,[esp+4]; mov [0x5C8C10],eax; retn`; returns the argument; main calls at 0x48F64F with 0; no reader evidenced, address-derived label
 // Status/limits: STRUCTURALLY_VERIFIED; retail runtime observed (1 call, arg 0); candidate runtime unobserved until wiring
-std::int32_t NATIVE_DECL AppMain_Set5C8C10_48F2A0(std::int32_t value)
+std::int32_t NATIVE_DECL AppMain_Set5C8C10(std::int32_t value)
 {
     g_5c8c10 = value;
     return value;
 }
 
-// Native: Game_SetStartupMode_48F210; retail VA 0x0048F210
+// Native: Game_SetStartupMode; retail VA 0x0048F210
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01
 // Tools/evidence: Binary Ninja MCP (Pseudo C + disassembly; selected decompiler), Radare2 CFG and angr CFGFast; static capture build/native-analysis/0x0048F210/capture.json; P05b per-native packet; Tester retail record build/tester/20261023T220230Z/handoff/0x0048F210.json
 // Behavior/CFG: one block `mov eax,[esp+4]; mov [0x5C8C08],eax; retn`; returns the argument; main calls with 1 at 0x48F656, then the "Level" handler 0x415B10 calls with 0 at 0x415B26 inside Game_Init; QTask_CreateTask reads it through 0x0048F220 and takes Flow_SetState(4) on 0; observed two calls in order (1, 0)
 // Status/limits: STRUCTURALLY_VERIFIED; retail runtime observed (2 calls, args 1 then 0, final word 0); candidate runtime unobserved until wiring
-std::int32_t NATIVE_DECL Game_SetStartupMode_48F210(std::int32_t value)
+std::int32_t NATIVE_DECL Game_SetStartupMode(std::int32_t value)
 {
     AppContext_StartupMode = value;
     return value;
 }
 
-// Native: AppContext_SetGermanVersion_48F2B0; retail VA 0x0048F2B0
+// Native: AppContext_SetGermanVersion; retail VA 0x0048F2B0
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01
 // Tools/evidence: Binary Ninja MCP (Pseudo C + disassembly; selected decompiler), Radare2 CFG and angr CFGFast; static capture build/native-analysis/0x0048F2B0/capture.json; Tester retail record build/tester/20261023T220230Z/handoff/0x0048F2B0.json
 // Behavior/CFG: one block `mov eax,[esp+4]; mov [0x5C8BDC],eax; retn`; returns the argument; main calls with 0 at 0x48F65C; the "Germany" CLI handler calls with 1, "HardcoreGerman" with 0 (German-version flag; name proposed from those callers)
 // Status/limits: STRUCTURALLY_VERIFIED; retail runtime observed (1 call, arg 0); candidate runtime unobserved until wiring
-std::int32_t NATIVE_DECL AppContext_SetGermanVersion_48F2B0(std::int32_t value)
+std::int32_t NATIVE_DECL AppContext_SetGermanVersion(std::int32_t value)
 {
     g_5c8bdc = value;
     return value;
 }
 
-// Native: AppContext_SetLanguage_48F300; retail VA 0x0048F300
+// Native: AppContext_SetLanguage; retail VA 0x0048F300
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01
 // Tools/evidence: Binary Ninja MCP (Pseudo C + disassembly; selected decompiler), Radare2 CFG and angr CFGFast; static capture build/native-analysis/0x0048F300/capture.json; Tester retail record build/tester/20261023T220230Z/handoff/0x0048F300.json
 // Behavior/CFG: single 41-byte block: `edi=[esp+4]; ecx=-1; eax=0; repne scasb; not ecx; sub edi,ecx; eax=ecx; esi=edi; edi=[0x5C8C20]; shr ecx,2; rep movsd; ecx=eax; and ecx,3; rep movsb` - unbounded strlen+1 byte copy of the argument string into 0x005C8C20 (dword body plus byte tail), returns the copied length including the NUL; main calls with the empty image buffer 0x00567C74 (return 1), the German/USA handlers pass their language names
 // Status/limits: STRUCTURALLY_VERIFIED; retail runtime observed (1 call in this scenario, arg 0x00567C74, EAX=1, NUL stored); candidate runtime unobserved until wiring; the retail buffer extent is not evidenced by any reference (port buffer is 0x40 bytes, unbounded retail copy preserved for the evidenced inputs)
-std::int32_t NATIVE_DECL AppContext_SetLanguage_48F300(const char* language)
+std::int32_t NATIVE_DECL AppContext_SetLanguage(const char* language)
 {
     std::int32_t length_with_nul = 0;
     while (language[length_with_nul] != '\0')
@@ -145,12 +145,12 @@ std::int32_t NATIVE_DECL AppContext_SetLanguage_48F300(const char* language)
     return length_with_nul;
 }
 
-// Native: AppMain_Set5C8C04_48F200; retail VA 0x0048F200
+// Native: AppMain_Set5C8C04; retail VA 0x0048F200
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01
 // Tools/evidence: Binary Ninja MCP (Pseudo C + disassembly; selected decompiler), Radare2 CFG and angr CFGFast; static capture build/native-analysis/0x0048F200/capture.json; Tester retail record build/tester/20261023T220230Z/handoff/0x0048F200.json
 // Behavior/CFG: one block `mov eax,[esp+4]; mov [0x5C8C04],eax; retn`; returns the argument; main calls at 0x48F66F with 0; no reader evidenced, address-derived label
 // Status/limits: STRUCTURALLY_VERIFIED; retail runtime observed (1 call, arg 0); candidate runtime unobserved until wiring
-std::int32_t NATIVE_DECL AppMain_Set5C8C04_48F200(std::int32_t value)
+std::int32_t NATIVE_DECL AppMain_Set5C8C04(std::int32_t value)
 {
     g_5c8c04 = value;
     return value;

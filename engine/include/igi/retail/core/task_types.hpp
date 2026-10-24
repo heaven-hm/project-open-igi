@@ -164,6 +164,12 @@ std::uint32_t NATIVE_DECL QTask_LinkQTaskEventHandler(
 
 // Native: QTask_GetCurrentType() - VA 0x004018F0 - complete port.
 // Behavior: returns the 16-bit current task type at 0x0054F928 in AX.
+// noinline is a compiler code-generation directive, no added logic: retail QTask_Init calls this native four
+// times (0x00401140, 0x00401150, 0x00401160, 0x00401170) and those call edges are part of the CFG this project
+// scores. Letting -O3 inline the body would delete four retail edges while every value stayed correct.
+#if defined(__GNUC__) || defined(__clang__)
+__attribute__((noinline))
+#endif
 std::uint16_t NATIVE_DECL QTask_GetCurrentType();
 
 // Native: QTask_Init() - VA 0x004010D0 - complete port.

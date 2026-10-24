@@ -16,8 +16,8 @@
 #endif
 
 extern "C" {
-std::int32_t NATIVE_DECL SetAppTitle_48F100(char const* title);
-std::int32_t NATIVE_DECL SetDebugCompileState_48F1C0(std::int32_t value);
+std::int32_t NATIVE_DECL SetAppTitle(char const* title);
+std::int32_t NATIVE_DECL SetDebugCompileState(std::int32_t value);
 }
 
 #undef NATIVE_DECL

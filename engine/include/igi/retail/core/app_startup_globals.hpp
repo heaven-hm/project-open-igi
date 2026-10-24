@@ -28,49 +28,49 @@
 
 extern "C" {
 
-// Native: Input_SetUseWin32Input_48F280; retail VA 0x0048F280. Writes
+// Native: Input_SetUseWin32Input; retail VA 0x0048F280. Writes
 // 0x005C8BE0. Callers: main 0x0048F643 with 0; the "WinInput" CLI handler with 1.
-std::int32_t NATIVE_DECL Input_SetUseWin32Input_48F280(std::int32_t value);
+std::int32_t NATIVE_DECL Input_SetUseWin32Input(std::int32_t value);
 
-// Native: AppMain_Set5C8C0C_48F290; retail VA 0x0048F290. Writes 0x005C8C0C.
+// Native: AppMain_Set5C8C0C; retail VA 0x0048F290. Writes 0x005C8C0C.
 // Caller main 0x0048F649 with 0. No reader evidenced; no semantic name claimed.
-std::int32_t NATIVE_DECL AppMain_Set5C8C0C_48F290(std::int32_t value);
+std::int32_t NATIVE_DECL AppMain_Set5C8C0C(std::int32_t value);
 
-// Native: AppMain_Set5C8C10_48F2A0; retail VA 0x0048F2A0. Writes 0x005C8C10.
+// Native: AppMain_Set5C8C10; retail VA 0x0048F2A0. Writes 0x005C8C10.
 // Caller main 0x0048F64F with 0. No reader evidenced; no semantic name claimed.
-std::int32_t NATIVE_DECL AppMain_Set5C8C10_48F2A0(std::int32_t value);
+std::int32_t NATIVE_DECL AppMain_Set5C8C10(std::int32_t value);
 
-// Native: Game_SetStartupMode_48F210; retail VA 0x0048F210. Writes 0x005C8C08.
+// Native: Game_SetStartupMode; retail VA 0x0048F210. Writes 0x005C8C08.
 // Callers: main 0x0048F656 with 1; the "Level" handler (0x415B10) with 0 inside
 // QTask_CreateTask -> Game_Init. 0x0048F220 reads it through QTask_CreateTask.
-std::int32_t NATIVE_DECL Game_SetStartupMode_48F210(std::int32_t value);
+std::int32_t NATIVE_DECL Game_SetStartupMode(std::int32_t value);
 
-// Native: AppContext_SetGermanVersion_48F2B0; retail VA 0x0048F2B0. Writes
+// Native: AppContext_SetGermanVersion; retail VA 0x0048F2B0. Writes
 // 0x005C8BDC. Callers: main 0x0048F65C with 0; "Germany" handler with 1;
 // "HardcoreGerman" handler with 0.
-std::int32_t NATIVE_DECL AppContext_SetGermanVersion_48F2B0(std::int32_t value);
+std::int32_t NATIVE_DECL AppContext_SetGermanVersion(std::int32_t value);
 
-// Native: AppContext_SetLanguage_48F300; retail VA 0x0048F300. Unbounded
+// Native: AppContext_SetLanguage; retail VA 0x0048F300. Unbounded
 // strlen+1 byte copy of the argument string into the retail buffer 0x005C8C20;
 // returns the copied length including the NUL. Callers: main 0x0048F669 with
 // 0x00567C74 (empty at image load), "Germany" with "Germany", "USA" with "USA".
-std::int32_t NATIVE_DECL AppContext_SetLanguage_48F300(const char* language);
+std::int32_t NATIVE_DECL AppContext_SetLanguage(const char* language);
 
-// Native: AppMain_Set5C8C04_48F200; retail VA 0x0048F200. Writes 0x005C8C04.
+// Native: AppMain_Set5C8C04; retail VA 0x0048F200. Writes 0x005C8C04.
 // Caller main 0x0048F66F with 0. No reader evidenced; no semantic name claimed.
-std::int32_t NATIVE_DECL AppMain_Set5C8C04_48F200(std::int32_t value);
+std::int32_t NATIVE_DECL AppMain_Set5C8C04(std::int32_t value);
 
-// Native: Display_SetScreenMode_48F120; retail VA 0x0048F120. Sign-extends the
+// Native: Display_SetScreenMode; retail VA 0x0048F120. Sign-extends the
 // low byte of the argument and stores it in 0x005C8C00, returning the
 // sign-extended value. Callers in `window level1`: main 0x0048F61C with 1, then
 // the "Window" CLI handler (0x48F350) with 0 at 0x0048F352.
-std::int32_t NATIVE_DECL Display_SetScreenMode_48F120(std::int32_t mode);
+std::int32_t NATIVE_DECL Display_SetScreenMode(std::int32_t mode);
 
-// Native: Display_GetScreenMode_48F130; retail VA 0x0048F130. Returns
+// Native: Display_GetScreenMode; retail VA 0x0048F130. Returns
 // 0x005C8C00. Observed 64 calls in the `window level1` startup window: one from
 // main 0x0048F754 (after the Window handler reset the mode to 0) and later
 // display/menu callers.
-std::int32_t NATIVE_DECL Display_GetScreenMode_48F130();
+std::int32_t NATIVE_DECL Display_GetScreenMode();
 
 // Retail storage the reconstructed setters write. The port owns these globals
 // here; 0x005C8C08 is deliberately NOT defined here because the existing

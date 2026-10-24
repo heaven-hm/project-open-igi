@@ -45,12 +45,12 @@ extern "C"
 extern "C"
 {
 
-// Native: SetAppTitle_48F100; retail VA 0x0048F100
+// Native: SetAppTitle; retail VA 0x0048F100
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01
 // Tools/evidence: Binary Ninja MCP (Pseudo C + disassembly; selected decompiler), Radare2 CFG and angr CFGFast; static capture build/audit/p05b-20261023T222309Z/ and build/tester/20261023T220230Z/static/0x0048F100-static.json; BN catalog alias FX_ExplosionSpawn_23 is wrong
 // Behavior/CFG: `ecx=[0x5C8BC4]; eax=[esp+4]; mov [0x5C8BD4],eax; if (ecx) SetWindowTextA(ecx,eax); ret` - one block; stores the title pointer in the document-title global and, when the window handle is non-null, forwards the title to SetWindowTextA; returns the argument when there is no window and the SetWindowTextA result otherwise; main calls it with "Innerloop" (0x53B534) at 0x48F60E and QTask_CreateTask calls it with "IGI" (0x536144)
 // Status/limits: STRUCTURALLY_VERIFIED; retail full-game runtime observed from main 0x48F60E and from QTask_CreateTask; candidate runtime unobserved until main wiring
-std::int32_t NATIVE_DECL SetAppTitle_48F100(char const* title)
+std::int32_t NATIVE_DECL SetAppTitle(char const* title)
 {
     AppTitle = title;
 #if defined(_WIN32)
@@ -63,12 +63,12 @@ std::int32_t NATIVE_DECL SetAppTitle_48F100(char const* title)
     return static_cast<std::int32_t>(reinterpret_cast<std::intptr_t>(title));
 }
 
-// Native: SetDebugCompileState_48F1C0; retail VA 0x0048F1C0
+// Native: SetDebugCompileState; retail VA 0x0048F1C0
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01
 // Tools/evidence: Binary Ninja MCP (Pseudo C + disassembly; selected decompiler), Radare2 CFG and angr CFGFast; static capture build/audit/p05b-20261023T222309Z/ and build/tester/20261023T220230Z/static/0x0048F1C0-static.json; BN catalog alias FX_FireBallUpdate_24 is wrong
 // Behavior/CFG: `movsx eax,byte [esp+4]; mov [0x5C8BEC],eax; ret` - one block: sign-extends the low byte of the argument into the debug-compile flag and returns the sign-extended value; main calls it with 1 at 0x48F629
 // Status/limits: STRUCTURALLY_VERIFIED; retail full-game runtime observed (main 0x48F629, arg 1); candidate runtime unobserved until main wiring; the flag global is currently also written by the QVM native loader, which is a port binding to confirm during wiring
-std::int32_t NATIVE_DECL SetDebugCompileState_48F1C0(std::int32_t value)
+std::int32_t NATIVE_DECL SetDebugCompileState(std::int32_t value)
 {
     const std::int32_t narrowed = static_cast<std::int8_t>(static_cast<std::uint8_t>(value));
     g_5c8bec = narrowed;

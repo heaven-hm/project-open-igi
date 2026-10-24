@@ -269,7 +269,7 @@ void* HeightMap_Enter(void* context);
 // Native: TerrainLightMap_PushEntry; retail VA 0x004F82B0; signature void*(void* self).
 // Artifact: igi.exe (retail 1.00); SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: Ghidra and Binary Ninja on scripts/GameNatives/terrainlightmap/004F82B0-TerrainLightMap_PushEntry.cpp; CFG 100.0%.
-// Behavior/CFG: Pushes lightmap index into lightmap stack data_b97b20.
+// Behavior/CFG: Pushes lightmap index into lightmap stack data.
 // Status/limits: TRANSCRIBED; exact stack operations matching retail binary.
 void* TerrainLightMap_PushEntry(void* self);
 

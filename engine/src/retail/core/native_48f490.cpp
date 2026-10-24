@@ -1,4 +1,4 @@
-// Native: WinProc_RegisterHandler_48F490 (placeholder name until VERIFIED; retail BN alias FX_FailedToRegisterWinp)
+// Native: WinProc_RegisterHandler (placeholder name until VERIFIED; retail BN alias FX_FailedToRegisterWinp)
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x0048F490-0x0048F4EA.
 // Tools/evidence: Binary Ninja MCP disassembly/decompile + radare2 bytes; 6 basic blocks; spec build/audit/main-0x48F530/level1-closure/20261024T022900Z/TRANSCRIPTION-SPECS.md §1.5.
 // Behavior/CFG: scans the 16-node pool for a node whose handler (+0x08) is null, fills handler/prev_link/next and appends it to the WinProc chain via HeapList_Insert(container=0x005C8DF0, node); pool-full path calls Debug_Error("Failed to register WinProc callback.") and jumps forever (0x48F4B4).
@@ -12,7 +12,7 @@ using igi::retail::core::WindowHandlerEntry;
 
 extern "C" {
 
-std::int32_t* WinProc_RegisterHandler_48F490(std::int32_t* handler)
+std::int32_t* WinProc_RegisterHandler(std::int32_t* handler)
 {
     // 0x0048F490-0x0048F4A5: scan node[0..15] by +0x08 (0x005C8D30, stride 0xC, end = 0x005C8DF0).
     WindowHandlerEntry* free_entry = nullptr;

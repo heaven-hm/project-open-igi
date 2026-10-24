@@ -63,7 +63,7 @@ std::int32_t Camera_UpdateFogPalette(const CameraColorContext* context)
     const auto b_scaled = static_cast<std::int32_t>(std::lrint(context->color_b * scale_pos_255));
     const std::int32_t result = b_scaled - ecx;
 
-    camera_matrix_state.palette_935c10.fill(static_cast<std::uint32_t>(result));
+    camera_matrix_state.palette.fill(static_cast<std::uint32_t>(result));
     return result;
 }
 
@@ -103,10 +103,10 @@ std::int32_t Camera_ResetMatrix(const CameraColorContext* context)
     std::size_t dest_index = 0;
     for (std::int32_t iter = 0; iter < 4; ++iter) {
         for (std::size_t i = 0; i < 0x20; ++i) {
-            camera_matrix_state.palette_935c10[dest_index++] = color_half;
+            camera_matrix_state.palette[dest_index++] = color_half;
         }
         for (std::size_t i = 0; i < 0x20; ++i) {
-            camera_matrix_state.palette_935c10[dest_index++] = color_full;
+            camera_matrix_state.palette[dest_index++] = color_full;
         }
     }
 

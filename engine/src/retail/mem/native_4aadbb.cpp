@@ -1,4 +1,4 @@
-// Native: Mem_FreeSmallBlock_4AADBB (placeholder until VERIFIED); retail VA 0x004AADBB-0x004AB0E3 (809 bytes, 265 instructions).
+// Native: Mem_FreeSmallBlock (placeholder until VERIFIED); retail VA 0x004AADBB-0x004AB0E3 (809 bytes, 265 instructions).
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: radare2 6.2.0 exact-range listing committed at docs/fidelity/evidence/0x004AADBB-full-listing.txt (pD 809 @ 0x4AADBB); the 0x80000000 constants below are retail's own immediates that radare2 renders as the unrelated DirectSoundCreate import symbol.
 // Behavior/CFG: small-block free with forward and backward coalescing into the 0x204-byte-per-segment bucket structures at [[arena+0x10] + segment*0x204 + 0x144]. It takes the block header at pointer-4, returns without doing anything when ((header-1) & 1) is set, coalesces with the following block when its size is even (removing it from its doubly-linked free list through [block+4]/[block+8] and clearing its size-class bit in the 0x44 or 0xC4 bitmap when it was the last element), then coalesces with the preceding block when the preceding size word is even, resizing between size classes, inserting the merged block at the head of its class list, setting that class's bitmap bit and per-class count, then writes the new size into the header and footer, decrements the segment's block count, and - only when the segment becomes empty - decommits and releases its 0x8000-byte arena page, compacts the 0x140-byte pool entries at 0xC321F8 by 0x14 through 0x4ACD70, which is the statically linked MSVC CRT memmove (jump-table-driven overlapping copy, not a game routine), and updates 0xC321E8/0xC321F0/0xC321EC.
@@ -19,7 +19,7 @@ using igi::retail::mem::g_c32428;
 
 extern "C" {
 
-void Mem_FreeSmallBlock_4AADBB(void* const arena_argument, void* const pointer)
+void Mem_FreeSmallBlock(void* const arena_argument, void* const pointer)
 {
     void* arena = arena_argument;                                                                                   // [ebp+8]: adjusted by 0x14 when the pool entry before it is removed
     std::uint32_t* const bitmap = *reinterpret_cast<std::uint32_t**>(static_cast<std::uint8_t*>(arena) + 0x10);      // 0x004AADC9: mov eax,[ecx+0x10]

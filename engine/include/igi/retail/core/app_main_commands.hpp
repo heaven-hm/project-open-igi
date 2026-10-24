@@ -30,22 +30,22 @@ extern "C" {
 // 0x004A5A0C: strtok-like tokenizer over a 32-byte delimiter bitmap; mutates the
 // input string, keeps its continuation pointer in a file-scope state (retail
 // image global 0x00936060), returns the token start or null.
-char* NATIVE_DECL AppMain_TokenizeDelimited_4A5A0C(char* text, char const* delimiters);
+char* NATIVE_DECL AppMain_TokenizeDelimited(char* text, char const* delimiters);
 
 // 0x0048F360: copies the stored command line (0x0048F080) into a 0x200-byte
 // stack buffer, tokenizes it, case-insensitively prefix-matches each token
 // against option_name and calls handler(token + strlen(option_name)) on a match.
 // Reaches handler only for token-matched options; returns the final tokenizer
 // result (null at end of line).
-void* NATIVE_DECL AppMain_ParseCmdLineArgs_48F360(
+void* NATIVE_DECL AppMain_ParseCmdLineArgs(
     char* option_name, std::int32_t(NATIVE_DECL* handler)(char* suffix));
 
 // CLI handlers registered by main, all cdecl int(char* suffix) with the suffix
 // pointing inside the parser's stack copy after the matched option name.
-std::int32_t NATIVE_DECL AppMain_WindowCommand_48F350(char* suffix);          // 0x0048F350
-std::int32_t NATIVE_DECL AppMain_WinInputCommand_48F920(char* suffix);        // 0x0048F920
-std::int32_t NATIVE_DECL AppMain_GermanyCommand_48F930(char* suffix);         // 0x0048F930
-std::int32_t NATIVE_DECL AppMain_USACommand_48F950(char* suffix);             // 0x0048F950
-std::int32_t NATIVE_DECL AppMain_HardcoreGermanCommand_48F960(char* suffix);  // 0x0048F960
+std::int32_t NATIVE_DECL AppMain_WindowCommand(char* suffix);          // 0x0048F350
+std::int32_t NATIVE_DECL AppMain_WinInputCommand(char* suffix);        // 0x0048F920
+std::int32_t NATIVE_DECL AppMain_GermanyCommand(char* suffix);         // 0x0048F930
+std::int32_t NATIVE_DECL AppMain_USACommand(char* suffix);             // 0x0048F950
+std::int32_t NATIVE_DECL AppMain_HardcoreGermanCommand(char* suffix);  // 0x0048F960
 
 } // extern "C"

@@ -5,7 +5,7 @@
 #include "igi/retail/core/native_4c1780.hpp"
 
 // retail 0x00489560: AI-detection registration position, transcribed body.
-extern "C" std::int32_t AI_Detection_Init_489560();
+extern "C" std::int32_t AI_Detection_Init();
 
 #if defined(_MSC_VER) && defined(_M_IX86)
 #define NATIVE_DECL __cdecl
@@ -56,13 +56,13 @@ void NATIVE_DECL QTask_RegisterClasses()
 {
     ReportNotTranscribed("AI graph");
     // 0x489560: transcribed body (position 2); registers no classes in the retail capture.
-    (void)AI_Detection_Init_489560();
+    (void)AI_Detection_Init();
     ReportNotTranscribed("material defines");
     ReportNotTranscribed("level flow");
     ReportNotTranscribed("game options");
     RegisterGameClasses();
     // 0x004C1780: ret-only task-list registrar, transcribed; it registers nothing.
-    AnimSound_LoadParameters_4C1780();
+    AnimSound_LoadParameters();
     RegisterFlowClass();
 }
 

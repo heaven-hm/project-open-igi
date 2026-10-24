@@ -50,7 +50,7 @@ void test_error_show_when_callbacks_are_null()
     g_exit_calls = 0;
 
     const std::int32_t ret =
-        igi::retail::error::Error_Show("Resource '%s' is not loaded.", "a.mef");
+        igi::retail::error::Debug_Error("Resource '%s' is not loaded.", "a.mef");
     require(ret == 0, "Error_Show returns 0 when g_93626c is null");
     require(g_displayed_text.empty(), "g_936268 not invoked when null");
 }
@@ -65,7 +65,7 @@ void test_error_show_formats_prefix_and_tailcalls_exit()
     g_exit_calls = 0;
 
     const std::int32_t ret =
-        igi::retail::error::Error_Show("Failed to load resource: '%s'", "LOCAL:models/prop.mef");
+        igi::retail::error::Debug_Error("Failed to load resource: '%s'", "LOCAL:models/prop.mef");
     require(ret == 77, "Error_Show returns result of tailcall g_93626c()");
     require(g_exit_calls == 1, "g_93626c called once");
     require(g_displayed_text == "Fatal error:\n\nFailed to load resource: 'LOCAL:models/prop.mef'",

@@ -16,7 +16,7 @@ void Script_Handler_4EF830(void* const argument, std::uint32_t* const value)
     // volatile is the minimal form that keeps the load in the emitted code; it changes no value, no
     // ordering and no control flow.
     (void)*reinterpret_cast<volatile std::uint32_t*>(value); // 0x004EF838: mov ecx,[eax] (eax = [esp+8], second argument)
-    AnimSound_LoadParameters_4C1780();                   // 0x004EF83C: call 0x4c1780 (callee is `ret`; the pushed words are dead)
+    AnimSound_LoadParameters();                   // 0x004EF83C: call 0x4c1780 (callee is `ret`; the pushed words are dead)
 }
 
 } // extern "C"

@@ -1,4 +1,4 @@
-// Native: Mouse_WinProc_48FED0 (placeholder until VERIFIED); retail VA 0x0048FED0-0x0048FF77 (168 bytes, 10 blocks, message jump table 0x0048FF78).
+// Native: Mouse_WinProc (placeholder until VERIFIED); retail VA 0x0048FED0-0x0048FF77 (168 bytes, 10 blocks, message jump table 0x0048FF78).
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: Binary Ninja MCP disassembly + radare2 6.2.0 full bytes + angr CFGFast; DINPUT-CALLBACKS packet §3.3 (table 0x48FF78: 0x48FF18/0x48FF48/0x48FF72/0x48FF28/0x48FF58/0x48FF72/0x48FF38/0x48FF68/0x48FF72/0x48FEE9).
 // Behavior/CFG: msg-0x201 range check; WM_LBUTTONDOWN/UP -> g_5C8E10 1/0, WM_RBUTTONDOWN/UP -> g_5C8E0C 1/0, WM_MBUTTONDOWN/UP -> g_5C8E18 1/0, the up-only messages return 1, WM_MOUSEWHEEL adds (int16)(wParam>>16)/120 to g_5C8E08, everything else returns 1; hwnd is ignored.
@@ -9,7 +9,7 @@
 
 extern "C" {
 
-std::int32_t Mouse_WinProc_48FED0(void* /*hwnd*/, std::uint32_t msg, std::uint32_t wParam,
+std::int32_t Mouse_WinProc(void* /*hwnd*/, std::uint32_t msg, std::uint32_t wParam,
                                   std::int32_t /*lParam*/)
 {
     // 0x0048FED0-0x0048FEDC: eax = msg; eax -= 0x201; if (unsigned)eax > 9 -> default return 1.

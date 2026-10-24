@@ -1,4 +1,4 @@
-// Native: Script_Hash32_4C0530 (placeholder until VERIFIED); retail VA 0x004C0530-0x004C0557 (39 bytes, 3 blocks).
+// Native: Script_Hash32 (placeholder until VERIFIED); retail VA 0x004C0530-0x004C0557 (39 bytes, 3 blocks).
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: radare2 6.2.0 full listing (8b542404 33c0 8a0a 84c9 7412 81e1ff000000 42 c1e005 03c1 8a0a 84c9 75ee 33d2 div ...); called from 0x4C04B0 as hash(value, [list+4]); no callees.
 // Behavior/CFG: hash = (hash << 5) + (byte & 0xFF) for each byte up to NUL (entry test then loop tail test, matching retail's two exit checks), then returns hash % bucketCount by the same unsigned divide retail uses with edx cleared.
@@ -7,7 +7,7 @@
 
 extern "C" {
 
-std::int32_t Script_Hash32_4C0530(char const* text, std::int32_t const bucket_count)
+std::int32_t Script_Hash32(char const* text, std::int32_t const bucket_count)
 {
     std::uint32_t hash = 0;                                 // 0x004C0534: xor eax,eax
     char c = *text;                                         // 0x004C0536: mov cl,[edx]

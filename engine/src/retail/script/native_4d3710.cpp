@@ -1,4 +1,4 @@
-// Native: QTask_NoOpHandler_4D3710 (placeholder until VERIFIED); retail VA 0x004D3710-0x004D3710 (1 bytes, 1 block, 0 edges).
+// Native: QTask_NoOpHandler (placeholder until VERIFIED); retail VA 0x004D3710-0x004D3710 (1 bytes, 1 block, 0 edges).
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: radare2 6.2.0 complete listing (c3); one of the 84 code pointers registered by the
 // 0x004EE970 catalogue, analysed in docs/fidelity/evidence/0x4EE970-data-extents.md section 8.
@@ -10,7 +10,7 @@
 extern "C" {
 
 
-void QTask_NoOpHandler_4D3710()
+void QTask_NoOpHandler()
 {
     // 0x004D3710: c3 - return immediately; no argument is read and no memory is touched.
 }

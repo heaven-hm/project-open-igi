@@ -1,0 +1,76 @@
+# MVP call flow from WinMain (0x0048F530)
+
+Retail WinMain call sites in instruction order; callee status from the native manifest. `MISSING` = no transcription. Indirect calls marked as such.
+
+| # | call site | callee | status |
+|---:|---|---|---|
+| 1 | `0x0048f544` | `dword` | INDIRECT |
+| 2 | `|` | `esi` | INDIRECT |
+| 3 | `||` | `esi` | INDIRECT |
+| 4 | `|||` | `dword` | INDIRECT |
+| 5 | `|||` | `dword` | INDIRECT |
+| 6 | `|||` | `dword` | INDIRECT |
+| 7 | `|||` | `dword` | INDIRECT |
+| 8 | `|||` | `dword` | INDIRECT |
+| 9 | `|||` | `0x48f0c0` | VERIFIED_WITH_DOCUMENTED_SCOPE |
+| 10 | `|||` | `0x48f0d0` | VERIFIED_WITH_DOCUMENTED_SCOPE |
+| 11 | `|||` | `0x48f0f0` | VERIFIED_WITH_DOCUMENTED_SCOPE |
+| 12 | `|||` | `0x48f100` | RUNTIME_TESTED |
+| 13 | `|||` | `0x48f140` | VERIFIED_WITH_DOCUMENTED_SCOPE |
+| 14 | `|||` | `0x48f120` | VERIFIED_WITH_DOCUMENTED_SCOPE |
+| 15 | `|||` | `0x48f1a0` | VERIFIED_WITH_DOCUMENTED_SCOPE |
+| 16 | `|||` | `0x48f1c0` | VERIFIED_WITH_DOCUMENTED_SCOPE |
+| 17 | `|||` | `0x48f1e0` | VERIFIED_WITH_DOCUMENTED_SCOPE |
+| 18 | `|||` | `0x48f240` | RUNTIME_TESTED |
+| 19 | `|||` | `0x48f260` | RUNTIME_TESTED |
+| 20 | `|||` | `0x48f280` | VERIFIED_WITH_DOCUMENTED_SCOPE |
+| 21 | `|||` | `0x48f290` | VERIFIED_WITH_DOCUMENTED_SCOPE |
+| 22 | `|||` | `0x48f2a0` | VERIFIED_WITH_DOCUMENTED_SCOPE |
+| 23 | `|||` | `0x48f210` | RUNTIME_TESTED |
+| 24 | `|||` | `0x48f2b0` | VERIFIED_WITH_DOCUMENTED_SCOPE |
+| 25 | `|||` | `0x48f300` | VERIFIED_WITH_DOCUMENTED_SCOPE |
+| 26 | `|||` | `0x48f200` | VERIFIED_WITH_DOCUMENTED_SCOPE |
+| 27 | `|||` | `0x48f360` | RUNTIME_TESTED |
+| 28 | `|||` | `0x48f360` | RUNTIME_TESTED |
+| 29 | `|||` | `0x48f360` | RUNTIME_TESTED |
+| 30 | `|||` | `0x48f360` | RUNTIME_TESTED |
+| 31 | `|||` | `0x498480` | MISSING |
+| 32 | `|||` | `0x4a53b3` | VERIFIED |
+| 33 | `|||` | `dword` | INDIRECT |
+| 34 | `|||` | `0x4a5ad5` | MISSING |
+| 35 | `|||` | `esi` | INDIRECT |
+| 36 | `|||` | `esi` | INDIRECT |
+| 37 | `|||` | `0x48f130` | RUNTIME_TESTED |
+| 38 | `|||` | `dword` | INDIRECT |
+| 39 | `|||` | `dword` | INDIRECT |
+| 40 | `|||` | `dword` | INDIRECT |
+| 41 | `|||` | `0x48f0e0` | STRUCTURALLY_VERIFIED |
+| 42 | `|||` | `0x498460` | STRUCTURALLY_VERIFIED |
+| 43 | `|||` | `section..text` | INDIRECT |
+| 44 | `|||` | `0x48f360` | RUNTIME_TESTED |
+| 45 | `|||` | `0x498460` | STRUCTURALLY_VERIFIED |
+| 46 | `|||` | `0x48f170` | RUNTIME_TESTED |
+| 47 | `|||` | `0x401050` | STRUCTURALLY_VERIFIED |
+| 48 | `|||` | `dword` | INDIRECT |
+| 49 | `|||` | `dword` | INDIRECT |
+| 50 | `|||` | `esi` | INDIRECT |
+| 51 | `|||` | `dword` | INDIRECT |
+| 52 | `|||` | `edi` | INDIRECT |
+| 53 | `|||` | `ebx` | INDIRECT |
+| 54 | `|||` | `esi` | INDIRECT |
+| 55 | `|||` | `dword` | INDIRECT |
+| 56 | `|||` | `dword` | INDIRECT |
+| 57 | `|||` | `dword` | INDIRECT |
+| 58 | `|||` | `dword` | INDIRECT |
+| 59 | `|||` | `0x4af7b0` | VERIFIED |
+| 60 | `0x0048f8fd` | `dword` | INDIRECT |
+| 61 | `0x0048f922` | `0x48f280` | VERIFIED_WITH_DOCUMENTED_SCOPE |
+| 62 | `0x0048f935` | `0x48f300` | VERIFIED_WITH_DOCUMENTED_SCOPE |
+| 63 | `0x0048f93c` | `0x48f2b0` | VERIFIED_WITH_DOCUMENTED_SCOPE |
+| 64 | `0x0048f955` | `0x48f300` | VERIFIED_WITH_DOCUMENTED_SCOPE |
+| 65 | `0x0048f962` | `0x48f2b0` | VERIFIED_WITH_DOCUMENTED_SCOPE |
+| 66 | `0x0048f99c` | `dword` | INDIRECT |
+| 67 | `0x0048f9ce` | `dword` | INDIRECT |
+| 68 | `0x0048f9d4` | `0x4010b0` | MISSING |
+| 69 | `0x0048f9db` | `dword` | INDIRECT |
+| 70 | `0x0048f9ea` | `0x498460` | STRUCTURALLY_VERIFIED |

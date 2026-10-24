@@ -67,7 +67,7 @@ struct CameraMatrixState {
     std::array<std::int32_t, camera_matrix_slot_count> slab_bcad7c{};
     std::array<std::int32_t, camera_matrix_slot_count> slab_bcadac{};
     std::array<std::int32_t, camera_matrix_slot_count> slab_bcade8{};
-    std::array<std::uint32_t, camera_palette_entry_count> palette_935c10{};
+    std::array<std::uint32_t, camera_palette_entry_count> palette{};
     std::int32_t slot_7205b8 = 0;
     std::int32_t slot_723508 = 0;
     std::int32_t slot_7205bc = 0;

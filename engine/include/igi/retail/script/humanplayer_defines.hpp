@@ -71,7 +71,7 @@ static_assert(sizeof(HumanPlayerScriptParameter) == 0x10U,
 // The float literal is written in hexadecimal so the constant is bit-exact;
 // 0x00533490 holds 60.0 but this native never reads it.
 inline constexpr float human_player_scale_4096000 = 4096000.0F;
-inline constexpr float human_player_scale_inverse_108000 = 0x1.36B06Ep-17F;
+inline constexpr float human_player_scale_inverse = 0x1.36B06Ep-17F;
 inline constexpr double human_player_scale_4096 = 4096.0;
 inline constexpr double human_player_scale_30 = 30.0;
 

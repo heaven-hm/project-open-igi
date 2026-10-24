@@ -1,4 +1,4 @@
-// Native: Script_ParameterTypeRegister_4F19C0 (placeholder until VERIFIED); retail VA 0x004F19C0-0x004F1A38 (121 bytes, 8 blocks).
+// Native: Script_ParameterTypeRegister (placeholder until VERIFIED); retail VA 0x004F19C0-0x004F1A38 (121 bytes, 8 blocks).
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: radare2 6.2.0 complete listing (docs/fidelity/evidence/0x004F19C0-listing.txt): 33c0 b92859a700 / loop 833900 741b 83c14c 40 81f9286ca700 7cef / 68ece05400 e8ceddfbff 83c404 ebfe / 8b542408 56 83faff 7423 / 8d0cd2 57 8d0c4a 8d348de058a700 8d0cc0 8d0c48 8d3c8de058a700 b913000000 f3a5 5f / 8b742408 8d0cc0 8d0c48 c1e102 c7812859a7.. 01 89b1e058a7.. 89b1e458a7.. 5e c3.
 // Behavior/CFG: scans the 64 descriptor slots for the first with a clear used dword (slot index*19+18), errors with Debug_Error("Unable to allocate parameter type") and spins when all are taken, otherwise optionally copies the 19-dword template slot named by arg1 (when arg1 != -1) into the new slot with rep movsd, then writes used=1, the name at +0 and the template index at +4, returning the slot index.
@@ -11,7 +11,7 @@ extern "C" {
 
 extern std::uint32_t g_a758e0[0x4C0]; // 0x00A758E0, owned by 0x4F1840
 
-std::int32_t Script_ParameterTypeRegister_4F19C0(std::uint32_t const name, std::int32_t const template_index)
+std::int32_t Script_ParameterTypeRegister(std::uint32_t const name, std::int32_t const template_index)
 {
     std::int32_t index = 0;                                              // 0x004F19C0: xor eax,eax
     for (;;) {

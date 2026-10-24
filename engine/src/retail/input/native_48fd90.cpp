@@ -1,4 +1,4 @@
-// Native: Input_MouseGetCaps_48FD90 (placeholder until VERIFIED); retail VA 0x0048FD90-0x0048FDD1 (66 bytes, 4 blocks, BN alias FX_CouldNotGetMouseCaps).
+// Native: Input_MouseGetCaps (placeholder until VERIFIED); retail VA 0x0048FD90-0x0048FDD1 (66 bytes, 4 blocks, BN alias FX_CouldNotGetMouseCaps).
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: Binary Ninja MCP disassembly/decompile + radare2 6.2.0 bytes; DINPUT-LAYER packet §3.4 (COM GetCapabilities = vtable +0x0C).
 // Behavior/CFG: builds caps{dwSize=0x2C}, calls the mouse device's GetCapabilities; on failure Debug_Error("Could not get mouse caps!") and spin; otherwise stores 0x00C28F80=1 and 0x00C28F81=caps byte +0x10 and returns it.
@@ -10,7 +10,7 @@
 
 extern "C" {
 
-std::int32_t Input_MouseGetCaps_48FD90()
+std::int32_t Input_MouseGetCaps()
 {
     // 0x0048FD90-0x0048FDA9: sub esp,0x2C; mov caps.dwSize,0x2C; load the mouse device vtable.
     std::uint8_t caps[0x2C] = {};

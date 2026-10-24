@@ -1,4 +1,4 @@
-// Native: Script_TaskContainer_Append_4F1A80 (placeholder until VERIFIED); retail VA 0x004F1A80-0x004F1AE8 (105 bytes, 4 blocks, 3 edges).
+// Native: Script_TaskContainer_Append (placeholder until VERIFIED); retail VA 0x004F1A80-0x004F1AE8 (105 bytes, 4 blocks, 3 edges).
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: radare2 6.2.0 disassembly (full listing in 0x00508FA0-disassembly.txt); 7 call sites in 0x508FA0 all clean add esp,0x18; fifth argument proven to be the leftover first argument of the preceding 0x4F0F80 call (7 at 0x509153, 5 at 0x509178); Debug_Error = 0x004AF7B0 retail_error.hpp.
 // Behavior/CFG: validates arg4 != -1 (else Debug_Error("Undefined parameter type.") then spins forever at 0x4F1AA0), then appends the 16-byte record {arg3-arg2, arg4, arg5, arg5&0xFF} at payload + count*16, reloading the count before every field store exactly as retail does, and increments the count; returns the container pointer.
@@ -9,7 +9,7 @@
 
 extern "C" {
 
-void* Script_TaskContainer_Append_4F1A80(std::int32_t* const container, std::int32_t const arg2,
+void* Script_TaskContainer_Append(std::int32_t* const container, std::int32_t const arg2,
                                          std::int32_t const arg3, std::int32_t const arg4,
                                          std::int32_t const arg5)
 {

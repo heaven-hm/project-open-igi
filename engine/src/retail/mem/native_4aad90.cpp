@@ -1,4 +1,4 @@
-// Native: Pool_FindBlock_4AAD90 (placeholder until VERIFIED); retail VA 0x004AAD90-0x004AADBA (43 bytes, 1 block, 2 edges).
+// Native: Pool_FindBlock (placeholder until VERIFIED); retail VA 0x004AAD90-0x004AADBA (43 bytes, 1 block, 2 edges).
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: radare2 6.2.0 complete listing (a1f421c300 8d0c80 a1f821c300 8d0c88 3bc1 7314 8b542404 2b500c 81fa00001000 7207 83c014 ebe8 33c0 c3); storage owned by 0x4AAD48.
 // Behavior/CFG: walks the 0x14-byte pool entries between 0x00C321F8 and 0x00C321F8 + 0x14 * 0x00C321F4 and returns the first entry whose dword at +0x0C is within 0x100000 BELOW the argument (unsigned compare of argument - entry[3]); returns 0 when the walk ends.
@@ -14,7 +14,7 @@ using igi::retail::mem::g_c321f4;
 
 extern "C" {
 
-void* Pool_FindBlock_4AAD90(void* const pointer)
+void* Pool_FindBlock(void* const pointer)
 {
     std::uint8_t* entry = static_cast<std::uint8_t*>(g_c321f8);                                    // 0x004AAD98: mov eax, [0xc321f8]
     std::uint8_t* const end = entry + static_cast<std::uintptr_t>(g_c321f4) * 0x14U;               // 0x004AAD95/0x004AAD9D: lea ecx,[eax+eax*4]; lea ecx,[eax+ecx*4]

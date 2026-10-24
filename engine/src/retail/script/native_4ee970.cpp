@@ -1,4 +1,4 @@
-// Native: Script_InitTypeCatalogue_4EE970 (placeholder until VERIFIED); retail VA 0x004EE970-0x004EF7EC (3709 bytes, ~1000 instructions).
+// Native: Script_InitTypeCatalogue (placeholder until VERIFIED); retail VA 0x004EE970-0x004EF7EC (3709 bytes, ~1000 instructions).
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: radare2 6.2.0 complete listing committed at docs/fidelity/evidence/0x004EE970-full-listing.txt (pD 3709 @ 0x4EE970); data extents under derivation in docs/fidelity/evidence/0x4EE970-data-extents.md.
 // Behavior/CFG: IN PROGRESS - section 1 only (0x004EE970-0x004EEA2D). It clears 0x1000 dwords at 0x00A71890, then registers the five base classes Level, Static, Dynamic, Idle and CameraBase through 0x4018F0/0x401900 into the class-id words at 0x0054DD0C, 0x0054DD0E, 0x0054DD10, 0x0054DD12 and 0x0054DD14, then allocates two events through 0x4017C0 storing the returned bytes at 0x0054DDA4 and 0x0054DDA5, and one through 0x401810 storing the returned dword at 0x0054DDA8. The remaining sections continue past 0x004EEA2D and are NOT yet transcribed.
@@ -17,7 +17,7 @@ extern std::uint32_t g_54dda8;         // 0x0054DDA8
 
 std::uint8_t QTask_NewQTaskEventNoContextFn(std::uint16_t value);        // 0x004EEA27: call 0x401810, one argument (retail pushes zero), returns AL
 
-void Script_InitTypeCatalogue_4EE970()
+void Script_InitTypeCatalogue()
 {
     for (std::int32_t index = 0; index < 0x1000; index += 1)            // 0x004EE974/0x004EE982: mov ecx,0x1000; rep stosd at [0xa71890]
     {

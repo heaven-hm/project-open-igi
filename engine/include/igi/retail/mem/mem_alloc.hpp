@@ -11,29 +11,29 @@ using NewHandlerFn = std::int32_t (*)(std::uint32_t size);
 // addresses documented in CLEAN (mem/004B0C60-Mem_Alloc.c and dependents). Field names embed the
 // retail VA so the mapping stays auditable.
 struct MemGlobals {
-    std::int32_t alloc_count_942300 = 0;            // 0x00942300 (g_942300)
-    std::uint32_t heap_init_9422fc = 0;             // 0x009422FC (g_9422fc)
-    void* free_list_head_a960f0 = nullptr;          // 0x00A960F0 (g_a960f0)
-    void* sentinel_a960f4 = nullptr;                // 0x00A960F4 (g_a960f4)
-    void* free_list_back_a960f8 = nullptr;          // 0x00A960F8 (g_a960f8)
-    std::int32_t state_a960e0 = 0;                  // 0x00A960E0 (g_a960e0)
+    std::int32_t alloc_count = 0;            // 0x00942300 (g_942300)
+    std::uint32_t heap_init = 0;             // 0x009422FC (g_9422fc)
+    void* free_list_head = nullptr;          // 0x00A960F0 (g_a960f0)
+    void* sentinel = nullptr;                // 0x00A960F4 (g_a960f4)
+    void* free_list_back = nullptr;          // 0x00A960F8 (g_a960f8)
+    std::int32_t state = 0;                  // 0x00A960E0 (g_a960e0)
     // Retail's live flag byte 0x009422FD is the second byte of the dword at
-    // 0x009422FC, so it aliases heap_init_9422fc rather than being separate
+    // 0x009422FC, so it aliases heap_init rather than being separate
     // storage. g_9422fd below aliases that byte; the 16-entry saved-flag
     // array at 0x009422E8 is the stack used by 0x004B0D60/0x004B0D90.
-    std::uint8_t qhash_stack_9422e8[16] = {};       // 0x009422E8 (saved flags)
-    std::uint32_t bucket_sentinel_936250 = 0;       // 0x00936250 (g_936250)
-    NewHandlerFn new_handler_936254 = nullptr;      // 0x00936254 (g_936254)
-    std::uint32_t heap_mode_c3242c = 0;             // 0x00C3242C (g_c3242c)
-    void* heap_handle_c32428 = nullptr;             // 0x00C32428 (g_c32428)
-    std::uint32_t pool_slot_count_c321e4 = 0;       // 0x00C321E4 (g_c321e4)
-    std::int32_t pool_segment_c321e8 = 0;           // 0x00C321E8 (g_c321e8)
-    void* pool_block_c321ec = nullptr;              // 0x00C321EC (g_c321ec)
-    std::uint32_t pool_used_c321f0 = 0;             // 0x00C321F0 (g_c321f0)
-    std::uint32_t pool_next_c321f4 = 0;             // 0x00C321F4 (g_c321f4)
-    void* pool_base_c321f8 = nullptr;               // 0x00C321F8 (g_c321f8)
-    std::uint32_t pool_threshold_c321fc = 0;        // 0x00C321FC (g_c321fc)
-    std::uint32_t free_list_bound_5466d4 = 0;       // 0x005466D4 (g_5466d4)
+    std::uint8_t qhash_stack[16] = {};       // 0x009422E8 (saved flags)
+    std::uint32_t bucket_sentinel = 0;       // 0x00936250 (g_936250)
+    NewHandlerFn new_handler = nullptr;      // 0x00936254 (g_936254)
+    std::uint32_t heap_mode = 0;             // 0x00C3242C (g_c3242c)
+    void* heap_handle = nullptr;             // 0x00C32428 (g_c32428)
+    std::uint32_t pool_slot_count = 0;       // 0x00C321E4 (g_c321e4)
+    std::int32_t pool_segment = 0;           // 0x00C321E8 (g_c321e8)
+    void* pool_block = nullptr;              // 0x00C321EC (g_c321ec)
+    std::uint32_t pool_used = 0;             // 0x00C321F0 (g_c321f0)
+    std::uint32_t pool_next = 0;             // 0x00C321F4 (g_c321f4)
+    void* pool_base = nullptr;               // 0x00C321F8 (g_c321f8)
+    std::uint32_t pool_threshold = 0;        // 0x00C321FC (g_c321fc)
+    std::uint32_t free_list_bound = 0;       // 0x005466D4 (g_5466d4)
 };
 
 [[nodiscard]] MemGlobals& Mem_GetGlobals();

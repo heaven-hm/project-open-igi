@@ -1,4 +1,4 @@
-// Native: DirectInput_ErrorText_48FA80 (placeholder until VERIFIED); retail VA 0x0048FA80-0x0048FBFD (381 bytes, 59 blocks, BN alias DIERR_GENERIC).
+// Native: DirectInput_ErrorText (placeholder until VERIFIED); retail VA 0x0048FA80-0x0048FBFD (381 bytes, 59 blocks, BN alias DIERR_GENERIC).
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: Binary Ninja MCP decompile/disassembly + radare2 6.2.0 bytes + angr CFGFast; jump table 0x0048FC00 and the 25 DIERR_* literals are image .rdata; DINPUT-LAYER packet §3.2.
 // Behavior/CFG: HRESULT -> DIERR_* literal in retail branch order: 0x80040209 first, then the hr<=0x80040202 switch, then the (hr+0x7FFBFDFD)<=5 range switch, then the second switch (0x8004020A/0x80070002/...), default "Unknown error".
@@ -7,7 +7,7 @@
 
 extern "C" {
 
-char const* DirectInput_ErrorText_48FA80(std::int32_t hr)
+char const* DirectInput_ErrorText(std::int32_t hr)
 {
     // 0x0048FA80: cmp eax,0x80040209; je -> DIERR_UNPLUGGED.
     if (hr == 0x80040209)
