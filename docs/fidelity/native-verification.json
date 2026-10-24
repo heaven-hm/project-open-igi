@@ -48361,6 +48361,78 @@
       }
     },
     {
+      "address": "0x004AF870",
+      "name": "Error_CallbackSet_4AF870",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/error/native_4af870.cpp",
+        "sha256": "17531490ece6c8bde9b1e7736cc4b5e3d6e9f0b5a9ea0f2df1b48d70da6aad48",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/004AF870-Camera_ApplyHandiCam_32 2.cpp",
+        "sha256": "b108cb0abed06af7566365fb3d31ae7118c60c3996b2033d164a0e3b8c3d8b87",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x004AF870",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004AF870-binaryninja.json",
+          "evidence_sha256": "78220e4a110144d85f33c993ae7af0354e31171eccc08729e8ae29243967b378"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x004AF870",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004AF870-radare2.json",
+          "evidence_sha256": "4e789cfabac286b045dc7c72f89f86c2174a119c25429c9c24f9fc78a2e93485"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0
+      }
+    },
+    {
+      "address": "0x004AF880",
+      "name": "Error_CallbackSet_4AF880",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/error/native_4af880.cpp",
+        "sha256": "f3be4e97e7160445a5e37dc7b31fc46107d248f46f1c8d4b58ce24895a1d6e43",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/004AF880-Camera_ApplyWideScreen_32 2.cpp",
+        "sha256": "493f2e537409755518e575ca3093177ad62fe6b5fbe86d4a6226e168b044b74f",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x004AF880",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004AF880-binaryninja.json",
+          "evidence_sha256": "e97625274fb7b4a3abb8983d83f05173147dda05e9d4b30c96d721f19eaaf4c1"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x004AF880",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004AF880-radare2.json",
+          "evidence_sha256": "c169a1e4d666a80dc399cafbe9d35d7362d568485a1f7e46baab20300bf373e8"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0
+      }
+    },
+    {
       "address": "0x004AF8F0",
       "name": "HeapList_Insert",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
