@@ -50803,7 +50803,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "TRANSCRIBED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004AF8F0",
           "signature": "unknown",
@@ -50825,7 +50825,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004AF8F0-semantic-review.json",
           "evidence_sha256": "4c87628f90a871b0679d162d3d6b671541b8bbe566e5e37354fdaa9af48e0bad"
-        }
+        },
+        "notes": "CLASSIFICATION CORRECTION (round 244): called from 0x004012BF inside the CRT startup region and placed among CRT pattern/list helpers (0x004AFF90, 0x004AFFB0, 0x004AF9D0), so this is runtime list support, not a game native. Kept as a transcribed record with its evidence; not boundary progress."
       }
     },
     {

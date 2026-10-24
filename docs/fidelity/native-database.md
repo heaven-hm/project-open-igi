@@ -80,7 +80,7 @@ the end of this document instead of being counted here.
 | `Native_004A7EFF` | `uint32_t __cdecl Native_004A7EFF(uint32_t** cursor);` | `0x004A7EFF` | 1.000 | CFG 1.000; bn+r2 agree |
 | `Qvm_ReportError` | `std::int32_t Qvm_ReportError(const char* format, ...)` | `0x004B7E10` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004B7E10-semantic-review.json` |
 
-## STRUCTURALLY_VERIFIED (1047)
+## STRUCTURALLY_VERIFIED (1046)
 
 | native name | signature | retail address | CFG | verification comment |
 | --- | --- | --- | --- | --- |
@@ -694,7 +694,6 @@ the end of this document instead of being counted here.
 | `Sys_StoreWord_4AF890` | `unestablished` | `0x004AF890` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004AF890-semantic-review.json` |
 | `Sys_StoreWord_4AF8A0` | `unestablished` | `0x004AF8A0` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004AF8A0-semantic-review.json` |
 | `Sys_StoreWord_4AF8B0` | `unestablished` | `0x004AF8B0` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004AF8B0-semantic-review.json` |
-| `HeapList_Insert` | `unestablished` | `0x004AF8F0` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004AF8F0-semantic-review.json` |
 | `Script_QHashListInsert` | `unestablished` | `0x004AF910` | 1.000 | CFG 1.000; bn+r2 agree |
 | `HeapList_Remove` | `void** __cdecl HeapList_Remove(void** node);` | `0x004AF960` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004AF960-semantic-review.json`; paired behavioral runner |
 | `Mem_AllocIndexedBlock` | `unestablished` | `0x004B0B00` | 1.000 | CFG 1.000; bn+r2 agree |
@@ -1132,7 +1131,7 @@ the end of this document instead of being counted here.
 | `FlashTask_Init` | `unestablished` | `0x00530A80` | 1.000 | CFG 1.000; bn+r2 agree |
 | `FreeCamera_Init` | `unestablished` | `0x005310E0` | 1.000 | CFG 1.000; bn+r2 agree |
 
-## TRANSCRIBED (58)
+## TRANSCRIBED (59)
 
 Records written in the Level 1 MVP session (2026-10-25). They carry static structure matching retail at CFG 1.000 and retail-side runtime observations, but no candidate runtime comparison, because the candidate exits at 0x00402930 before executing game natives. They are therefore not claimed as verified.
 
@@ -1183,6 +1182,7 @@ Records written in the Level 1 MVP session (2026-10-25). They carry static struc
 | `MathSys_Invoke3` | `int32_t __convention MathSys_Invoke3("regparm")(int32_t param_1, int32_t param_2, int32_t param_3, int32_t* param_4, void* param_5, void* param_6, int32_t param_7);` | `0x004AD004` | 0.720 | CFG 0.720; bn+r2 agree; review `0x004AD004-semantic-review.json` |
 | `Camera_ResetMatrix_26` | `uint32_t __stdcall(int32_t arg1, uint32_t arg2, int32_t arg3, uint32_t arg4) __pure Camera_ResetMatrix_26(void);` | `0x004AD140` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004AD140-semantic-review.json` |
 | `Camera_UpdateTransform_27` | `uint32_t __stdcall(int32_t arg1, uint32_t arg2, int32_t arg3, uint32_t arg4) __pure Camera_UpdateTransform_27(void);` | `0x004AD1B0` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004AD1B0-semantic-review.json` |
+| `HeapList_Insert` | `unestablished` | `0x004AF8F0` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004AF8F0-semantic-review.json`; CLASSIFICATION CORRECTION (round 244): called from 0x004012BF inside the CRT startup region and placed among CRT pattern/list helpers (0x004AFF90, 0x004AFFB0, 0x004AF9D0), so this is runtime list support, not a game native. Kept as a transcribed record with its evidence; not boundary progress. |
 | `Model_GetBoneWord0C_4B6CE0` | `unestablished` | `0x004B6CE0` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004B6CE0-semantic-review.json` |
 | `Model_GetBoneWord10_4B6D20` | `unestablished` | `0x004B6D20` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004B6D20-semantic-review.json` |
 | `DynObj_IsNumericToken_4C0170` | `unestablished` | `0x004C0170` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004C0170-semantic-review.json` |
