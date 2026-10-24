@@ -1445,3 +1445,28 @@ Recorded as an open boundary question with the two decisive next experiments:
 
 No transcription attempted while this is open - a guessed boundary here would mis-attribute argument
 loads, the same failure mode already caught at 0x401927.
+
+### Per-seed angr entry recovery also inconclusive (round 121)
+
+```
+0x4FAC09 -> function_entry null, inconclusive ("CFGFast did not recover an exact function entry")
+0x4FAC2B -> function_entry null, inconclusive
+```
+
+So neither a single mid-region address (0x4FAD50) nor the two candidate leaf starts are recovered by
+CFGFast. Static entry recovery has now failed at every seed tried, which means the "one big function"
+vs "many small functions" question cannot be settled statically with this tooling on this image.
+
+Escalating to the runtime experiment, which is decisive and already permitted by the workflow:
+instrument retail `igi.exe` startup and log every call whose target falls in the registration region
+(0x4FABF0-0x4FAF00). Startup does execute this path (it is the AI-graph node registration), so the
+observed call targets directly answer which entries are real, independent of CFGFast.
+
+Concrete probe plan (small, no dereferencing of unknown pointers):
+- attach/spawn retail with `scripts/frida_level_probe.js`-style entry hook filtered to that range,
+  or a minimal Interceptor on the range after locating module base;
+- run `wine igi.exe window level1` in the game directory, capture call/return lines;
+- record which addresses appear as call targets and their argument counts at entry.
+
+That converts the static ambiguity into evidence. Until then this init stays untranscribed and
+`0x4F9DF0` stays blocked on its globals' owner boundary, not on its own decode (which is complete).
