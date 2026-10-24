@@ -63,7 +63,10 @@ inline constexpr std::size_t task_phase_count = 0xFEU;
 
 // The retail event table at 0x0054F930. Each entry is six bytes, and the
 // retail allocates the event identifiers from 0x20.
-inline constexpr std::size_t event_table_entry_count = 0x540U / 6U;
+// Retail 0x0054F930..0x0054FF24 is the phase-record table: 0x5F4 bytes of 6-byte records = 254 records, proven by
+// the clear loop at 0x004011D5 (`mov eax,0x54F932 / add eax,6 / cmp eax,0x54FF26 / jl`), not 0x540/6 = 224 from the
+// earlier count. The clear loop and both allocator scan bounds were 30 records short.
+inline constexpr std::size_t event_table_entry_count = 0x5F4U / 6U;
 inline constexpr std::uint8_t first_event_id = 0x20U;
 
 } // namespace igi::retail::core
