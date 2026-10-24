@@ -898,8 +898,10 @@ return h                        ; 0x4C03AD: mov eax,esi
 
 **Arity observation worth recording:** the two `Mem_Alloc` calls in this function push a
 different number of arguments - `push 4; push 8; call` for the header but `push eax; call` for
-the bucket block. A cdecl callee cannot vary its argument count, so `Mem_Alloc` must read only
-its first argument (`size`) and ignore extra stack traffic; the pushed `4` here is stray, the
+the bucket block. CORRECTION (round 93): `Mem_Alloc` DOES read two arguments - `mov eax,[esp+4]`
+and `mov ebx,[esp+0xc]` feeding `lea ebp,[eax+ebx+0x1c]` - so the second call is not exempt: its
+arg2 is the leftover pushed `8` still on the stack (stack reuse, the same pattern as 0x4F1A80),
+i.e. `Mem_Alloc(count*12, 8)`, and `add esp,0x10` cleans all four dwords, the
 same benign pattern already documented for `0x4D9730`. The engine's current
 `Mem_Alloc(std::int32_t context, std::int32_t arg2)` therefore needs checking against retail
 before it is called from a faithful transcription, because reading a second argument would make
