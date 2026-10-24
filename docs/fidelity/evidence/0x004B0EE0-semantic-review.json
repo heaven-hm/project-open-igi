@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "address": "0x004B0EE0",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "1c77e9dd7959271d02420a2432395bc75f92668b3d2d4f2ba4af45ea79597347",
+  "implementation_path": "engine/src/retail/sys/native_4b0ee0.cpp",
+  "reviewed_by": "lead",
+  "reviewed": true,
+  "review_scope": "static: retail instructions and emitted candidate listing",
+  "result": "passed",
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "rationale": "76 bytes, 26 instructions, 5 blocks, 6 edges; both decoders and the emitted candidate report 5/6, score 1.000."
+    },
+    {
+      "name": "cfg_match",
+      "result": "passed",
+      "rationale": "Block and edge counts match retail exactly (5/6): the flag test, the callback body, the advance, and the loop-back."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "passed",
+      "rationale": "Two cdecl arguments: the callback at [esp+4] (call ebp) and the forwarded argument at [esp+8] (ebx)."
+    },
+    {
+      "name": "local_layout",
+      "result": "passed",
+      "rationale": "Retail reserves eight bytes, takes their address, pushes it as the callback's first argument, and only then fills index at +0x00 and the record's name pointer at +0x04. The C++ keeps that ordering: the struct is built before the call and its two fields are assigned in retail's order."
+    },
+    {
+      "name": "table_walk",
+      "result": "passed",
+      "rationale": "Walks 0x00A950A0 + index*0x208 while below 0x00A960E0, i.e. eight records, and calls out only for records whose +0x204 flag is non-zero."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "passed",
+      "rationale": "Returns void after restoring the stack; no branch beyond the flag test and the loop bound."
+    }
+  ],
+  "evidence": "docs/fidelity/evidence/0x4EE970-data-extents.md section 22.3",
+  "limitations": [
+    "Runtime unobserved.",
+    "The record table 0x00A950A0 is defined by native_4b0e00.cpp and referred to here; it starts zeroed, so this enumerator calls nothing until 0x004B0E00 registers a mode.",
+    "The callback's contract is unproven beyond the observed two-argument cdecl shape and the two-word local it is handed."
+  ]
+}
