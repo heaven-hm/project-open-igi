@@ -1,0 +1,2536 @@
+{
+  "schema_version": 1,
+  "manifest_sha256": "0caafcbff132b26bb3f15c54d9a85c37f95344000fbb6080c7b81d43d9eebcf1",
+  "scope": "Static inventory only; no call reachability or retail parity inferred",
+  "files": [
+    {
+      "path": "engine/include/igi/retail/audio/sound_adpcm_decoder.hpp",
+      "sha256": "86007da98a6d33576d8cd290f471219c5d842fc336f2c437264375d0f5ad7d45",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/include/igi/retail/audio/sound_attenuation_table.hpp",
+      "sha256": "7678f578ca00b9856b125208a479c1ea693a7eb52706dcc56cc7ca438c1d3cd9",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/include/igi/retail/audio/sound_ilsf_header.hpp",
+      "sha256": "3f32352fa69858aa505bde280186352b677c7843951d153c951a859cf732fc63",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/include/igi/retail/audio/sound_ilsf_stream_reader.hpp",
+      "sha256": "91b6f3a6a8acf362728a06568bbbe8e91856644a248f5010588f71e5175944e8",
+      "manifest_natives": [],
+      "markers": [
+        {
+          "line": 23,
+          "text": "// has not been verified. The catalog-derived Sound_Load label is provisional; REA names the loader FUN_00495f70."
+        }
+      ],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/include/igi/retail/audio/sound_key_functions.hpp",
+      "sha256": "1968759d00c5665eeb7e16821ce8d5cabeea7bdfb21c050b6feb803eb93dff2e",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/include/igi/retail/config/config_graphic_options.hpp",
+      "sha256": "8a88f04a2767fb28cf7a41445c9004b7a2dbb744415eb29fcb21d458a807d7ea",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/include/igi/retail/core/app_context.hpp",
+      "sha256": "28a700cc94d610483026c26a4532824d53898ad119bc8a8a45b517f041e02df8",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/include/igi/retail/core/debug_command_line.hpp",
+      "sha256": "af30bcdcc7bc0467bde289eb30ed2174ceb702858f03225bd1b39017fef14f8f",
+      "manifest_natives": [],
+      "markers": [
+        {
+          "line": 36,
+          "text": "// Therefore the parser in this file is an explicitly-labelled HOST ADAPTER that reproduces"
+        },
+        {
+          "line": 50,
+          "text": "// Host adapter (not a retail native)."
+        },
+        {
+          "line": 54,
+          "text": "// Host adapter (not a retail native). Returns true when the token is a recognised switch."
+        }
+      ],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/include/igi/retail/core/fpu_state.hpp",
+      "sha256": "dfd1ae5cce5d26c623efd98bf35c98c3e91952cbf90f7407cb46200133533b53",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/include/igi/retail/core/frame_natives.hpp",
+      "sha256": "2728a7a938a807a13baf0a77677588f47c308f25cdb22741649981c23cb5d04e",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/include/igi/retail/diagnostics/log_record.hpp",
+      "sha256": "8fe726ea9feae3bdc8a71b0a5130e300eb7ff7b93e3a9c8a805af108b1cd5a9b",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/include/igi/retail/dynobj/hash_lookup.hpp",
+      "sha256": "421846aea6972a3a193404d195c970f6181592ba321fa36be0b60143f2baa042",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/include/igi/retail/dynobj/local_models_mef.hpp",
+      "sha256": "0563627513a96b5b5d445a04f36fde9cdb411c065aa701bd37ca5fb800dd211d",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [
+        "Host_SetModelBackendInit"
+      ],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/include/igi/retail/dynobj/mtp_package_loader.hpp",
+      "sha256": "627cea3163d766534eb4327dec47dea5666dd44c109c079f82d3363a3b40ecd0",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [
+        "Host_SetAnimIffLoader",
+        "Host_SetAnimOverridePrefix",
+        "Host_SetLovsEntryLoader",
+        "Host_SetPackagePrefix",
+        "Host_SetPaletteLoader",
+        "Host_SetSharedPackageContext"
+      ],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/include/igi/retail/error/error_show.hpp",
+      "sha256": "41b44103216ed71f6a9063740a387ce552da07065e333c125377b6e980be1407",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/include/igi/retail/human/human_camera_eye.hpp",
+      "sha256": "5739cb3f665542b257e0304ed0d27b4928e2d67bd8a68e1b7eb907df636d66e9",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/include/igi/retail/human/human_view.hpp",
+      "sha256": "ee52f9dec1f53063aae44d5a3cd9f4dfe5de19705db4186d71f15dd80c317b4e",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/include/igi/retail/input/input_port.hpp",
+      "sha256": "ab118975894eba9be5e3d94e7a81592781b364a5d7722bfe7dff74ba4ee2edec",
+      "manifest_natives": [],
+      "markers": [
+        {
+          "line": 89,
+          "text": "// HOST HELPER: the platform adapter reports the raw device state."
+        },
+        {
+          "line": 108,
+          "text": "// HOST HELPER: returns the look delta and clears it, so the consumer reads"
+        }
+      ],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/include/igi/retail/mem/heap_list.hpp",
+      "sha256": "c030c33dd4cfa0233a47de58997291151be303ab576030e5a26435fe7b2e8190",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/include/igi/retail/mem/mem_alloc.hpp",
+      "sha256": "807dac4cf31e9e8ac6dc299c8840f7c8cbcfddfecbbf7263b419417f99e13dbe",
+      "manifest_natives": [],
+      "markers": [
+        {
+          "line": 98,
+          "text": "// Confidence: high for mode branches, 16-byte rounding, and HeapAlloc fallback."
+        }
+      ],
+      "host_identifiers": [
+        "Host_HeapAlloc",
+        "Host_HeapFree"
+      ],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/include/igi/retail/model/iff_chunk_tree.hpp",
+      "sha256": "f2921c47f6a5a8278c5bba1cb9472d7f27dce56555889c4f963ff15e2140962e",
+      "manifest_natives": [],
+      "markers": [
+        {
+          "line": 24,
+          "text": "// here as a host adapter over the same container layout."
+        },
+        {
+          "line": 76,
+          "text": "// HOST HELPER: parses a retail IFF file into the retail's chunk tree."
+        }
+      ],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/include/igi/retail/model/iff_skeleton.hpp",
+      "sha256": "aae22a1686e5c2ecacb0561f15402f1069630de9a24ec96cdd90f1baf0ee159b",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/include/igi/retail/model/mef_bone_rig.hpp",
+      "sha256": "d39be4190dcf63d586c75e4564029e7b3d1d76fa98868cb40bd6ac4908e059ad",
+      "manifest_natives": [],
+      "markers": [
+        {
+          "line": 47,
+          "text": "// HOST HELPER: selects the skeleton that fits a skinned model."
+        },
+        {
+          "line": 56,
+          "text": "// HOST HELPER: the rest-pose palette for a rig: the rotation is the identity"
+        }
+      ],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/include/igi/retail/model/mef_model_loader.hpp",
+      "sha256": "f089f9e175375a0945fc07afd0a98c7be8b4138962db5a39b775702873c8b2a1",
+      "manifest_natives": [],
+      "markers": [
+        {
+          "line": 57,
+          "text": "// establishes the 0x44 record stride; field semantics remain provisional."
+        }
+      ],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/include/igi/retail/model/mef_native_attachments.hpp",
+      "sha256": "a95bc9ae32173d4856f5b8251cdb6eac4b2209c17f2121ed2fc27d75f8d4600b",
+      "manifest_natives": [],
+      "markers": [
+        {
+          "line": 40,
+          "text": "// Catalog name is provisional: the body retrieves an ATTA record, rather than drawing bones."
+        },
+        {
+          "line": 48,
+          "text": "// Catalog name is provisional: this returns the signed 16-bit MESH attachment count."
+        }
+      ],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/include/igi/retail/model/mef_render_data.hpp",
+      "sha256": "835b99ff77abe2a3527fe7c8202776ddf06a53de2f476f17900277460bcade2c",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/include/igi/retail/model/mef_skinner.hpp",
+      "sha256": "2e5afc97f79388e5ed7b54f908570cbda7c4fe8bd8892acdfbab235f21eccb32",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/include/igi/retail/model/model_texture_package.hpp",
+      "sha256": "34f72a53156a6bab82a0a4215e54985d89c815d08db227c14a7fa577ea395630",
+      "manifest_natives": [],
+      "markers": [
+        {
+          "line": 45,
+          "text": "// Host adapter: parses MTP IFF container chunks into a C++ MtpPackage struct for diagnostic inspection."
+        }
+      ],
+      "host_identifiers": [
+        "Host_ParseModelTexturePackage"
+      ],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/include/igi/retail/qfile/alias_resolve.hpp",
+      "sha256": "496d933c31e501e2f1068c61d44340ed7e842fffad24363703c6eb2a49117e19",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/include/igi/retail/render/backend.hpp",
+      "sha256": "30d772c4a8a0918f6ef3eb83f0841e8564e8cb56c1ac78939f3a500dd9394e39",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [
+        "Host_SetRenderBackendId"
+      ],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/include/igi/retail/render/camera_transform.hpp",
+      "sha256": "a83c3206f0a02cf3dc705aec91cc3586d415e71e206e02db748be021651bba6e",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/include/igi/retail/render/lod_settings.hpp",
+      "sha256": "0f0f9de6214652a0d9620ea010d184f1abd04895bcc5eb9622ea93afae4aa4e0",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/include/igi/retail/render/trans_context.hpp",
+      "sha256": "943b5700b6684f0ecd70a24d44d90bb32bcdbe642a2484a369e327f74b0a5307",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/include/igi/retail/render/view_block.hpp",
+      "sha256": "0aa80c116dccc8e7e96f914b2ee72277c1106d73368177b1c7bcaf16a8ac27de",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/include/igi/retail/resource/device_dispatch.hpp",
+      "sha256": "7915e254e01d75b833f9a3b63b946e4d6d387eb794c0fa92d4622129784bcbcb",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [
+        "Host_SetCheckHeap",
+        "Host_SetPushStack",
+        "Host_SetReadFileBlock"
+      ],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/include/igi/retail/resource/is_resource_loaded.hpp",
+      "sha256": "0c99e193f30d4cdf4d215ac07ad7290d5dfa54ee7e6d30763b68e2c292aaeb07",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/include/igi/retail/resource/resource_archive.hpp",
+      "sha256": "17410428390e9c9b5695fe8d7cebab4631a29e027536ff28cefe377d52d47af2",
+      "manifest_natives": [],
+      "markers": [
+        {
+          "line": 37,
+          "text": "// Host adapter: parses ILFF/IRES or legacy RESOURCE bytes into a host ResourceArchive container."
+        },
+        {
+          "line": 54,
+          "text": "// Confidence: partial host adapter; retail allocator/VFS/registry behavior is incomplete."
+        },
+        {
+          "line": 57,
+          "text": "// Host adapter: reads a file from disk and parses it with Sys_Resource."
+        }
+      ],
+      "host_identifiers": [
+        "Host_LoadResourceArchive",
+        "Host_ParseResourceArchive"
+      ],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/include/igi/retail/resource/resource_cache.hpp",
+      "sha256": "f428e7f998ef6d8a16700526ec64222285e52ca2852cd8e698f49dae116e12cb",
+      "manifest_natives": [],
+      "markers": [
+        {
+          "line": 48,
+          "text": "// Host adapter: probes the host ResourceCache map by normalized path."
+        },
+        {
+          "line": 65,
+          "text": "// Confidence: partial host adapter; retail allocator/VFS/registry behavior is incomplete."
+        },
+        {
+          "line": 68,
+          "text": "// Host adapter: path-based cached file read. Not the retail Resource_Load (VA 0x004B5F00)."
+        },
+        {
+          "line": 74,
+          "text": "// Host adapter: drops a path from the port cache. The retail Resource_Unload (VA 0x004B6380)"
+        }
+      ],
+      "host_identifiers": [
+        "Host_FindCachedResource",
+        "Host_LoadResourceFile",
+        "Host_UnloadResourceFile"
+      ],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/include/igi/retail/resource/resource_lifecycle.hpp",
+      "sha256": "5af7a373e05e85f57ac8ad8da3b04fd828969a1bc20dd87cead3a22e397d5568",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [
+        "Host_SetResourcePackUnpack",
+        "Host_SetSysFreeMemory16",
+        "Host_SetSysResource"
+      ],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/include/igi/retail/resource/resource_unpack.hpp",
+      "sha256": "92a30b0a6ab440a214e6e320f3109184873cb6151aef797652db23470b7ccb2f",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [
+        "Host_SetResourceUnpack"
+      ],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/include/igi/retail/resource/sys_resource.hpp",
+      "sha256": "7f1f7602bdf7effed28d675bd44cdf5054933161a9b45ec675af7dc2fb1bb28a",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [
+        "Host_SetSysAllocateMemory5",
+        "Host_SetSysOpenFileStream5"
+      ],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/include/igi/retail/script/qvm_compiled_program.hpp",
+      "sha256": "b37a6a37a91fbe8b107c620e7b0232fc74046c231f8f3193d848d8bfa7e0da39",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/include/igi/retail/script/qvm_loader.hpp",
+      "sha256": "2171c5f3579c95fdfa60adffe89873b7aa2059571ad9bf477b4ca44e971c7566",
+      "manifest_natives": [],
+      "markers": [
+        {
+          "line": 39,
+          "text": "// Host adapter: loads a QVM file from the host ResourceCache and parses its header."
+        },
+        {
+          "line": 44,
+          "text": "// Confidence: partial host adapter for scene/test harness."
+        }
+      ],
+      "host_identifiers": [
+        "Host_LoadQvmScript"
+      ],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/include/igi/retail/script/qvm_native_loader.hpp",
+      "sha256": "0ecdfc7b2f02579b36407a31861f32bb1d030e5ee016a3cf9b7947d659844a86",
+      "manifest_natives": [],
+      "markers": [
+        {
+          "line": 99,
+          "text": "// Confidence: high for exact error-flag store, callback branch, and Error_Show fallback."
+        },
+        {
+          "line": 123,
+          "text": "//           (0x0048F1D0); when 0 (or fallback), verifies `Sys_AllocateMemory_16(qvm_path)` (0x004B5B60)"
+        }
+      ],
+      "host_identifiers": [
+        "Host_SetQvmBlockRelease",
+        "Host_SetQvmDebugCompileFlag",
+        "Host_SetQvmForcePrecompiledFlag",
+        "Host_SetQvmStandaloneRelease",
+        "Host_SetSysDispatchOpcode7",
+        "Host_SetSysResolveSymbol28"
+      ],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/include/igi/retail/script/qvm_native_state.hpp",
+      "sha256": "a53222adf4a582d1d83f48243d352c29bf266cc297c7a2228da153919a3288ec",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/include/igi/retail/script/qvm_object_calls.hpp",
+      "sha256": "65357bab7a967eb7727247dc1e69c4f9af8faff693a39b864be5f253b84abcab",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/include/igi/retail/script/qvm_stack_natives.hpp",
+      "sha256": "72c3d4fbd8c1921faa292cfbcb32d7badd808bc7cf0f8308c660d1ca5489f275",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/include/igi/retail/script/script_mode.hpp",
+      "sha256": "3e8932a10ae8bbf6badd304e7fd8860f4dcdbe3ecd6c48e157fb4310ccbf40fd",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/include/igi/retail/sys/ilff_navigation.hpp",
+      "sha256": "1335642278960e6259ff2e8bd6853fcdab76f4456a4cbb22ebff8bf9909f59c3",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/include/igi/retail/sys/resource_lookup.hpp",
+      "sha256": "9082d87273a8777bd8904b22e2836a8392828d2ea9930f2a2ba0493db359ef3b",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/include/igi/retail/terrain/terrain_loaders.hpp",
+      "sha256": "dac24ccf318bd2f50d45f140b03d5b4de8c9855d810aadf4f3ac83a7be74bcf8",
+      "manifest_natives": [],
+      "markers": [
+        {
+          "line": 96,
+          "text": "// HOST HELPER: return whether a world-space point is enabled by the modifier's"
+        },
+        {
+          "line": 102,
+          "text": "// HOST HELPER: expose the ported terrain globals to the differential harnesses. These mirror"
+        },
+        {
+          "line": 169,
+          "text": "// HOST HELPER: load Level terrain files and QSC tasks."
+        },
+        {
+          "line": 173,
+          "text": "// HOST HELPER: build decoded render mesh for the given camera and origin."
+        },
+        {
+          "line": 202,
+          "text": "// Status/limits: ANALYZED only; unimplemented placeholder throws std::logic_error. ABI unverified."
+        },
+        {
+          "line": 209,
+          "text": "// Status/limits: ANALYZED only; unimplemented placeholder throws std::logic_error. ABI unverified."
+        },
+        {
+          "line": 216,
+          "text": "// Status/limits: ANALYZED only; unimplemented placeholder throws std::logic_error. ABI unverified."
+        },
+        {
+          "line": 223,
+          "text": "// Status/limits: ANALYZED only; unimplemented placeholder throws std::logic_error. ABI unverified."
+        },
+        {
+          "line": 230,
+          "text": "// Status/limits: ANALYZED only; unimplemented placeholder throws std::logic_error. ABI unverified."
+        }
+      ],
+      "host_identifiers": [
+        "Host_BuildRenderMesh",
+        "Host_GetMaterialGroupBytes",
+        "Host_GetTextureModifierState",
+        "Host_GetTileMapBytes",
+        "Host_LoadLevelTerrain",
+        "Host_ResetTerrainGlobals",
+        "Host_SetTextureModifierCount",
+        "Host_TextureModifierCoversPoint"
+      ],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/include/igi/retail/terrain/terrain_native_records.hpp",
+      "sha256": "c76e0966a62eb64ed470f683200a1a2d6c38f978549cee65d725d016e1ac8bee",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/include/igi/retail/texture/loop_terrain_texture.hpp",
+      "sha256": "c71d75414451d77bc6606a6a1b6cfe93e380d357153d3a84a6fdb3c5d89c6653",
+      "manifest_natives": [],
+      "markers": [
+        {
+          "line": 39,
+          "text": "// Host adapter: parses a LOOP terrain texture container into a C++ LoopTerrainTextureFile struct."
+        },
+        {
+          "line": 60,
+          "text": "// Host adapter: parses a LOOP model texture container into a C++ LoopModelTextureFile struct."
+        }
+      ],
+      "host_identifiers": [
+        "Host_ParseModelTextureFile",
+        "Host_ParseTerrainTextureFile"
+      ],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/include/igi/retail/texture/model_texture_pixels.hpp",
+      "sha256": "d52833dbbde7e838d8cd64089459ab3276c6eaa3a6b877b34beec67580d78476",
+      "manifest_natives": [],
+      "markers": [
+        {
+          "line": 14,
+          "text": "// Original catalogue labels describe unrelated terrain/physics operations and are provisional."
+        }
+      ],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/include/igi/retail/texture/texture_loaders.hpp",
+      "sha256": "38792515d69dcc32ed21d02210d02fe66236d6835ad38f7756d89764520a7ffc",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [
+        "Host_SetTextureBackendCallback",
+        "Host_SetTextureBackendId",
+        "Host_SetTextureCallbackSlots"
+      ],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/platform/windows/developer_controls.hpp",
+      "sha256": "17f9544eecbab2e969cdac8ee1b441f5452e7505bca6efd4b76f82e603053954",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/platform/windows/main.cpp",
+      "sha256": "0ee75d55c58ee11e86ef5fb8874648f4a00b6a7ddc676819b9b0dc4ef3448651",
+      "manifest_natives": [],
+      "markers": [
+        {
+          "line": 84,
+          "text": "const std::size_t placeholder = message.find(\"%s\");"
+        },
+        {
+          "line": 85,
+          "text": "if (placeholder != std::string::npos)"
+        },
+        {
+          "line": 87,
+          "text": "message.replace(placeholder, 2U, resource_name);"
+        }
+      ],
+      "host_identifiers": [
+        "Host_LoadResourceArchive"
+      ],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/platform/windows/player_controller.cpp",
+      "sha256": "43863e02d4283530c3a829f472ec164b9b4e687a42dfa844b8eedcd1ab03654f",
+      "manifest_natives": [],
+      "markers": [
+        {
+          "line": 310,
+          "text": "throw std::logic_error(\"Ground locomotion requires retail animation root-motion; no fallback speed is available.\");"
+        }
+      ],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/platform/windows/player_controller.hpp",
+      "sha256": "26115253ed427055747df7b6a1a3da89390b326bc643da61e9b77b4ea8d2e2e7",
+      "manifest_natives": [],
+      "markers": [
+        {
+          "line": 42,
+          "text": "// HOST HELPER: indexes the terrain mesh triangles around a centre in metre space."
+        },
+        {
+          "line": 45,
+          "text": "// HOST HELPER: topmost surface height and normal under (x, y) in metre space."
+        },
+        {
+          "line": 126,
+          "text": "// Ground locomotion requires authored animation root-motion samples. No fallback"
+        },
+        {
+          "line": 129,
+          "text": "// HOST HELPER: places the human at a feet position (retail units) and level reference."
+        },
+        {
+          "line": 133,
+          "text": "// HOST HELPER: advances the human by wall-clock seconds in fixed 30 Hz retail ticks."
+        },
+        {
+          "line": 139,
+          "text": "// HOST HELPER: existing look integration, independent of movement availability."
+        },
+        {
+          "line": 142,
+          "text": "// HOST HELPER: first-person eye through the transcribed retail native (0x00465820)."
+        }
+      ],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/platform/windows/retail_model_scene.cpp",
+      "sha256": "b56a1d0c303d88e43ba2e903bbfbfe4ff15e15b9ff638a86ace628f4d8cda400",
+      "manifest_natives": [],
+      "markers": [
+        {
+          "line": 152,
+          "text": "float safe_number(const script::QvmObjectValue& value, float fallback = 0.0f)"
+        },
+        {
+          "line": 162,
+          "text": "return fallback;"
+        },
+        {
+          "line": 299,
+          "text": "// by load() once that task has been decoded; keeping the fallback at a standing eye avoids"
+        },
+        {
+          "line": 726,
+          "text": "// Fallback model identifier search across arguments if empty or non-matching"
+        },
+        {
+          "line": 773,
+          "text": "// radare2 and CLEAN agree on this branch; full fallback-registry runtime parity is pending."
+        },
+        {
+          "line": 794,
+          "text": "write_log(\"Unrendered source model: '\" + model_name + \"'; no resolved retail fallback\","
+        },
+        {
+          "line": 1172,
+          "text": "// HOST HELPER: upload terrain texture layers to DirectDraw surfaces."
+        },
+        {
+          "line": 1346,
+          "text": "// HOST HELPER: advances the retail input port and the human controller, then"
+        },
+        {
+          "line": 1411,
+          "text": "// HOST HELPER: posts the retail input sequence to the scene window, so the"
+        },
+        {
+          "line": 1454,
+          "text": "// HOST HELPER: posts the scheduled demo messages for this frame."
+        },
+        {
+          "line": 1471,
+          "text": "// HOST HELPER: reports the human state so the runtime behaviour is visible"
+        }
+      ],
+      "host_identifiers": [
+        "Host_BuildRenderMesh",
+        "Host_LoadLevelTerrain",
+        "Host_LoadQvmScript",
+        "Host_LoadResourceArchive",
+        "Host_LoadResourceFile",
+        "Host_ParseModelTexturePackage"
+      ],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/platform/windows/retail_model_scene.hpp",
+      "sha256": "0ea65b8184bc35d293e8e06c32f5022d7c1f184ee9a6a9845f67c67e6ae1b8c1",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/platform/windows/retail_native_verification_support.cpp",
+      "sha256": "8c8c50928d84059a33da6f52f0a49ef43428e37737a556e10580b444b67b88f8",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/src/retail/audio/sound_adpcm_decoder.cpp",
+      "sha256": "a5965364e271668a24bffc9e284543c55ffd3750f3b9980b9d8852a8824f46dc",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/src/retail/audio/sound_attenuation_table.cpp",
+      "sha256": "b2e811560477738c28f2fe29861bbcb8a1c3cf27829fab4e92f50b9d6b0047ec",
+      "manifest_natives": [],
+      "markers": [
+        {
+          "line": 51,
+          "text": "// Host-only fallback for analysis builds. Retail parity is provided by the x87 path above."
+        }
+      ],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/src/retail/audio/sound_ilsf_header.cpp",
+      "sha256": "54e5164de10215029c3a6604c81020058dcd2f4e8752d5efca8fd1907621999e",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/src/retail/audio/sound_ilsf_stream_reader.cpp",
+      "sha256": "b44afad0c430a94b8a1891d1be0a87b8517921266c01365e6c5e3d8a72921c04",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/src/retail/audio/sound_key_functions.cpp",
+      "sha256": "9ac2fb909e184e89d0060a59df935b56e4d48b240512abdd02762d550867d4af",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/src/retail/config/config_graphic_options.cpp",
+      "sha256": "67d2e3d5b330cde7d5e7e8548d843c2d9b961241b7afb04886d717a107e1ca06",
+      "manifest_natives": [
+        {
+          "address": "0x00404590",
+          "status": "STRUCTURALLY_VERIFIED"
+        },
+        {
+          "address": "0x00404F00",
+          "status": "STRUCTURALLY_VERIFIED"
+        },
+        {
+          "address": "0x00404F60",
+          "status": "STRUCTURALLY_VERIFIED"
+        },
+        {
+          "address": "0x00405530",
+          "status": "STRUCTURALLY_VERIFIED"
+        },
+        {
+          "address": "0x004055C0",
+          "status": "STRUCTURALLY_VERIFIED"
+        },
+        {
+          "address": "0x00405620",
+          "status": "STRUCTURALLY_VERIFIED"
+        }
+      ],
+      "markers": [
+        {
+          "line": 10,
+          "text": "// Status/limits: STRUCTURALLY_VERIFIED with live retail-byte execution for the store and the block build; the fixture stubs Script_GetArg, which is the documented ABI boundary of the adapted interface."
+        }
+      ],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/src/retail/core/app_context.cpp",
+      "sha256": "4dc2da1fff93aac4d51d0052480c23f8a74c214db67f31bad083186d2733c557",
+      "manifest_natives": [
+        {
+          "address": "0x0048F1A0",
+          "status": "STRUCTURALLY_VERIFIED"
+        },
+        {
+          "address": "0x0048F1B0",
+          "status": "STRUCTURALLY_VERIFIED"
+        },
+        {
+          "address": "0x0048F1E0",
+          "status": "STRUCTURALLY_VERIFIED"
+        },
+        {
+          "address": "0x0048F230",
+          "status": "STRUCTURALLY_VERIFIED"
+        },
+        {
+          "address": "0x0048F240",
+          "status": "STRUCTURALLY_VERIFIED"
+        },
+        {
+          "address": "0x0048F250",
+          "status": "STRUCTURALLY_VERIFIED"
+        },
+        {
+          "address": "0x0048F260",
+          "status": "STRUCTURALLY_VERIFIED"
+        }
+      ],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/src/retail/core/debug_command_line.cpp",
+      "sha256": "6dd22dd21932996756395c831d90e5de7df6157764329762391b85747ad63ee9",
+      "manifest_natives": [],
+      "markers": [
+        {
+          "line": 1,
+          "text": "// HOST HELPER: host command-line integration of IGIPatch debug feature callbacks."
+        },
+        {
+          "line": 5,
+          "text": "// Status/limits: HOST HELPER; these switch names are not retail natives; runtime polarity remains unverified."
+        }
+      ],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/src/retail/core/fpu_state.cpp",
+      "sha256": "30111ad2e8a687cd0451567245c549c62a1f16e3b9ce1409584c5dbaf1b9e4fe",
+      "manifest_natives": [
+        {
+          "address": "0x00498460",
+          "status": "TRANSCRIBED"
+        },
+        {
+          "address": "0x004AC66B",
+          "status": "TRANSCRIBED"
+        },
+        {
+          "address": "0x004AC6FD",
+          "status": "TRANSCRIBED"
+        },
+        {
+          "address": "0x004AC620",
+          "status": "TRANSCRIBED"
+        },
+        {
+          "address": "0x004AC655",
+          "status": "TRANSCRIBED"
+        },
+        {
+          "address": "0x004A7157",
+          "status": "TRANSCRIBED"
+        }
+      ],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/src/retail/core/frame_natives.cpp",
+      "sha256": "cedfdf84867c1b1d02408f74bfd6f08c36f4a1f05aa67ffccb0b717d1efdb4d9",
+      "manifest_natives": [
+        {
+          "address": "0x00401050",
+          "status": "STRUCTURALLY_VERIFIED"
+        },
+        {
+          "address": "0x00402880",
+          "status": "VERIFIED"
+        },
+        {
+          "address": "0x004028A0",
+          "status": "VERIFIED"
+        },
+        {
+          "address": "0x0048F480",
+          "status": "STRUCTURALLY_VERIFIED"
+        }
+      ],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/src/retail/diagnostics/log_record.cpp",
+      "sha256": "4733c9241e90153d1e5f38238e158cb9a92b7472290f8fcea64aacf2adb17f9d",
+      "manifest_natives": [],
+      "markers": [
+        {
+          "line": 1,
+          "text": "// HOST HELPER: timestamped host diagnostic log formatting."
+        },
+        {
+          "line": 5,
+          "text": "// Status/limits: HOST HELPER; no retail native equivalence or gameplay behavior claimed."
+        }
+      ],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/src/retail/dynobj/hash_lookup.cpp",
+      "sha256": "72a7d7202418fa8391d19bc3730d8fc7a4b0648f43892eaf78c4c41b4fa23bd8",
+      "manifest_natives": [
+        {
+          "address": "0x004CEAA0",
+          "status": "VERIFIED"
+        },
+        {
+          "address": "0x004CF300",
+          "status": "VERIFIED"
+        }
+      ],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/src/retail/dynobj/local_models_mef.cpp",
+      "sha256": "89f7d7d90d26440b8700a9837cf23bbf4d3648a9a0aa6b8b6d219c4680f1db3c",
+      "manifest_natives": [
+        {
+          "address": "0x004CF390",
+          "status": "VERIFIED"
+        }
+      ],
+      "markers": [],
+      "host_identifiers": [
+        "Host_SetModelBackendInit"
+      ],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/src/retail/dynobj/mtp_package_loader.cpp",
+      "sha256": "130c93024b77819875b3d397a3e39f3688816f87d9737872aad43afc2536076c",
+      "manifest_natives": [
+        {
+          "address": "0x004CF080",
+          "status": "STRUCTURALLY_VERIFIED"
+        },
+        {
+          "address": "0x004CF330",
+          "status": "STRUCTURALLY_VERIFIED"
+        },
+        {
+          "address": "0x004CF630",
+          "status": "STRUCTURALLY_VERIFIED"
+        },
+        {
+          "address": "0x004CF870",
+          "status": "STRUCTURALLY_VERIFIED"
+        },
+        {
+          "address": "0x004CF910",
+          "status": "STRUCTURALLY_VERIFIED"
+        }
+      ],
+      "markers": [],
+      "host_identifiers": [
+        "Host_SetAnimIffLoader",
+        "Host_SetAnimOverridePrefix",
+        "Host_SetLovsEntryLoader",
+        "Host_SetPackagePrefix",
+        "Host_SetPaletteLoader",
+        "Host_SetSharedPackageContext"
+      ],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/src/retail/error/error_show.cpp",
+      "sha256": "e159b0edbadbe67f217119e07165c40c66245821b552b9864a987759026a3b9e",
+      "manifest_natives": [
+        {
+          "address": "0x004A53B3",
+          "status": "VERIFIED"
+        },
+        {
+          "address": "0x004A5702",
+          "status": "VERIFIED"
+        },
+        {
+          "address": "0x004AF7B0",
+          "status": "VERIFIED"
+        }
+      ],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/src/retail/human/human_camera_eye.cpp",
+      "sha256": "182ce57b7d898f8c8ee40559aa09fc7d4a196a75cd7e5cbdecbc5e7653bea674",
+      "manifest_natives": [
+        {
+          "address": "0x00463180",
+          "status": "STRUCTURALLY_VERIFIED"
+        },
+        {
+          "address": "0x00465820",
+          "status": "STRUCTURALLY_VERIFIED"
+        }
+      ],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/src/retail/human/human_view.cpp",
+      "sha256": "beddc433b78fe95e38b65718f92b227a816db752e1688d565aaed384db0a7038",
+      "manifest_natives": [
+        {
+          "address": "0x004659E0",
+          "status": "STRUCTURALLY_VERIFIED"
+        }
+      ],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/src/retail/input/input_port.cpp",
+      "sha256": "3d6db2f04c3b99137224ef9d28e28a2c816a892480f16f4b49fd6ff722ce045f",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/src/retail/mem/heap_list.cpp",
+      "sha256": "5501d4fe25267d4f01818b200f1653203a680df4dc7b2d3b3045cffd15b0d8e5",
+      "manifest_natives": [
+        {
+          "address": "0x004AF8F0",
+          "status": "VERIFIED"
+        },
+        {
+          "address": "0x004AF960",
+          "status": "STRUCTURALLY_VERIFIED"
+        }
+      ],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/src/retail/mem/mem_alloc.cpp",
+      "sha256": "5272fd285f110a9d834f95ec250e424cc497f581c783d4d94f76db29ca346520",
+      "manifest_natives": [
+        {
+          "address": "0x004AA670",
+          "status": "STRUCTURALLY_VERIFIED"
+        },
+        {
+          "address": "0x004AA682",
+          "status": "STRUCTURALLY_VERIFIED"
+        },
+        {
+          "address": "0x004AA6AE",
+          "status": "STRUCTURALLY_VERIFIED"
+        },
+        {
+          "address": "0x004AD722",
+          "status": "STRUCTURALLY_VERIFIED"
+        },
+        {
+          "address": "0x004B0BA0",
+          "status": "STRUCTURALLY_VERIFIED"
+        },
+        {
+          "address": "0x004B0C60",
+          "status": "VERIFIED"
+        },
+        {
+          "address": "0x004B0D40",
+          "status": "STRUCTURALLY_VERIFIED"
+        }
+      ],
+      "markers": [
+        {
+          "line": 102,
+          "text": "// Status/limits: STRUCTURALLY_VERIFIED; high for mode branches, 16-byte rounding, and HeapAlloc fallback."
+        }
+      ],
+      "host_identifiers": [
+        "Host_HeapAlloc",
+        "Host_HeapFree"
+      ],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/src/retail/model/iff_chunk_tree.cpp",
+      "sha256": "5da3c85c234db5b96244dfd31810f6d9e3cb3328499a8c567224e13418d09e61",
+      "manifest_natives": [],
+      "markers": [
+        {
+          "line": 34,
+          "text": "// HOST HELPER: parses the chunks of a form body into the retail's node layout."
+        }
+      ],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/src/retail/model/iff_skeleton.cpp",
+      "sha256": "9f23a68ecd2c55fd2e1d190a9467c6c3a33c591f97915551abc63aae2cc0a0a7",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/src/retail/model/mef_bone_rig.cpp",
+      "sha256": "459b19a565d7a6c0b9737e8187a7c9704f318c7c40b6f48c9de75ab79db1fffe",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/src/retail/model/mef_model_loader.cpp",
+      "sha256": "175cfdb041e8590f377e39ba2f9cab021c7409bd2cce50e48efa4f1208b7d0e7",
+      "manifest_natives": [],
+      "markers": [
+        {
+          "line": 18,
+          "text": "// The catalog name is provisional: REA labels this procedure retail routine 0x004CF390."
+        }
+      ],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/src/retail/model/mef_native_attachments.cpp",
+      "sha256": "9d61bcbfd52060743c0084cccedd1acf4b922d17702b1e02565119ee4880a78a",
+      "manifest_natives": [
+        {
+          "address": "0x004D0CF0",
+          "status": "VERIFIED"
+        },
+        {
+          "address": "0x004D0D10",
+          "status": "VERIFIED"
+        }
+      ],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/src/retail/model/mef_render_data.cpp",
+      "sha256": "64e8a2d790423395b848cb52ca44b800f03efc91282fd59b52091e7ca121b56d",
+      "manifest_natives": [],
+      "markers": [
+        {
+          "line": 1,
+          "text": "// HOST HELPER: MEF render-data builder \u2014 no retail VA (host-side support logic)."
+        },
+        {
+          "line": 2,
+          "text": "// Artifact: not transcribed from retail igi.exe; complements native MEF loaders bound in the manifest."
+        }
+      ],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/src/retail/model/mef_skinner.cpp",
+      "sha256": "abccac31ef27246e054bfe6316c9961be075c8e0a9f30cab70d79d06a0f086e2",
+      "manifest_natives": [],
+      "markers": [
+        {
+          "line": 1,
+          "text": "// HOST HELPER: MEF skinner \u2014 no retail VA (host-side support logic)."
+        },
+        {
+          "line": 2,
+          "text": "// Artifact: not transcribed from retail igi.exe; complements native MEF loaders bound in the manifest."
+        }
+      ],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/src/retail/model/model_texture_package.cpp",
+      "sha256": "48baf9a7017ca8928af2372aef751e967bd66e611d456f590f18ab5b6b7ec456",
+      "manifest_natives": [],
+      "markers": [
+        {
+          "line": 171,
+          "text": "// Host adapter: parses MTP IFF container chunks into a C++ MtpPackage struct for diagnostic inspection."
+        }
+      ],
+      "host_identifiers": [
+        "Host_ParseModelTexturePackage"
+      ],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/src/retail/qfile/alias_resolve.cpp",
+      "sha256": "bb10ecf67e6c5d0d0dc5d4bdacf5478ae94a5728fc327539c84d00bb8cfffcf2",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/src/retail/render/backend.cpp",
+      "sha256": "aaf8f69894d8f9b5163add9a31c5c13c8749e98238f4973a2a96c5314f6de857",
+      "manifest_natives": [
+        {
+          "address": "0x004CEA80",
+          "status": "STRUCTURALLY_VERIFIED"
+        }
+      ],
+      "markers": [],
+      "host_identifiers": [
+        "Host_SetRenderBackendId"
+      ],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/src/retail/render/camera_transform.cpp",
+      "sha256": "d970b768395ccffa1523f6cd08355114d24f5e279bfb66a9f3cc9a7c60a1ebb4",
+      "manifest_natives": [
+        {
+          "address": "0x004A2600",
+          "status": "STRUCTURALLY_VERIFIED"
+        },
+        {
+          "address": "0x004A26C0",
+          "status": "STRUCTURALLY_VERIFIED"
+        },
+        {
+          "address": "0x004B7450",
+          "status": "STRUCTURALLY_VERIFIED"
+        }
+      ],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/src/retail/render/lod_settings.cpp",
+      "sha256": "42619ba0462ea8d100675697b8a67b8843c2385f9d03906b8ecbaf31557f6a92",
+      "manifest_natives": [
+        {
+          "address": "0x004EDB60",
+          "status": "STRUCTURALLY_VERIFIED"
+        }
+      ],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/src/retail/render/trans_context.cpp",
+      "sha256": "33331bc5a9836d724ddddc0e4ac8c986d01993a02360ab93cc18df87f101dab8",
+      "manifest_natives": [
+        {
+          "address": "0x00497E70",
+          "status": "STRUCTURALLY_VERIFIED"
+        }
+      ],
+      "markers": [
+        {
+          "line": 27,
+          "text": "// Status/limits: STRUCTURALLY_VERIFIED for the copy, the installed flag and the install counter; the render-method dispatch is not implemented."
+        }
+      ],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/src/retail/render/view_block.cpp",
+      "sha256": "cf2569235f12db3df34b00ff0898cec5f7bfdfccccde0a3827390cd7e8cbd65d",
+      "manifest_natives": [
+        {
+          "address": "0x00491D40",
+          "status": "STRUCTURALLY_VERIFIED"
+        },
+        {
+          "address": "0x00497D70",
+          "status": "STRUCTURALLY_VERIFIED"
+        }
+      ],
+      "markers": [
+        {
+          "line": 59,
+          "text": "// HOST HELPER: install the screen framing block from a window rect."
+        },
+        {
+          "line": 63,
+          "text": "// Status/limits: HOST HELPER; the port installs a full-window rect instead of running the viewport QTask rect computation."
+        }
+      ],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/src/retail/resource/device_dispatch.cpp",
+      "sha256": "c8ad9b8b801842ffcb02f1dffb59acef57fc8bf85c983cd6f489e017f48b337f",
+      "manifest_natives": [
+        {
+          "address": "0x004B1690",
+          "status": "STRUCTURALLY_VERIFIED"
+        },
+        {
+          "address": "0x004B1780",
+          "status": "STRUCTURALLY_VERIFIED"
+        },
+        {
+          "address": "0x004B17F0",
+          "status": "STRUCTURALLY_VERIFIED"
+        }
+      ],
+      "markers": [],
+      "host_identifiers": [
+        "Host_SetCheckHeap",
+        "Host_SetPushStack",
+        "Host_SetReadFileBlock"
+      ],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/src/retail/resource/is_resource_loaded.cpp",
+      "sha256": "36d73c8e4f50c0a65b811238775097c6d3279f32c30581f42f5804ae5823cfed",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/src/retail/resource/resource_archive.cpp",
+      "sha256": "ecf46a362b80c953229b17e70364b71dca9a39e97339bf50d3c2d615d80a9d21",
+      "manifest_natives": [],
+      "markers": [
+        {
+          "line": 175,
+          "text": "// Host adapter: parses ILFF/IRES or legacy RESOURCE bytes into a host ResourceArchive container."
+        },
+        {
+          "line": 209,
+          "text": "// HOST HELPER: Host_LoadResourceArchive. Host archive-file reader; this is not the retail two-argument Resource_Load native."
+        }
+      ],
+      "host_identifiers": [
+        "Host_LoadResourceArchive",
+        "Host_ParseResourceArchive"
+      ],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/src/retail/resource/resource_cache.cpp",
+      "sha256": "4b0b6e541e4a5ef429bc5c6d7cfe7c6cbcfb3104b361235031e6e4a5d9f9e34f",
+      "manifest_natives": [],
+      "markers": [
+        {
+          "line": 63,
+          "text": "// Host adapter: probes the host ResourceCache map by normalized path."
+        },
+        {
+          "line": 82,
+          "text": "// HOST HELPER: Host_LoadResourceFile. Host filesystem/cache adapter; retail VFS and allocation behavior are not transcribed here."
+        },
+        {
+          "line": 110,
+          "text": "// Host adapter: drops a path from the port cache; see the header note."
+        }
+      ],
+      "host_identifiers": [
+        "Host_FindCachedResource",
+        "Host_LoadResourceFile",
+        "Host_UnloadResourceFile"
+      ],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/src/retail/resource/resource_lifecycle.cpp",
+      "sha256": "de6e8a3d1c3c668afafce94b89c4bdeaf1ad00632616d95bf997b6fda77e6f74",
+      "manifest_natives": [
+        {
+          "address": "0x004B5F00",
+          "status": "VERIFIED"
+        },
+        {
+          "address": "0x004B6380",
+          "status": "VERIFIED"
+        }
+      ],
+      "markers": [],
+      "host_identifiers": [
+        "Host_SetResourcePackUnpack",
+        "Host_SetSysFreeMemory16",
+        "Host_SetSysResource"
+      ],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/src/retail/resource/resource_unpack.cpp",
+      "sha256": "860c189265a089cdc6b81efb8a9e472990c867e9487763f617ed546d916bebad",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [
+        "Host_SetResourceUnpack"
+      ],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/src/retail/resource/sys_resource.cpp",
+      "sha256": "2c601f597dbf195fba1396c89649c97d200aa82d59254ea4c6258acb27952035",
+      "manifest_natives": [
+        {
+          "address": "0x004AAD10",
+          "status": "STRUCTURALLY_VERIFIED"
+        },
+        {
+          "address": "0x004B59F0",
+          "status": "STRUCTURALLY_VERIFIED"
+        },
+        {
+          "address": "0x004B5C90",
+          "status": "STRUCTURALLY_VERIFIED"
+        },
+        {
+          "address": "0x004B5F80",
+          "status": "STRUCTURALLY_VERIFIED"
+        },
+        {
+          "address": "0x004B60F0",
+          "status": "STRUCTURALLY_VERIFIED"
+        }
+      ],
+      "markers": [],
+      "host_identifiers": [
+        "Host_SetSysAllocateMemory5",
+        "Host_SetSysFreeMemory16",
+        "Host_SetSysOpenFileStream5",
+        "Host_SetSysResource"
+      ],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/src/retail/script/qvm_compiled_program.cpp",
+      "sha256": "1d6a1b93e858dc08816b0b31b2b8db85ba2d4431d116fb1f40a08963fb5dd7df",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/src/retail/script/qvm_loader.cpp",
+      "sha256": "739d5dd1ae6fa816f925495b7ec3e365e87c862e50912fd45920398cb0a00df0",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [
+        "Host_LoadQvmScript",
+        "Host_LoadResourceFile"
+      ],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/src/retail/script/qvm_native_loader.cpp",
+      "sha256": "21ffdfd2118d3c5a3d7a5ff3e6b7960abe40c05db54198da539bbb7a2f6dcc5f",
+      "manifest_natives": [
+        {
+          "address": "0x0048F1D0",
+          "status": "STRUCTURALLY_VERIFIED"
+        },
+        {
+          "address": "0x0048F340",
+          "status": "STRUCTURALLY_VERIFIED"
+        },
+        {
+          "address": "0x004B1E90",
+          "status": "STRUCTURALLY_VERIFIED"
+        },
+        {
+          "address": "0x004B5B60",
+          "status": "STRUCTURALLY_VERIFIED"
+        },
+        {
+          "address": "0x004B7E10",
+          "status": "STRUCTURALLY_VERIFIED"
+        },
+        {
+          "address": "0x004B80B0",
+          "status": "STRUCTURALLY_VERIFIED"
+        },
+        {
+          "address": "0x004B83D0",
+          "status": "STRUCTURALLY_VERIFIED"
+        },
+        {
+          "address": "0x004B8A10",
+          "status": "STRUCTURALLY_VERIFIED"
+        }
+      ],
+      "markers": [
+        {
+          "line": 155,
+          "text": "// Status/limits: STRUCTURALLY_VERIFIED; high for exact error-flag store, callback branch, and Error_Show fallback."
+        },
+        {
+          "line": 206,
+          "text": "// Behavior/CFG: loads a compiled `.qvm` script object from `qvm_path`: checks `FX_FragmentSimulate_24()` (0x0048F1D0); when 0 (or fallback), verifies `Sys_AllocateMemory_16(qvm_path)` (0x004B5B60) `0x94`-byte QVM object via `Mem_Alloc(0x94, 4)` (0x004B0C60), zeroes it, calls `Sys_PopStack_23(0)` (0x004B8A10), stores the loaded buffer at `+0x80` (`result[0x20]`), size at `+0x84` (`result[0x21]`), and copies the path string into `+0x00..+0x7F`. When `FX_FragmentSimulate_24()` is non-zero, also supports `.qvm` extension replacement (`0x00547290` = `\".qvm\"`) and `.qas` assembly (`0x00547288` = `\".qas\"`). radare2 33 blocks/50 edges; Binary Ninja 33 blocks; 91.4% structural agreement."
+        }
+      ],
+      "host_identifiers": [
+        "Host_SetQvmBlockRelease",
+        "Host_SetQvmDebugCompileFlag",
+        "Host_SetQvmForcePrecompiledFlag",
+        "Host_SetQvmStandaloneRelease",
+        "Host_SetSysDispatchOpcode7",
+        "Host_SetSysResolveSymbol28"
+      ],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/src/retail/script/qvm_object_calls.cpp",
+      "sha256": "2ff35a45c6e879beb364388bfbfb6797034f96db36a5c146ea22ecbc9ff854cd",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/src/retail/script/qvm_stack_natives.cpp",
+      "sha256": "abb82cff357ee035f53ffb16b00414fd9a9384ced3b257ecfd1a31aeb95bc96a",
+      "manifest_natives": [
+        {
+          "address": "0x004BCFD0",
+          "status": "STRUCTURALLY_VERIFIED"
+        },
+        {
+          "address": "0x004BD3D0",
+          "status": "STRUCTURALLY_VERIFIED"
+        },
+        {
+          "address": "0x004BDA00",
+          "status": "STRUCTURALLY_VERIFIED"
+        }
+      ],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/src/retail/script/script_mode.cpp",
+      "sha256": "bef5155c54f3c9e935577c85b4819aaa26f9c80e7aba287c74fb723d4f467679",
+      "manifest_natives": [
+        {
+          "address": "0x004F1160",
+          "status": "TRANSCRIBED"
+        }
+      ],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/src/retail/sys/ilff_navigation.cpp",
+      "sha256": "3ca6df6dd3baf32cdc903dc4b1bdf9aab830350570abbe1bc191c2b094724e43",
+      "manifest_natives": [
+        {
+          "address": "0x004B7470",
+          "status": "VERIFIED"
+        },
+        {
+          "address": "0x004B7490",
+          "status": "VERIFIED"
+        },
+        {
+          "address": "0x004B74D0",
+          "status": "VERIFIED"
+        },
+        {
+          "address": "0x004B7540",
+          "status": "STRUCTURALLY_VERIFIED"
+        },
+        {
+          "address": "0x004B7570",
+          "status": "STRUCTURALLY_VERIFIED"
+        },
+        {
+          "address": "0x004B7580",
+          "status": "STRUCTURALLY_VERIFIED"
+        },
+        {
+          "address": "0x004B7590",
+          "status": "VERIFIED"
+        }
+      ],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/src/retail/sys/resource_lookup.cpp",
+      "sha256": "3df29856f1d85c2ff463d7792f7467b61bc4f7b63ebb8fce31658f15a8974365",
+      "manifest_natives": [
+        {
+          "address": "0x004AD73D",
+          "status": "STRUCTURALLY_VERIFIED"
+        },
+        {
+          "address": "0x004B5AF0",
+          "status": "VERIFIED"
+        },
+        {
+          "address": "0x004B5B30",
+          "status": "VERIFIED"
+        }
+      ],
+      "markers": [
+        {
+          "line": 12,
+          "text": "// and locale mapping branches are not implemented; see scopes/0x004AD73D.md."
+        }
+      ],
+      "host_identifiers": [],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/src/retail/terrain/terrain_loaders.cpp",
+      "sha256": "133d9ddb293c4f329a9db725b5c50e96412083975c604859f802f1645fe8cc1e",
+      "manifest_natives": [
+        {
+          "address": "0x004C5F00",
+          "status": "ANALYZED"
+        },
+        {
+          "address": "0x004C6240",
+          "status": "ANALYZED"
+        },
+        {
+          "address": "0x004C6670",
+          "status": "STRUCTURALLY_VERIFIED"
+        },
+        {
+          "address": "0x004C6760",
+          "status": "STRUCTURALLY_VERIFIED"
+        },
+        {
+          "address": "0x004D14E0",
+          "status": "ANALYZED"
+        },
+        {
+          "address": "0x004F82B0",
+          "status": "TRANSCRIBED"
+        },
+        {
+          "address": "0x00505E40",
+          "status": "VERIFIED_WITH_DOCUMENTED_SCOPE"
+        },
+        {
+          "address": "0x00506F00",
+          "status": "STRUCTURALLY_VERIFIED"
+        },
+        {
+          "address": "0x00510010",
+          "status": "ANALYZED"
+        },
+        {
+          "address": "0x00512C30",
+          "status": "ANALYZED"
+        }
+      ],
+      "markers": [
+        {
+          "line": 273,
+          "text": "// Status/limits: TRANSCRIBED; scripts/texture_modifier_push_diff_runner.py covers mapped nonaliasing x86 contexts; natural runtime integration remains provisional."
+        },
+        {
+          "line": 379,
+          "text": "// Behavior/CFG: Retail performs the operations described in the evidence; this placeholder performs none."
+        },
+        {
+          "line": 380,
+          "text": "// Status/limits: ANALYZED only; unimplemented placeholder throws std::logic_error. ABI unverified."
+        },
+        {
+          "line": 385,
+          "text": "throw std::logic_error(\"Terrain_Load (0x004C6240) is not transcribed; native loading is unavailable.\");"
+        },
+        {
+          "line": 391,
+          "text": "// Behavior/CFG: Retail performs the operations described in the evidence; this placeholder performs none."
+        },
+        {
+          "line": 392,
+          "text": "// Status/limits: ANALYZED only; unimplemented placeholder throws std::logic_error. ABI unverified."
+        },
+        {
+          "line": 397,
+          "text": "throw std::logic_error(\"Terrain_LoadTexturesAndLightmaps (0x004C5F00) is not transcribed; native texture loading is unavailable.\");"
+        },
+        {
+          "line": 403,
+          "text": "// Behavior/CFG: HOST STUB - NOT A TRANSCRIPTION. The retail body at 0x004D14E0 is 4181 bytes"
+        },
+        {
+          "line": 406,
+          "text": "// Status/limits: ANALYZED only; unimplemented placeholder throws std::logic_error. ABI unverified."
+        },
+        {
+          "line": 411,
+          "text": "throw std::logic_error(\"Terrain_TraverseContourQuadtree (0x004D14E0) is not transcribed; native traversal is unavailable.\");"
+        },
+        {
+          "line": 417,
+          "text": "// Behavior/CFG: Retail performs the operations described in the evidence; this placeholder performs none."
+        },
+        {
+          "line": 418,
+          "text": "// Status/limits: ANALYZED only; unimplemented placeholder throws std::logic_error. ABI unverified."
+        },
+        {
+          "line": 422,
+          "text": "throw std::logic_error(\"Terrain_DecodeChunkCommands (0x00510010) is not transcribed; native CMD decoding is unavailable.\");"
+        },
+        {
+          "line": 428,
+          "text": "// Behavior/CFG: HOST STUB - NOT A TRANSCRIPTION. The retail body at 0x00512C30 is 6317 bytes"
+        },
+        {
+          "line": 431,
+          "text": "// Status/limits: ANALYZED only; unimplemented placeholder throws std::logic_error. ABI unverified."
+        },
+        {
+          "line": 436,
+          "text": "throw std::logic_error(\"Terrain_Draw (0x00512C30) is not transcribed; native terrain rendering is unavailable.\");"
+        },
+        {
+          "line": 439,
+          "text": "// HOST HELPER: load Level terrain files and QSC tasks."
+        },
+        {
+          "line": 801,
+          "text": "// QVM parse fallback: keep default materials"
+        },
+        {
+          "line": 812,
+          "text": "// HOST HELPER: build decoded render mesh for the given camera and origin."
+        },
+        {
+          "line": 1125,
+          "text": "// HOST HELPER: expose the ported terrain globals to differential harnesses. These mirror the"
+        }
+      ],
+      "host_identifiers": [
+        "Host_BuildRenderMesh",
+        "Host_GetMaterialGroupBytes",
+        "Host_GetTextureModifierState",
+        "Host_GetTileMapBytes",
+        "Host_LoadLevelTerrain",
+        "Host_ResetTerrainGlobals",
+        "Host_SetTextureModifierCount",
+        "Host_TextureModifierCoversPoint"
+      ],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/src/retail/texture/loop_terrain_texture.cpp",
+      "sha256": "d77084d856362eb3f9bc4ab912a5df6c19a94a5a8a32306d1e3e8ee5e173a057",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [
+        "Host_ParseModelTextureFile",
+        "Host_ParseTerrainTextureFile"
+      ],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/src/retail/texture/model_texture_pixels.cpp",
+      "sha256": "7304da4930d4f06848c2e674fea218af8c6ead874ca854f853fe8407679ae77e",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [
+        "Host_ParseModelTextureFile"
+      ],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/src/retail/texture/texture_loaders.cpp",
+      "sha256": "b7903922fd0ee520828b67e6f2531993f17cc952ef8711795d82c9260ed4460e",
+      "manifest_natives": [
+        {
+          "address": "0x004B0F80",
+          "status": "STRUCTURALLY_VERIFIED"
+        },
+        {
+          "address": "0x004B23B0",
+          "status": "STRUCTURALLY_VERIFIED"
+        },
+        {
+          "address": "0x004B24C0",
+          "status": "VERIFIED_WITH_DOCUMENTED_SCOPE"
+        },
+        {
+          "address": "0x004B26A0",
+          "status": "STRUCTURALLY_VERIFIED"
+        },
+        {
+          "address": "0x004B26B0",
+          "status": "STRUCTURALLY_VERIFIED"
+        },
+        {
+          "address": "0x004B7CF0",
+          "status": "STRUCTURALLY_VERIFIED"
+        },
+        {
+          "address": "0x004CF790",
+          "status": "VERIFIED_WITH_DOCUMENTED_SCOPE"
+        },
+        {
+          "address": "0x005175A0",
+          "status": "VERIFIED_WITH_DOCUMENTED_SCOPE"
+        }
+      ],
+      "markers": [],
+      "host_identifiers": [
+        "Host_SetTextureBackendCallback",
+        "Host_SetTextureBackendId",
+        "Host_SetTextureCallbackSlots"
+      ],
+      "classification": "source",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/tests/audio/sound_adpcm_decoder_test.cpp",
+      "sha256": "b481277b5270a8438a2fbc0184b1bf2ddaeaf7e6aff3b9f728187d7b6dbada9c",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "test",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/tests/audio/sound_attenuation_table_test.cpp",
+      "sha256": "465c70d4df2ade5eec5083500096198e4700b0103c154da7dac667943d128a90",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "test",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/tests/audio/sound_ilsf_header_test.cpp",
+      "sha256": "86542507686c13f3f758ffc318ae76f41235b30447a8d58cb0cec1757df6111c",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "test",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/tests/audio/sound_ilsf_stream_reader_test.cpp",
+      "sha256": "7588c3eea7f2a9d9b910a73672dc3cb80f7dda0b4f5f312b9f25e2364875d200",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "test",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/tests/audio/sound_key_functions_test.cpp",
+      "sha256": "7295c0c4592c1ef56b5d1aba080e2619ee907ed30db6bc62289d203058dc013a",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "test",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/tests/core/debug_command_line_test.cpp",
+      "sha256": "907e0f7a731c2748269edc175adcecd1e351939ac823aab9a1ead1dd855d1e82",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "test",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/tests/core/developer_controls_test.cpp",
+      "sha256": "f4e80d7dd12a004719867fd174562149245e668185b5480e176fc625bd72779a",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "test",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/tests/core/frame_natives_test.cpp",
+      "sha256": "b1c0f4f8206f4b1279d0c3419a15bfb8db9592ed072015d96f2469b4a000d545",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "test",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/tests/core/input_port_test.cpp",
+      "sha256": "68b079396b63743fc3c4fcb8c365e65c2ce0aa3b641b7397864a2e0cdd9ba1fe",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "test",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/tests/core/log_record_test.cpp",
+      "sha256": "1a4b7fb1e5bc3f41a2991b4a3e3285091f968f91e5a125659a45f623c4eb92bd",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "test",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/tests/dynobj/hash_lookup_test.cpp",
+      "sha256": "666f45db4a93289bd6ace8a48b9d2c217a7cb3205bd8dcbee8b719aef7467ee5",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "test",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/tests/dynobj/local_models_mef_test.cpp",
+      "sha256": "0ddb133b68e6a5a2f75d7510adcfc06a1509f8e87a8565e88223a7859ce192b9",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [
+        "Host_SetModelBackendInit",
+        "Host_SetRenderBackendId"
+      ],
+      "classification": "test",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/tests/dynobj/mtp_package_loader_test.cpp",
+      "sha256": "102e0b7b43e02bddbcbeceb9bcee9d1ea3d8a8891259bd79e5aac5bb36bfbd62",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [
+        "Host_SetAnimIffLoader",
+        "Host_SetAnimOverridePrefix",
+        "Host_SetPackagePrefix",
+        "Host_SetPaletteLoader"
+      ],
+      "classification": "test",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/tests/error/error_show_test.cpp",
+      "sha256": "6d28b3c255924a5e121beadf9d14ae7759ceccc8c26d5c1a912e15722a523298",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "test",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/tests/mem/heap_list_test.cpp",
+      "sha256": "3ef073b48427d7b7179d4fdc6720330c54f015e2b573ba6d5cfb679af5a74268",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "test",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/tests/mem/mem_alloc_test.cpp",
+      "sha256": "415af593118b938eea4cec467c22784435df5837316bfc32ef42562e18b32c58",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "test",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/tests/model/iff_skeleton_test.cpp",
+      "sha256": "88b415e3411cc787a5c4528b4d3a72eec93244ebf70c27b8370d4b4c85e3d0e1",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "test",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/tests/model/mef_model_loader_test.cpp",
+      "sha256": "2465d9751d898834080a803b05457937eb92e909a2fe661650e918481fbe5d24",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "test",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/tests/model/mef_native_attachments_test.cpp",
+      "sha256": "2e6947687f7a9d4231005dab94c3c7f5a60d04827d9edca071024dcb12d1005c",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "test",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/tests/model/mef_native_differential_test.cpp",
+      "sha256": "97c6b84236cb1e3aa0e9446e80fc7258d59b8dd9ca7eeb201b781b985891855f",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "test",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/tests/model/mef_render_data_test.cpp",
+      "sha256": "65737185aa0c9257656a492c2fb3da7fecda5d275824d4136d33364951cc979e",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [
+        "Host_LoadQvmScript"
+      ],
+      "classification": "test",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/tests/model/model_texture_package_test.cpp",
+      "sha256": "3fef585dc5e05ffdcc89f91894940b65f2401005c1a4d7baf22ab586c73aaf6d",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [
+        "Host_LoadResourceArchive",
+        "Host_ParseModelTextureFile",
+        "Host_ParseModelTexturePackage"
+      ],
+      "classification": "test",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/tests/platform/player_controller_test.cpp",
+      "sha256": "3acac1f1193dcbdabe384697f91bb070a4869f30f27c0d4708d90de4324be210",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "test",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/tests/qfile/alias_resolve_test.cpp",
+      "sha256": "8e49b64a1e4508d901d590580d8f119f9cdd81d3fea05e7370a0abb661a245a3",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "test",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/tests/render/camera_transform_test.cpp",
+      "sha256": "16ffbd81ab4a38489775a794ebbdeb545c5918ca662903cf27f504fbfc4b3224",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "test",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/tests/render/trans_context_test.cpp",
+      "sha256": "0ff2e478765e3bc3c700fa5f596cd9fd557b7c7abb161dd49744231b8bf60c2f",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "test",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/tests/resource/device_dispatch_test.cpp",
+      "sha256": "f1b7aa574b2e9eee1714bda7162e9cdfe6a0877766ef79c945b28f95e91dc1cd",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [
+        "Host_SetCheckHeap",
+        "Host_SetPushStack",
+        "Host_SetReadFileBlock"
+      ],
+      "classification": "test",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/tests/resource/is_resource_loaded_test.cpp",
+      "sha256": "2285b075e63db6146f75bca77a8fd47ea8c23eb8435175f4b4bc19b026ee3e8e",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "test",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/tests/resource/resource_archive_test.cpp",
+      "sha256": "0a037ac403b24ceeba4ebab22f28bd76a04628e59ef2b7f068b6fa72db4dcd1d",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [
+        "Host_LoadResourceArchive",
+        "Host_ParseResourceArchive"
+      ],
+      "classification": "test",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/tests/resource/resource_lifecycle_test.cpp",
+      "sha256": "270f9c53ed26025ab0e0b743186845d8b9ca5e3fc3fb51e386e4d43c56c61092",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [
+        "Host_SetResourcePackUnpack",
+        "Host_SetSysFreeMemory16",
+        "Host_SetSysResource"
+      ],
+      "classification": "test",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/tests/resource/resource_unpack_test.cpp",
+      "sha256": "82ffba830a3c9497459a359ae9022a8c073a051d9ffb6ac157cd3fdf8d955a0e",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [
+        "Host_SetResourceUnpack"
+      ],
+      "classification": "test",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/tests/resource/sys_resource_test.cpp",
+      "sha256": "48f410c2d19f641e3c7ed0a3f25ce0482e4d3e146681fda8f9f5d5b4283ea382",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "test",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/tests/script/qvm_compiled_program_test.cpp",
+      "sha256": "19a103b2de78c145452971fa78becec4fb69d91ef8d99c5a6700c151e43b33df",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [
+        "Host_FindCachedResource",
+        "Host_LoadQvmScript",
+        "Host_LoadResourceFile",
+        "Host_UnloadResourceFile"
+      ],
+      "classification": "test",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/tests/script/qvm_dispatch_native_differential_test.cpp",
+      "sha256": "8a0bdaf5f8b4d0a6cfabebc0f2c4bf32565cfbb87002d524f4f71439758ea97e",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "test",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/tests/script/qvm_instruction_dispatch_test.cpp",
+      "sha256": "e47ea56d4e52027e32a6d584a3e765b67a86a323102ca8bce61b3cb58bdbbfc7",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "test",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/tests/script/qvm_native_loader_test.cpp",
+      "sha256": "ad4e9b30a0159f3c24517dec67bccc3b85ab382980a10af208505921c34cde78",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [
+        "Host_SetQvmDebugCompileFlag",
+        "Host_SetQvmForcePrecompiledFlag"
+      ],
+      "classification": "test",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/tests/script/qvm_stack_native_differential_test.cpp",
+      "sha256": "62c4108cbd4aff85285089fafdc74d166cf8f8828ef1e6336d368b79a9ee0ab8",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "test",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/tests/script/qvm_stack_natives_test.cpp",
+      "sha256": "84415e2f60527432b1cc953f68ceb19076b5d8d64eaf065e6298492047cbda6a",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "test",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/tests/sys/ilff_navigation_test.cpp",
+      "sha256": "3a2abf65935df730751372fa3a8976b979798a50c7054b70c0eca3c11519d575",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "test",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/tests/sys/resource_lookup_test.cpp",
+      "sha256": "3b4ad4a8f9681f6ef833f1144fb64829ed600aac64e47f3ea420b14e81867c97",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "test",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/tests/terrain/terrain_loaders_test.cpp",
+      "sha256": "8265df07750ee4da825044e2a232b1e9d3780f184e2d576cc219c2ce491d52c7",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [
+        "Host_BuildRenderMesh",
+        "Host_LoadLevelTerrain",
+        "Host_LoadQvmScript",
+        "Host_ResetTerrainGlobals",
+        "Host_TextureModifierCoversPoint"
+      ],
+      "classification": "test",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/tests/terrain/terrain_native_records_test.cpp",
+      "sha256": "dd5015dadb039d0f20d206ed700e10b037b5500342c8508f5ee4c88ea8ba2017",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [],
+      "classification": "test",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/tests/texture/loop_terrain_texture_test.cpp",
+      "sha256": "74d673dad078f35ce31b4e2424c76e7b5ae7ce7a9f3c408ae0b2fc890adc5c0a",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [
+        "Host_LoadResourceArchive",
+        "Host_ParseModelTextureFile",
+        "Host_ParseTerrainTextureFile"
+      ],
+      "classification": "test",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    },
+    {
+      "path": "engine/tests/texture/texture_loaders_test.cpp",
+      "sha256": "fb5241345d3766c288298c101515a8ba8ae98a2ac06b8341f9c7c7bf3992501e",
+      "manifest_natives": [],
+      "markers": [],
+      "host_identifiers": [
+        "Host_SetTextureBackendCallback",
+        "Host_SetTextureBackendId",
+        "Host_SetTextureCallbackSlots"
+      ],
+      "classification": "test",
+      "review": "required; address binding and marker matches are not proof of equivalence"
+    }
+  ],
+  "file_count": 159,
+  "marker_count": 105,
+  "host_identifier_count": 45,
+  "source_without_manifest_count": 87
+}
