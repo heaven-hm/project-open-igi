@@ -4722,3 +4722,581 @@ r2 -q -e scr.color=0 -e bin.relocs.apply=true -c 'aaa; s 0x004af8f0; pd 10' igi.
 r2 -q -e scr.color=0 -e bin.relocs.apply=true -c 'aaa; s 0x004af910; pd 8'  igi.exe   # insert-at-front
 ```
 Python scans used above (run from `/Users/haseeb-mir/Downloads/IGI`): exhaustive `E8` enumeration for call sites (`0x4012F0` 2, `0x4012A0` 110, `0x4013B0` 1, `0x4014B0` 4 direct + 2 tail jumps, `0x4014E0` 1, `0x4AF8F0` 67, `0x4AF910` 8); exhaustive 4-byte literal scans for every type-table/pool field address (`0xAF5EE4`, `0xAF5EEC`, `0xAF5EF0`, `0xAF5EF4`, `0xAF5EF8`, `0xAF5EFC`, `0xAF5F00`, `0xAF5F04`, `0xAF5F05`, `0xAF5F08`, `0xAFA708`, `0x54FF24`, `0x54FF34`) so that every global in the tables is a real reference site and not an inference; PE section arithmetic for the zero-filled `.data` tail.
+
+## §18. RESEARCH NOTE — transcription proposal for `0x004015F0` (task destructor): 391 B, 25 blocks, 134 instructions
+
+Requested as a research note; **no `engine/` file, no manifest record, no catalogue file and no committed input file was modified, and nothing was committed** — this section is appended after §17 and is the only tree change of this pass. Scratch stayed in `/tmp/fa14/`. No decompiler was invoked (r2 6.2.0 `pdf`/`pdj`/`afbj` plus NASM `ndisasm` as an independent second decoder, plus Python reads of the image); no runtime evidence; the game was not launched.
+
+### 18.0 The two supplied inputs are defective — corrections before anything else
+
+Both committed inputs were used as required, and both carry errors that would have propagated into a transcription. This is recorded first because the Lead's instruction was to trust them.
+
+**(a) `docs/fidelity/evidence/0x4015F0-instruction-table.md` is not a complete instruction table.** It has **88 rows, not 134**, and **18 gaps** where the instruction stream is skipped:
+
+| check | value |
+|---|---|
+| rows in the file | 88 |
+| bytes actually declared in its `bytes` column | **249 of 391** |
+| rows with an empty `bytes` cell | 3 (the byte column cannot be used for those rows at all) |
+| row-boundary gaps (previous row's end ≠ next row's address) | **18**, totalling **142 missing bytes** (largest: `0x40165C`→`0x401672` 22 B, `0x401643`→`0x40164A` 7 B, `0x401699`→`0x4016C5` 44 B) |
+| the "mean bytes per instruction 4.44" check | circular: 391/88 by construction, not an independent check of the decode |
+
+The complete decode is **134 instructions** that tile `0x4015F0`–`0x401776` with no gap (sum of instruction lengths = 391 = the function extent; last instruction `ret` at `0x401776`; `afij` reports `size 391`, `ninstrs 134`, `nbbs 25`). Two independent decoders agree instruction-for-instruction: radare2 `pdj` and NASM `ndisasm` produce **identical addresses and identical byte strings for all 134 rows** (verified programmatically, 0 mismatches). The complete 134-row table is already in **§16.2.2** of this sheet; it is the table to use, and §18's block sketches map onto it one-to-one.
+
+**(b) `docs/fidelity/evidence/0x4015F0-dependencies.md` inherits a listing that runs past the function end.** It claims five direct call targets (two self-calls, `0x4B0D10`, `0x4AF7B0`, `0x4015D0`). The committed listing it cites is 202 lines (`pd 200`), its last instruction is at `0x40180A`, and it therefore continues 148 bytes past the function end at `0x401776`:
+
+| claim in the dependencies note | where it actually comes from | status |
+|---|---|---|
+| `0x4015F0` called twice | `0x40165F` (inside the function) **and `0x4017A4`** | `0x4017A4` is inside the *next* function (`0x401780`, which starts with `E8` to this destructor); it is a caller of `0x4015F0`, not a self-call inside it |
+| `0x4AF7B0` (`Debug_Error`) called once | `0x4017E0` | `0x4017E0` is inside a *different* function (the event allocator around `0x4017C0`); the destructor contains **no** `0x4AF7B0` reference |
+| `0x4B0D10` called once | `0x40176A` | correct, inside the function |
+| `0x4015D0` called once | `0x4016C5` | correct, inside the function |
+| indirect handler calls | `0x40164F`, `0x401682` | correct |
+
+Corrected direct-callee inventory for `0x4015F0`–`0x401776`: **3 direct `E8` targets** — `0x4015F0` (self, `0x40165F`), `0x4015D0` (unlink, `0x4016C5`), `0x4B0D10` (free, `0x40176A`) — plus **2 indirect `call eax`** handler invocations (`0x40164F`, `0x401682`). Both direct callees exist in the tree with one-pointer cdecl signatures: `QTask_UnlinkTask_4015D0(void* task)` (`engine/src/retail/core/native_4015d0.cpp`, `TRANSCRIBED`) and `Mem_DeAllocFn(void*)` (`engine/src/retail/mem/native_4b0d10.cpp`). The conclusion of the dependency note stands ("every direct dependency is already present"), but for three callees, not five.
+
+### 18.1 Identity and ABI
+
+| fact | value | evidence |
+|---|---|---|
+| entry / extent | `0x004015F0`–`0x00401776`, **391 bytes**, ends `ret` at `0x401776` | `afij` size 391; contiguous 134-instruction tiling |
+| blocks / instructions | **25 blocks / 134 instructions**, 37 edges | `afbj` + `pdj`; block table 18.2 |
+| signature | **`void __cdecl QTask_DestroyTask_4015F0(void *task)`** | see rows below |
+| argument count | **1 dword** | all 120 call sites push exactly one dword; `mov esi,[esp+0x10]` at `0x401608` with 12 bytes pushed = entry+4 |
+| calling convention | **cdecl** | both return sites are plain `C3` `ret` (`0x401768`, `0x401776`); every caller cleans 4 bytes (see table) |
+| argument meaning | **the task object pointer** | the pointer is dereferenced as the QTask header throughout (`+0x00`, `+0x04`, `+0x08`, `+0x0C`, `+0x10`, `+0x14`, `+0x18`, `+0x1C`, `+0x1E`) and passed unchanged to both handlers, to `0x4015D0`, to the recursive self-call and to `0x4B0D10`; §16 established the same layout from the allocator `0x4012F0` |
+| return value | **none established** | EAX differs by path: `[class+0xAF5EF4]` on the `position == poolUsed` return (`0x40170E`), the last element address at `0x401768` (`0x40172F`), and `0x4B0D10`'s EAX at `0x401776` |
+| stack frame | 16 saved-register bytes (`ebx`, `ebp`, `esi`, `edi`) + 4 argument bytes = 20 | `afij` `stackframe 20`; pushes at `0x4015F6`/`0x4015F8`/`0x401607`/`0x40160C` |
+| callers | **120** sites in 95 groups (§16.7 has the grouped table) | exhaustive `E8` scan |
+
+| what was checked | result |
+|---|---|
+| call sites (`E8` targets = `0x4015F0`) | **120** (r2 `axt` agrees; the enumeration is an exhaustive `E8` scan of `.text`) |
+| words pushed for this call at each site | **exactly one dword at every one of the 120 sites**: 117 push immediately before the `call` (`push eax/ecx/edx/ebx/esi/edi/ebp`), 3 push before an intervening short branch (`0x416F22` `push edi; jne`; `0x465AEF` `push <reg>; jz`; `0x4EA88F` `push <reg>; jz`) |
+| cleanup after the call | the first post-call instruction at all 120 sites is classified: **101 begin with the cleanup** (`add esp,4` on the next instruction at 88 sites; `add esp,0x04` after one or two intervening instructions at 4 sites — `0x4F22DE` +3; `0x40165F`, `0x402674`, `0x415AC1` +5; and 9 where the four bytes are folded into the caller's own larger `add esp,0x08/0x0C/0x10/0x44` epilogue), **8 begin with `pop ecx`**, and **11 begin with another `call`** whose own cleanup covers the four bytes later in the sequence. Every form yields exactly 4 bytes of caller cleanup for this call; no site uses a callee-cleaned form (and the callee's own `ret` is plain, see next row) |
+| callee side | **plain `ret` (`0xC3`) at both return sites** (`0x401768`, `0x401776`) — no `ret N`, so the callee is cdecl and the caller cleans |
+| the argument is the task object | after `push esi; mov esi,[esp+0x10]` (frame 12 → entry+4) every field access in the body is `[esi+…]`: `+0x00`, `+0x04` (via `[eax+4]`/`[edi+4]`), `+0x08`/`+0x0C`/`+0x10` (list head, terminator, tail), `+0x14`, `+0x18`, `+0x1C`, `+0x1E`; the pointer is passed unchanged to `0x4015D0`, to the two indirect handlers, to the recursive self-calls and to `0x4B0D10` |
+| return value | the function does not establish one: EAX at `0x401768` is either `[class+0xAF5EF4]` (the `position == poolUsed` path, taken at `0x40170E`) or the last element's address (`0x40172F`), and at `0x401776` it is whatever `0x4B0D10` leaves. No site reads EAX as the first post-call instruction (the classification above: cleanup, `pop ecx`, or a `call` that overwrites EAX); a full dataflow over all 120 callers was not attempted — see 18.8 item 3 |
+
+### 18.2 Block table — all 25 blocks
+
+`afbj` order, each range inclusive of its first instruction and ending at the first byte of the next block. Every block's instruction count is from `pdj`; the sum is 134.
+
+| block | range | insns | entry / exit condition | successors |
+|---|---|---|---|---|
+| B1 | `0x004015F0`–`0x00401611` | 12 | entry: `edx = [0x567C58]`; `edx--`; `[0x567C58] = edx`; `depth = [0xAFA7E0]`; `eax = 0`; `esi = [esp+0x10]` = entry+4 = **arg1**; `test depth,depth` | `depth <= 0` → B10, else B2 |
+| B2 | `0x00401611`–`0x00401616` | 1 | scan entry: `ecx = 0xAFA6E0`, index (eax) is 0 | → B3 |
+| B3 | `0x00401616`–`0x0040161A` | 2 | compare the slot with the task | equal → B6, else B4 |
+| B4 | `0x0040161A`–`0x00401622` | 4 | advance the scan | `i < depth` → B3, else B5 |
+| B5 | `0x00401622`–`0x00401624` | 1 | scan finished without a match | → B10 (unconditional `jmp`) |
+| B6 | `0x00401624`–`0x0040162A` | 3 | match: read the task's first dword | null → B8, else B7 |
+| B7 | `0x0040162A`–`0x00401634` | 5 | first dword non-null: classify it | → B9 (unconditional `jmp`) |
+| B8 | `0x00401634`–`0x00401636` | 1 | first dword null | → B9 (fallthrough) |
+| B9 | `0x00401636`–`0x0040163D` | 1 | store the replacement in the matched slot, then fall into the dispatch block | → B10 (fallthrough) |
+| B10 | `0x0040163D`–`0x0040164E` | 5 | **phase-3 handler** lookup by the task's type word | handler == 0 → B12, else B11 |
+| B11 | `0x0040164E`–`0x00401654` | 3 | phase-3 handler present (1 argument pushed) | → B12 (fallthrough) |
+| B12 | `0x00401654`–`0x0040165E` | 4 | children walk: `node = [task+0x10]`, `prev = [node+4]` | `prev == 0` → B14, else B13 |
+| B13 | `0x0040165E`–`0x00401670` | 7 | destroy loop body: recursive call, then step to `prev` | `prev != 0` → B13, else B14 |
+| B14 | `0x00401670`–`0x00401681` | 5 | **phase-2 handler** lookup (type word re-read) | handler == 0 → B16, else B15 |
+| B15 | `0x00401681`–`0x00401687` | 3 | phase-2 handler present (1 argument pushed) | → B16 (fallthrough) |
+| B16 | `0x00401687`–`0x0040168E` | 3 | registry guard: `[task+0x18]` | `[task+0x18] == 0` → B21, else B17 |
+| B17 | `0x0040168E`–`0x0040169B` | 5 | registry scan setup: `count = [0x567C40]`, `i = 0`, signed `count <= 0` test | `count <= 0` → B21, else B18 |
+| B18 | `0x0040169B`–`0x004016B9` | 8 | registry body: compute the slot address and compare its first dword with the task | match → B19, else B20 |
+| B19 | `0x004016B9`–`0x004016BF` | 1 | slot matched: clear it (no break, scan continues) | → B20 (fallthrough) |
+| B20 | `0x004016BF`–`0x004016C4` | 3 | registry loop increment and bound test | `i < count` → B18, else B21 |
+| B21 | `0x004016C4`–`0x004016D8` | 6 | unlink the task, then read the pooled byte `[task+0x1E]` | `[task+0x1E] == 0` → B24, else B22 |
+| B22 | `0x004016D8`–`0x00401710` | 16 | pooled: read the object's pool position, decrement `poolUsed`, compare | `position == poolUsed` → B25, else B23 |
+| B23 | `0x00401710`–`0x00401769` | 27 | swap-remove: three index/tail stores (no exit branch, falls into the shared return) | → B25 (falls into the pops and `ret` at `0x401768`) |
+| B24 | `0x00401769`–`0x00401772` | 3 | heap: `Mem_DeAllocFn(task)` (1 argument) | → B25 (fallthrough) |
+| B25 | `0x00401772`–`0x00401777` | 5 | shared return: pop edi/esi/ebp/ebx, `ret` | `ret` |
+
+### 18.3 Block-by-block C++ sketch, line-by-line against retail instructions
+
+Every line carries the retail instruction address it must reproduce. Two blocks carry a **reload marker** (`*** reload ***`) where retail deliberately re-reads a value that a compiler would prefer to keep in a register; those are the entries of 18.6.
+
+#### B1 `0x4015F0`–`0x401611` (12 insns) — prologue, live-count decrement, dispatch-stack guard
+
+```c
+--QTask_LiveTaskCount;              // 0x4015F0 mov edx,[0x567C58]; 0x4015F7 dec edx; 0x4015F9 mov [0x567C58],edx
+const std::int32_t depth = QTask_HandlerStackDepth;   // 0x4015FF mov edx,[0xAFA7E0]
+// eax = 0 (scan index)                     0x401605 xor eax,eax
+// esi = arg1 (the task)                    0x401607 push esi; 0x401608 mov esi,[esp+0x10]
+// push edi                                 0x40160C
+if (depth > 0) goto B2;              // 0x40160D test edx,edx; 0x40160F jle 0x40163D
+```
+
+#### B2 `0x401611` (1 insn) — scan base
+
+```c
+slotPtr = &QTask_HandlerStack[0];// 0x401611 mov ecx,0xAFA6E0   (index in eax is still 0)
+```
+
+#### B3 `0x401616`–`0x401618` (2 insns) — compare
+
+```c
+if (*slotPtr == (std::uint32_t)(std::uintptr_t)task) goto B6;   // 0x401616 cmp [ecx],esi; 0x401618 je
+```
+
+#### B4 `0x40161A`–`0x401620` (4 insns) — advance
+
+```c
+++index;                          // 0x40161A inc eax
+slotPtr += 1;                     // 0x40161B add ecx,4
+if (index < depth) goto B3;       // 0x40161E cmp eax,edx; 0x401620 jl
+```
+
+#### B5 `0x401622` (1 insn) — no match
+
+```c
+goto B10;                         // 0x401622 jmp 0x40163D
+```
+
+#### B6 `0x401624`–`0x401628` (3 insns) — matched: read the task's link word
+
+```c
+next = *(std::uint32_t*)task;     // 0x401624 mov edx,[esi]      (the task's own +0x00 link)
+if (next == 0) goto B8;           // 0x401626 test edx,edx; 0x401628 je 0x401634
+```
+
+#### B7 `0x40162A`–`0x401632` (5 insns) — `next` is a real node?
+
+```c
+value = (*(std::uint32_t*)next != 0) ? next : 0;   // 0x40162A mov ecx,[edx]; 0x40162C neg ecx; 0x40162E sbb ecx,ecx;
+                                                   // 0x401630 and ecx,edx
+goto B9;                          // 0x401632 jmp 0x401636
+```
+
+#### B8 `0x401634` (1 insn) — no next sibling
+
+```c
+value = 0;                        // 0x401634 xor ecx,ecx
+```
+
+#### B9 `0x401636` (1 insn) — publish the fixup
+
+```c
+QTask_HandlerStack[index] = value; // 0x401636 mov [eax*4 + 0xAFA6E0],ecx   (store before the phase-3 handler)
+```
+
+#### B10 `0x40163D`–`0x40164C` (5 insns) — phase-3 handler lookup
+
+```c
+index = 0;                                  // 0x40163D xor eax,eax
+index = *(std::uint16_t*)(task + 0x1C);     // 0x40163F mov ax,word [esi+0x1C]     (type word)
+handler = QTask_Phase3Handlers[index];      // 0x401643 mov eax,[eax*4 + 0xA97CE0]
+if (handler == 0) goto B12;                 // 0x40164A test eax,eax; 0x40164C je
+```
+
+#### B11 `0x40164E`–`0x401651` (3 insns) — call it, one argument
+
+```c
+handler(task);                    // 0x40164E push esi; 0x40164F call eax; 0x401651 add esp,4
+```
+
+#### B12 `0x401654`–`0x40165C` (4 insns) — children: tail and its previous
+
+```c
+node = *(std::uint8_t**)(task + 0x10);        // 0x401654 mov eax,[esi+0x10]   (tail field)
+previous = *(std::uint8_t**)(node + 4);       // 0x401657 mov edi,[eax+4]     (node->prev)
+if (previous == 0) goto B14;                  // 0x40165A test edi,edi; 0x40165C je
+```
+
+#### B13 `0x40165E`–`0x40166E` (7 insns) — tail-to-head destroy loop
+
+```c
+do {
+    QTask_DestroyTask_4015F0(node);           // 0x40165E push eax; 0x40165F call 0x4015F0; 0x401669 add esp,4
+    node = previous;                          // 0x401664 mov eax,edi
+    previous = *(std::uint8_t**)(previous + 4); // 0x401666 mov edi,[edi+4]
+} while (previous != 0);                      // 0x40166C test edi,edi; 0x40166E jne 0x40165E
+```
+
+#### B14 `0x401670`–`0x40167F` (5 insns) — phase-2 handler lookup (type re-read)
+
+```c
+index = 0;                                  // 0x401670 xor ecx,ecx
+index = *(std::uint16_t*)(task + 0x1C);     // 0x401672 mov cx,word [esi+0x1C]     *** reload ***
+handler = QTask_Phase2Handlers[index];      // 0x401676 mov eax,[ecx*4 + 0xA976E0]
+if (handler == 0) goto B16;                 // 0x40167D test eax,eax; 0x40167F je
+```
+
+#### B15 `0x401681`–`0x401684` (3 insns)
+
+```c
+handler(task);                    // 0x401681 push esi; 0x401682 call eax; 0x401684 add esp,4
+```
+
+#### B16 `0x401687`–`0x40168C` (3 insns) — registry guard
+
+```c
+if (*(std::uint32_t*)(task + 0x18) != 0) goto B17;   // 0x401687 mov eax,[esi+0x18]; 0x40168A test eax,eax;
+                                                       // 0x40168C je 0x4016C4
+```
+
+#### B17 `0x40168E`–`0x401699` (5 insns)
+
+```c
+count = QTask_RegistryCount;      // 0x40168E mov eax,[0x567C40]      (read once)
+index = 0;                        // 0x401693 xor ecx,ecx
+limit = count;                    // 0x401697 mov edx,eax            (bound kept in edx)
+if (count <= 0) goto B21;         // 0x401695 test eax,eax / 0x401699 jle (signed)
+```
+
+#### B18 `0x40169B`–`0x4016B7` (8 insns) — registry body
+
+```c
+eax = QTask_RegistryIndices;      // 0x40169B mov eax,[0x567C3C]    (re-read every iteration)
+base = QTask_RegistryBase;        // 0x4016A0 mov ebx,[0x567C38]    (re-read every iteration)
+eax = *(std::uint32_t*)(eax + index*4);       // 0x4016A6 mov eax,[eax + ecx*4]
+eax *= QTask_RegistryStride;                  // 0x4016A9 imul eax,[0x567C48] (re-read every iteration)
+edi = *(std::uint32_t*)(eax + base);          // 0x4016B0 mov edi,[eax + ebx]
+entry = eax + base;                           // 0x4016B3 add eax,ebx
+if (edi != (std::uint32_t)(std::uintptr_t)task) goto B20;   // 0x4016B5 cmp edi,esi; 0x4016B7 jne
+```
+
+#### B19 `0x4016B9` (1 insn)
+
+```c
+*(std::uint32_t*)entry = 0;       // 0x4016B9 mov dword [eax],0      (no break: every matching slot is cleared)
+```
+
+#### B20 `0x4016BF`–`0x4016C2` (3 insns)
+
+```c
+++index;                          // 0x4016BF inc ecx
+if (index < limit) goto B18;      // 0x4016C0 cmp ecx,edx; 0x4016C2 jl
+```
+
+#### B21 `0x4016C4`–`0x4016D2` (6 insns) — unlink, then the pooled byte
+
+```c
+QTask_UnlinkTask_4015D0(task);                      // 0x4016C4 push esi; 0x4016C5 call 0x4015D0
+pooled = *(std::uint8_t*)(task + 0x1E);             // 0x4016CA mov al,[esi+0x1E]   (read AFTER the call)
+// 0x4016CD add esp,4 ; 0x4016D0 test al,al ; 0x4016D2 je 0x401769
+if (pooled == 0) goto B24; /* heap */
+```
+
+#### B22 `0x4016D8`–`0x40170E` (16 insns) — pooled: position, used count, compare
+
+```c
+eax = 0;                                             // 0x4016D8 xor eax,eax
+eax = *(std::uint16_t*)(task + 0x1C);                // 0x4016DA mov ax,word [esi+0x1C]   *** reload ***
+eax = eax * 3;                                       // 0x4016DE lea eax,[eax+eax*2]
+eax <<= 4;                                           // 0x4016E1 shl eax,4              (= type * 0x30)
+ecx = *(std::uint32_t*)(eax + 0xAF5F00);             // 0x4016E4 tailOffset
+ebp = *(std::uint32_t*)(eax + 0xAF5EF4);             // 0x4016EA poolUsed
+--ebp;                                               // 0x4016F0 dec ebp
+edi = *(std::uint32_t*)(ecx + task);                 // 0x4016F1 position = *(uint32*)(task + tailOffset)
+*(std::uint32_t*)(eax + 0xAF5EF4) = ebp;             // 0x4016F4 *** store: poolUsed = used - 1 ***
+eax = 0;                                             // 0x4016FA xor eax,eax
+eax = *(std::uint16_t*)(task + 0x1C);                // 0x4016FC mov ax,word [esi+0x1C]   *** reload ***
+ecx = eax * 3; ecx <<= 4;                            // 0x401700 lea; 0x401703 shl
+eax = *(std::uint32_t*)(ecx + 0xAF5EF4);             // 0x401706 *** reload poolUsed ***
+if (edi == eax) goto B25;                            // 0x40170C cmp edi,eax; 0x40170E je 0x401772
+```
+
+#### B23 `0x401710`–`0x401769` (27 insns) — swap-remove, then pop and ret
+
+```c
+edx = *(std::uint32_t*)(ecx + 0xAF5EF0);             // 0x401710 index array
+ebx = *(std::uint32_t*)(ecx + 0xAF5EEC);             // 0x401716 pool base
+eax = *(std::uint32_t*)(edx + eax*4);                // 0x40171C lastSlot = index[poolUsed]
+ebp = *(std::uint32_t*)(edx + edi*4);                // 0x40171F mySlot   = index[position]
+eax *= *(std::uint32_t*)(ecx + 0xAF5EFC);            // 0x401722 elemSize
+ecx = *(std::uint32_t*)(ecx + 0xAF5F00);             // 0x401729 tailOffset
+eax += ebx;                                          // 0x40172F lastElem = base + lastSlot*elemSize
+ebx = *(std::uint32_t*)(ecx + eax);                  // 0x401731 lastPos = *(lastElem + tailOffset)
+ecx = *(std::uint32_t*)(edx + ebx*4);                // 0x401734 movedSlot = index[lastPos]
+*(std::uint32_t*)(edx + edi*4) = ecx;                // 0x401737 *** store A: index[position] = index[lastPos] ***
+ecx = 0;                                             // 0x40173A xor ecx,ecx
+ecx = *(std::uint16_t*)(task + 0x1C);                // 0x40173C mov cx,word [esi+0x1C]   *** reload ***
+edx = ecx*3; edx <<= 4;                              // 0x401740 lea; 0x401743 shl
+ecx = *(std::uint32_t*)(edx + 0xAF5EF0);             // 0x401746 index array   *** re-read ***
+*(std::uint32_t*)(ecx + ebx*4) = ebp;                // 0x40174C *** store B: index[lastPos] = mySlot ***
+ecx = 0;                                             // 0x40174F xor ecx,ecx
+ecx = *(std::uint16_t*)(task + 0x1C);                // 0x401751 mov cx,word [esi+0x1C]   *** reload ***
+edx = ecx*3; edx <<= 4;                              // 0x401755 lea; 0x401758 shl
+ecx = *(std::uint32_t*)(edx + 0xAF5F00);             // 0x40175B tailOffset   *** re-read ***
+*(std::uint32_t*)(ecx + eax) = edi;                  // 0x401761 *** store C: lastElem->tail = position ***
+// 0x401764 pop edi; 0x401765 pop esi; 0x401766 pop ebp; 0x401767 pop ebx; 0x401768 ret
+```
+
+#### B24 `0x401769`–`0x40176F` (3 insns) — heap release
+
+```c
+Mem_DeAllocFn(task);              // 0x401769 push esi; 0x40176A call 0x4B0D10; 0x40176F add esp,4
+```
+
+#### B25 `0x401772`–`0x401776` (5 insns) — shared return
+
+```c
+// 0x401772 pop edi; 0x401773 pop esi; 0x401774 pop ebp; 0x401775 pop ebx; 0x401776 ret
+return;
+```
+
+Structural notes that the sketches encode and a transcription must not "clean up":
+
+* The children loop is a **do/while on the *previous* pointer, not on the tail pointer**: retail loads `node = [task+0x10]` and `previous = [node+4]` *before* the first call, destroys `node`, then steps `node = previous; previous = [previous+4]`, and the loop exits when `previous == 0`. The head address (`task+8`) is stepped through as a value but never passed to the recursive call, because the terminator word at `task+0x0C` is 0.
+* The registry scan **does not break** after a match: `0x4016B9` clears a matching slot and `0x4016BF` continues; every slot whose first dword equals the task is cleared.
+* The registry loop reads its **count once** (`0x40168E`, kept in `edx`) but re-reads base, index array and stride **on every iteration** (`0x40169B`, `0x4016A0`, `0x4016A9`).
+* The type word `[task+0x1C]` is read **six times** (`0x40163F`, `0x401672`, `0x4016DA`, `0x4016FC`, `0x40173C`, `0x401751`) and the class fields are re-read between the swap stores; §18.6 lists these as order risks.
+
+### 18.4 Constants, globals, offsets and callees, with retail addresses
+
+| symbol used in 18.3/18.7 | address / value | width | retail references |
+|---|---|---|---|
+| `QTask_LiveTaskCount` | `0x00567C58` | dword | `0x4015F0` (load), `0x4015F9` (store) — decrement writer; zero-initialised `.data` tail |
+| `QTask_HandlerStackDepth` | `0x00AFA7E0` | dword | `0x4015FF` (only reference in the function) |
+| `QTask_HandlerStack` | `0x00AFA6E0` | dword array, 64 entries (`0xAFA6E0`–`0xAFA7E0`) | base `0x401611`; slot read `0x401616`; slot write `0x401636` |
+| `QTask_Phase3Handlers` | `0x00A97CE0` | dword array, 384 classes | `0x401643` (= `0xA96AE0` + 3×`0x600`, §10 phase table) |
+| `QTask_Phase2Handlers` | `0x00A976E0` | dword array, 384 classes | `0x401676` (= `0xA96AE0` + 2×`0x600`) |
+| `QTask_RegistryCount` | `0x00567C40` | dword | `0x40168E` |
+| `QTask_RegistryIndices` | `0x00567C3C` | dword pointer | `0x40169B` |
+| `QTask_RegistryBase` | `0x00567C38` | dword pointer | `0x4016A0` |
+| `QTask_RegistryStride` | `0x00567C48` | dword | `0x4016A9` |
+| type table base | `0x00AF5EE0` | 384 × `0x30` | class offset computed as `type*3 <<4` (`0x4016DE`/`0x4016E1`, `0x401700`/`0x401703`, `0x401740`, `0x401755`) |
+| `poolUsed` | `0x00AF5EF4` (+0x14) | dword | `0x4016EA` read, `0x4016F4` write, `0x401706` re-read |
+| `poolIndices` | `0x00AF5EF0` (+0x10) | dword pointer | `0x401710`, `0x401746` |
+| `poolBase` | `0x00AF5EEC` (+0x0C) | dword pointer | `0x401716` |
+| `poolElemSize` | `0x00AF5EFC` (+0x1C) | dword | `0x401722` |
+| `poolTailOffset` | `0x00AF5F00` (+0x20) | dword | `0x4016E4`, `0x401729`, `0x40175B` |
+| task `+0x00` | next-sibling link | dword | read `0x401624` |
+| task `+0x04` | previous-sibling link | dword | read `0x401657`, `0x401666` (as `[node+4]`, `[prev+4]`) |
+| task `+0x08` | child-list head `.first` | dword | implied by the empty-list values `0x401657`/`0x401666` (head address `task+8`) |
+| task `+0x0C` | child-list terminator `.next` (= 0) | dword | implied by the loop exit (`[task+0x0C] == 0` terminates the walk) |
+| task `+0x10` | child-list tail | dword | read `0x401654` |
+| task `+0x14` | owner pointer | dword | not read here — consumed by `0x4015D0` (§17.1.3) |
+| task `+0x18` | registry reference count | dword | read `0x401687` |
+| task `+0x1C` | type id | **word** | read `0x40163F`, `0x401672`, `0x4016DA`, `0x4016FC`, `0x40173C`, `0x401751` |
+| task `+0x1E` | pool-recycled flag | **byte** | read `0x4016CA` |
+| `QTask_UnlinkTask_4015D0` | `0x004015D0` | 1 pointer arg | `0x4016C4`/`0x4016C5` |
+| `Mem_DeAllocFn` | `0x004B0D10` | 1 pointer arg | `0x401769`/`0x40176A` |
+| self | `0x004015F0` | 1 pointer arg | `0x40165E`/`0x40165F` |
+| strings | **none** | — | no `.rdata` reference anywhere in the 391 bytes; every immediate is a code VA, a global, or a small integer (`0x1C`, `0x18`, `0x1E`, `0x10`, `4`, `3`, `4` (shift), `0x30` via `*3 <<4`) |
+
+### 18.5 Pool-vs-heap release: the exact decision
+
+The decision is **one byte of the object**: `0x4016CA` `8a 46 1e` `mov al, byte [esi+0x1E]` — the same flag the allocator wrote at `0x401395` from `bl`. `0x4016D0` `84 c0` tests it and `0x4016D2` `0f 84 91 00 00 00` `je 0x401769` selects the heap path.
+
+| path | condition | what runs |
+|---|---|---|
+| pooled | `[task+0x1E] != 0` | `0x4016D8`–`0x401761`: swap-remove against the class pool, no `0x4B0D10` call |
+| heap | `[task+0x1E] == 0` | `0x401769`–`0x40176F`: `Mem_DeAllocFn(task)`, then `0x401772` return |
+
+The flag is a *per-instance* fact, not a class fact: the allocator sets it to 1 only on the branch that actually claims a pool element (`0x40133A` `mov bl,1`, `0x401395` store). The destructor therefore does **not** consult `class+0x24` (`0xAF5F04`, the pool-present byte) — a transcription must not add that test.
+
+Pooled release, in retail order (this is the exact inverse of §17.1.4 / the allocator's `0x40132E`–`0x401358`):
+
+| step | VA | operation |
+|---|---|---|
+| 1 | `0x4016D8`–`0x4016E1` | `class = 0xAF5EE0 + (uint16)[task+0x1C] * 0x30` |
+| 2 | `0x4016E4` | `tailOffset = *(u32*)(class+0x20)` |
+| 3 | `0x4016EA` | `used = *(u32*)(class+0x14)` |
+| 4 | `0x4016F0` | `used--` |
+| 5 | `0x4016F1` | `position = *(u32*)(task + tailOffset)` — the value the allocator stored at `0x40134E` |
+| 6 | `0x4016F4` | **store `*(u32*)(class+0x14) = used`** (before the comparison; a reader can see the shrunken count while the index array is still stale) |
+| 7 | `0x4016FA`–`0x401706` | re-read `class` from `[task+0x1C]`, then `newUsed = *(u32*)(class+0x14)` |
+| 8 | `0x40170C`/`0x40170E` | `if (position == newUsed) return;` — the removed element was the last used slot, so no swap |
+| 9 | `0x401710`/`0x401716` | `indices = *(u32*)(class+0x10)`, `base = *(u32*)(class+0x0C)` |
+| 10 | `0x40171C`/`0x40171F` | `lastSlot = indices[newUsed]`, `mySlot = indices[position]` (both read before any store) |
+| 11 | `0x401722`–`0x401731` | `lastElement = base + lastSlot * elemSize`; `lastPosition = *(u32*)(lastElement + tailOffset)` |
+| 12 | `0x401734`/`0x401737` | **store A** `indices[position] = indices[lastPosition]` |
+| 13 | `0x40173A`–`0x401746` | re-read `class` from `[task+0x1C]`, re-read `indices` |
+| 14 | `0x40174C` | **store B** `indices[lastPosition] = mySlot` |
+| 15 | `0x40174F`–`0x40175B` | re-read `class` from `[task+0x1C]`, re-read `tailOffset` |
+| 16 | `0x401761` | **store C** `*(u32*)(lastElement + tailOffset) = position` |
+| 17 | `0x401764`–`0x401768` | pop `edi`,`esi`,`ebp`,`ebx`; `ret` |
+
+Counterpart check against the allocator: allocator `0x40133C` reads `indices[used]`, `0x401345` multiplies by `elemSize`, `0x40134C` adds `base`, `0x40134E` writes `used` into `*(u32*)(element + tailOffset)`, `0x401358` increments `poolUsed`. The destructor writes the same `tailOffset` dword (store C), moves the same `indices` entries (stores A/B) and decrements the same `poolUsed` (step 6) — the two functions are exact inverses.
+
+### 18.6 Risky-order list — where GCC may reorder, merge or fold relative to retail
+
+The Lead's hypothesis is right: this function has several places where a straightforward transcription diverges in *access order* from retail. They fall into three classes. Class **A** would change single-threaded behaviour; class **B** changes only what a concurrent reader or an already-running handler can observe; class **C** keeps values identical and changes only the access count (matching-fidelity only). The suggested `volatile` qualification is noted per row, but the decisive test is the generated code of the diagnostic build, not style.
+
+| # | site(s) | retail fact | compiler risk | class | suggested guard |
+|---|---|---|---|---|---|
+| 1 | `0x4015F0`/`0x4015F7`/`0x4015F9` | count is decremented and stored **before** the dispatch-stack scan and before the phase-3 handler | sinking the store past the first indirect call (a handler may read the count) | A if a restructuring moves it; GCC itself will not sink a global store past an indirect call | keep the store where retail has it; `volatile` only if the build folds it |
+| 2 | `0x401636` | the dispatch-stack fixup is stored **before** the phase-3 handler runs, so the handler sees the fixed-up stack | hoisting/sinking across the handler call | A (a handler that walks the stack would see the dead node) | keep the store before the call; do not move the fixup to an epilogue |
+| 3 | `0x40163F` → `0x401672` | type word is re-read **after** the phase-3 handler (the handler may change the class of the task) | CSE of the type word into a register across the call | **A** (a cached type selects the wrong phase-2 handler / the wrong pool class) | re-read at each site; `volatile` is defensible here |
+| 4 | `0x401672` → `0x4016DA` | type word re-read **after** the phase-2 handler and the children walk | CSE across the calls | **A** (wrong class in the pool release) | same |
+| 5 | `0x4016F4` → `0x401706` | `poolUsed` is stored, then **re-read** from the same class | store-forwarding replaces the load; the two accesses become one | C (value identical) unless a concurrent writer mutates it | `volatile` on the class fields if access fidelity is required |
+| 6 | `0x4016DA`/`0x4016FC`/`0x40173C`/`0x401751` | the class offset is **recomputed from the type word four times**, interleaved with the swap stores | CSE of the type word and of the class pointers across store A (`0x401737`) | C single-threaded; B if a concurrent writer can change the class | re-read at each site (as 18.3 sketches); `volatile` if folded |
+| 7 | `0x401710`→`0x401737`→`0x401746` | `indices` is cached in `edx` for store A, then **re-read** at `0x401746` for store B | GCC may keep the cached `edx` and drop the `0x401746` load | C (identical pointer) unless the class could be replaced | as #6 |
+| 8 | `0x401716`→`0x40172F`/`0x401761` | `base`/`tailOffset` used for `lastElement`, tailOffset re-read at `0x40175B` | same folding as #7 | C | as #6 |
+| 9 | `0x401737`→`0x40174C`→`0x401761` | three stores in that order (index[position], index[lastPos], lastElement->tail) | reordering independent stores (possible only if the compiler proves non-alias; these are pointer-derived, so it cannot) | A if reordered and a handler/thread observes the pool | keep the store order; no helper that batches the writes |
+| 10 | `0x401654` | `node = [task+0x10]` is read **after** the phase-3 handler returns (the handler may add or remove children) | hoisting the tail load above the handler call | **A** (walks a stale child list) | keep the read after the call |
+| 11 | `0x401657` vs `0x401666` | `prev` is read before destroying `node`, and the next `prev` after the recursive call | hoisting the second load above the call | C for the retail list invariant (the unlink of `node` writes `[node->prev]` = `node->next` but leaves `prev->prev` untouched), so values are equal; keep the sites anyway | keep the load after the call |
+| 12 | `0x4016CA` | the pooled byte is read **after** the unlink call | hoisting it above the call | C (unlink does not write `+0x1E`), but the read-after-call order is retail's | keep the read after the call |
+| 13 | `0x40168E` vs `0x40169B`/`0x4016A0`/`0x4016A9` | registry count is loaded once; base/indices/stride are reloaded every iteration | hoisting the three globals out of the loop (compiler cannot prove the iteration store does not alias them) | C unless the store aliases the globals — which is possible if a registry base points into `0x567C38` | if the build hoists them, force with `volatile`; the count **must stay** loop-invariant (retail reads it once) |
+| 14 | `0x40164F`/`0x401682` | handler pointer is loaded from the table and called; the argument is pushed between the load and the call | reordering the push before the load is harmless; caching the handler across handlers is not (retail reloads for phase 2) | A if the phase-2 lookup reuses the phase-3 pointer | two separate lookups and two separate calls |
+| 15 | `0x401761`→`0x401764`–`0x401768` | pops and `ret`; EAX at `ret` is the last element address | nothing to reorder, but **do not** add a return value: retail's EAX is incidental | A if the transcription "returns" something meaningful | `void` return |
+
+A conservative position for the first transcription: `volatile`-qualify the type-word load, the `poolUsed` store/load pair, and the class-field re-reads inside the swap (rows 3–8), because those are the only rows where a *single-threaded* divergence is possible (rows 3 and 4) or where the retail access pattern is the evidence (rows 5–8). Rows 1, 2, 9, 10, 14 and 15 need no `volatile` — they need the statement order and the absence of a helper.
+
+### 18.7 Proposed whole-function form (proposal only)
+
+```c
+// PROPOSAL ONLY - not engine code, not verified, do not copy into engine/ before 18.8 is settled.
+// Native: QTask_DestroyTask_4015F0 (placeholder; name is the Lead's call per AGENTS.md 10.14 rule 12);
+//   retail VA 0x004015F0-0x00401776 (391 bytes, 25 blocks, 134 instructions).
+// Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
+// Tools/evidence: radare2 6.2.0 pdj/afbj (134 rows, contiguous tiling of 0x4015F0-0x401776) and NASM
+//   ndisasm 3.01 cross-decode (identical address/byte pairs) - see 18.0, 18.9.
+// Behavior/CFG: 25-block destructor; phase-3 handler, children tail-to-head, phase-2 handler, registry
+//   slot clearing, unlink, then pooled swap-remove or 0x004B0D10 free.
+// Status/limits: PROPOSAL. Gaps 18.8 unresolved; the risky order list 18.6 is not yet checked against
+//   generated code, and no runtime evidence exists.
+
+void NATIVE_DECL QTask_DestroyTask_4015F0(void* task)   // arg1: cdecl object pointer, proven 18.1
+{
+    std::uint8_t* const p = static_cast<std::uint8_t*>(task);
+    --QTask_LiveTaskCount;                                        // 0x4015F0/0x4015F7/0x4015F9
+    const std::int32_t depth = QTask_HandlerStackDepth;           // 0x4015FF  (0x00AFA7E0)
+    std::int32_t i = 0;                                           // 0x401605
+    if (depth > 0)                                                // 0x40160D/0x40160F
+    {
+    scan:
+        if (QTask_HandlerStack[i] == reinterpret_cast<std::uint32_t>(
+                                        reinterpret_cast<std::uintptr_t>(task))) // 0x401616
+        {
+            const std::uint32_t next = *reinterpret_cast<std::uint32_t*>(p); // 0x401624
+            std::uint32_t slot = 0U;                                        // 0x401634
+            if (next != 0U)                                                 // 0x401626
+            {
+                slot = (*reinterpret_cast<std::uint32_t*>(next) != 0U) ? next : 0U; // 0x40162A-0x401630
+            }
+            QTask_HandlerStack[i] = slot;                                   // 0x401636
+            goto dispatch;                                                  // falls through to 0x40163D
+        }
+        ++i;                                                                // 0x40161A
+        if (i < depth) goto scan;                                           // 0x40161E/0x401620
+        // 0x401622 jmp 0x40163D when the scan exhausts with no match
+    }
+dispatch:
+
+    // phase-3 handler, one argument                             0x40163D-0x401651
+    {
+        const std::uint32_t t = *reinterpret_cast<std::uint16_t*>(p + 0x1C);    // 0x40163F
+        void (*const handler)(void*) = QTask_Phase3Handlers[t];                 // 0x401643
+        if (handler != nullptr)                                                 // 0x40164A
+        {
+            handler(task);                                                      // 0x40164E/0x40164F
+        }
+    }
+
+    // children, tail to head                                    0x401654-0x40166E
+    {
+        std::uint8_t* node = *reinterpret_cast<std::uint8_t**>(p + 0x10);      // 0x401654
+        std::uint8_t* previous = *reinterpret_cast<std::uint8_t**>(node + 4);   // 0x401657
+        if (previous != nullptr)                                                // 0x40165A
+        {
+            do
+            {
+                QTask_DestroyTask_4015F0(node);                                 // 0x40165E/0x40165F
+                node = previous;                                                // 0x401664
+                previous = *reinterpret_cast<std::uint8_t**>(previous + 4);     // 0x401666
+            } while (previous != nullptr);                                      // 0x40166C
+        }
+    }
+
+    // phase-2 handler, one argument, type word re-read           0x401670-0x401684
+    {
+        const std::uint32_t t = *reinterpret_cast<std::uint16_t*>(p + 0x1C);    // 0x401672
+        void (*const handler)(void*) = QTask_Phase2Handlers[t];                 // 0x401676
+        if (handler != nullptr)                                                 // 0x40167D
+        {
+            handler(task);                                                      // 0x401681/0x401682
+        }
+    }
+
+    // registry slots                                            0x401687-0x4016C2
+    if (*reinterpret_cast<std::uint32_t*>(p + 0x18) != 0U)                      // 0x401687/0x40168C
+    {
+        const std::int32_t count = QTask_RegistryCount;                         // 0x40168E (read once)
+        if (count > 0)                                                          // 0x401695/0x401699
+        {
+            for (std::int32_t k = 0; k < count; ++k)                            // 0x401693/0x4016BF/0x4016C2
+            {
+                std::uint8_t* const entry = reinterpret_cast<std::uint8_t*>(
+                    QTask_RegistryBase + static_cast<std::uint32_t>(QTask_RegistryIndices[k]) *
+                                             static_cast<std::uint32_t>(QTask_RegistryStride)); // 0x40169B-0x4016B3
+                if (*reinterpret_cast<std::uint32_t*>(entry) ==
+                    reinterpret_cast<std::uint32_t>(task))                      // 0x4016B5/0x4016B7
+                {
+                    *reinterpret_cast<std::uint32_t*>(entry) = 0U;              // 0x4016B9
+                }
+            }
+        }
+    }
+
+    QTask_UnlinkTask_4015D0(task);                                              // 0x4016C4/0x4016C5
+    if (*reinterpret_cast<volatile std::uint8_t*>(p + 0x1E) == 0U)              // 0x4016CA/0x4016D0
+    {
+        Mem_DeAllocFn(task);                                                    // 0x401769/0x40176A
+        return;                                                                 // 0x401772-0x401776
+    }
+
+    // pooled swap-remove                                        0x4016D8-0x401761
+    {
+        std::uint32_t classOffset =
+            static_cast<std::uint32_t>(*reinterpret_cast<std::uint16_t*>(p + 0x1C)) * 3U * 16U; // 0x4016D8-0x4016E1
+        const std::uint32_t tailOffset =
+            *reinterpret_cast<std::uint32_t*>(classOffset + 0xAF5F00);          // 0x4016E4
+        std::uint32_t used = *reinterpret_cast<std::uint32_t*>(classOffset + 0xAF5EF4); // 0x4016EA
+        --used;                                                                 // 0x4016F0
+        const std::uint32_t position = *reinterpret_cast<std::uint32_t*>(
+            tailOffset + reinterpret_cast<std::uint32_t>(task));                // 0x4016F1
+        *reinterpret_cast<std::uint32_t*>(classOffset + 0xAF5EF4) = used;       // 0x4016F4
+        classOffset =
+            static_cast<std::uint32_t>(*reinterpret_cast<std::uint16_t*>(p + 0x1C)) * 3U * 16U; // 0x4016FA-0x401703
+        if (position == *reinterpret_cast<std::uint32_t*>(classOffset + 0xAF5EF4)) // 0x401706/0x40170C
+        {
+            return;                                                             // 0x401772-0x401776
+        }
+        std::uint32_t* const indexArray =
+            reinterpret_cast<std::uint32_t*>(*reinterpret_cast<std::uint32_t*>(classOffset + 0xAF5EF0)); // 0x401710
+        const std::uint32_t poolBase = *reinterpret_cast<std::uint32_t*>(classOffset + 0xAF5EEC);         // 0x401716
+        const std::uint32_t lastSlot = indexArray[used];                                                // 0x40171C
+        const std::uint32_t mySlot = indexArray[position];                                              // 0x40171F
+        std::uint32_t lastElement = poolBase + lastSlot *
+            *reinterpret_cast<std::uint32_t*>(classOffset + 0xAF5EFC);          // 0x401722-0x40172F
+        const std::uint32_t lastElementTail =
+            *reinterpret_cast<std::uint32_t*>(classOffset + 0xAF5F00);          // 0x401729
+        const std::uint32_t lastPosition = *reinterpret_cast<std::uint32_t*>(lastElement + lastElementTail); // 0x401731
+        indexArray[position] = indexArray[lastPosition];                        // 0x401734/0x401737
+        classOffset =
+            static_cast<std::uint32_t>(*reinterpret_cast<std::uint16_t*>(p + 0x1C)) * 3U * 16U; // 0x40173A-0x401743
+        reinterpret_cast<std::uint32_t*>(
+            *reinterpret_cast<std::uint32_t*>(classOffset + 0xAF5EF0))[lastPosition] = mySlot; // 0x401746/0x40174C
+        classOffset =
+            static_cast<std::uint32_t>(*reinterpret_cast<std::uint16_t*>(p + 0x1C)) * 3U * 16U; // 0x40174F-0x401758
+        *reinterpret_cast<std::uint32_t*>(
+            *reinterpret_cast<std::uint32_t*>(classOffset + 0xAF5F00) + lastElement) = position; // 0x40175B/0x401761
+    }
+    // 0x401764-0x401767 pop edi/esi/ebp/ebx; 0x401768 ret
+}
+```
+
+The proposal deliberately does **not** name the file, the register save order or the manifest record; those are the Lead's. It contains no helper functions, no null checks (retail has none anywhere in these 391 bytes), no cycle guard and no logging.
+
+### 18.8 Cannot prove — explicit gaps
+
+1. **The purpose of the dispatch-stack fixup (B2–B9).** The mechanics are proven (scan `depth` entries at `0xAFA6E0`, on the first entry equal to the task replace it with `next = [task+0x00]` when `next != 0 && [next] != 0`, else 0). What the stack *is* (the §13/§16 "event dispatch stack" reading is a label, not a proof), why an entry equal to a dying task exists, and why the replacement requires the sibling's own next word to be non-zero are **not** established by this function. A transcription must reproduce the mechanics without asserting meaning.
+2. **Registry semantics (B16–B20).** The layout is mechanical: `count = [0x567C40]`, `indices = [0x567C3C]`, `base = [0x567C38]`, `stride = [0x567C48]`; entry address = `base + indices[i]*stride`; the first dword of a matching entry is cleared. What a "registry entry" represents, why `[task+0x18]` gates the scan, and why clearing is not paired with a decrement are unproven.
+3. **Return value.** The first post-call instruction was classified at all 120 sites and none of them reads EAX; 11 sites continue into another `call` (which overwrites EAX before any use), and the rest are cleanup/`pop ecx`. That is a one-instruction lookahead, not a dataflow: a caller could still read EAX several instructions later after an intervening write, and one site (`0x4010BF`) reaches the call immediately before `add esp,4; jmp` — a tail position where EAX escapes into the jump without being passed as an argument. Treat "no caller uses the return" as **strong but not complete** evidence, and keep the transcription `void`.
+4. **Double destruction / re-entrancy.** Retail has no guard: no "already dead" flag is tested, no depth counter around the recursion, no cycle check. What happens when a task is destroyed twice, or when a phase handler destroys the task being destroyed (the handler *can*, since it receives the pointer), is not settled by the bytes.
+5. **Whether a phase handler may mutate the task's fields.** The dispatch order (handler → children → handler) and the six type-word re-reads are consistent with "handlers may mutate the task", but no handler body was examined for this note. The re-reads are reproduced; the mutability is an inference from them.
+6. **Phase column identity.** `0xA97CE0` = `0xA96AE0` + 3×`0x600` and `0xA976E0` = + 2×`0x600`, i.e. the third and second columns of the §10 handler table. Whether retail calls them "phase 3" and "phase 2" semantically is §16's naming, not this function's evidence.
+7. **The `0x4B0D10` argument contract.** That it frees the *same* pointer passed to it is the tree's transcription (`Mem_DeAllocFn(void*)`), not re-proven here.
+8. **Effect of `0x4015D0` on the task header.** This function calls unlink *before* reading the pooled flag and before the pooled release; that the unlink leaves `+0x1C`/`+0x1E`/the pool position intact is assumed by the release path. `0x4015D0` was transcribed in round 175; its own evidence should be checked if the release path is ever tested.
+9. **No runtime evidence.** Nothing in this section is runtime-tested; no call counts, no observed arguments, no observed pool state.
+10. **The supplied instruction table cannot be used as a row-level checklist** (18.0): a transcription review against it would silently miss 46 instructions. Use §16.2.2.
+
+### 18.9 Reproduction
+
+```
+r2 -q -e scr.color=0 -e bin.relocs.apply=true -c 'aaa; s 0x004015f0; afij; afbj' igi.exe     # 25 blocks, 134 insns, size 391
+r2 -q -e scr.color=0 -e bin.relocs.apply=true -c 'aaa; s 0x004015f0; pdf' igi.exe              # linear listing
+ndisasm -b32 -o0x4015F0 /tmp/fa14/f15f0.bin                                                    # independent decoder (391 raw bytes)
+```
+Extraction used for `ndisasm`: image offset `0x1000 + (0x4015F0 - 0x401000)` = `0x15F0`, 391 bytes. Cross-check result: 134 instructions, identical addresses/bytes to `pdj`, byte sum 391, last row `0x401776 C3 ret`. Call-site scan: exhaustive `E8` enumeration over `.text` (`.text` VA `0x401000`, raw `0x1000`, raw size `0x132000`). The 391-byte window contains no `.rdata` reference, so the "no strings" row in 18.4 is exhaustive over the function.
