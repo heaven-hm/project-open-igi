@@ -166,3 +166,23 @@ A workable order is therefore:
 3. keep the project-authored guard in place until then - it fails closed, which is the honest behaviour.
 
 No native was landed from this analysis: it is a map, and it says plainly that the remaining work is 133 closures, not 133 functions.
+
+## What the first callees actually are (round 238)
+
+Sampling the first missing callees shows they are window-class registration routines, not game logic: 0x004813E0 (256 instructions)
+and 0x00488620 (56 instructions) both fill a WNDCLASS-style block, call a registrar, then create and show a window, and both store the
+resulting class atom into a two-byte static (0x0054097C and 0x005C8A90).
+
+Their calls do not go to import thunks. They go through function-pointer globals:
+
+    0x00401400: mov 0x00567C6C,%ecx     ; entry point of one routine
+    0x00401530: mov 0x00567C70,%ecx     ; entry point of another
+
+so a faithful transcription of any of these callees also needs the ownership of 0x00567C6C and 0x00567C70, plus the routines they
+point at. That is a third dependency layer beyond the callee list, and it is the reason this boundary is not a "just transcribe 133
+functions" job: the first three sampled callees already pull in platform entry pointers that the candidate must obtain from the host
+rather than from retail bytes.
+
+Recorded, not acted on: transcribing a window registration that calls through a retail function pointer requires knowing what that
+pointer is initialised to, and inventing that binding is exactly what the rules forbid. The next increment is to trace where
+0x00567C6C and 0x00567C70 are assigned.
