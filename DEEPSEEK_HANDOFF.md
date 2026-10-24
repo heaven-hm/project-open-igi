@@ -1071,3 +1071,18 @@ based on a false premise: those sites do not have a missing argument, they have 
 Correct representation, now implemented and documented at both places: keep the one-argument `FrameHandler` and cast at
 the one site that genuinely pushes two words (the allocator wrapper 0x004012A0), with the retail pushes cited. The
 "ABI gap" recorded in section 17.6 is real for that wrapper only, not for the handler table as a whole.
+
+## Why 0x004014E0 still has no CFG artifacts: it is absent from the v4 catalog (round 177)
+
+`python3 scripts/build_native_records.py 0x004014E0 --force` prints only "built 0 record(s)" and no diagnostic. The
+loop at scripts/build_native_records.py:215 explains it: the script iterates `discover()` (the v4 catalog) and skips
+every address it did not yield, so an address the catalog does not list is never considered - not even to print a
+warning. 0x4014E0 is therefore not a generator failure but a catalog gap.
+
+Consequence: 0x4014B0 got artifacts and STRUCTURALLY_VERIFIED because the catalog lists it, while 0x4014E0 cannot get
+any through this script and must stay TRANSCRIBED until the catalog entry exists. Adding the entry needs the signature
+and source mapping the generator expects; the retail body is fully established (16-iteration loop over 0x54FF24,
+handler-table presence test, bit per non-0xFF phase, `or ah,0x80`), so only the catalog metadata is missing.
+
+Do not read "built 0 record(s)" as "nothing to do": for an address outside the catalog it always means the script
+never looked.
