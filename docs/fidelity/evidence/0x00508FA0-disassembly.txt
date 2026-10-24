@@ -260,3 +260,36 @@ the container by `count`, reallocates through this helper and copies the old pay
 
 Next dependency: `0x004B0C60` (allocator). If it is not in the tree, both `0x4F1950` and
 `0x4F1980` stay blocked and the allocator is the leaf to land first.
+
+### 0x4F1A80 decoded (105 B, 4 blocks) - appends a 16-byte record to a container
+
+```
+ecx = arg3; edx = arg2; ecx = arg3 - arg2
+edx = arg4; if (edx == -1) { Debug_Error("Undefined parameter type."); jmp self }
+eax = arg1 (container)
+push ebx/esi/edi
+esi = *eax; edi = eax[8]; esi <<= 4          ; payload + count*16
+bl  = byte [arg5 stack slot]                  ; low byte kept for the last field
+dword [esi+edi]     = ecx                     ; record[0] = arg3-arg2
+dword [payload+4]   = edx                     ; record[1] = arg4
+dword [payload+8]   = dword [arg5 slot]       ; record[2] = arg5
+byte  [payload+0xC] = bl                      ; record[3] = arg5 low byte
+*container = *container + 1                   ; count++
+ret (eax = container)
+```
+
+So it appends one 16-byte record `{arg3-arg2, arg4, arg5, arg5&0xFF}` at
+`payload + count*16` and increments the container count - consistent with the 16-byte
+stride established by `0x4F1950`/`0x4F1980`. Features preserved: the `arg4 == -1`
+fail-closed path calling `Debug_Error("Undefined parameter type.")` then spinning
+forever, and the same record written through four separate `count*16` recomputations
+(retail reloads the count each time; a transcription that caches it would still be
+observably equivalent only because nothing modifies the count in between - the retail
+reload pattern is recorded here so it is not silently "optimised").
+
+NOT TRANSCRIBED YET, deliberately: the argument stack slots need exact resolution first.
+r2 reports 5 stack arguments (`sp[0x4..0x18]`) but the body reads `byte [arg_20h]` and
+`dword [arg_20h_2]` after three pushes, and its own auto-names disagree (`arg5` typed
+`int8_t` yet read as a dword too). Writing the signature from that guess would be a
+fabricated ABI. Next step: derive the true slot from the caller sites inside `0x508FA0`
+(number of pushes before each `call 0x4F1A80`), then transcribe.
