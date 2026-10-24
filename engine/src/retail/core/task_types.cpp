@@ -570,6 +570,11 @@ void NATIVE_DECL QTask_ClearTaskTypes()
     }
 }
 
+// Retail natives called by QTask_Init's phase links, declared here because their headers do not carry them.
+// Each is its own transcription at its own VA; these are declarations, not additions.
+void TaskEventTable_MarkSlot_401860(std::uint16_t value, std::uint32_t index);
+void TaskEventTable_MarkSlotNoMask_401890(std::uint16_t value, std::uint32_t index);
+
 // Native: QTask_Init; retail VA 0x004010D0.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004010D0..0x004011B0.
@@ -593,6 +598,16 @@ void NATIVE_DECL QTask_Init()
     QTask_ClearEventTable();
     QTask_ClearTaskTypes();
     QTask_CurrentType = TaskType_Register("QTask", 0x20U, 0x0181U, 0U);
+    // 0x0040113E-0x0040114B: push 0 / call 0x004018F0 / push eax / call 0x00401860 / add esp,8.
+    // The phase dword pushed first is the link call's second argument, not padding: 0x004018F0 takes no
+    // argument, so the phase survives to [esp+8] while EAX (the current type) becomes [esp+4].
+    TaskEventTable_MarkSlot_401860(QTask_GetCurrentType(), 0U);
+    // 0x0040114E-0x0040115B: same pair for phase 1 through 0x00401890.
+    TaskEventTable_MarkSlotNoMask_401890(QTask_GetCurrentType(), 1U);
+    // 0x0040115E-0x0040116B: phase 2.
+    TaskEventTable_MarkSlotNoMask_401890(QTask_GetCurrentType(), 2U);
+    // 0x0040116E-0x00401176: phase 3.
+    TaskEventTable_MarkSlotNoMask_401890(QTask_GetCurrentType(), 3U);
     // 0x0040117B xor eax,eax / 0x0040117D mov ecx,0x17d00 / 0x00401183 mov edi,0xa96ae0 /
     // 0x0040118F rep stosd - the handler/state table is zeroed here, after the registration and after the
     // phase 0..3 links at 0x0040113E-0x00401176 (not yet transcribed), and before the 0x4B0B00 and 0x4B8810
