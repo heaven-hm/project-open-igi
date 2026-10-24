@@ -842,3 +842,26 @@ Queue in call order from 0x4010B0: 0x401A60 (6 B) -> 0x4015F0 (391 B, 25 bb, rec
 only-the-writer-defines-a-global rule I cannot define it, and an extern-only declaration will not link. So the file
 stays out of CMakeLists until the writer is transcribed - the same blocker shape as 0xA96AE0 before QTask_Init's
 zero-fill was found. Do not "fix" it by defining the storage in the reader: that is the invented-global defect.
+
+## §15 delivered: Graph_Init 0x4FAA60 scope, and my teardown order was wrong
+
+analyst appended §15 (404 lines) to docs/fidelity/evidence/0x4EE970-data-extents.md. 0x4FAA60 is 837 bytes, 225
+instructions, sole caller 0x518484 in the registration cascade from 0x5183D0, with 0x518489 (GraphNode 0x518760)
+immediately after it consuming the ids it allocates.
+
+Corrections to what I had recorded:
+- **Teardown order (I had it wrong).** Retail 0x4FB110 is: (1) free [0xA76D10] through 0x4C1830 FIRST, (2) then ten
+  0x4018C0 slot clears in the order E368,369,36A,36B,36C,36D,36E,370,36F,371, (3) then 0x401A20 unregister. My
+  "clear slots -> release array -> unregister" had the first two steps swapped. It never zeroes [0xA76D10] and never
+  rewrites slot bytes.
+- **Ten slot writes are NOT in slot order.** 0x4FAA88->E368 ... 0x4FAABF->E36F, 0x4FAACA->E371, 0x4FAAD5->E370,
+  0x4FAAE0->E36D, 0x4FAAEB->E36E. Preserve that order.
+- **0x54E366 is dead**: image 0x0181, zero references of any width. No writer, no reader, keep the image value.
+- **0xA76D10 confirmed**: 0x4F1950(5), 16-byte elements, 5 entries, header {count+0, capacity+4, ptr+0xC+8};
+  element {+0 offset-like, +4 type handle, +8 id dword, +0xC id byte}. Only [0xA70C90] (Bool8) is identified; the
+  other three handle slots and element +0 semantics are unresolved.
+- **0x401A60 is NOT unblocked by Graph_Init.** 0x567C58 is touched by 0x4012FB/0x40130D/0x4015F2/0x4015FB (type-system
+  routines) and 0x401A61; 0x4FAA60 touches none of them. Still waiting on flow-analyst's §14 for 0x4015F0.
+- **Eight stand-ins to delete** once Graph_Init exists: g_54e364, g_a76d10, g_54e369, g_54e36b/c/d/e/f; slots
+  0x54E368/36A/370 gain real storage for the first time; that is what makes 0x4F9270 a real reader instead of a
+  reader of invented storage.

@@ -3123,3 +3123,407 @@ The candidate instead has `if (event_id >= event_table_entry_count) { return 0U;
 - **Writer:** exactly one — `0x4FAAD0 a2 71 e3 54 00` in `Graph_Init 0x4FAA60`, immediately after `0x4FAACA call 0x4017C0` (allocated with argument 0). Teardown `0x4FB110` reads it at `0x4FB184` (`mov cl,[0x54E371]`) and clears it through `0x4018C0` at `0x4FB18B`.
 - **Transcription status:** the writer is **not** transcribed (no `native_4faa60.cpp`; the six existing Graph getters document "runtime-written by the untranscribed Graph_Init 0x4FAA60"; `graph_state.hpp` marks them placeholders, `graph_state.cpp` does not exist — each getter file defines its own `g_...` byte). Adding `native_4f9270.cpp` now would be the same blocker as `0x401A60`: a reader whose retail writer is untranscribed, backed by a stand-in. Correct order is to transcribe `Graph_Init 0x4FAA60` first (it writes all ten slots, allocates the five-entry `0xA76D10` array, registers the class and its handlers), then `0x4F9270` reads real storage; the call site `0x518760` is also untranscribed, so end-to-end validation needs it too.
 - **Do not import** the external catalogue name `Script_CallNativeHandler_22` (BN/Re-Agent catalogues, CFG 1.000): a 6-byte `mov al,[mem]; ret` body contains no call and the name asserts behaviour the bytes contradict.
+
+_(Appended at EOF as §15 on the Lead's instruction. §14 was not present in this file at append time; if a §14 lands afterwards, insert it above this section — this section is self-contained.)_
+
+## §15. APPENDED — `Graph_Init` `0x004FAA60` (and teardown `0x004FB110`): scope of the one writer that removes eight stand-ins
+
+Evidence sheet for the increment requested after §14: transcribe retail `0x004FAA60` (writer of the Graph class word, the ten phase slots and the `0xA76D10` container) and `0x004FB110` (its teardown), so the eight Graph reader stand-ins can be deleted instead of keeping per-getter `g_...` bytes. Artifact: retail `igi.exe`, SHA-256 `dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01`, base `0x400000`. Tools: radare2 6.2.0 for byte dumps and call enumeration; capstone 5.0.7 aligned from the verified entry `0x4FAA60` for the instruction table (r2 `pd` misaligns in this function's NOP-padded tail, so the table is capstone from the entry, checked byte-for-byte against the r2 listing).
+
+### 15.1 Identity, boundary and callers
+
+- Function: `0x004FAA60`–`0x004FADA4`, 837 bytes including prologue/epilogue. Entry `sub esp,0x80` (`81 ec 80 00 00 00`), exit `c3` at `0x4FADA4`; `0x4FADA5`–`0x4FADAF` is eleven `0x90` alignment bytes and the next code starts at `0x4FADB0`, the handler registered by the `0x401530(class, 3, ...)` call below.
+- Callers: exactly one in the image — `0x518484 call 0x4FAA60`, inside the class-registration cascade that begins at `0x5183D0`. The next call in that cascade is `0x518489 call 0x518760` (the `"GraphNode"` initialiser), which is where the seventh getter `0x4F9270` is called (§13.8.2). Graph is therefore registered immediately before GraphNode — load-bearing ordering, because GraphNode's `0x401400` registration consumes the phase ids Graph_Init just allocated.
+- Teardown `0x004FB110`–`0x004FB1A0` (0x91 bytes; `0x4FB1A1` onward is NOP padding), single caller `0x518609 call 0x4FB110`.
+- Already written down elsewhere in this sheet: `0x4017C0` (`QTask_AllocateEvent`, §13.5/§13.8.1), `0x401400`/`0x401530` (class handler/method registration, §11/§13.3), `0x4018C0` (event-table clear). Everything else in 15.6–15.9 is new evidence here.
+
+### 15.2 Full retail instruction sequence of `0x4FAA60`
+
+Every instruction from entry to `ret`, in retail order, with image bytes and an annotation on every call, store and stack cleanup. Nothing is elided: this table is the transcription checklist.
+
+| VA | bytes | instruction | note |
+| --- | --- | --- | --- |
+| `0x004FAA60` | `81 ec 80 00 00 00` | `sub esp, 0x80` | frame = 0x80 bytes |
+| `0x004FAA66` | `56` | `push esi` |  |
+| `0x004FAA67` | `57` | `push edi` |  |
+| `0x004FAA68` | `33 ff` | `xor edi, edi` |  |
+| `0x004FAA6A` | `57` | `push edi` | arg1 of 0x5034D0 = 0 |
+| `0x004FAA6B` | `57` | `push edi` | arg2 of 0x5034D0 = 0 |
+| `0x004FAA6C` | `e8 5f 8a 00 00` | `call 0x5034d0` | root-type lookup 0x5034D0(0,0) -> AX = [0x54E634] = 0x0181 |
+| `0x004FAA71` | `50` | `push eax` | arg3 (parent) = 0x0181 |
+| `0x004FAA72` | `68 80 00 00 00` | `push 0x80` | arg2 (size) = 0x80 |
+| `0x004FAA77` | `68 48 df 54 00` | `push 0x54df48` | arg1 (name) = "Graph" @0x54DF48 |
+| `0x004FAA7C` | `e8 7f 6e f0 ff` | `call 0x401900` | 0x401900(name, 0x80, 0x0181, 0) -> AX = new class id; arg4 = the 0 push left by 0x5034D0 |
+| `0x004FAA81` | `57` | `push edi` |  |
+| `0x004FAA82` | `66 a3 64 e3 54 00` | `mov word ptr [0x54e364], ax` | [0x54E364] = Graph class id |
+| `0x004FAA88` | `e8 33 6d f0 ff` | `call 0x4017c0` | 1st alloc: QTask_AllocateEvent(0) |
+| `0x004FAA8D` | `57` | `push edi` |  |
+| `0x004FAA8E` | `a2 68 e3 54 00` | `mov byte ptr [0x54e368], al` | slot 0x54E368 = AL |
+| `0x004FAA93` | `e8 28 6d f0 ff` | `call 0x4017c0` | 2nd alloc |
+| `0x004FAA98` | `57` | `push edi` |  |
+| `0x004FAA99` | `a2 69 e3 54 00` | `mov byte ptr [0x54e369], al` | slot 0x54E369 = AL |
+| `0x004FAA9E` | `e8 1d 6d f0 ff` | `call 0x4017c0` | 3rd alloc |
+| `0x004FAAA3` | `57` | `push edi` |  |
+| `0x004FAAA4` | `a2 6a e3 54 00` | `mov byte ptr [0x54e36a], al` | slot 0x54E36A = AL |
+| `0x004FAAA9` | `e8 12 6d f0 ff` | `call 0x4017c0` | 4th alloc |
+| `0x004FAAAE` | `57` | `push edi` |  |
+| `0x004FAAAF` | `a2 6b e3 54 00` | `mov byte ptr [0x54e36b], al` | slot 0x54E36B = AL |
+| `0x004FAAB4` | `e8 07 6d f0 ff` | `call 0x4017c0` | 5th alloc |
+| `0x004FAAB9` | `57` | `push edi` |  |
+| `0x004FAABA` | `a2 6c e3 54 00` | `mov byte ptr [0x54e36c], al` | slot 0x54E36C = AL |
+| `0x004FAABF` | `e8 fc 6c f0 ff` | `call 0x4017c0` | 6th alloc |
+| `0x004FAAC4` | `57` | `push edi` |  |
+| `0x004FAAC5` | `a2 6f e3 54 00` | `mov byte ptr [0x54e36f], al` | slot 0x54E36F = AL |
+| `0x004FAACA` | `e8 f1 6c f0 ff` | `call 0x4017c0` | 7th alloc |
+| `0x004FAACF` | `57` | `push edi` |  |
+| `0x004FAAD0` | `a2 71 e3 54 00` | `mov byte ptr [0x54e371], al` | slot 0x54E371 = AL (the getter 0x4F9270 reads this) |
+| `0x004FAAD5` | `e8 e6 6c f0 ff` | `call 0x4017c0` | 8th alloc |
+| `0x004FAADA` | `57` | `push edi` |  |
+| `0x004FAADB` | `a2 70 e3 54 00` | `mov byte ptr [0x54e370], al` | slot 0x54E370 = AL |
+| `0x004FAAE0` | `e8 db 6c f0 ff` | `call 0x4017c0` | 9th alloc |
+| `0x004FAAE5` | `57` | `push edi` |  |
+| `0x004FAAE6` | `a2 6d e3 54 00` | `mov byte ptr [0x54e36d], al` | slot 0x54E36D = AL |
+| `0x004FAAEB` | `e8 d0 6c f0 ff` | `call 0x4017c0` | 10th alloc (AL used directly below: no push before the store) |
+| `0x004FAAF0` | `a2 6e e3 54 00` | `mov byte ptr [0x54e36e], al` | slot 0x54E36E = AL |
+| `0x004FAAF5` | `66 a1 64 e3 54 00` | `mov ax, word ptr [0x54e364]` | class id |
+| `0x004FAAFB` | `68 b0 90 4f 00` | `push 0x4f90b0` | handler |
+| `0x004FAB00` | `57` | `push edi` | phase 0 |
+| `0x004FAB01` | `50` | `push eax` | arg1 = class id |
+| `0x004FAB02` | `e8 f9 68 f0 ff` | `call 0x401400` | 0x401400(class, 0, 0x4F90B0) |
+| `0x004FAB07` | `66 8b 0d 64 e3 54 00` | `mov cx, word ptr [0x54e364]` |  |
+| `0x004FAB0E` | `83 c4 48` | `add esp, 0x48` | clean 0x48 bytes: 3 allocs (0xC) + 3 methods (0x24) + the 0x4FAB11 group? see §15.3 |
+| `0x004FAB11` | `68 80 17 4c 00` | `push 0x4c1780` | method id 1 handler = ret-only 0x4C1780 |
+| `0x004FAB16` | `6a 01` | `push 1` | id 1 |
+| `0x004FAB18` | `51` | `push ecx` |  |
+| `0x004FAB19` | `e8 12 6a f0 ff` | `call 0x401530` | 0x401530(class, 1, 0x4C1780) |
+| `0x004FAB1E` | `66 8b 15 64 e3 54 00` | `mov dx, word ptr [0x54e364]` |  |
+| `0x004FAB25` | `68 60 91 4f 00` | `push 0x4f9160` | handler |
+| `0x004FAB2A` | `6a 02` | `push 2` | id 2 |
+| `0x004FAB2C` | `52` | `push edx` |  |
+| `0x004FAB2D` | `e8 fe 69 f0 ff` | `call 0x401530` | 0x401530(class, 2, 0x4F9160) |
+| `0x004FAB32` | `66 a1 64 e3 54 00` | `mov ax, word ptr [0x54e364]` |  |
+| `0x004FAB38` | `68 b0 ad 4f 00` | `push 0x4fadb0` | handler |
+| `0x004FAB3D` | `6a 03` | `push 3` | id 3 |
+| `0x004FAB3F` | `50` | `push eax` |  |
+| `0x004FAB40` | `e8 eb 69 f0 ff` | `call 0x401530` | 0x401530(class, 3, 0x4FADB0) |
+| `0x004FAB45` | `83 c4 24` | `add esp, 0x24` |  |
+| `0x004FAB48` | `68 80 91 4f 00` | `push 0x4f9180` | handler |
+| `0x004FAB4D` | `e8 1e 6f ff ff` | `call 0x4f1a70` | call 0x4F1A70 = slot 0x54E0E5 (E5) |
+| `0x004FAB52` | `66 8b 0d 64 e3 54 00` | `mov cx, word ptr [0x54e364]` | class id |
+| `0x004FAB59` | `50` | `push eax` | phase = E5 |
+| `0x004FAB5A` | `51` | `push ecx` |  |
+| `0x004FAB5B` | `e8 a0 68 f0 ff` | `call 0x401400` | 0x401400(class, E5, 0x4F9180) |
+| `0x004FAB60` | `83 c4 0c` | `add esp, 0xc` |  |
+| `0x004FAB63` | `68 40 ae 4f 00` | `push 0x4fae40` | handler |
+| `0x004FAB68` | `e8 f3 6e ff ff` | `call 0x4f1a60` | call 0x4F1A60 = slot 0x54E0E4 (E4) |
+| `0x004FAB6D` | `66 8b 15 64 e3 54 00` | `mov dx, word ptr [0x54e364]` | class id |
+| `0x004FAB74` | `50` | `push eax` | phase = E4 |
+| `0x004FAB75` | `52` | `push edx` |  |
+| `0x004FAB76` | `e8 85 68 f0 ff` | `call 0x401400` | 0x401400(class, E4, 0x4FAE40) |
+| `0x004FAB7B` | `83 c4 0c` | `add esp, 0xc` |  |
+| `0x004FAB7E` | `68 50 ae 4f 00` | `push 0x4fae50` | handler |
+| `0x004FAB83` | `e8 d8 6f ff ff` | `call 0x4f1b60` | call 0x4F1B60 = slot 0x54E0EA (EA) |
+| `0x004FAB88` | `50` | `push eax` |  |
+| `0x004FAB89` | `e8 92 64 ff ff` | `call 0x4f1020` | call 0x4F1020 -> [0xA70CA0] |
+| `0x004FAB8E` | `50` | `push eax` |  |
+| `0x004FAB8F` | `e8 2c 70 ff ff` | `call 0x4f1bc0` | 0x4F1BC0([0xA70CA0], EA, 0x4FAE50) |
+| `0x004FAB94` | `6a 05` | `push 5` | capacity 5 |
+| `0x004FAB96` | `e8 b5 6d ff ff` | `call 0x4f1950` | 0x4F1950(5) -> new 16-byte-element container |
+| `0x004FAB9B` | `83 c4 10` | `add esp, 0x10` |  |
+| `0x004FAB9E` | `a3 10 6d a7 00` | `mov dword ptr [0xa76d10], eax` | [0xA76D10] = container |
+| `0x004FABA3` | `57` | `push edi` |  |
+| `0x004FABA4` | `6a 07` | `push 7` | id |
+| `0x004FABA6` | `e8 65 64 ff ff` | `call 0x4f1010` | call 0x4F1010 -> [0xA70C88] |
+| `0x004FABAB` | `8b 15 10 6d a7 00` | `mov edx, dword ptr [0xa76d10]` |  |
+| `0x004FABB1` | `50` | `push eax` |  |
+| `0x004FABB2` | `8d 44 24 34` | `lea eax, [esp + 0x34]` | &local + 0x20 |
+| `0x004FABB6` | `8d 4c 24 14` | `lea ecx, [esp + 0x14]` | &local |
+| `0x004FABBA` | `50` | `push eax` |  |
+| `0x004FABBB` | `51` | `push ecx` |  |
+| `0x004FABBC` | `52` | `push edx` |  |
+| `0x004FABBD` | `e8 be 6e ff ff` | `call 0x4f1a80` | 0x4F1A80(container, &local, &local+0x20, [0xA70C88], 7) |
+| `0x004FABC2` | `83 c4 18` | `add esp, 0x18` |  |
+| `0x004FABC5` | `57` | `push edi` |  |
+| `0x004FABC6` | `6a 07` | `push 7` | id |
+| `0x004FABC8` | `e8 23 63 ff ff` | `call 0x4f0ef0` | call 0x4F0EF0 -> [0xA75898] |
+| `0x004FABCD` | `8b 15 10 6d a7 00` | `mov edx, dword ptr [0xa76d10]` |  |
+| `0x004FABD3` | `50` | `push eax` |  |
+| `0x004FABD4` | `8d 44 24 79` | `lea eax, [esp + 0x79]` | &local + 0x65 |
+| `0x004FABD8` | `8d 4c 24 14` | `lea ecx, [esp + 0x14]` | &local |
+| `0x004FABDC` | `50` | `push eax` |  |
+| `0x004FABDD` | `51` | `push ecx` |  |
+| `0x004FABDE` | `52` | `push edx` |  |
+| `0x004FABDF` | `e8 9c 6e ff ff` | `call 0x4f1a80` | 0x4F1A80(container, &local, &local+0x65, [0xA75898], 7) |
+| `0x004FABE4` | `83 c4 18` | `add esp, 0x18` |  |
+| `0x004FABE7` | `57` | `push edi` |  |
+| `0x004FABE8` | `6a 06` | `push 6` | id |
+| `0x004FABEA` | `e8 11 64 ff ff` | `call 0x4f1000` | call 0x4F1000 -> [0xA70C90] (Bool8 handle) |
+| `0x004FABEF` | `8b 15 10 6d a7 00` | `mov edx, dword ptr [0xa76d10]` |  |
+| `0x004FABF5` | `50` | `push eax` |  |
+| `0x004FABF6` | `8d 44 24 7c` | `lea eax, [esp + 0x7c]` | &local + 0x68 |
+| `0x004FABFA` | `8d 4c 24 14` | `lea ecx, [esp + 0x14]` | &local |
+| `0x004FABFE` | `50` | `push eax` |  |
+| `0x004FABFF` | `51` | `push ecx` |  |
+| `0x004FAC00` | `52` | `push edx` |  |
+| `0x004FAC01` | `e8 7a 6e ff ff` | `call 0x4f1a80` | 0x4F1A80(container, &local, &local+0x68, [0xA70C90], 6) |
+| `0x004FAC06` | `83 c4 18` | `add esp, 0x18` |  |
+| `0x004FAC09` | `57` | `push edi` |  |
+| `0x004FAC0A` | `6a 06` | `push 6` | id |
+| `0x004FAC0C` | `e8 ef 63 ff ff` | `call 0x4f1000` | call 0x4F1000 -> [0xA70C90] |
+| `0x004FAC11` | `8b 15 10 6d a7 00` | `mov edx, dword ptr [0xa76d10]` |  |
+| `0x004FAC17` | `50` | `push eax` |  |
+| `0x004FAC18` | `8d 44 24 7d` | `lea eax, [esp + 0x7d]` | &local + 0x69 |
+| `0x004FAC1C` | `8d 4c 24 14` | `lea ecx, [esp + 0x14]` | &local |
+| `0x004FAC20` | `50` | `push eax` |  |
+| `0x004FAC21` | `51` | `push ecx` |  |
+| `0x004FAC22` | `52` | `push edx` |  |
+| `0x004FAC23` | `e8 58 6e ff ff` | `call 0x4f1a80` | 0x4F1A80(container, &local, &local+0x69, [0xA70C90], 6) |
+| `0x004FAC28` | `83 c4 18` | `add esp, 0x18` |  |
+| `0x004FAC2B` | `57` | `push edi` |  |
+| `0x004FAC2C` | `6a 07` | `push 7` | id |
+| `0x004FAC2E` | `e8 ed 63 ff ff` | `call 0x4f1020` | call 0x4F1020 -> [0xA70CA0] |
+| `0x004FAC33` | `8b 15 10 6d a7 00` | `mov edx, dword ptr [0xa76d10]` |  |
+| `0x004FAC39` | `50` | `push eax` |  |
+| `0x004FAC3A` | `8d 44 24 14` | `lea eax, [esp + 0x14]` | &local + 0 |
+| `0x004FAC3E` | `8d 4c 24 14` | `lea ecx, [esp + 0x14]` | &local |
+| `0x004FAC42` | `50` | `push eax` |  |
+| `0x004FAC43` | `51` | `push ecx` |  |
+| `0x004FAC44` | `52` | `push edx` |  |
+| `0x004FAC45` | `e8 36 6e ff ff` | `call 0x4f1a80` | 0x4F1A80(container, &local, &local+0, [0xA70CA0], 7) |
+| `0x004FAC4A` | `83 c4 18` | `add esp, 0x18` |  |
+| `0x004FAC4D` | `c7 05 48 72 a7 00 4c 72 a7 00` | `mov dword ptr [0xa77248], 0xa7724c` | 0xA77248 list head |
+| `0x004FAC57` | `c7 05 50 72 a7 00 48 72 a7 00` | `mov dword ptr [0xa77250], 0xa77248` | 0xA77250 |
+| `0x004FAC61` | `89 3d 4c 72 a7 00` | `mov dword ptr [0xa7724c], edi` | 0xA7724C sentinel |
+| `0x004FAC67` | `b8 2c 72 a7 00` | `mov eax, 0xa7722c` | 4-entry class->size table base 0xA77228 |
+| `0x004FAC6C` | `b9 81 01 00 00` | `mov ecx, 0x181` | root id 0x0181 |
+| `0x004FAC71` | `66 89 48 fc` | `mov word ptr [eax - 4], cx` | table[e].class = 0x0181 |
+| `0x004FAC75` | `89 38` | `mov dword ptr [eax], edi` | table[e].dword = 0 |
+| `0x004FAC77` | `83 c0 08` | `add eax, 8` |  |
+| `0x004FAC7A` | `3d 4c 72 a7 00` | `cmp eax, 0xa7724c` |  |
+| `0x004FAC7F` | `7c f0` | `jl 0x4fac71` |  |
+| `0x004FAC81` | `66 a1 64 e3 54 00` | `mov ax, word ptr [0x54e364]` | class id |
+| `0x004FAC87` | `68 40 02 00 00` | `push 0x240` | per-object bytes 0x240 |
+| `0x004FAC8C` | `50` | `push eax` |  |
+| `0x004FAC8D` | `e8 ce e7 ff ff` | `call 0x4f9460` | 0x4F9460(class, 0x240) -> class->0x240 table |
+| `0x004FAC92` | `83 c4 08` | `add esp, 8` |  |
+| `0x004FAC95` | `c7 05 a0 74 a7 00 a4 74 a7 00` | `mov dword ptr [0xa774a0], 0xa774a4` | 0xA774A0 list head |
+| `0x004FAC9F` | `c7 05 a8 74 a7 00 a0 74 a7 00` | `mov dword ptr [0xa774a8], 0xa774a0` |  |
+| `0x004FACA9` | `89 3d a4 74 a7 00` | `mov dword ptr [0xa774a4], edi` |  |
+| `0x004FACAF` | `c7 05 18 6d a7 00 1c 6d a7 00` | `mov dword ptr [0xa76d18], 0xa76d1c` | 0xA76D18 list head |
+| `0x004FACB9` | `c7 05 20 6d a7 00 18 6d a7 00` | `mov dword ptr [0xa76d20], 0xa76d18` |  |
+| `0x004FACC3` | `89 3d 1c 6d a7 00` | `mov dword ptr [0xa76d1c], edi` |  |
+| `0x004FACC9` | `be 28 6d a7 00` | `mov esi, 0xa76d28` | first of 64 nodes 0xA76D28..0xA77227 |
+| `0x004FACCE` | `56` | `push esi` | node |
+| `0x004FACCF` | `89 7e 04` | `mov dword ptr [esi + 4], edi` | node->prev = 0 |
+| `0x004FACD2` | `68 18 6d a7 00` | `push 0xa76d18` | list head |
+| `0x004FACD7` | `89 3e` | `mov dword ptr [esi], edi` | node->next = 0 |
+| `0x004FACD9` | `e8 12 4c fb ff` | `call 0x4af8f0` | 0x4AF8F0(0xA76D18, node) |
+| `0x004FACDE` | `83 c6 14` | `add esi, 0x14` | next node (+0x14) |
+| `0x004FACE1` | `83 c4 08` | `add esp, 8` |  |
+| `0x004FACE4` | `81 fe 28 72 a7 00` | `cmp esi, 0xa77228` |  |
+| `0x004FACEA` | `7c e2` | `jl 0x4facce` |  |
+| `0x004FACEC` | `68 e0 ae 4f 00` | `push 0x4faee0` | handler |
+| `0x004FACF1` | `6a 05` | `push 5` | count 5 |
+| `0x004FACF3` | `68 a4 e4 54 00` | `push 0x54e4a4` | name "nMaxNodes" @0x54E4A4 |
+| `0x004FACF8` | `e8 f3 f0 ff ff` | `call 0x4f9df0` | 0x4F9DF0("nMaxNodes", 5, 0x4FAEE0) |
+| `0x004FACFD` | `68 50 af 4f 00` | `push 0x4faf50` | handler |
+| `0x004FAD02` | `6a 05` | `push 5` | count 5 |
+| `0x004FAD04` | `68 9c e4 54 00` | `push 0x54e49c` | name "nNodeID" @0x54E49C |
+| `0x004FAD09` | `e8 e2 f0 ff ff` | `call 0x4f9df0` | 0x4F9DF0("nNodeID", 5, 0x4FAF50) |
+| `0x004FAD0E` | `68 80 af 4f 00` | `push 0x4faf80` | handler |
+| `0x004FAD13` | `6a 08` | `push 8` | count 8 |
+| `0x004FAD15` | `68 8c e4 54 00` | `push 0x54e48c` | name "tNodePosition" @0x54E48C |
+| `0x004FAD1A` | `e8 d1 f0 ff ff` | `call 0x4f9df0` | 0x4F9DF0("tNodePosition", 8, 0x4FAF80) |
+| `0x004FAD1F` | `68 a0 af 4f 00` | `push 0x4fafa0` | handler |
+| `0x004FAD24` | `6a 06` | `push 6` | count 6 |
+| `0x004FAD26` | `68 80 e4 54 00` | `push 0x54e480` | name "vNodeGamma" @0x54E480 |
+| `0x004FAD2B` | `e8 c0 f0 ff ff` | `call 0x4f9df0` | 0x4F9DF0("vNodeGamma", 6, 0x4FAFA0) |
+| `0x004FAD30` | `68 c0 af 4f 00` | `push 0x4fafc0` | handler |
+| `0x004FAD35` | `6a 06` | `push 6` | count 6 |
+| `0x004FAD37` | `68 74 e4 54 00` | `push 0x54e474` | name "vNodeRadius" @0x54E474 |
+| `0x004FAD3C` | `e8 af f0 ff ff` | `call 0x4f9df0` | 0x4F9DF0("vNodeRadius", 6, 0x4FAFC0) |
+| `0x004FAD41` | `68 e0 af 4f 00` | `push 0x4fafe0` | handler |
+| `0x004FAD46` | `6a 05` | `push 5` | count 5 |
+| `0x004FAD48` | `68 64 e4 54 00` | `push 0x54e464` | name "nNodeMaterial" @0x54E464 |
+| `0x004FAD4D` | `e8 9e f0 ff ff` | `call 0x4f9df0` | 0x4F9DF0("nNodeMaterial", 5, 0x4FAFE0) |
+| `0x004FAD52` | `83 c4 48` | `add esp, 0x48` |  |
+| `0x004FAD55` | `68 30 b0 4f 00` | `push 0x4fb030` | handler |
+| `0x004FAD5A` | `6a 09` | `push 9` | count 9 |
+| `0x004FAD5C` | `68 54 e4 54 00` | `push 0x54e454` | name "nNodeCriteria" @0x54E454 |
+| `0x004FAD61` | `e8 8a f0 ff ff` | `call 0x4f9df0` | 0x4F9DF0("nNodeCriteria", 9, 0x4FB030) |
+| `0x004FAD66` | `68 80 b0 4f 00` | `push 0x4fb080` | handler |
+| `0x004FAD6B` | `6a 05` | `push 5` | count 5 |
+| `0x004FAD6D` | `68 48 e4 54 00` | `push 0x54e448` | name "nLinkID1" @0x54E448 |
+| `0x004FAD72` | `e8 79 f0 ff ff` | `call 0x4f9df0` | 0x4F9DF0("nLinkID1", 5, 0x4FB080) |
+| `0x004FAD77` | `68 b0 b0 4f 00` | `push 0x4fb0b0` | handler |
+| `0x004FAD7C` | `6a 05` | `push 5` | count 5 |
+| `0x004FAD7E` | `68 3c e4 54 00` | `push 0x54e43c` | name "nLinkID2" @0x54E43C |
+| `0x004FAD83` | `e8 68 f0 ff ff` | `call 0x4f9df0` | 0x4F9DF0("nLinkID2", 5, 0x4FB0B0) |
+| `0x004FAD88` | `68 d0 b0 4f 00` | `push 0x4fb0d0` | handler |
+| `0x004FAD8D` | `6a 05` | `push 5` | count 5 |
+| `0x004FAD8F` | `68 30 e4 54 00` | `push 0x54e430` | name "eLinkType" @0x54E430 |
+| `0x004FAD94` | `e8 57 f0 ff ff` | `call 0x4f9df0` | 0x4F9DF0("eLinkType", 5, 0x4FB0D0) |
+| `0x004FAD99` | `83 c4 30` | `add esp, 0x30` |  |
+| `0x004FAD9C` | `5f` | `pop edi` |  |
+| `0x004FAD9D` | `5e` | `pop esi` |  |
+| `0x004FAD9E` | `81 c4 80 00 00 00` | `add esp, 0x80` |  |
+| `0x004FADA4` | `c3` | `ret ` |  |
+
+### 15.3 The ten phase-slot writes, in retail order
+
+All ten allocations are `QTask_AllocateEvent(0)` (`push edi` with `edi = 0` immediately before each `call 0x4017C0`), and every store writes the allocator's `AL` straight into the slot (`a2 <slot>`). The allocation order is **not** slot-address order — preserve it verbatim (rule 11 of §10.14).
+
+| # | alloc call | store | destination | note |
+| --- | --- | --- | --- | --- |
+| 1 | `0x4FAA88` | `0x4FAA8E` | `0x54E368` | first id in the chain |
+| 2 | `0x4FAA93` | `0x4FAA99` | `0x54E369` | |
+| 3 | `0x4FAA9E` | `0x4FAAA4` | `0x54E36A` | |
+| 4 | `0x4FAAA9` | `0x4FAAAF` | `0x54E36B` | |
+| 5 | `0x4FAAB4` | `0x4FAABA` | `0x54E36C` | |
+| 6 | `0x4FAABF` | `0x4FAAC5` | `0x54E36F` | jumps ahead of E36D/E36E |
+| 7 | `0x4FAACA` | `0x4FAAD0` | `0x54E371` | the slot the missing seventh getter `0x4F9270` returns |
+| 8 | `0x4FAAD5` | `0x4FAADB` | `0x54E370` | |
+| 9 | `0x4FAAE0` | `0x4FAAE6` | `0x54E36D` | |
+| 10 | `0x4FAAEB` | `0x4FAAF0` | `0x54E36E` | this alloc's `AL` is stored with no intervening `push` |
+
+Return-register detail: retail stores `AL` of a full `EAX` (the `QTask_AllocateEvent` id, `inc eax` from `0x20`). A transcription must not narrow the call result before the store if it can avoid it; the observable store is the same byte, but the register contract is `EAX` — same point the Lead already fixed in `ac0e275e`.
+
+### 15.4 `0x54E366` — the word with image value `0x0181` and no code reference
+
+Image bytes from `0x54E364`: `81 01 81 01 ff ff ff ff ff ff ff ff ff ff 00 00`, i.e. word `0x0181` at `0x54E364`, word `0x0181` at `0x54E366`, ten `0xFF` bytes at `0x54E368`–`0x54E371`, then `0x0000`. `0x54E364` is the live Graph class word (written at `0x4FAA82`).
+
+- **`0x54E366` is dead code-wise.** An exhaustive 4-byte-literal scan for `0x0054E366` and `0x0054E367` across `.text` returns **zero** references, and there is no base-address/`lea` use of the `0x54E364` block. The ten references to `0x0054E364` are all 16-bit (`0x4F9212`, `0x4FAA84`, `0x4FAAF7`, `0x4FAB0A`, `0x4FAB21`, `0x4FAB34`, `0x4FAB55`, `0x4FAB70`, `0x4FAC83`, `0x4FB193`: `mov ax,[0x54E364]` / `mov [0x54E364],ax`), and no dword access spans `0x54E364..0x54E367`.
+- So `0x54E366` is image data only. Its value equals the root type id `0x0181` (what `0x5034D0` returns from `[0x54E634]`), which suggests a second, never-registered class word — but that is a **hypothesis**: nothing in `igi.exe` reads or writes it. Do not add a writer or a reader for it and leave the `.data` image value as-is. Status: UNRESOLVED and inert.
+
+### 15.5 `0xA76D10` constructor and element layout — confirm/correct on the Lead's numbers
+
+- Constructor: `0x4FAB94 push 5; 0x4FAB96 call 0x4F1950`, result stored at `0x4FAB9E mov [0xA76D10],eax`. `0x4F1950` body (`push esi; mov esi,[esp+8]; mov eax,esi; push 4; shl eax,4; add eax,0xC; push eax; call 0x4B0C60; add esp,8; lea ecx,[eax+0xC]; mov [eax+4],esi; mov dword [eax],0; mov [eax+8],ecx; pop esi; ret`) allocates `capacity*16 + 12` bytes, 4-byte aligned, via `0x4B0C60`; header is `{count = 0 at +0, capacity = n at +4, data pointer = ptr+0xC at +8}`; the elements start at container+0xC.
+- **Confirm**: elements are 16 bytes, there are **5** entries, and the structure is growable. The grow routine is `0x4F1980(container, delta)`: reallocates via `0x4F1950(old count + delta)`, then `rep movsd`/`rep movsb` copies `count*16` bytes and preserves the old count. `Graph_Init` calls it **zero** times (capacity 5, exactly 5 appends), so a faithful transcription of `Graph_Init` contains no reallocation and must not add one.
+- Element layout from `0x4F1A80` (body: `ecx=[esp+0xC]; edx=[esp+8]; ecx-=edx; edx=[esp+0x10]; if edx==-1 -> Debug_Error("Undefined parameter type" @0x54E110)+spin; eax=[esp+4]; count=*eax; data=*(eax+8); element[count*16+0]=ecx; element[count*16+4]=edx; element[count*16+8]=arg5; element[count*16+0xC]=(byte)arg5; (*eax)++`):
+  - `+0x00` = `arg3 - arg2` (caller passes two pointers into its own frame; the difference is stored verbatim),
+  - `+0x04` = `arg4` (type handle, the push left in front of the handle getter),
+  - `+0x08` = `arg5` (dword id 6 or 7), `+0x0C` = low byte of the same id,
+  - fatal case: `arg4 == 0xFFFFFFFF` → `push 0x54E110` (`"Undefined parameter type"`), `call 0x4AF7B0`, `add esp,4`, `jmp 0x4F1AA0`.
+- The five appended elements, in call order, with the exact arguments the caller builds (`0x4FABB1`…`0x4FAC45`):
+
+| # | append call | `arg3-arg2` (stored +0) | handle (+4) | id (+8) | handle getter |
+| --- | --- | --- | --- | --- | --- |
+| 1 | `0x4FABBD` | `0x20` (`lea [esp+0x34]` minus `lea [esp+0x14]`) | `[0xA70C88]` | 7 | `0x4F1010` |
+| 2 | `0x4FABDF` | `0x65` (`[esp+0x79]` minus `[esp+0x14]`) | `[0xA75898]` | 7 | `0x4F0EF0` |
+| 3 | `0x4FAC01` | `0x68` (`[esp+0x7c]`) | `[0xA70C90]` | 6 | `0x4F1000` |
+| 4 | `0x4FAC23` | `0x69` (`[esp+0x7d]`) | `[0xA70C90]` | 6 | `0x4F1000` |
+| 5 | `0x4FAC45` | `0x00` (`[esp+0x14]` minus itself) | `[0xA70CA0]` | 7 | `0x4F1020` |
+
+- Handle identities: `[0xA70C90]` is the Bool8 type handle (`0x4F1000` = `mov eax,[0xA70C90]; ret`, §13 `Script_TypeHandleGetBool8`). `[0xA70C88]`, `[0xA75898]` and `[0xA70CA0]` are handle slots read by `0x4F1010` (`mov eax,[0xA70C88]`), `0x4F0EF0` (`mov eax,[0xA75898]`) and `0x4F1020` (`mov eax,[0xA70CA0]`); **their owning types are not established in this scope — unresolved, do not name them**. The semantic of element `+0x00` is likewise unresolved: it behaves like a field offset into the 0x80-byte Graph object (all five values `< 0x80`), but no reader of `+0x00` is proven here, so record it as "offset-like dword" rather than naming it.
+
+### 15.6 `0x401900` / `0x401400` / `0x401530` calls in order, with proven arguments
+
+`0x4FAA60` makes one type registration, three phase-handler registrations, three class-method registrations and one attribute-handler registration:
+
+1. `0x4FAA6A push edi; 0x4FAA6B push edi; 0x4FAA6C call 0x5034D0` — `0x5034D0` is `66 a1 34 e6 54 00; c3` = `mov ax,[0x54E634]; ret`, and image `[0x54E634] = 0x0181`, so it returns the **root type id `0x0181`**. It is a 2-argument cdecl call whose arguments the callee does not pop (`ret`, not `ret 8`), so the two zero dwords remain on the stack.
+2. `0x4FAA71 push eax (0x0181); 0x4FAA72 push 0x80; 0x4FAA77 push 0x54DF48 ("Graph"); 0x4FAA7C call 0x401900`. With the two leftover zeros, the proven signature is `0x401900(name_ptr, size, parent_class_word, copy_source, <unused>)`: body reads `arg1=[esp+4]` (stored slot+0x00), `arg2=[esp+8]` (slot+0x04), `arg3=[esp+0xC]` word (slot+0x08), `arg4=[esp+0x10]` (non-zero → `0x4B0B00(&slot+0x0C, size, arg4, 0)` and slot+0x24=1; zero → slot+0x24=0). For Graph: name `"Graph"` @`0x54DF48`, size `0x80`, parent `0x0181`, copy_source `0`.
+   - Table details (needed if `0x401900` is the next transcription): 384 slots of `0x30` bytes at `0xAF5EE0`–`0xAFA704`; free marker byte at slot+0x25; full table → `push 0x5361C4 ("Unable to allocate task type")`, `call 0x4AF7B0`, `jmp $` at `0x401918`–`0x401925`. Parent `!= 0x0181` copies the parent's `0xFE`-entry phase row at `0xA96AE0 + class*0x180` and inherits dword slot+0x2C; parent `== 0x0181` writes `0x20000000` to slot+0x2C. Returns the new class id in `AX` (`mov ax,bp` at `0x4019E5`) after `0x4019DF call 0x4014B0`, which recomputes every in-use slot's word `+0x28` through `0x4014E0(class)`. `0x4014E0` builds a 16-bit mask: for each of the 16 bytes of the phase→class map at `0x54FF24` (`0xFF` terminates) it tests the handler-table dword at `0xA96AE0 + class*0x180 + map[c]*4` and ORs `1<<c`; then `or ah,0x80` (bit 15 always set).
+3. Phase-handler registrations, three, all `0x401400(class, phase, handler)`: `0x4FAB02 0x401400(class, 0, 0x4F90B0)`; `0x4FAB5B 0x401400(class, E5, 0x4F9180)`; `0x4FAB76 0x401400(class, E4, 0x4FAE40)`. The two non-zero phases are read through `0x4F1A70` (slot `0x54E0E5`) and `0x4F1A60` (slot `0x54E0E4`): a transcription must **call the getters**, not inline bytes, because those slots hold runtime-allocated ids (§13.5 / Task B).
+4. Class-method registrations, three, all `0x401530(class, id, handler)`: `0x4FAB19 0x401530(class, 1, 0x4C1780)`; `0x4FAB2D 0x401530(class, 2, 0x4F9160)`; `0x4FAB40 0x401530(class, 3, 0x4FADB0)`. Handler `0x4C1780` is the ret-only stub already flagged in §13.6 flag 3.
+5. Attribute-handler registration, one: `0x4FAB7E push 0x4FAE50; 0x4FAB83 call 0x4F1B60` (slot `0x54E0EA`, kind EA); `0x4FAB88 push eax; 0x4FAB89 call 0x4F1020` (`[0xA70CA0]`); `0x4FAB8E push eax; 0x4FAB8F call 0x4F1BC0` → `0x4F1BC0([0xA70CA0], <EA byte>, 0x4FAE50)`. Body of `0x4F1BC0`: `table[arg1*19 + (int8)arg2] = arg3` at `0xA758E8` (64 type rows × 19 dwords = 0x4C0 dwords, the array `0x4F1840` clears), then it walks the derived-type chain at `0xA758E4` stride `0x4C` and repeats for every entry whose `[entry] == arg1`.
+
+Stack-cleanup checkpoints, so a transcription keeps the same push/pop shape: `0x4FAB0E add esp,0x48` cleans 8 (leftover `0x5034D0` args) + 12 (`0x401900` args) + 40 (ten allocator args) + 12 (phase-0 registration) = 72; `0x4FAB45 add esp,0x24` = 3 × 12 method registrations; `0x4FAB60` and `0x4FAB7B` `add esp,0xC` = one registration each; `0x4FAB9B add esp,0x10` = 12 (`0x4F1BC0`) + 4 (`0x4F1950` capacity); each of the five append blocks ends `add esp,0x18` = 16 (append args) + 8 (two pushes left in front of the handle getter); `0x4FAD52 add esp,0x48` = 6 × 12 and `0x4FAD99 add esp,0x30` = 4 × 12 for the ten member registrations.
+
+### 15.7 The `0x4F1A80` fills
+
+Five calls, one per element. Argument order is proven both from the callee reads (`[esp+4]` container, `[esp+8]` low pointer, `[esp+0xC]` high pointer, `[esp+0x10]` type handle, `[esp+0x14]` id) and from the caller push order (`push <handle>; lea high; push high; lea low; push low; push container`). Each block also pushes a spare `0` (consumed by the block's `add esp,0x18`) and leaves the id (7, 7, 6, 6, 7 in call order) in the `arg5` slot by pushing it before the handle getter call — reproduce both pushes exactly; they are what makes the cleaned byte count 0x18.
+
+### 15.8 The remaining initialisation blocks of `0x4FAA60`
+
+- `0x4FAC4D`–`0x4FAC61`: three-dword list head at `0xA77248`: `[0xA77248]=0xA7724C`, `[0xA77250]=0xA77248`, `[0xA7724C]=0`.
+- `0x4FAC67`–`0x4FAC7F`: initialise the **4-entry** 8-byte table at `0xA77228`: each entry gets word `0x0181` at `+0` and dword `0` at `+4` (loop `0x4FAC71`–`0x4FAC7F`, `eax` from `0xA7722C` while `<0xA7724C`, step 8 → entries `0xA77228`, `0xA77230`, `0xA77238`, `0xA77240`).
+- `0x4FAC81`–`0x4FAC92`: `0x4F9460(class, 0x240)`. `0x4F9460` scans that same 4-entry table for the class word (using `0x0181` as the free marker when `edx == -1`) and writes `{word class, dword 0x240}`. So **Graph objects are 0x240 bytes**, and that table is the class→allocation-size map.
+- `0x4FAC95`–`0x4FACD9`: `[0xA774A0]=0xA774A4`, `[0xA774A8]=0xA774A0`, `[0xA774A4]=0`; `[0xA76D18]=0xA76D1C`, `[0xA76D20]=0xA76D18`, `[0xA76D1C]=0`; then the node loop: `esi = 0xA76D28`, while `esi < 0xA77228`: `[esi]=0`, `[esi+4]=0`, `0x4AF8F0(0xA76D18, esi)`, `esi += 0x14` → **64 nodes of 20 bytes** (`0x500/0x14 = 64`) inserted into the `0xA76D18` list. `0x4AF8F0(list, node)` body: `[node+4]=[list+8]; [node]=list+4; [[list+8]]=node; [list+8]=node` (doubly-linked insert).
+- `0x4FACEC`–`0x4FAD94`: ten `0x4F9DF0(name, count, handler)` member registrations. Names are ASCII in `.data`. `0x4F9DF0` hashes the name with `0x4F9E70` (lower-case fold via `add cl,0xE0` for a–z; hash = Σ char × weight, weight starts 1 and `+= 0x13D; &= 0xFFFF`), walks the dict at `0xA774A0` (node: `+0` next, `+4` prev, `+8` hash, `+0xC` count, `+0x10` handler) and on a duplicate hash → `push 0x54E3E8` (`"GraphStream - collision in hash for %s"`), `call 0x4AF810`, ret; otherwise takes a node from the `0xA76D18` list, sets `+8=hash`, `+0xC=count`, `+0x10=handler`, unlinks it (`0x4AF960`) and relinks it into `0xA774A0` (`0x4AF8F0`). If the `0xA76D18` list is empty it returns silently. Registration order and values:
+
+| # | call | name @VA | count | handler |
+| --- | --- | --- | --- | --- |
+| 1 | `0x4FACF8` | `"nMaxNodes"` @`0x54E4A4` | 5 | `0x4FAEE0` |
+| 2 | `0x4FAD09` | `"nNodeID"` @`0x54E49C` | 5 | `0x4FAF50` |
+| 3 | `0x4FAD1A` | `"tNodePosition"` @`0x54E48C` | 8 | `0x4FAF80` |
+| 4 | `0x4FAD2B` | `"vNodeGamma"` @`0x54E480` | 6 | `0x4FAFA0` |
+| 5 | `0x4FAD3C` | `"vNodeRadius"` @`0x54E474` | 6 | `0x4FAFC0` |
+| 6 | `0x4FAD4D` | `"nNodeMaterial"` @`0x54E464` | 5 | `0x4FAFE0` |
+| 7 | `0x4FAD61` | `"nNodeCriteria"` @`0x54E454` | 9 | `0x4FB030` |
+| 8 | `0x4FAD72` | `"nLinkID1"` @`0x54E448` | 5 | `0x4FB080` |
+| 9 | `0x4FAD83` | `"nLinkID2"` @`0x54E43C` | 5 | `0x4FB0B0` |
+| 10 | `0x4FAD94` | `"eLinkType"` @`0x54E430` | 5 | `0x4FB0D0` |
+
+The duplicate-hash message names the object these members belong to as a **GraphStream**-style script type (`"GraphStream - collision in hash for %s"` @`0x54E3E8`); that string is the only evidence for the name, so do not extend it to the ten handler bodies without their own evidence.
+- Epilogue `0x4FAD9C`–`0x4FADA4`: `pop edi; pop esi; add esp,0x80; ret`.
+
+### 15.9 `Graph_Shutdown` `0x004FB110` — full sequence, and one order correction
+
+| VA | bytes | instruction | note |
+| --- | --- | --- | --- |
+| `0x004FB110` | `a1 10 6d a7 00` | `mov eax, dword ptr [0xa76d10]` | [0xA76D10] |
+| `0x004FB115` | `50` | `push eax` |  |
+| `0x004FB116` | `e8 15 67 fc ff` | `call 0x4c1830` | 0x4C1830(container) = 0x4B0D10 free path — array released FIRST |
+| `0x004FB11B` | `8a 0d 68 e3 54 00` | `mov cl, byte ptr [0x54e368]` | slot 0x54E368 |
+| `0x004FB121` | `51` | `push ecx` |  |
+| `0x004FB122` | `e8 99 67 f0 ff` | `call 0x4018c0` | 0x4018C0(E368) clear |
+| `0x004FB127` | `8a 15 69 e3 54 00` | `mov dl, byte ptr [0x54e369]` | slot 0x54E369 |
+| `0x004FB12D` | `52` | `push edx` |  |
+| `0x004FB12E` | `e8 8d 67 f0 ff` | `call 0x4018c0` | 0x4018C0(E369) |
+| `0x004FB133` | `a0 6a e3 54 00` | `mov al, byte ptr [0x54e36a]` | slot 0x54E36A |
+| `0x004FB138` | `50` | `push eax` |  |
+| `0x004FB139` | `e8 82 67 f0 ff` | `call 0x4018c0` | 0x4018C0(E36A) |
+| `0x004FB13E` | `8a 0d 6b e3 54 00` | `mov cl, byte ptr [0x54e36b]` | slot 0x54E36B |
+| `0x004FB144` | `51` | `push ecx` |  |
+| `0x004FB145` | `e8 76 67 f0 ff` | `call 0x4018c0` | 0x4018C0(E36B) |
+| `0x004FB14A` | `8a 15 6c e3 54 00` | `mov dl, byte ptr [0x54e36c]` | slot 0x54E36C |
+| `0x004FB150` | `52` | `push edx` |  |
+| `0x004FB151` | `e8 6a 67 f0 ff` | `call 0x4018c0` | 0x4018C0(E36C) |
+| `0x004FB156` | `a0 6d e3 54 00` | `mov al, byte ptr [0x54e36d]` | slot 0x54E36D |
+| `0x004FB15B` | `50` | `push eax` |  |
+| `0x004FB15C` | `e8 5f 67 f0 ff` | `call 0x4018c0` | 0x4018C0(E36D) |
+| `0x004FB161` | `8a 0d 6e e3 54 00` | `mov cl, byte ptr [0x54e36e]` | slot 0x54E36E |
+| `0x004FB167` | `51` | `push ecx` |  |
+| `0x004FB168` | `e8 53 67 f0 ff` | `call 0x4018c0` | 0x4018C0(E36E) |
+| `0x004FB16D` | `8a 15 70 e3 54 00` | `mov dl, byte ptr [0x54e370]` | slot 0x54E370 (note: E370 before E36F) |
+| `0x004FB173` | `52` | `push edx` |  |
+| `0x004FB174` | `e8 47 67 f0 ff` | `call 0x4018c0` | 0x4018C0(E370) |
+| `0x004FB179` | `a0 6f e3 54 00` | `mov al, byte ptr [0x54e36f]` | slot 0x54E36F |
+| `0x004FB17E` | `50` | `push eax` |  |
+| `0x004FB17F` | `e8 3c 67 f0 ff` | `call 0x4018c0` | 0x4018C0(E36F) |
+| `0x004FB184` | `8a 0d 71 e3 54 00` | `mov cl, byte ptr [0x54e371]` | slot 0x54E371 |
+| `0x004FB18A` | `51` | `push ecx` |  |
+| `0x004FB18B` | `e8 30 67 f0 ff` | `call 0x4018c0` | 0x4018C0(E371) |
+| `0x004FB190` | `66 8b 15 64 e3 54 00` | `mov dx, word ptr [0x54e364]` | class id |
+| `0x004FB197` | `52` | `push edx` |  |
+| `0x004FB198` | `e8 83 68 f0 ff` | `call 0x401a20` | 0x401A20(class) unregister — LAST |
+| `0x004FB19D` | `83 c4 30` | `add esp, 0x30` | cleans 10 clear-calls (0x28) + unregister (4) + free (4) = 0x30 |
+| `0x004FB1A0` | `c3` | `ret ` | never writes 0xA76D10 back to 0 |
+
+**Order correction.** The sequence is: (1) load `[0xA76D10]` and **release the container first** via `0x4C1830`; (2) clear the ten phase ids via `0x4018C0`, in retail order `E368, E369, E36A, E36B, E36C, E36D, E36E, E370, E36F, E371` (note `E370` before `E36F`, not slot order); (3) unregister class word `0x54E364` via `0x401A20`; (4) `add esp,0x30`; ret. The assumption in the request — "clear ten slots, release `0xA76D10`, then unregister" — is **wrong in the first two steps**: retail frees the container before it clears the ids.
+
+- `0x4C1830` is `mov eax,[esp+4]; push eax; call 0x4B0D10; pop ecx; ret` — the container free wrapper. `0x4B0D10` is the release path: decrements the pool counter at `0x942300`, unlinks the allocation header via `0x4AF960`, and frees via `0x4A6A50` (`add eax,-4; and al,0xFC` first).
+- `0x4018C0` clears the event record for an id (`and eax,0xFF; lea eax,[eax+eax*2]; mov byte [0x54F932 + id*6],0`), i.e. it marks the `0x54F930` record free. It does **not** rewrite the slot bytes themselves.
+- `0x401A20` unregister: `and eax,0xFFFF`; slot = arg*0x30; if slot+0x24 (copied-payload flag) → `0x4B0B70(&slot+0x0C)` (destroys the `0x4B0B00`-copied payload: frees `[slot+0x0C]` through `0x4B0D10` and zeroes it); then `slot+0x25 = 0` (free marker). So unregister frees the per-class payload before clearing in-use.
+- Teardown **never** writes `[0xA76D10] = 0` and never rewrites the ten slot bytes to `0xFF`/`0`. A faithful transcription leaves the dangling global and the stale ids exactly as retail does. (Contrast `Script_ParameterEventReset` `0x4F18C0`, which does rewrite its own slots to `0xFF` — different routine, do not copy its idiom here.)
+
+### 15.10 What this writer removes, what it needs, and what it does not unblock
+
+- **Stand-ins to delete once `native_4faa60.cpp` exists** (all are port-owned definitions inside reader files today): `g_54e364` (`native_4f9210.cpp`), `g_a76d10` (`native_4f9200.cpp`), `g_54e369` (`native_4f9280.cpp`), `g_54e36b` (`native_4f9220.cpp`), `g_54e36c` (`native_4f9230.cpp`), `g_54e36d` (`native_4f9240.cpp`), `g_54e36e` (`native_4f9250.cpp`), `g_54e36f` (`native_4f9260.cpp`) — eight definitions, to become `extern` declarations owned by the new writer. Slots with no getter (`0x54E368`, `0x54E36A`, `0x54E370`) need storage in the writer for the first time.
+- **Readers unblocked:** `0x4F9200` (`A76D10`), `0x4F9210` (class word), the six slot getters, and `0x4F9270` (`0x54E371`), which can then be added as `native_4f9270.cpp` without a stand-in (§13.8.2).
+- **Required callees** for a byte-faithful `0x4FAA60` + `0x4FB110` pair: `0x5034D0`, `0x401900`, `0x4014B0`, `0x4014E0`, `0x4017C0` (already `QTask_AllocateEvent`), `0x4C1780`, `0x401400`, `0x401530`, `0x4F1A60`, `0x4F1A70`, `0x4F1B60`, `0x4F1020`, `0x4F1BC0`, `0x4F1950`, `0x4B0C60`, `0x4F1010`, `0x4F0EF0`, `0x4F1000`, `0x4F1A80`, `0x4F9460`, `0x4AF8F0`, `0x4F9DF0` (+`0x4F9E70`, `0x4AF960`, `0x4AF810`), and on the teardown side `0x4C1830`, `0x4B0D10`, `0x4018C0` (exists), `0x401A20` (+`0x4B0B70`). If any is still untranscribed, the increment is either "transcribe the whole chain" or "block the writer" — do not stub them.
+- **Image values a faithful transcription must reproduce** (`.data` initial image): `0x54E364 = 0x0181` word; `0x54E366 = 0x0181` word (dead, never written — keep the image value, add no code); `0x54E368..0x54E371 = 0xFF` ×10; `0x54E634 = 0x0181`; `0xA76D10 = 0`; `0x54E0E4..0x54E0EB` are owned by `0x4F1840` (not this routine); table `0xA77228` entries `{0x0181, 0}`; list heads `0xA77248/4C/50`, `0xA774A0/A4/A8`, `0xA76D18/1C/20`; the `0xA758E4` derived-type chain and the `0xA758E8` 64×19 handler table are cleared by `0x4F1840`.
+- **NOT unblocked: `0x401A60` / `0x567C58`.** The literal `0x00567C58` is referenced at `0x4012FB`, `0x40130D`, `0x4015F2`, `0x4015FB` (the `0x4012xx`/`0x4015xx` type-system routines) and at `0x401A61` inside `0x401A60` itself; `0x4FAA60` touches none of them. The "same missing writer" argument holds only for the Graph slots and `0xA76D10`; the `0x401A60` blocker is a different writer and stays blocked after this increment.
+
+### 15.11 Evidence commands
+
+```sh
+cd /Users/haseeb-mir/Downloads/IGI
+r2 -q -e scr.color=0 -c 'pd 260 @ 0x4FAA60' -c 'pd 40 @ 0x4FB110' -c q igi.exe
+r2 -q -e scr.color=0 -c 'pd 20 @ 0x4F1950' -c 'pd 30 @ 0x4F1980' -c 'pd 30 @ 0x4F1A80' -c q igi.exe
+r2 -q -e scr.color=0 -c 'pd 40 @ 0x401900' -c 'pd 20 @ 0x4014B0' -c 'pd 30 @ 0x4014E0' -c q igi.exe
+r2 -q -e scr.color=0 -c 'pd 30 @ 0x401A20' -c 'pd 12 @ 0x4C1830' -c 'pd 16 @ 0x4B0D10' -c q igi.exe
+r2 -q -e scr.color=0 -c 'pd 30 @ 0x4F9DF0' -c 'pd 24 @ 0x4F9E70' -c 'px 64 @ 0x54E364' -c q igi.exe
+```
+
+Reference scans: call sites by enumerating every `e8` in `.text` and computing `target = site+5+rel`; stores/loads by exhaustive 4-byte literal scans for the VA; the ten-slot order and every cleanup byte count above come from the raw instruction table in 15.2, not from r2 `pd` alone (the NOP-padded tail misaligns r2 beyond `0x4FAD9C`).
