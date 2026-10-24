@@ -306,3 +306,24 @@ Method rules learned the hard way this arc:
   would not match retail. That chain (`0x4EE970` -> `0x4F1180` -> `0x4F0C90` -> `0x4B0D10` ->
   `0x4A6A50` -> `0x4AADBB`) is therefore the actual path past startup, not optional allocator tidying:
   without it the executable cannot reach Level 1 data at all. Do not stub or catch that throw.
+
+## OWNER DECISION (recorded 2026-10-24): CRT library-boundary exception — GRANTED
+
+The owner approved a **CRT library-boundary exception** after it was escalated by the Tester:
+routines that are statically linked C runtime primitives (the `memmove`/`memcpy`/`memset` shape:
+jump-table-driven `rep movsd`/`rep stosd`, no game globals, imports, strings or object layout, and
+callers that are generic copy sites) may be reached through the standard library equivalent instead
+of being transcribed as game natives. Such routines are recorded as **CRT-classified, no native, no
+CFG claim** - they are never presented as game logic and never given a CFG score.
+
+- First application: `0x4ACD70`, called by `0x4AADBB`'s arena teardown. Evidence for the
+  classification (Tester-audited): dst `[ebp+8]` / src `[ebp+0xC]` / count `[ebp+0x10]` returning dst,
+  the standard overlap test with a backward `std; rep movsd; cld` path, forward and backward tail
+  jump tables at `0x4ACEB8`/`0x4ACDD0`/`0x4ACEC8`/`0x4ACE4C` and `0x4AD050`/`0x4AD000`/`0x4ACF58`,
+  821 bytes / 33 blocks, no game references, and exactly three generic copy callers
+  (`0x4A7600`, `0x4ACBDC`, `0x4AB0AA`). Reproduced with `std::memmove(pool, tail, limit - tail)`.
+- This exception does NOT cover anything that touches game state. A routine with game globals, game
+  object layout, imports used for game behaviour, or game-specific semantics must still be transcribed
+  as its own native at its retail address. Do not use this exception to skip a game routine.
+- Do not write inline-assembly `rep movsd` merely to obtain a CFG number: that would present a CRT
+  primitive as game logic, which is exactly what the exception exists to avoid.
