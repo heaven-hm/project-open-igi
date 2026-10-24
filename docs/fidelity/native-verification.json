@@ -56331,6 +56331,46 @@
       }
     },
     {
+      "address": "0x004C0170",
+      "name": "DynObj_IsNumericToken_4C0170",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/dynobj/native_4c0170.cpp",
+        "sha256": "99575613c3386e50e4cec9e36a71dd79f687fcaaa11bffb9a26258aebe4eb116",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/004C0170-DynObj_FindSymbol 2.cpp",
+        "sha256": "35d89ea34e5f4bf7f70c9dac03bbf310f6eb2c0a67227a91d5a1139f5d9b21ce",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x004C0170",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004C0170-binaryninja.json",
+          "evidence_sha256": "24e8f832a031fc335f4dc5da8610e442fa7093481bf4baebbb210cf1731908e9"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x004C0170",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004C0170-radare2.json",
+          "evidence_sha256": "0f0c90a9a0494789ed5760063eba077a80e37ef16d956c10efcb964ae89e3d22"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declaration preserves the observed x86 argument boundary; both decoders agree on the entry."
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004C0170-semantic-review.json",
+          "evidence_sha256": "47e65595383ecd5ae3918dd566adddcbeb08b9b8832bec25912f859f386e26f6"
+        }
+      }
+    },
+    {
       "address": "0x004C0230",
       "name": "DynObj_GetField0C_4C0230",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
