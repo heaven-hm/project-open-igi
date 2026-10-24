@@ -90,3 +90,20 @@ Consequence for the work order: the closure must be classified, not only measure
 transcribe, (b) a CRT/runtime helper that the compiler supplies in the candidate, or (c) an inner entry of an already transcribed
 function. Only (a) counts against readiness; listing 0x004A54A0 as "ready" was noise, and treating it as a required transcription
 would have been a fabricated native.
+
+## Frontier exhaustion (round 225)
+
+After the getter and small-native waves, the ready set has run dry of landable leaves. Filtering the remaining ready
+natives for bodies that touch no globals, make no call and no tail jump leaves exactly one member - 0x004AC8CC, which is a
+three-stos 12-byte zero fill, i.e. compiler-generated struct clearing, not game code.
+
+Every other ready native now falls into one of two classes:
+
+1. it reads or writes a static object whose extent and owner are not yet established (0x5BDDB0, 0x5C10F0, 0x5C8A4C and
+   family), so landing it would require inventing storage; or
+2. it is a CRT/compiler helper (stack probe, 12-byte clear, string primitives) that the candidate toolchain supplies and
+   that must not be transcribed as a native.
+
+That is the real conclusion of the leaf-native strategy: it cannot continue without the extent-discovery work first. The
+next increment is therefore data ownership, not another transcription: enumerate every reference to one shared object,
+prove its extent from the widest access, record writers and readers, and only then land the natives that touch it.
