@@ -455,3 +455,29 @@ of `0x4B8810` and the seven-dword record layout being filled here.
 Dependencies: `0x004B0D60` and `0x004C0560` have no provenance lines in `engine/` yet, so
 this routine stays unwritten. Its own tail (from `0x004BAB18`) still needs capture before a
 transcription attempt - recorded here so the decode is not restarted.
+
+### 0x4F9DF0 decoded (120 B, 7 blocks) - graph-stream node removal/lookup
+
+```
+esi = arg1; call 0x4F9E70(arg1)          ; hash/lookup -> eax
+edx = [0x00A774A0]                       ; list head pointer-to-pointer
+loop: ecx = [edx]; if (!ecx) -> not-found
+      if ([edx+8] == eax) -> duplicate path (0x4F9E58)
+      edx = ecx; ecx = [ecx]; if (ecx) loop
+not-found:
+esi = [0x00A76D18]; if (!esi[0]) return
+[esi+8] = eax; [esi+0xC] = arg2; [esi+0x10] = arg3
+call 0x4AF960(esi)                       ; HeapList_Remove (VERIFIED, mem/)
+push esi; push 0x00A774A0; esi[4] = 0; esi[0] = 0
+call 0x4AF8F0(...)                       ; list insert (already used by Mem_Alloc)
+duplicate: push esi; push "GraphStream::collision in hash for ..." ; call 0x4AF810
+```
+
+So: look the node up by arg1, walk the list at `0x00A774A0` comparing `[node+8]`, and on a
+miss take the recycled entry at `0x00A76D18`, fill `[8],[0xC],[0x10]`, unlink it with the
+verified `HeapList_Remove`, then re-insert it into the list. A duplicate hit reports
+`"GraphStream::collision in hash for ..."` through `0x4AF810`.
+
+Dependencies: `0x4F9E70` (lookup) and `0x4AF810` (report) have no provenance lines yet;
+`0x4AF960` and `0x4AF8F0` are already transcribed. So one more leaf (`0x4F9E70`) plus a
+reporting helper stand between the tree and a writable `0x4F9DF0`.
