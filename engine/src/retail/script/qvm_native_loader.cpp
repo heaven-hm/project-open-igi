@@ -11,6 +11,28 @@
 #include <cstring>
 
 namespace igi::retail::script {
+
+// Retail QVM state words shared with qvm_execute.cpp (`0x00A965A0`, `0x00A96598`, `0x00A965A8`).
+//
+// These three have to live at namespace scope, not in the anonymous namespace below: qvm_execute.cpp
+// declares them `extern` and reads/writes the same retail storage (0x00A965A0 is Qvm_SetGlobalState's
+// dword, 0x00A965A8 is the error-reported flag the evaluators store, 0x00A96598 is the
+// error-reporting-enabled dword). Internal linkage here meant those extern declarations could never
+// resolve, and a local duplicate in qvm_execute.cpp would have split the state Qvm_ReportError and
+// Qvm_SetGlobalState update - which is why the fix is linkage, not a second definition.
+//
+// 0x00A965A0 - written only by Qvm_SetGlobalState (0x004B8A14), read only by Qvm_Execute (0x004B8645).
+// 0x00A96598 - error reporting enabled: written at 0x004B8974 / 0x004B89D4, read by Qvm_ReportError.
+// 0x00A965A8 - "an error was reported": written at 0x004B7E1D, 0x004B85C7, 0x004B86BB, 0x004B9313,
+//              0x004B987D, 0x004BBD83; read at 0x004B8699, 0x004BF361.
+std::int32_t g_a965a0 = -1;
+// The error-state pair is observable retail memory: 0x004B8970 writes 0x00A96598 and the
+// 0x004B8B00 reset clears 0x00A43E70/0x00A43E68. They are volatile so a single-translation-unit
+// build cannot constant-fold away Qvm_ReportError's flag store, disabled-state return and
+// callback branch just because this unit contains no writer for them.
+volatile std::int32_t g_a96598 = 1;
+[[maybe_unused]] volatile std::int32_t g_a965a8 = 0;
+
 namespace {
 
 // Port-owned storage for `0x005C8BEC` (Script_GetDebugCompileState) and `0x005C8BF0` (Script_GetForcePrecompiledState).
@@ -20,14 +42,7 @@ namespace {
 extern "C" std::int32_t g_5c8bec;
 std::int32_t g_5c8bf0 = 0;
 
-// Port-owned storage for `0x00A965A0` (Qvm_SetGlobalState), `0x00A96598`, `0x00A965A8`, `0x00A43E68`, `0x00A43E70`.
-std::int32_t g_a965a0 = -1;
-// The error-state pair is observable retail memory: 0x004B8970 writes 0x00A96598 and the
-// 0x004B8B00 reset clears 0x00A43E70/0x00A43E68. They are volatile so a single-translation-unit
-// build cannot constant-fold away Qvm_ReportError's flag store, disabled-state return and
-// callback branch just because this unit contains no writer for them.
-volatile std::int32_t g_a96598 = 1;
-[[maybe_unused]] volatile std::int32_t g_a965a8 = 0;
+// Port-owned storage for `0x00A43E68`, `0x00A43E70`.
 volatile std::int32_t g_a43e68 = 0;
 
 QvmErrorCallbackFn volatile g_a43e70 = nullptr;

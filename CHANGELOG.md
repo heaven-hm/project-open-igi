@@ -11,6 +11,20 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - QVM core dependency table; shared state words given external linkage (internal build, no release)
+
+- **Evidence added**: `docs/fidelity/evidence/qvm-core-dependency-table.md` - per-VA sizes, r2 CFG, ABI, callers, callees and the wave ordering
+  for the QVM closure, including the finding that the three evaluators (`0x004B9120`, `0x004B9660`, `0x004B8CE0`) are one mutually
+  recursive cluster through `0x004B9040` with no acyclic order inside it.
+- **Linkage defect fixed in `engine/src/retail/script/qvm_native_loader.cpp`**: `g_a965a0`, `g_a96598` and `g_a965a8` were defined inside the
+  file's anonymous namespace, so the `extern` declarations in `qvm_execute.cpp` could never resolve - the CMake note calling these words
+  "not ported" was wrong; they were ported but with internal linkage. Moved to namespace scope with the retail evidence for each word
+  (writers/readers by VA) recorded at the definition. A duplicate definition in `qvm_execute.cpp` was never an option: it would have split
+  the state that `Qvm_ReportError` and `Qvm_SetGlobalState` update.
+- **Verified, not assumed**: `nm` on separately compiled objects shows the three words defined `D/D/B` in `qvm_native_loader.o` and referenced
+  `U` in `qvm_execute.o`, so the pair now resolves; the full build stays green at 14,206,388 bytes. This fixes the linkage, **not** the
+  evaluator transcription - `0x004B9120`/`0x004B9660`/`0x004B8CE0` remain unimplemented.
+
 ### 2026-10-25 - QVM argument accessors transcribed and measured; the script-layer wall mapped (internal build, no release)
 
 - **Evidence added**: `docs/fidelity/evidence/qvm-accessors-4b8a20-4b8a50-4b8a80.md`. Three accessors measured on radare2 6.2.0
