@@ -1,0 +1,27 @@
+{
+  "schema": "config-getter-runtime-capture",
+  "retail_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "captures": [
+    {
+      "file": "retail.json",
+      "result": "observed",
+      "counts": {
+        "entry": 2,
+        "return_": 2,
+        "unmatched_entries": 0
+      },
+      "error": null
+    },
+    {
+      "file": null,
+      "result": "not captured",
+      "counts": null,
+      "error": "the candidate run hit the documented Frida setup timeout and was killed after it exceeded the observation window; the spawned igi1.exe was terminated and no process was left behind"
+    }
+  ],
+  "notes": [
+    "0x004167D0 is a 6-byte getter (mov al,[0x00539540]; ret) and the Interceptor hook installs on it: retail observed 2 entries and 2 returns, so the routine is reached during level-1 startup.",
+    "The candidate side produced no observation for two independent reasons, and they must not be conflated: the Frida setup timeout aborted this run, and the candidate also exits 3 at 0x00402930 before any game native runs. Either one alone would block the paired comparison.",
+    "0x004AD36E, a 3-byte function, could not be hooked at all in an earlier capture; 5 bytes is the minimum the Interceptor needs, so 3-byte bodies remain unobservable with this probe."
+  ]
+}
