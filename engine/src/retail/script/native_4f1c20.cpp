@@ -1,4 +1,4 @@
-// Native: Qvm_CheckParameterCount_4F1C20 (placeholder until VERIFIED); retail VA 0x004F1C20-0x004F1C68 (73 bytes, 6 blocks, 5 edges).
+// Native: Qvm_CheckParameterCount_4F1C20 (placeholder until VERIFIED); retail VA 0x004F1C20-0x004F1C68 (73 bytes, 6 blocks, 8 edges).
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: radare2 6.2.0 complete listing (53 55 8b6c2410 56 57 8b7c2414 33f6 8b1f 85ed 7e19 ... ebfe); callers 0x004EF86F and 0x004EF9E8.
 // Behavior/CFG: walks the requested number of parameters in a four-field context and faults when the script asked for more parameters than the caller supplied. Fields: [0] base index, [4] POINTER to the available count, [8] source file text, [0xC] line number. context[1] is passed straight to 0x4B8B00, which dereferences it.

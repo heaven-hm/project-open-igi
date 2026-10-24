@@ -467,3 +467,38 @@ when comparing pairs or reproducing an audit.
 Current frozen pair: **8939c4b7**, plain `8939c4b72f4a3707aee4a8d6d9ac661ad687ad7e328ebeb32698561f296bfc9e`,
 normalised `8b95a4b8764038ad3c5f1bd5ecd58a8355d36b9ac1c21cc9bd3694d7bdb3dec8`, 175 compiled sources,
 committed 04ffb82a.
+
+## Float callbacks 0x4EF9E0 / 0x4EF860 fully derived, not yet written (round 151)
+
+Both are now understood from the listing; next round writes them. `Qvm_CheckParameterCount_4F1C20` is correct
+under them as of 8939c4b7, and the Tester confirms the emitted indirection.
+
+`0x4EF9E0` (41 B, 1 block) - signature `(float* destination, std::int32_t* context)`:
+  push esi; esi = [esp+0xc] = arg2 (context)
+  Qvm_CheckParameterCount_4F1C20(context, 1)                      // push 1; push esi
+  Qvm_GetFloatArg(context[1], context[0])                         // push [esi]; push [esi+4]; call 0x4b8a50
+  *destination = that float                                       // fstp dword [ecx], ecx = [esp+0x18] = arg1
+  context[0] += 1                                                 // mov eax,[esi]; inc eax; mov [esi],eax
+  push/pop balance: the single `add esp,0x10` covers the four pushed words (1, esi, [esi], [esi+4]).
+
+`0x4EF860` (66 B, 3 blocks) - signature `(float* destination, std::int32_t* context)`:
+  push ebx; ebx = [esp+0xc] = arg2 (context); push ebp/esi/edi; edi = [esp+0x14] = arg1 (destination)
+  Qvm_CheckParameterCount_4F1C20(context, 0xB)                    // push 0xb; push ebx
+  base = context[0]                                               // mov ebp,[ebx]
+  for (i = 0; i < 0xB; i += 1) {                                  // xor esi,esi / cmp esi,0xb / jl
+      destination[i] = Qvm_GetFloatArg(context[1], base + i)      // push esi+ebp; push [ebx+4]; call 0x4b8a50; fstp dword [edi]
+      edi += 4
+  }
+  context[0] += 0xB, then pop edi/esi/ebp/ebx and return.          // tail after 0x4EF899 must still be read to confirm order
+
+Open item before writing: read the 0x4EF899 tail to confirm the exact store-back and pop order, and confirm
+`Qvm_GetFloatArg`'s declared signature in engine/include/igi/retail/script/qvm_execute.hpp (it is transcribed
+and structurally verified at 0x004B8A50, 3 blocks/2 edges, but the header must be checked rather than assumed).
+The literal loop bound 0xB must be re-derived from `cmp esi,0xb` (done) and cross-checked against the 11 dwords
+that 0x4EF990 copies - they agree.
+
+Tester's low-severity residuals accepted and documented, not "fixed": base is read inside the count>0 path in
+0x4F1C20 (both known callers pass 1 or 11), the omitted add esp,0xc on the non-returning path, and the header
+edge count (now 8).
+
+Protocol in force: announce each freeze, wait for the Tester's ack, then deploy.
