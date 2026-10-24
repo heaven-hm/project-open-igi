@@ -660,3 +660,50 @@ that only the retail writer defines a global, so the extent must come from the w
 
 Order therefore stands: `0x401530` first to establish the table's true indexing, then `0x4014E0`, then `0x4014B0`,
 then `0x401400`. The class-id assignment cannot be first because its table has no owner yet.
+
+## §10/§11: the handler table extent is PROVEN, and the current port's 0x401530 is not faithful (round 156)
+
+Analyst appended §10/§11 to docs/fidelity/evidence/0x4EE970-data-extents.md (+368 lines). Committed with this
+note. Six corrections that must be folded in before ANY code lands; four of them contradict what I recorded.
+
+**Handler/state table `0x00A96AE0` - extent proven, no longer a blocker.**
+`[0x00A96AE0, 0x00AF5EE0)` = 0x17D00 dwords (97,536) = 0x5F400 bytes = 254 phases x 384 classes.
+Element index = **class_id + phase*0x180** (row stride 0x600 bytes). Proof trio: QTask_Init `0x40117D
+mov ecx,0x17d00` / `0x401183 mov edi,0xa96ae0` / `0x40118F rep stosd`; independent proof from
+TaskType_Register's column loops (`0x4019C1 mov edx,0xFE`, stride 0x600, column 0..383); third proof by
+adjacency, since `0xA96AE0 + 0x5F400 = 0xAF5EE0`, the type-table base, whose clear loop is separately provable,
+and the lower neighbour is the 256-byte map `[0xA969E0,0xA96AE0)`.
+
+Writers: exactly three, all one subsystem - the two handler stores (`0x40156E`, `0x401444`) plus QTask_Init's
+zero-fill and TaskType_Register's column copy/zero. No fifth writer in 588 refs. Registrar bounds cannot prove
+the extent (0x401530 has no finite mask; 0x401400 would over-run capacity by 65,920 dwords), so the initialiser
+is the only valid source - which is why the earlier "only the writer defines a global" rule pointed at the right
+place but the wrong writer.
+
+**Corrections that invalidate my rounds 152-155 notes:**
+1. Type-table OBJECT base is **0xAF5EE0**, not 0xAF5EE8 (that is record+8). Object = `[0xAF5EE0,0xAFA6E0)`,
+   384 x 0x30. The byte at `0xAF5F05` is the IN-USE byte at +0x25, not the name byte; +0x00 is the name pointer.
+2. `mov dx,word [esp+0x14]` at 0x401589 reads **arg1**, not arg2 - 16 bytes are already pushed. Rounds 153/154
+   swapped them. Real semantics: **arg1 = class id (propagation root/column), arg2 = phase (row/multiplier)**,
+   and the recursion forwards phase unchanged while passing the matched record index as the new arg1.
+3. The index formula I wrote is transposed: it is `class_id + phase*0x180`, not `class_word*0x180 + phase`.
+4. **The existing `task_types.cpp` handler-link code is NOT a faithful 0x401530**: it lacks the whole propagation
+   loop (0x401582-0x4015B7) and the tail `call 0x4014B0` (0x4015B9), returns the composed index instead of
+   retail's pre-call counter (`[0x567C70]-1`), and applies `phase & 0xFF` which retail applies only in 0x401400
+   (0x401417). It is also a shared helper, which the one-native-per-VA and no-helper rules forbid. Treat the
+   current `link_handler` as unverified, not as a baseline.
+5. The QTask_Init port omits the 0x17D00-dword zero-fill - the very block that proves the extent - plus the
+   0xAFA6E0 / 0xA969E0 / 0xAFA7E0 / 0x54F92C / 0x567C38 / QTASK_TYPE_UNDEFINED initialisers, so initial state
+   cannot match without them.
+6. `QTask_HandlerTable` / `QTask_FirstLinkFlag` must be 0x17D00 elements each (254*384), not 384*384. The flag
+   array `[0x54FF34,0x567C34)` is 0x17D00 bytes, and the port over-sizes it by 49,920 elements.
+
+**Two silent-failure modes to preserve rather than sanitise:** the flag at 0x54FF34+id marks DIRECT registration,
+not visited state (recursive entries always write 0), so a self-parent record or parent cycle recurses forever
+and nothing in 0x401530 guards it; and passing the root sentinel 0x0181 as arg1 composes
+`phase*0x180+385 = (phase+1)*0x180+1`, an in-bounds write into another class's slot while the compare matches
+every root record. Both are real arithmetic in retail and must be transcribed as-is.
+
+Next: agent-check corrections 1-6 against the current task_types.cpp before editing, then implement QTask_Init's
+zero-fill and make 0x401530 a proper native at its own VA. Do not treat any of the above as verified until the
+existing code is diffed against it.

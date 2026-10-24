@@ -1482,6 +1482,374 @@ NATIVE_DECL std::uintptr_t <name>(std::uintptr_t arg0, std::uintptr_t value)
 - **Do not hardcode the kind numbers.** Slots `E6`/`E9` are addresses (`0x0054E0E6`/`0x0054E0E9`); the values inside are assigned at run time by `0x4F1840` (§8.0(b)). The registration index `19*type + (int8)kind` must be computed from those runtime bytes exactly as `0x4F1BC0` does.
 - **Count sanity for this file (definitions given, from the committed listing):** the initialiser contains 443 `push` instructions, of which 176 carry an immediate operand: 119 pushes of code pointers (84 distinct = the handler set), 32 pushes of type-name string pointers, 1 push of the `"RGB"` pointer `0x0054DF10`, and 24 pushes of small/negative integers (19 × `-1`, 4 × `0x20`, 1 × `0x38`). It contains 262 `call` instructions to 17 distinct local targets and 40 distinct absolute memory operands. For citation, use these explicit definitions: §7.1's "139 `push` instructions" is the subset `119 code-pointer pushes + 19 × push -1 + 1 × push "RGB"` (139 exactly — small-integer pushes and the 32 type-name pushes are excluded), and §1/§6's "127 distinct absolute references" is the earlier loose aggregate over code+string+data operands; neither is a contradicting count, but the definitions above are the ones that can be re-derived one-to-one from the listing. The 84-handler set is set-equal under every parse.
 
+## 10. APPENDED — the extent of `0x00A96AE0`, proven from its writers
+
+### 10.0 The question and the method
+
+The question is the storage definition of the dword table at `0x00A96AE0`: how many elements, how many bytes, and which retail instruction proves it. The instruction must not be a reader: `0x4014E0` multiplies a byte of the 16-byte map at `0x54FF24` by `0x180` and masks the other index with `0xffff`, so a *reader* would "require" a table of `255*0x180 + 0xffff + 1` dwords (`0x27E80` elements, `0x9FA00` bytes) if the map ever held a non-sentinel byte above `0xFD`. That number is an arithmetic artefact, not storage.
+
+Method: enumerate every reference to the global (`axtj @ 0x00a96ae0` returns 588 references; an independent raw `disp32` scan of `.text` for the displacement bytes `e0 6a a9 00` returns the same 588 sites, so the two enumerations agree), then classify each site by the instruction that consumes the displacement, and inspect every site that forms a pointer into the region or performs a store. This section uses **only** instructions that write (directly, or through a pointer this code forms from the base); readers are quoted once, in §10.8, and only to explain where Lead's sentinel concern came from.
+
+### 10.1 The extent, stated
+
+**The table occupies `[0x00A96AE0, 0x00AF5EE0)`: 97,536 dwords = 390,144 bytes = `0x17D00` elements = `0x5F400` bytes.**
+
+It is a two-dimensional array of 32-bit handler pointers: **254 phases (rows, index 0..253) × 384 classes (columns, index 0..383)**, row stride `0x600` bytes (`0x180` dwords), element index `class_id + phase * 0x180`. `254` is the row *capacity* (proved by the copy/zero loop count `0xFE` in §10.4); the phase ids actually passed by the observed call sites are 0..18 (§11.3), so the used rows are a prefix of the capacity, not the whole of it. The array ends exactly at the task-type table base `0xAF5EE0`, i.e. the handler table and the type table are two adjacent objects with no gap.
+
+**The instruction that proves it** is the array's own zero-fill inside `QTask_Init` (`0x004010D0`, `0x0040117B`–`0x0040118F`):
+
+| VA | bytes | instruction | role in the proof |
+| --- | --- | --- | --- |
+| `0x0040117B` | `33 c0` | `xor eax, eax` | fill value 0 |
+| `0x0040117D` | `b9 00 7d 01 00` | `mov ecx, 0x17d00` | **element count = 97,536** |
+| `0x00401183` | `bf e0 6a a9 00` | `mov edi, 0xa96ae0` | **destination = table base** |
+| `0x0040118F` | `f3 ab` | `rep stosd dword es:[edi], eax` | **writes `ECX` dwords from `EDI` upward** |
+
+`rep stosd` writes exactly `ECX` dwords (`0x17D00`), four bytes each, to consecutive addresses starting at `EDI`. Count and destination are literals of the instruction stream, not values computed from any reader; maximum element written = `0x17D00 - 1 = 0x17CFF`, last address `0xA96AE0 + 0x17CFC = 0xAF5EDC`, first address past the array `0xAF5EE0`. No `UNKNOWN` remains and no further observation is needed to settle the size.
+
+### 10.2 The upper boundary is independently the next object
+
+`0xAF5EE0` — the first address past the array — is the base of the task-type table, proved without reference to `0xA96AE0`:
+
+- `QTask_ClearTaskTypes` `0x004011B0`: `mov eax, 0xaf5ee0` (`0x004011B0`), then the loop `0x004011B7`–`0x004011C4`: `mov byte [eax + 0x25], cl` / `mov dword [eax], ecx` / `add eax, 0x30` / `cmp eax, 0xafa6e0` / `jl 0x004011B7`. Base `0xAF5EE0`, stride `0x30`, end `0xAFA6E0` → 384 slots, extent `[0xAF5EE0, 0xAFA6E0)` = `0x4800` bytes.
+- The three functions that address records confirm the same base: `0x401900` writes name/size/parent at `0xAF5EE0`/`0xAF5EE4`/`0xAF5EE8` (`0x0040193C`–`0x00401957`); `0x4014B0` writes the mask word at `0xAF5F08` = base`+0x28`; `0x401530`/`0x401400` compare the parent word at `0xAF5EE8` = base`+0x08` (their walk cursor) and read the in-use byte at `0xAF5F05` = base`+0x25`.
+
+`0xA96AE0 + 0x5F400 = 0xAF5EE0` exactly. The zero-fill's extent and the adjacency therefore agree to the byte.
+
+### 10.3 The lower boundary is independently the previous object
+
+Immediately below the table sits a 256-byte byte map at `0xA969E0`:
+
+- `0x401D30`: `and eax, 0xff` at `0x00401D3E`, then `mov byte [eax + 0xa969e0], cl` at `0x00401D43` → maximum byte address `0xA96ADF`, so that object is exactly `[0xA969E0, 0xA96AE0)`.
+- `QTask_Init` initialises the same region: `mov ecx, 0x3f` / `mov edi, 0xa969e0` / `or eax, -1` / `rep stosd` (`0x004010FB`–`0x00401120`), then the `stosw` at `0x0040112E` writes the map's final word at `0xA96ADC`–`0xA96ADD` (the last two bytes, `0xA96ADE`–`0xA96ADF`, stay zero).
+
+So the table's low boundary is `0xA96AE0` and its high boundary is `0xAF5EE0`; the neighbouring objects fix both ends and neither of them is touched by the `0x17D00`-dword fill.
+
+### 10.4 A second, independent writer proof of the same geometry
+
+`TaskType_Register` (`0x00401900`) initialises one table column per new class. After it has chosen the parent path (`cmp di, 0x181` at `0x004019AD`), it runs one of two loops:
+
+| VA | instruction | meaning |
+| --- | --- | --- |
+| `0x004019BA` | `lea ecx, [ebp*4 + 0xa96ae0]` | destination = column `ebp` (the newly allocated class index) |
+| `0x004019C1` | `mov edx, 0xfe` | **row count = 254** |
+| `0x004019C6` | `lea eax, [edi*4 + 0xa96ae0]` | source = column `edi = parent_type & 0xffff` (copy path only) |
+| `0x004019CD` | `mov esi, [eax]` | read parent's element for this row |
+| `0x004019CF` | `add eax, 0x600` | **row stride = 0x600 bytes = 384 dwords** |
+| `0x004019D4` | `mov [ecx], esi` | write the child's element |
+| `0x004019D6` | `add ecx, 0x600` | next row |
+| `0x004019DC` | `dec edx` / `0x004019DD jne 0x004019cd` | loop 254 times |
+
+and the root path at `0x004019EB`–`0x00401A03` is the same loop with `mov dword [eax], 0` (zero the column) instead of the copy. The column index `ebp` comes from the free-slot scan in the same function: `mov eax, 0xaf5f05`, `add eax, 0x30`, `cmp eax, 0xafa705` → `ebp` ∈ `0..383`. Since 384 slots exist, the highest element any column loop can touch is row 253, column 383: `253*0x180 + 383 = 0x17CFF`, the last dword of the array — the same extent as §10.1, reached by a different writer.
+
+### 10.5 The two semantic writers, with the maximum index each can produce from its own bounds
+
+| # | function | store site | instruction | index as the instruction computes it |
+| --- | --- | --- | --- | --- |
+| W3 | `0x401530` | `0x0040156E` | `mov dword [eax*4 + 0xa96ae0], edx` | `eax = (arg1 & 0xffff) + (arg2*3 << 7)` where the shift is a 32-bit multiply by `0x180`; `arg2` is **not masked** |
+| W4 | `0x401400` | `0x00401444` | `mov dword [eax*4 + 0xa96ae0], edx` | `eax = (arg1 & 0xffff) + (arg2 & 0xff) * 0x180` |
+
+- **W3's own bounds:** `and eax, 0xffff` at `0x00401553` bounds `arg1` to `0xFFFF`; the phase path is `lea esi, [ebp + ebp*2]` (`0x00401558`) then `shl esi, 7` (`0x00401562`), and `inc`/`shl` do not bound the value. The instruction therefore gives **no finite bound** on the phase: for `arg2 >= 0x100_0000` the wrap-around even loses the row distinction. Only the argument's *domain* (a phase id, §11.3) bounds it.
+- **W4's own bounds:** both masks are present, so the instruction-level maximum is `0xFFFF + 0xFF*0x180 = 0x27E7F` (163,455) — larger than the proved capacity `0x17CFF` (97,535) by 65,920 elements.
+- Both writers store a single dword and (immediately after) one flag byte at the same index; neither is the defining writer.
+
+Consequence: **the extent cannot be derived from the registrars at all** — their own masks over-run the array if a caller passes an out-of-domain phase or class id, which is precisely why the extent has to come from the array's own initialiser and from the class allocator's column loops (§10.1, §10.4). This is a statement about writer instructions, not an inference from a reader.
+
+### 10.6 Complete writer census — and the answer to "is there a third owner?"
+
+The 588 references to `0x00A96AE0` in `.text` classify exactly as follows:
+
+| class | count | sites |
+| --- | --- | --- |
+| direct dword store | 2 | `0x00401444` (W4, in `0x401400`), `0x0040156E` (W3, in `0x401530`) |
+| base-pointer formation feeding a store | 4 | `mov edi, 0xa96ae0` at `0x00401183` (W0, `QTask_Init`), `lea ecx, [ebp*4 + 0xa96ae0]` at `0x004019BA`, `lea eax, [edi*4 + 0xa96ae0]` at `0x004019C6`, `lea eax, [ebp*4 + 0xa96ae0]` at `0x004019EB` (W1/W2, `TaskType_Register`) |
+| indirect dispatch `call dword [reg*4 + 0xa96ae0]` | 28 | `call dword [ecx*4 + 0xa96ae0]` ×17, `[edx*4 + 0xa96ae0]` ×8, other registers ×3; first sites `0x004081A8`, `0x00408265`, `0x00408413`, `0x00413D9F`, `0x004146D2`, `0x004147A2` |
+| dword load (read) | 554 | handler lookups; the largest single shapes are `mov eax, [eax*4 + 0xa96ae0]` ×205, `[ecx*4 + ...]` ×125, `[edx*4 + ...]` ×89 |
+
+So the answer to the Lead's question is: **yes, there are writers outside the two registrars — two more, in two more functions — but they are not a third owner of the semantics.**
+
+- **W0 = `QTask_Init` (`0x004010D0`) at `0x0040118F`**: startup zero-fill of the entire array (the §10.1 proving instruction).
+- **W1/W2 = `TaskType_Register` (`0x00401900`) at `0x004019CD`–`0x004019DD` / `0x004019F7`–`0x00401A03`**: per-class column copy (inheritance) or column zero (root), 254 dwords.
+- **W3/W4 = the registrars**: the only stores of a handler *value*; the only stores that ever put a non-zero dword into the array.
+
+There is no fifth writer and no other function that forms a pointer into the region: the remaining 554 references are loads and 28 are indirect calls. The region is written exactly by the task-type subsystem and by nothing else.
+
+### 10.7 Why the registrars are still the right place to look for the *meaning* of an entry
+
+The array is the phase → per-class handler dispatch table: `TaskType_Register` seeds each new class's column from its parent's column (or zero for the root word `0x0181`), `0x401530`/`0x401400` store one handler per (class, phase) and propagate it down the class tree, `0x4014E0` reads it to build a class's 16-bit phase mask, and the dispatcher `call dword [reg*4 + 0xa96ae0]` invokes it. §10.5 fixes the exact store arithmetic; §11 derives W3 statement by statement.
+
+### 10.8 `0x0054FF24` — image state versus runtime state (the sentinel question)
+
+Lead's sentinel concern is a statement about **runtime**, not about the image:
+
+- Image bytes at `0x54FF24`: 16 zero bytes (`00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00`).
+- `QTask_Init` overwrites all sixteen bytes with `0xFF` before any registration: `or eax, -1` at `0x004010F8`; `mov [0x54ff24], eax` at `0x00401100`; `mov [0x54ff28], eax` at `0x0040110A`; `mov [0x54ff2C], eax` at `0x00401111`; `mov [0x54ff30], eax` at `0x00401118`. So at runtime every slot is `0xFF` until assigned.
+- `0x401D30` sets a slot (`mov byte [ecx + 0x54ff24], al` at `0x00401D38`) and `0x401D50` clears one (`mov byte [ecx + 0x54ff24], 0xff` at `0x00401D66`). The value stored is a *phase id* byte, masked to 8 bits, no range validation.
+- The reader `0x4014E0` guards with `cmp dl, 0xff` / `je skip` (`0x004014EB`–`0x004014F3`), so the `0xFF` fill produces no table access.
+
+The reader's worst case is still real but bounded by the map's contract: if a slot ever held `0xFE` or higher (other than `0xFF`), `0x4014E0` would read `phase*0x180 + type_id` with `phase >= 254`, i.e. **at or past `0x17D00` dwords** — the first read of the type table. The map's only writers store phase ids (`0x401D30`'s argument is the caller's phase byte), and every observed phase id is small (0..18, §11.3), so the contract holds; the code performs no check of its own. This is recorded as a residual boundary hazard, not as evidence about the table's size.
+
+### 10.9 The parallel first-link flag array `0x0054FF34`
+
+- Written by exactly two instructions, at the same composed index as W3/W4: `0x00401575` / `0x0040144B`, `mov byte [eax + 0x54ff34], cl`. Read at the same index shape: `0x00401593` / `0x00401469`, `mov al, byte [esi + ebx + 0x54ff34]`. Four references total.
+- Element is one byte per table element, so the required extent is the same element count: `0x17D00` bytes = 97,536 bytes, `[0x54FF34, 0x567C34)`.
+- The image holds zeros and no initialiser writes this array (the only writers are the two registrars), so every flag starts at `0` at runtime.
+- The end `0x567C34` is not independently pinned by an adjacent object (the next known global block starts at `0x567C38`, four dwords later), so the byte extent is derived from the shared index space, not from adjacency. It is nevertheless exact: the two writers cannot address more than `0x17D00` elements without writing outside the table they index in the same instruction pair.
+- Current port state: `task_types.cpp` sizes `QTask_FirstLinkFlag` as `384 * 384 = 147,456` bytes (and `QTask_HandlerTable` as 147,456 `FrameHandler` entries). The retail extent for both is `0x17D00` elements (`254 * 384`); the port is over-sized by `0xC300` elements and the header's `384*0x180` geometry is a slice of the retail's, not the retail's.
+
+### 10.10 Storage definitions and constants this fixes
+
+```json
+{
+ "task_handler_table": {
+  "va": "0x00A96AE0",
+  "element": "dword (code pointer)",
+  "elements": 97536,
+  "bytes": 390144,
+  "start": "0x00A96AE0",
+  "end_exclusive": "0x00AF5EE0",
+  "geometry": {"phases": 254, "classes": 384, "row_stride_bytes": 1536, "index": "class_id + phase * 384"},
+  "proving_writers": ["0x0040117D", "0x00401183", "0x0040118F", "0x004019C1", "0x004019CF", "0x004019D6", "0x004019AD"],
+  "semantic_writers": ["0x0040156E", "0x00401444"]
+ },
+ "first_link_flag_table": {
+  "va": "0x0054FF34",
+  "element": "byte",
+  "elements": 97536,
+  "bytes": 97536,
+  "start": "0x0054FF34",
+  "end_exclusive": "0x00567C34",
+  "writers": ["0x00401575", "0x0040144B"]
+ },
+ "phase_map": {
+  "va": "0x0054FF24",
+  "bytes": 16,
+  "image_bytes": "all 0x00",
+  "runtime_init": "0xFF x16 by 0x004010F8-0x0040111D",
+  "assigned_by": ["0x00401D38", "0x00401D66"]
+ }
+}
+```
+
+Two constants belong with these sizes: the row stride `0x180` dwords and the row count `254` (`0xFE`); the class count `384` (`0x4800/0x30`). `TaskType_Register` already loops `phase < 0xFE` in the current port, so the port's arrays, not its loop, are the odd ones out. `QTask_Init` (`0x004010D0`) in the current port does not reproduce the `0x17D00`-dword zero-fill or the neighbouring `0xAFA6E0`/`0xA969E0` initialisations; that is a separate transcription gap, recorded here because §10.1's proving block is exactly the missing initialisation.
+
+## 11. APPENDED — statement-level derivation of `0x401530`
+
+### 11.1 Identity, ABI, and what this function is
+
+- **VA:** `0x00401530`–`0x004015CD` (158 bytes; the following four bytes `0x004015CE`–`0x004015CF` are `nop` padding, the next function starts at `0x004015D0`). Four basic blocks: entry/straight-line `0x401530`–`0x401580`, loop body `0x401582`–`0x4015A5`, loop step `0x4015AD`–`0x4015B7`, tail `0x4015B9`–`0x4015CD`.
+- **Calling convention:** cdecl, three 4-byte arguments, caller cleans `0x0C`. Call sites push, in order, handler → phase → class id, so the parameter list is `(std::uint16_t class_id, std::uint32_t phase, FrameHandler handler)`. 623 call sites (`axtj`).
+- **Return:** `std::uint32_t` in EAX = the value of `0x00567C70` **before** this call (the nesting depth at entry: 0 for the outermost registration, 1 inside its propagation, …). It is not used by any of the inspected call sites (the instruction after each `call 0x401530` never consumes EAX: the sites either start the next push sequence or reload a register from memory), but its computation is part of the body and must be reproduced.
+- **Side effects:** one dword and one byte into the phase/handler tables, increments of two globals (`0x00567C70`, `0x00536148`), a recursive walk of the 384 type slots that can write more dwords/bytes, and a call to `0x4014B0` which rewrites every in-use type slot's 16-bit mask word.
+
+What it means: *link `handler` as the implementation of `phase` for class `class_id` and for every class derived from it*. `class_id` is the type-table slot index returned by `TaskType_Register` (`0x401900` returns it in AX, `0x00401A0B`); `phase` is a phase/event id.
+
+### 11.2 The argument frame, derived from the function's own stack reads
+
+The pushes are the proof. Entry `[esp]` = return address, `[esp+4]` = arg1, `[esp+8]` = arg2, `[esp+0xC]` = arg3. Inside the function each read must be evaluated with the exact number of bytes pushed at that instruction:
+
+| read site | bytes pushed at that point | `[esp+n]` = entry offset | resolves to |
+| --- | --- | --- | --- |
+| `0x0040153E` `mov eax, [esp+0xc]` | `ebx`, `ebp` = 8 | `+4` | **arg1** (`class_id`) |
+| `0x0040154B` `mov ebp, [esp+0x14]` | `ebx`, `ebp`, `esi` = 12 | `+8` | **arg2** (`phase`) |
+| `0x0040154F` `mov edx, [esp+0x18]` | 12 | `+0xC` | **arg3** (`handler`) |
+| `0x00401589` `mov dx, word [esp+0x14]` | `ebx`, `ebp`, `esi`, `edi` = 16 | `+4` | **arg1** — the loop's compare operand |
+| `0x0040159E` `mov eax, [esp+0x1c]` | 16 | `+0xC` | **arg3** — forwarded to the recursive call |
+
+**Correction to the handoff (rounds 152–155):** the compared value at `0x00401589` is **arg1**, not arg2, because `push edi` at `0x0040156D` has already happened (16 bytes pushed, so `[esp+0x14]` = entry `+4`). Likewise the `and eax, 0xffff` at `0x00401553` masks arg1 (`eax` was loaded from `[esp+0xc]` with only 8 bytes pushed). The loop therefore compares each type record's parent word against the **class id being registered** (arg1) and forwards `arg2` (phase) unchanged; it does not compare phases. This is exactly the sort of silent swap the statement-level sheet exists to prevent, and it changes the semantics: the propagation walks the *derived-class* tree from arg1, it does not filter by phase.
+
+### 11.3 Instruction-by-instruction derivation
+
+`reg` values in the comment column are after the instruction executes.
+
+| VA | bytes | instruction | exact statement / purpose |
+| --- | --- | --- | --- |
+| `0x00401530` | `8b 0d 70 7c 56 00` | `mov ecx, [0x567c70]` | `old = QTask_NoContextHandlerCount;` |
+| `0x00401536` | `53` | `push ebx` | save callee-saved |
+| `0x00401537` | `55` | `push ebp` | save callee-saved |
+| `0x00401538` | `8b 2d 48 61 53 00` | `mov ebp, [0x536148]` | `tmp = QTask_LinkedHandlerCounter;` |
+| `0x0040153E` | `8b 44 24 0c` | `mov eax, [esp+0xc]` | `eax = class_id;` |
+| `0x00401542` | `41` | `inc ecx` | `old += 1;` |
+| `0x00401543` | `45` | `inc ebp` | `tmp += 1;` |
+| `0x00401544` | `56` | `push esi` | save callee-saved |
+| `0x00401545` | `89 2d 48 61 53 00` | `mov [0x536148], ebp` | `QTask_LinkedHandlerCounter = tmp;` (monotonic, never restored) |
+| `0x0040154B` | `8b 6c 24 14` | `mov ebp, [esp+0x14]` | `ebp = phase;` (the counter value in EBP is dead from here) |
+| `0x0040154F` | `8b 54 24 18` | `mov edx, [esp+0x18]` | `edx = handler;` |
+| `0x00401553` | `25 ff ff 00 00` | `and eax, 0xffff` | `eax = class_id & 0xffff;` (load-bearing: callers push dwords whose upper half is stale) |
+| `0x00401558` | `8d 74 6d 00` | `lea esi, [ebp + ebp*2]` | `esi = phase * 3;` |
+| `0x0040155C` | `89 0d 70 7c 56 00` | `mov [0x567c70], ecx` | `QTask_NoContextHandlerCount = old;` (stored **before** the handler store) |
+| `0x00401562` | `c1 e6 07` | `shl esi, 7` | `esi = phase * 0x180;` (32-bit wrap; **no phase mask**) |
+| `0x00401565` | `03 c6` | `add eax, esi` | `index = (class_id & 0xffff) + phase*0x180;` |
+| `0x00401567` | `83 f9 01` | `cmp ecx, 1` | `depth = (old == 1);` |
+| `0x0040156A` | `0f 94 c1` | `sete cl` | `cl = (old == 1);` (only CL; ECX keeps the counter in its upper bytes) |
+| `0x0040156D` | `57` | `push edi` | save callee-saved |
+| `0x0040156E` | `89 14 85 e0 6a a9 00` | `mov dword [eax*4 + 0xa96ae0], edx` | `QTask_HandlerTable[index] = handler;` (W3) |
+| `0x00401575` | `88 88 34 ff 54 00` | `mov byte [eax + 0x54ff34], cl` | `QTask_FirstLinkFlag[index] = (old == 1);` (byte store, index **not** scaled by 4) |
+| `0x0040157B` | `33 db` | `xor ebx, ebx` | `record_index = 0;` |
+| `0x0040157D` | `bf e8 5e af 00` | `mov edi, 0xaf5ee8` | `record = &QTask_TypeTable[0];` (cursor at record + 0x08 = the parent word) |
+| `0x00401582` | `8a 47 1d` | `mov al, [edi+0x1d]` | `al = record->in_use;` (`+0x25` from the record base, `+0x1D` from the cursor) |
+| `0x00401585` | `84 c0` | `test al, al` | `if (!in_use) goto step;` |
+| `0x00401587` | `74 24` | `je 0x4015ad` | |
+| `0x00401589` | `66 8b 54 24 14` | `mov dx, word [esp+0x14]` | `parent_of_record = record->parent_type;` |
+| `0x0040158E` | `66 39 17` | `cmp word [edi], dx` | `if (record->parent_type != (uint16)class_id) goto step;` |
+| `0x00401591` | `75 1a` | `jne 0x4015ad` | (compares against **arg1**) |
+| `0x00401593` | `8a 84 1e 34 ff 54 00` | `mov al, byte [esi + ebx + 0x54ff34]` | `al = QTask_FirstLinkFlag[phase*0x180 + record_index];` |
+| `0x0040159A` | `84 c0` | `test al, al` | `if (flag != 0) goto step;` (a directly registered class is not overwritten) |
+| `0x0040159C` | `75 0f` | `jne 0x4015ad` | |
+| `0x0040159E` | `8b 44 24 1c` | `mov eax, [esp+0x1c]` | `handler = arg3;` (reloaded from the stack every iteration) |
+| `0x004015A2` | `50` | `push eax` | argument 3 of the recursive call |
+| `0x004015A3` | `55` | `push ebp` | argument 2 = `phase` (unmasked value as loaded) |
+| `0x004015A4` | `53` | `push ebx` | argument 1 = `record_index` (the derived class id) |
+| `0x004015A5` | `e8 86 ff ff ff` | `call 0x401530` | `QTask_LinkQTaskEventHandlerNoContextFn((uint16)record_index, phase, handler);` |
+| `0x004015AA` | `83 c4 0c` | `add esp, 0xc` | caller cleanup of the three arguments |
+| `0x004015AD` | `83 c7 30` | `add edi, 0x30` | `record = record + 1;` |
+| `0x004015B0` | `43` | `inc ebx` | `record_index += 1;` |
+| `0x004015B1` | `81 ff e8 a6 af 00` | `cmp edi, 0xafa6e8` | `} while (record_index < 384);` (end cursor = record 384's `+0x08`) |
+| `0x004015B7` | `7c c9` | `jl 0x401582` | |
+| `0x004015B9` | `e8 f2 fe ff ff` | `call 0x4014b0` | `TaskType_RefreshHandlerMask();` (no arguments) |
+| `0x004015BE` | `a1 70 7c 56 00` | `mov eax, [0x567c70]` | `old = QTask_NoContextHandlerCount;` (reload **after** the refresh) |
+| `0x004015C3` | `5f` | `pop edi` | restore callee-saved |
+| `0x004015C4` | `48` | `dec eax` | `old -= 1;` |
+| `0x004015C5` | `5e` | `pop esi` | restore callee-saved |
+| `0x004015C6` | `5d` | `pop ebp` | restore callee-saved |
+| `0x004015C7` | `a3 70 7c 56 00` | `mov [0x567c70], eax` | `QTask_NoContextHandlerCount = old;` |
+| `0x004015CC` | `5b` | `pop ebx` | restore callee-saved |
+| `0x004015CD` | `c3` | `ret` | `return old;` (EAX = value before this call) |
+
+### 11.4 Exact C++ statements, in retail order
+
+```cpp
+// Native: QTask_LinkQTaskEventHandlerNoContextFn; retail VA 0x00401530-0x004015CD.
+// cdecl, three 4-byte arguments, caller cleans 0x0C, returns the pre-call depth counter.
+std::uint32_t NATIVE_DECL QTask_LinkQTaskEventHandlerNoContextFn(
+    std::uint16_t class_id, std::uint32_t phase, igi::retail::core::FrameHandler handler)
+{
+    std::uint32_t depth = QTask_NoContextHandlerCount;          // 0x401530
+    ++QTask_LinkedHandlerCounter;                               // 0x401538 / 0x401543 / 0x401545
+    depth = depth + 1U;                                         // 0x401542
+    const std::uint32_t raw_class_id = class_id;                // 0x40153E
+    const std::uint32_t index = (raw_class_id & 0xFFFFU)        // 0x401553
+                              + (phase * 0x180U);               // 0x401558,0x401562,0x401565 (uint32 wrap, no mask)
+    QTask_NoContextHandlerCount = depth;                        // 0x40155C (before the handler store)
+    const std::uint8_t first_link = (depth == 1U) ? 1U : 0U;    // 0x401567,0x40156A
+    QTask_HandlerTable[index] = handler;                        // 0x40156E
+    QTask_FirstLinkFlag[index] = first_link;                    // 0x401575 (one byte, index not scaled)
+    // 0x40157B-0x4015B7: propagate the link to every derived class of class_id.
+    for (std::uint32_t type_id = 0U, offset = 0U; type_id < 384U; ++type_id, offset += 0x30U)
+    {
+        const auto* slot = reinterpret_cast<const std::uint8_t*>(QTask_TypeTable) + offset;
+        if (slot[0x25] == 0U)                                   // 0x401582-0x401587
+            continue;
+        if (*reinterpret_cast<const std::uint16_t*>(slot + 0x08)
+            != static_cast<std::uint16_t>(class_id))            // 0x401589-0x401591 (arg1, not phase)
+            continue;
+        if (QTask_FirstLinkFlag[phase * 0x180U + type_id] != 0U) // 0x401593-0x40159C
+            continue;
+        QTask_LinkQTaskEventHandlerNoContextFn(                 // 0x4015A2-0x4015A5
+            static_cast<std::uint16_t>(type_id), phase, handler);
+    }
+    TaskType_RefreshHandlerMask();                              // 0x4015B9
+    --depth;                                                    // 0x4015BE, 0x4015C4
+    QTask_NoContextHandlerCount = depth;                        // 0x4015C7
+    return depth;                                               // EAX at 0x4015CD
+}
+```
+
+Retail-order notes that the code must preserve:
+
+1. `QTask_NoContextHandlerCount` is written (`0x40155C`) **before** the handler table and flag stores, and re-read/re-written at the tail (`0x4015BE`, `0x4015C7`).
+2. The flag is computed from the *incremented* counter and written **before** the propagation loop (`0x401567`–`0x401575` precede `0x401582`). The flag store is unconditional; recursive entries (depth ≥ 2) therefore write `0`, and only the outermost call writes `1`.
+3. `QTask_LinkedHandlerCounter` is incremented on every entry, including recursive ones, and never restored.
+4. The propagation compare uses **arg1** (`class_id`), and the recursive call passes the matched **record index** as the new arg1, `phase` unchanged, `handler` unchanged.
+5. `TaskType_RefreshHandlerMask()` runs after the whole propagation, and the counter is reloaded after it.
+
+### 11.5 Globals, with address, width, and the instruction that proves the width
+
+| global | width | initial (image) | role | references in this function |
+| --- | --- | --- | --- | --- |
+| `0x00567C70` | dword | 0 | no-context link nesting counter | `0x401530` read, `0x40155C` store, `0x4015BE` read, `0x4015C7` store |
+| `0x00536148` | dword | `0xFFFFFFFF` | linked-handler counter (monotonic, starts -1) | `0x401538` read, `0x401545` store; also `0x40140D`/`0x40141C` in `0x401400`; read from `0x4C5C47`, `0x4CE5C2`, `0x4CE603` outside the subsystem |
+| `0x00A96AE0` | dword × 0x17D00 | 0 | handler table (§10) | `0x40156E` store |
+| `0x0054FF34` | byte × 0x17D00 | 0 | first-link flags (§10.9) | `0x401575` store, `0x401593` load |
+| `0x00AF5EE0 + i*0x30` | record (32/16/8-bit fields) | zeroed at init | type table; `+0x08` parent class id (word), `+0x25` in-use byte | `0x40157D`–`0x4015B1` walk |
+| `0x0054FF24` | byte × 16 | image 0, runtime `0xFF` | phase map, read indirectly through `0x4014B0`→`0x4014E0` | not read directly here |
+
+### 11.6 Callees, argument order, and transcription status in this checkout
+
+| callee | call site | arguments (cdecl order) | returns | status in this checkout |
+| --- | --- | --- | --- | --- |
+| `0x004014B0` `TaskType_RefreshHandlerMask` | `0x004015B9` | none | EAX = last `0x4014E0` result; retail callers ignore it | **TRANSCRIBED**: `engine/src/retail/core/native_4014b0.cpp`, 43 bytes, 5 blocks, walks the 384 type slots and stores the mask from `0x4014E0` at slot`+0x28` for each in-use slot. Its callee `0x004014E0` (`TaskType_HandlerPhaseMask`, 75 bytes) is **TRANSCRIBED** in `native_4014e0.cpp`: for map slot i=0..15, phase=`0x54FF24[i]`; if phase != `0xFF`, set bit i when `0xA96AE0[phase*0x180 + (type_id & 0xFFFF)]` is non-null; then set bit 15 (`or ah, 0x80`). |
+| `0x00401530` (self) | `0x004015A5` | `(type_id, phase, handler)`, caller cleans `0x0C` | pre-call depth (unused by the loop) | this section; current port transcription is **incomplete** — see §11.9 |
+
+What `0x4014B0` and `0x401400` require from a correct `0x401530`:
+
+- **`0x4014B0` needs the stores to be complete and to have happened before it is called.** It derives each class's 16-bit mask by reading `table[phase*0x180 + class_id]` for the 16 map slots (`0x4014E0`). Every derived class's column must therefore already contain the handler when the refresh runs; that is why the retail calls it after the recursion (`0x4015B9`), not before the loop. If the propagation (or the top-level store) were reordered after the refresh, all classes except the directly linked one would keep a mask bit of 0 and their handlers would never be dispatched — a silent behavioural loss with no memory error.
+- **`0x401400` needs nothing from `0x401530`'s return value** — it is a sibling with its own counter (`0x567C6C`) and its own stores (`0x401444`, `0x40144B`, `0x40148F` for the refresh). The coupling is shared state and identical geometry: both index the same table with `class_id + phase*0x180`, both walk the same type table with the same parent word, both increment `0x536148`, and both call `0x4014B0` at their tail. A transcription of one must not be "simplified" by reusing the other's masking: `0x401400` masks the phase with `and eax, 0xff` at `0x00401417`, `0x401530` has no such mask (§11.8, risk 5).
+
+Sibling differences, from the same instruction-level reading of `0x401400` (`0x00401400`–`0x004014A3`, 164 bytes):
+
+| aspect | `0x401530` | `0x401400` |
+| --- | --- | --- |
+| counter | `0x00567C70`, written `0x40155C`/`0x4015C7` | `0x00567C6C`, written `0x401435`/`0x40149D` |
+| phase mask | **none** (`0x401558`/`0x401562`) | `and eax, 0xff` at `0x00401417` before `lea esi,[eax+eax*2]`/`shl esi,7` (`0x401426`/`0x40142D`) |
+| arg loading | arg1 at `0x40153E`, arg2 at `0x40154B`, arg3 at `0x40154F` | arg2 at `0x401408` (`[esp+0x10]`, 8 pushed), arg3 at `0x401422`, arg1 at `0x401429` (`[esp+0x10]`, 12 pushed) |
+| mask write | `0x401575` | `0x40144B` |
+| propagation | identical loop, compare at `0x40158E` vs arg1, recurse at `0x4015A5` | identical loop, compare at `0x401464` vs arg1, recurse at `0x40147B` |
+| refresh + return | `0x4014B0` at `0x4015B9`, return counter-1 | `0x4014B0` at `0x40148F`, return counter-1 |
+
+### 11.7 Recursion re-entry: where the flag check is insufficient
+
+The recursive call re-enters `0x401530` with a *different* arg1 (the matched record index), the same phase, the same handler. Because the entry increments the counter, the recursive call's depth is at least 2, so its flag store writes `0` (`cmp ecx,1`/`sete cl` at `0x401567`/`0x40156A`). Consequences:
+
+1. **The propagation never marks visited classes.** A flag value of `1` exists only for classes linked directly (depth 1). Entries written by propagation stay `0`, and the loop's guard (`0x401593`–`0x40159C`) therefore passes for them on every later visit. Termination rests entirely on the parent-word graph being acyclic: the loop recurses into a record whenever its parent word equals the current class id, and nothing else stops re-entry.
+2. **Self-parent record → unbounded recursion.** If a type slot's parent word equalled its own slot index, the loop would match that record, recurse with the same arg1, and repeat forever: the flag at that entry is `0` (written by the recursive call), so the guard cannot stop it. The retail's own allocation order makes this unreachable (TaskType_Register returns the slot index; derived declarations can only pass indices that already exist, so a parent index is always *earlier* than the child's slot) — but `0x401530` itself performs no check.
+3. **Cycle → unbounded recursion.** Same argument for two slots pointing at each other (A's parent = B, B's parent = A). Not producible by the retail's registration order, not checked here.
+4. **The `0x0181` sentinel aliases instead of failing.** If arg1 is `0x0181` (the "no parent" root word, also the static initial value of every class-word global, e.g. `0x54DD0C` = `0x0181` in the image), then `index = phase*0x180 + 385 = (phase+1)*0x180 + 1`: the handler and the flag land one row up, column 1 — inside the array, in another class's slot, with no error. The compare then matches every **root** record (parent word `0x0181`), so the call propagates from all roots rather than from the intended class. This is a real, silent path if a link call runs before the class's `TaskType_Register` return has been stored; the retail's own startup order avoids it, and a transcription must reproduce the arithmetic rather than "sanitise" it.
+5. **Depth/stack.** For an acyclic tree the recursion depth is bounded by the number of classes (≤384), and the counter `0x567C70` tracks it; the flag check adds no depth bound and no visited set, so it is not a defence against 2–4.
+
+Lead's two loud flags, answered: **(a)** there *are* writers of `0xA96AE0` outside the two registrars — `QTask_Init`'s zero-fill and `TaskType_Register`'s column loops — but no third owner of handler values and no unrelated writer (§10.6). **(b)** the recursion can re-enter with an index that defeats the flag check exactly in cases 1–4 above; the flag is a *direct-registration* marker, not a visited marker, and the only thing that keeps the walk finite is the acyclic parent graph produced by `TaskType_Register`'s allocation order.
+
+### 11.8 `-O3` loss risks for this transcription
+
+1. **The 8-bit store (`0x00401575`).** `mov byte [eax + 0x54ff34], cl` must become a one-byte store into a `std::uint8_t` array. If the flag array is declared with a wider element (or a temporary `std::uint32_t` is written through a cast), three neighbouring elements are overwritten — the same defect class that bit the earlier work. The read at `0x401593` is likewise an 8-bit load.
+2. **The flag store must stay between the handler store and the loop.** It is unconditional at depth 1 and writes `0` at depth ≥ 2; only `1` marks a directly registered class. Moving it after the propagation, or writing it only when it is `1`, changes which subtrees later propagations may overwrite (and case 2's self-loop guard depends on the top-level `1` being in place before the loop).
+3. **`sete cl` writes only CL.** The upper 24 bits of ECX still hold the incremented counter at that point; a transcription must not assign the flag back into the counter variable (the tail re-reads the counter from memory, so the visible behaviour would survive, but a `count = (count == 1)` form would corrupt the tail's decrement and the return).
+4. **The phase multiply is an unmasked 32-bit wrap** (`lea esi,[ebp+ebp*2]` / `shl esi,7` at `0x401558`/`0x401562`). It must be `std::uint32_t phase * 0x180U` (or the explicit shift form), not `std::size_t` and not signed: on the 64-bit host a `size_t` computation does not wrap at 32 bits, and a signed multiply is undefined on overflow. The same wrap applies to `eax + esi` and to `eax*4` in the store's addressing.
+5. **`0x401530` does not mask the phase, `0x401400` does.** A shared helper that applies `& 0xff` to both (the current port does exactly this) is a behavioural divergence for phase ≥ `0x100` and for the negative/upper-bit residue of a caller that pushed more than the phase id.
+6. **The flag index is the same dword index, not a byte offset ×4.** `0x401575` uses `[eax + 0x54ff34]` with EAX = the composed dword index; `0x401593` uses `[esi + ebx + 0x54ff34]` with ESI = `phase*0x180` *as an index*, not `phase*0x180*4`. Scaling the flag index by 4 would read/write four phases away.
+7. **The compare operand is arg1** (`0x401589`–`0x401591`). Both sides are 16-bit, so a swap to arg2 compiles cleanly and is silently wrong (§11.2).
+8. **The recursive call's argument order and cleanup.** `push handler` (`0x40159E`), `push phase` (`0x4015A3`), `push type_id` (`0x4015A4`), `call` (`0x4015A5`), `add esp, 0x0C` (`0x4015AA`): arg1 is the *type id*, arg2 the phase *as loaded, unmasked*, arg3 the handler reloaded from the stack. The callee is cdecl; the retail batches some cleanups (`add esp,0x30` after four calls, e.g. `0x004EEABE`), so the callee must not pop its arguments.
+9. **Loop bound and walk cursor.** 384 iterations from `edi = 0xAF5EE8` to `< 0xAFA6E8` step `0x30`; the in-use byte is at cursor `+0x1D` (`record + 0x25`), the parent word at cursor `+0` (`record + 0x08`). Using `0xAF5EE8` as the table base, or 383/385 iterations, breaks the walk; the port's type table base must remain `0xAF5EE0` (§11.10, correction 1).
+10. **Array sizes must be the retail capacity.** `QTask_HandlerTable` and `QTask_FirstLinkFlag` are `0x17D00` elements each (254 × 384), not `384 × 384`; `TaskType_Register`'s column loop already uses `0xFE`, so the current port's arrays are the inconsistent part (over-sized by `0xC000` elements; harmless for in-domain indices, but not the retail storage definition, and any index-overrun behaviour would differ).
+11. **Tail order and return value.** The refresh call (`0x4015B9`) precedes the reload/decrement/store (`0x4015BE`, `0x4015C4`, `0x4015C7`), and the return is the *pre-call* counter value (0 at the outermost level). Returning the composed index (as the current port does) is a different function contract; even though the inspected call sites ignore EAX, this must be corrected for fidelity and for any caller that is not yet transcribed.
+12. **Two counters stay separate.** `0x567C70` (this function, starts 0, incremented on entry, decremented on exit, returned) versus `0x536148` (shared with `0x401400`, starts `0xFFFFFFFF`, incremented on every entry including recursion, never restored). `0x536148` is read outside the subsystem (`0x4C5C47`, `0x4CE5C2`, `0x4CE603`), so merging or resetting it is observable.
+13. **The recursion is a real call with a 16-byte frame plus the three arguments**, not a loop: `0x567C70` exposes the nesting depth, and the flag behaviour depends on the depth. Tail-call or loop conversion by the optimiser must be prevented (the function is not tail-recursive — the loop step and the refresh follow the call — so this holds, but keep it a separate native so no inlining across VAs occurs).
+
+### 11.9 Diff against the transcription currently in this checkout
+
+`engine/src/retail/core/task_types.cpp` currently implements `0x401530` as `QTask_LinkQTaskEventHandlerNoContextFn`, delegating to the anonymous-namespace `link_handler` helper shared with `0x401400` (lines ~18–33). Against the derivation above the deltas are:
+
+| # | retail | current port | consequence |
+| --- | --- | --- | --- |
+| D1 | propagation loop `0x401582`–`0x4015B7` (384-slot walk, parent compare, flag guard, recursive call) | **absent** | derived classes never receive the handler; their `0x4014E0` masks miss the phase; handlers of derived classes are never dispatched |
+| D2 | `call 0x4014B0` at `0x4015B9` | **absent** | class mask words are never refreshed after a link, so even the directly registered class's dispatcher bit stays stale |
+| D3 | returns EAX = pre-call `0x567C70` value | returns the composed `index` | wrong return contract (inert only for callers that ignore EAX, all inspected ones do) |
+| D4 | `0x401530` leaves the phase unmasked | helper applies `phase & 0xFF` to both variants | divergence at phase ≥ `0x100`; `0x401400` needs the mask, `0x401530` must not have it |
+| D5 | the two bodies are distinct retail functions with different counters and different masks | one shared helper | hides D4 and the counter difference; per rule 10.13/10.14 (no helper functions, one implementation per retail VA) the two must be written as their own bodies |
+| D6 | `QTask_HandlerTable`/`QTask_FirstLinkFlag` are `0x17D00` elements | `384 * 384 = 147,456` elements | over-sized storage; header comment "class_id * 0x180 + phase" is transposed (correct: `class_id + phase * 0x180`) |
+
+The parts that are already correct in the port and should not be touched: the counter increments (`++count`, `++QTask_LinkedHandlerCounter`), the first-link flag value `(count == 1)`, the dword store, the `class_id & 0xFFFF` mask, the `TaskType_RefreshHandlerMask` / `TaskType_HandlerPhaseMask` natives, and `TaskType_Register`'s `phase < 0xFE` column loop (which matches W1/W2 in §10.4).
+
+### 11.10 Loud corrections to the handoff (rounds 152–155), and what to land
+
+1. **Type-table object base is `0xAF5EE0`, not `0xAF5EE8`.** The object is `[0xAF5EE0, 0xAFA6E0)` = 384 × `0x30`; `0xAF5EE8` is *record + 0x08* — the walk cursor `0x401530`/`0x401400` initialise, and the parent-word field. Declaring the table at `0xAF5EE8` clips 8 bytes from the front of every record boundary. Proved by `QTask_ClearTaskTypes` `0x4011B0` (`mov eax,0xaf5ee0` … `cmp eax,0xafa6e0`), `TaskType_Register`'s writes at `0xAF5EE0`/`0xAF5EE4`/`0xAF5EE8`/`0xAF5F04`/`0xAF5F05`/`0xAF5F0C`, and `TaskType_RefreshHandlerMask`'s write at `0xAF5F08`.
+2. **The loop compares arg1 (class id), not arg2 (phase).** `[esp+0x14]` at `0x401589` is entry `+4` because 16 bytes are pushed (incl. `push edi` at `0x40156D`); the same error appears in round 153/154's argument frame. The loop's compare value is also not "the id that indexes the table" — `arg1` is the *class id* (the column, and the propagation root), `arg2` is the phase (the row, and the table multiplier).
+3. **The byte at `0xAF5F05` is the in-use flag, not the name byte.** The record's name is a dword pointer at `+0x00`; `0x401582` reads `[edi+0x1D]` = `record+0x25` = `in_use` (cleared by `QTask_ClearTaskTypes`). The propagation therefore visits only in-use classes.
+4. **The handler table is not "indexed by the dword table's id"; it is 254 phases × 384 classes with index `class_id + phase*0x180`, extent `0x17D00` dwords, ending exactly at the type table base** (§10.1–§10.5). The header comment `The entry for a class is at class_id * 0x180 + phase` is transposed.
+5. **The first-link array is `0x17D00` bytes, not `384 × 384`**, and starts at `0x54FF34`; the map at `0x54FF24` is 16 bytes, image-zero, runtime `0xFF` until `0x401D30`/`0x401D50` assign/clear (Lead's "`0xFF`-filled" holds at runtime only).
+6. **Landing checklist for `0x401530`:** (a) two separate native bodies (`0x401530` unmasked phase, `0x401400` masked phase, separate counters) with no shared helper; (b) the propagation loop and the `0x4014B0` tail call; (c) return the pre-call depth; (d) array sizes `0x17D00`; (e) byte-width flag store and load; (f) `uint32` arithmetic for the phase multiply and index. With those, the function is body-complete; its runtime status stays `UNTRANSCRIBED`/`TRANSCRIBED` until the paired-evidence gate, since `0x4014B0`'s mask values depend on the `0x54FF24` writers that are only partly transcribed.
+7. **`QTask_Init` gap (needed for §10.1 to be reproduced):** the port's `QTask_Init` currently omits the `0x40`-dword clear at `0xAFA6E0`, the `0xAFA7E0`/`0x54F92C` clears, the `0xA969E0` fill, the `0x17D00`-dword handler-table zero-fill, the `0x567C38` setup through `0x4B0B00`, and the `0x4B8810`("QTASK_TYPE_UNDEFINED", `0x0181`) call. Those are separate natives/blocks but the `0x17D00` zero-fill is the §10.1 proving block and must be reproduced for the initial state to match.
+
 ## Appendix A — machine-readable handler set
 
 Compact JSON for scripting (`args` are 0-based argument indices derived from the slot reads; `registrations` are the derived type/class registrations):
