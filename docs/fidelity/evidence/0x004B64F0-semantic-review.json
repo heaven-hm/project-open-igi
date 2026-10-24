@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "address": "0x004B64F0",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "44e6a5af610792c708223b934707fcf38a3b84b40abb7c70393078213ed93dc7",
+  "implementation_path": "engine/src/retail/resource/native_4b64f0.cpp",
+  "reviewed_by": "lead",
+  "reviewed": true,
+  "review_scope": "static: retail instructions and emitted candidate listing",
+  "result": "passed",
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "rationale": "65 retail bytes, 26 instructions, 1 block, 0 edges; candidate 1/0, score 1.000."
+    },
+    {
+      "name": "cfg_match",
+      "result": "passed",
+      "rationale": "Both decoders and the candidate report 1/0; without the volatile sink -O3 would tail-jump (2 blocks/1 edge), which is why the sink exists."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "passed",
+      "rationale": "Argument1 is read as two dwords: dword 0 becomes the callee's second argument, dword 1 is the base of a 0x24-stride record indexed by argument2 and becomes the callee's first argument; argument3 is pushed first and therefore lands in the ninth slot; the rest forward in order."
+    },
+    {
+      "name": "call_and_return",
+      "result": "passed",
+      "rationale": "One call to the transcribed Texture_UploadMipmapPacket (0x004B23B0) with 0x24 bytes of arguments, returning the callee's value, as retail does."
+    }
+  ],
+  "evidence": "docs/fidelity/evidence/0x4EE970-data-extents.md section 22.3",
+  "limitations": [
+    "Runtime unobserved.",
+    "The volatile sink is the only non-retail construct; it carries no logic, does not reorder stores and exists only to keep the call/return shape at -O3. It is documented at the site.",
+    "The three middle arguments' types stay unestablished; only the forwarded dword values are preserved."
+  ]
+}

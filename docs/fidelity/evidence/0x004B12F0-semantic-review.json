@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "address": "0x004B12F0",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "d4d153032fe8c7aaf571347da51c28eb5808204a4a3f0a74e50f7ce9d4d99a67",
+  "implementation_path": "engine/src/retail/qfile/native_4b12f0.cpp",
+  "reviewed_by": "lead",
+  "reviewed": true,
+  "review_scope": "static: retail instructions and emitted candidate listing",
+  "result": "passed",
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "rationale": "175 retail bytes, 66 instructions, 7 blocks, 8 edges; candidate 7/8, score 1.000."
+    },
+    {
+      "name": "cfg_match",
+      "result": "passed",
+      "rationale": "Blocks and edges match retail exactly (7/8); the analyst's rotated-loop draft measured 7/7, and the body as landed is the exact one."
+    },
+    {
+      "name": "call_order",
+      "result": "passed",
+      "rationale": "Device index (0x004B11A0) first with an early return on 0, then the clear-by-key (0x004B13A0), then the free-slot scan, then the two name copies, then the handle store."
+    },
+    {
+      "name": "slot_scan",
+      "result": "passed",
+      "rationale": "Scans the 32 handle words at 0x009423C0 in 0x94 strides up to the 0x00943640 bound and returns without writing when none is free, matching retail's loop and bound."
+    },
+    {
+      "name": "storage",
+      "result": "passed",
+      "rationale": "Refers to g_942330 (owned by 0x004B13A0) and g_9423c0 (owned by 0x004B12D0) extern; no new storage."
+    }
+  ],
+  "evidence": "docs/fidelity/evidence/0x4EE970-data-extents.md section 22.3",
+  "limitations": [
+    "Runtime unobserved.",
+    "Byte-identical name copies with strlen+1 and no destination bound, so an over-long key overruns the following record fields exactly as retail does.",
+    "No return value is declared because retail's eax at return is a copy-loop leftover.",
+    "The in-tree reader of these tables is 0x004B13A0 only: the landed alias resolver 0x004B1020 reads port-owned storage and is being re-derived, so this writer has no faithful reader yet - recorded, not hidden."
+  ]
+}
