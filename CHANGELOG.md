@@ -11,6 +11,27 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - QVM argument accessors transcribed and measured; the script-layer wall mapped (internal build, no release)
+
+- **Evidence added**: `docs/fidelity/evidence/qvm-accessors-4b8a20-4b8a50-4b8a80.md`. Three accessors measured on radare2 6.2.0
+  `af`/`pd` against the retail image (all three 3 blocks / 2 branch edges, no prologue, plain `ret`):
+
+  | VA | bytes | instructions | r2 nargs/frame | retail call sites |
+  | --- | --- | --- | --- | --- |
+  | `0x004B8A20` `Script_EvalArgInt` | 46 | 17 | 2 / 8 | 231 |
+  | `0x004B8A50` `Qvm_GetFloatArg` | 44 | 17 | 2 / 8 | 201 |
+  | `0x004B8A80` `Sys_ResolveSymbol_23` | 66 | 25 | 4 / 16 | 75 |
+
+- **Correction recorded, not inherited**: for `0x004B8A20` and `0x004B8A50` the historical Binary Ninja/angr candidate disagrees with
+  the retail CFG (5 blocks, splitting at the calls) while Binary Ninja and radare2 on the retail bytes agree on 3 blocks / 2 edges; the
+  document states which parts agree (entry, flag at `+0x04`, scale-4 table at `+0x08`, the two x87 returns) and which do not.
+- **The wall is now explicit**: each accessor is a two-branch wrapper whose work sits in untranscribed callees, so linking the three
+  replaces three undefined symbols with six - `0x004BCAB0` (41 B, 14 instrs), `0x004B9120` (1188 B, 65 blocks, 484 instrs),
+  `0x004BD010`, `0x004B9660`, `0x004BD040`, `0x004B8CE0`. `0x004BD010`/`0x004B9660` are already transcribed inside `qvm_execute.cpp`, but
+  that file is the **unlinked** `igi_qvm_execute_object` target, gated on eight further callees plus three QVM state words.
+- **Not committed, still untracked by design**: the three accessor `.cpp` files and the six handler `.cpp` files. None of the nine can join
+  the `igi` link until that closure exists; the build stays green and the nine files are backed up under `build/pending/`.
+
 ### 2026-10-25 - QTask handler ABI settled and independently re-verified (internal build, no release)
 
 - **Evidence added**: `docs/fidelity/evidence/qtask-handler-abi.md` (635 lines) settles the handler ABI from retail instructions: the
