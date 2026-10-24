@@ -44,3 +44,32 @@ expects, plus the semantic/behavioral evidence the gate demands at
    CFG scores; fix any native below 0.85 before it is used in a body that runs.
 3. Only then pursue runtime observation, which still requires the registrar
    chain to reach the input path.
+
+## Round 11 update: evidence-artifact chain, one step further
+
+Created the Binary Ninja disassembly artifacts for the seven single-block natives
+(`0x0048F090`, `0x0048F0A0`, `0x0048F270`, `0x004AF740`, `0x004AE730`,
+`0x00490340`, `0x00490350`) at `docs/fidelity/evidence/0x<VA>-binaryninja.json`
+in the existing schema (schema_version 1, kind native-disassembly, tool
+binary_ninja, retail SHA-256, cfg nodes/edges).
+
+`build_native_records.py` then fails on the **next** artifact in the chain:
+
+```
+FileNotFoundError: docs/fidelity/evidence/0x0048F090-radare2.json
+```
+
+So a record needs at minimum BN + radare2 (+ semantic-review/behavioral/build)
+artifacts per VA. None of those can be fabricated: radare2 must be an actual
+capture of the retail CFG for that entry, and semantic-review/behavioral records
+must reflect review actually performed. The remaining steps are therefore tool
+runs, not authorship:
+
+1. radare2 CFG capture per VA -> `0x<VA>-radare2.json` (same schema family as the
+   existing `0048F1A0-radare2.json`).
+2. semantic-review artifact per VA against the transcription just written.
+3. behavioral/build artifacts from the real candidate and probe runs.
+4. `build_native_records.py` -> gate -> per-native CFG score.
+
+Until then the input natives stay TRANSCRIBED and the changed-native gate
+continues to report an empty scope.
