@@ -52,6 +52,12 @@ add_executable(igi WIN32
     engine/src/retail/script/native_4f0c90.cpp
     engine/src/retail/script/native_4ef830.cpp
     engine/src/retail/script/native_4ef850.cpp
+    engine/src/retail/script/native_4ef8b0.cpp
+    engine/src/retail/script/native_4ef990.cpp
+    engine/src/retail/script/native_4ef9b0.cpp
+    engine/src/retail/script/native_4ef9d0.cpp
+    engine/src/retail/script/native_4efa10.cpp
+    engine/src/retail/script/native_4efa90.cpp
     engine/src/retail/script/hash_table_globals.cpp
     engine/src/retail/script/native_4f11a0.cpp
     engine/src/retail/script/native_4f1180.cpp

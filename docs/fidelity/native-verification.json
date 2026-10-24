@@ -58650,352 +58650,182 @@
     },
     {
       "address": "0x004EF8B0",
-      "name": "PhysicsTerrain_GetContext_4EF8B0",
+      "name": "Script_Handler_4EF8B0",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
-        "path": "scripts/GameNatives/physicsterrain/004EF8B0-PhysicsTerrain_GetContext_4EF8B0.cpp",
-        "sha256": "8ff10fc69500029ace4a1504b15f47894c9603fc23897fa47eb9396ba5dfd079",
-        "signature": "int* PhysicsTerrain_GetContext_4EF8B0(int* arg1)"
+        "path": "engine/src/retail/script/native_4ef8b0.cpp",
+        "sha256": "5a6ec81481093dc4edeafc741728dbd62f964133cc7717b162fc92a3c236d3f7",
+        "signature": "unknown"
       },
       "game_natives": {
-        "path": "scripts/GameNatives/physicsterrain/004EF8B0-PhysicsTerrain_GetContext_4EF8B0.cpp",
-        "sha256": "8ff10fc69500029ace4a1504b15f47894c9603fc23897fa47eb9396ba5dfd079",
-        "signature": "int* PhysicsTerrain_GetContext_4EF8B0(int* arg1)"
+        "path": "scripts/GameNatives/physicsterrain/004EF8B0-PhysicsTerrain_GetContext_4EF8B0 2.cpp",
+        "sha256": "f5a7a6880b9545a800508caf716c2b0461d26cc99b2af18cb80e211510b3c76a",
+        "signature": "unknown"
       },
       "verification": {
         "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x004EF8B0",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004EF8B0-binaryninja.json",
+          "evidence_sha256": "79aabcc5796ea53f4d226a6a5e423ee13f73d1a1d520f077f929956dac5052c1"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x004EF8B0",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004EF8B0-radare2.json",
+          "evidence_sha256": "bb6578547d2c9befcf00a19980228c1c85edaf6be3e7dd67266738be56cc21e3"
+        },
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
-          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "limitations": [
-          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
-        ],
-        "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
-          "args": [
-            "--address",
-            "{address}",
-            "--binary",
-            "{binary}",
-            "--binary-sha256",
-            "{binary_sha256}",
-            "--implementation",
-            "{implementation}",
-            "--implementation-sha256",
-            "{implementation_sha256}",
-            "--root",
-            "{root}"
-          ],
-          "timeout_seconds": 360
-        },
-        "selected_decompiler": "binary_ninja",
-        "radare2": {
-          "evidence_path": "docs/fidelity/evidence/0x004EF8B0-radare2.json",
-          "evidence_sha256": "e0e0896955a0b20445625bb656ec65136c017e0b15bc2c6d479b72d19c68f65e",
-          "evidence_id": "r2:live:0x004EF8B0",
-          "signature": "not restated"
-        },
-        "binary_ninja": {
-          "evidence_path": "docs/fidelity/evidence/0x004EF8B0-binaryninja.json",
-          "evidence_sha256": "8f373c4d04fbb44620b41d812d34b67bfb579f8aa925af9a2b145fbc4dcb7dbe",
-          "evidence_id": "bn:live:0x004EF8B0",
-          "signature": "not restated"
-        },
-        "cfg_similarity": 1.0,
-        "semantic_review": {
-          "evidence_path": "docs/fidelity/evidence/0x004EF8B0-semantic-review.json",
-          "evidence_sha256": "d34e12127e019c33e9c2849d7105f7bccc8a232109f8b4383b949ed595b6cdde"
-        },
-        "build": {
-          "evidence_path": "docs/fidelity/evidence/0x004EF8B0-build.json",
-          "evidence_sha256": "b6e16fc160c4d7dcc84e1ebaf33764b7c525b61e62831a8884536f8e79c989e1"
-        },
-        "behavioral": {
-          "evidence_path": "docs/fidelity/evidence/0x004EF8B0-behavioral.json",
-          "evidence_sha256": "bede886032c2c46fc12feb68a791504f7a663074a676f28521b35b80ee2cfafd"
-        }
+        "cfg_similarity": 1.0
       }
     },
     {
       "address": "0x004EF990",
-      "name": "PhysicsTerrain_GetContext_4EF990",
+      "name": "Script_Handler_4EF990",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
-        "path": "scripts/GameNatives/physicsterrain/004EF990-PhysicsTerrain_GetContext_4EF990.cpp",
-        "sha256": "2189184a761d9adc4dad35d577c9ca968fde8ad100eef852d3fc4f0c22808c99",
-        "signature": "int* PhysicsTerrain_GetContext_4EF990(int arg1, int* arg2)"
+        "path": "engine/src/retail/script/native_4ef990.cpp",
+        "sha256": "edc1f63d82084680acdcca59ddb92e732e31d20eba27df921dcf0f7ca680710e",
+        "signature": "unknown"
       },
       "game_natives": {
-        "path": "scripts/GameNatives/physicsterrain/004EF990-PhysicsTerrain_GetContext_4EF990.cpp",
-        "sha256": "2189184a761d9adc4dad35d577c9ca968fde8ad100eef852d3fc4f0c22808c99",
-        "signature": "int* PhysicsTerrain_GetContext_4EF990(int arg1, int* arg2)"
+        "path": "scripts/GameNatives/physicsterrain/004EF990-PhysicsTerrain_GetContext_4EF990 2.cpp",
+        "sha256": "c8ce09165523d08ba0ee4c67c0ccbb365b090c155bd8a2e052ffd7c4e1653112",
+        "signature": "unknown"
       },
       "verification": {
         "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x004EF990",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004EF990-binaryninja.json",
+          "evidence_sha256": "36ad7a09e29791b943ce99d65bf88ed501b8ce39fc0dcee41ec10e675062d484"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x004EF990",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004EF990-radare2.json",
+          "evidence_sha256": "102e1521b886efbd3af1f7db2cda0f8c801c448512ac2febdd84374b26ebc3ad"
+        },
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
-          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "limitations": [
-          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
-        ],
-        "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
-          "args": [
-            "--address",
-            "{address}",
-            "--binary",
-            "{binary}",
-            "--binary-sha256",
-            "{binary_sha256}",
-            "--implementation",
-            "{implementation}",
-            "--implementation-sha256",
-            "{implementation_sha256}",
-            "--root",
-            "{root}"
-          ],
-          "timeout_seconds": 360
-        },
-        "selected_decompiler": "binary_ninja",
-        "radare2": {
-          "evidence_path": "docs/fidelity/evidence/0x004EF990-radare2.json",
-          "evidence_sha256": "5692ed177462f52fa09829370f3089a4b9ea943cf5820532e3e88431b64b3e2e",
-          "evidence_id": "r2:live:0x004EF990",
-          "signature": "not restated"
-        },
-        "binary_ninja": {
-          "evidence_path": "docs/fidelity/evidence/0x004EF990-binaryninja.json",
-          "evidence_sha256": "060c183167795808744d024d56c03c772d970975c15db6a6f5796552aebe1793",
-          "evidence_id": "bn:live:0x004EF990",
-          "signature": "not restated"
-        },
-        "cfg_similarity": 1.0,
-        "semantic_review": {
-          "evidence_path": "docs/fidelity/evidence/0x004EF990-semantic-review.json",
-          "evidence_sha256": "ec72e421832ad11a168e5f80379625f1f4a7e74db21c0f291060117d8519cf00"
-        },
-        "build": {
-          "evidence_path": "docs/fidelity/evidence/0x004EF990-build.json",
-          "evidence_sha256": "78f8be5753d94a5c6349f3b6170edcbab71925e4fd7ade37ecf7bcbd684cee09"
-        },
-        "behavioral": {
-          "evidence_path": "docs/fidelity/evidence/0x004EF990-behavioral.json",
-          "evidence_sha256": "472082db522bca77e8ed80d46bca5422bdf0c07c42305039122d495bc51df175"
-        }
+        "cfg_similarity": 1.0
       }
     },
     {
       "address": "0x004EF9B0",
-      "name": "PhysicsTerrain_GetContext_4EF9B0",
+      "name": "Script_Handler_4EF9B0",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
-        "path": "scripts/GameNatives/physicsterrain/004EF9B0-PhysicsTerrain_GetContext_4EF9B0.cpp",
-        "sha256": "d7b30f2fb0b86748ff322e296f29cc3849973466f420b29c583c20923daea272",
-        "signature": "int* PhysicsTerrain_GetContext_4EF9B0(int arg1, int* arg2)"
+        "path": "engine/src/retail/script/native_4ef9b0.cpp",
+        "sha256": "cbeeb0bd2533d45ad1df61cf34273c0f865e8ce4272c1244a355b94250c9b742",
+        "signature": "unknown"
       },
       "game_natives": {
-        "path": "scripts/GameNatives/physicsterrain/004EF9B0-PhysicsTerrain_GetContext_4EF9B0.cpp",
-        "sha256": "d7b30f2fb0b86748ff322e296f29cc3849973466f420b29c583c20923daea272",
-        "signature": "int* PhysicsTerrain_GetContext_4EF9B0(int arg1, int* arg2)"
+        "path": "scripts/GameNatives/physicsterrain/004EF9B0-PhysicsTerrain_GetContext_4EF9B0 2.cpp",
+        "sha256": "12697e5bc436bfcb64431f49f519a61f94f00f332a80d91ca9ba20e5ff628479",
+        "signature": "unknown"
       },
       "verification": {
         "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x004EF9B0",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004EF9B0-binaryninja.json",
+          "evidence_sha256": "e64613cc8152cc5f4b94b6044ded9b8a67e276a693b901be5e98209a911eef90"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x004EF9B0",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004EF9B0-radare2.json",
+          "evidence_sha256": "03fc2f8c3b05dec46e2687a409645515d88aab94e8e692313fa698612f1b0b78"
+        },
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
-          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "limitations": [
-          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
-        ],
-        "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
-          "args": [
-            "--address",
-            "{address}",
-            "--binary",
-            "{binary}",
-            "--binary-sha256",
-            "{binary_sha256}",
-            "--implementation",
-            "{implementation}",
-            "--implementation-sha256",
-            "{implementation_sha256}",
-            "--root",
-            "{root}"
-          ],
-          "timeout_seconds": 360
-        },
-        "selected_decompiler": "binary_ninja",
-        "radare2": {
-          "evidence_path": "docs/fidelity/evidence/0x004EF9B0-radare2.json",
-          "evidence_sha256": "f7eca767e705a7c1ab16c0332a4815f0746c6f315541165ad4ea892b2c754ddd",
-          "evidence_id": "r2:live:0x004EF9B0",
-          "signature": "not restated"
-        },
-        "binary_ninja": {
-          "evidence_path": "docs/fidelity/evidence/0x004EF9B0-binaryninja.json",
-          "evidence_sha256": "4d1b75ee827f85a2f920960ee38ed37d8c7d229303d4ca023899cba6d354bd4d",
-          "evidence_id": "bn:live:0x004EF9B0",
-          "signature": "not restated"
-        },
-        "cfg_similarity": 1.0,
-        "semantic_review": {
-          "evidence_path": "docs/fidelity/evidence/0x004EF9B0-semantic-review.json",
-          "evidence_sha256": "f17ba49ca4fb144c0cff0628e3e45668d70ff9b148673439f580f565703a7d62"
-        },
-        "build": {
-          "evidence_path": "docs/fidelity/evidence/0x004EF9B0-build.json",
-          "evidence_sha256": "ec05429bf5a95e94181823c6c2c2ce2520e50a1c2a52379e11609b1eeb62310f"
-        },
-        "behavioral": {
-          "evidence_path": "docs/fidelity/evidence/0x004EF9B0-behavioral.json",
-          "evidence_sha256": "3f0110ffebbda27276a19a81548375f0168657ad17f81ac1853f3ed13089a56b"
-        }
+        "cfg_similarity": 1.0
       }
     },
     {
       "address": "0x004EF9D0",
-      "name": "PhysicsTerrain_InvokeTooFewParametersInLi_4EF9D0",
+      "name": "Script_Handler_4EF9D0",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
-        "path": "scripts/GameNatives/physicsterrain/004EF9D0-PhysicsTerrain_InvokeTooFewParametersInLi_4EF9D0.cpp",
-        "sha256": "6da33056841497e2118cf198dd89547996d4270b490017fe9700c32f8eca8c3f",
-        "signature": "int* PhysicsTerrain_InvokeTooFewParametersInLi_4EF9D0(int* arg1)"
+        "path": "engine/src/retail/script/native_4ef9d0.cpp",
+        "sha256": "68c1b791c2d649d29e88363112e28dd39f7a896cd3dfbc7cf01e1d934d37d99b",
+        "signature": "unknown"
       },
       "game_natives": {
-        "path": "scripts/GameNatives/physicsterrain/004EF9D0-PhysicsTerrain_InvokeTooFewParametersInLi_4EF9D0.cpp",
-        "sha256": "6da33056841497e2118cf198dd89547996d4270b490017fe9700c32f8eca8c3f",
-        "signature": "int* PhysicsTerrain_InvokeTooFewParametersInLi_4EF9D0(int* arg1)"
+        "path": "scripts/GameNatives/physicsterrain/004EF9D0-PhysicsTerrain_InvokeTooFewParametersInLi_4EF9D0 2.cpp",
+        "sha256": "f9c030bed6a137aacea4df2f37e143f501d7b6750fb91dfc10dda6b7e4593017",
+        "signature": "unknown"
       },
       "verification": {
         "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x004EF9D0",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004EF9D0-binaryninja.json",
+          "evidence_sha256": "221646662f70323681f1a1ea347e7b62864802502f73c0578f7154dc94580a59"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x004EF9D0",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004EF9D0-radare2.json",
+          "evidence_sha256": "351c852820d8e9562a7ce1e5e624d183c77a98138b044f30b013501afe02d07d"
+        },
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
-          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "limitations": [
-          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
-        ],
-        "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
-          "args": [
-            "--address",
-            "{address}",
-            "--binary",
-            "{binary}",
-            "--binary-sha256",
-            "{binary_sha256}",
-            "--implementation",
-            "{implementation}",
-            "--implementation-sha256",
-            "{implementation_sha256}",
-            "--root",
-            "{root}"
-          ],
-          "timeout_seconds": 360
-        },
-        "selected_decompiler": "binary_ninja",
-        "radare2": {
-          "evidence_path": "docs/fidelity/evidence/0x004EF9D0-radare2.json",
-          "evidence_sha256": "800cd3ac4b9564382cb94dc4a6f62e1918b10db3cf0362335072279213d353d3",
-          "evidence_id": "r2:live:0x004EF9D0",
-          "signature": "not restated"
-        },
-        "binary_ninja": {
-          "evidence_path": "docs/fidelity/evidence/0x004EF9D0-binaryninja.json",
-          "evidence_sha256": "28c94a2d8791482c0e6ef058174c0f0ea60b7519f8dd6e4c1f80b2e0178fc77d",
-          "evidence_id": "bn:live:0x004EF9D0",
-          "signature": "not restated"
-        },
-        "cfg_similarity": 1.0,
-        "semantic_review": {
-          "evidence_path": "docs/fidelity/evidence/0x004EF9D0-semantic-review.json",
-          "evidence_sha256": "467b44e4609c5908e3b288aad92b593ac886fbb3d4dbe5fdd7b3473eaf74ca71"
-        },
-        "build": {
-          "evidence_path": "docs/fidelity/evidence/0x004EF9D0-build.json",
-          "evidence_sha256": "d5e19eaf9020acff636f591b22fac30aeb4a53d5d442ebe8efe0db6afb8e8367"
-        },
-        "behavioral": {
-          "evidence_path": "docs/fidelity/evidence/0x004EF9D0-behavioral.json",
-          "evidence_sha256": "51551afd2aebf47f673112646ac691f183d9367d110601129c237225410aafe7"
-        }
+        "cfg_similarity": 1.0
       }
     },
     {
       "address": "0x004EFA10",
-      "name": "PhysicsTerrain_GetContext_4EFA10",
+      "name": "Script_Handler_4EFA10",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
-        "path": "scripts/GameNatives/physicsterrain/004EFA10-PhysicsTerrain_GetContext_4EFA10.cpp",
-        "sha256": "39a8e52c0d6e86e7ce933ccbc9e6f443c545cbd68064a7565eff85a467f88c4f",
-        "signature": "int* PhysicsTerrain_GetContext_4EFA10(int* arg1)"
+        "path": "engine/src/retail/script/native_4efa10.cpp",
+        "sha256": "8a6fd32d17efb98078aa35ffb15617b69300c311e9deddc8fd787bf1a9cdf570",
+        "signature": "unknown"
       },
       "game_natives": {
-        "path": "scripts/GameNatives/physicsterrain/004EFA10-PhysicsTerrain_GetContext_4EFA10.cpp",
-        "sha256": "39a8e52c0d6e86e7ce933ccbc9e6f443c545cbd68064a7565eff85a467f88c4f",
-        "signature": "int* PhysicsTerrain_GetContext_4EFA10(int* arg1)"
+        "path": "scripts/GameNatives/physicsterrain/004EFA10-PhysicsTerrain_GetContext_4EFA10 2.cpp",
+        "sha256": "4d32f45c143be32496382b962704b039d3f9e7dd6c098a682904d69f45d009fa",
+        "signature": "unknown"
       },
       "verification": {
         "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x004EFA10",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004EFA10-binaryninja.json",
+          "evidence_sha256": "22462c0cbc6e4257b7d2a46fdb29cc0a384af17a378d11e1bac40849659856ee"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x004EFA10",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004EFA10-radare2.json",
+          "evidence_sha256": "65e4a8a45af538f9fd3180e5d7744699df1625b65e6826ba69351e68ba04a836"
+        },
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
-          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "limitations": [
-          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
-        ],
-        "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
-          "args": [
-            "--address",
-            "{address}",
-            "--binary",
-            "{binary}",
-            "--binary-sha256",
-            "{binary_sha256}",
-            "--implementation",
-            "{implementation}",
-            "--implementation-sha256",
-            "{implementation_sha256}",
-            "--root",
-            "{root}"
-          ],
-          "timeout_seconds": 360
-        },
-        "selected_decompiler": "binary_ninja",
-        "radare2": {
-          "evidence_path": "docs/fidelity/evidence/0x004EFA10-radare2.json",
-          "evidence_sha256": "8f2197f81a8b23994584e91cb6100a71483a8e75c96aa28d6eda06855b3e1872",
-          "evidence_id": "r2:live:0x004EFA10",
-          "signature": "not restated"
-        },
-        "binary_ninja": {
-          "evidence_path": "docs/fidelity/evidence/0x004EFA10-binaryninja.json",
-          "evidence_sha256": "5fcf41b5a8a0c6bebeaac78b008185adf1e61acbd8740d7de30523c8efa30322",
-          "evidence_id": "bn:live:0x004EFA10",
-          "signature": "not restated"
-        },
-        "cfg_similarity": 1.0,
-        "semantic_review": {
-          "evidence_path": "docs/fidelity/evidence/0x004EFA10-semantic-review.json",
-          "evidence_sha256": "62d74c7d5c52dd9dc24e5a41d52e71fca0388faf66fde08081d45891eea21e75"
-        },
-        "build": {
-          "evidence_path": "docs/fidelity/evidence/0x004EFA10-build.json",
-          "evidence_sha256": "2533f1ada79f42d0fce0c79452ac7266bf8e1bd99743fb0dffcc70ff93b072e7"
-        },
-        "behavioral": {
-          "evidence_path": "docs/fidelity/evidence/0x004EFA10-behavioral.json",
-          "evidence_sha256": "4d68b01a94c8ee3488d49d4c628ef0d70827a4e1d04c19b53a1514753e1eec1b"
-        }
+        "cfg_similarity": 1.0
       }
     },
     {
@@ -59070,72 +58900,38 @@
     },
     {
       "address": "0x004EFA90",
-      "name": "PhysicsTerrain_GetContext_4EFA90",
+      "name": "Script_Handler_4EFA90",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
-        "path": "scripts/GameNatives/physicsterrain/004EFA90-PhysicsTerrain_GetContext_4EFA90.cpp",
-        "sha256": "233b5b63c9885344589b3f27f9cfc9790a70e62541dc3eb40544cd9553a19036",
-        "signature": "int PhysicsTerrain_GetContext_4EFA90(int* arg1, int* arg2)"
+        "path": "engine/src/retail/script/native_4efa90.cpp",
+        "sha256": "993b55773dfdff8dc8a8553e9de46f5f7b705d6130172493187404dcf1d6ec69",
+        "signature": "unknown"
       },
       "game_natives": {
-        "path": "scripts/GameNatives/physicsterrain/004EFA90-PhysicsTerrain_GetContext_4EFA90.cpp",
-        "sha256": "233b5b63c9885344589b3f27f9cfc9790a70e62541dc3eb40544cd9553a19036",
-        "signature": "int PhysicsTerrain_GetContext_4EFA90(int* arg1, int* arg2)"
+        "path": "scripts/GameNatives/physicsterrain/004EFA90-PhysicsTerrain_GetContext_4EFA90 2.cpp",
+        "sha256": "de3a399bf3391163c5e56974b4a730a13667bf5788028bc8ecd82f8f05401845",
+        "signature": "unknown"
       },
       "verification": {
         "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x004EFA90",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004EFA90-binaryninja.json",
+          "evidence_sha256": "9b5c9a9df267197b23ef6826f8b78eff9256c12dbb1cab875b8076c88a41e576"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x004EFA90",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004EFA90-radare2.json",
+          "evidence_sha256": "80dd30b42e59cb203b5cb94ce75860dd98f595787ffaa572913f56e94a520e0b"
+        },
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
-          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "limitations": [
-          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
-        ],
-        "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
-          "args": [
-            "--address",
-            "{address}",
-            "--binary",
-            "{binary}",
-            "--binary-sha256",
-            "{binary_sha256}",
-            "--implementation",
-            "{implementation}",
-            "--implementation-sha256",
-            "{implementation_sha256}",
-            "--root",
-            "{root}"
-          ],
-          "timeout_seconds": 360
-        },
-        "selected_decompiler": "binary_ninja",
-        "radare2": {
-          "evidence_path": "docs/fidelity/evidence/0x004EFA90-radare2.json",
-          "evidence_sha256": "508887c3da3f224e2ccc8d42c9d2c74b08361eec5e853d4b34ecf94e342bb4d7",
-          "evidence_id": "r2:live:0x004EFA90",
-          "signature": "not restated"
-        },
-        "binary_ninja": {
-          "evidence_path": "docs/fidelity/evidence/0x004EFA90-binaryninja.json",
-          "evidence_sha256": "8a6b8858bb8bc3d9c8dfcde2d16235d91e3f9b5870711987a25e988a6eca7583",
-          "evidence_id": "bn:live:0x004EFA90",
-          "signature": "not restated"
-        },
-        "cfg_similarity": 1.0,
-        "semantic_review": {
-          "evidence_path": "docs/fidelity/evidence/0x004EFA90-semantic-review.json",
-          "evidence_sha256": "ae044ed067edf54b80986649ac0564424d92810b1dc9accca4fa609cb6c95193"
-        },
-        "build": {
-          "evidence_path": "docs/fidelity/evidence/0x004EFA90-build.json",
-          "evidence_sha256": "3566acb192ce57e860ee2043e11200e5d4f282f6bc622d7341cbd4ab1b576571"
-        },
-        "behavioral": {
-          "evidence_path": "docs/fidelity/evidence/0x004EFA90-behavioral.json",
-          "evidence_sha256": "39ad9c8f30825f2d511eed47b7290f9c9d00201c8b8307b860e674d6e6b6d681"
-        }
+        "cfg_similarity": 1.0
       }
     },
     {
