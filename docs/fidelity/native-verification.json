@@ -50154,6 +50154,49 @@
       }
     },
     {
+      "address": "0x004B1420",
+      "name": "QFile_DispatchDevicePath_4B1420",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/qfile/native_4b1420.cpp",
+        "sha256": "e89dd5f802679102e6c1b5cb85cb44c2145dbf712f603ddac462944e2af1ec2f",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/sys/004B1420-Sys_IllegalDeviceNameInP 2.cpp",
+        "sha256": "180e52c7d50f089f2b3004d79518dd89fa758da5a73a21a32f30c90b031e786c",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x004B1420",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004B1420-binaryninja.json",
+          "evidence_sha256": "e416dcf2ecfea2c774615bb1f98e730ed239148a1a1a467d4305916a8465193c"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x004B1420",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004B1420-radare2.json",
+          "evidence_sha256": "f08baa254154956b5ec6252af7429e4f1e93bdfdd790c382b51ab8f9abfc0493"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004B1420-semantic-review.json",
+          "evidence_sha256": "85b0129eb6ff89dd2e50c3a9a795db738b94fda1d32f323c60a9eb49069fc2fa"
+        }
+      },
+      "notes": [
+        "Catalog name Sys_IllegalDeviceNameInP contradicted: 0x004B1420 is the QFile device-path dispatcher (all eight call sites are device-open wrappers) and the illegal-name Debug_Error at 0x004B14CD is one of its two fatal branches. Placeholder name kept until VERIFIED."
+      ]
+    },
+    {
       "address": "0x004B1690",
       "name": "Device_CloseStream",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",

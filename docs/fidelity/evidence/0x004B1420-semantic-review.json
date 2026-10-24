@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "address": "0x004B1420",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "e89dd5f802679102e6c1b5cb85cb44c2145dbf712f603ddac462944e2af1ec2f",
+  "implementation_path": "engine/src/retail/qfile/native_4b1420.cpp",
+  "reviewed_by": "lead",
+  "reviewed": true,
+  "review_scope": "static: retail instructions and emitted candidate listing",
+  "result": "passed",
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "rationale": "229 bytes, 80 instructions, entry 0x004B1420 through the single ret at 0x004B1504; the emitted candidate is 14 blocks / 21 edges, exactly retail's count."
+    },
+    {
+      "name": "cfg_match",
+      "result": "passed",
+      "rationale": "Both decoders report 14/21 against retail's 14/21, score 1.000. The flow analysis had predicted 16/23 from a standalone -O3 compile of its draft; the project's actual flags emit 14/21, so its caveat does not apply to the landed build."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "passed",
+      "rationale": "Three cdecl arguments (path, callback, context); the call site 0x00485150 pushes arg3 then 0x00484E60 then \"LOCAL:missions\" and cleans 0xC. The two saved-register reads at 0x004B144E/0x004B1455 are arg3/arg2, read once outside the loop."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "passed",
+      "rationale": "0x004B1020 alias resolve twice, 0x004B11A0 index twice, one indirect call through record+0x00 with four dwords, two Debug_Error terminals that spin, and the return of the handler's EAX."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "passed",
+      "rationale": "Record stride derived exactly as retail: (index*8 - index)*5*4 = index*0x8C; present word at record+0x1C (0x00943708 with the scale applied); handler at record+0x00 (0x009436EC); five-record bound at 0x004B145F; both error strings byte-identical."
+    },
+    {
+      "name": "floating_point_semantics",
+      "result": "not_applicable",
+      "rationale": "No floating-point instruction."
+    },
+    {
+      "name": "memory_layout_and_access",
+      "result": "passed",
+      "rationale": "The ':' scan tests the byte already loaded before loading buffer[colon+1] and counting it, which is retail's order at 0x004B1484-0x004B1490; the local buffer is 0x80 bytes and uninitialised exactly as retail's frame is."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "passed",
+      "rationale": "The handler's EAX is returned only on the depth==0 path; the two error branches never return, matching retail's jmp $ self-loops."
+    }
+  ],
+  "evidence": "docs/fidelity/evidence/0x4B1420-retail-listing.txt and docs/fidelity/evidence/0x4EE970-data-extents.md section 21",
+  "limitations": [
+    "Runtime unobserved; reachable only through the device-open wrappers behind the startup boundary.",
+    "The device table has no transcribed registrar (retail 0x004B1B90 is missing), so the five records stay zeroed and every dispatch currently reports the device as not present. That is the honest state, not a filled-in table.",
+    "The handler contract (four arguments, int32 EAX) is established by the call sequence only; no device handler is transcribed yet.",
+    "The no-':' path passes &buffer[strlen+1], which is an uninitialised stack byte, exactly as retail does; what handlers do with it is unproven.",
+    "The catalog name Sys_IllegalDeviceNameInP is contradicted: the bytes are the device-path dispatcher that contains the illegal-name error branch, so the address-suffixed placeholder is kept and no rename is claimed."
+  ]
+}
