@@ -366,3 +366,20 @@ listing. The four `record` writes and the count reload pattern stay exactly as d
 Blocker therefore cleared: `0x4F1A80` is writable once `0x4F0F80` (already transcribed,
 called 6 times) is confirmed to be its source of the fifth value at every site - which the
 `add esp,0x18` cleanup count at each of the seven sites can verify mechanically.
+
+### Cleanup count verified at the 0x4F1A80 call sites (round 57)
+
+Parsed the listing for the instruction following each `call 0x4F1A80`: **all six sites that
+could be parsed clean `0x18`** (24 bytes = the two `0x4F0F80` leftovers + four own pushes).
+One earlier count mentioned seven call sites; the automated pass found six with a directly
+following `add esp,0x18`, so the seventh either has its cleanup separated by other
+instructions or my earlier manual count included a neighbouring call. That discrepancy is
+recorded rather than rounded away: the **mechanism** (0x18 cleanup covering both calls) is
+confirmed at every site checked, and the exact site count needs re-counting before the
+transcription is finalised.
+
+Practical status: the five-argument model is consistent with every parsed site. Before the
+body is written, two small facts still need confirming rather than assuming:
+(1) `Debug_Error`'s engine-side declaration/signature for the `arg4 == -1` fail-closed path,
+and (2) that the value passed to the preceding `0x4F0F80` is what the record's fifth field
+receives at each site (verified for the first two sites: 7 and 5).
