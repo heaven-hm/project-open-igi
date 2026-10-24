@@ -11,6 +11,19 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - Startup init sequence measured: the guard's own figures are wrong (internal build, no release)
+
+- **Evidence added**: `docs/fidelity/evidence/startup-402930-call-sequence.md` - the ordered call inventory of `0x00402930..0x00402F50`.
+- **Measured twice, agreeing**: 309 `call` instructions through `build/retail-dis.txt` and an independent
+  `objdump -d --start-address=0x402930 --stop-address=0x402F50`; the region is a straight-line call sequence plus `nop` padding.
+- **The candidate's fail-closed guard text is inaccurate**: it reports "155 ordered init/open/load calls ending in a tail jump to 0x004CEF30". The
+  region actually holds **309 call sites over 303 distinct callees**, the last call target is `0x004895D0`, and no tail jump to `0x004CEF30` exists
+  inside the range. The 155/134 figures must not be carried into any later transcription or plan.
+- **Real closure**: 26 of the 303 distinct callees have a manifest record whose implementation file exists; **277 have no implementation file**. The
+  sequence is dominated by per-class registration routines in the `0x0041xxxx`-`0x0048xxxx` range - the same pattern as `0x00424B90` `Cursor_Init`,
+  which is already transcribed - so the remaining work is a large but regular set of small registrars, not 277 unrelated systems.
+- Counted strictly: a callee whose source exists but has no manifest record yet (the pending `0x42D*`/`0x42F*` handler files) counts as absent here.
+
 ### 2026-10-25 - TaskType_Register (0x00401900) moved to its own native and linked (internal build, no release)
 
 - **Atomic move, as the no-duplication rule requires**: the `TaskType_Register` definition was removed from
