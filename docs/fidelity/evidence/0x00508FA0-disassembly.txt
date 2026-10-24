@@ -197,3 +197,22 @@
 |           0x00509287      e8640bffff     call fcn.004f9df0
 |           0x0050928c      81c4f8000000   add esp, 0xf8
 \           0x00509292      c3             ret
+
+## Call-target classification (round 50)
+
+The listing contains 42 call instructions but only **20 distinct targets**. Checked each
+target address against `engine/src` and `engine/include`:
+
+- **15 of 20 already exist** in the tree (including the registrar API `0x401900`,
+  the link helper `0x401530` and the phase-table helper `0x401400`).
+- **5 targets are missing**: `0x004F1980`, `0x004F1A80`, `0x004F9460`, `0x004F9DF0`,
+  `0x005186C0`.
+
+This materially corrects the earlier "42 callees, deep subtree" reading: the AI-graph
+registrar is one straight-line block with 20 unique dependencies, 15 of which are already
+transcribed. Landing five more routines would make `0x00508FA0` writable, and with it the
+`0x508F80` thunk and the position-1 boundary.
+
+Repeated targets by call count: `0x401400` x9, `0x4F1A80` x7, `0x4F0F80` x6,
+`0x5186C0` x3, `0x401530` x2 - so four of the five missing routines are called many
+times and are the next transcription targets.
