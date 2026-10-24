@@ -222,3 +222,24 @@ retail dispatch data (previously confirmed only from the disassembly listing), a
 it is the input the CFG repair needs. r2 itself still does not emit these as
 `switch_op` edges even with `anal.jmp.tbl=true` (verified: 10 blocks, 0 switches),
 so the edge repair must consume this table evidence explicitly.
+
+## Round 20: scores are recomputed from live tool graphs - artifact editing cannot move them
+
+Experiment: added the indirect `switch` edges (read from `dinput-jump-tables.json`)
+into `0x00490120-, 0x00490190-, 0x0048FED0-radare2.json`, then re-ran
+`build_native_records.py --force --dry-run`. Scores did not change
+(0.675 / 0.480 / 0.527) and the printed counts stayed `r2=5/3, 10/2, 10/3`.
+
+Cause: line 219 calls `ng.cfg_score(bn_graph, r2_graph)` on graphs freshly parsed
+from the binary in-process; the `*-binaryninja.json` / `*-radare2.json` files are
+*outputs* of the builder, not inputs to the score. Editing them (or moving them to
+a different filename case - original files are `0x0048FED0-radare2.json` with
+uppercase hex) has no effect, and `--force` would overwrite them anyway.
+
+Consequence: the indirect-edge repair must be implemented in the scoring path
+(before `cfg_score`), consuming table evidence explicitly - e.g. detect the
+indirect `jmp [table]` operand, map it to `dinput-jump-tables.json`, append the
+`switch` edges to the r2 graph with table VA + index provenance, and only then
+score. That keeps the 0.85 threshold untouched and does not copy Binary Ninja's
+edge list. The three modified artifacts were reverted (`git checkout HEAD --`),
+so the repo has no hand-enriched evidence.
