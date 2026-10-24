@@ -38,3 +38,31 @@ observed ids must fall 0..122 in the observed order.
   against the subtree site list).
 - Testers' capture does not include exit code (driver terminated the spawn after 30 s);
   irrelevant to id attribution, but it means this trace cannot support lifetime claims.
+
+## Site attribution: 127 static sites vs 123 observed ids
+
+Mapping the retail callsites to the inventory's function ranges
+(`position1-tree.json`, 537 nodes keyed by VA with Start/Highest Address):
+
+- **97 functions in the position-1 subtree call `0x00401900`**, and **all 97 have at
+  least one observed registration site** - so no whole function is dormant on the
+  level-1 path.
+- Those 97 functions account for **123 observed registrations**, i.e. exactly ids
+  **0..122**, matching the `AIGraph`=122 boundary.
+- The inventory counted **127 static `0x00401900` call sites** in the same subtree,
+  so the difference is **4 call sites**, not 4 functions: some functions contain
+  more than one site and only one of them executes on this path (for example a
+  class registered in one branch of an init function while another branch is
+  skipped at level 1).
+
+That converts the remaining uncertainty from "unknown which classes are missing"
+into "find the 4 non-executing sites among 97 functions". It also confirms the
+subtree boundary is right: attributing every observed registration to a tree
+function needed no guesses, and no observed site fell outside the 537 nodes.
+
+## Correction to carry forward
+
+The earlier framing "position 1 registers ids 0..43" was inherited from a flat
+chain table; the retail evidence says the executed ids are 0..122 assigned through
+97 registrar functions. Any transcription that reproduces a 44-class group and
+stops is wrong by 79 classes.
