@@ -707,3 +707,35 @@ rather than turned into a return.
 Remaining: the tail from `0x004C05B7` (the key copy and list link) must be captured before the
 body can be written. Named dependency confirmations: `0x4C04B0` (landed) and `0x4B0C60`
 (Mem_Alloc, landed) are both available.
+
+### 0x4C0560 tail captured (complete listing) - record build, key copy, bucket link
+
+```
+0x4C05B7  mov edi,ebx; mov [edx+0xc],eax        ; record+0xC = (from earlier)
+0x4C05BC  or ecx,-1; xor eax,eax; repne scasb   ; strlen(value)
+0x4C05C3  mov eax,[esp+0x20]                    ; record
+0x4C05C7  not ecx; sub edi,ecx; mov edx,ecx     ; ecx = len+1, edi = value start
+0x4C05CD  mov esi,edi; mov edi,[eax+8]          ; dest = record->key (record+0x10)
+0x4C05D2  shr ecx,2; rep movsd; mov ecx,edx; and ecx,3; rep movsb   ; inline strcpy
+0x4C05DE  mov ecx,[esp+0x20]; mov dword [ecx+4],0
+0x4C05E9  mov edx,[esp+0x20]; mov dword [edx],0                    ; record[0], record[4] = 0
+0x4C05F3  mov eax,[ebp+4]; push eax; push ebx; call 0x4C0530       ; hash(value, list+4)
+0x4C05FD  mov ecx,[esp+0x28]; lea edx,[eax+eax*2]
+0x4C0604  mov eax,[ebp]; push ecx; lea ecx,[eax+edx*4]; push ecx
+0x4C060C  call 0x4AF910                                          ; bucket-list insert (0x4AF910)
+0x4C0611  mov edx,[esp+0x30]; add esp,0x18
+0x4C0618  mov eax,[edx+8]; pop edi; pop esi; pop ebp; pop ebx; ret  ; returns record->key
+```
+
+So the record is: `[0]=0`, `[4]=0`, `[8]=key pointer (record+0x10)`, `[0xC]=?`, inline key at
+`+0x10`, total `strlen(value)+0x10` bytes. After building it, the same `0x4C0530` hash selects
+the bucket and `0x4AF910` links the record into it; the function returns `record->key`
+(`[record+8]`), not the record itself.
+
+New dependency named: `0x4AF910` (bucket link). Also note the inline key copy is a
+`rep movsd` + `rep movsb` pair (retail's inline strcpy), which a C++ string copy would not
+reproduce instruction-for-instruction; the observable result is what the CFG gate can check,
+so the provenance must state that the copy shape is behavioural, not instruction-identical.
+
+Argument count for `0x4C0560` still to confirm from its call sites (list is `[ebp]`/`[ebp+4]`,
+value is `ebx`); recorded as open rather than assumed.
