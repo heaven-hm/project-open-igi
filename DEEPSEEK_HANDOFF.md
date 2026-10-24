@@ -606,3 +606,29 @@ after `push ebx`/`push ebp` (8) is arg2, `and eax,0xff` masks it to eight bits, 
 Both remain untranscribed. Open before writing: where arg2 is read in `0x401530` (it does not appear in the
 filtered instruction set - likely consumed by the same propagation comparison the recursive call uses), and the
 full body of `0x4014B0` which both call.
+
+## 0x401530 frames settled; 0x4014B0 is the class-id assignment pass (round 154)
+
+**arg2 is found.** The earlier filtered scan missed it because the same displacement `[esp+0x14]` is read twice
+at different stack depths: at `0x00401589` (`mov dx, word [esp+0x14]`) the frame already has ebx, ebp and esi
+pushed (12 bytes), so that read is **arg2**, and it is compared against the record's class word at `word [edi]`.
+So `0x401530` is:
+
+    void Registrar(std::uint16_t id, std::uint16_t class_word, std::uint32_t handler)
+
+- arg1 = id (`and eax,0xffff`), indexes the handler table at `0x00A96AE0` (`mov [eax*4+0xa96ae0], edx`).
+- arg2 = class word, compared against each record's word at `[edi]` to find the classes to apply to.
+- arg3 = handler/state value, stored in the handler table and forwarded to the recursive call.
+- the recursive call passes `(record_index, arg2, arg3)`, i.e. the same property applied to each derived class
+  with that class's own index as the id. The flag byte at `0x54FF34 + id` prevents re-application.
+- returns the decremented counter and stores it back to `0x00567C70`.
+
+**`0x4014B0` (43 B, 5 blocks) is the class-id assignment pass** that runs after every registration:
+for each record from name byte `0x00AF5F05` stepping 0x30 to `0x00AFA708`, if the name byte is non-zero it calls
+`0x4014E0(record_index)` and stores the returned **word** at `record+0x20` (`mov word [esi],ax` with
+`esi = 0xAF5F08 = base+0x20`). So class ids live at record offset +0x20 and are assigned by `0x4014E0`, not by
+the registrars. Dependency order for transcription is therefore `0x4014E0` -> `0x4014B0` -> `0x401530`/`0x401400`.
+
+Remaining unknown before writing the registrars: `0x4014E0`'s body (the id allocator) and the initialiser at
+`0x4EF7??` that calls `0x4F1840`. Do not transcribe the registrars until `0x4014E0` exists, since their post-loop
+step calls `0x4014B0` on every invocation.
