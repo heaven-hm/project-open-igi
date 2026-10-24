@@ -11,6 +11,21 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - corrected the two QTask link natives from retail operands (internal build, no release)
+
+- **Corrected (fidelity defect, found by `chain-worker`, fixed by Lead)**: `QTask_LinkQTaskEventHandler` (`0x00401400`) had its two
+  argument roles swapped. Retail `0x00401408` loads the SECOND argument into `ebp` and takes the phase from its low byte, while
+  `0x00401429` loads the FIRST argument and masks it to get the index base; `0x0040145F` compares the type record's first word against
+  the FIRST argument and `0x00401474`-`0x0040147A` recurse with the SECOND. The tree body used the first argument for phase/recursion and
+  the second for the comparison, which with the registrar call shape `(class id, event id, handler)` made every phase link collide on
+  `class + (class & 0xff) * 0x180`. Both bodies now match retail; `0x00401530` also had its record comparison against the wrong argument,
+  and retail does not low-byte-mask its stride argument - both corrected.
+- **Re-measured**: `0x00401400` and `0x00401530` both rebuild green and score **CFG 1.000** (7 blocks / 10 edges each) against retail.
+- **Why it matters**: the class registrars pushed by the startup sequence call these two natives; the wrong operand made the handler
+  table land in the wrong phase rows, so the startup-chain transcription could not be validated against retail registration state.
+- **Process**: `docs/agents/subagent-roles.md` records the owner's subagent split (Lead integrator, implementer, verifier/tester, research)
+  with the mandatory "no self-verification" rule and the parallel-vs-sequential decision rule.
+
 ### 2026-10-25 - window-only scene capture: launch, load, Escape, capture (internal build, no release)
 
 - **Fixed**: the earlier captures were full-screen grabs of the desktop (they showed the editor, not the game). New

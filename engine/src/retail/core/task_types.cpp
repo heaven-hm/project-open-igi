@@ -466,12 +466,14 @@ void TaskTypes_RegisterRetailClasses(std::uint16_t first_id, std::uint16_t last_
 // Status/limits: STRUCTURALLY_VERIFIED (CFG 7 blocks / 10 edges, score 1.000); runtime UNOBSERVED. The loop bounds are retail's own
 //           (0x00AF5EE8 to 0x00AFA6E8 stride 0x30); the 0x004014B0 callee is transcribed separately.
 std::uint32_t NATIVE_DECL QTask_LinkQTaskEventHandlerNoContextFn(
-    std::uint16_t event_id, std::uint32_t context, igi::retail::core::FrameHandler handler)
+    std::uint16_t class_id, std::uint32_t event_id, igi::retail::core::FrameHandler handler)
 {
     const std::uint32_t count = ++QTask_NoContextHandlerCount;              // 0x00401530/0x00401542/0x0040155C
     ++QTask_LinkedHandlerCounter;                                          // 0x00401538/0x00401543/0x00401545
+    // 0x0040153E: eax = the FIRST argument, 0x00401553 masks its LOW WORD. 0x00401558/0x00401562 build the product from the
+    // SECOND argument WITHOUT the low-byte mask 0x00401400 applies, so the whole second argument feeds the stride here.
     const std::uint32_t index =
-        (static_cast<std::uint32_t>(event_id) & 0xFFFFU) + context * 0x180U; // 0x00401553/0x00401558/0x00401562/0x00401565
+        (static_cast<std::uint32_t>(class_id) & 0xFFFFU) + event_id * 0x180U;
     const std::uint8_t first_link = (count == 1U) ? 1U : 0U;                // 0x00401567/0x0040156A
     QTask_HandlerTable[index] = handler;                                   // 0x0040156E
     QTask_FirstLinkFlag[index] = first_link;                               // 0x00401575
@@ -485,12 +487,12 @@ std::uint32_t NATIVE_DECL QTask_LinkQTaskEventHandlerNoContextFn(
         if (record[0x1D] != 0U)                                            // 0x00401582/0x00401585/0x00401587
         {
             if (*reinterpret_cast<std::uint16_t*>(record) ==
-                static_cast<std::uint16_t>(context))                       // 0x00401589/0x0040158E/0x00401591
+                static_cast<std::uint16_t>(class_id))                      // 0x00401589/0x0040158E/0x00401591: the FIRST argument
             {
-                if (QTask_FirstLinkFlag[context * 0x180U + slot] == 0U)     // 0x00401593/0x0040159A/0x0040159C
+                if (QTask_FirstLinkFlag[event_id * 0x180U + slot] == 0U)     // 0x00401593/0x0040159A/0x0040159C
                 {
                     QTask_LinkQTaskEventHandlerNoContextFn(
-                        static_cast<std::uint16_t>(slot), context, handler); // 0x004015A2/0x004015A3/0x004015A4/0x004015A5
+                        static_cast<std::uint16_t>(slot), event_id, handler); // 0x004015A2/0x004015A3/0x004015A4/0x004015A5
                 }
             }
         }
@@ -515,14 +517,15 @@ std::uint32_t NATIVE_DECL QTask_LinkQTaskEventHandlerNoContextFn(
 //           clear, recurses with (slot, arg1, handler); then calls 0x004014B0, decrements 0x00567C6C and returns it.
 // Status/limits: TRANSCRIBED (full body, statically derived); runtime UNOBSERVED.
 std::uint32_t NATIVE_DECL QTask_LinkQTaskEventHandler(
-    std::uint16_t event_id, std::uint32_t context, igi::retail::core::FrameHandler handler)
+    std::uint16_t class_id, std::uint32_t event_id, igi::retail::core::FrameHandler handler)
 {
     const std::uint32_t count = ++QTask_ContextHandlerCount;                // 0x00401400/0x00401415/0x00401435
     ++QTask_LinkedHandlerCounter;                                          // 0x0040140D/0x00401416/0x0040141C
-    const std::uint32_t phase =
-        static_cast<std::uint32_t>(event_id) & 0xFFU;                       // 0x00401413/0x00401417: phase from the LOW BYTE
+    // 0x00401408: ebp = [esp+0x10], the SECOND argument; 0x00401413/0x00401417 take the phase from its LOW BYTE.
+    const std::uint32_t phase = event_id & 0xFFU;
+    // 0x00401429: eax = [esp+0x10], the FIRST argument; 0x00401430 masks its LOW WORD and 0x0040143B adds the phase stride.
     const std::uint32_t index =
-        (static_cast<std::uint32_t>(event_id) & 0xFFFFU) + phase * 0x180U;  // 0x00401426/0x0040142D/0x00401430/0x0040143B
+        (static_cast<std::uint32_t>(class_id) & 0xFFFFU) + phase * 0x180U;
     const std::uint8_t first_link = (count == 1U) ? 1U : 0U;                // 0x0040143D/0x00401440
     QTask_HandlerTable[index] = handler;                                   // 0x00401444
     QTask_FirstLinkFlag[index] = first_link;                               // 0x0040144B
@@ -536,7 +539,7 @@ std::uint32_t NATIVE_DECL QTask_LinkQTaskEventHandler(
         if (record[0x1D] != 0U)                                            // 0x00401458/0x0040145B/0x0040145D
         {
             if (*reinterpret_cast<std::uint16_t*>(record) ==
-                static_cast<std::uint16_t>(context))                       // 0x0040145F/0x00401464/0x00401467
+                static_cast<std::uint16_t>(class_id))                       // 0x0040145F/0x00401464/0x00401467
             {
                 if (QTask_FirstLinkFlag[phase * 0x180U + slot] == 0U)       // 0x00401469/0x00401470/0x00401472
                 {
