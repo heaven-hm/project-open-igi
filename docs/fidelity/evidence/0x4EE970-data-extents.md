@@ -619,6 +619,869 @@ Call targets reported by CFG recovery for the handler bodies (dependency plannin
 
 ---
 
+
+---
+
+## 8. APPENDED — transcription sheet: the six zero-argument handlers
+
+The 84-handler map is §7. This section is the first half of the transcription sheet requested by the Lead: the **six handlers whose bodies read no incoming stack argument**. The thirteen `[esp+8]`-only handlers follow in §9. Sheet only — no `engine/` file, manifest entry or listing was changed to produce it.
+
+### 8.0 Refinements to §7.3 (must be read before relying on §7.3 wording)
+
+Preparing this sheet turned up four details that §7.3 states too loosely or omits. They do not change the 84-handler table or the `fn(arg0, value)` conclusion; they fix how the registration machinery must be transcribed.
+
+**(a) The six "kind getters" take no arguments.** Each is exactly two instructions — `mov al, byte [<slot>]; ret` — and reads one byte from static data; e.g. `0x4F1B90` = `a0 e9 e0 54 00` / `c3` (`mov al, byte [0x0054E0E9]; ret`). The `push <handler>` that precedes the getter call in the listing is **not** the getter's argument: no `add esp` follows the getter call, so the pushed handler stays on the stack and becomes the **third** argument of `0x4F1BC0`. Exact sequence (bytes from the committed listing):
+
+| VA | bytes | instruction |
+| --- | --- | --- |
+| `0x004EECCA` | `68707d4200` | `push 0x427d70` (handler — stays for `0x4F1BC0`) |
+| `0x004EECCF` | `e8bc2e0000` | `call 0x4F1B90` (no arguments; returns kind in AL) |
+| `0x004EECD4` | `50` | `push eax` (kind low byte = arg1) |
+| `0x004EECD5` | `a17018a700` | `mov eax, dword [0xa71870]` (Real32 type handle) |
+| `0x004EECDA` | `50` | `push eax` (type = arg0) |
+| `0x004EECDB` | `e8e02e0000` | `call 0x4F1BC0` (gets type, kind, handler) |
+| `0x004EECE0` | `83c40c` | `add esp, 0xc` (cleans all three) |
+
+So `0x4F1BC0(type, kind, handler)` is right, but the kind getter is a **no-parameter native** and the handler push must be preserved on the stack between the two calls. Transcribing the getter as `uint32 get(uintptr_t)` would be wrong; transcribing it as a zero-argument call whose result is the kind byte is required.
+
+**(b) The six kind slots are assigned at run time, not in the file.** The bytes at `0x0054E0E6`, `E7`, `E8`, `E9`, `EA`, `EB` are all `0xFF` in the image (verified in the PE raw data: `0x0054E0E6` = `ff ff ff ff ff ff`). `0x4F1840` assigns them by calling `0x4F1B20` six times:
+
+| VA | bytes | instruction |
+| --- | --- | --- |
+| `0x004F187D` | `e89e020000` | `call 0x4F1B20` |
+| `0x004F1882` | `a2ebe05400` | `mov byte [0x54e0eb], al` |
+| `0x004F1887` | `e894020000` | `call 0x4F1B20` |
+| `0x004F188C` | `a2eae05400` | `mov byte [0x54e0ea], al` |
+| `0x004F1891` | `e88a020000` | `call 0x4F1B20` |
+| `0x004F1896` | `a2e7e05400` | `mov byte [0x54e0e7], al` |
+| `0x004F189B` | `e880020000` | `call 0x4F1B20` |
+| `0x004F18A0` | `a2e8e05400` | `mov byte [0x54e0e8], al` |
+| `0x004F18A5` | `e876020000` | `call 0x4F1B20` |
+| `0x004F18AA` | `a2e9e05400` | `mov byte [0x54e0e9], al` |
+| `0x004F18AF` | `e86c020000` | `call 0x4F1B20` |
+| `0x004F18B4` | `a2e6e05400` | `mov byte [0x54e0e6], al` |
+
+Allocation order: slot `EB`, then `EA`, `E7`, `E8`, `E9`, `E6`. `0x4F1B20` is the manifest `STRUCTURALLY_VERIFIED` helper; `0x4F1840` also zeroes the 16-byte flag array at `0xA758C8` and the `0x1300`-byte parameter table at `0xA758E0` (see §4). **Consequence:** the "kindE6"/"kindE9" labels in §7.4 are slot identities (the address byte), not kind values. The kind value stored in a slot is whatever `0x4F1B20` returned when `0x4F1840` ran; it must never be hardcoded. The registration index `19*type + (int8)kind` therefore also cannot be enumerated statically — transcribe `0x4F1840`/`0x4F1B20` and read the bytes, exactly as retail does.
+
+**(c) The dispatcher propagates the callback's EAX, but none of its four callers consumes it.** `0x4F1AF0` ends `call dword [edx*4+0xa758e8]` / `add esp,8` / `ret` (`0x4F1B0B`, `0x4F1B12`, `0x4F1B15`), so it returns the handler's EAX. The four call sites, with the first instruction after each call, show the result is overwritten before any use:
+
+| Call site | First instruction after the call |
+| --- | --- |
+| `0x4880A4` | `0x4880A9` `8b4324` `mov eax, dword [ebx + 0x24]` |
+| `0x4882F8` | `0x4882FD` `8b442430` `mov eax, dword [esp + 0x30]` |
+| `0x488333` | `0x488338` `83c410` `add esp, 0x10`, then `0x48833B` `8b4324` `mov eax, ...` |
+| `0x4F095A` | `0x4F095F` `8bb424f800..` `mov esi, dword [esp + 0xF8]` |
+
+So a candidate handler's EAX-on-return is currently unobservable at every dispatcher call site. It is still worth matching for the constant-writers (§9), because retail returns `value` there and the match is free; but no landed native should be blocked on it.
+
+**(d) These handlers are shared, global callbacks.** `axtj` on the whole image gives `0x4D3710` 163 references: 148 registration `push` instructions, 13 direct `call`s and 2 pointer stores. Only 8 of those are inside this initialiser; 140 registration pushes and all 13 direct calls are outside it. The other five have exactly one reference each — the registration here. The bodies must therefore not assume any type-specific context, and `0x4D3710` in particular must stay a truly empty callback.
+
+### 8.1 The six handlers
+
+Loud caveat first, because it bounds what "transcription-ready" means here: **five of the six are class-method handlers** registered through `0x401530(classWord, methodId, handler)` with `methodId = 2`; the consumer of those class tables (the call site that invokes class methods) was **not located** in this pass. Their bodies read no stack arguments at all, so any argument list is ignored by construction and the emitted body is exact; but their C++ signature and the use (if any) of their EAX return cannot be fixed until `0x401530` and the class-invocation path are transcribed. The sixth, `0x4D3710`, is registered in *both* channels (class method id 1 for Static and Idle, and six attribute kind slots) and is additionally called directly at 13 sites with one pushed argument. Nothing here contradicts the `fn(arg0, value)` dispatcher evidence — the five class methods simply are not reached through it.
+
+| # | VA | size | body | registration (this initialiser) | target global |
+| --- | --- | --- | --- | --- | --- |
+| 1 | `0x004D3710` | 1 | `ret` only (no-op) | Static.method1, Idle.method1 (`0x401530`, id 1) + attribute slots of VarString (`EB`) and Graph (`EA`,`EB`,`E7`,`E8`,`E6`) | — |
+| 2 | `0x004F0610` | 11 | unconditional dword zero-store | Level.method2 (`0x401530`, id 2, class word R1+0x00 `0x0054DD0C`) | `0x00A758A4` (R8+0x00) |
+| 3 | `0x004F0640` | 20 | conditional dword zero-store | Static.method2 (`0x401530`, id 2, class word R1+0x02 `0x0054DD0E`) | `0x00A758B0` (R8+0x0C), read then written |
+| 4 | `0x004F06F0` | 11 | unconditional dword zero-store | Dynamic.method2 (`0x401530`, id 2, class word R1+0x04 `0x0054DD10`) | `0x00A758AC` (R8+0x08) |
+| 5 | `0x004F0710` | 11 | unconditional dword zero-store | Idle.method2 (`0x401530`, id 2, class word R1+0x06 `0x0054DD12`) | `0x00A758B4` (R8+0x10) |
+| 6 | `0x004F0730` | 11 | unconditional dword zero-store | CameraBase.method2 (`0x401530`, id 2, class word R1+0x08 `0x0054DD14`) | `0x00A758B8` (R8+0x14) |
+
+Common facts for all six: **no callee calls**, **no string reads**, **no dereference of any argument** (they read no arguments), and none of them returns a value of its own (see each block for the EAX detail). The five globals do not exist in the candidate yet; they are R8 fields (`0x00A758A4`, `0x00A758AC`, `0x00A758B0`, `0x00A758B4`, `0x00A758B8` — §3 R8, currently only reached by untranscribed handlers). They must become new candidate symbols (extern, not file-local); their retail addresses must not appear as constants in candidate code.
+
+### 8.2 `0x004D3710` — no-op callback (class method 1 for Static/Idle + six attribute slots)
+
+**Retail body — complete:**
+
+| VA | bytes | instruction |
+| --- | --- | --- |
+| `0x004D3710` | `c3` | `ret` |
+
+**Registrations.** Class channel (2 sites), `0x401530(classWord, 1, 0x4D3710)`:
+
+| VA | bytes | instruction |
+| --- | --- | --- |
+| `0x004EEA84` | `66a10edd5400` | `mov ax, word [0x54dd0e]` (Static class word) |
+| `0x004EEA8A` | `6810374d00` | `push 0x4d3710` |
+| `0x004EEA8F` | `6a01` | `push 1` |
+| `0x004EEA91` | `50` | `push eax` |
+| `0x004EEA92` | `e8992af1ff` | `call 0x401530` |
+| `0x004EEB2D` | `668b1512dd5400` | `mov dx, word [0x54dd12]` (Idle class word) |
+| `0x004EEB34` | `6810374d00` | `push 0x4d3710` |
+| `0x004EEB39` | `6a01` | `push 1` |
+| `0x004EEB3B` | `52` | `push edx` |
+| `0x004EEB3C` | `e8ef29f1ff` | `call 0x401530` |
+
+Attribute channel (6 sites), all with the same 6-instruction shape (`push handler` / `call getter` / `push eax` / load type handle / `push` / `call 0x4F1BC0`):
+
+| Site | Getter call | Kind slot | Type handle (field name) | Registration call |
+| --- | --- | --- | --- | --- |
+| `0x004EF12A` | `0x004EF12F` `0x4F1B80` | `0x0054E0EB` | `0x00A70C9C` (VarString, R3+0x34) | `0x004EF13B` |
+| `0x004EF58A` | `0x004EF58F` `0x4F1B60` | `0x0054E0EA` | `0x00A70CA0` (Graph, R3+0x38) | `0x004EF59B` |
+| `0x004EF5A3` | `0x004EF5A8` `0x4F1B80` | `0x0054E0EB` | `0x00A70CA0` (Graph) | `0x004EF5B5` |
+| `0x004EF5BD` | `0x004EF5C2` `0x4F1BA0` | `0x0054E0E7` | `0x00A70CA0` (Graph) | `0x004EF5CF` |
+| `0x004EF5D7` | `0x004EF5DC` `0x4F1BB0` | `0x0054E0E8` | `0x00A70CA0` (Graph) | `0x004EF5E8` |
+| `0x004EF60A` | `0x004EF60F` `0x4F1B70` | `0x0054E0E6` | `0x00A70CA0` (Graph) | `0x004EF61C` |
+
+**Exact C++ behaviour:** nothing. The body performs no access, so the emitted native must have an empty body:
+
+```cpp
+NATIVE_DECL void <no-op callback>(void) { }
+```
+
+**Accesses:** none — no argument read, no global read/write, no callee, no constant.
+
+**-O3 / codegen risks (all three matter here):**
+1. **Do not give it a return value.** Retail leaves EAX exactly as the caller had it. `return 0;` would make the dispatcher return 0 instead of `arg0`; an empty body plus `ret` keeps EAX unchanged, which is what retail does. (Currently unobservable per §8.0(c), but this handler is also called directly, so preserving it is free.)
+2. **Empty-body folding (linker ICF).** Because the body is a bare `ret`, an identical-code-folding linker may merge this native with another empty stub, collapsing a retail VA identity that the registration tables must reference. Verify the emitted symbol address is the one stored by the registration natives; do not let the build silently alias it.
+3. **Arity.** Retail tolerates three call shapes: 1 pushed argument at the 13 direct call sites (`push esi; call 0x4d3710; add esp,4` — e.g. `0x00482783`/`0x00482784`), 2 arguments through the attribute table (`fn(arg0, value)`), and whatever the class system passes. A cdecl empty function with no parameters ignores all of them; do not add parameters that force the caller to push something, and do not clean the stack inside it (retail is caller-clean).
+
+### 8.3 `0x004F0610` — Level class method 2: zero `0x00A758A4`
+
+**Registration —** `0x401530(classWord = *0x0054DD0C, 2, 0x004F0610)`:
+
+| VA | bytes | instruction |
+| --- | --- | --- |
+| `0x004EEA6D` | `668b150cdd5400` | `mov dx, word [0x54dd0c]` |
+| `0x004EEA74` | `83c440` | `add esp, 0x40` (cleanup of the Level block's earlier pushes) |
+| `0x004EEA77` | `6810064f00` | `push 0x4f0610` |
+| `0x004EEA7C` | `6a02` | `push 2` |
+| `0x004EEA7E` | `52` | `push edx` |
+| `0x004EEA7F` | `e8ac2af1ff` | `call 0x401530` |
+
+**Retail body — complete:**
+
+| VA | bytes | instruction |
+| --- | --- | --- |
+| `0x004F0610` | `c705a458a70000000000` | `mov dword [0xa758a4], 0` |
+| `0x004F061A` | `c3` | `ret` |
+
+**Exact C++ behaviour:**
+
+```cpp
+// 0x004F0610: *(uint32_t*)0xA758A4 = 0   (R8 +0x00, Level object slot)
+NATIVE_DECL void <Level class method 2>(void) { g_a758a4 = 0u; }
+```
+
+**Accesses:**
+
+| Retail address | Width | Access | Candidate form |
+| --- | --- | --- | --- |
+| `0x00A758A4` | 4 bytes | write only, value `0` | extern symbol for R8 +0x00, store `0u` |
+
+**Constants / strings / callees:** none. Only the constant `0`.
+
+**-O3 loss risks:**
+1. **Store to a global nothing reads yet.** R8 +0x00 is currently written by this handler and by Level's property handler `0x4F0600` (untranscribed), and read by `0x4F0580`, `0x4F0D40`, `0x4F0E90`, `0x4F1080`, `0x4F17C0` (all untranscribed). Because no candidate code reads it today, the store is removable under LTO/dead-store analysis if the symbol is file-local or provably unread. Declare it as an external symbol in the shared globals unit and do not let it become `static`; then a plain store survives -O3.
+2. Nothing else: the function touches no argument, calls nothing, and needs no return value (retail leaves EAX untouched).
+
+### 8.4 `0x004F0640` — Static class method 2: conditionally zero `0x00A758B0`
+
+**Registration —** `0x401530(classWord = *0x0054DD0E, 2, 0x004F0640)`:
+
+| VA | bytes | instruction |
+| --- | --- | --- |
+| `0x004EEAAA` | `668b150edd5400` | `mov dx, word [0x54dd0e]` |
+| `0x004EEAB1` | `6840064f00` | `push 0x4f0640` |
+| `0x004EEAB6` | `6a02` | `push 2` |
+| `0x004EEAB8` | `52` | `push edx` |
+| `0x004EEAB9` | `e8722af1ff` | `call 0x401530` |
+
+**Retail body — complete:**
+
+| VA | bytes | instruction |
+| --- | --- | --- |
+| `0x004F0640` | `a1b058a700` | `mov eax, dword [0xa758b0]` |
+| `0x004F0645` | `85c0` | `test eax, eax` |
+| `0x004F0647` | `740a` | `je 0x4f0653` |
+| `0x004F0649` | `c705b058a70000000000` | `mov dword [0xa758b0], 0` |
+| `0x004F0653` | `c3` | `ret` |
+
+**Exact C++ behaviour (branch-faithful form):**
+
+```cpp
+// 0x004F0640: load 0xA758B0; if non-null, store 0; return old value in EAX
+NATIVE_DECL void <Static class method 2>(void)
+{
+    if (g_a758b0 != 0u)
+        g_a758b0 = 0u;
+}
+```
+
+**Accesses:**
+
+| Retail address | Width | Access | Candidate form |
+| --- | --- | --- | --- |
+| `0x00A758B0` | 4 bytes | read (guard), then write `0` if non-zero | extern symbol for R8 +0x0C; the load is retail and worth keeping |
+
+**Constants / strings / callees:** none. Constant `0` only. Retail writers/readers of `0x00A758B0`: written here and at `0x4F062D` (Static property, `0x4F0620`); read here, at `0x4F0620` and at `0x4F0ED0`. All untranscribed.
+
+**-O3 loss risks (this is the risky one of the six):**
+1. **The load can be folded away.** Memory-state-wise the branch is redundant — both paths end with the global equal to 0 — so -O3 may replace the sequence with an unconditional `store 0` (or, with LTO and no readers, delete the store). That is acceptable for memory state, but it loses the retail load, which is the only reason the function reads before writing. If byte-faithful sequencing matters, keep the explicit `if`; the compiler may still fold it, and the memory end-state remains identical either way.
+2. **EAX differs between the forms.** Retail returns EAX = old global (0 when the global was already null); the `if` form compiled as a void function leaves EAX unspecified. No caller's use of it is proven (class-invocation path unknown), so this is a documented divergence rather than a blocker — but if the class system is later found to read it, transcribe the return as the old value.
+3. **Do not declare the global `static`** (same dead-store risk as §8.3).
+
+### 8.5 `0x004F06F0` — Dynamic class method 2: zero `0x00A758AC`
+
+**Registration —** `0x401530(classWord = *0x0054DD10, 2, 0x004F06F0)`:
+
+| VA | bytes | instruction |
+| --- | --- | --- |
+| `0x004EEB19` | `668b0d10dd5400` | `mov cx, word [0x54dd10]` |
+| `0x004EEB20` | `68f0064f00` | `push 0x4f06f0` |
+| `0x004EEB25` | `6a02` | `push 2` |
+| `0x004EEB27` | `51` | `push ecx` |
+| `0x004EEB28` | `e8032af1ff` | `call 0x401530` |
+
+**Retail body — complete:**
+
+| VA | bytes | instruction |
+| --- | --- | --- |
+| `0x004F06F0` | `c705ac58a70000000000` | `mov dword [0xa758ac], 0` |
+| `0x004F06FA` | `c3` | `ret` |
+
+**Exact C++ behaviour:**
+
+```cpp
+// 0x004F06F0: *(uint32_t*)0xA758AC = 0   (R8 +0x08, Dynamic object slot)
+NATIVE_DECL void <Dynamic class method 2>(void) { g_a758ac = 0u; }
+```
+
+**Accesses:** `0x00A758AC`, 4 bytes, write only, value `0`. Retail also writes this field from Dynamic's property handler `0x4F06E4` (`0x4F06E0`) and reads it at `0x4F0EE0`; both are untranscribed, so in candidate code the field has no reader today. **Constants / strings / callees:** none besides the constant `0`.
+**-O3 loss risks:** identical to §8.3 (external-symbol requirement; no argument/return concerns; EAX untouched by retail).
+
+### 8.6 `0x004F0710` — Idle class method 2: zero `0x00A758B4`
+
+**Registration —** `0x401530(classWord = *0x0054DD12, 2, 0x004F0710)`:
+
+| VA | bytes | instruction |
+| --- | --- | --- |
+| `0x004EEB53` | `668b0d12dd5400` | `mov cx, word [0x54dd12]` |
+| `0x004EEB5D` | `6810074f00` | `push 0x4f0710` |
+| `0x004EEB62` | `6a02` | `push 2` |
+| `0x004EEB64` | `51` | `push ecx` |
+| `0x004EEB65` | `e8c629f1ff` | `call 0x401530` |
+
+**Retail body — complete:**
+
+| VA | bytes | instruction |
+| --- | --- | --- |
+| `0x004F0710` | `c705b458a70000000000` | `mov dword [0xa758b4], 0` |
+| `0x004F071A` | `c3` | `ret` |
+
+**Exact C++ behaviour:**
+
+```cpp
+// 0x004F0710: *(uint32_t*)0xA758B4 = 0   (R8 +0x10, Idle object slot)
+NATIVE_DECL void <Idle class method 2>(void) { g_a758b4 = 0u; }
+```
+
+**Accesses:** `0x00A758B4`, 4 bytes, write only, value `0`. Note this field has **no reader anywhere in the image** (§3 R8), so its only observable effect is the store itself — which makes the external-symbol requirement in §8.3 point 1 mandatory, otherwise -O3 can delete the last observable effect of the native.
+**Constants / strings / callees:** none besides the constant `0`.
+
+### 8.7 `0x004F0730` — CameraBase class method 2: zero `0x00A758B8`
+
+**Registration —** `0x401530(classWord = *0x0054DD14, 2, 0x004F0730)`:
+
+| VA | bytes | instruction |
+| --- | --- | --- |
+| `0x004EEB90` | `668b0d14dd5400` | `mov cx, word [0x54dd14]` |
+| `0x004EEB97` | `6830074f00` | `push 0x4f0730` |
+| `0x004EEB9C` | `6a02` | `push 2` |
+| `0x004EEB9E` | `51` | `push ecx` |
+| `0x004EEB9F` | `e88c29f1ff` | `call 0x401530` |
+
+**Retail body — complete:**
+
+| VA | bytes | instruction |
+| --- | --- | --- |
+| `0x004F0730` | `c705b858a70000000000` | `mov dword [0xa758b8], 0` |
+| `0x004F073A` | `c3` | `ret` |
+
+**Exact C++ behaviour:**
+
+```cpp
+// 0x004F0730: *(uint32_t*)0xA758B8 = 0   (R8 +0x14, CameraBase object slot)
+NATIVE_DECL void <CameraBase class method 2>(void) { g_a758b8 = 0u; }
+```
+
+**Accesses:** `0x00A758B8`, 4 bytes, write only, value `0`, also with **no reader anywhere in the image** (same caveat as §8.6).
+**Constants / strings / callees:** none besides the constant `0`.
+
+### 8.8 Landing checklist for the six
+
+| Handler | Landing risk | Requires before it can be *called* |
+| --- | --- | --- |
+| `0x004D3710` | empty body must stay empty; ICF alias check; arity-tolerant | nothing for the body; registration natives `0x401530`/`0x4F1B60`–`0x4F1BC0` for wiring |
+| `0x004F0610` | external symbol for `0xA758A4` (dead-store risk) | `0x401530` + class invocation path |
+| `0x004F0640` | external symbol for `0xA758B0`; load may fold; EAX = old value divergence | `0x401530` + class invocation path |
+| `0x004F06F0` | external symbol for `0xA758AC` | `0x401530` + class invocation path |
+| `0x004F0710` | external symbol for `0xA758B4`; field has no readers — store must not be elided | `0x401530` + class invocation path |
+| `0x004F0730` | external symbol for `0xA758B8`; field has no readers — store must not be elided | `0x401530` + class invocation path |
+
+None of the six can be exercised until `0x401530` and the class-invocation path are transcribed; the bodies are nevertheless exact and can land now. The thirteen `[esp+8]`-only handlers follow in §9.
+
+---
+
+## 9. APPENDED — transcription sheet: the thirteen `[esp+8]`-only handlers
+
+Second half of the sheet requested by the Lead: the thirteen handlers that read **only** `[esp+8]`, the dispatcher's second callback argument (`value`, i.e. `0x4F1AF0`'s 4th argument). Same rules as §8: sheet only, no `engine/` write, no manifest/listing/git change.
+
+### 9.0 Verdict — all thirteen fit the two-argument model; nothing here threatens the dispatcher evidence
+
+Every one of the thirteen is the same 11-byte, 3-instruction, single-basic-block function:
+
+| # | VA | bytes | instruction |
+| --- | --- | --- | --- |
+| — | `<VA>` | `8b442408` | `mov eax, dword [esp + 8]` (read `value`, 4 bytes) |
+| — | `<VA>+4` | `c700<imm32>` | `mov dword [eax], <imm32>` (write 4 bytes through `value`) |
+| — | `<VA>+0xA` | `c3` | `ret` |
+
+Facts that make this group the cleanest in the set:
+- **One argument read only.** `[esp+8]` is read once; `[esp+4]` (`arg0`) is never read by any of the thirteen; no third argument is read; no handler writes any incoming stack slot. The dispatcher pushes exactly two arguments (`push value; push arg0` at `0x4F1B09`/`0x4F1B0A`), so the two-argument model is confirmed again, from the callee side.
+- **Exactly one dereference, 4 bytes wide, write-only.** No handler reads memory through `value`; there is no byte/word/dword ambiguity to flag. The only memory effects in the whole group are these single dword stores.
+- **No global, no string, no callee.** No handler in this group touches static data or calls anything. The only constant is the immediate stored.
+- **No direct call sites anywhere in the image; two registration roles.** `axtj` reports zero `call` references to each of the thirteen; they are referenced only by `push` instructions. One set is the attribute registrations inside `0x4EE970` (this sheet's scope, reachable through table `0x00A758E8` / `0x4F1AF0`). The other set is 31 registrations outside the initialiser, and every one of them is a **class-property registration** `0x401400(classWord, stateByte, handler)` whose state byte comes from a helper called with the handler (`0x4C56E0` ×16, `0x416810` ×5, `0x413B30` ×4, `0x4F4110`/`0x4E5360` ×2 each, `0x477030`/`0x4EE0F0` ×1 each): e.g. `0x4EF8B0` at `0x43F9C7` inside the `Fence` declaration function `0x43F900`, `0x51BAA0` at `0x4266EE` inside the `CarDoor` declaration `0x426630`, `0x427D70` at `0x4278EE` inside the `RocketPod` declaration `0x427830`. `0x4EF850` and `0x4EF9D0` have no outside references. So the same bodies are also shared class-property callbacks elsewhere; that channel's invocation ABI is the same open Channel 2 as §8.1, but because these bodies read only `[esp+8]` they ignore everything except their second argument under either channel.
+- **EAX on return = `value`.** `mov eax,[esp+8]` leaves the pointer in EAX and the store does not change EAX, so retail returns `value` (the dispatcher passes that through). Per §8.0(c) no dispatch caller consumes it today; matching it is still free by returning `value`.
+
+**LOUD: no handler in this group needs an exception or reinterpretation of the model.** There is no "does not fit" item to act on for the thirteen: every one reads only `[esp+8]`, writes 4 bytes through it, and does nothing else. The only open ABI item left anywhere in this sheet is the class channel — class *method* invocation for the six in §8.1, and class *property* invocation for the outside role described in the third bullet above.
+
+### 9.1 Canonical transcription (one native per VA)
+
+```cpp
+// Shape of all thirteen; substitute the VA and the stored constant.
+// Native: <retail-derived name>; retail VA 0x00XXXXXX
+NATIVE_DECL std::uintptr_t <name>(std::uintptr_t arg0, std::uintptr_t value)
+{
+    (void)arg0;                                        // retail never reads [esp+4]
+    *reinterpret_cast<std::uint32_t*>(value) = <CONST>; // 4-byte store, no read-back
+    return value;                                      // retail leaves EAX = value
+}
+```
+
+- ABI: `cdecl`, two 4-byte arguments, caller cleans 8 bytes (`0x4F1B12 add esp, 8`). Keep both parameters even though `arg0` is unused: with a one-parameter form `value` would sit at `[esp+4]` and the emitted frame would no longer match retail's `[esp+8]` read — the frame offsets are themselves part of the evidence.
+- `-O3`: the store goes through an opaque, escaped pointer, so it cannot be deleted, reordered with an observable effect, or turned into a no-op. Unlike the six in §8 there is no dead-store, dead-load or folding risk here. The only codegen choice to make is `void` vs returning `value`; `void` loses nothing observable today (§8.0(c)) but returning `value` is exactly retail.
+- Do not merge or macro-collapse the thirteen: rule 10.15(13)/10.13(2) requires one native per retail VA, and the retail bodies differ only in the immediate — but they are distinct functions with distinct callers in the table.
+
+
+### 9.2 The thirteen, with constants and registrations
+
+| # | VA | size | stored 4-byte value | registrations in `0x4EE970` (type + kind slot) |
+| --- | --- | --- | --- | --- |
+| 1 | `0x00427D70` | 11 | `4` | Real32 (`E9`), Int32 (`E9`) |
+| 2 | `0x00427F80` | 11 | `8` | Real64 (`E9`) |
+| 3 | `0x004EF850` | 11 | `0x41` | QTaskNote (`E9`) |
+| 4 | `0x004EF8B0` | 11 | `0xB` | GraphEnvelope (`E6`) |
+| 5 | `0x004EF9D0` | 11 | `0x2C` | GraphEnvelope (`E9`) |
+| 6 | `0x004EFA10` | 11 | `1` | Real32, Real64, Int32, Int16, VarString, String16, String32, String256, LevelExpression, QTaskNote, bool8 (`E6`) + bool8 (`E9`) |
+| 7 | `0x004EFB00` | 11 | `3` | Quat32, Real32x3, Real32x9, Real64x3 (`E6`) |
+| 8 | `0x004EFCD0` | 11 | `0x28` | Real32x9 (`E9`) |
+| 9 | `0x004EFF20` | 11 | `0x14` | Quat32 (`E9`) |
+| 10 | `0x004F00A0` | 11 | `0x18` | Real64x3 (`E9`) |
+| 11 | `0x004F01B0` | 11 | `2` | Int16 (`E9`) |
+| 12 | `0x004F64E0` | 11 | `0` | Graph (`E9`) |
+| 13 | `0x0051BAA0` | 11 | `0xC` | Real32x3 (`E9`) |
+
+**Verification note for row 4 (`0x004EF8B0`), where a naive parse of the listing mis-assigns the type:** the registration instructions are `push 0x4ef8b0` at `0x004EF6B5`, `call 0x4F1B70` at `0x004EF6BA`, `mov edx, dword [0x00A70C80]` at `0x004EF6BF`, `push eax` at `0x004EF6C5`, `push edx` at `0x004EF6C6`, `call 0x4F1BC0` at `0x004EF6C7`. The type handle is `0x00A70C80` = GraphEnvelope, and the `mov eax, dword [0x00A7186C]` (String256) at `0x004EF6CC` belongs to the **next** registration block. The committed §7.4 row 11 and Appendix A record (`GraphEnvelope.kindE6`) are therefore correct; only this sheet's per-handler table below needs to be read with that order in mind.
+
+**Hypothesis, clearly separated from evidence:** the `E9` immediates look like byte sizes of the registered types (Int16 2, Int32/Real32 4, Real64 8, Quat32 0x14, Real32x3 0xC, Real32x9 0x28, Real64x3 0x18, graph envelope 0x2C, Graph 0). That reading is *not proven* — `E6` does not share it (it stores 1, 3 and 0xB) — so do not name these natives from it. The sheet only needs the immediates.
+
+### 9.3 Per-handler blocks
+
+#### 9.3.1 `0x00427D70` — stores `4` (`4u`); registered for Int32 and Real32
+
+**Retail body — complete:**
+
+| VA | bytes | instruction |
+| --- | --- | --- |
+| `0x00427D70` | `8b442408` | `mov eax, dword [esp + 8]` |
+| `0x00427D74` | `c70004000000` | `mov dword [eax], 4` |
+| `0x00427D7A` | `c3` | `ret` |
+
+**Exact C++ behaviour:**
+
+```cpp
+// 0x00427D70: *reinterpret_cast<std::uint32_t*>(value) = 4u;  (single 4-byte store)
+NATIVE_DECL std::uintptr_t <name>(std::uintptr_t arg0, std::uintptr_t value)
+{
+    (void)arg0;
+    *reinterpret_cast<std::uint32_t*>(value) = 4u;
+    return value;
+}
+```
+
+**Registrations** (`push handler` → `call getter` → `push eax` → load type handle → `call 0x4F1BC0`):
+
+| `push` site | getter call, getter | kind slot | type handle, type | `0x4F1BC0` call |
+| --- | --- | --- | --- | --- |
+| `0x004EECCA` | `0x004EECCF` `0x4f1b90` | `E9` | `0x00A71870` Real32 | `0x004EECDB` |
+| `0x004EF021` | `0x004EF026` `0x4f1b90` | `E9` | `0x00A70C7C` Int32 | `0x004EF032` |
+
+**Constants / strings / globals:** the only constant is the stored `4`; no string is read, no static data is read or written.
+
+**Callees:** none.
+
+**Accesses:** one 4-byte store through `value` (`[esp+8]`); no read through it; `arg0` (`[esp+4]`) unused; no stack write.
+
+**-O3 risks:** none for the store (opaque escaped pointer). Only the return-type choice in 9.1 applies: retail EAX = `value`.
+
+#### 9.3.2 `0x00427F80` — stores `8` (`8u`); registered for Real64
+
+**Retail body — complete:**
+
+| VA | bytes | instruction |
+| --- | --- | --- |
+| `0x00427F80` | `8b442408` | `mov eax, dword [esp + 8]` |
+| `0x00427F84` | `c70008000000` | `mov dword [eax], 8` |
+| `0x00427F8A` | `c3` | `ret` |
+
+**Exact C++ behaviour:**
+
+```cpp
+// 0x00427F80: *reinterpret_cast<std::uint32_t*>(value) = 8u;  (single 4-byte store)
+NATIVE_DECL std::uintptr_t <name>(std::uintptr_t arg0, std::uintptr_t value)
+{
+    (void)arg0;
+    *reinterpret_cast<std::uint32_t*>(value) = 8u;
+    return value;
+}
+```
+
+**Registrations** (`push handler` → `call getter` → `push eax` → load type handle → `call 0x4F1BC0`):
+
+| `push` site | getter call, getter | kind slot | type handle, type | `0x4F1BC0` call |
+| --- | --- | --- | --- | --- |
+| `0x004EEECB` | `0x004EEED0` `0x4f1b90` | `E9` | `0x00A71874` Real64 | `0x004EEEDC` |
+
+**Constants / strings / globals:** the only constant is the stored `8`; no string is read, no static data is read or written.
+
+**Callees:** none.
+
+**Accesses:** one 4-byte store through `value` (`[esp+8]`); no read through it; `arg0` (`[esp+4]`) unused; no stack write.
+
+**-O3 risks:** none for the store (opaque escaped pointer). Only the return-type choice in 9.1 applies: retail EAX = `value`.
+
+#### 9.3.3 `0x004EF850` — stores `0x41` (`0x41u`); registered for QTaskNote
+
+**Retail body — complete:**
+
+| VA | bytes | instruction |
+| --- | --- | --- |
+| `0x004EF850` | `8b442408` | `mov eax, dword [esp + 8]` |
+| `0x004EF854` | `c70041000000` | `mov dword [eax], 0x41` |
+| `0x004EF85A` | `c3` | `ret` |
+
+**Exact C++ behaviour:**
+
+```cpp
+// 0x004EF850: *reinterpret_cast<std::uint32_t*>(value) = 0x41u;  (single 4-byte store)
+NATIVE_DECL std::uintptr_t <name>(std::uintptr_t arg0, std::uintptr_t value)
+{
+    (void)arg0;
+    *reinterpret_cast<std::uint32_t*>(value) = 0x41u;
+    return value;
+}
+```
+
+**Registrations** (`push handler` → `call getter` → `push eax` → load type handle → `call 0x4F1BC0`):
+
+| `push` site | getter call, getter | kind slot | type handle, type | `0x4F1BC0` call |
+| --- | --- | --- | --- | --- |
+| `0x004EF49A` | `0x004EF49F` `0x4f1b90` | `E9` | `0x00A75894` QTaskNote | `0x004EF4AC` |
+
+**Constants / strings / globals:** the only constant is the stored `0x41`; no string is read, no static data is read or written.
+
+**Callees:** none.
+
+**Accesses:** one 4-byte store through `value` (`[esp+8]`); no read through it; `arg0` (`[esp+4]`) unused; no stack write.
+
+**-O3 risks:** none for the store (opaque escaped pointer). Only the return-type choice in 9.1 applies: retail EAX = `value`.
+
+#### 9.3.4 `0x004EF8B0` — stores `0xB` (`0xBu`); registered for GraphEnvelope
+
+**Retail body — complete:**
+
+| VA | bytes | instruction |
+| --- | --- | --- |
+| `0x004EF8B0` | `8b442408` | `mov eax, dword [esp + 8]` |
+| `0x004EF8B4` | `c7000b000000` | `mov dword [eax], 0xB` |
+| `0x004EF8BA` | `c3` | `ret` |
+
+**Exact C++ behaviour:**
+
+```cpp
+// 0x004EF8B0: *reinterpret_cast<std::uint32_t*>(value) = 0xBu;  (single 4-byte store)
+NATIVE_DECL std::uintptr_t <name>(std::uintptr_t arg0, std::uintptr_t value)
+{
+    (void)arg0;
+    *reinterpret_cast<std::uint32_t*>(value) = 0xBu;
+    return value;
+}
+```
+
+**Registrations** (`push handler` → `call getter` → `push eax` → load type handle → `call 0x4F1BC0`):
+
+| `push` site | getter call, getter | kind slot | type handle, type | `0x4F1BC0` call |
+| --- | --- | --- | --- | --- |
+| `0x004EF6B5` | `0x004EF6BA` `0x4f1b70` | `E6` | `0x00A70C80` GraphEnvelope | `0x004EF6C7` |
+
+**Constants / strings / globals:** the only constant is the stored `0xB`; no string is read, no static data is read or written.
+
+**Callees:** none.
+
+**Accesses:** one 4-byte store through `value` (`[esp+8]`); no read through it; `arg0` (`[esp+4]`) unused; no stack write.
+
+**-O3 risks:** none for the store (opaque escaped pointer). Only the return-type choice in 9.1 applies: retail EAX = `value`.
+
+#### 9.3.5 `0x004EF9D0` — stores `0x2C` (`0x2Cu`); registered for GraphEnvelope
+
+**Retail body — complete:**
+
+| VA | bytes | instruction |
+| --- | --- | --- |
+| `0x004EF9D0` | `8b442408` | `mov eax, dword [esp + 8]` |
+| `0x004EF9D4` | `c7002c000000` | `mov dword [eax], 0x2C` |
+| `0x004EF9DA` | `c3` | `ret` |
+
+**Exact C++ behaviour:**
+
+```cpp
+// 0x004EF9D0: *reinterpret_cast<std::uint32_t*>(value) = 0x2Cu;  (single 4-byte store)
+NATIVE_DECL std::uintptr_t <name>(std::uintptr_t arg0, std::uintptr_t value)
+{
+    (void)arg0;
+    *reinterpret_cast<std::uint32_t*>(value) = 0x2Cu;
+    return value;
+}
+```
+
+**Registrations** (`push handler` → `call getter` → `push eax` → load type handle → `call 0x4F1BC0`):
+
+| `push` site | getter call, getter | kind slot | type handle, type | `0x4F1BC0` call |
+| --- | --- | --- | --- | --- |
+| `0x004EF69B` | `0x004EF6A0` `0x4f1b90` | `E9` | `0x00A70C80` GraphEnvelope | `0x004EF6AD` |
+
+**Constants / strings / globals:** the only constant is the stored `0x2C`; no string is read, no static data is read or written.
+
+**Callees:** none.
+
+**Accesses:** one 4-byte store through `value` (`[esp+8]`); no read through it; `arg0` (`[esp+4]`) unused; no stack write.
+
+**-O3 risks:** none for the store (opaque escaped pointer). Only the return-type choice in 9.1 applies: retail EAX = `value`.
+
+#### 9.3.6 `0x004EFA10` — stores `1` (`1u`); registered for twelve registrations
+
+**Retail body — complete:**
+
+| VA | bytes | instruction |
+| --- | --- | --- |
+| `0x004EFA10` | `8b442408` | `mov eax, dword [esp + 8]` |
+| `0x004EFA14` | `c70001000000` | `mov dword [eax], 1` |
+| `0x004EFA1A` | `c3` | `ret` |
+
+**Exact C++ behaviour:**
+
+```cpp
+// 0x004EFA10: *reinterpret_cast<std::uint32_t*>(value) = 1u;  (single 4-byte store)
+NATIVE_DECL std::uintptr_t <name>(std::uintptr_t arg0, std::uintptr_t value)
+{
+    (void)arg0;
+    *reinterpret_cast<std::uint32_t*>(value) = 1u;
+    return value;
+}
+```
+
+**Registrations** (`push handler` → `call getter` → `push eax` → load type handle → `call 0x4F1BC0`):
+
+| `push` site | getter call, getter | kind slot | type handle, type | `0x4F1BC0` call |
+| --- | --- | --- | --- | --- |
+| `0x004EECE3` | `0x004EECE8` `0x4f1b70` | `E6` | `0x00A71870` Real32 | `0x004EECF5` |
+| `0x004EEEE4` | `0x004EEEE9` `0x4f1b70` | `E6` | `0x00A71874` Real64 | `0x004EEEF6` |
+| `0x004EF03A` | `0x004EF03F` `0x4f1b70` | `E6` | `0x00A70C7C` Int32 | `0x004EF04C` |
+| `0x004EF0E5` | `0x004EF0EA` `0x4f1b70` | `E6` | `0x00A70C78` Int16 | `0x004EF0F7` |
+| `0x004EF190` | `0x004EF195` `0x4f1b70` | `E6` | `0x00A70C9C` VarString | `0x004EF1A2` |
+| `0x004EF23B` | `0x004EF240` `0x4f1b70` | `E6` | `0x00A71884` String16 | `0x004EF24D` |
+| `0x004EF2E6` | `0x004EF2EB` `0x4f1b70` | `E6` | `0x00A71888` String32 | `0x004EF2F8` |
+| `0x004EF391` | `0x004EF396` `0x4f1b70` | `E6` | `0x00A7186C` String256 | `0x004EF3A3` |
+| `0x004EF43C` | `0x004EF441` `0x4f1b70` | `E6` | `0x00A7188C` LevelExpression | `0x004EF44E` |
+| `0x004EF4B4` | `0x004EF4B9` `0x4f1b70` | `E6` | `0x00A75894` QTaskNote | `0x004EF4C6` |
+| `0x004EF545` | `0x004EF54A` `0x4f1b90` | `E9` | `0x00A70C90` bool8 | `0x004EF557` |
+| `0x004EF55F` | `0x004EF564` `0x4f1b70` | `E6` | `0x00A70C90` bool8 | `0x004EF571` |
+
+**Constants / strings / globals:** the only constant is the stored `1`; no string is read, no static data is read or written.
+
+**Callees:** none.
+
+**Accesses:** one 4-byte store through `value` (`[esp+8]`); no read through it; `arg0` (`[esp+4]`) unused; no stack write.
+
+**-O3 risks:** none for the store (opaque escaped pointer). Only the return-type choice in 9.1 applies: retail EAX = `value`.
+
+#### 9.3.7 `0x004EFB00` — stores `3` (`3u`); registered for Quat32, Real32x3, Real32x9, Real64x3
+
+**Retail body — complete:**
+
+| VA | bytes | instruction |
+| --- | --- | --- |
+| `0x004EFB00` | `8b442408` | `mov eax, dword [esp + 8]` |
+| `0x004EFB04` | `c70003000000` | `mov dword [eax], 3` |
+| `0x004EFB0A` | `c3` | `ret` |
+
+**Exact C++ behaviour:**
+
+```cpp
+// 0x004EFB00: *reinterpret_cast<std::uint32_t*>(value) = 3u;  (single 4-byte store)
+NATIVE_DECL std::uintptr_t <name>(std::uintptr_t arg0, std::uintptr_t value)
+{
+    (void)arg0;
+    *reinterpret_cast<std::uint32_t*>(value) = 3u;
+    return value;
+}
+```
+
+**Registrations** (`push handler` → `call getter` → `push eax` → load type handle → `call 0x4F1BC0`):
+
+| `push` site | getter call, getter | kind slot | type handle, type | `0x4F1BC0` call |
+| --- | --- | --- | --- | --- |
+| `0x004EEC38` | `0x004EEC3D` `0x4f1b70` | `E6` | `0x00A71878` Quat32 | `0x004EEC4A` |
+| `0x004EED8E` | `0x004EED93` `0x4f1b70` | `E6` | `0x00A70C68` Real32x3 | `0x004EEDA0` |
+| `0x004EEE39` | `0x004EEE3E` `0x4f1b70` | `E6` | `0x00A70C6C` Real32x9 | `0x004EEE4B` |
+| `0x004EEF8F` | `0x004EEF94` `0x4f1b70` | `E6` | `0x00A75890` Real64x3 | `0x004EEFA1` |
+
+**Constants / strings / globals:** the only constant is the stored `3`; no string is read, no static data is read or written.
+
+**Callees:** none.
+
+**Accesses:** one 4-byte store through `value` (`[esp+8]`); no read through it; `arg0` (`[esp+4]`) unused; no stack write.
+
+**-O3 risks:** none for the store (opaque escaped pointer). Only the return-type choice in 9.1 applies: retail EAX = `value`.
+
+#### 9.3.8 `0x004EFCD0` — stores `0x28` (`0x28u`); registered for Real32x9
+
+**Retail body — complete:**
+
+| VA | bytes | instruction |
+| --- | --- | --- |
+| `0x004EFCD0` | `8b442408` | `mov eax, dword [esp + 8]` |
+| `0x004EFCD4` | `c70028000000` | `mov dword [eax], 0x28` |
+| `0x004EFCDA` | `c3` | `ret` |
+
+**Exact C++ behaviour:**
+
+```cpp
+// 0x004EFCD0: *reinterpret_cast<std::uint32_t*>(value) = 0x28u;  (single 4-byte store)
+NATIVE_DECL std::uintptr_t <name>(std::uintptr_t arg0, std::uintptr_t value)
+{
+    (void)arg0;
+    *reinterpret_cast<std::uint32_t*>(value) = 0x28u;
+    return value;
+}
+```
+
+**Registrations** (`push handler` → `call getter` → `push eax` → load type handle → `call 0x4F1BC0`):
+
+| `push` site | getter call, getter | kind slot | type handle, type | `0x4F1BC0` call |
+| --- | --- | --- | --- | --- |
+| `0x004EEE20` | `0x004EEE25` `0x4f1b90` | `E9` | `0x00A70C6C` Real32x9 | `0x004EEE31` |
+
+**Constants / strings / globals:** the only constant is the stored `0x28`; no string is read, no static data is read or written.
+
+**Callees:** none.
+
+**Accesses:** one 4-byte store through `value` (`[esp+8]`); no read through it; `arg0` (`[esp+4]`) unused; no stack write.
+
+**-O3 risks:** none for the store (opaque escaped pointer). Only the return-type choice in 9.1 applies: retail EAX = `value`.
+
+#### 9.3.9 `0x004EFF20` — stores `0x14` (`0x14u`); registered for Quat32
+
+**Retail body — complete:**
+
+| VA | bytes | instruction |
+| --- | --- | --- |
+| `0x004EFF20` | `8b442408` | `mov eax, dword [esp + 8]` |
+| `0x004EFF24` | `c70014000000` | `mov dword [eax], 0x14` |
+| `0x004EFF2A` | `c3` | `ret` |
+
+**Exact C++ behaviour:**
+
+```cpp
+// 0x004EFF20: *reinterpret_cast<std::uint32_t*>(value) = 0x14u;  (single 4-byte store)
+NATIVE_DECL std::uintptr_t <name>(std::uintptr_t arg0, std::uintptr_t value)
+{
+    (void)arg0;
+    *reinterpret_cast<std::uint32_t*>(value) = 0x14u;
+    return value;
+}
+```
+
+**Registrations** (`push handler` → `call getter` → `push eax` → load type handle → `call 0x4F1BC0`):
+
+| `push` site | getter call, getter | kind slot | type handle, type | `0x4F1BC0` call |
+| --- | --- | --- | --- | --- |
+| `0x004EEC1F` | `0x004EEC24` `0x4f1b90` | `E9` | `0x00A71878` Quat32 | `0x004EEC30` |
+
+**Constants / strings / globals:** the only constant is the stored `0x14`; no string is read, no static data is read or written.
+
+**Callees:** none.
+
+**Accesses:** one 4-byte store through `value` (`[esp+8]`); no read through it; `arg0` (`[esp+4]`) unused; no stack write.
+
+**-O3 risks:** none for the store (opaque escaped pointer). Only the return-type choice in 9.1 applies: retail EAX = `value`.
+
+#### 9.3.10 `0x004F00A0` — stores `0x18` (`0x18u`); registered for Real64x3
+
+**Retail body — complete:**
+
+| VA | bytes | instruction |
+| --- | --- | --- |
+| `0x004F00A0` | `8b442408` | `mov eax, dword [esp + 8]` |
+| `0x004F00A4` | `c70018000000` | `mov dword [eax], 0x18` |
+| `0x004F00AA` | `c3` | `ret` |
+
+**Exact C++ behaviour:**
+
+```cpp
+// 0x004F00A0: *reinterpret_cast<std::uint32_t*>(value) = 0x18u;  (single 4-byte store)
+NATIVE_DECL std::uintptr_t <name>(std::uintptr_t arg0, std::uintptr_t value)
+{
+    (void)arg0;
+    *reinterpret_cast<std::uint32_t*>(value) = 0x18u;
+    return value;
+}
+```
+
+**Registrations** (`push handler` → `call getter` → `push eax` → load type handle → `call 0x4F1BC0`):
+
+| `push` site | getter call, getter | kind slot | type handle, type | `0x4F1BC0` call |
+| --- | --- | --- | --- | --- |
+| `0x004EEF76` | `0x004EEF7B` `0x4f1b90` | `E9` | `0x00A75890` Real64x3 | `0x004EEF87` |
+
+**Constants / strings / globals:** the only constant is the stored `0x18`; no string is read, no static data is read or written.
+
+**Callees:** none.
+
+**Accesses:** one 4-byte store through `value` (`[esp+8]`); no read through it; `arg0` (`[esp+4]`) unused; no stack write.
+
+**-O3 risks:** none for the store (opaque escaped pointer). Only the return-type choice in 9.1 applies: retail EAX = `value`.
+
+#### 9.3.11 `0x004F01B0` — stores `2` (`2u`); registered for Int16
+
+**Retail body — complete:**
+
+| VA | bytes | instruction |
+| --- | --- | --- |
+| `0x004F01B0` | `8b442408` | `mov eax, dword [esp + 8]` |
+| `0x004F01B4` | `c70002000000` | `mov dword [eax], 2` |
+| `0x004F01BA` | `c3` | `ret` |
+
+**Exact C++ behaviour:**
+
+```cpp
+// 0x004F01B0: *reinterpret_cast<std::uint32_t*>(value) = 2u;  (single 4-byte store)
+NATIVE_DECL std::uintptr_t <name>(std::uintptr_t arg0, std::uintptr_t value)
+{
+    (void)arg0;
+    *reinterpret_cast<std::uint32_t*>(value) = 2u;
+    return value;
+}
+```
+
+**Registrations** (`push handler` → `call getter` → `push eax` → load type handle → `call 0x4F1BC0`):
+
+| `push` site | getter call, getter | kind slot | type handle, type | `0x4F1BC0` call |
+| --- | --- | --- | --- | --- |
+| `0x004EF0CC` | `0x004EF0D1` `0x4f1b90` | `E9` | `0x00A70C78` Int16 | `0x004EF0DD` |
+
+**Constants / strings / globals:** the only constant is the stored `2`; no string is read, no static data is read or written.
+
+**Callees:** none.
+
+**Accesses:** one 4-byte store through `value` (`[esp+8]`); no read through it; `arg0` (`[esp+4]`) unused; no stack write.
+
+**-O3 risks:** none for the store (opaque escaped pointer). Only the return-type choice in 9.1 applies: retail EAX = `value`.
+
+#### 9.3.12 `0x004F64E0` — stores `0` (`0u`); registered for Graph
+
+**Retail body — complete:**
+
+| VA | bytes | instruction |
+| --- | --- | --- |
+| `0x004F64E0` | `8b442408` | `mov eax, dword [esp + 8]` |
+| `0x004F64E4` | `c70000000000` | `mov dword [eax], 0` |
+| `0x004F64EA` | `c3` | `ret` |
+
+**Exact C++ behaviour:**
+
+```cpp
+// 0x004F64E0: *reinterpret_cast<std::uint32_t*>(value) = 0u;  (single 4-byte store)
+NATIVE_DECL std::uintptr_t <name>(std::uintptr_t arg0, std::uintptr_t value)
+{
+    (void)arg0;
+    *reinterpret_cast<std::uint32_t*>(value) = 0u;
+    return value;
+}
+```
+
+**Registrations** (`push handler` → `call getter` → `push eax` → load type handle → `call 0x4F1BC0`):
+
+| `push` site | getter call, getter | kind slot | type handle, type | `0x4F1BC0` call |
+| --- | --- | --- | --- | --- |
+| `0x004EF5F0` | `0x004EF5F5` `0x4f1b90` | `E9` | `0x00A70CA0` Graph | `0x004EF602` |
+
+**Constants / strings / globals:** the only constant is the stored `0`; no string is read, no static data is read or written.
+
+**Callees:** none.
+
+**Accesses:** one 4-byte store through `value` (`[esp+8]`); no read through it; `arg0` (`[esp+4]`) unused; no stack write.
+
+**-O3 risks:** none for the store (opaque escaped pointer). Only the return-type choice in 9.1 applies: retail EAX = `value`.
+
+#### 9.3.13 `0x0051BAA0` — stores `0xC` (`0xCu`); registered for Real32x3
+
+**Retail body — complete:**
+
+| VA | bytes | instruction |
+| --- | --- | --- |
+| `0x0051BAA0` | `8b442408` | `mov eax, dword [esp + 8]` |
+| `0x0051BAA4` | `c7000c000000` | `mov dword [eax], 0xC` |
+| `0x0051BAAA` | `c3` | `ret` |
+
+**Exact C++ behaviour:**
+
+```cpp
+// 0x0051BAA0: *reinterpret_cast<std::uint32_t*>(value) = 0xCu;  (single 4-byte store)
+NATIVE_DECL std::uintptr_t <name>(std::uintptr_t arg0, std::uintptr_t value)
+{
+    (void)arg0;
+    *reinterpret_cast<std::uint32_t*>(value) = 0xCu;
+    return value;
+}
+```
+
+**Registrations** (`push handler` → `call getter` → `push eax` → load type handle → `call 0x4F1BC0`):
+
+| `push` site | getter call, getter | kind slot | type handle, type | `0x4F1BC0` call |
+| --- | --- | --- | --- | --- |
+| `0x004EED75` | `0x004EED7A` `0x4f1b90` | `E9` | `0x00A70C68` Real32x3 | `0x004EED86` |
+
+**Constants / strings / globals:** the only constant is the stored `0xC`; no string is read, no static data is read or written.
+
+**Callees:** none.
+
+**Accesses:** one 4-byte store through `value` (`[esp+8]`); no read through it; `arg0` (`[esp+4]`) unused; no stack write.
+
+**-O3 risks:** none for the store (opaque escaped pointer). Only the return-type choice in 9.1 applies: retail EAX = `value`.
+
+
+### 9.4 Landing notes for the thirteen
+
+- **All thirteen are body-complete and self-contained:** no new globals, no strings, no callees, no dependencies on untranscribed data. They can land as soon as there is a place for them; the attribute-table role cannot be *invoked* until `0x4F1AF0`, `0x4F1BC0`, the six getters `0x4F1B60`–`0x4F1BB0`, and the kind-slot initialiser (`0x4F1840` + `0x4F1B20`) are transcribed. Their second, class-property role (above) additionally needs `0x401400` and the class-invocation path — the same open Channel 2 item as the six in §8. Neither role depends on `0x401530` (class *method* registration), only the six do.
+- **One native per VA, thirteen files or thirteen functions** — whichever the Lead's layout uses, no merging (their bytes differ only in the immediate, but they are distinct retail functions addressed by distinct table slots).
+- **Registration natives needed for them to be reachable:** `0x4F1BC0` (`0x4F1BC0(type, kind, handler)` — note the handler arrives as the third argument, per §8.0(a)) and the getters; plus `0x4F1840`/`0x4F1B20` so the kind slots hold real kind values before any registration runs.
+- **Do not hardcode the kind numbers.** Slots `E6`/`E9` are addresses (`0x0054E0E6`/`0x0054E0E9`); the values inside are assigned at run time by `0x4F1840` (§8.0(b)). The registration index `19*type + (int8)kind` must be computed from those runtime bytes exactly as `0x4F1BC0` does.
+- **Count sanity for this file (definitions given, from the committed listing):** the initialiser contains 443 `push` instructions, of which 176 carry an immediate operand: 119 pushes of code pointers (84 distinct = the handler set), 32 pushes of type-name string pointers, 1 push of the `"RGB"` pointer `0x0054DF10`, and 24 pushes of small/negative integers (19 × `-1`, 4 × `0x20`, 1 × `0x38`). It contains 262 `call` instructions to 17 distinct local targets and 40 distinct absolute memory operands. For citation, use these explicit definitions: §7.1's "139 `push` instructions" is the subset `119 code-pointer pushes + 19 × push -1 + 1 × push "RGB"` (139 exactly — small-integer pushes and the 32 type-name pushes are excluded), and §1/§6's "127 distinct absolute references" is the earlier loose aggregate over code+string+data operands; neither is a contradicting count, but the definitions above are the ones that can be re-derived one-to-one from the listing. The 84-handler set is set-equal under every parse.
+
 ## Appendix A — machine-readable handler set
 
 Compact JSON for scripting (`args` are 0-based argument indices derived from the slot reads; `registrations` are the derived type/class registrations):

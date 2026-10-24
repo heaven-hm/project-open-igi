@@ -7,10 +7,11 @@
 
 extern "C" {
 
-void Script_Handler_4EFA10(void* const argument, std::uint32_t* const value)
+std::uint32_t Script_Handler_4EFA10(void* const argument, std::uint32_t* const value)
 {
     (void)argument;                                      // first argument is never read by retail
-    *value = 1;                                          // 0x004EFA14: mov dword [eax],1
+    *value = 1;
+    return static_cast<std::uint32_t>(reinterpret_cast<std::uintptr_t>(value)); // retail EAX on return is the value argument                                          // 0x004EFA14: mov dword [eax],1
 }
 
 } // extern "C"
