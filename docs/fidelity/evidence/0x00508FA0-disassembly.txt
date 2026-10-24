@@ -1207,3 +1207,24 @@ Re-verified state of the registrar's remaining call inventory from round 97:
 New standing rule adopted from here: before decoding any VA, run the `VA 0x<va>` provenance grep
 across `engine/` **first** - the same check used for callees - and record the result in the same
 round. Only `0x4F0F80`, `0x4F9280`, `0x4F9DF0` (and its `0x4AF810` dependency) remain.
+
+### Round 109: provenance check applied before decoding (new rule works)
+
+```
+0x004F0F80 -> engine/src/retail/render/native_4f0f80.cpp   ALREADY TRANSCRIBED (6 B getter:
+                mov eax,[0xA71874]; ret)
+0x004F9280 -> engine/src/retail/core/native_4f9280.cpp      ALREADY TRANSCRIBED
+0x004F9DF0 -> MISSING
+0x004AF810 -> MISSING
+0x00936274 -> MISSING (global, owner unknown)
+```
+
+So the registrar's entire call inventory from round 97 is now accounted for: every target except
+`0x4F9DF0` is already transcribed. The first application of the new provenance-grep rule caught
+two more existing natives before any decode was spent - which is exactly the failure mode from
+round 108 avoided at zero cost.
+
+Remaining before `0x508FA0` can be written:
+1. the `0x00936274` global owner (needed by `0x4AF810`);
+2. `0x4AF810` (78 B, 3 blocks, warning-log emitter - already fully decoded, blocked only on that global);
+3. `0x4F9DF0` (120 B, 7 blocks, fully decoded, blocked on `0x4AF810`).
