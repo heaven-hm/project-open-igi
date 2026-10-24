@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "address": "0x004AF8A0",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "1a31f039622b862e90e06ed8543bb51e402f1f0ac81c7cb6204b29089adf6df4",
+  "implementation_path": "engine/src/retail/sys/native_4af8a0.cpp",
+  "reviewed_by": "lead",
+  "reviewed": true,
+  "review_scope": "static: retail instructions and emitted candidate listing",
+  "result": "passed",
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "rationale": "10 bytes, three instructions, one block, zero edges; generated artifacts match 1/0."
+    },
+    {
+      "name": "cfg_match",
+      "result": "passed",
+      "rationale": "Both decoders report 1/0, score 1.000."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "passed",
+      "rationale": "One cdecl argument read from [esp+4]; nothing else is read."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "passed",
+      "rationale": "Stores into 0x0093626C, the exact absolute destination in retail's mov."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "passed",
+      "rationale": "One dword store, no calls."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "passed",
+      "rationale": "Returns void through a single ret."
+    }
+  ],
+  "evidence": "docs/fidelity/evidence/0x4EE970-data-extents.md section 22.3",
+  "limitations": [
+    "Runtime unobserved; the word at 0x0093626C has no other owner in the tree, so the setter writes a storage this file defines.",
+    "No reader of this word is transcribed yet, so the value's meaning is unproven."
+  ]
+}

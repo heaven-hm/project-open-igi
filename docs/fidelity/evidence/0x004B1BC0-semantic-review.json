@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "address": "0x004B1BC0",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "50ce2b4766fb9c4b023c1581fe28cd3604c7866f9b221b8bed8ac39442fd9234",
+  "implementation_path": "engine/src/retail/qfile/native_4b1bc0.cpp",
+  "reviewed_by": "lead",
+  "reviewed": true,
+  "review_scope": "static: retail instructions and emitted candidate listing",
+  "result": "passed",
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "rationale": "26 bytes, seven instructions, one block, zero edges; generated artifacts match 1/0."
+    },
+    {
+      "name": "cfg_match",
+      "result": "passed",
+      "rationale": "Both decoders report 1/0, score 1.000."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "passed",
+      "rationale": "One cdecl argument, the device index, pushed before the dispatch and popped afterwards; the slot receives it as its only argument."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "passed",
+      "rationale": "One indirect call through record+0x04 (0x009436B4), then pop ecx and ret."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "passed",
+      "rationale": "0x8C stride and +0x04 slot displacement from the lea/scale sequence and the call displacement."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "passed",
+      "rationale": "Returns the slot's EAX; no branch."
+    }
+  ],
+  "evidence": "docs/fidelity/evidence/0x4EE970-data-extents.md section 22.3",
+  "limitations": [
+    "Runtime unobserved; the slot is populated only once the qfile init chain lands, so this build calls a null slot.",
+    "The slot's return type is unproven."
+  ]
+}
