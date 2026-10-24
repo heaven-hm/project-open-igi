@@ -1,0 +1,79 @@
+{
+  "kind": "igi-single-native-verification-run",
+  "schema_version": 1,
+  "address": "0x0048F0C0",
+  "result": "blocked",
+  "verified": false,
+  "error": "ValueError('typed-comparison failed; no acceptance')",
+  "phases": [
+    {
+      "name": "natural",
+      "command": [
+        "/Users/haseeb-mir/Library/Application Support/pipx/venvs/frida-tools/bin/python",
+        "scripts/tester/capture_store_command_line_natural.py",
+        "--out",
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/build/runtime-traces/store-command-line-acceptance-20261025-sol-1/natural"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "controlled",
+      "command": [
+        "/Users/haseeb-mir/Library/Application Support/pipx/venvs/frida-tools/bin/python",
+        "scripts/frida_app_startup_store_pair.py",
+        "--candidate",
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/build-first-native-sol/igi1.exe",
+        "--receipt",
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/build-first-native-sol/diagnostic-receipt.json",
+        "--out",
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/build/runtime-traces/store-command-line-acceptance-20261025-sol-1/controlled.json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "gate",
+      "command": [
+        "/Users/haseeb-mir/Library/Application Support/pipx/venvs/frida-tools/bin/python",
+        "scripts/native_gate.py",
+        "--root",
+        "/Users/haseeb-mir/Documents/Code/project-open-igi",
+        "--manifest",
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/build/runtime-traces/store-command-line-acceptance-20261025-sol-1/proposed-manifest.json",
+        "--file",
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/engine/src/retail/core/app_startup_natives.cpp",
+        "--address",
+        "0x0048F0C0",
+        "--threshold",
+        "VERIFIED",
+        "--cfg-threshold",
+        "0.85",
+        "--require-semantic-evidence",
+        "--require-behavioral-tests",
+        "--require-frida-probes",
+        "--report",
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/build/runtime-traces/store-command-line-acceptance-20261025-sol-1/gate.json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "typed-comparison",
+      "command": [
+        "/Users/haseeb-mir/Library/Application Support/pipx/venvs/frida-tools/bin/python",
+        "scripts/tester/check_store_command_line_pair.py",
+        "--pair",
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/build/runtime-traces/store-command-line-acceptance-20261025-sol-1/controlled.json",
+        "--natural",
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/build/runtime-traces/store-command-line-acceptance-20261025-sol-1/natural",
+        "--gate-report",
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/build/runtime-traces/store-command-line-acceptance-20261025-sol-1/gate.json",
+        "--candidate",
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/build-first-native-sol/igi1.exe",
+        "--receipt",
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/build-first-native-sol/diagnostic-receipt.json",
+        "--out",
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/build/runtime-traces/store-command-line-acceptance-20261025-sol-1/differential.json"
+      ],
+      "exit_code": 1
+    }
+  ]
+}

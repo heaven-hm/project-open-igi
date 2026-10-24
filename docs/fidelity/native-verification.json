@@ -39751,7 +39751,7 @@
         "signature": "int __cdecl int32_t(int32_t)"
       },
       "verification": {
-        "status": "RUNTIME_TESTED",
+        "status": "VERIFIED_WITH_DOCUMENTED_SCOPE",
         "selected_decompiler": "binary_ninja",
         "candidate_symbol": "_StoreCommandLine",
         "runtime_layout": {
@@ -39786,8 +39786,8 @@
           "evidence_sha256": "4cb55128a7770d0e55e3af2765e116d65acfd95cb210bf3def6dc4ab21ce443a"
         },
         "build": {
-          "evidence_path": "docs/fidelity/evidence/main-first-native-20261025-sol/build.json",
-          "evidence_sha256": "b254081c55c008358003a6f86e2c3a43d4f4b47dac8cc656414f14e72501c76c"
+          "evidence_path": "docs/fidelity/evidence/main-first-native-20261025-sol/build-final.json",
+          "evidence_sha256": "359fec132d0c41f7f83a553f97b5226d52f170a1ee22a5d4a92eaacdc0db02ec"
         },
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/main-first-native-20261025-sol/semantic-review.json",
@@ -39815,12 +39815,12 @@
           "note": "Controlled pre-resume ABI calls only. Arbitrary values are opaque 32-bit words, not claimed valid command-line pointers. Natural WinMain call is separately observed with a different reviewed probe."
         },
         "runtime_tests": {
-          "evidence_path": "docs/fidelity/evidence/main-first-native-20261025-sol/controlled-pair.json",
-          "evidence_sha256": "8322834ece0b25c2e20ae0f626d4c4f7208e641dcd97f7335af70831a0b2047c"
+          "evidence_path": "docs/fidelity/evidence/main-first-native-20261025-sol/controlled-final.json",
+          "evidence_sha256": "ba3aef99ec1c50dd4486e25ad213cbf6b70e7d1f2a9cc0e714fd034e431eb109"
         },
         "natural_runtime_observation": {
-          "evidence_path": "docs/fidelity/evidence/main-first-native-20261025-sol/natural-comparison.json",
-          "evidence_sha256": "6187b7958cd986453aae52c4f6f19315e0f5c69eed29aaf5a1dfe25fbb3006eb"
+          "evidence_path": "docs/fidelity/evidence/main-first-native-20261025-sol/natural-accepted-comparison.json",
+          "evidence_sha256": "3b92fc64604b100a1fb819ce317eeff5bf090eca97293556ff22d0da035bd5b7"
         },
         "behavioral_runner": {
           "path": "scripts/frida_app_startup_store_pair.py",
@@ -39836,7 +39836,9 @@
             "--implementation-sha256",
             "{implementation_sha256}",
             "--root",
-            "{root}"
+            "{root}",
+            "--out",
+            "/Users/haseeb-mir/Documents/Code/project-open-igi/build/runtime-traces/store-command-line-acceptance-20261025-sol-1/gate-live-pair.json"
           ],
           "timeout_seconds": 150
         },
@@ -39849,13 +39851,32 @@
           "evidence_sha256": "c976c1f0b0b47863d098147c61f50f80df5ccd8d01a59e702259cf1692b816d2"
         },
         "limitations": [
-          "RUNTIME_TESTED describes retained original/candidate game-process observations on source 0cd758f2ad54db1e376f379e730f907a4c5dfb986d519302642cb948d41fdc08 and candidate image 9d901ded6761ce5b959a0d2f64f53da030bdf6a7e020ab81dff1a26acbd58e4a, not acceptance of the current whole tree.",
-          "One natural call per side: window level1, identical NUL-terminated command line, pointer store/return relations, unchanged input and adjacent sampled bytes. Controlled pre-resume replay separately matched 11 opaque 32-bit word cases with the global restored.",
-          "Prior VERIFIED_WITH_DOCUMENTED_SCOPE label retracted: stale source/report hashes, an unrelated chunk-walk semantic review, and no valid scope document. Prior record retained unchanged for audit.",
-          "Current whole-tree receipt became stale during other agents edits. A later clean rebuild failed linking g_a94a64 in native_4b0f70.cpp; no fresh image/receipt or current-tree acceptance is claimed.",
-          "Required before acceptance: successful fresh x86 build, strict focused gate with live runner, and gate-bound paired typed comparison through the acceptance checker. Independent critic has not been performed.",
-          "Compiler CRT startup and Windows SDK code are outside game-native reconstruction per owner clarification; game code starts at WinMain. Full game startup still stops at untranscribed 0x00402930."
-        ]
+          "Exact declared native scope, not universal or whole-game parity.",
+          "The first automated attempt remains blocked in accepted/result.json because the adapter read the generic template hash; the corrected adapter reads targets[].probe_sha256 and both rechecks passed. Raw captures were not altered.",
+          "Author semantic review and independent BN/r2/angr evidence; no independent human/agent critic was available.",
+          "The conservative source provenance comment still says STRUCTURALLY_VERIFIED; this is a gate warning. Source bytes were kept identical to the tested build.",
+          "No engine source changed, no new game native added, no release attestation or deployment."
+        ],
+        "frida_runtime": {
+          "evidence_path": "docs/fidelity/evidence/main-first-native-20261025-sol/frida-final.json",
+          "evidence_sha256": "67fa19253af86aa4ab2b08d723677fda9174f7785cee892105394fdf687facc3"
+        },
+        "scope": {
+          "path": "docs/fidelity/scopes/store-command-line-20261025.md",
+          "sha256": "2a5c3dd5ab719cb4e78d353e3148244dca9516670c23557e0b0daf5f23088881"
+        },
+        "acceptance": {
+          "evidence_path": "docs/fidelity/evidence/main-first-native-20261025-sol/acceptance.json",
+          "evidence_sha256": "8ce9f5ab25c740c79deb5bd94f74826c51e1e4f36b4a5d57779ebec9295c1f46"
+        },
+        "runtime_differential": {
+          "evidence_path": "docs/fidelity/evidence/main-first-native-20261025-sol/accepted/differential-rechecked.json",
+          "evidence_sha256": "0b619f3d19fbe5a98d3bc6ae5f8ae36272090bb904007295789f04bd12e69e8b"
+        },
+        "strict_focus_gate": {
+          "evidence_path": "docs/fidelity/evidence/main-first-native-20261025-sol/accepted/gate.json",
+          "evidence_sha256": "3f6b2b8a27d1291eb924fe6e54aac29962b0f1479f65214b8b6b99dce28a6993"
+        }
       }
     },
     {

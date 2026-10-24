@@ -1,0 +1,149 @@
+{
+  "kind": "igi-tester-native-probe",
+  "schema_version": 1,
+  "result": "observed",
+  "verified": false,
+  "captured_at": "2026-10-24T19:35:55.597623+00:00",
+  "targets": [
+    {
+      "address": "0x418580",
+      "name": "StoreCommandLine",
+      "probe": "/Users/haseeb-mir/Documents/Code/project-open-igi/scripts/tester/frida_store_command_line_natural.js",
+      "probe_sha256": "1bf465dd45895d44a198fb892074b352f78b0513536d143c2721a6eec23bf4ab",
+      "observations": {
+        "name": null,
+        "entries": 1,
+        "returns": 1
+      },
+      "retailName": "StoreCommandLine"
+    }
+  ],
+  "executable": {
+    "path": "/Users/haseeb-mir/Documents/Code/project-open-igi/build-first-native-sol/igi1.exe",
+    "sha256": "9d901ded6761ce5b959a0d2f64f53da030bdf6a7e020ab81dff1a26acbd58e4a",
+    "preferred_base": "0x00400000",
+    "module": "igi1.exe"
+  },
+  "probe_template_sha256": "8472074d6840df8a07f63fe4460771357e99b8b584e9a1bbc7997450359ad84c",
+  "environment": {
+    "frida_host": "127.0.0.1:27042",
+    "frida_client": "17.24.0",
+    "game_directory": "/Users/haseeb-mir/Downloads/IGI",
+    "level": 1,
+    "arguments": [
+      "window",
+      "level1"
+    ],
+    "scenario": {
+      "observe_seconds": 5.0,
+      "scripted_actions": "none (idle observation)"
+    }
+  },
+  "arguments": {
+    "arg_words": 1,
+    "native_size": 10,
+    "mem_arg": null,
+    "return_mem": null,
+    "watch": [
+      {
+        "address": 5943912,
+        "offset": 0,
+        "length": 4
+      }
+    ],
+    "max_calls": 256
+  },
+  "hooks": [
+    {
+      "installed": true,
+      "target": "0x418580",
+      "state": "0x5ab268",
+      "codeHex": "8b442404a368b25a00c3",
+      "mode": "natural-pre-resume-hook",
+      "name": "StoreCommandLine",
+      "retailVA": "0x418580",
+      "sideAddress": "0x418580"
+    }
+  ],
+  "evidence_input": null,
+  "entries": [
+    {
+      "type": "observed",
+      "phase": "entry",
+      "address": "0x418580",
+      "callIndex": 1,
+      "argumentWord": 1170884,
+      "inputHex": "77696e646f77206c6576656c3100",
+      "globalBefore": 0,
+      "neighborsBefore": "000000000000000000000000",
+      "callerRva": 105036
+    }
+  ],
+  "returns": [
+    {
+      "type": "observed",
+      "phase": "return",
+      "address": "0x418580",
+      "callIndex": 1,
+      "returnWord": 1170884,
+      "globalAfter": 1170884,
+      "inputHexAfter": "77696e646f77206c6576656c3100",
+      "neighborsAfter": "00000000c4dd110000000000"
+    }
+  ],
+  "messages": 3,
+  "summary": null,
+  "limitations": [
+    "Finite idle observation interval only; no scripted gameplay actions.",
+    "Only the process this driver spawned is terminated; attach mode never terminates the target.",
+    "A pointer snapshot is read only after Process.findRangeByAddress proves the range readable; unknown pointer contents remain unobserved rather than guessed.",
+    "Observed calls are not proof of behavioral parity by themselves; a typed comparator is required.",
+    "Result 'unobserved' means only that this capture did not reach the native; it is not a pass or fail."
+  ],
+  "capture": {
+    "mode": "spawn-suspended",
+    "owned_pid": 1908,
+    "arguments": [
+      "Z:\\Users\\haseeb-mir\\Documents\\Code\\project-open-igi\\build-first-native-sol\\igi1.exe",
+      "window",
+      "level1"
+    ],
+    "cwd": "Z:\\Users\\haseeb-mir\\Downloads\\IGI",
+    "session_detach": {
+      "reason": "process-terminated",
+      "at": 1792870557.914633,
+      "crash": null
+    },
+    "exited_before_observe_end": {
+      "at": 1792870558.349337,
+      "elapsed_seconds": 2.042
+    },
+    "alive_at_end": false
+  },
+  "events": [
+    {
+      "type": "store_command_line_complete",
+      "entries": 1,
+      "returns": 1,
+      "scope": "natural startup calls to 0x0048F0C0 only",
+      "codeHex": "8b442404a368b25a00c3",
+      "stateAddress": "0x5ab268",
+      "targetAddress": "0x418580"
+    }
+  ],
+  "summaries": [],
+  "summary_errors": [
+    {
+      "probe": "/Users/haseeb-mir/Documents/Code/project-open-igi/scripts/tester/frida_store_command_line_natural.js",
+      "error": "InvalidOperationError: script has been destroyed"
+    }
+  ],
+  "counts": {
+    "entry": 1,
+    "return_": 1,
+    "unmatched_entries": 0
+  },
+  "cleanup": {
+    "owned_process_exited": true
+  }
+}

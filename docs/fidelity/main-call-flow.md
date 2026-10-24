@@ -1,4 +1,14 @@
-# Retail main call flow (igi.exe entry 0x0048F530) - ordered native walk
+# Retail WinMain call flow (0x0048F530) - ordered game-native walk
+
+The PE process entry is `0x004A50F5`, historically mislabeled
+`Camera_ApplyHandiCam_3`. It performs CRT startup and calls `WinMain` at
+`0x004A51BE`. Per the owner's clarification, compiler startup, CRT internals,
+and Windows SDK implementations are supplied by the toolchain and are outside
+the game-native transcription scope. The candidate's compiler-generated
+`WinMainCRTStartup` is therefore not a missing game-native implementation.
+The ordered game-code reconstruction starts at `WinMain` (`0x0048F530`), then
+`StoreCommandLine` (`0x0048F0C0`). This boundary does not waive any game-native
+ABI, call-order, state, CFG, or paired-runtime checks.
 
 Captured from the retail image with Binary Ninja disassembly/Pseudo C (selected decompiler),
 Radare2 `af; pdf` call order and angr CFGFast exact entries. Image: `/Users/haseeb-mir/Downloads/IGI/igi.exe`,

@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "kind": "native-disassembly",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "function_entry": "0x0048F0C0",
+  "signature": "int32_t __cdecl(int32_t)",
+  "function_bytes": "8b442404a3c88b5c00c3",
+  "cfg": {
+    "nodes": [
+      {
+        "address": "0x0048F0C0"
+      }
+    ],
+    "edges": []
+  },
+  "raw_capture": {
+    "path": "docs/fidelity/evidence/main-first-native-20261025-sol/capture.json",
+    "sha256": "c8b254242be9e6f8e6b301c55c6c3dab085294d54c0317948bb9d35a7ae69672"
+  },
+  "tool": "radare2",
+  "version": "6.2.0",
+  "notes": [
+    "Provider names FX_FragmentSimulate_22 and g_5c8bc8 are annotations, not recovered source names.",
+    "One cdecl argument word is copied to the mapped global and EAX; no argument dereference, branch or call."
+  ]
+}

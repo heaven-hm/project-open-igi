@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "kind": "igi-native-evidence-refresh",
+  "address": "0x0048F0C0",
+  "result": "runtime_observations_matched_acceptance_pending",
+  "verified": false,
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "0cd758f2ad54db1e376f379e730f907a4c5dfb986d519302642cb948d41fdc08",
+  "candidate_executable_sha256": "9d901ded6761ce5b959a0d2f64f53da030bdf6a7e020ab81dff1a26acbd58e4a",
+  "natural_calls": {
+    "retail": 1,
+    "candidate": 1
+  },
+  "controlled_cases": {
+    "total": 11,
+    "passed": 11
+  },
+  "static": {
+    "cfg_similarity": 1.0,
+    "binary_ninja_blocks": 1,
+    "radare2_blocks": 1,
+    "angr_exact_entry": true,
+    "entry_bytes_match": true
+  },
+  "next_required": [
+    "Fresh whole-tree build receipt after concurrent changes",
+    "Strict focused gate with live behavioral runner",
+    "Gate-bound paired typed runtime comparison through the acceptance checker",
+    "Independent critic where available; record any outstanding findings"
+  ],
+  "limits": [
+    "No engine native changed by this evidence refresh.",
+    "Full startup still stops at untranscribed 0x00402930; no playable Level 1 acceptance."
+  ],
+  "current_tree_build": "failed: undefined reference g_a94a64 in native_4b0f70.cpp",
+  "compiler_boundary": "Owner excludes CRT/compiler startup and Windows SDK code; no CRT native implementation required."
+}

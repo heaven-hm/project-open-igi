@@ -1,0 +1,26 @@
+{
+  "backup_analysis_tools": [],
+  "behavioral_tests_required": true,
+  "cfg_threshold": 0.85,
+  "checked_files": [],
+  "checked_natives": [],
+  "deleted_files": [],
+  "failures": [
+    "Cannot read native verification manifest /Users/haseeb-mir/Documents/Code/project-open-igi/build/native-analysis/main-first-native-20261025-sol/proposed-manifest.json: [Errno 2] No such file or directory: '/Users/haseeb-mir/Documents/Code/project-open-igi/build/native-analysis/main-first-native-20261025-sol/proposed-manifest.json'"
+  ],
+  "frida_probes_required": true,
+  "mode": "tree",
+  "primary_analysis_tools": [
+    "selected_decompiler",
+    "radare2"
+  ],
+  "requested_addresses": [
+    "0x0048F0C0"
+  ],
+  "result": "blocked",
+  "root": "/Users/haseeb-mir/Documents/Code/project-open-igi",
+  "schema_version": 1,
+  "semantic_review_required": true,
+  "threshold": "VERIFIED",
+  "warnings": []
+}

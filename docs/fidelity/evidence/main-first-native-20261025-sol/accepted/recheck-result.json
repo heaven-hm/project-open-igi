@@ -1,0 +1,39 @@
+{
+  "kind": "igi-single-native-comparison-recheck",
+  "result": "passed",
+  "phases": [
+    {
+      "command": [
+        "/Users/haseeb-mir/Library/Application Support/pipx/venvs/frida-tools/bin/python",
+        "scripts/tester/check_store_command_line_pair.py",
+        "--pair",
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/build/runtime-traces/store-command-line-acceptance-20261025-sol-1/controlled.json",
+        "--natural",
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/build/runtime-traces/store-command-line-acceptance-20261025-sol-1/natural",
+        "--gate-report",
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/build/runtime-traces/store-command-line-acceptance-20261025-sol-1/gate.json",
+        "--candidate",
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/build-first-native-sol/igi1.exe",
+        "--receipt",
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/build-first-native-sol/diagnostic-receipt.json",
+        "--out",
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/build/runtime-traces/store-command-line-acceptance-20261025-sol-1/differential-rechecked.json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/Users/haseeb-mir/Library/Application Support/pipx/venvs/frida-tools/bin/python",
+        "scripts/check_frida_differential.py",
+        "--gate-report",
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/build/runtime-traces/store-command-line-acceptance-20261025-sol-1/gate.json",
+        "--candidate-exe",
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/build-first-native-sol/igi1.exe",
+        "--report",
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/build/runtime-traces/store-command-line-acceptance-20261025-sol-1/differential-rechecked.json"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "checker_sha256": "6f995725c0d12222c1191719d6157a75b8d6d5fea46640325d085664b40d5cfa"
+}

@@ -1,0 +1,105 @@
+{
+  "kind": "igi-retail-analysis-capture",
+  "schema_version": 1,
+  "result": "analysis_collected",
+  "verified": false,
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "address": "0x0048F0C0",
+  "artifacts": {
+    "bn_function_info": {
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/scripts/bn_mcp_call.py",
+        "bn_function_info",
+        "{\"function\": \"0x0048F0C0\"}"
+      ],
+      "exit_code": 0,
+      "stdout": "---\ntool: \"bn_function_info\"\nfunction: \"0x48f0c0\"\narch: \"x86\"\nname: \"FX_FragmentSimulate_22\"\nplatform: \"windows-x86\"\n---\n\n## Function\n\n| Field | Value |\n| --- | --- |\n| Function | 0x48f0c0 (x86) |\n| Name | FX_FragmentSimulate_22 |\n| Start | 0x48f0c0 |\n| Lowest Address | 0x48f0c0 |\n| Highest Address | 0x48f0c9 |\n| Architecture | x86 |\n| Platform | windows-x86 |\n| Definition | int32_t(int32_t arg1) |\n| Exported | false |\n| Auto Discovered | true |\n| Has User Annotations | true |\n| Needs Update | false |\n| Analysis Skipped | false |\n| Analysis Skip Reason | NoSkipReason |\n| Basic Blocks | 1 |\n| Ranges | 0x48f0c0-0x48f0ca (10 bytes) |\n\n## Basic Blocks\n\n| Index | Range | Incoming | Outgoing |\n| --- | --- | --- | --- |\n| 0 | 0x48f0c0-0x48f0ca (10 bytes) | 0 | 0 |\n\n",
+      "stderr": ""
+    },
+    "bn_function_decompile": {
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/scripts/bn_mcp_call.py",
+        "bn_function_decompile",
+        "{\"function\": \"0x0048F0C0\"}"
+      ],
+      "exit_code": 0,
+      "stdout": "---\ntool: \"bn_function_decompile\"\nfunction: \"0x48f0c0\"\narch: \"x86\"\nname: \"FX_FragmentSimulate_22\"\nplatform: \"windows-x86\"\nlanguage: \"Pseudo C\"\noffset: 0\nlimit: 1000\ncount: 8\ntotal: 8\nnextOffset: null\ntruncated: false\nneedsUpdate: false\n---\n\n````bn-pseudoc\n  int32_t FX_FragmentSimulate_22(int32_t arg1)\n\n{\n    g_5c8bc8 = arg1;\n    return arg1;\n}\n````\n\n",
+      "stderr": ""
+    },
+    "bn_function_disassembly": {
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/scripts/bn_mcp_call.py",
+        "bn_function_disassembly",
+        "{\"function\": \"0x0048F0C0\"}"
+      ],
+      "exit_code": 0,
+      "stdout": "---\ntool: \"bn_function_disassembly\"\nfunction: \"0x48f0c0\"\narch: \"x86\"\nname: \"FX_FragmentSimulate_22\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 1000\ncount: 7\ntotal: 7\nnextOffset: null\ntruncated: false\n---\n\n````asm\n  int32_t FX_FragmentSimulate_22(int32_t arg1)\n\n0x48f0c0  mov     eax, dword [esp+0x4 {arg1}]\n0x48f0c4  mov     dword [g_5c8bc8], eax\n0x48f0c9  retn     {__return_addr}\n````\n\n",
+      "stderr": ""
+    },
+    "bn_function_basic_blocks": {
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/scripts/bn_mcp_call.py",
+        "bn_function_basic_blocks",
+        "{\"function\": \"0x0048F0C0\"}"
+      ],
+      "exit_code": 0,
+      "stdout": "---\ntool: \"bn_function_basic_blocks\"\nfunction: \"0x48f0c0\"\narch: \"x86\"\nname: \"FX_FragmentSimulate_22\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 1000\ncount: 1\ntotal: 1\nnextOffset: null\ntruncated: false\n---\n\n| Index | Range | Flags | Incoming Edges | Outgoing Edges |\n| --- | --- | --- | --- | --- |\n| 0 | 0x48f0c0-0x48f0ca (10 bytes) | can-exit |  |  |\n\n",
+      "stderr": ""
+    },
+    "bn_memory_read": {
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/scripts/bn_mcp_call.py",
+        "bn_memory_read",
+        "{\"address\": \"0x0048F0C0\", \"length\": 16}"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"address\":\"0x48f0c0\",\"requestedLength\":\"0x10\",\"bytesRead\":16,\"hex\":\"8b442404a3c88b5c00c3909090909090\",\"base64\":\"i0QkBKPIi1wAw5CQkJCQkA==\\n\",\"warnings\":[]}\n",
+      "stderr": ""
+    },
+    "radare2_cfg": {
+      "command": [
+        "r2",
+        "-q",
+        "-2",
+        "-e",
+        "bin.relocs.apply=true",
+        "-c",
+        "af @ 0x0048F0C0; agfj @ 0x0048F0C0; q",
+        "/Users/haseeb-mir/Downloads/IGI/igi.exe"
+      ],
+      "exit_code": 0,
+      "stdout": "[{\"name\":\"fcn.0048f0c0\",\"addr\":4780224,\"ninstr\":3,\"nargs\":1,\"nlocals\":0,\"size\":10,\"stack\":0,\"type\":\"fcn\",\"blocks\":[{\"addr\":4780224,\"size\":10,\"ops\":[{\"addr\":4780224,\"esil\":\"0x4,esp,+,[4],eax,=\",\"refptr\":4,\"fcn_addr\":4780224,\"fcn_last\":4780230,\"size\":4,\"opcode\":\"mov eax, dword [esp + 4]\",\"disasm\":\"mov eax, dword [esp + 4]\",\"bytes\":\"8b442404\",\"family\":\"cpu\",\"type\":\"mov\",\"reloc\":false,\"type_num\":9,\"type2_num\":0,\"flags\":[\"fcn.0048f0c0\"]},{\"addr\":4780228,\"ptr\":6065096,\"esil\":\"eax,0x5c8bc8,=[4]\",\"refptr\":4,\"fcn_addr\":4780224,\"fcn_last\":4780229,\"size\":5,\"opcode\":\"mov dword [0x5c8bc8], eax\",\"disasm\":\"mov dword [0x5c8bc8], eax\",\"bytes\":\"a3c88b5c00\",\"family\":\"cpu\",\"type\":\"mov\",\"reloc\":false,\"type_num\":9,\"type2_num\":0,\"refs\":[{\"addr\":6065096,\"type\":\"DATA\",\"perm\":\"-w-\"}]},{\"addr\":4780233,\"esil\":\"esp,[4],eip,=,4,esp,+=\",\"refptr\":0,\"fcn_addr\":4780224,\"fcn_last\":4780233,\"size\":1,\"opcode\":\"ret\",\"disasm\":\"ret\",\"bytes\":\"c3\",\"family\":\"cpu\",\"type\":\"ret\",\"reloc\":false,\"type_num\":5,\"type2_num\":0}]}]}]\n",
+      "stderr": ""
+    },
+    "angr": {
+      "command": [
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.venv-angr/bin/python",
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/scripts/angr_analyze.py",
+        "--binary",
+        "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+        "--address",
+        "0x0048F0C0"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"analysis\": \"CFGFast\", \"analysis_options\": {\"automatic_first\": true, \"data_references\": true, \"normalize\": true, \"seeded_address_count\": 0}, \"angr_version\": \"10.0.4.post1\", \"architecture\": \"X86\", \"binary_path\": \"/Users/haseeb-mir/Downloads/IGI/igi.exe\", \"binary_sha256\": \"dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01\", \"bits\": 32, \"function_entry\": \"0x0048F0C0\", \"functions\": {\"0x0048F0C0\": {\"baseline_has_unresolved_jumps\": false, \"block_count\": 1, \"edges\": [], \"function_entry\": \"0x0048F0C0\", \"has_unresolved_jumps\": false, \"implicit_repeat_nodes\": [], \"initialization_model\": null, \"name\": \"sub_48f0c0\", \"nodes\": [\"0x0048F0C0\"], \"reason\": null, \"recovery_mode\": \"automatic\", \"result\": \"pass\", \"returning\": true}}, \"has_unresolved_jumps\": false, \"kind\": \"angr-analysis\", \"limitations\": [\"CFGFast is approximate static analysis\", \"This result does not prove semantic or behavioral equivalence\"], \"mapped_base\": \"0x400000\", \"reason\": null, \"result\": \"pass\", \"schema_version\": 1, \"tool\": \"angr\"}\n",
+      "stderr": ""
+    }
+  },
+  "structural_summary": {
+    "cfg_similarity": 1.0,
+    "binary_ninja_blocks": 1,
+    "radare2_blocks": 1,
+    "angr_exact_entry": true,
+    "entry_bytes_match": true
+  },
+  "limitations": [
+    "Raw analysis capture only; no source-semantic or runtime acceptance.",
+    "Binary Ninja bytes are bound only at the sampled entry; complete function-byte/source review is still required.",
+    "Graph similarity must be reviewed separately; successful collection is not a CFG score."
+  ]
+}

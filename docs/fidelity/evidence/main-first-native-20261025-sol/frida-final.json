@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "address": "0x0048F0C0",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "0cd758f2ad54db1e376f379e730f907a4c5dfb986d519302642cb948d41fdc08",
+  "kind": "frida-runtime-report",
+  "result": "passed",
+  "candidate_executable_sha256": "d750a86cf648627bae10f8b8c52813d4cf7acd74b2f28e1b5a779a8ec4243250",
+  "retail_observed_calls": 1,
+  "candidate_observed_calls": 1,
+  "probe_sha256": "1bf465dd45895d44a198fb892074b352f78b0513536d143c2721a6eec23bf4ab",
+  "comparison": {
+    "kind": "igi-store-command-line-natural-pair",
+    "verified": false,
+    "retail_va": "0x0048F0C0",
+    "observations_match": true,
+    "checks": [
+      {
+        "side": "retail",
+        "check": "one complete natural call and owned-process cleanup",
+        "passed": true
+      },
+      {
+        "side": "retail",
+        "check": "actual pointer store/return and no other observed memory change",
+        "passed": true
+      },
+      {
+        "side": "candidate",
+        "check": "one complete natural call and owned-process cleanup",
+        "passed": true
+      },
+      {
+        "side": "candidate",
+        "check": "actual pointer store/return and no other observed memory change",
+        "passed": true
+      },
+      {
+        "check": "same complete normalized observations",
+        "passed": true
+      }
+    ],
+    "observations": {
+      "retail": {
+        "inputHex": "77696e646f77206c6576656c3100",
+        "globalBefore": 0,
+        "returnedInput": true,
+        "storedInput": true,
+        "inputUnchanged": true,
+        "neighborsUnchanged": true
+      },
+      "candidate": {
+        "inputHex": "77696e646f77206c6576656c3100",
+        "globalBefore": 0,
+        "returnedInput": true,
+        "storedInput": true,
+        "inputUnchanged": true,
+        "neighborsUnchanged": true
+      }
+    },
+    "scope": "First natural WinMain StoreCommandLine invocation, window level1",
+    "limits": [
+      "Full WinMain later stops at the untranscribed 0x00402930 startup sequence.",
+      "Only the observed valid command-line pointer is runtime-tested; no universal pointer-domain proof."
+    ],
+    "identities": {
+      "/Users/haseeb-mir/Downloads/IGI/igi.exe": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "/Users/haseeb-mir/Documents/Code/project-open-igi/engine/src/retail/core/app_startup_natives.cpp": "0cd758f2ad54db1e376f379e730f907a4c5dfb986d519302642cb948d41fdc08",
+      "/Users/haseeb-mir/Documents/Code/project-open-igi/scripts/tester/frida_store_command_line_natural.js": "1bf465dd45895d44a198fb892074b352f78b0513536d143c2721a6eec23bf4ab",
+      "/Users/haseeb-mir/Documents/Code/project-open-igi/scripts/tester/frida_probe_driver.py": "f4d18968216940b9e745ec248fea0b2b967db90fc34d7cc47a5f20b4e3f37825",
+      "/Users/haseeb-mir/Documents/Code/project-open-igi/scripts/tester/capture_store_command_line_natural.py": "ee28e1988086a2143fe4f24e200304ec55a60657bea4d5b255d06e0fb24049d4",
+      "/Users/haseeb-mir/Documents/Code/project-open-igi/build-first-native-sol/igi1.exe": "d750a86cf648627bae10f8b8c52813d4cf7acd74b2f28e1b5a779a8ec4243250",
+      "/Users/haseeb-mir/Documents/Code/project-open-igi/build-first-native-sol/diagnostic-receipt.json": "cf55769d0cd593df731e43d3287372f4b746f1b5ba9149871e71a8e57b55ceae"
+    }
+  },
+  "scope": "One natural WinMain call per side, window level1"
+}

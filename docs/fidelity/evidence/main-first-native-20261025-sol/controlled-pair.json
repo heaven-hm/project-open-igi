@@ -1,0 +1,778 @@
+{
+  "schema_version": 1,
+  "kind": "behavioral-test-report",
+  "address": "0x0048F0C0",
+  "scope": "startup-scalar-store",
+  "result": "passed",
+  "executed": true,
+  "oracle": "retail-binary-execution",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "0cd758f2ad54db1e376f379e730f907a4c5dfb986d519302642cb948d41fdc08",
+  "candidate_sha256": "9d901ded6761ce5b959a0d2f64f53da030bdf6a7e020ab81dff1a26acbd58e4a",
+  "probe_sha256": "c761680b5c5883e3b26b2ef791466914353e5b0c9e758f960d95398dad95fea9",
+  "candidate_symbols": {
+    "entry": "0x00418580",
+    "state": "0x005AB268"
+  },
+  "observable_fields": [
+    "return_value",
+    "state_delta",
+    "side_effects"
+  ],
+  "runner": {
+    "path": "scripts/frida_app_startup_store_pair.py",
+    "sha256": "0a18db595236a7f7a259fb903711e48fb2e709c7d4d88bdf53dac577e1a6d015",
+    "command": [
+      "/Users/haseeb-mir/Library/Application Support/pipx/venvs/frida-tools/bin/python",
+      "scripts/frida_app_startup_store_pair.py",
+      "--candidate",
+      "build-first-native-sol/igi1.exe",
+      "--receipt",
+      "build-first-native-sol/diagnostic-receipt.json",
+      "--out",
+      "build/runtime-traces/main-first-native-20261025-sol-boundaries4.json"
+    ]
+  },
+  "retail": {
+    "name": "retail",
+    "executable": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+    "executable_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+    "arguments": [
+      "window",
+      "level1"
+    ],
+    "cwd": "/Users/haseeb-mir/Downloads/IGI",
+    "result": "captured",
+    "probe_phase": "before-primary-thread-resume",
+    "probe": {
+      "module": "igi.exe",
+      "entry": "0x48f0c0",
+      "globalStateRestored": true,
+      "calls": [
+        {
+          "input": {
+            "value": 0,
+            "initial_state": 324468736
+          },
+          "output": {
+            "return_value": 0,
+            "state_delta": {
+              "global_0x005C8BC8_before": 324468736,
+              "global_0x005C8BC8_after": 0
+            },
+            "side_effects": {
+              "global_0x005C8BC8_after": 0
+            }
+          }
+        },
+        {
+          "input": {
+            "value": 1,
+            "initial_state": 324468737
+          },
+          "output": {
+            "return_value": 1,
+            "state_delta": {
+              "global_0x005C8BC8_before": 324468737,
+              "global_0x005C8BC8_after": 1
+            },
+            "side_effects": {
+              "global_0x005C8BC8_after": 1
+            }
+          }
+        },
+        {
+          "input": {
+            "value": 2,
+            "initial_state": 324468738
+          },
+          "output": {
+            "return_value": 2,
+            "state_delta": {
+              "global_0x005C8BC8_before": 324468738,
+              "global_0x005C8BC8_after": 2
+            },
+            "side_effects": {
+              "global_0x005C8BC8_after": 2
+            }
+          }
+        },
+        {
+          "input": {
+            "value": 10,
+            "initial_state": 324468739
+          },
+          "output": {
+            "return_value": 10,
+            "state_delta": {
+              "global_0x005C8BC8_before": 324468739,
+              "global_0x005C8BC8_after": 10
+            },
+            "side_effects": {
+              "global_0x005C8BC8_after": 10
+            }
+          }
+        },
+        {
+          "input": {
+            "value": 127,
+            "initial_state": 324468740
+          },
+          "output": {
+            "return_value": 127,
+            "state_delta": {
+              "global_0x005C8BC8_before": 324468740,
+              "global_0x005C8BC8_after": 127
+            },
+            "side_effects": {
+              "global_0x005C8BC8_after": 127
+            }
+          }
+        },
+        {
+          "input": {
+            "value": 128,
+            "initial_state": 324468741
+          },
+          "output": {
+            "return_value": 128,
+            "state_delta": {
+              "global_0x005C8BC8_before": 324468741,
+              "global_0x005C8BC8_after": 128
+            },
+            "side_effects": {
+              "global_0x005C8BC8_after": 128
+            }
+          }
+        },
+        {
+          "input": {
+            "value": 255,
+            "initial_state": 324468742
+          },
+          "output": {
+            "return_value": 255,
+            "state_delta": {
+              "global_0x005C8BC8_before": 324468742,
+              "global_0x005C8BC8_after": 255
+            },
+            "side_effects": {
+              "global_0x005C8BC8_after": 255
+            }
+          }
+        },
+        {
+          "input": {
+            "value": 256,
+            "initial_state": 324468743
+          },
+          "output": {
+            "return_value": 256,
+            "state_delta": {
+              "global_0x005C8BC8_before": 324468743,
+              "global_0x005C8BC8_after": 256
+            },
+            "side_effects": {
+              "global_0x005C8BC8_after": 256
+            }
+          }
+        },
+        {
+          "input": {
+            "value": 2147483647,
+            "initial_state": 324468744
+          },
+          "output": {
+            "return_value": 2147483647,
+            "state_delta": {
+              "global_0x005C8BC8_before": 324468744,
+              "global_0x005C8BC8_after": 2147483647
+            },
+            "side_effects": {
+              "global_0x005C8BC8_after": 2147483647
+            }
+          }
+        },
+        {
+          "input": {
+            "value": -2147483648,
+            "initial_state": 324468745
+          },
+          "output": {
+            "return_value": -2147483648,
+            "state_delta": {
+              "global_0x005C8BC8_before": 324468745,
+              "global_0x005C8BC8_after": -2147483648
+            },
+            "side_effects": {
+              "global_0x005C8BC8_after": -2147483648
+            }
+          }
+        },
+        {
+          "input": {
+            "value": -1,
+            "initial_state": 324468746
+          },
+          "output": {
+            "return_value": -1,
+            "state_delta": {
+              "global_0x005C8BC8_before": 324468746,
+              "global_0x005C8BC8_after": -1
+            },
+            "side_effects": {
+              "global_0x005C8BC8_after": -1
+            }
+          }
+        }
+      ]
+    },
+    "scope": "controlled native calls only; game main was not resumed",
+    "natural_startup_observed": false,
+    "owned_process_terminated": true
+  },
+  "candidate": {
+    "name": "candidate",
+    "executable": "/Users/haseeb-mir/Downloads/IGI/open-igi-probe-smvw8x2n.exe",
+    "executable_sha256": "9d901ded6761ce5b959a0d2f64f53da030bdf6a7e020ab81dff1a26acbd58e4a",
+    "arguments": [
+      "window",
+      "level1"
+    ],
+    "cwd": "/Users/haseeb-mir/Downloads/IGI",
+    "result": "captured",
+    "probe_phase": "before-primary-thread-resume",
+    "probe": {
+      "module": "open-igi-probe-smvw8x2n.exe",
+      "entry": "0x418580",
+      "globalStateRestored": true,
+      "calls": [
+        {
+          "input": {
+            "value": 0,
+            "initial_state": 324468736
+          },
+          "output": {
+            "return_value": 0,
+            "state_delta": {
+              "global_0x005C8BC8_before": 324468736,
+              "global_0x005C8BC8_after": 0
+            },
+            "side_effects": {
+              "global_0x005C8BC8_after": 0
+            }
+          }
+        },
+        {
+          "input": {
+            "value": 1,
+            "initial_state": 324468737
+          },
+          "output": {
+            "return_value": 1,
+            "state_delta": {
+              "global_0x005C8BC8_before": 324468737,
+              "global_0x005C8BC8_after": 1
+            },
+            "side_effects": {
+              "global_0x005C8BC8_after": 1
+            }
+          }
+        },
+        {
+          "input": {
+            "value": 2,
+            "initial_state": 324468738
+          },
+          "output": {
+            "return_value": 2,
+            "state_delta": {
+              "global_0x005C8BC8_before": 324468738,
+              "global_0x005C8BC8_after": 2
+            },
+            "side_effects": {
+              "global_0x005C8BC8_after": 2
+            }
+          }
+        },
+        {
+          "input": {
+            "value": 10,
+            "initial_state": 324468739
+          },
+          "output": {
+            "return_value": 10,
+            "state_delta": {
+              "global_0x005C8BC8_before": 324468739,
+              "global_0x005C8BC8_after": 10
+            },
+            "side_effects": {
+              "global_0x005C8BC8_after": 10
+            }
+          }
+        },
+        {
+          "input": {
+            "value": 127,
+            "initial_state": 324468740
+          },
+          "output": {
+            "return_value": 127,
+            "state_delta": {
+              "global_0x005C8BC8_before": 324468740,
+              "global_0x005C8BC8_after": 127
+            },
+            "side_effects": {
+              "global_0x005C8BC8_after": 127
+            }
+          }
+        },
+        {
+          "input": {
+            "value": 128,
+            "initial_state": 324468741
+          },
+          "output": {
+            "return_value": 128,
+            "state_delta": {
+              "global_0x005C8BC8_before": 324468741,
+              "global_0x005C8BC8_after": 128
+            },
+            "side_effects": {
+              "global_0x005C8BC8_after": 128
+            }
+          }
+        },
+        {
+          "input": {
+            "value": 255,
+            "initial_state": 324468742
+          },
+          "output": {
+            "return_value": 255,
+            "state_delta": {
+              "global_0x005C8BC8_before": 324468742,
+              "global_0x005C8BC8_after": 255
+            },
+            "side_effects": {
+              "global_0x005C8BC8_after": 255
+            }
+          }
+        },
+        {
+          "input": {
+            "value": 256,
+            "initial_state": 324468743
+          },
+          "output": {
+            "return_value": 256,
+            "state_delta": {
+              "global_0x005C8BC8_before": 324468743,
+              "global_0x005C8BC8_after": 256
+            },
+            "side_effects": {
+              "global_0x005C8BC8_after": 256
+            }
+          }
+        },
+        {
+          "input": {
+            "value": 2147483647,
+            "initial_state": 324468744
+          },
+          "output": {
+            "return_value": 2147483647,
+            "state_delta": {
+              "global_0x005C8BC8_before": 324468744,
+              "global_0x005C8BC8_after": 2147483647
+            },
+            "side_effects": {
+              "global_0x005C8BC8_after": 2147483647
+            }
+          }
+        },
+        {
+          "input": {
+            "value": -2147483648,
+            "initial_state": 324468745
+          },
+          "output": {
+            "return_value": -2147483648,
+            "state_delta": {
+              "global_0x005C8BC8_before": 324468745,
+              "global_0x005C8BC8_after": -2147483648
+            },
+            "side_effects": {
+              "global_0x005C8BC8_after": -2147483648
+            }
+          }
+        },
+        {
+          "input": {
+            "value": -1,
+            "initial_state": 324468746
+          },
+          "output": {
+            "return_value": -1,
+            "state_delta": {
+              "global_0x005C8BC8_before": 324468746,
+              "global_0x005C8BC8_after": -1
+            },
+            "side_effects": {
+              "global_0x005C8BC8_after": -1
+            }
+          }
+        }
+      ]
+    },
+    "scope": "controlled native calls only; game main was not resumed",
+    "natural_startup_observed": false,
+    "owned_process_terminated": true
+  },
+  "cases": [
+    {
+      "id": "case-0",
+      "input": {
+        "value": 0,
+        "initial_state": 324468736
+      },
+      "categories": [
+        "boundary"
+      ],
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "global_0x005C8BC8_before": 324468736,
+          "global_0x005C8BC8_after": 0
+        },
+        "side_effects": {
+          "global_0x005C8BC8_after": 0
+        }
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {
+          "global_0x005C8BC8_before": 324468736,
+          "global_0x005C8BC8_after": 0
+        },
+        "side_effects": {
+          "global_0x005C8BC8_after": 0
+        }
+      },
+      "result": "passed"
+    },
+    {
+      "id": "case-1",
+      "input": {
+        "value": 1,
+        "initial_state": 324468737
+      },
+      "categories": [
+        "boundary"
+      ],
+      "reference_output": {
+        "return_value": 1,
+        "state_delta": {
+          "global_0x005C8BC8_before": 324468737,
+          "global_0x005C8BC8_after": 1
+        },
+        "side_effects": {
+          "global_0x005C8BC8_after": 1
+        }
+      },
+      "candidate_output": {
+        "return_value": 1,
+        "state_delta": {
+          "global_0x005C8BC8_before": 324468737,
+          "global_0x005C8BC8_after": 1
+        },
+        "side_effects": {
+          "global_0x005C8BC8_after": 1
+        }
+      },
+      "result": "passed"
+    },
+    {
+      "id": "case-2",
+      "input": {
+        "value": 2,
+        "initial_state": 324468738
+      },
+      "categories": [
+        "nominal"
+      ],
+      "reference_output": {
+        "return_value": 2,
+        "state_delta": {
+          "global_0x005C8BC8_before": 324468738,
+          "global_0x005C8BC8_after": 2
+        },
+        "side_effects": {
+          "global_0x005C8BC8_after": 2
+        }
+      },
+      "candidate_output": {
+        "return_value": 2,
+        "state_delta": {
+          "global_0x005C8BC8_before": 324468738,
+          "global_0x005C8BC8_after": 2
+        },
+        "side_effects": {
+          "global_0x005C8BC8_after": 2
+        }
+      },
+      "result": "passed"
+    },
+    {
+      "id": "case-3",
+      "input": {
+        "value": 10,
+        "initial_state": 324468739
+      },
+      "categories": [
+        "nominal"
+      ],
+      "reference_output": {
+        "return_value": 10,
+        "state_delta": {
+          "global_0x005C8BC8_before": 324468739,
+          "global_0x005C8BC8_after": 10
+        },
+        "side_effects": {
+          "global_0x005C8BC8_after": 10
+        }
+      },
+      "candidate_output": {
+        "return_value": 10,
+        "state_delta": {
+          "global_0x005C8BC8_before": 324468739,
+          "global_0x005C8BC8_after": 10
+        },
+        "side_effects": {
+          "global_0x005C8BC8_after": 10
+        }
+      },
+      "result": "passed"
+    },
+    {
+      "id": "case-4",
+      "input": {
+        "value": 127,
+        "initial_state": 324468740
+      },
+      "categories": [
+        "nominal"
+      ],
+      "reference_output": {
+        "return_value": 127,
+        "state_delta": {
+          "global_0x005C8BC8_before": 324468740,
+          "global_0x005C8BC8_after": 127
+        },
+        "side_effects": {
+          "global_0x005C8BC8_after": 127
+        }
+      },
+      "candidate_output": {
+        "return_value": 127,
+        "state_delta": {
+          "global_0x005C8BC8_before": 324468740,
+          "global_0x005C8BC8_after": 127
+        },
+        "side_effects": {
+          "global_0x005C8BC8_after": 127
+        }
+      },
+      "result": "passed"
+    },
+    {
+      "id": "case-5",
+      "input": {
+        "value": 128,
+        "initial_state": 324468741
+      },
+      "categories": [
+        "nominal"
+      ],
+      "reference_output": {
+        "return_value": 128,
+        "state_delta": {
+          "global_0x005C8BC8_before": 324468741,
+          "global_0x005C8BC8_after": 128
+        },
+        "side_effects": {
+          "global_0x005C8BC8_after": 128
+        }
+      },
+      "candidate_output": {
+        "return_value": 128,
+        "state_delta": {
+          "global_0x005C8BC8_before": 324468741,
+          "global_0x005C8BC8_after": 128
+        },
+        "side_effects": {
+          "global_0x005C8BC8_after": 128
+        }
+      },
+      "result": "passed"
+    },
+    {
+      "id": "case-6",
+      "input": {
+        "value": 255,
+        "initial_state": 324468742
+      },
+      "categories": [
+        "nominal"
+      ],
+      "reference_output": {
+        "return_value": 255,
+        "state_delta": {
+          "global_0x005C8BC8_before": 324468742,
+          "global_0x005C8BC8_after": 255
+        },
+        "side_effects": {
+          "global_0x005C8BC8_after": 255
+        }
+      },
+      "candidate_output": {
+        "return_value": 255,
+        "state_delta": {
+          "global_0x005C8BC8_before": 324468742,
+          "global_0x005C8BC8_after": 255
+        },
+        "side_effects": {
+          "global_0x005C8BC8_after": 255
+        }
+      },
+      "result": "passed"
+    },
+    {
+      "id": "case-7",
+      "input": {
+        "value": 256,
+        "initial_state": 324468743
+      },
+      "categories": [
+        "nominal"
+      ],
+      "reference_output": {
+        "return_value": 256,
+        "state_delta": {
+          "global_0x005C8BC8_before": 324468743,
+          "global_0x005C8BC8_after": 256
+        },
+        "side_effects": {
+          "global_0x005C8BC8_after": 256
+        }
+      },
+      "candidate_output": {
+        "return_value": 256,
+        "state_delta": {
+          "global_0x005C8BC8_before": 324468743,
+          "global_0x005C8BC8_after": 256
+        },
+        "side_effects": {
+          "global_0x005C8BC8_after": 256
+        }
+      },
+      "result": "passed"
+    },
+    {
+      "id": "case-8",
+      "input": {
+        "value": 2147483647,
+        "initial_state": 324468744
+      },
+      "categories": [
+        "boundary"
+      ],
+      "reference_output": {
+        "return_value": 2147483647,
+        "state_delta": {
+          "global_0x005C8BC8_before": 324468744,
+          "global_0x005C8BC8_after": 2147483647
+        },
+        "side_effects": {
+          "global_0x005C8BC8_after": 2147483647
+        }
+      },
+      "candidate_output": {
+        "return_value": 2147483647,
+        "state_delta": {
+          "global_0x005C8BC8_before": 324468744,
+          "global_0x005C8BC8_after": 2147483647
+        },
+        "side_effects": {
+          "global_0x005C8BC8_after": 2147483647
+        }
+      },
+      "result": "passed"
+    },
+    {
+      "id": "case-9",
+      "input": {
+        "value": -2147483648,
+        "initial_state": 324468745
+      },
+      "categories": [
+        "boundary"
+      ],
+      "reference_output": {
+        "return_value": -2147483648,
+        "state_delta": {
+          "global_0x005C8BC8_before": 324468745,
+          "global_0x005C8BC8_after": -2147483648
+        },
+        "side_effects": {
+          "global_0x005C8BC8_after": -2147483648
+        }
+      },
+      "candidate_output": {
+        "return_value": -2147483648,
+        "state_delta": {
+          "global_0x005C8BC8_before": 324468745,
+          "global_0x005C8BC8_after": -2147483648
+        },
+        "side_effects": {
+          "global_0x005C8BC8_after": -2147483648
+        }
+      },
+      "result": "passed"
+    },
+    {
+      "id": "case-10",
+      "input": {
+        "value": -1,
+        "initial_state": 324468746
+      },
+      "categories": [
+        "boundary"
+      ],
+      "reference_output": {
+        "return_value": -1,
+        "state_delta": {
+          "global_0x005C8BC8_before": 324468746,
+          "global_0x005C8BC8_after": -1
+        },
+        "side_effects": {
+          "global_0x005C8BC8_after": -1
+        }
+      },
+      "candidate_output": {
+        "return_value": -1,
+        "state_delta": {
+          "global_0x005C8BC8_before": 324468746,
+          "global_0x005C8BC8_after": -1
+        },
+        "side_effects": {
+          "global_0x005C8BC8_after": -1
+        }
+      },
+      "result": "passed"
+    }
+  ],
+  "tests_total": 11,
+  "tests_failed": 0,
+  "tests_passed": 11
+}

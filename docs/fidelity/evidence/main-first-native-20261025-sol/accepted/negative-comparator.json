@@ -1,0 +1,7 @@
+{
+  "kind": "capture-comparator-negative-check",
+  "result": "passed",
+  "mutation": "Changed the recorded candidate return for existing captured case 0 from 0 to 1; no native code or fixture inputs changed.",
+  "exit_code": 1,
+  "expected_rejection": "store/return/state differs from the reviewed instructions"
+}

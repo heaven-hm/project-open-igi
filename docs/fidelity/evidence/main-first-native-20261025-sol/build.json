@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "kind": "build-report",
+  "address": "0x0048F0C0",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "0cd758f2ad54db1e376f379e730f907a4c5dfb986d519302642cb948d41fdc08",
+  "result": "passed",
+  "executed": true,
+  "command": "cmake --build /Users/haseeb-mir/Documents/Code/project-open-igi/build-first-native-sol --target igi --clean-first -j4",
+  "candidate_executable_sha256": "9d901ded6761ce5b959a0d2f64f53da030bdf6a7e020ab81dff1a26acbd58e4a",
+  "receipt": {
+    "path": "docs/fidelity/evidence/main-first-native-20261025-sol/build-receipt.json",
+    "sha256": "756f304642e81b2606852126a4c7a0bfb63360e09e651ffb1b7f6f15bb4c277c"
+  },
+  "limits": [
+    "This records the executed diagnostic clean build, not a release attestation.",
+    "Receipt was checked before/after the retained captures. Concurrent engine/CMake edits now invalidate whole-tree freshness; a fresh build and paired run are required for acceptance."
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "kind": "igi-single-native-scoped-acceptance",
+  "address": "0x0048F0C0",
+  "result": "passed",
+  "status": "VERIFIED_WITH_DOCUMENTED_SCOPE",
+  "scope": "One natural WinMain call per game, window level1; eleven controlled ABI calls per game; load/store/EAX return and documented memory observations only.",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "0cd758f2ad54db1e376f379e730f907a4c5dfb986d519302642cb948d41fdc08",
+  "candidate_sha256": "d750a86cf648627bae10f8b8c52813d4cf7acd74b2f28e1b5a779a8ec4243250",
+  "retained_image": "build/accepted-native-images/StoreCommandLine-d750a86cf648627bae10f8b8c52813d4cf7acd74b2f28e1b5a779a8ec4243250.exe",
+  "gate": {
+    "evidence_path": "docs/fidelity/evidence/main-first-native-20261025-sol/accepted/gate.json",
+    "evidence_sha256": "3f6b2b8a27d1291eb924fe6e54aac29962b0f1479f65214b8b6b99dce28a6993"
+  },
+  "typed_differential": {
+    "evidence_path": "docs/fidelity/evidence/main-first-native-20261025-sol/accepted/differential-rechecked.json",
+    "evidence_sha256": "0b619f3d19fbe5a98d3bc6ae5f8ae36272090bb904007295789f04bd12e69e8b"
+  },
+  "runtime_checker": {
+    "evidence_path": "docs/fidelity/evidence/main-first-native-20261025-sol/accepted/recheck-result.json",
+    "evidence_sha256": "c5dd3b488a4526ca0e4f080c696f2ac158c51ae43987a694d39d04d1fda55c0d"
+  },
+  "negative_comparator": {
+    "evidence_path": "docs/fidelity/evidence/main-first-native-20261025-sol/accepted/negative-comparator.json",
+    "evidence_sha256": "ef9a09f14acf18299f57f7dba2dbfded6414471110d2f001fbaab75c9e7a40cd"
+  },
+  "scope_document": {
+    "path": "docs/fidelity/scopes/store-command-line-20261025.md",
+    "sha256": "2a5c3dd5ab719cb4e78d353e3148244dca9516670c23557e0b0daf5f23088881"
+  },
+  "limitations": [
+    "Exact declared native scope, not universal or whole-game parity.",
+    "The first automated attempt remains blocked in accepted/result.json because the adapter read the generic template hash; the corrected adapter reads targets[].probe_sha256 and both rechecks passed. Raw captures were not altered.",
+    "Author semantic review and independent BN/r2/angr evidence; no independent human/agent critic was available.",
+    "The conservative source provenance comment still says STRUCTURALLY_VERIFIED; this is a gate warning. Source bytes were kept identical to the tested build.",
+    "No engine source changed, no new game native added, no release attestation or deployment."
+  ]
+}

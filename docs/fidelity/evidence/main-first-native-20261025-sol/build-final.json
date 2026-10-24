@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "address": "0x0048F0C0",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "0cd758f2ad54db1e376f379e730f907a4c5dfb986d519302642cb948d41fdc08",
+  "kind": "build-report",
+  "result": "passed",
+  "executed": true,
+  "command": "cmake --build /Users/haseeb-mir/Documents/Code/project-open-igi/build-first-native-sol --target igi --clean-first -j4",
+  "candidate_executable_sha256": "d750a86cf648627bae10f8b8c52813d4cf7acd74b2f28e1b5a779a8ec4243250",
+  "receipt": {
+    "evidence_path": "docs/fidelity/evidence/main-first-native-20261025-sol/build-final-receipt.json",
+    "evidence_sha256": "cf55769d0cd593df731e43d3287372f4b746f1b5ba9149871e71a8e57b55ceae"
+  },
+  "scope": "Executed diagnostic build; no release attestation or deployment"
+}

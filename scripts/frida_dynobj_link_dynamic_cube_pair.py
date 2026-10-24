@@ -77,7 +77,9 @@ class CaptureError(RuntimeError):
 
 def run_one(device, exe: pathlib.Path, name: str, process_module: str, function_va: str,
             probe_source: str, input_cases: list[list[int]], observe_seconds: float,
-            probe_before_resume: bool = False) -> dict:
+            probe_before_resume: bool = False, stop_after_probe: bool = False) -> dict:
+    if stop_after_probe and not probe_before_resume:
+        raise ValueError('controlled-only endpoint requires pre-resume native invocation')
     pid = None
     session = None
     script = None
@@ -92,17 +94,21 @@ def run_one(device, exe: pathlib.Path, name: str, process_module: str, function_
         if probe_before_resume:
             record['probe_phase'] = 'before-primary-thread-resume'
             record['probe'] = script.exports_sync.probe(process_module, function_va, input_cases)
-        device.resume(pid)
-        time.sleep(observe_seconds)
-        if pid not in {p.pid for p in device.enumerate_processes()}:
-            raise RuntimeError('owned game exited before the startup observation completed')
-        if name == 'retail':
-            record['escape'] = script.exports_sync.press_escape()
-            if not record['escape'].get('sent'):
-                raise RuntimeError(f"Escape was not delivered to the IGI window: {record['escape']}")
-            time.sleep(1)
-        if not probe_before_resume:
-            record['probe'] = script.exports_sync.probe(process_module, function_va, input_cases)
+        if stop_after_probe:
+            record['scope'] = 'controlled native calls only; game main was not resumed'
+            record['natural_startup_observed'] = False
+        else:
+            device.resume(pid)
+            time.sleep(observe_seconds)
+            if pid not in {p.pid for p in device.enumerate_processes()}:
+                raise RuntimeError('owned game exited before the startup observation completed')
+            if name == 'retail':
+                record['escape'] = script.exports_sync.press_escape()
+                if not record['escape'].get('sent'):
+                    raise RuntimeError(f"Escape was not delivered to the IGI window: {record['escape']}")
+                time.sleep(1)
+            if not probe_before_resume:
+                record['probe'] = script.exports_sync.probe(process_module, function_va, input_cases)
         record['result'] = 'captured'
     except Exception as error:
         record['result'] = 'failed'
