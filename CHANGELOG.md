@@ -21,17 +21,21 @@ number and never counts as a release.
 - Fixed chronological discovery: game QTask addresses are no longer excluded as CRT; default walk begins at WinMain; the full 3,073-row direct-call order is retained. Function/disassembly inputs are now private and image/hash-bound instead of relying on shared `/tmp/afl.json`. Static direct-call order is not universal runtime coverage.
 
 
-### 2026-10-25 - Startup init sequence measured: the guard's own figures are wrong (internal build, no release)
+### 2026-10-25 - Startup init sequence measured (entry corrected after review; the guard was right)
 
 - **Evidence added**: `docs/fidelity/evidence/startup-402930-call-sequence.md` - the ordered call inventory of `0x00402930..0x00402F50`.
 - **Measured twice, agreeing**: 309 `call` instructions through `build/retail-dis.txt` and an independent
   `objdump -d --start-address=0x402930 --stop-address=0x402F50`; the region is a straight-line call sequence plus `nop` padding.
-- **The candidate's fail-closed guard text is inaccurate**: it reports "155 ordered init/open/load calls ending in a tail jump to 0x004CEF30". The
-  region actually holds **309 call sites over 303 distinct callees**, the last call target is `0x004895D0`, and no tail jump to `0x004CEF30` exists
-  inside the range. The 155/134 figures must not be carried into any later transcription or plan.
-- **Real closure**: 26 of the 303 distinct callees have a manifest record whose implementation file exists; **277 have no implementation file**. The
-  sequence is dominated by per-class registration routines in the `0x0041xxxx`-`0x0048xxxx` range - the same pattern as `0x00424B90` `Cursor_Init`,
-  which is already transcribed - so the remaining work is a large but regular set of small registrars, not 277 unrelated systems.
+- **Correction (this entry was initially wrong)**: an earlier version of this entry claimed the candidate's guard ("155 ordered calls ending in a
+  tail jump to 0x004CEF30") was inaccurate, based on 309 calls over 303 distinct callees. That measurement ran from `0x00402930` to the next
+  *manifest* native `0x00402F50`, which spans **two functions**. `0x00402930` really does end at `0x00402C3B`, with the last call at `0x00402C32`
+  to `0x00402F50` (`Config_YmbeAfp`) and the tail `jmp 0x004CEF30` at `0x00402C37` - exactly what the guard says. Independently
+  `objdump --start-address=0x402930 --stop-address=0x402C3B` reports **155 calls**. The worker who flagged this was right and this entry is
+  corrected rather than left standing.
+- **Real closure for `0x00402930`**: 155 call sites, 154 distinct callees, 22 with an implementation file, **132 absent** - consistent with the
+  guard's 134 within counting-method noise. The neighbour at `0x00402C40` is a separate, unrecorded 154-call sequence (150 distinct, 145 absent)
+  with no manifest record, no work-order entry and no direct caller found by `axt`; its first calls are the small `0x004192B0`/`0x004199B0`
+  routines that call `0x00401A20`, so it is plausibly a companion register/unregister pass - a hypothesis, not a finding.
 - Counted strictly: a callee whose source exists but has no manifest record yet (the pending `0x42D*`/`0x42F*` handler files) counts as absent here.
 
 ### 2026-10-25 - TaskType_Register (0x00401900) moved to its own native and linked (internal build, no release)
