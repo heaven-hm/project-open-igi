@@ -54459,6 +54459,86 @@
       }
     },
     {
+      "address": "0x004B6CE0",
+      "name": "Model_GetBoneWord0C_4B6CE0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/model/native_4b6ce0.cpp",
+        "sha256": "cf0ac40aae2dbc5d300b16fb34a0529521df667f837b838f65d31c63144e0bb7",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/model/004B6CE0-Model_GetBoneWord0C_4B6CE0.cpp",
+        "sha256": "09d3aaf8975ca069ef711caa578bad6d6a4b27069e8705f4e6b8b6bdca3a73cc",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x004B6CE0",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004B6CE0-binaryninja.json",
+          "evidence_sha256": "b0b60d2c48b6021d3040ca163a9075b58b062d22ce4d728565496908f69e007b"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x004B6CE0",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004B6CE0-radare2.json",
+          "evidence_sha256": "51d1fd8f3b5cec72378b3cfa9c00547c54f52c2b4fd16ee6b67bc33bbd21c276"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declaration preserves the observed x86 argument boundary; both decoders agree on the entry."
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004B6CE0-semantic-review.json",
+          "evidence_sha256": "fab3b0205d2624984bd053d6ba2152966822c89c1ba55e3390a862ae5d289a47"
+        }
+      }
+    },
+    {
+      "address": "0x004B6D20",
+      "name": "Model_GetBoneWord10_4B6D20",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/model/native_4b6d20.cpp",
+        "sha256": "860de8679b1337104ee7c474a6a354f7944015bed8eb491fe8f41f715d905c56",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/model/004B6D20-Model_GetBoneWord10_4B6D20.cpp",
+        "sha256": "4d1c3cb72bf7e2f4da4c2ced91197e11ec8a9bee4714db6e76fefc0c52f60e06",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x004B6D20",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004B6D20-binaryninja.json",
+          "evidence_sha256": "8ae0d019c4b5c3de9cbd2a6951a9c48cf820fa63ead133c716ccf922996828f3"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x004B6D20",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004B6D20-radare2.json",
+          "evidence_sha256": "82302a54c6643103d9deb3b9978fe305c26695e2644e197caac539430cf7e199"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declaration preserves the observed x86 argument boundary; both decoders agree on the entry."
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004B6D20-semantic-review.json",
+          "evidence_sha256": "9352cc60f836a0a120bc0b6a5182c571c6bdf98cd6e25501ccf086958e15fded"
+        }
+      }
+    },
+    {
       "address": "0x004B7450",
       "name": "Matrix_InvalidateSlot",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
@@ -67492,6 +67572,46 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004F1D10-behavioral.json",
           "evidence_sha256": "cddc90e72ebc6b12a183b5cf874ca621983040d590d75d33e1bc53af3d9252c4"
+        }
+      }
+    },
+    {
+      "address": "0x004F1D60",
+      "name": "Sys_InitListHead_4F1D60",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/sys/native_4f1d60.cpp",
+        "sha256": "f0401b1ddc3b2333fdac8aaea7e4242257c8970ad7fafb264bc8e7f13a8e6a9f",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/script/004F1D60-Script_SpawnNewTask_10 2.cpp",
+        "sha256": "1b5e1ed31d06f8fcb39a9991136da65396bd76791a076ae6e45e92b94d200394",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x004F1D60",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004F1D60-binaryninja.json",
+          "evidence_sha256": "ed56d17ec6668e9eb235466f44b339bf1a4791b464c4ef302ac084b833151f10"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x004F1D60",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004F1D60-radare2.json",
+          "evidence_sha256": "c428a8396fb877570071959a9535a87e6bd5017a87b564fce0f23162e590e129"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declaration preserves the observed x86 argument boundary; both decoders agree on the entry."
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004F1D60-semantic-review.json",
+          "evidence_sha256": "99b1010bf04d99e60d9f92ee35b3085304e37fcd8116e38fc20f8f5240906368"
         }
       }
     },
