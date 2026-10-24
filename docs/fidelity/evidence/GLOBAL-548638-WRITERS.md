@@ -122,3 +122,42 @@ Landing order therefore becomes: `0x401860` (41 B, no callees) -> `0x4D9730` (83
 its retail VA (the header currently documents it but no symbol is defined there).
 
 `"QObj"` bytes confirmed at `0x0054863C` (`51 4F 62 6A 00`), size `0x50`.
+
+## Round 34: frozen pair for current tree; possible TaskType_Register arity mismatch
+
+Frozen and deployed: `build/artifacts/igi1-bc2861e1.exe` + receipt, sha256
+`bc2861e1747ce8b0d4cca2b86c08a823515035a35921cd86b147f97e63d7ed19`, deployed copy
+verified identical. Source and deployed binary agree again after the 0x401860
+commit.
+
+### New discrepancy, must be resolved before transcribing 0x4D9730
+
+The 0x4D9730 site pushes **five** dwords before `TaskType_Register`:
+
+```
+0x4D9763 push 0
+0x4D9765 push 0
+0x4D9767 call 0x4018F0      ; declared no-argument QTask_GetCurrentType()
+0x4D976C push eax
+0x4D976D push 0x50
+0x4D976F push "QObj"
+0x4D9774 call 0x401900
+0x4D9779 add esp, 0x14      ; 20 bytes = 5 arguments
+```
+
+`add esp,0x14` is retail-owned evidence that this call consumed 5 arguments,
+whereas `engine/include/igi/retail/core/task_types.hpp:129` declares
+`TaskType_Register(const char* name, std::uint32_t object_size, ...)` with four
+parameters (16 bytes). Two possibilities, both need evidence, neither is assumed:
+
+1. `TaskType_Register` really takes a fifth argument (for example a flag or parent
+   count) and the engine declaration/transcription is missing it - that would be a
+   fidelity defect affecting every existing registrar call site, not just this one.
+2. The two zero pushes belong to a different callee that the listing hides (for
+   example a `__fastcall`/`__stdcall` variant of 0x4018F0 with different cleanup),
+   in which case the extra dword is not a TaskType_Register parameter.
+
+`QTask_GetCurrentType()` in the header is declared with no parameters, which argues
+against reading the two pushes as its arguments. Until this is settled from the
+decompile of 0x4D9730 (BN) plus the 0x401900 body's parameter reads, writing
+0x4D9730 would either invent an argument or silently drop one. Blocked, not guessed.
