@@ -1362,3 +1362,26 @@ Two important structure facts:
 
 Still to capture: the routine's true prologue (before `0x4FAC71`) and the remaining `0x4F9DF0`
 registration calls after `0x4FAD0E`.
+
+### Stream init: registrations and 8-byte table fill (round 117)
+
+```
+ecx = 0x181
+0x4FAC71  loop: word [eax-4] = cx (0x181); dword [eax] = edi (0); eax += 8; cmp eax,0xA7724C; jl
+          ; 8-byte entries {u16 = 0x181 sentinel, u32 = 0} from 0xA77228 to 0xA7724C (4-5 entries)
+0x4FAC81  ax = word [0x54E364]; push 0x240; push eax; call 0x4F9460   ; node size 576
+...
+0x4FACEC  register("nMaxNodes",     5, 0x4FAEE0)
+0x4FACFD  register("nNodeID",       5, 0x4FAF50)
+0x4FAD0E  register("tNodePosition", 8, 0x4FAF80)
+0x4FAD1F  register("vNodeGamma",    6, 0x4FAFA0)
+0x4FAD30  register(...,             6, 0x4FAFC0)   ; continues
+```
+
+So the 8-byte registry table entries are `{u16 sentinel 0x181, u32 zero}` - the same `0x181` (385)
+constant family as the descriptor table and the node-size table, which is now confirmed in a third
+independent structure.
+
+The criteria registration list is growing: name, a small integer type code (5/6/8) and a handler
+address each. Capture continues past `0x4FAD30`; the routine's prologue (before `0x4FAC66`) is still
+unresolved because the surrounding bytes are mid-instruction at these offsets.
