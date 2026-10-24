@@ -104,3 +104,37 @@ Begin now: baseline preservation/path audit as P00; assign parallel read-only
 research for Level 1 closure and compile-only dependencies. Then execute the
 ordered plan autonomously, with a single implementation writer.
 ```
+
+## Handoff — round 140 (matching decompilation of igi.exe, mvp/level1-integration)
+
+State: 28 natives landed, compiled (receipt compiled_sources 134) and Tester-verified; startup fails
+closed at QTask_RegisterClasses, position 1 / id 0, exit 3. Last frozen pair `e0b4e70b`
+(sha256 e0b4e70b97ac10ac948e03c9cee988b9060215aa7090ce6387787cff2e5c4bdc), deployed and verified.
+No playable Level 1; no release, version, screenshot or window claim.
+
+Landed this arc (all exact CFG, 1.000 unless noted): 0x4F1B20, 0x4F1B50, 0x4F1840, 0x4F18C0, 0x4F19C0,
+0x4F1A40, 0x4F1BC0, plus the earlier hash/container/error group. Storage ownership is settled:
+0xA758E0 (11 slots x 19 dwords, used flag dword 18, parent dword 1) owned by 0x4F1840; 0xA758C8
+16-slot table owned by 0x4F1B20; 0x54E0E4..EB owned by 0x4F1A60.
+
+Remaining chain, bottom-up (ownership-driven, each needs the one below):
+1. 0x4EE970 (3452 B catalogue) - block at 0x4EF565..0x4EF5A0 registers "Graph" via 0x4F19C0(-1, "Graph")
+   and stores the handle at 0xA70CA0; it also reads 0xA70C90 and calls 0x4F1BC0/0x4F1B60.
+2. 0x4F1020 (6 B getter of 0xA70CA0) - linkable once 1 lands.
+3. 0x4FAA60 (837 B stream init, owner of 0xA774A0/0xA76D18) + 0x4F9DF0 (120 B emitter) - mutual pair,
+   must land together; both listings captured in docs/fidelity/evidence/.
+4. 0x5183D0-region init sequence (calls 0x4EE970 from 0x51840C, 0x4FAA60 from 0x518484, 0x5186C0).
+5. 0x508FA0 (755 B registrar, 42 call sites, listing captured) + 0x508F80 thunk (call 0x5183D0; jmp 0x508FA0).
+
+Method rules learned the hard way this arc:
+- Boundaries: radare2 `af` accepts a seeded address as an entry, so seeded extents lie. Reliable
+  technique is "find preceding c3 90 90 90, then skip nops"; when that fails, ask the Tester for a
+  retail-only Frida call-target probe (this resolved 0x4FAA60 and 0x4EE970 in one step each).
+- Ownership: a global is declared only by its retail writer; readers go extern. This is what keeps
+  blocking attempted out-of-order transcriptions - and it is why 0x4FAA60/0x4F9DF0 cannot be written
+  before 0x4EE970.
+- Landing: a native counts as landed only when it appears in receipt compilation.compiled_sources,
+  not inputs.sources. 18 natives were silently unwired for several rounds because a str.replace
+  anchor never matched; always verify the anchor and print the count before/after.
+- Strings must stay byte-identical; non-obvious retail orders (0x4F1840's EB,EA,E7,E8,E9,E6 slot
+  stores) and sentinel values (0x181, 0xFF) are preserved, never normalised.
