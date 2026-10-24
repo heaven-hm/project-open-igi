@@ -1385,3 +1385,28 @@ independent structure.
 The criteria registration list is growing: name, a small integer type code (5/6/8) and a handler
 address each. Capture continues past `0x4FAD30`; the routine's prologue (before `0x4FAC66`) is still
 unresolved because the surrounding bytes are mid-instruction at these offsets.
+
+### Stream init is much larger than assumed (still no prologue above 0x4FABEC)
+
+Walking backwards from the registration block shows a repeating three-call sequence, not a short
+init:
+
+```
+0x4FAC09  push edi; push 6; call 0x4F1020        ; class/type lookup with code 6
+0x4FAC33  edx = [0xA76D10]; push eax; &stack slots; push ...; call 0x4F1A80   ; container append (landed)
+0x4FAC2B  push edi; push 7; call 0x4F1020        ; code 7
+0x4FAC45  call 0x4F1A80
+0x4FABFF  same shape for earlier codes           ; and further back
+0x4FAC4D  [0xA77248] = 0xA7724C; [0xA77250] = 0xA77248; [0xA7724C] = 0   ; another self-linked head
+0x4FAC67  eax = 0xA7722C; ecx = 0x181            ; 8-byte registry fill
+```
+
+So this routine registers a whole series of node properties - each one a `0x4F1020(code)` lookup
+followed by an `0x4F1A80` append into the list at `0xA76D10`, then a set of `0x4F9DF0` name
+registrations - and it also owns a fourth self-linked head at `0xA77248`. Bytes above `0x4FABEC`
+decode as mid-instruction, so the prologue is still further back and the function is far larger than
+the "small init" this round planned for.
+
+Correct decision recorded: do **not** transcribe a partial init. Capture the complete listing with a
+proper boundary (via angr CFGFast entry recovery, which is the tool for exact retail entries) before
+writing any of it, and treat `0x4F9DF0` as blocked on that boundary rather than on storage.
