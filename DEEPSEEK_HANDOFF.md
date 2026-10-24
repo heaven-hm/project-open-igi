@@ -287,3 +287,22 @@ Method rules learned the hard way this arc:
   else KERNEL32 `HeapFree` on `g_c32428`), then `0x4B0D10` (`Mem_DeAllocFn`), which unblocks
   `QTaskList_Delete` (`0x4C1830`, documented blocked in `engine/src/retail/core/qtask_list.cpp`) and
   the `0x4F1180` branch of the `0x4EE970` catalogue.
+
+## Round 152: 0x4AB84C landed and frozen; 0x4AADBB analysis staged
+
+- Landed `0x4AB84C` (page marker, bn=4/5 **1.000**). Mode-2 bucket set is complete: `0x4AB6DD`,
+  `0x4AB733`, `0x4AB7F5`, `0x4AB84C` + `mode2_bucket.hpp` + `mode2_bucket_globals.cpp`. Frozen
+  `770d5b8d` (156 sources), Tester verified clean binding, unchanged sentinel, boundary unchanged.
+- **The one remaining blocker on the free path is `0x4AADBB`** (809 bytes, 265 instructions). The exact
+  listing is committed at `docs/fidelity/evidence/0x004AADBB-full-listing.txt` so the transcription does
+  not have to re-derive it. Structure identified so far: 0x204-byte bucket stride arrays at
+  `[eax + edi*4 + 0x44]` and `[eax + edi*4 + 0xC4]`, a 0x144 offset, per-size free lists unlinked
+  through `[node+4]`/`[node+8]` pairs, `0x3F` clamps on `(word >> 4) - 1`, `not`/`shr` bit masks
+  derived from the `0x80000000` constant, and KERNEL32 `VirtualFree` for page release. It must be
+  transcribed as one unit - it does not compile or bind in halves - so it gets a dedicated pass with
+  the whole listing in view.
+- **Strategic note for whoever picks this up:** the deliberate fail-closed throw at `QTask_RegisterClasses`
+  (`0x00402930`) exists because the AI graph registrar is not transcribed and the class ids after it
+  would not match retail. That chain (`0x4EE970` -> `0x4F1180` -> `0x4F0C90` -> `0x4B0D10` ->
+  `0x4A6A50` -> `0x4AADBB`) is therefore the actual path past startup, not optional allocator tidying:
+  without it the executable cannot reach Level 1 data at all. Do not stub or catch that throw.
