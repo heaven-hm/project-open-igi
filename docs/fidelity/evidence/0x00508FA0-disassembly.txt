@@ -1311,3 +1311,25 @@ their retail writers must be located before this native can be transcribed - sam
 `0xA43E88`/`0xAF5EE8`.
 
 Next step: byte-reference search for writers of `0x00A774A0` and `0x00A76D18`.
+
+### Writers of 0xA774A0 and 0xA76D18 located: init routine around 0x4FAC80-0x4FACD2
+
+```
+0x4FAC95  mov [0x00A774A0], 0x00A774A4    ; list base self-links to base+4
+0x4FACAF  mov [0x00A76D18], 0x00A76D1C    ; node pool self-links to base+4
+0x4FACD2  push 0x00A76D18                 ; used as an argument (heap_list init)
+```
+
+Readers: `0x4F9DFB`/`0x4F9E3C` (the emitter being transcribed) and `0x4FA140` (a later consumer).
+
+Both globals follow the same embedded-sentinel pattern as `0x00A43EA0`: the stored pointer is
+`base + 4`, i.e. a self-linked list head. So the owner is a single init routine at roughly
+`0x4FAC80-0x4FACD2` that initialises both lists and passes the node-pool address to a heap-list
+call - the same shape as `0x4BACD0`.
+
+Plan: capture that init routine, transcribe it declaring both globals, then `0x4F9DF0` becomes
+writable, then `0x508FA0` + `0x508F80`.
+
+Note also `0x4FA140` is a second consumer of the same list; it is not yet inventoried in the
+registrar's call list, so it may belong to a different call path and should be checked when that
+path is reached.
