@@ -30,12 +30,14 @@ constexpr std::uintptr_t VIRTUAL_KEY_F12 = 0x12U;
 
 extern "C" {
 
-igi::retail::core::WindowHandlerEntry* WindowHandlerChain = nullptr;
-// Relocated retail WinProc chain storage (see native_0048f970.hpp): the pool at
-// 0x005C8D28, the terminators/head words at 0x005C8DF0/0x005C8DF4/0x005C8DF8.
-igi::retail::core::WindowHandlerEntry WindowHandlerPool[16] = {};
+// Relocated retail WinProc chain container (0x005C8DF0 head, 0x005C8DF4
+// terminator cell, 0x005C8DF8 tail pointer-to-pointer) and the 16-node pool at
+// 0x005C8D28. The three container words must stay contiguous in this order:
+// HeapList_Insert computes container+4 / container+8, exactly as retail.
 igi::retail::core::WindowHandlerEntry** WindowHandlerTail = nullptr;
 std::uintptr_t WindowHandlerTerminator = 0U;
+igi::retail::core::WindowHandlerEntry* WindowHandlerChain = nullptr;
+igi::retail::core::WindowHandlerEntry WindowHandlerPool[16] = {};
 // Loop_StatusByte is the retail 0x005C8DE8 global that Loop_SetStatusByte owns;
 // frame_natives.hpp declares it and frame_natives.cpp defines it, so this unit
 // only links against it. Defining it here too broke the mingw link with
@@ -141,28 +143,6 @@ std::intptr_t NATIVE_DECL WindowProcedure(void* window, std::uint32_t message,
 #else
     return 0;
 #endif
-}
-
-void LinkWindowHandler(igi::retail::core::WindowHandlerEntry* entry) noexcept
-{
-    // The retail's chain is a list whose head is the first registered entry and
-    // whose tail points at the list's end cell, so the head always has a
-    // successor and the procedure's walk reaches every handler. The port keeps
-    // the same shape with a terminal entry that carries no handler.
-    static igi::retail::core::WindowHandlerEntry chain_tail{};
-    if (WindowHandlerChain == nullptr)
-    {
-        entry->next = &chain_tail;
-        WindowHandlerChain = entry;
-        return;
-    }
-    igi::retail::core::WindowHandlerEntry* last_entry = WindowHandlerChain;
-    while (last_entry->next != nullptr && last_entry->next != &chain_tail)
-    {
-        last_entry = last_entry->next;
-    }
-    last_entry->next = entry;
-    entry->next = &chain_tail;
 }
 
 } // extern "C"

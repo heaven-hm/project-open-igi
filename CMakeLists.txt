@@ -44,6 +44,8 @@ add_executable(igi WIN32
     engine/src/retail/core/qtask_list.cpp
     engine/src/retail/core/retail_error.cpp
     engine/src/retail/core/main.cpp
+    engine/src/retail/core/native_48f490.cpp
+    engine/src/retail/core/native_48f4f0.cpp
     engine/src/retail/core/task_types.cpp
     engine/src/retail/diagnostics/log_record.cpp
     engine/src/retail/dynobj/dynamic_cube.cpp
@@ -107,7 +109,6 @@ add_executable(igi WIN32
     engine/platform/windows/player_controller.cpp
     engine/platform/windows/retail_animation.cpp
     engine/platform/windows/direct_input_mouse.cpp
-    engine/platform/windows/retail_model_scene.cpp
     engine/platform/windows/retail_native_verification_support.cpp)
 target_include_directories(igi PRIVATE engine/include)
 target_compile_features(igi PRIVATE cxx_std_20)

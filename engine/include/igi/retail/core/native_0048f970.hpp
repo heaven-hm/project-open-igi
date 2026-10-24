@@ -68,7 +68,6 @@ std::intptr_t NATIVE_DECL WindowProcedure(void* window, std::uint32_t message,
                                               std::uintptr_t wparam, std::intptr_t lparam);
 
 // Links a handler into the retail's window message chain.
-void LinkWindowHandler(igi::retail::core::WindowHandlerEntry* entry) noexcept;
 
 } // extern "C"
 
