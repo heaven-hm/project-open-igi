@@ -383,3 +383,29 @@ storage for this table; `0x401900` owns it.
 where the last three data defects came from. Do not transcribe statements against them until each range's
 extent is derived from the instruction that consumes it and cross-checked against the next object's start.
 The catalogue's own clear (`0x1000` dwords at `0x00A71890`) is an inline `rep stosd`, not a call.
+
+## 0x4EE970 is blocked on 83 untranscribed handler natives (round 151 finding)
+
+The catalogue is not a section-by-section transcription job. It embeds **83 distinct retail code pointers**
+as `push <VA>` immediates (handler function addresses handed to 0x401530 / 0x401400 / 0x4CEA20 and friends),
+and **0 of those 83 have a transcribed native** in `engine/src/retail`. In this candidate the image is
+`DYNAMIC_BASE`, so a retail absolute code address cannot be pushed at all: each one must become a reference
+to the candidate symbol of that native. The catalogue therefore cannot be finished before its handlers exist.
+
+Distinct handler VAs (83), from docs/fidelity/evidence/0x004EE970-full-listing.txt:
+0x427d70 0x427f80 0x487d90 0x487e20 0x488700 0x4d3710 0x4ef7f0 0x4ef830 0x4ef850 0x4ef860 0x4ef8b0
+0x4ef8c0 0x4ef990 0x4ef9b0 0x4ef9d0 0x4ef9e0 0x4efa10 0x4efa20 0x4efa90 0x4efaa0 0x4efab0 0x4efb00
+0x4efb10 0x4efb60 0x4efb80 0x4efba0 0x4efc10 0x4efc90 0x4efcb0 0x4efcd0 0x4efce0 0x4efd50 0x4efee0
+0x4eff00 0x4eff20 0x4eff30 0x4eff60 0x4eff90 0x4effb0 0x4effd0 0x4f0020 0x4f0060 0x4f0080 0x4f00a0
+0x4f00b0 0x4f00e0 0x4f0110 0x4f0140 0x4f0170 0x4f0190 0x4f01b0 0x4f01c0 0x4f0270 0x4f02b0 0x4f0320
+0x4f0350 0x4f0380 0x4f03a0 0x4f03d0 0x4f0400 0x4f0430 0x4f0460 0x4f04a0 0x4f04d0 0x4f0500 0x4f0530
+0x4f0560 0x4f0570 0x4f0580 0x4f0600 0x4f0610 0x4f0620 0x4f0640 0x4f0660 0x4f06e0 0x4f06f0 0x4f0700
+0x4f0710 0x4f0720 0x4f0730 0x4f0740 0x4f0780 0x4f64e0
+
+Most are small: median distance to the next listed handler is 0x30 bytes, and the bulk of the 0x4EF7F0..
+0x4F0790 range is a dense family of QVM/task callbacks. A few are large (0x4F0780, 0x487E20, 0x4D3710) and
+three are far outside the family (0x427D70, 0x427F80, 0x487D90, 0x488700).
+
+Recommended order: transcribe the dense 0x4EF7F0-0x4F0790 family first (each small, each independently
+bindable), then the outliers, then 0x4EE970 last with a symbol reference per pointer. Section 1 of
+0x4EE970 is already committed (unwired, partial) and does not depend on any of the 83.
