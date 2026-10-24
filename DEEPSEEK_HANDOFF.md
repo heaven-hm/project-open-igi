@@ -502,3 +502,50 @@ Tester's low-severity residuals accepted and documented, not "fixed": base is re
 edge count (now 8).
 
 Protocol in force: announce each freeze, wait for the Tester's ack, then deploy.
+
+## Analyst deliverable: 84 handlers (not 83) and proven data extents (round 151)
+
+`docs/fidelity/evidence/0x4EE970-data-extents.md` (730 lines, committed) supersedes my earlier counts.
+
+Handlers: **84, not 83.** The 83 list missed `0x0051BAA0` (11 B: reads [esp+8], writes 0xC through it,
+registered once as `Real32x3.kindE9`). `0x0054DF10` is the `"RGB"` string, not a handler - that is why a naive
+count gives 85. All 84 are clean `C3`-terminated cdecl entries: no `C2 imm16`, no thunks, no interior pointers.
+
+ABI is proven from the dispatcher, not guessed: `0x4F1AF0(type, kind, value, arg0)` builds `19*type+kind` and
+calls `push value; push arg0; call [edx*4+0xa758e8]`, so **every attribute handler is `fn(arg0, value)`** - two
+cdecl arguments - and `0x4F1BC0` stores the handler at `[(19*type + (int8)kind)*4 + 0xA758E8]`. Slot-read
+distribution: 55 read both `[esp+4]` and `[esp+8]`, 13 only `[esp+8]`, 9 only `[esp+4]`, 6 none, and `0x4F0780`
+reads three. Suggested transcription order: 6 zero-arg, then 13 `[esp+8]`-only, then 9 `[esp+4]`-only, then the
+55 two-arg converters; `0x4F0780`, `0x4EFD50`, `0x4EF8C0` last.
+
+Data extents proven (R1-R8), with the clipping traps that matter: R1 `0x54DD0C..0x54DD16` is 5 class words PLUS
+a flag byte at +0x0A (a `u16[5]` clips it - my current `g_54dd0c[5]` is therefore too small once the flag byte's
+writer is transcribed); R2 `0x54DDA4..0x54DDB3` keeps a 2-byte hole; R3 `0xA70C68..0xA70CA7` is 0x40 bytes of 16
+dwords with fields at +0x0C/+0x2C/+0x30; R4 the 251x3 bucket table; R5 `0xA7186C..0xA7188F` 9 handles; R6 the
+0x4000-byte array; R7 keeps its hole; R8 has a hole plus write-only dwords.
+
+Do NOT declare an object starting at `0xA70C68`: its bottom is unprovable (0xA70C48 is passed as an argument at
+0x4EE88B and 0xA70C60/0xA70C64 are live globals of other functions). This is the region the analyst is least
+confident about and the one most likely to produce the next clipping defect.
+
+Also required before the initialiser can be faithful: `0x401530`, `0x401400`, `0x4F1B60..0x4F1BB0`, `0x4F1BC0`,
+`0x4F1AF0`, `0x4B8890`, `0x4F19C0`, `0x4017C0`/`0x401810`, `0x401B20`.
+
+## Correction: the four handler "return" changes were byte-identical (round 151)
+
+My commit 7c9a011a claimed 0x4EF850 / 0x4EF8B0 / 0x4EF9D0 / 0x4EFA10 "now return the value argument" and that
+"the emitted bodies differ from what you signed off in b2adaddc". The Tester compared the bytes: all four are
+identical between b2adaddc and c3e61a74 (8b442408 c700<imm32> c3). The older `void` versions already left EAX
+equal to the value argument, because the store went through `[eax]` and nothing overwrote it before `ret`.
+
+So the change was documentation-level only, not a code fix, and my claim of a behavioural difference was wrong.
+The explicit return stays (it is a guarantee rather than an accident of codegen), but it must be described
+honestly: it does not change the artifact. Lesson: assert what the emitted bytes show, not what the source
+change looks like it should do - the same error as the 0x4EF830 comment that vouched for a deleted load, in the
+opposite direction.
+
+## Next increment: the class channel (agreed with the Tester)
+
+23 of 84 handlers now exist and none can execute. Further handler batches add coverage without reachability, so
+the next work is the `0x401530` / `0x401400` invocation path and the class table, with class-method signatures
+kept blocked until the invocation sites are evidenced.
