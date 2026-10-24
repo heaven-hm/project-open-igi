@@ -1202,3 +1202,33 @@ throw.
 Lease hygiene resolved the same round: 41746 was a stale sol candidate (5f749d26, not ours), and 93434/93436/93439 were
 the Tester's own orphaned frida-server tree (d4b0b8af). Cleared with evidence recorded first; winedevice/CrossOver GUI
 and the shared wineserver left alone.
+
+## Session close-out state (round 188 end)
+
+Tree: clean except one uncommitted tester script (scripts/tester/frida_probe_driver.py, the Tester's own work - not
+mine to revert). The tracked scripts/__pycache__/*.pyc churn that has been carried for many rounds is cleared.
+
+Agreed state of the world for the next session:
+  HEAD 906762cb; build green; deployed and frozen candidate b071553f (diagnostic receipt, HEAD f9b418aa source).
+  Runtime observation on that artifact: exit 3 at QTask_RegisterClasses 0x00402930, position 1 / id 0, four runs
+  (cold, cold after cooldown, warm, +seh), stdout empty, 71 x 0x80000026 in the SEH run.
+
+Work landed this session (engine):
+  0x004012F0 allocator and 0x004012A0 wrapper rewritten from the retail instructions, including the pool branch, the
+  memory flag-stack pair, the unconditional pre-branch live-count increment and the retail header store order pinned
+  with volatile after GCC reordered it.
+  0x004015D0 unlink native transcribed (calls HeapList_Remove 0x004AF960).
+  0x00401A60 live-count reader wired: it now declares storage that its retail writer defines.
+
+Work landed this session (evidence/tooling):
+  Six natives newly recorded after the provenance-format sweep (the generator only accepts
+  '// Native: <name>; retail VA 0x........'); 0x4014B0 and 0x4014E0 now STRUCTURALLY_VERIFIED from their own files;
+  0x489560 and 0x4C5810 held at TRANSCRIBED because their generated CFG artifacts are degenerate.
+  Withdrawn after checking: the 'catalog gap' explanation for 0x4014E0, the 32-row destructor table, and the
+  two-argument FrameHandler plan (real call sites push one word and clean 4; the allocator wrapper is the only
+  two-word site and is cast there).
+
+Next increment, in order:
+  1. Transcribe 0x004015F0 (88 instructions, 25 blocks, 391 bytes, table committed at
+     docs/fidelity/evidence/0x4015F0-instruction-table.md; every direct dependency already in the tree).
+  2. Then 0x00402930's remaining dependency chain, which is what actually moves the startup wall.
