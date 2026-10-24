@@ -1280,3 +1280,34 @@ installed callback at `0x00A936274` (now port-owned via the setters landed in ro
 Dependencies to resolve before transcription: `0x004A53B3` (buffer append/assign) and `0x004A5702`
 (varargs format) - provenance grep results recorded in the next step; the buffer `0x00A84640` is
 already claimed by `error_show.cpp`.
+
+### 0x4F9DF0 complete decode (120 B, 7 blocks) - graph stream criteria emitter
+
+```
+esi = arg1 (name)
+eax = 0x4F9E70(name)                        ; string hash (landed)
+edx = [0x00A774A0]                          ; list base
+for (ecx = [edx]; ecx != 0; edx = ecx, ecx = [ecx])
+    if ([edx + 8] == eax) goto duplicate
+// not found:
+esi = [0x00A76D18]                          ; node pool head
+if ([esi] == 0) { pop esi; ret; }           ; exhausted pool -> silent return
+[esi + 8] = hash; [ecx + 0xC] = arg2; [ecx + 0x10] = arg3
+push esi; call 0x4AF960                     ; (heap_list, landed)
+push esi; push 0xA774A0; [esi+4] = 0; [esi] = 0; call 0x4AF8F0; add esp,0xC
+pop esi; ret
+duplicate:                                  ; 0x4F9E58
+push esi; push str."GraphStream : collision in %s"; call 0x4AF810; add esp,8; pop esi; ret
+```
+
+So this registers a named graph-stream criterion: it hashes the name, scans the existing list, and
+either warns through the (now landed) warning emitter when the name collides or links a node from
+the pool with the hash and two caller values. The duplicate path passes the node pointer as the
+`%s` variadic argument, which is why the call pushes `esi` before the format string.
+
+Dependencies: `0x4AF960` and `0x4AF8F0` are already transcribed in `mem/heap_list.cpp`. **Missing
+storage:** `0x00A774A0` (list base) and `0x00A76D18` (node pool head) are absent from `engine/`, so
+their retail writers must be located before this native can be transcribed - same ordering rule as
+`0xA43E88`/`0xAF5EE8`.
+
+Next step: byte-reference search for writers of `0x00A774A0` and `0x00A76D18`.
