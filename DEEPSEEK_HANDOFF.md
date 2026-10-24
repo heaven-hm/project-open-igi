@@ -632,3 +632,31 @@ the registrars. Dependency order for transcription is therefore `0x4014E0` -> `0
 Remaining unknown before writing the registrars: `0x4014E0`'s body (the id allocator) and the initialiser at
 `0x4EF7??` that calls `0x4F1840`. Do not transcribe the registrars until `0x4014E0` exists, since their post-loop
 step calls `0x4014B0` on every invocation.
+
+## 0x4014E0 (class-id builder) read, and why it cannot be written yet (round 155)
+
+`0x4014E0` is 75 bytes, 5 blocks:
+
+    push esi; esi = arg1; eax = 0; push edi; ecx = 0
+    loop slot = 0..0xF:
+        dl = byte [slot + 0x54FF24]          // exts: the file holds sixteen 0xFF bytes
+        if (dl == 0xFF) continue
+        edx = (dl & 0xFF) * 0x180 + (arg1 & 0xFFFF)   // lea edx,[edx+edx*2]; shl edx,7; add edx,edi
+        if (dword [edx*4 + 0xA96AE0] != 0) eax |= 1 << slot
+    or ah,0x80                               // sets bit 15
+    ret                                       // returns the word in AX
+
+So class ids are a 16-bit bitmap: one bit per occupancy slot plus bit 15 always set, over the byte table at
+`0x0054FF24` (16 bytes, 0xFF in the image) and the dword table at `0x00A96AE0` - the same table `0x401530`
+writes via `mov [eax*4+0xa96ae0],edx`.
+
+**Why this is not transcribed yet:** `0x00A96AE0` has no proven extent. `0x401530` writes it at an index derived
+from its own record arithmetic and `0x4014E0` reads it at `(slot_byte * 0x180 + (arg & 0xFFFF)) * 4`, which with
+the 0xFF sentinel would reach roughly 0x9A000 bytes - almost certainly sparse, with real slot bytes below 8, but
+that is inference, not evidence. Declaring storage for it from the reader's arithmetic would repeat the clipped
+array defect in the opposite direction (over-declaring and colliding with the neighbouring globals). The rule is
+that only the retail writer defines a global, so the extent must come from the write sites, which are in
+`0x401530` (untranscribed) and its callers.
+
+Order therefore stands: `0x401530` first to establish the table's true indexing, then `0x4014E0`, then `0x4014B0`,
+then `0x401400`. The class-id assignment cannot be first because its table has no owner yet.
