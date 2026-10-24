@@ -94,3 +94,31 @@ that interpretation stays labelled as interpretation until the list exists.
 Cost note for the next round: one `aaa` pass over 13 MB is cheaper than 97 separate
 r2 launches; run it once, dump `axt` for every `0x401900` caller, then intersect
 with observed sites.
+
+## Round 27: no dormant sites exist - the "127" count was wrong
+
+Single `aaa` pass over the retail image, then `axt 0x00401900`:
+
+- **exactly 279 call sites** to `0x00401900` exist in the binary, and that set is
+  **identical** to the 279 observed sites in the retail capture (`set(sites) ==
+  set(observed)`, zero unobserved, zero extra).
+- **123 of those sites fall inside the position-1 subtree**, and **all 123
+  executed** (ids 0..122). Unobserved sites inside the tree: **none**.
+
+Conclusion: the inventory's "127 unconditional `0x00401900` sites" in the subtree
+was an overcount by four - there are no branch-skipped or dormant registration
+sites at all at level 1. The earlier interpretation (four class registrations
+skipped by branches) is therefore withdrawn; the correct statement is 123 sites,
+123 registrations, ids 0..122, in 97 functions.
+
+This also validates the capture mechanically: the static xref set and the runtime
+call set agree exactly, so neither the probe nor the disassembly is missing a
+registration site. That is the strongest form of agreement available here - two
+independent methods producing the same 279-element set.
+
+## Consequence
+
+Position 1's acceptance criterion is now unambiguous and closed-form: transcribe
+the 97 registrar functions reached from `0x508f80`; the candidate must emit ids
+0..122 in the observed order with the observed (name, size, arg3) triples, and the
+retail callsite -> id mapping file gives the expected sequence entry by entry.
