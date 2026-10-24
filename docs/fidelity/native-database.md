@@ -92,9 +92,9 @@ coverage, whatever the status word.
 | `Native_004A7EFF` | `uint32_t __cdecl Native_004A7EFF(uint32_t** cursor);` | `0x004A7EFF` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `Qvm_ReportError` | `std::int32_t Qvm_ReportError(const char* format, ...)` | `0x004B7E10` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 
-## STRUCTURALLY_VERIFIED (1062)
+## STRUCTURALLY_VERIFIED (1070)
 
-125 of these rows have code but no semantic review bound; the comment column says so per row.
+133 of these rows have code but no semantic review bound; the comment column says so per row.
 
 806 of these rows have no implementation file; their comment column says so and they are not
 coverage, whatever the status word.
@@ -1033,12 +1033,18 @@ coverage, whatever the status word.
 | `Sys_GetGlobal8_4F40D0` | `unestablished` | `0x004F40D0` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `Sys_GetGlobal8_4F40E0` | `unestablished` | `0x004F40E0` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `Sys_GetGlobal8_4F4110` | `unestablished` | `0x004F4110` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Sys_GetGlobal8_4F4120` | `unestablished` | `0x004F4120` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Sys_GetGlobal8_4F4130` | `unestablished` | `0x004F4130` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Sys_GetGlobal8_4F4140` | `unestablished` | `0x004F4140` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `PhysicsTerrain_InvokeComputeNormals` | `int PhysicsTerrain_InvokeComputeNormals(float arg1, void* arg2)` | `0x004F42D0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `PhysicsTerrain_GetParam_4F4390` | `char* PhysicsTerrain_GetParam_4F4390(int arg1, char* arg2)` | `0x004F4390` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `PhysicsTerrain_Invoke2_4F43B0` | `int PhysicsTerrain_Invoke2_4F43B0(int* arg1)` | `0x004F43B0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `PhysicsTerrain_Invoke12` | `int* PhysicsTerrain_Invoke12(int* arg1)` | `0x004F43D0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `PhysicsTerrain_Invoke12_4F44A0` | `int PhysicsTerrain_Invoke12_4F44A0(void* arg1, int arg2)` | `0x004F44A0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `PhysicsTerrain_Invoke3_4F4560` | `int* PhysicsTerrain_Invoke3_4F4560(int* arg1)` | `0x004F4560` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
+| `Sys_GetGlobal16_4F45F0` | `unestablished` | `0x004F45F0` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Sys_GetGlobal8_4F4850` | `unestablished` | `0x004F4850` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Sys_GetGlobal8_4F4860` | `unestablished` | `0x004F4860` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `Script_SetConstant_4F64E0` | `unestablished` | `0x004F64E0` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `TerrainLightMap_PushEntry` | `void* __cdecl TerrainLightMap_PushEntry(void* self);` | `0x004F82B0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `TerrainLightMap_Render` | `void* TerrainLightMap_Render(void* context)` | `0x004F8320` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
@@ -1047,6 +1053,8 @@ coverage, whatever the status word.
 | `TerrainLightMap_Setup` | `int TerrainLightMap_Setup(int* context)` | `0x004F8780` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `Script_NodeSizeTable_Set` | `unestablished` | `0x004F9460` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `Script_StringHash` | `unestablished` | `0x004F9E70` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Sys_GetGlobal16_4FB5E0` | `unestablished` | `0x004FB5E0` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Sys_GetGlobal8_4FC840` | `unestablished` | `0x004FC840` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `Physics_VirmodelIsNull` | `struct status_msg* Physics_VirmodelIsNull(void * context, int arg2, int arg3, int arg4, int* arg5)` | `0x00503CC0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `TextureModifier_Push` | `void* __cdecl TextureModifier_Push(void* self);` | `0x00505E40` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `TextureModifier_Create` | `void* TextureModifier_Create(void* context)` | `0x00505ED0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
