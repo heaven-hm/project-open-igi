@@ -42917,19 +42917,38 @@
     },
     {
       "address": "0x00490230",
-      "name": "Keyboard_Update",
+      "name": "Keyboard_Update_490230",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
+        "path": "engine/src/retail/input/native_490230.cpp",
+        "sha256": "71cab2dee159740e8a920a34a8b67ebab230211b23ac228575148f6a0ea0b21d",
+        "signature": "unknown"
+      },
+      "game_natives": {
         "path": "scripts/GameNatives/00490230-Keyboard_Update.cpp",
-        "sha256": "49c040d6ea27359e28a55a7199f12be6bf03a3569a18e6565377586225861bee"
+        "sha256": "49c040d6ea27359e28a55a7199f12be6bf03a3569a18e6565377586225861bee",
+        "signature": "unknown"
       },
       "verification": {
-        "status": "VERIFIED",
-        "limitations": [
-          "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md)."
-        ],
-        "evidence": [
-          "scripts/GameNatives/EU_NATIVES_BN_COPY.md"
-        ]
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x00490230",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x00490230-binaryninja.json",
+          "evidence_sha256": "15038f6b67b1dff68387f471e4b15642896be47c8b0d2f57dbc7f4e704fd6807"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x00490230",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x00490230-radare2.json",
+          "evidence_sha256": "80f815a2456cb96c9543c004891baee4d93a8ff6bc8342a9aeb17394268da16d"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0
       }
     },
     {

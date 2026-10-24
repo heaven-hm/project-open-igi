@@ -243,3 +243,21 @@ indirect `jmp [table]` operand, map it to `dinput-jump-tables.json`, append the
 score. That keeps the 0.85 threshold untouched and does not copy Binary Ninja's
 edge list. The three modified artifacts were reverted (`git checkout HEAD --`),
 so the repo has no hand-enriched evidence.
+
+## Round 23: Keyboard_Update_490230 bound at 1.000; frozen-pair regression clean
+
+`build_native_records.py 0x490230 --force` (repaired scoring path) gives
+`bn=11/16 r2=11/16 score=1.000` and an 11-block / 16-edge CFG, matching the
+11-block extent recorded in the provenance block. Record: STRUCTURALLY_VERIFIED
+(static only - runtime is still unobserved).
+
+Frozen pair `2d4c977c…` (diagnostic build, IGI1MUTEX) regression, Tester:
+hash-stable before/after for artifact and deployed copy; lifetimes 2565 ms and
+2784 ms (cold-run band), exit 3; unchanged uncaught `std::logic_error` at
+`QTask_RegisterClasses` **position 1, id 0** (AI graph registrar, first
+statement); no earlier divergence, no mutex contention. So the new input native
+did not disturb startup ordering - it is simply not on the startup path yet.
+
+Parser note for future rounds: in `build/tester/.../OBSERVATION.md` the phrase
+"12044 ms to pipe EOF" was excluded by the Tester because Wine child handles
+outlive the game; that is a measurement artefact, not a lifetime.
