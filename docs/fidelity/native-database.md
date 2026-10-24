@@ -92,9 +92,9 @@ coverage, whatever the status word.
 | `Native_004A7EFF` | `uint32_t __cdecl Native_004A7EFF(uint32_t** cursor);` | `0x004A7EFF` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `Qvm_ReportError` | `std::int32_t Qvm_ReportError(const char* format, ...)` | `0x004B7E10` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 
-## STRUCTURALLY_VERIFIED (1046)
+## STRUCTURALLY_VERIFIED (1054)
 
-109 of these rows have code but no semantic review bound; the comment column says so per row.
+117 of these rows have code but no semantic review bound; the comment column says so per row.
 
 806 of these rows have no implementation file; their comment column says so and they are not
 coverage, whatever the status word.
@@ -886,7 +886,10 @@ coverage, whatever the status word.
 | `Render_BindTexture_12` | `int Render_BindTexture_12(void)` | `0x004DA880` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `Render_BindTexture_13` | `void Render_BindTexture_13(int* context, void ** arg2)` | `0x004DBF30` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `Render_BindTexture_14` | `int Render_BindTexture_14(int context, void * arg2, double* arg3)` | `0x004DCF00` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
+| `Sys_GetGlobal16_4DEE80` | `unestablished` | `0x004DEE80` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `Render_BindTexture_15` | `float Render_BindTexture_15(float context)` | `0x004DEEC0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
+| `Sys_GetGlobal16_4E0830` | `unestablished` | `0x004E0830` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Sys_GetGlobal16_4E5350` | `unestablished` | `0x004E5350` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `DynCubeObj_Init` | `unestablished` | `0x004E5370` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `Core_GetEventWord_4E7530` | `unestablished` | `0x004E7530` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004E7530-semantic-review.json` |
 | `CameraControlTask_Init` | `unestablished` | `0x004E7C50` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
@@ -899,6 +902,9 @@ coverage, whatever the status word.
 | `InputPort_Process` | `struct status_msg* InputPort_Process(void * context)` | `0x004ED5C0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `PhysicsTerrain_GetContext_4EDA70` | `void* PhysicsTerrain_GetContext_4EDA70(void* arg1)` | `0x004EDA70` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `LODSettings_LoadParameters` | `x86 cdecl void*(void* context, LODSettingsRecord* (*lookup)(const char*))` | `0x004EDB60` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
+| `Sys_GetGlobal8_4EE0E0` | `unestablished` | `0x004EE0E0` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Sys_GetGlobal8_4EE0F0` | `unestablished` | `0x004EE0F0` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Sys_GetGlobal8_4EE100` | `unestablished` | `0x004EE100` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `PhysicsTerrain_GetContext_4EE530` | `void* PhysicsTerrain_GetContext_4EE530(void* arg1)` | `0x004EE530` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `PhysicsTerrain_ProcessLOCALgrab` | `int PhysicsTerrain_ProcessLOCALgrab()` | `0x004EE540` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `PhysicsTerrain_ProcessLOCALgrab_4EE5E0` | `int PhysicsTerrain_ProcessLOCALgrab_4EE5E0(void* arg1)` | `0x004EE5E0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
@@ -980,6 +986,7 @@ coverage, whatever the status word.
 | `Script_GetParseMode` | `int Script_ParseEnumReal32_5(void)` | `0x004F1160` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `QHash_FindValue` | `unestablished` | `0x004F1180` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `QHashNode_Find` | `unestablished` | `0x004F11A0` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Sys_GetGlobal8_4F1200` | `unestablished` | `0x004F1200` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `Sys_GetGlobal32_4F1210` | `unestablished` | `0x004F1210` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004F1210-semantic-review.json` |
 | `Sys_GetGlobal32_4F1220` | `unestablished` | `0x004F1220` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004F1220-semantic-review.json` |
 | `Script_ParameterEventInit` | `unestablished` | `0x004F1840` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
@@ -1007,6 +1014,7 @@ coverage, whatever the status word.
 | `Sys_GetGlobal32_4F1E00` | `unestablished` | `0x004F1E00` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004F1E00-semantic-review.json` |
 | `Sys_GetGlobal32_4F1E10` | `unestablished` | `0x004F1E10` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004F1E10-semantic-review.json` |
 | `Sys_GetGlobal32_4F1E20` | `unestablished` | `0x004F1E20` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004F1E20-semantic-review.json` |
+| `Sys_GetGlobal8_4F1FD0` | `unestablished` | `0x004F1FD0` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `Sys_GetGlobal32_4F2020` | `unestablished` | `0x004F2020` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004F2020-semantic-review.json` |
 | `Sys_GetGlobal32_4F2030` | `unestablished` | `0x004F2030` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004F2030-semantic-review.json` |
 | `PhysicsTerrain_GetContext_4F2B80` | `int* PhysicsTerrain_GetContext_4F2B80(int* arg1)` | `0x004F2B80` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |

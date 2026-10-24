@@ -1,0 +1,37 @@
+{
+  "name": "igi",
+  "description": "Project I.G.I. retail Windows x86 (igi.exe) profile for the autonomous RE harness.",
+  "target": {
+    "kind": "pe32",
+    "arch": "x86",
+    "bits": 32,
+    "calling_convention": "mixed cdecl/thiscall (instance methods are thiscall; free functions cdecl)",
+    "retail_binary": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+    "retail_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+    "image_base": "0x400000",
+    "entry_point_va": "0x401000",
+    "code_range": ["0x401000", "0x532510"],
+    "note": "Addresses are retail virtual addresses (VA) with image base 0x400000. Recheck the SHA-256 before reusing any address evidence."
+  },
+  "natives": {
+    "catalog": "assets/IGINatives_v4.json",
+    "catalog_key": "Natives",
+    "address_field": "address",
+    "registrars": [
+      "0x4B8890",
+      "0x4BAAC0",
+      "0x4B88C0",
+      "0x4B88F0"
+    ],
+    "registration_pattern": "push <name-string-ptr>; push <fn-ptr>; call <registrar> (the immediate push-run before a registrar call carries the (name, fn) pair; not every callsite is a clean 2-push registration)",
+    "name_string_section": ".rdata"
+  },
+  "runtime": {
+    "workdir": "/Users/haseeb-mir/Downloads/IGI",
+    "launcher": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+    "mutex": "IGIMUTEX",
+    "data_root_check": "YMBE.AFP (retail startup reads this by relative path; workdir must be the game data root)",
+    "note": "Attach after launch misses startup calls; record that limitation. Run retail and port sequentially (one process at a time) because both use IGIMUTEX."
+  },
+  "evidence_dir": "docs/fidelity/evidence"
+}

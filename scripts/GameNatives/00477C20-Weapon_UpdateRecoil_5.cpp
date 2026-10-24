@@ -1,0 +1,10 @@
+// IGI native provenance: Weapon_UpdateRecoil_5 - 0x00477C20 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
+// Evidence: 00477C20-Weapon_UpdateRecoil_5.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
+#include "00477C20-Weapon_UpdateRecoil_5.hpp"
+int Weapon_UpdateRecoil_5()
+
+{
+    int result;
+    result = g_5407ba;
+    return result;
+}

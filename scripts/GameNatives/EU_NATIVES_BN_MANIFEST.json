@@ -1,0 +1,869 @@
+{
+ "generated": "2026-10-24T03:25:57+05:30",
+ "source": "Binary Ninja MCP http://127.0.0.1:24642/mcp (authorization=disabled)",
+ "bn_view": {
+  "handle": "view_1",
+  "format": "PE",
+  "arch": "x86",
+  "platform": "windows-x86",
+  "entry": "0x4a50f5"
+ },
+ "destination": "Scripts/GameNatives",
+ "skip_rule": "native considered already present only if a .cpp with BN-marker \"Source: Binary Ninja MCP decompile\" existed for that address; 12 such files were re-validated against live BN output",
+ "natives": [
+  {
+   "addr": "0x00401530",
+   "addr_key": "401530",
+   "bn_name": "QTask_LinkQTaskEventHandlerNoContextFn",
+   "definition": "int32_t(uint16_t event_id, int32_t context, uint32_t flags)",
+   "status": "copied_humanized",
+   "cpp": "00401530-QTask_LinkQTaskEventHandlerNoContextFn.cpp",
+   "hpp": "00401530-QTask_LinkQTaskEventHandlerNoContextFn.hpp",
+   "sha256_cpp": "abed32999874d8fdd055f75feb56df0dad3f8167b7ee3ab8da2dd829d331a21a",
+   "replaced": [
+    {
+     "path": "00401530-QTask_LinkQTaskEventHandlerNoContextFn.cpp",
+     "backup": "/tmp/eu_overwritten/00401530-QTask_LinkQTaskEventHandlerNoContextFn.cpp",
+     "sha256_before": "3e867622aff6b110460e449fa05efd028c12f2fa1e458b78ee289a4968359ac4"
+    },
+    {
+     "path": "00401530-QTask_LinkQTaskEventHandlerNoContextFn.hpp",
+     "backup": "/tmp/eu_overwritten/00401530-QTask_LinkQTaskEventHandlerNoContextFn.hpp",
+     "sha256_before": "99507c040a4ee6b4e4f8d3e38e40a19a2f54b7c068d56b1b55c9731c452ad3f4"
+    }
+   ]
+  },
+  {
+   "addr": "0x00401810",
+   "addr_key": "401810",
+   "bn_name": "QTask_NewQTaskEventNoContextFn",
+   "definition": "int32_t(int16_t arg1)",
+   "status": "copied_humanized",
+   "cpp": "00401810-QTask_NewQTaskEventNoContextFn.cpp",
+   "hpp": "00401810-QTask_NewQTaskEventNoContextFn.hpp",
+   "sha256_cpp": "95ca3b8ac03dc6b1e6860a1e1ce5115b6b2576fbbabc7efa41cc3edadf991a62",
+   "replaced": [
+    {
+     "path": "00401810-QTask_NewQTaskEventNoContextFn.cpp",
+     "backup": "/tmp/eu_overwritten/00401810-QTask_NewQTaskEventNoContextFn.cpp",
+     "sha256_before": "544b4aeb6748e527e056ad6efe65da709da1b4970b6b1580f4b61e2172c561dc"
+    },
+    {
+     "path": "00401810-QTask_NewQTaskEventNoContextFn.hpp",
+     "backup": "/tmp/eu_overwritten/00401810-QTask_NewQTaskEventNoContextFn.hpp",
+     "sha256_before": "0841d067b4a501ccc6c6276ba0e03324aab7d3c944881480ad5b4622a38db270"
+    }
+   ]
+  },
+  {
+   "addr": "0x004018e0",
+   "addr_key": "4018e0",
+   "bn_name": "QTask_DeleteQTaskEventNoContext",
+   "definition": "uint32_t(int32_t arg1)",
+   "status": "copied_humanized",
+   "cpp": "004018e0-QTask_DeleteQTaskEventNoContext.cpp",
+   "hpp": "004018e0-QTask_DeleteQTaskEventNoContext.hpp",
+   "sha256_cpp": "7e1cd51f5e125d11f40a04790603707f30b67f78a6d66b0276c2e7a93379925c",
+   "replaced": [
+    {
+     "path": "004018e0-QTask_DeleteQTaskEventNoContext.cpp",
+     "backup": "/tmp/eu_overwritten/004018e0-QTask_DeleteQTaskEventNoContext.cpp",
+     "sha256_before": "e2c6f6fd01b809b9903bd65b5de852d1f85ca61eb010aa63c8573890dc603c92"
+    }
+   ]
+  },
+  {
+   "addr": "0x00401a20",
+   "addr_key": "401a20",
+   "bn_name": "QTask_DeleteQTaskType",
+   "definition": "uint32_t(int16_t arg1)",
+   "status": "copied_humanized",
+   "cpp": "00401a20-QTask_DeleteQTaskType.cpp",
+   "hpp": "00401a20-QTask_DeleteQTaskType.hpp",
+   "sha256_cpp": "e8790e2de15e9b8ad2d2d8bac3f09b4906bf4635d08b6a04f4b176e6181d00c5",
+   "replaced": [
+    {
+     "path": "00401a20-QTask_DeleteQTaskType.cpp",
+     "backup": "/tmp/eu_overwritten/00401a20-QTask_DeleteQTaskType.cpp",
+     "sha256_before": "65c4024012db9657b64e2aa376baece082cdd1704958b84c60a29c15cff55304"
+    }
+   ]
+  },
+  {
+   "addr": "0x00401cf0",
+   "addr_key": "401cf0",
+   "bn_name": "QTask_IsQTaskTypeDerived",
+   "definition": "int32_t(int32_t arg1, int16_t arg2)",
+   "status": "copied_humanized",
+   "cpp": "00401cf0-QTask_IsQTaskTypeDerived.cpp",
+   "hpp": "00401cf0-QTask_IsQTaskTypeDerived.hpp",
+   "sha256_cpp": "58db303db92c304de6bf0948b98d42566ea17c03e56a62b2f1a68aa5987eadc0",
+   "replaced": [
+    {
+     "path": "00401cf0-QTask_IsQTaskTypeDerived.cpp",
+     "backup": "/tmp/eu_overwritten/00401cf0-QTask_IsQTaskTypeDerived.cpp",
+     "sha256_before": "6824bb50da6c01a5d0cf23bf41dd6660f4cbd4f4080bdb44d5705db9b28e0bc3"
+    },
+    {
+     "path": "00401cf0-QTask_IsQTaskTypeDerived.hpp",
+     "backup": "/tmp/eu_overwritten/00401cf0-QTask_IsQTaskTypeDerived.hpp",
+     "sha256_before": "5231cea4fcec9be5e18e95c6fa96f317023e2e557a41bfc762bdc3ad97a11626"
+    }
+   ]
+  },
+  {
+   "addr": "0x004028b0",
+   "addr_key": "4028b0",
+   "bn_name": "Flow_GetTicks",
+   "definition": "uint32_t()",
+   "status": "copied_humanized",
+   "cpp": "004028b0-Flow_GetTicks.cpp",
+   "hpp": "004028b0-Flow_GetTicks.hpp",
+   "sha256_cpp": "a61ab8a00a11874939d444ec797fb215471b2270ebfac4a1586d3288a1dfaf04",
+   "replaced": [
+    {
+     "path": "004028b0-Flow_GetTicks.cpp",
+     "backup": "/tmp/eu_overwritten/004028b0-Flow_GetTicks.cpp",
+     "sha256_before": "f5924f93110f7c258a428fc1c7b2c1cc731967ccbb68bef008c1db6b150e9d14"
+    },
+    {
+     "path": "004028b0-Flow_GetTicks.hpp",
+     "backup": "/tmp/eu_overwritten/004028b0-Flow_GetTicks.hpp",
+     "sha256_before": "27f158c3cb00c38cd8ea615831037140d0f0e68b87a3f62bf5385190ee8de196"
+    }
+   ]
+  },
+  {
+   "addr": "0x00404590",
+   "addr_key": "404590",
+   "bn_name": "Config_GetActiveGraphicOptions",
+   "definition": "void*()",
+   "status": "copied_humanized",
+   "cpp": "00404590-Config_GetActiveGraphicOptions.cpp",
+   "hpp": "00404590-Config_GetActiveGraphicOptions.hpp",
+   "sha256_cpp": "9745bc8e7f8ab79d55082c78dd4dbf2656f7253e03d59ffa4d668fa156f75bf7",
+   "replaced": [
+    {
+     "path": "00404590-Config_GetActiveGraphicOptions.cpp",
+     "backup": "/tmp/eu_overwritten/00404590-Config_GetActiveGraphicOptions.cpp",
+     "sha256_before": "221c6aed0965fa63c108a8e7f19698d060fb00fd9b0f8636922486e027c5c936"
+    },
+    {
+     "path": "00404590-Config_GetActiveGraphicOptions.hpp",
+     "backup": "/tmp/eu_overwritten/00404590-Config_GetActiveGraphicOptions.hpp",
+     "sha256_before": "a1c6b63c53a858d22ea817bc1a8c8966352d3a0c05c40995c1fb7cc178e0a8a7"
+    }
+   ]
+  },
+  {
+   "addr": "0x00406220",
+   "addr_key": "406220",
+   "bn_name": "Config_GetActivePlayerProfile",
+   "definition": "void*()",
+   "status": "copied_humanized",
+   "cpp": "00406220-Config_GetActivePlayerProfile.cpp",
+   "hpp": "00406220-Config_GetActivePlayerProfile.hpp",
+   "sha256_cpp": "44d427b41d23484fb5e9b095e2abb648213c91748cf6041c4f794d742a0ca8cf",
+   "replaced": [
+    {
+     "path": "00406220-Config_GetActivePlayerProfile.cpp",
+     "backup": "/tmp/eu_overwritten/00406220-Config_GetActivePlayerProfile.cpp",
+     "sha256_before": "332999a5342eec1a848fcd66b9139e9d4ffd1e8e5bea9d3b4a4290890fade6fa"
+    },
+    {
+     "path": "00406220-Config_GetActivePlayerProfile.hpp",
+     "backup": "/tmp/eu_overwritten/00406220-Config_GetActivePlayerProfile.hpp",
+     "sha256_before": "819392ff475c2113bcf01b7ecbad514918df18a90b7c80930d1cfb861ac8b8fc"
+    }
+   ]
+  },
+  {
+   "addr": "0x00414fd0",
+   "addr_key": "414fd0",
+   "bn_name": "GameFunctions_IsDebugKeyPressed",
+   "definition": "int32_t(void* arg1)",
+   "status": "copied_humanized",
+   "cpp": "00414fd0-GameFunctions_IsDebugKeyPressed.cpp",
+   "hpp": "00414fd0-GameFunctions_IsDebugKeyPressed.hpp",
+   "sha256_cpp": "cf2816195b0b62bf833e0070282525eb3afac924419e9a45b970a806562ec415",
+   "replaced": [
+    {
+     "path": "00414fd0-GameFunctions_IsDebugKeyPressed.cpp",
+     "backup": "/tmp/eu_overwritten/00414fd0-GameFunctions_IsDebugKeyPressed.cpp",
+     "sha256_before": "2153a2df045a3ee73149a8819ffcecd9c5a6b1838efcf9da22368aec885e0d12"
+    },
+    {
+     "path": "00414fd0-GameFunctions_IsDebugKeyPressed.hpp",
+     "backup": "/tmp/eu_overwritten/00414fd0-GameFunctions_IsDebugKeyPressed.hpp",
+     "sha256_before": "b1b51c2398619cd9a7295f6b6c12de45697e59b51407449e9e0bb6eb147b23e6"
+    }
+   ]
+  },
+  {
+   "addr": "0x00424ce0",
+   "addr_key": "424ce0",
+   "bn_name": "Cursor_RunHandler",
+   "definition": "int32_t(void* arg1)",
+   "status": "copied_humanized",
+   "cpp": "00424ce0-Cursor_RunHandler.cpp",
+   "hpp": "00424ce0-Cursor_RunHandler.hpp",
+   "sha256_cpp": "1cdd8aa5cd62633d323f4f89702c09b4fcb73e0ffab38119cf1979661abe403c",
+   "replaced": [
+    {
+     "path": "00424ce0-Cursor_RunHandler.cpp",
+     "backup": "/tmp/eu_overwritten/00424ce0-Cursor_RunHandler.cpp",
+     "sha256_before": "46225ea6cf65ac1699fe570ec9123f39c33832fd08b92df3b903448afad2d39a"
+    },
+    {
+     "path": "00424ce0-Cursor_RunHandler.hpp",
+     "backup": "/tmp/eu_overwritten/00424ce0-Cursor_RunHandler.hpp",
+     "sha256_before": "6188086e2453ac55da1745525c5d595b7770edb0d318da9a626325787e404036"
+    }
+   ]
+  },
+  {
+   "addr": "0x004610c0",
+   "addr_key": "4610c0",
+   "bn_name": "AI_UpdateOrders_18",
+   "definition": "int32_t(float arg1)",
+   "status": "copied_humanized",
+   "cpp": "004610c0-AI_UpdateOrders_18.cpp",
+   "hpp": "004610c0-AI_UpdateOrders_18.hpp",
+   "sha256_cpp": "482261a9d6b0724c1d271d366e5f693b6a627fd4f550273986bd5af280001700",
+   "replaced": []
+  },
+  {
+   "addr": "0x00464800",
+   "addr_key": "464800",
+   "bn_name": "HumanView_UpdateView",
+   "definition": "float(float arg1, float arg2) __location(\"eax\")",
+   "status": "copied_humanized",
+   "cpp": "00464800-HumanView_UpdateView.cpp",
+   "hpp": "00464800-HumanView_UpdateView.hpp",
+   "sha256_cpp": "62386e6a4b021532b0f0336bc70d3f966a98e9fcae7bc1db36ed65d0ae4f1b26",
+   "replaced": [
+    {
+     "path": "00464800-HumanView_UpdateView.cpp",
+     "backup": "/tmp/eu_overwritten/00464800-HumanView_UpdateView.cpp",
+     "sha256_before": "aa004d0f1abc711d8981eb1236f04cc9d78ce787f929f8377ab76cf5535ec8ef"
+    },
+    {
+     "path": "00464800-HumanView_UpdateView.hpp",
+     "backup": "/tmp/eu_overwritten/00464800-HumanView_UpdateView.hpp",
+     "sha256_before": "97a4f902fc174106d4025dd905b3b793eaa1807321ba45c2c92666dc838ed2e9"
+    }
+   ]
+  },
+  {
+   "addr": "0x00464bd0",
+   "addr_key": "464bd0",
+   "bn_name": "HumanView_UpdateBody",
+   "definition": "int32_t(void* arg1, void* arg2)",
+   "status": "copied_humanized",
+   "cpp": "00464bd0-HumanView_UpdateBody.cpp",
+   "hpp": "00464bd0-HumanView_UpdateBody.hpp",
+   "sha256_cpp": "f3c00991224c5c38c74b94b69753d3ccc2727f08d0153cfe18a21377947d861c",
+   "replaced": []
+  },
+  {
+   "addr": "0x0048f0a0",
+   "addr_key": "48f0a0",
+   "bn_name": "AppContext_GethWnd",
+   "definition": "int32_t()",
+   "status": "copied_humanized",
+   "cpp": "0048f0a0-AppContext_GethWnd.cpp",
+   "hpp": "0048f0a0-AppContext_GethWnd.hpp",
+   "sha256_cpp": "47dffc606456c2f1ce0158164ec066411524239d90e036d87de675587917e228",
+   "replaced": [
+    {
+     "path": "0048f0a0-AppContext_GethWnd.cpp",
+     "backup": "/tmp/eu_overwritten/0048f0a0-AppContext_GethWnd.cpp",
+     "sha256_before": "c7964612d35c94fdbae90a262d4650e76be633dfc23846f94ca3ddea548733d3"
+    },
+    {
+     "path": "0048f0a0-AppContext_GethWnd.hpp",
+     "backup": "/tmp/eu_overwritten/0048f0a0-AppContext_GethWnd.hpp",
+     "sha256_before": "056362ffaa07d1313c5a41dc3936fcbeb111823d9fe4e2d304faf2d01c73763a"
+    }
+   ]
+  },
+  {
+   "addr": "0x0048f1a0",
+   "addr_key": "48f1a0",
+   "bn_name": "AppContext_SetDebugged",
+   "definition": "int32_t(char arg1)",
+   "status": "copied_humanized",
+   "cpp": "0048f1a0-AppContext_SetDebugged.cpp",
+   "hpp": "0048f1a0-AppContext_SetDebugged.hpp",
+   "sha256_cpp": "073562b57e3da222c91b224e15b18546647e4941dbc811bb87bae1b874abc081",
+   "replaced": [
+    {
+     "path": "0048f1a0-AppContext_SetDebugged.cpp",
+     "backup": "/tmp/eu_overwritten/0048f1a0-AppContext_SetDebugged.cpp",
+     "sha256_before": "2c038832695dea6c9240a911d8bbb207d1176d99ae37471a902d651db3acb9b8"
+    }
+   ]
+  },
+  {
+   "addr": "0x0048f1e0",
+   "addr_key": "48f1e0",
+   "bn_name": "AppContext_SetDebugtextState",
+   "definition": "int32_t(char arg1)",
+   "status": "copied_humanized",
+   "cpp": "0048f1e0-AppContext_SetDebugtextState.cpp",
+   "hpp": "0048f1e0-AppContext_SetDebugtextState.hpp",
+   "sha256_cpp": "d1705883cd4963e6cded501ffca5ad8f3070db53f3dc3192b71ff6dd99fbf578",
+   "replaced": [
+    {
+     "path": "0048f1e0-AppContext_SetDebugtextState.cpp",
+     "backup": "/tmp/eu_overwritten/0048f1e0-AppContext_SetDebugtextState.cpp",
+     "sha256_before": "90b6ef91929af705dba5b863d831fb0155b3a94952ee6ed43ed5ff4aa92195fc"
+    }
+   ]
+  },
+  {
+   "addr": "0x0048f260",
+   "addr_key": "48f260",
+   "bn_name": "AppContext_SetTerrainLightmapsUsed",
+   "definition": "int32_t(char arg1)",
+   "status": "copied_humanized",
+   "cpp": "0048f260-AppContext_SetTerrainLightmapsUsed.cpp",
+   "hpp": "0048f260-AppContext_SetTerrainLightmapsUsed.hpp",
+   "sha256_cpp": "da3134b5c9208e25226ce9e8c4b8ac1efb7bf25424929829ca7cb0bed5a0f6a7",
+   "replaced": [
+    {
+     "path": "0048f260-AppContext_SetTerrainLightmapsUsed.cpp",
+     "backup": "/tmp/eu_overwritten/0048f260-AppContext_SetTerrainLightmapsUsed.cpp",
+     "sha256_before": "7bfed79736facca365c3c88fd4566f7ce049469a09b5ae55bfc82c097f85046f"
+    }
+   ]
+  },
+  {
+   "addr": "0x0048f360",
+   "addr_key": "48f360",
+   "bn_name": "AppMain_ParseCmdLineArgs",
+   "definition": "void*(char* arg1, int32_t arg2)",
+   "status": "copied_humanized",
+   "cpp": "0048f360-AppMain_ParseCmdLineArgs.cpp",
+   "hpp": "0048f360-AppMain_ParseCmdLineArgs.hpp",
+   "sha256_cpp": "647181064a331d7f5f0c2f88a9fa8c59b063e0a6962a7401d38d022fe1f5ae17",
+   "replaced": [
+    {
+     "path": "0048f360-AppMain_ParseCmdLineArgs.cpp",
+     "backup": "/tmp/eu_overwritten/0048f360-AppMain_ParseCmdLineArgs.cpp",
+     "sha256_before": "bc4ed4f23649db7c40294ad9fdb121a0bf9ef3054c8522d6b09de8f652ff48ca"
+    },
+    {
+     "path": "0048f360-AppMain_ParseCmdLineArgs.hpp",
+     "backup": "/tmp/eu_overwritten/0048f360-AppMain_ParseCmdLineArgs.hpp",
+     "sha256_before": "c4a0cb1e2662fe7ce15fb6c05fd9f3250c833e9887294914185b0b6797518dfc"
+    }
+   ]
+  },
+  {
+   "addr": "0x0048fc20",
+   "addr_key": "48fc20",
+   "bn_name": "Mouse_Update",
+   "definition": "int32_t()",
+   "status": "copied_humanized",
+   "cpp": "0048fc20-Mouse_Update.cpp",
+   "hpp": "0048fc20-Mouse_Update.hpp",
+   "sha256_cpp": "c2eb0e5d3fc0bfe448d4f04b99f502b33d342ed4d49d735a9a9e93529b02f242",
+   "replaced": [
+    {
+     "path": "0048fc20-Mouse_Update.cpp",
+     "backup": "/tmp/eu_overwritten/0048fc20-Mouse_Update.cpp",
+     "sha256_before": "66cc66a0eae2b13ebbaf0e11777ef0fbcecd1051f64744fcef89b6bc6a0e473e"
+    },
+    {
+     "path": "0048fc20-Mouse_Update.hpp",
+     "backup": "/tmp/eu_overwritten/0048fc20-Mouse_Update.hpp",
+     "sha256_before": "4668d515c89311406ea71c8f8f22436618772b5b5b634af603ebd330919beab9"
+    }
+   ]
+  },
+  {
+   "addr": "0x00490230",
+   "addr_key": "490230",
+   "bn_name": "Keyboard_Update",
+   "definition": "int32_t()",
+   "status": "copied_humanized",
+   "cpp": "00490230-Keyboard_Update.cpp",
+   "hpp": "00490230-Keyboard_Update.hpp",
+   "sha256_cpp": "06e251a0c7cac8074bb72fee13245e0f1725477dda9bfde0495ddbcdaff686d1",
+   "replaced": [
+    {
+     "path": "00490230-Keyboard_Update.hpp",
+     "backup": "/tmp/eu_overwritten/00490230-Keyboard_Update.hpp",
+     "sha256_before": "25c69d5e84d2e8626371f556d57d9b8c48023b64b7b37e6a8e173357671451e9"
+    }
+   ]
+  },
+  {
+   "addr": "0x00491a90",
+   "addr_key": "491a90",
+   "bn_name": "Display_SetMode",
+   "definition": "int32_t(void* arg1)",
+   "status": "copied_humanized",
+   "cpp": "00491a90-Display_SetMode.cpp",
+   "hpp": "00491a90-Display_SetMode.hpp",
+   "sha256_cpp": "d1b334e792e8f312a42bc4aabd9a22f363a8713650c999c412ff66e9e9f7f8b9",
+   "replaced": []
+  },
+  {
+   "addr": "0x00491cf0",
+   "addr_key": "491cf0",
+   "bn_name": "Display_GetActiveMode",
+   "definition": "int32_t() __pure",
+   "status": "copied_humanized",
+   "cpp": "00491cf0-Display_GetActiveMode.cpp",
+   "hpp": "00491cf0-Display_GetActiveMode.hpp",
+   "sha256_cpp": "6c9dda4142d91ba3e7beacc46f82ae152da5a283095423638d1b889c6a6359e6",
+   "replaced": []
+  },
+  {
+   "addr": "0x00491e70",
+   "addr_key": "491e70",
+   "bn_name": "Display_SetBackgroundColourFn",
+   "definition": "uint32_t(char arg1, char arg2, char arg3)",
+   "status": "copied_humanized",
+   "cpp": "00491e70-Display_SetBackgroundColourFn.cpp",
+   "hpp": "00491e70-Display_SetBackgroundColourFn.hpp",
+   "sha256_cpp": "972bfad4760f3a67fc67b1dcfc69263cf18bba5aab1a5c00e9cb5e6d9f3202dd",
+   "replaced": []
+  },
+  {
+   "addr": "0x00497e70",
+   "addr_key": "497e70",
+   "bn_name": "Transcontext_SetActiveTransContext",
+   "definition": "int32_t(int32_t* arg1)",
+   "status": "copied_humanized",
+   "cpp": "00497e70-Transcontext_SetActiveTransContext.cpp",
+   "hpp": "00497e70-Transcontext_SetActiveTransContext.hpp",
+   "sha256_cpp": "e8b7186acb01ebe4de74ce972dba1e68c1f15e6778304e3368a3d57aa495055f",
+   "replaced": [
+    {
+     "path": "00497e70-Transcontext_SetActiveTransContext.cpp",
+     "backup": "/tmp/eu_overwritten/00497e70-Transcontext_SetActiveTransContext.cpp",
+     "sha256_before": "89c0d47ef196f66cb53ecfe4e62fbd80c398148b39ebd17b706b556c829f73b2"
+    }
+   ]
+  },
+  {
+   "addr": "0x004a53b3",
+   "addr_key": "4a53b3",
+   "bn_name": "sprintf",
+   "definition": "int32_t(char* arg1, char* arg2)",
+   "status": "copied_humanized",
+   "cpp": "004a53b3-sprintf.cpp",
+   "hpp": "004a53b3-sprintf.hpp",
+   "sha256_cpp": "fa6fe7580fd584738e6d587611c1ee78b131c4a8eff70829a21e92d90511abeb",
+   "replaced": []
+  },
+  {
+   "addr": "0x004b0c60",
+   "addr_key": "4b0c60",
+   "bn_name": "Mem_AllocFn",
+   "definition": "void*(int32_t arg1, int32_t arg2)",
+   "status": "copied_humanized",
+   "cpp": "004b0c60-Mem_AllocFn.cpp",
+   "hpp": "004b0c60-Mem_AllocFn.hpp",
+   "sha256_cpp": "c3a8e9c3f79c486a5e228f283cb65af79bfc57c8e314d76ac7db49b3d7356ca0",
+   "replaced": [
+    {
+     "path": "004b0c60-Mem_AllocFn.hpp",
+     "backup": "/tmp/eu_overwritten/004b0c60-Mem_AllocFn.hpp",
+     "sha256_before": "bca5c0c38a38698a313305ed26494488deb19c7cae0cb7039dd2e4ceef7dd19d"
+    }
+   ]
+  },
+  {
+   "addr": "0x004b0d10",
+   "addr_key": "4b0d10",
+   "bn_name": "Mem_DeAllocFn",
+   "definition": "int32_t(void* arg1)",
+   "status": "copied_humanized",
+   "cpp": "004b0d10-Mem_DeAllocFn.cpp",
+   "hpp": "004b0d10-Mem_DeAllocFn.hpp",
+   "sha256_cpp": "66a162f23040fab2ab22ada772b18948285b5622ce1fe9bb9963f6a04a4fb8ae",
+   "replaced": [
+    {
+     "path": "004b0d10-Mem_DeAllocFn.hpp",
+     "backup": "/tmp/eu_overwritten/004b0d10-Mem_DeAllocFn.hpp",
+     "sha256_before": "efce889e3dcc3fed47ac8a769d5325d0a0c2ce7705819f2f30bbcec5d5f28dff"
+    }
+   ]
+  },
+  {
+   "addr": "0x004b38e0",
+   "addr_key": "4b38e0",
+   "bn_name": "Real32x9_Create",
+   "definition": "int32_t(float* arg1, float arg2, float arg3, float arg4)",
+   "status": "copied_humanized",
+   "cpp": "004b38e0-Real32x9_Create.cpp",
+   "hpp": "004b38e0-Real32x9_Create.hpp",
+   "sha256_cpp": "03429f2d0e7429a01165ad33a0ae90689cdcc6c35fd63f253a60ac7c44f693bd",
+   "replaced": [
+    {
+     "path": "004b38e0-Real32x9_Create.hpp",
+     "backup": "/tmp/eu_overwritten/004b38e0-Real32x9_Create.hpp",
+     "sha256_before": "a90c761f6c6d9eebbc99feccd17fdbe4e53ec76fa0d39cbff595861e21708fd0"
+    }
+   ]
+  },
+  {
+   "addr": "0x004b6e70",
+   "addr_key": "4b6e70",
+   "bn_name": "Picture_GetWidth",
+   "definition": "int32_t(int32_t* arg1)",
+   "status": "copied_humanized",
+   "cpp": "004b6e70-Picture_GetWidth.cpp",
+   "hpp": "004b6e70-Picture_GetWidth.hpp",
+   "sha256_cpp": "11e5b5446a52c9c7ca89af9129ec117404391e3dec861c41a652ea6549537623",
+   "replaced": [
+    {
+     "path": "004b6e70-Picture_GetWidth.cpp",
+     "backup": "/tmp/eu_overwritten/004b6e70-Picture_GetWidth.cpp",
+     "sha256_before": "7ca61b2e0d045b022fe56698974cc542172f7af41f90588c5db8bc51af2977f6"
+    },
+    {
+     "path": "004b6e70-Picture_GetWidth.hpp",
+     "backup": "/tmp/eu_overwritten/004b6e70-Picture_GetWidth.hpp",
+     "sha256_before": "28aa60edc6ebf662d261fbc59c3c41fcaf6ffe7a815b607f4d0c31d8624a1602"
+    }
+   ]
+  },
+  {
+   "addr": "0x004b6e80",
+   "addr_key": "4b6e80",
+   "bn_name": "Picture_GetHeight",
+   "definition": "int32_t(int32_t* arg1)",
+   "status": "copied_humanized",
+   "cpp": "004b6e80-Picture_GetHeight.cpp",
+   "hpp": "004b6e80-Picture_GetHeight.hpp",
+   "sha256_cpp": "95554d53d62fde0aa3a33e80a4e1458358f8a8ef6d8b55a64cd5ff732178a42f",
+   "replaced": [
+    {
+     "path": "004b6e80-Picture_GetHeight.cpp",
+     "backup": "/tmp/eu_overwritten/004b6e80-Picture_GetHeight.cpp",
+     "sha256_before": "1deed6151e0d4d8afaba2e0b7ae583db73482308b71da441149935bee4faf573"
+    },
+    {
+     "path": "004b6e80-Picture_GetHeight.hpp",
+     "backup": "/tmp/eu_overwritten/004b6e80-Picture_GetHeight.hpp",
+     "sha256_before": "2d75b82ecfe62f1932e65e07ad30a6ab69b193aa136dc8a4601c87054e15fb04"
+    }
+   ]
+  },
+  {
+   "addr": "0x004b8a20",
+   "addr_key": "4b8a20",
+   "bn_name": "Script_EvalArgInt",
+   "definition": "int32_t(float arg1, int32_t arg2)",
+   "status": "copied_humanized",
+   "cpp": "004b8a20-Script_EvalArgInt.cpp",
+   "hpp": "004b8a20-Script_EvalArgInt.hpp",
+   "sha256_cpp": "d0e6f9af8b829595a2675d0366e1b5ecab6208b2e3abd3ff738251ab44b7c8b5",
+   "replaced": [
+    {
+     "path": "004b8a20-Script_EvalArgInt.hpp",
+     "backup": "/tmp/eu_overwritten/004b8a20-Script_EvalArgInt.hpp",
+     "sha256_before": "7065cb544b05d75edc90c8d7fabdf4026ff9fb537742e705ddc9b0357956887c"
+    }
+   ]
+  },
+  {
+   "addr": "0x004c1790",
+   "addr_key": "4c1790",
+   "bn_name": "QTaskList_Register",
+   "definition": "int32_t*(int32_t* arg1, int32_t arg2)",
+   "status": "copied_humanized",
+   "cpp": "004c1790-QTaskList_Register.cpp",
+   "hpp": "004c1790-QTaskList_Register.hpp",
+   "sha256_cpp": "897a2f27a2685ce7e2911da7022dcbcfae88abecaa5702d3ee701eb2d79264e5",
+   "replaced": [
+    {
+     "path": "004c1790-QTaskList_Register.cpp",
+     "backup": "/tmp/eu_overwritten/004c1790-QTaskList_Register.cpp",
+     "sha256_before": "efdf88adad388625ca6fff045d7497f54617eeb95e827b0b0ba9eb48b3c890dc"
+    },
+    {
+     "path": "004c1790-QTaskList_Register.hpp",
+     "backup": "/tmp/eu_overwritten/004c1790-QTaskList_Register.hpp",
+     "sha256_before": "f8f3ddea3bb3b06a15b1cbf87d6c2db1f7687ccbfce8b896cc461ec062e619c0"
+    }
+   ]
+  },
+  {
+   "addr": "0x004c17c0",
+   "addr_key": "4c17c0",
+   "bn_name": "QTaskList_Remove",
+   "definition": "int32_t(int32_t* arg1, int32_t arg2)",
+   "status": "copied_humanized",
+   "cpp": "004c17c0-QTaskList_Remove.cpp",
+   "hpp": "004c17c0-QTaskList_Remove.hpp",
+   "sha256_cpp": "c99beeaebfcda4bcad9ba5986dbee6da8fbdf64d946da8e0dec12b30d5f66b9a",
+   "replaced": [
+    {
+     "path": "004c17c0-QTaskList_Remove.cpp",
+     "backup": "/tmp/eu_overwritten/004c17c0-QTaskList_Remove.cpp",
+     "sha256_before": "5c6b7507c781ffa7e486cf73ec90f95b279a20ef1a22f4cb08aed78860d49b7c"
+    },
+    {
+     "path": "004c17c0-QTaskList_Remove.hpp",
+     "backup": "/tmp/eu_overwritten/004c17c0-QTaskList_Remove.hpp",
+     "sha256_before": "a3e2d0d8f087b26dc4abd4a51b8f53789c3a9876e5856f2abcbb0553d529b673"
+    }
+   ]
+  },
+  {
+   "addr": "0x004c1800",
+   "addr_key": "4c1800",
+   "bn_name": "QTaskList_New",
+   "definition": "int32_t*(int32_t arg1)",
+   "status": "copied_humanized",
+   "cpp": "004c1800-QTaskList_New.cpp",
+   "hpp": "004c1800-QTaskList_New.hpp",
+   "sha256_cpp": "9f33f37f845042b3122d2deae9cb9352f188d443661e57d846640711e735c4e4",
+   "replaced": [
+    {
+     "path": "004c1800-QTaskList_New.cpp",
+     "backup": "/tmp/eu_overwritten/004c1800-QTaskList_New.cpp",
+     "sha256_before": "4cd481c5828292d438e1e5032e466cb9b34a0c46619d70abdde0e30b4046a7c0"
+    },
+    {
+     "path": "004c1800-QTaskList_New.hpp",
+     "backup": "/tmp/eu_overwritten/004c1800-QTaskList_New.hpp",
+     "sha256_before": "7f5122e298f20072057593957adee23bd402fc9e44442b222c8ba799021fd480"
+    }
+   ]
+  },
+  {
+   "addr": "0x004c1830",
+   "addr_key": "4c1830",
+   "bn_name": "QTaskList_Delete",
+   "definition": "int32_t(void* arg1)",
+   "status": "copied_humanized",
+   "cpp": "004c1830-QTaskList_Delete.cpp",
+   "hpp": "004c1830-QTaskList_Delete.hpp",
+   "sha256_cpp": "f549f6395eba83f3d90c77350f9b012d07fcf3ba5a4c1d2d64b3cc7105777623",
+   "replaced": [
+    {
+     "path": "004c1830-QTaskList_Delete.cpp",
+     "backup": "/tmp/eu_overwritten/004c1830-QTaskList_Delete.cpp",
+     "sha256_before": "f03614eadfdccc60f3b41b4bb057962f8ba279713162d442b95aa018a4e1255b"
+    },
+    {
+     "path": "004c1830-QTaskList_Delete.hpp",
+     "backup": "/tmp/eu_overwritten/004c1830-QTaskList_Delete.hpp",
+     "sha256_before": "d5a4a4b422defbb3660c254a955bf46c0e3c770ac0beb4c79881a61e6da2a758"
+    }
+   ]
+  },
+  {
+   "addr": "0x004d3210",
+   "addr_key": "4d3210",
+   "bn_name": "AnimController_UpdateChannels",
+   "definition": "int32_t(int32_t arg1, int32_t* arg2)",
+   "status": "copied_humanized",
+   "cpp": "004d3210-AnimController_UpdateChannels.cpp",
+   "hpp": "004d3210-AnimController_UpdateChannels.hpp",
+   "sha256_cpp": "7859bb3deb6ec629803227cf7550ab261f3a3d57b157bdf049ca08b5932f228a",
+   "replaced": [
+    {
+     "path": "004d3210-AnimController_UpdateChannels.cpp",
+     "backup": "/tmp/eu_overwritten/004d3210-AnimController_UpdateChannels.cpp",
+     "sha256_before": "30ec9f6c5c662a86223500ada7c556d3e168dcabeaee73b28637e5b0c79fbddd"
+    }
+   ]
+  },
+  {
+   "addr": "0x004d9610",
+   "addr_key": "4d9610",
+   "bn_name": "BoneDynCubeObj_GetQTaskType",
+   "definition": "int32_t()",
+   "status": "copied_humanized",
+   "cpp": "004d9610-BoneDynCubeObj_GetQTaskType.cpp",
+   "hpp": "004d9610-BoneDynCubeObj_GetQTaskType.hpp",
+   "sha256_cpp": "344e1db67ced1fae1747c1f533946d19d7d628b29dc2fe9f5a5be5758eb8939f",
+   "replaced": [
+    {
+     "path": "004d9610-BoneDynCubeObj_GetQTaskType.cpp",
+     "backup": "/tmp/eu_overwritten/004d9610-BoneDynCubeObj_GetQTaskType.cpp",
+     "sha256_before": "6de18b1ebb2efeea590fb68598af608a9d8e2afc43dd13f9a41c989020876e46"
+    }
+   ]
+  },
+  {
+   "addr": "0x004e6030",
+   "addr_key": "4e6030",
+   "bn_name": "SoundSys_SetFrequency",
+   "definition": "int32_t(int32_t arg1)",
+   "status": "copied_humanized",
+   "cpp": "004e6030-SoundSys_SetFrequency.cpp",
+   "hpp": "004e6030-SoundSys_SetFrequency.hpp",
+   "sha256_cpp": "4977ed807abaf7af7ef18274f8ad5ed9e890b0872cf2d25c5faf05a0ad4fb32f",
+   "replaced": []
+  },
+  {
+   "addr": "0x004e76e0",
+   "addr_key": "4e76e0",
+   "bn_name": "TextWindow_vprintf",
+   "definition": "int32_t(int32_t* arg1, char* arg2, int32_t arg3)",
+   "status": "copied_humanized",
+   "cpp": "004e76e0-TextWindow_vprintf.cpp",
+   "hpp": "004e76e0-TextWindow_vprintf.hpp",
+   "sha256_cpp": "aae8cf30b51b643cb5153a9e50eaef966139b150851a6c060c84df306424307c",
+   "replaced": []
+  },
+  {
+   "addr": "0x004e7b80",
+   "addr_key": "4e7b80",
+   "bn_name": "DebugText_SetCursor",
+   "definition": "int32_t(int32_t arg1, int32_t arg2)",
+   "status": "copied_humanized",
+   "cpp": "004e7b80-DebugText_SetCursor.cpp",
+   "hpp": "004e7b80-DebugText_SetCursor.hpp",
+   "sha256_cpp": "cd5b582e3fcdd175977ef240728b63d019b059b3e6021f7b3b19af6de0b37751",
+   "replaced": []
+  },
+  {
+   "addr": "0x004e7bb0",
+   "addr_key": "4e7bb0",
+   "bn_name": "DebugText_Clear",
+   "definition": "int32_t()",
+   "status": "copied_humanized",
+   "cpp": "004e7bb0-DebugText_Clear.cpp",
+   "hpp": "004e7bb0-DebugText_Clear.hpp",
+   "sha256_cpp": "be84c8f9454c383c73a3b4168514a0d65a267c84de7455db8556be311005defe",
+   "replaced": []
+  },
+  {
+   "addr": "0x004e8100",
+   "addr_key": "4e8100",
+   "bn_name": "SoundSys_EvaluateTrigger_11",
+   "definition": "int32_t()",
+   "status": "copied_humanized",
+   "cpp": "004e8100-SoundSys_EvaluateTrigger_11.cpp",
+   "hpp": "004e8100-SoundSys_EvaluateTrigger_11.hpp",
+   "sha256_cpp": "f7fbd5371c40f95c18c6671f6d8c708b408de1a314aae3d2b6dbd93dd3e6500c",
+   "replaced": []
+  },
+  {
+   "addr": "0x00415020",
+   "addr_key": "415020",
+   "bn_name": "GameFunctions_IsDebugKeyPressedOnce",
+   "definition": "int32_t(void* arg1)",
+   "status": "skipped_already_present",
+   "verified": "cpp body byte-identical to live BN bn_function_decompile output"
+  },
+  {
+   "addr": "0x00416d20",
+   "addr_key": "416d20",
+   "bn_name": "Game_GetRandomState",
+   "definition": "int32_t()",
+   "status": "skipped_already_present",
+   "verified": "cpp body byte-identical to live BN bn_function_decompile output"
+  },
+  {
+   "addr": "0x004199d0",
+   "addr_key": "4199d0",
+   "bn_name": "BackgroundFX_New",
+   "definition": "struct status_msg*(void* arg1)",
+   "status": "skipped_already_present",
+   "verified": "cpp body byte-identical to live BN bn_function_decompile output"
+  },
+  {
+   "addr": "0x0041f2d0",
+   "addr_key": "41f2d0",
+   "bn_name": "ListBox_AddItem",
+   "definition": "int32_t(int32_t arg1, int32_t arg2)",
+   "status": "skipped_already_present",
+   "verified": "cpp body byte-identical to live BN bn_function_decompile output"
+  },
+  {
+   "addr": "0x0048f240",
+   "addr_key": "48f240",
+   "bn_name": "AppContext_SetLightmapsUsed",
+   "definition": "int32_t(char arg1)",
+   "status": "skipped_already_present",
+   "verified": "cpp body byte-identical to live BN bn_function_decompile output"
+  },
+  {
+   "addr": "0x004af7b0",
+   "addr_key": "4af7b0",
+   "bn_name": "Debug_Error",
+   "definition": "int32_t(char* arg1)",
+   "status": "skipped_already_present",
+   "verified": "cpp body byte-identical to live BN bn_function_decompile output"
+  },
+  {
+   "addr": "0x004b0f90",
+   "addr_key": "4b0f90",
+   "bn_name": "RenderMode_PopRenderMode",
+   "definition": "int32_t()",
+   "status": "skipped_already_present",
+   "verified": "cpp body byte-identical to live BN bn_function_decompile output"
+  },
+  {
+   "addr": "0x004b3320",
+   "addr_key": "4b3320",
+   "bn_name": "Real64x3_NullVector",
+   "definition": "int32_t(double* arg1)",
+   "status": "skipped_already_present",
+   "verified": "cpp body byte-identical to live BN bn_function_decompile output"
+  },
+  {
+   "addr": "0x004b53b0",
+   "addr_key": "4b53b0",
+   "bn_name": "Qsprite_Register4Az",
+   "definition": "int32_t(int32_t* arg1, int32_t arg2, int32_t arg3, int32_t arg4, int32_t arg5, int32_t arg6, int32_t arg7, int32_t arg8, int32_t arg9, float arg10, float arg11, float arg12, int32_t arg13, int32_t arg14, int32_t arg15, int32_t arg16, int32_t arg17)",
+   "status": "skipped_already_present",
+   "verified": "cpp body byte-identical to live BN bn_function_decompile output"
+  },
+  {
+   "addr": "0x004b6e60",
+   "addr_key": "4b6e60",
+   "bn_name": "Picture_Register",
+   "definition": "int32_t(int32_t* arg1)",
+   "status": "skipped_already_present",
+   "verified": "cpp body byte-identical to live BN bn_function_decompile output"
+  },
+  {
+   "addr": "0x00507ec0",
+   "addr_key": "507ec0",
+   "bn_name": "Input_Run",
+   "definition": "int16_t*(int32_t* arg1, int32_t arg2)",
+   "status": "skipped_already_present",
+   "verified": "cpp body byte-identical to live BN bn_function_decompile output"
+  },
+  {
+   "addr": "0x00509cf0",
+   "addr_key": "509cf0",
+   "bn_name": "Joypad_Update",
+   "definition": "void()",
+   "status": "skipped_already_present",
+   "verified": "cpp body byte-identical to live BN bn_function_decompile output"
+  },
+  {
+   "addr": "0x004444e0",
+   "addr_key": "4444e0",
+   "bn_name": null,
+   "definition": null,
+   "status": "not_in_binary_ninja",
+   "note": "BN reports function_not_found at this VA"
+  }
+ ],
+ "verification": {
+  "performed": [
+   "cpp written for all 42 new natives with readable identifiers only",
+   "structural comparison vs live BN decompile: ordered numeric literals, string literals, control-flow keyword sequence, static call sequence identical (signature line excluded; arg2->callback indirect call rename normalized)",
+   "generated .hpp syntax-checked with g++ -std=c++17 -fsyntax-only (42/42 pass)"
+  ],
+  "not_performed": [
+   "runtime execution or behavioral equivalence testing (source readability pass only)",
+   "compilation of the .cpp pseudocode files (BN pseudo-C is not compilable C by design)"
+  ],
+  "structural_result": "ALL PASS (42/42)"
+ }
+}

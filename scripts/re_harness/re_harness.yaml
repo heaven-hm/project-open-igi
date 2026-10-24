@@ -1,0 +1,48 @@
+# Autonomous reverse-engineering harness — target-agnostic configuration.
+#
+# This harness is a SELF-CONTAINED, REA-disciplined static + runtime + natives
+# analysis pipeline. It is NOT the RE-Agent CLI (auto-re-agent / re-agent) and it
+# is NOT the REA MCP server (reverse-engineer-anything). It coordinates local
+# tools (radare2, ghidra-cli, frida, capstone, pefile) and records evidence with
+# the project's fail-closed discipline. See docs/AUTONOMOUS_RE_HARNESS.md.
+#
+# Selection: `--profile igi` loads profiles/igi.json on top of these defaults.
+
+schema_version: 1
+kind: re-harness-config
+
+# Where per-native evidence files are written. New files only; existing evidence
+# under docs/fidelity/evidence is never modified by this harness.
+evidence_dir: docs/fidelity/evidence
+
+# A run starts with a fail-closed scope gate. Set to false only for offline
+# exploration that must not require the retail binary (still records the gap).
+scope_gate:
+  require_retail_binary: true
+  require_retail_hash_match: true
+  require_catalog: true
+  require_static_tool: true   # at least one of: radare2, capstone
+
+# Decompiler policy (one selected decompiler at a time, per AGENTS.md 10.4.4).
+# Order expresses preference; the harness uses the first available and records
+# which one it used. It never mixes two decompilers on the same target.
+decompiler_order:
+  - ghidra_cli
+
+# Runtime analysis policy. A launcher is REQUIRED to actually execute a probe.
+# With no launcher configured, the harness only generates the probe and records
+# an honest "not executed" pending status — it never claims runtime evidence.
+runtime:
+  execute: false              # global kill-switch; even if a launcher exists
+  default_workdir: null       # retail data root, e.g. /Users/haseeb-mir/Downloads/IGI
+  launcher: null              # e.g. "/Users/haseeb-mir/Downloads/IGI/igi.exe"
+
+# Tool selection hints. angr_python mirrors AGENTS.md 10.7 (isolated interpreter).
+tools:
+  angr_python: .venv-angr/bin/python
+  extra_path: []
+
+# Safety: the harness never writes outside these roots without --out.
+write_roots:
+  - scripts/re_harness/work
+  - docs/fidelity/evidence

@@ -1,0 +1,10 @@
+// IGI native provenance: VehiclePhysics_Invoke2_42DA60 - 0x0042DA60 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
+// Evidence: 0042DA60-VehiclePhysics_Invoke2_42DA60.md; Binary Ninja/Radare2 CFG record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
+#include "VehiclePhysics_Invoke2_42DA60.h"
+
+int* VehiclePhysics_Invoke2_42DA60(int* arg1)
+
+{
+    *arg1 = 0x20;
+    return arg1;
+}

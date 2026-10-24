@@ -106,6 +106,8 @@ def main() -> int:
         if match:
             width = {2: 46, 61: 46}.get(46, None)  # placeholder replaced below
             register = match.group(2)
+            if register != "eax":
+                continue
             picks.append((va, int(match.group(1), 16), register))
         if len(picks) >= options.count:
             break
@@ -113,13 +115,13 @@ def main() -> int:
     if not picks:
         print("no ready getters left in the closure")
         return 0
-    print("picks:", ", ".join(f"0x{va:06X}->0x{addr:08X}" for va, addr in picks))
+    print("picks:", ", ".join(f"0x{item[0]:06X}->0x{item[1]:08X}" for item in picks))
     if options.dry_run:
         return 0
 
     cmake = (ROOT / "CMakeLists.txt").read_text()
     template = (ROOT / "scripts/tester/frida_native_probe_template.js").read_text()
-    for va, address in picks:
+    for va, address, _register in picks:
         text_va = f"0x{va:08X}"
         name = f"Sys_GetGlobal32_{va:06X}"
         symbol = f"g_{address:06x}"

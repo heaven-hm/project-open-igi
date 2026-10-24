@@ -1,0 +1,8 @@
+// IGI native provenance: StatusScreen_Get - 0x00487180 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
+// Evidence: 00487180-FX_SmokeEmit_8.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
+#include "00487180-StatusScreen_Get.hpp"
+int StatusScreen_Get()
+
+{
+    return g_5c8a48;
+}

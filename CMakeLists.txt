@@ -104,6 +104,14 @@ add_executable(igi WIN32
     engine/src/retail/config/native_416880.cpp
     engine/src/retail/config/native_416890.cpp
     engine/src/retail/sys/native_4aa0a0.cpp
+    engine/src/retail/sys/native_4f1fd0.cpp
+    engine/src/retail/sys/native_4f1200.cpp
+    engine/src/retail/sys/native_4ee100.cpp
+    engine/src/retail/sys/native_4ee0f0.cpp
+    engine/src/retail/sys/native_4ee0e0.cpp
+    engine/src/retail/sys/native_4e5350.cpp
+    engine/src/retail/sys/native_4e0830.cpp
+    engine/src/retail/sys/native_4dee80.cpp
     engine/src/retail/sys/native_4af8f0.cpp
     engine/src/retail/sys/native_4d9850.cpp
     engine/src/retail/sys/native_4d97e0.cpp
@@ -287,6 +295,8 @@ add_executable(igi WIN32
     engine/src/retail/render/native_4f0f80.cpp
     engine/src/retail/render/native_4f1000.cpp
     engine/src/retail/script/native_4ee960.cpp
+    engine/src/retail/script/native_4ee970.cpp
+    engine/src/retail/script/native_4ee970_globals.cpp
     engine/src/retail/script/native_4f19c0.cpp
     engine/src/retail/script/native_4f1bc0.cpp
     engine/src/retail/script/native_4f1b70.cpp

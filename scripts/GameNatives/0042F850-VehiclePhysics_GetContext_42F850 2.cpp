@@ -1,0 +1,12 @@
+// IGI native provenance: VehiclePhysics_GetContext_42F850 - 0x0042F850 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
+// Evidence: 0042F850-VehiclePhysics_GetContext_42F850.md; Binary Ninja/Radare2 CFG record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
+#include "VehiclePhysics_GetContext_42F850.h"
+
+int* VehiclePhysics_GetContext_42F850(void* arg1, int* arg2)
+
+{
+    arg2[1] = 0;
+    *arg2 = arg1 + 0x20;
+    arg2[2] = *(arg1 + 0x74c);
+    return arg2;
+}

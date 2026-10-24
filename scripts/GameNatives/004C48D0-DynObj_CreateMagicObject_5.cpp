@@ -1,0 +1,9 @@
+// IGI native provenance: DynObj_CreateMagicObject_5 - 0x004C48D0 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
+// Evidence: 004C48D0-DynObj_CreateMagicObject_5.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
+#include "004C48D0-DynObj_CreateMagicObject_5.hpp"
+int DynObj_CreateMagicObject_5(void* context, int arg2)
+
+{
+    *(context + 0x6c) = arg2;
+    return arg2;
+}

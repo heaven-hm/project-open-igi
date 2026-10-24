@@ -1,0 +1,35 @@
+// IGI native provenance: Render_TransformVertices_14 - 0x004DCBA0 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
+// Evidence: 004DCBA0-Render_TransformVertices_14.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
+#include "004DCBA0-Render_TransformVertices_14.hpp"
+void* Render_TransformVertices_14(int* context, void* arg2)
+
+{
+    void* result = arg2;
+    int* i = *(result + 8);
+
+    if (*i && i)
+    {
+        do
+        {
+            int temp_2 = context[2];
+            void* entity_2 = *(*(*i[0x1b] + 0xc) + 0xc);
+            int* data_4 = *(context[1] + (temp_2 << 2)) * context[4] + *context;
+            *(context[5] + data_4) = temp_2;
+            context[2] += 1;
+            *data_4 = *(entity_2 + 0x50);
+            data_4[1] = *(entity_2 + 0x54);
+            data_4[2] = *(entity_2 + 0x58);
+            data_4[3] = *(entity_2 + 0x5c);
+            result = Render_TransformVertices_14(context, i);
+            i = *i;
+
+            if (!i)
+                break;
+
+            if (!*i)
+                break;
+        } while (i);
+    }
+
+    return result;
+}

@@ -1,0 +1,83 @@
+// IGI native provenance: FlatSky_Init - 0x0051DDF0 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
+// Evidence: 0051DDF0-FlatSky_Init.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
+#include "0051DDF0-FlatSky_Init.hpp"
+int* FlatSky_Init()
+
+{
+    int item_340 = 0;
+    g_ba1fde = TaskType_Register("FlatSky", 0xd0, QTask_OpenEvent_2(), 0);
+    int item_340_1 = 0;
+    g_ba1fdc = TaskType_Register("FlatSkyLayer", 0x26c, QTask_OpenEvent_2(), 0);
+    QTask_RemoveEventCallback(g_ba1fde, 0, FlatSky_LoadParameters);
+    QTask_TriggerEvent(g_ba1fde, 2, FlatSky_Setup);
+    QTask_RemoveEventCallback(g_ba1fde, 4, FlatSky_Process);
+    QTask_TriggerEvent(g_ba1fde, 1, sub_488700);
+    int data_5 = Script_ParseEnumInt32_8();
+    QTask_RemoveEventCallback(g_ba1fde, data_5, sub_51eb30);
+    int data_6 = Script_ParseEnumReal32_8();
+    QTask_RemoveEventCallback(g_ba1fde, data_6, FlatSky_Update);
+    QTask_RemoveEventCallback(g_ba1fdc, 0, FlatSky_OnEvent);
+    QTask_TriggerEvent(g_ba1fdc, 2, FlatSky_Action);
+    int data_8 = Script_ParseEnumInt32_8();
+    QTask_RemoveEventCallback(g_ba1fdc, data_8, sub_51ec60);
+    int data_9 = Script_ParseEnumReal32_8();
+    int item_344_3 = data_9;
+    data_9 = g_ba1fdc;
+    QTask_RemoveEventCallback(data_9, item_344_3, FlatSky_Cleanup);
+    QTask_TriggerEvent(g_ba1fdc, 1, sub_51da90);
+    g_ba1fe4 = Script_EvaluateCondition_7(0xb);
+    int data_11 = Script_EvaluateCondition_2();
+    void item_33c;
+    void item_2c8;
+    Script_UndefinedParameterTy(g_ba1fe4, &item_33c, &item_2c8, data_11, 7, 0x54eeb0);
+    int data_12 = Script_EvaluateCondition_2();
+    void item_2d0;
+    Script_UndefinedParameterTy(g_ba1fe4, &item_33c, &item_2d0, data_12, 7, 0);
+    int data_13 = Script_EvaluateCondition_2();
+    void item_2cc;
+    Script_UndefinedParameterTy(g_ba1fe4, &item_33c, &item_2cc, data_13, 7, 0);
+    int data_14 = Script_CallNativeHandler_2();
+    void item_2c4;
+    Script_UndefinedParameterTy(g_ba1fe4, &item_33c, &item_2c4, data_14, 7, 0);
+    int data_15 = Script_ParseEnumInt32_4();
+    void item_274;
+    Script_UndefinedParameterTy(g_ba1fe4, &item_33c, &item_274, data_15, 7, 0);
+    int data_16 = Script_ExecuteLevelScript_2();
+    void item_2b4;
+    Script_UndefinedParameterTy(g_ba1fe4, &item_33c, &item_2b4, data_16, 7, 0x54eec0);
+    int data_17 = Script_CallNativeHandler_2();
+    void item_2b0;
+    Script_UndefinedParameterTy(g_ba1fe4, &item_33c, &item_2b0, data_17, 7, 0);
+    int data_18 = Script_CallNativeHandler_2();
+    void item_298;
+    Script_UndefinedParameterTy(g_ba1fe4, &item_33c, &item_298, data_18, 7, 0);
+    int data_19 = Script_CallNativeHandler_2();
+    void item_2a4;
+    Script_UndefinedParameterTy(g_ba1fe4, &item_33c, &item_2a4, data_19, 7, 0);
+    int data_20 = Script_CallNativeHandler_2();
+    void item_280;
+    Script_UndefinedParameterTy(g_ba1fe4, &item_33c, &item_280, data_20, 7, 0);
+    int data_21 = Script_CallNativeHandler_2();
+    void item_28c;
+    Script_UndefinedParameterTy(g_ba1fe4, &item_33c, &item_28c, data_21, 7, 0);
+    g_ba1fe0 = Script_EvaluateCondition_7(6);
+    int data_23 = Script_SpawnNewTask_4();
+    void item_26c;
+    void item_124;
+    Script_UndefinedParameterTy(g_ba1fe0, &item_26c, &item_124, data_23, 7, 0);
+    int data_24 = Script_EvaluateCondition_2();
+    void item_24;
+    Script_UndefinedParameterTy(g_ba1fe0, &item_26c, &item_24, data_24, 7, 0);
+    int data_25 = Script_EvaluateCondition_2();
+    void item_20;
+    Script_UndefinedParameterTy(g_ba1fe0, &item_26c, &item_20, data_25, 7, 0x54eeb8);
+    int data_26 = Script_EvaluateCondition_2();
+    void item_1c;
+    Script_UndefinedParameterTy(g_ba1fe0, &item_26c, &item_1c, data_26, 7, 0x54eeb8);
+    int data_27 = Script_EvaluateCondition_2();
+    void item_10;
+    Script_UndefinedParameterTy(g_ba1fe0, &item_26c, &item_10, data_27, 7, 0x54eeb0);
+    int data_28 = Script_CallNativeHandler_2();
+    void item_c;
+    return Script_UndefinedParameterTy(g_ba1fe0, &item_26c, &item_c, data_28, 7, 0);
+}
