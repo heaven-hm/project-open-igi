@@ -8,6 +8,6 @@
   "frida_python": "/Users/haseeb-mir/Library/Application Support/pipx/venvs/frida-tools/bin/python",
   "reference_catalog": "/Users/haseeb-mir/Documents/Code/project-open-igi-scope-gate/assets/IGINatives_v4.json",
   "re_agent_root": "/Users/haseeb-mir/Documents/Code/re-agent",
-  "candidate": "build-clean-win32/igi1.exe",
-  "build_directory": "build-clean-win32"
+  "candidate": "build-win32-no-verify-gate/igi1.exe",
+  "build_directory": "build-win32-no-verify-gate"
 }

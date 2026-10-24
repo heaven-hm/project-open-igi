@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-BUILD_DIR="${IGI_CLEAN_BUILD_DIR:-$ROOT_DIR/build-clean-win32}"
+BUILD_DIR="${IGI_CLEAN_BUILD_DIR:-$ROOT_DIR/build-win32-no-verify-gate}"
 if [[ "${1:-}" != "--diagnostic" ]]; then
     exec python3 "$ROOT_DIR/scripts/accept_changed_feature.py" "$@"
 fi

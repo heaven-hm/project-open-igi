@@ -70558,6 +70558,61 @@
           "evidence_sha256": "160b6c41511dfbaccd82f0493287d894ea18c6f64395c76ef3cd7d110951c3fe"
         }
       }
+    },
+    {
+      "address": "0x004B0B00",
+      "name": "Mem_AllocIndexedBlock_4B0B00",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/mem/task_list.cpp",
+        "sha256": "0607748116512ba2d3998e5c08734f1c9dfd347434705c75cc06366b9546b269",
+        "signature": "std::int32_t __cdecl(std::int32_t* descriptor, std::int32_t element_size, std::int32_t count, std::int32_t alignment)"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "limitations": [
+          "No game process has executed the candidate implementation; runtime evidence is absent.",
+          "Retail Binary Ninja alias Sys_FreeMemory_2 is wrong: the body allocates an indexed block; the implementation records the discrepancy.",
+          "Static reachability: 32 direct retail callers; transcribed callers are listed below, the remainder are untranscribed and not exercised."
+        ],
+        "notes": "New native added by the commit 800fec7f lineage; status must remain TRANSCRIBED until a typed runtime comparison exists."
+      }
+    },
+    {
+      "address": "0x0048F490",
+      "name": "WinProc_RegisterHandler_48F490",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_48f490.cpp",
+        "sha256": "7df43dea2c19db0a18f87f7dbaf4174e1fefca240a4b008291bc29e821684314",
+        "signature": "std::int32_t* __cdecl(std::int32_t* handler)"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "limitations": [
+          "No runtime evidence; not called by any transcribed startup path.",
+          "Retail direct callers: exactly 6 (0x424C00 Cursor_Init, 0x48A728 FX_DebrisSpawn_16, 0x48FEB8 FX_CouldNotCreateDirect, 0x490109 FX_CouldNotCreateDirect_2, 0x49065F Display_OpenDevice_2, 0x493803 Display_Direct3D); none of those caller functions is transcribed in engine/ or the manifest."
+        ],
+        "notes": "Only reachable from the six untranscribed callers today; do not claim runtime reachability."
+      }
+    },
+    {
+      "address": "0x0048F4F0",
+      "name": "WinProc_RemoveHandler_48F4F0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_48f4f0.cpp",
+        "sha256": "508bedb782983037547dff0a7e476ea100267bebad30a6703d639da0fda91d68",
+        "signature": "std::int32_t* __cdecl(std::int32_t* front_link)"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "limitations": [
+          "No runtime evidence; not called by any transcribed startup path.",
+          "Retail direct callers: exactly 5 (0x48A8A5 FX_TrailUpdate_16, 0x48FFE9 FX_DebrisSpawn_27, 0x490339 Display_SetDisplayMode, 0x4903C1 Display_CreateSurface, 0x49506F Display_RestoreDevice_7); none of those caller functions is transcribed in engine/ or the manifest."
+        ],
+        "notes": "Only reachable from the five untranscribed callers today; do not claim runtime reachability."
+      }
     }
   ],
   "integration": {
