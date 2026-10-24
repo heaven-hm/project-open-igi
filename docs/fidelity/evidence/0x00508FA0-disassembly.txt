@@ -1033,3 +1033,21 @@ extent runs from `0x401927` onward and still needs a clean boundary capture).
 
 Next: capture the complete `0x401927` body, transcribe it as the table's writer, then `0x4014B0`
 and `0x401400`.
+
+### 0x401927 complete extent captured
+
+Listing saved as `docs/fidelity/evidence/0x00401927-listing.txt`. True extent is
+`0x00401927-0x004019EA` (196 bytes, 13 blocks, ending with `ret` at `0x4019EA`; radare2's
+189-byte figure came from analysing mid-store at `0x401954`).
+
+Callees: `0x4014B0` twice and `0x4B0B00` once. So the descriptor writer is mostly self-contained
+table work plus a small helper pair, and `0x4014B0` is shared between it and the recursive
+`0x401400` - meaning `0x4014B0` should be transcribed first since both consumers need it.
+
+Ordering for the next increments, now fully determined:
+
+1. `0x4014B0` (43 B, 5 blocks, 18 instructions) - shared helper.
+2. `0x401927` (196 B, 13 blocks) - owns `0xAF5EE8`.
+3. `0x401400` (164 B, 7 blocks, recursive) - reads `0xAF5EE8`.
+
+`0x4B0B00` ownership not yet checked.

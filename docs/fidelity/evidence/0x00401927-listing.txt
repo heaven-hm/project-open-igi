@@ -1,0 +1,60 @@
+            0x00401927      8b4c240c       mov ecx, dword [esp + 0xc]
+            0x0040192b      8b442408       mov eax, dword [esp + 8]
+            0x0040192f      56             push esi
+            0x00401930      8d746d00       lea esi, [ebp + ebp*2]
+            0x00401934      c1e604         shl esi, 4
+            0x00401937      57             push edi
+            0x00401938      8b7c2418       mov edi, dword [esp + 0x18]
+            0x0040193c      c686055faf..   mov byte [esi + 0xaf5f05], 1 ; [0xaf5f05:1]=0
+            0x00401943      898ee45eaf00   mov dword [esi + 0xaf5ee4], ecx ; [0xaf5ee4:4]=0
+            0x00401949      8986e05eaf00   mov dword [esi + 0xaf5ee0], eax ; [0xaf5ee0:4]=0
+            0x0040194f      6681ff8101     cmp di, 0x181               ; 385
+            0x00401954      6689bee85e..   mov word [esi + 0xaf5ee8], di ; [0xaf5ee8:2]=0
+        ,=< 0x0040195b      741b           je 0x401978
+        |   0x0040195d      8bc7           mov eax, edi
+        |   0x0040195f      25ffff0000     and eax, 0xffff
+        |   0x00401964      8d1440         lea edx, [eax + eax*2]
+        |   0x00401967      c1e204         shl edx, 4
+        |   0x0040196a      8b820c5faf00   mov eax, dword [edx + 0xaf5f0c]
+        |   0x00401970      89860c5faf00   mov dword [esi + 0xaf5f0c], eax ; [0xaf5f0c:4]=0
+       ,==< 0x00401976      eb0a           jmp 0x401982
+       |`-> 0x00401978      c7860c5faf..   mov dword [esi + 0xaf5f0c], 0x20000000 ; [0xaf5f0c:4]=0
+       `--> 0x00401982      8b44241c       mov eax, dword [esp + 0x1c]
+            0x00401986      85c0           test eax, eax
+        ,=< 0x00401988      741c           je 0x4019a6
+        |   0x0040198a      6a00           push 0
+        |   0x0040198c      50             push eax
+        |   0x0040198d      51             push ecx
+        |   0x0040198e      8d8eec5eaf00   lea ecx, [esi + 0xaf5eec]
+        |   0x00401994      51             push ecx
+        |   0x00401995      e866f10a00     call 0x4b0b00
+        |   0x0040199a      83c410         add esp, 0x10
+        |   0x0040199d      c686045faf..   mov byte [esi + 0xaf5f04], 1 ; [0xaf5f04:1]=0
+       ,==< 0x004019a4      eb07           jmp 0x4019ad
+       |`-> 0x004019a6      c686045faf..   mov byte [esi + 0xaf5f04], 0 ; [0xaf5f04:1]=0
+       `--> 0x004019ad      6681ff8101     cmp di, 0x181               ; 385
+        ,=< 0x004019b2      7437           je 0x4019eb
+        |   0x004019b4      81e7ffff0000   and edi, 0xffff
+        |   0x004019ba      8d0cade06a..   lea ecx, [ebp*4 + 0xa96ae0]
+        |   0x004019c1      bafe000000     mov edx, 0xfe               ; 254
+        |   0x004019c6      8d04bde06a..   lea eax, [edi*4 + 0xa96ae0]
+       .--> 0x004019cd      8b30           mov esi, dword [eax]
+       :|   0x004019cf      0500060000     add eax, 0x600              ; 1536
+       :|   0x004019d4      8931           mov dword [ecx], esi
+       :|   0x004019d6      81c100060000   add ecx, 0x600              ; 1536
+       :|   0x004019dc      4a             dec edx
+       `==< 0x004019dd      75ee           jne 0x4019cd
+        |   0x004019df      e8ccfaffff     call 0x4014b0
+        |   0x004019e4      5f             pop edi
+        |   0x004019e5      668bc5         mov ax, bp
+        |   0x004019e8      5e             pop esi
+        |   0x004019e9      5d             pop ebp
+        |   0x004019ea      c3             ret
+        `-> 0x004019eb      8d04ade06a..   lea eax, [ebp*4 + 0xa96ae0]
+            0x004019f2      b9fe000000     mov ecx, 0xfe               ; 254
+        .-> 0x004019f7      c70000000000   mov dword [eax], 0
+        :   0x004019fd      0500060000     add eax, 0x600              ; 1536
+        :   0x00401a02      49             dec ecx
+        `=< 0x00401a03      75f2           jne 0x4019f7
+            0x00401a05      e8a6faffff     call 0x4014b0
+            0x00401a0a      5f             pop edi
