@@ -666,7 +666,7 @@ edx = [esi]                  ; bucket array
 ecx = hash*3; ebp = [edx+ecx*4]   ; bucket head node
 edi = [ebp]                  ; node->next
 if (!edi) -> miss
-loop: esi = [ebp+8]          ; IMAGEULATION: node->key at +8 (not a stack arg)
+loop: esi = [ebp+8]          ; node->key at +8 (not a stack arg)
       cmp(value, key)        ; 2-byte unrolled, sbb sign trick
       equal -> hit: *out = ebp, return 1
       else: ebp = edi; edi = [edi]; if (edi) goto loop
