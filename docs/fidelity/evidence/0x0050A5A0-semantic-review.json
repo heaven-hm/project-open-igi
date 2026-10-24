@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "address": "0x0050A5A0",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "e83ec493178a8dacebe18acc37c6b9291281eb5b126694ae46577e9ddc5bdaae",
+  "implementation_path": "engine/src/retail/qfile/native_50a5a0.cpp",
+  "reviewed_by": "lead",
+  "reviewed": true,
+  "review_scope": "static: retail instructions and emitted candidate listing",
+  "result": "passed",
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "rationale": "11 bytes, one block, zero edges, three instructions; generated artifacts match 1/0."
+    },
+    {
+      "name": "cfg_match",
+      "result": "passed",
+      "rationale": "Both decoders report 1/0, score 1.000; the body is a single field load."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "passed",
+      "rationale": "Two cdecl arguments; only the second is read, at [esp+8], matching retail's load through eax."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "passed",
+      "rationale": "Field offset 0xA0 from the context pointer, exactly the displacement in retail's load."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "passed",
+      "rationale": "Returns the loaded dword; no branch, no store, no error path."
+    }
+  ],
+  "evidence": "docs/fidelity/evidence/0x4EE970-data-extents.md section 22.2",
+  "limitations": [
+    "Runtime unobserved.",
+    "The second-slot context convention is inferred from the 0x004B1690-0x004B17F0 gate family, which push (index, context, ...); no caller outside that family was observed.",
+    "The meaning of the field at +0xA0 is not established, only its offset."
+  ]
+}

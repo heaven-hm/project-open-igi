@@ -6265,3 +6265,24 @@ rather than after it stalls.
 Consequence for planning: prefer the landability rule from §21.7 over call-graph distance. The setter family landed in round
 206 was chosen because all eighteen of its instructions have no callees and no code immediates, so it was landable in one
 step; the qfile init chain is not, for a reason that is visible in the bytes only after the callback list is extracted.
+
+### §22.3 Corrections to §22.2, and a landability sweep (round 207)
+
+Two corrections to §22.2, both found by measuring rather than by re-reading my own summary:
+
+1. **The missing-callback count was ten, not eleven.** 0x004C1780 IS transcribed (engine/src/retail/core/native_4c1780.cpp,
+   a one-byte ret used as the task-list registrar). So 0x00509F50's code immediates leave ten missing, not eleven.
+2. **The setter family is sixteen, not twelve.** Beyond +0x00..+0x30 there are 0x004B1D60 -> +0x34, 0x004B1D80 -> +0x4C,
+   0x004B1DA0 -> +0x3C and 0x004B1DC0 -> +0x40, all 28 bytes / 1 block / 7 instructions with the same index arithmetic.
+   0x004B1DA0 is the ONLY writer of record+0x3C, the handler word 0x004B1420 tests and calls; 0x004B1D60's +0x34 slot is the
+   one 0x004B17C0 and 0x004B17F0 dispatch through.
+
+A landability sweep over fifteen ranges classified 337 catalog candidates: **132 landable in one step, 194 blocked, 7 already
+landed, 4 filtered**. Blocked causes: callee 163, callee+code-immediate 14, code-immediate 12, misc 5.
+
+Both controls were run alongside the scan, as §22.1 requires: 0x004E7530 has exactly 88 direct call sites; the dword
+0x00509F50 occurs exactly twice, at 0x005098B1 and 0x00509F59.
+
+Method note worth keeping: the enumeration basis was the catalog (5,734 VAs), not the manifest (1,124 records), because the
+manifest does not contain 0x004B1200, 0x005098B0 or 0x00509F50 - the three addresses this chain is built on. A
+manifest-based sweep would have reported the chain as nonexistent.

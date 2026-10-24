@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "address": "0x004B1700",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "b0a2a36536d49c85e7a51a729a0310dd3ff3a0ad0ddc981b5ee4d68b6e9c4869",
+  "implementation_path": "engine/src/retail/qfile/native_4b1700.cpp",
+  "reviewed_by": "lead",
+  "reviewed": true,
+  "review_scope": "static: retail instructions and emitted candidate listing",
+  "result": "passed",
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "rationale": "43 bytes, 16 instructions, one block, zero edges; generated artifacts match 1/0."
+    },
+    {
+      "name": "cfg_match",
+      "result": "passed",
+      "rationale": "Both decoders report 1/0, score 1.000."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "passed",
+      "rationale": "Four cdecl arguments; the second is pushed by callers but never read by the stub, and the index comes from *context."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "passed",
+      "rationale": "One indirect call through record+0x14 (0x9436C4) with (index, context, argument3, argument4) and a 0x10 cleanup."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "passed",
+      "rationale": "0x8C stride and the +0x14 slot offset, both from the retail load/call pair."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "passed",
+      "rationale": "Returns the slot's EAX; no branch. DOCUMENTED DIFFERENCE: GCC tail-call-optimises to a register rewrite plus jmp slot (26 bytes / 6 instructions) where retail pushes, calls and returns through the stub. Same slot, same arguments, same cdecl order, same blocks and edges; the return path differs. Accepted rather than defeated with a helper, which rule 9 forbids."
+    }
+  ],
+  "evidence": "docs/fidelity/evidence/0x4EE970-data-extents.md section 22.2",
+  "limitations": [
+    "Runtime unobserved; the slot is only populated once the qfile init chain lands, so this build dispatches a null slot exactly as the current table state implies.",
+    "The tail-call difference is a real codegen divergence in the return path, recorded rather than described as a match.",
+    "The slot's return type is unproven."
+  ]
+}
