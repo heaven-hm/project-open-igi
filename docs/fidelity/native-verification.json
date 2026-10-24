@@ -3,6 +3,36 @@
   "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
   "retired_files": [
     {
+      "path": "scripts/GameNatives/camera/004A7EFF-Camera_UpdateTransform_12.cpp",
+      "reviewed": true,
+      "rationale": "Invalid generated pointer typing and unsupported camera name; prior variants and hashes retained in docs/fidelity/evidence/format-arg-reader-20261024-sol/prior-catalog.json. Replacement has a byte-identical 13-byte body and recorded-input DLL replay; production intake remains blocked.",
+      "replacedBy": "scripts/GameNatives/string/004A7EFF-Native_004A7EFF.cpp"
+    },
+    {
+      "path": "scripts/GameNatives/camera/004A7EFF-Camera_UpdateTransform_12 2.cpp",
+      "reviewed": true,
+      "rationale": "Duplicate for the same VA; original contents retained in the prior-catalog archive.",
+      "replacedBy": "scripts/GameNatives/string/004A7EFF-Native_004A7EFF.cpp"
+    },
+    {
+      "path": "scripts/GameNatives/camera/004A7EFF-Camera_UpdateTransform_12.hpp",
+      "reviewed": true,
+      "rationale": "Prototype replaced with the observed pointer-to-cursor-cell ABI and raw DWORD result; original source identifiers remain unknown.",
+      "replacedBy": "scripts/GameNatives/string/004A7EFF-Native_004A7EFF.hpp"
+    },
+    {
+      "path": "scripts/GameNatives/004A7EFF-Camera_UpdateTransform_12.cpp",
+      "reviewed": true,
+      "rationale": "Ignored legacy duplicate archived before removal; no distinct implementation is discarded.",
+      "replacedBy": "scripts/GameNatives/string/004A7EFF-Native_004A7EFF.cpp"
+    },
+    {
+      "path": "scripts/GameNatives/004A7EFF-Camera_UpdateTransform_12 2.cpp",
+      "reviewed": true,
+      "rationale": "Ignored legacy duplicate archived before removal; no distinct implementation is discarded.",
+      "replacedBy": "scripts/GameNatives/string/004A7EFF-Native_004A7EFF.cpp"
+    },
+    {
       "path": "scripts/GameNatives/display/00498480-Display_DinputDll.cpp",
       "reviewed": true,
       "rationale": "Superseded erroneous generated transcription: invalid callable integer/pointer types, guessed BOOL result and incomplete COM typing. Original blob remains in Git history. New candidate is not accepted.",
@@ -44834,6 +44864,49 @@
         }
       },
       "status": "STRUCTURALLY_VERIFIED"
+    },
+    {
+      "address": "0x004A7EFF",
+      "name": "Native_004A7EFF",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/string/004A7EFF-Native_004A7EFF.cpp",
+        "sha256": "38c8964ea3d23441a36e0664efa2f682e4085a18a34d29aaf19db8b17b2b5188",
+        "signature": "uint32_t __cdecl Native_004A7EFF(uint32_t** cursor);"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/string/004A7EFF-Native_004A7EFF.cpp",
+        "sha256": "38c8964ea3d23441a36e0664efa2f682e4085a18a34d29aaf19db8b17b2b5188",
+        "signature": "uint32_t __cdecl Native_004A7EFF(uint32_t** cursor);"
+      },
+      "verification": {
+        "status": "BUILD_VERIFIED",
+        "selected_decompiler": "binary_ninja",
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/format-arg-reader-20261024-sol/binary_ninja.json",
+          "evidence_sha256": "4a2949f01925df76c44668653b57feb09cc934b00e623ed153557aa8714e3eba",
+          "evidence_id": "bn:live:0x004A7EFF:20261024-sol",
+          "signature": "int32_t(int32_t* arg1)"
+        },
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/format-arg-reader-20261024-sol/radare2.json",
+          "evidence_sha256": "d963a395cd525dbdf5f75878cc4489438653990239a70dfdc9e4b4e9d74be4dc",
+          "evidence_id": "r2:live:0x004A7EFF:20261024-sol",
+          "signature": "one x86 DWORD stack argument; source type annotation unavailable"
+        },
+        "angr": {
+          "evidence_path": "docs/fidelity/evidence/format-arg-reader-20261024-sol/angr.json",
+          "evidence_sha256": "688ed82cc94a79f599a266397a19bf34ca8a1343126e4759ccf52fdbf0c32b14"
+        },
+        "cfg_similarity": 1.0,
+        "limitations": [
+          "One block, 13 bytes; compiled and loaded candidate body equals retail. Byte SHA256 639148f2f162bda27c1f66ab90d68794bac59a533c7cbf65580a2c6853ef771f.",
+          "27,447 natural retail inputs matched a compiled-DLL replay in a second retail host: return bits, cursor advance and source word after the call. This is diagnostic runtime evidence, not natural reconstructed-game formatter reachability.",
+          "No reviewed production runtime_contract, independent acceptance or engine intake is claimed. Invalid pointers, overlapping cursor/value storage and concurrency are not covered by the recorded disjoint inputs.",
+          "Original source identifiers and signedness are unknown. The placeholder name and uint32_t result describe the observed raw ABI only."
+        ]
+      },
+      "notes": "Historical alias Camera_UpdateTransform_12 is erroneous. This leaf is a dependency of formatter 0x004A7720, reached by the unresolved WinMain DirectX-failure formatting path. Full formatter and startup acceptance remain open."
     },
     {
       "address": "0x004A5000",
