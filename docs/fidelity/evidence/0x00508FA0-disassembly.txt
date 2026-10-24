@@ -1541,3 +1541,27 @@ counts, instead of guessing.
 
 Recorded rather than transcribed: the getter `0x4F1020` remains blocked on this owner, and the
 stream init `0x4FAA60` depends on the getter only through `0x4F1020`'s 10 calls.
+
+### RESOLVED by retail probe: owner of 0xA70CA0 is 0x4EE970 (0 args, returns 0xA7186C)
+
+```
+0x4EE970-0x4EF7EC   entry 53 57 33 db (push ebx; push edi; xor ebx,ebx), single ret at 0x4EF7EC
+                    called ONCE from 0x51840C (E8), ZERO stack args, return eax = 0x00A7186C
+0x4EF585            internal instruction inside it (mov [0xA70CA0],eax), hit as linear fallthrough
+direct E8/E9 target scan over 0x4EF400-0x4EF600 -> 0 targets (confirms internal)
+```
+
+Two structural consequences:
+
+1. It is a **single large function (0x347C = 3452 bytes)** that owns `0x00A70CA0` among other state;
+   it is startup-reachable on level 1 and is invoked from the same `0x518xxx` region as the stream
+   init (`0x518484` -> `0x4FAA60`) and the NodeCriteria registrar (`0x5186C0`). So `0x51840C`,
+   `0x518484` and `0x5186C0` are calls from ONE caller in the `0x5183xx`-`0x5184xx` area - almost
+   certainly the `0x5183D0` routine the `0x508F80` thunk invokes.
+2. The dependency graph therefore converges on that `0x5183D0`-region routine: it calls the
+   stream init, the owner of `0xA70CA0`, and the NodeCriteria registrar. Transcribing it first
+   would tie all three subgraphs together and make the per-native order irrelevant.
+
+Revised plan (evidence-driven): capture `0x5183D0`-region caller next, since (a) the runtime probe
+already proved its callees and argument counts, and (b) it is the single point through which
+`0x508FA0` reaches every remaining native.
