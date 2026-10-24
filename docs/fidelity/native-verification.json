@@ -5003,7 +5003,7 @@
       "implementation": {
         "path": "engine/src/retail/core/class_registration.cpp",
         "sha256": "eeed3aac634e5e8fbc7f4b5ed86d066f57b32825b02ae5b3c256029c39f7e7cd",
-        "signature": "unknown"
+        "signature": "unknown (not transcribed; fail-closed stub throws)"
       },
       "game_natives": {
         "path": "scripts/GameNatives/flow/00402930-QTask_RegisterClasses.hpp",
@@ -5011,14 +5011,15 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "ANALYZED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
           "rationale": "Binary Ninja and radare2 agree on the entry at 0X00402930: the candidate keeps the retail's instructions, globals and return."
         },
         "limitations": [
-          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
+          "NOT TRANSCRIBED. engine/src/retail/core/class_registration.cpp is a deliberate fail-closed stub that throws std::logic_error with the class-id mismatch message; it is not a transcription of retail 0x00402930. Previous STRUCTURALLY_VERIFIED status was unsupported by any implementation and has been withdrawn."
         ],
         "behavioral_runner": {
           "path": "scripts/native_diff_runner.py",
