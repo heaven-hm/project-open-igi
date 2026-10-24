@@ -1565,3 +1565,28 @@ Two structural consequences:
 Revised plan (evidence-driven): capture `0x5183D0`-region caller next, since (a) the runtime probe
 already proved its callees and argument counts, and (b) it is the single point through which
 `0x508FA0` reaches every remaining native.
+
+### Common caller region: 0x5183D0 is a long straight-line call sequence, not a tiny shim
+
+```
+0x5183D0  call 0x530270
+0x5183D5  call 0x4FCF50
+0x5183DA  call 0x530220
+0x5183DF  call 0x507E70
+0x5183E4  call 0x4ED510
+0x5183E9  call 0x508D70
+0x5183EE  call 0x504E10
+... (r2 af reports 4985 bytes / 90 instructions at this seed, so the extent is not trustworthy yet)
+```
+
+Together with the runtime-observed call sites, this is the AI-graph initialisation sequence that
+invokes `0x4EE970` (0x51840C), `0x4FAA60` (0x518484) and `0x5186C0` (NodeCriteria). It is a long
+straight-line schedule of subsystem inits - the same shape as `0x508FA0`'s 42-call block, one level
+higher - and `0x508F80` is the thunk `call 0x5183D0; jmp 0x508FA0`, so this sequence sits directly
+between startup and every remaining native.
+
+Assessment recorded honestly: the remaining chain is now four large routines (0x4EE970 3452 B,
+0x4FAA60 837 B, 0x5183D0-region sequence, 0x508FA0 755 B) plus `0x4F9DF0`. Advancing position 1 is
+therefore a multi-round effort with boundary recovery needed per routine; the runtime probe technique
+the Tester validated is the reliable instrument for each boundary, and each transcription must still
+pass the CFG gate before landing.
