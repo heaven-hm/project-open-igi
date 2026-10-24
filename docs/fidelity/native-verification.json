@@ -55588,6 +55588,46 @@
       }
     },
     {
+      "address": "0x004CEF30",
+      "name": "Core_CopyState_4CEF30",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_4cef30.cpp",
+        "sha256": "3dc36708b27a2ea5f32a9ccbc2d9a14de95ce1f4a34531236d1c70c819d9f916",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/004CEF30-DynObj_LinkDynamicCube_13 2.cpp",
+        "sha256": "683de84933d6a5657bbba231adb8306362aefd2e3726585d6af413eced18da54",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x004CEF30",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004CEF30-binaryninja.json",
+          "evidence_sha256": "ce6224b472c7a87fcbcb569bbc75f693b935013d84cbef9c621a308bdcefe294"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x004CEF30",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004CEF30-radare2.json",
+          "evidence_sha256": "09ae995d6af61b6625da5f861bee8e7ac0eccc4d42b3b907208fd925350f9436"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004CEF30-semantic-review.json",
+          "evidence_sha256": "0b987ee3b8fe757fc966e271e7b656dc9660b7f3997644cdd05f3c6d4308dc56"
+        }
+      }
+    },
+    {
       "address": "0x004CF080",
       "name": "DynObj_LoadModelTexturePackage",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
