@@ -36,9 +36,13 @@ struct TaskTypeSlot
     std::uint8_t unknown_0x0A[0x1A];
     std::uint8_t has_task_list;              // +0x24, 0x00AF5F04
     std::uint8_t in_use;                     // +0x25, 0x00AF5F05
-    std::uint8_t unknown_0x26[0x06];
+    std::uint8_t unknown_0x26[0x02];
+    std::uint16_t handler_mask;              // +0x28, written by 0x004014B0
+    std::uint8_t unknown_0x2A[0x02];
     std::uint32_t inherited_flags;           // +0x2C, 0x00AF5F0C
 };
+static_assert(offsetof(TaskTypeSlot, handler_mask) == 0x28, "the retail slot layout");
+static_assert(sizeof(TaskTypeSlot) == 0x30, "the retail slot is 0x30 bytes");
 static_assert(offsetof(TaskTypeSlot, object_size) == 0x04, "the retail slot layout");
 static_assert(offsetof(TaskTypeSlot, parent_type) == 0x08, "the retail slot layout");
 static_assert(offsetof(TaskTypeSlot, in_use) == 0x25, "the retail slot layout");
@@ -73,6 +77,11 @@ extern igi::retail::core::TaskTypeSlot QTask_TypeTable[igi::retail::core::task_t
 // the table the per-frame dispatch at 0x00401050 reads. The retail stores the
 // class handler itself in the table and the per-frame calls it.
 extern igi::retail::core::FrameHandler QTask_HandlerTable[];
+
+// Retail global at 0x0054FF24: the 16-byte phase map read by 0x004014E0 (0xFF =
+// phase absent). The retail symbol is unknown; address-named until evidence names
+// it. Written by the 0x00401400/0x00401530 link natives, not by 0x004014E0/B0.
+extern std::uint8_t g_54ff24[16];
 
 // The retail's event table at 0x0054F930. Each entry is six bytes: the
 // argument word at +0x00, the used byte at +0x02 and the second used byte at

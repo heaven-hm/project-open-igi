@@ -344,6 +344,10 @@ constexpr RetailRegistrationRecord kRetailRegistrationOrder[] = {
 extern "C" {
 
 igi::retail::core::TaskTypeSlot QTask_TypeTable[igi::retail::core::task_type_slot_count] = {};
+
+// Native data: retail 0x0054FF24, 16-byte phase map (initial contents not yet
+// captured; writers are the 0x00401400/0x00401530 link natives).
+std::uint8_t g_54ff24[16] = {};
 igi::retail::core::FrameHandler QTask_HandlerTable[igi::retail::core::task_type_slot_count *
                                        igi::retail::core::task_phase_stride] = {};
 std::uint8_t QTask_EventTable[igi::retail::core::event_table_entry_count * 6U] = {};
