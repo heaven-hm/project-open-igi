@@ -810,3 +810,26 @@ and the site values are `arg2 = 0x4B7EA0` (a handler/callback address), `arg3 = 
 
 So the round-87 "at least seven arguments" and "field source unknown" questions are closed:
 exactly seven arguments, and `0x4B8830`/`0x4B7EA0` are handler addresses passed as arg2.
+
+### 0x4BAAC0 blocked on unowned symbol-list global 0x00A43E88 (owner located)
+
+`0x00A43E88` does not exist in `engine/` (no field, no reference). Byte-reference search gives
+readers and the writers:
+
+```
+readers: 0x4BAAE3 (inside 0x4BAAC0), 0x4BAB48, 0x4BAB88, 0x4BABA0, 0x4BAD40
+writers: 0x4BACDA (store) and 0x4BAD52 (store 0)
+```
+
+So the owner is the function containing `0x4BACDA`/`0x4BAD52` (the symbol-table initialise/teardown
+pair around `0x4BAC80`-`0x4BAD60`), which is not yet transcribed. `0x4BAAC0` therefore stays
+unwritten: it only consumes the list, and inventing the storage here would be the same violation
+already rejected twice (0x009422E8, 0x00936274).
+
+Confirmed separately: at the `0x4B7E9C` call site the registrar does `add esp,0x1c; ret`
+immediately, discarding `0x4BAAC0`'s eax, so the implicit return value retail leaves behind
+(index+1 from the flag-stack push) is unobserved by callers - recorded as the reason a void
+signature would be behaviourally safe even though retail leaves a value in eax.
+
+Next productive step: decode the `0x4BAC80`-`0x4BAD60` pair that owns this list (init/teardown),
+then `0x4BAAC0` becomes writable, matching the same order used for the flag-stack family.
