@@ -48,6 +48,7 @@ add_executable(igi WIN32
     engine/src/retail/core/retail_error.cpp
     engine/src/retail/core/main.cpp
     engine/src/retail/core/native_48f490.cpp
+    engine/src/retail/core/native_4c1780.cpp
     engine/src/retail/core/native_48f4f0.cpp
     engine/src/retail/core/task_types.cpp
     engine/src/retail/diagnostics/log_record.cpp

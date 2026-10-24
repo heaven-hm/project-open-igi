@@ -2,6 +2,7 @@
 
 #include "igi/retail/core/flow.hpp"
 #include "igi/retail/core/game_flow.hpp"
+#include "igi/retail/core/native_4c1780.hpp"
 
 #if defined(_MSC_VER) && defined(_M_IX86)
 #define NATIVE_DECL __cdecl
@@ -56,7 +57,8 @@ void NATIVE_DECL QTask_RegisterClasses()
     ReportNotTranscribed("level flow");
     ReportNotTranscribed("game options");
     RegisterGameClasses();
-    ReportNotTranscribed("task list");
+    // 0x004C1780: ret-only task-list registrar, transcribed; it registers nothing.
+    AnimSound_LoadParameters_4C1780();
     RegisterFlowClass();
 }
 
