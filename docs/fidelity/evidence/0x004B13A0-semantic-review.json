@@ -41,11 +41,11 @@
       "rationale": "On a match retail computes index*9, adds index, multiplies by 4 twice and stores zero at 0x009423C0 + index*0x94; the transcription keeps the 0x94 stride and the zero store, and returns with no value."
     }
   ],
-  "evidence": "docs/fidelity/evidence/0x4EE970-data-extents.md section 22.3",
+  "evidence": "docs/fidelity/evidence/0x4EE970-data-extents.md section 22.3 Retail runtime evidence (spawn-suspended Frida, retail igi.exe alone, probe 63c9c669...): docs/fidelity/evidence/qfile-startup-20261024T195947Z/OBSERVATION.md.",
   "limitations": [
-    "Runtime unobserved.",
-    "0x009423C0 is owned by native_4b12d0.cpp and declared extern here; the record table 0x00942330 has no external owner, so this file defines it and it starts zeroed.",
-    "The record's fields beyond the name at +0x00 and the +0x90 word are not established; the table is raw bytes rather than a described structure.",
-    "What the cleared word at 0x009423C0 means is unproven; only that retail zeroes it for the matching index."
+    "Runtime OBSERVED on retail: 7 calls with arguments INTROSCREEN:, STATUSSCREEN:, COMPUTER:, MENUSYS:, LANGUAGE: (twice) and MISSION:, matching NO record; the 0x00942330 table was entirely zero at the first call and held six records with those same names plus +0x90 flags by the 30 s snapshot.",
+    "So this routine runs BEFORE the table is populated, and no clear side effect was observed in the window. The populator is unknown and is the next link to derive.",
+    "The cleared word's meaning at 0x009423C0 is still unproven.",
+    "No candidate parity: this is retail-only observation, so the record stays at STRUCTURALLY_VERIFIED and is not promoted."
   ]
 }

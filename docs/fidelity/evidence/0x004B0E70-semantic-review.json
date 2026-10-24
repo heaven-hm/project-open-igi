@@ -41,10 +41,11 @@
       "rationale": "One cdecl argument read from [esp+4] and stored verbatim; nothing else is read."
     }
   ],
-  "evidence": "docs/fidelity/evidence/0x4EE970-data-extents.md section 22.3",
+  "evidence": "docs/fidelity/evidence/0x4EE970-data-extents.md section 22.3 Retail runtime evidence (spawn-suspended Frida, retail igi.exe alone, probe 63c9c669...): docs/fidelity/evidence/qfile-startup-20261024T195947Z/OBSERVATION.md.",
   "limitations": [
-    "Runtime unobserved; the table starts zeroed, so every slot reads free exactly as an unwritten table would.",
-    "This file now owns the table 0x00A94A80 that 0x004B0EB0 clears, after a same-named symbol in another translation unit turned out to be an anonymous-namespace static with no external linkage.",
-    "128 records is what the scanned extent 0x00A94E84-0x00A94A80 = 0x404 yields at 8 stride."
+    "Runtime OBSERVED on retail: 64 calls, the 0x00A94A80 table starts fully zeroed, and 64 slots fill from DisplayOpen through AfterburnerPrimitive - the 128-entry extent is confirmed at runtime.",
+    "Slots 64..127 were free at the end of the observation window, so the free-slot scan and the full-table error path were not exercised.",
+    "Field meanings beyond the +0x00 name pointer and the +0x04 flag remain unproven.",
+    "No candidate parity: this is retail-only observation, so the record stays at STRUCTURALLY_VERIFIED and is not promoted."
   ]
 }

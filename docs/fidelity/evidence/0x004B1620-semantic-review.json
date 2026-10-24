@@ -41,11 +41,11 @@
       "rationale": "Both exits are transcribed: the null-slot exits load EAX with zero (xor eax,eax), and the match exit loads the paired word. No error message is emitted by this routine in retail and none was added."
     }
   ],
-  "evidence": "docs/fidelity/evidence/0x4EE970-data-extents.md section 22.3",
+  "evidence": "docs/fidelity/evidence/0x4EE970-data-extents.md section 22.3 Retail runtime evidence (spawn-suspended Frida, retail igi.exe alone, probe 63c9c669...): docs/fidelity/evidence/qfile-startup-20261024T195947Z/OBSERVATION.md.",
   "limitations": [
-    "Runtime unobserved.",
-    "Neither 0x00546F04 nor 0x00534A70 has an external owner in the tree, so this file defines both and they start zeroed; retail populates them elsewhere.",
-    "The meaning of the paired word in 0x00534A70 is not established, only its address, 4-byte stride and that it is indexed by the matched name's position.",
-    "The table extents are definition sizes, not retail facts; the walk is bounded by the null terminator retail itself tests, so the declared size does not change behavior for a properly terminated table."
+    "Runtime OBSERVED on retail: 351 calls during startup+level-1 load, every call passed the string \"r\" and returned 1.",
+    "The table 0x00546F04 holds exactly four real strings then null - \"r\", \"r+\", \"w\", \"w+\" - and 0x00534A70 holds [1,3,2,3]. So this is a stream-mode lookup, not a device-name lookup: the placeholder name is semantically wrong and is retained only because rule 12 forbids renaming before full verification.",
+    "The declared 16-entry table extent is larger than retail's observed four entries plus null; the walk is bounded by retail's own null terminator, so behavior is unaffected.",
+    "No candidate parity: this is retail-only observation, so the record stays at STRUCTURALLY_VERIFIED and is not promoted."
   ]
 }

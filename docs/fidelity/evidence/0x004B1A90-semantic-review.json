@@ -41,11 +41,11 @@
       "rationale": "The match path returns without loading EAX, so the transcription returns void; no return value is invented."
     }
   ],
-  "evidence": "docs/fidelity/evidence/0x4EE970-data-extents.md section 22.3",
+  "evidence": "docs/fidelity/evidence/0x4EE970-data-extents.md section 22.3 Retail runtime evidence (spawn-suspended Frida, retail igi.exe alone, probe 63c9c669...): docs/fidelity/evidence/qfile-startup-20261024T195947Z/OBSERVATION.md.",
   "limitations": [
-    "Runtime unobserved.",
-    "The head word 0x00943970 has no other owner in the tree, so this file defines it and it starts null; retail's head is populated elsewhere. The routine dereferences it without a null check exactly as retail does.",
-    "Because the next pointer must be non-null before a record is compared, the last record of an acyclic list is never examined. That is retail's observable shape and is transcribed rather than corrected; whether the real list is circular is unproven.",
-    "Record layout beyond +0x00 and +0x18 is not established; the middle is opaque padding rather than a described structure."
+    "Runtime OBSERVED on retail: 135 calls, every one matched a record; 0x00943970 is non-null and the list grows during the run to 69 records, last node at 0x00943974 with a null next.",
+    "The earlier 'starts null' limitation is RESOLVED by observation.",
+    "The last-record-never-compared property is retail's coded order; with a 69-node list at runtime the practical effect of the null-next termination was not itself observed, so it stays unproven as a behavioral consequence.",
+    "No candidate parity: this is retail-only observation, so the record stays at STRUCTURALLY_VERIFIED and is not promoted."
   ]
 }
