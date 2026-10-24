@@ -11,6 +11,21 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - window-only scene capture: launch, load, Escape, capture (internal build, no release)
+
+- **Fixed**: the earlier captures were full-screen grabs of the desktop (they showed the editor, not the game). New
+  `scripts/tester/capture_game_window.py` enumerates windows by `CGWindowID`, raises the game window, captures it with
+  `screencapture -l <window id>` only, and reports pid/window id/bounds/image size/scale so the image is provably that window
+  (`matches_window: true`), with a region fallback when a window has no image backing.
+- **Added**: `scripts/tester/game_scene_capture.py` - the owner's scene-check sequence in one command: launch
+  `<exe> window level<N>` from the game directory through the CrossOver wine launcher, poll until the game window exists, wait the
+  load time, bring it to the front, send Escape to skip the intro/cutscene, capture only the window, then terminate the process.
+- **Verified (retail)**: `igi.exe window level1`, Escape sent (`CGEventPostToPid` + `osascript`), window `igi.exe` title `IGI`
+  id `11715` pid `41085` bounds `1024x668` at `328,177`, captured `2048x1336` (scale 2, `matches_window: true`) ->
+  `screenshots/pair-2026-10-25/retail-level1-scene.png`.
+- **Candidate**: `igi1.exe window level1` through the same sequence produced **no window**: it still fails closed at
+  `0x00402930` before a capturable game window exists. No candidate scene screenshot is claimed; T1 remains blocked on T0.
+
 ### 2026-10-25 - diagnostic logging + paired same-level capture (internal build, no release)
 
 - **Added**: `engine/include/igi/diagnostic_log.hpp` - diagnostic-only logging infrastructure (owner rule 3(a)): never changes control
