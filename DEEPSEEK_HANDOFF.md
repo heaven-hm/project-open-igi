@@ -1324,3 +1324,16 @@ Two record discrepancies found and NOT yet fixed (they are separate work, and re
 Also worth recording as a project-accuracy defect: our fail-closed message at 0x00402930 says the AI graph registrar is
 outside MVP scope, but the function is the startup init sequence. The message is at least incomplete and should be
 corrected in the same change that transcribes the native, not silently kept.
+
+## Artifact frozen and deployed for the message-only change (round 193)
+
+  frozen    build/artifacts/igi1-faf2b948.exe
+  receipt   build/artifacts/igi1-faf2b948-receipt.json (kind diagnostic-candidate-build, result built)
+  plain     faf2b9484e7364214ccf5b0a70f33f3423d51b1d7a46268df6e83473de7d3f18
+  deployed  /Users/haseeb-mir/Downloads/IGI/igi1.exe, byte-identical (re-checked after copy)
+  source    HEAD 3929910e
+
+Supersedes b071553f for runtime observation. Diagnostic receipt again, so it is an observation build and not a
+strict-gate release attestation. Handed to the Tester with an explicit request to record the new stderr verbatim, confirm
+the behaviour is identical apart from the text, and report whether any igi1 or frida-server process survived the run -
+the last two lease handoffs were blocked by 17-hour-old orphans, so that check belongs in every report from now on.
