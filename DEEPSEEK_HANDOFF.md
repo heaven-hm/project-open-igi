@@ -1357,3 +1357,21 @@ handle, and no process survived the run. That check is now part of the requested
 
 Identity: plain faf2b9484e736421, normalised 3cbcd6d7, deployed byte-identical and hash-stable, diagnostic receipt, source
 HEAD 3929910e with an empty engine diff to current HEAD 94e963cc.
+
+## Integrity audit of the six natives landed this session, and a correction to the section 20 ranking (round 197)
+
+Audit result: for 0x004015F0, 0x004CEF30, 0x004E7530, 0x004F0FA0, 0x004F0FD0 and 0x00413B20, every manifest
+implementation.sha256 matches the file on disk and every bound semantic review's evidence_sha256 matches its artifact.
+No stale records, no dangling review bindings.
+
+Ranking correction worth acting on before round 198 takes another "cheap" row: 0x004688B0 (111 B, ranked in the top 10 as
+depending only on 0x004E7530, which has now landed) is NOT self-contained. Its instructions call 0x004018F0, 0x00401900,
+0x00401400 and 0x00401530 twice, and it looks up the "ComputerLog" string at 0x0053F6E4 and pushes handler pointers
+0x00468920/0x00488700/0x00468BB0/0x00468BC0. 0x00401530 is the native already known to be incomplete in this tree (missing
+propagation loop 0x0041582-0x004015AD, the recursive self-call and the zero-arg call to 0x004014B0), so transcribing
+0x004688B0 faithfully would require finishing 0x00401530 first. The triage's "single missing dep" column counted only
+missing *records*, not incomplete implementations.
+
+Action for the ranking: treat an existing but incomplete implementation (0x00401530 is the known case) as a missing
+dependency, and re-rank the top of the list accordingly. Otherwise the sweep will keep selecting rows that cannot be
+landed faithfully, which is the same failure mode as choosing a native and then discovering its CFG extent was wrong.
