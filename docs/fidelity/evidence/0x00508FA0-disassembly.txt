@@ -1734,3 +1734,24 @@ Revised order, driven by ownership rather than address:
 
 Recorded so the next rounds do not repeat the attempt-then-block cycle: none of 2-4 can land before
 1, and 1 is large enough that it must be transcribed by registration block across multiple rounds.
+
+### Who writes 0xA70CA0: a registration call, not a literal store
+
+```
+0x4EF569  edx = [0xA70C90]
+0x4EF56F  push eax; push edx; call 0x4F1BC0        ; (A) two args
+0x4EF576  push -1; push 0x54DF48 ("Graph"); call 0x4F19C0   ; (B) two args
+0x4EF582  add esp,0x14
+0x4EF585  [0xA70CA0] = eax                         ; = result of (B), the "Graph" registration
+0x4EF58A  push 0x4D3710; call 0x4F1B60             ; constant/descriptor arg
+0x4EF595  eax = [0xA70CA0]; push eax; call 0x4F1BC0
+```
+
+So `0x00A70CA0` is **the handle returned by registering the name `"Graph"` with argument -1** through
+`0x4F19C0`. That makes `0x4F19C0` (121 B, 8 blocks) and `0x4F1BC0` (86 B, 6 blocks) the two routines
+that must land before `0x4F1020`/`0x4FAA60`; both listings captured
+(`docs/fidelity/evidence/0x004F19C0-listing.txt`, `0x004F1BC0-listing.txt`).
+
+`0x4F19C0` looks like the general "register a named thing, return its handle" primitive and `0x4F1BC0`
+the two-argument attribute/property writer. They are small enough to transcribe next and they unblock
+the chain that reaches `0x508FA0`.

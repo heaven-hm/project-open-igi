@@ -1,0 +1,48 @@
+            0x004f19c0      33c0           xor eax, eax
+            0x004f19c2      b92859a700     mov ecx, 0xa75928
+        .-> 0x004f19c7      833900         cmp dword [ecx], 0
+       ,==< 0x004f19ca      741b           je 0x4f19e7
+       |:   0x004f19cc      83c14c         add ecx, 0x4c               ; 76
+       |:   0x004f19cf      40             inc eax
+       |:   0x004f19d0      81f9286ca700   cmp ecx, 0xa76c28
+       |`=< 0x004f19d6      7cef           jl 0x4f19c7
+       |    0x004f19d8      68ece05400     push str.Unable_to_allocate_parameter_type ; 0x54e0ec ; "Unable to allocate parameter type"
+       |    0x004f19dd      e8ceddfbff     call 0x4af7b0
+       |    0x004f19e2      83c404         add esp, 4
+       |@-> 0x004f19e5      ebfe           jmp 0x4f19e5
+       `--> 0x004f19e7      8b542408       mov edx, dword [esp + 8]
+            0x004f19eb      56             push esi
+            0x004f19ec      83faff         cmp edx, 0xffffffff
+        ,=< 0x004f19ef      7423           je 0x4f1a14
+        |   0x004f19f1      8d0cd2         lea ecx, [edx + edx*8]
+        |   0x004f19f4      57             push edi
+        |   0x004f19f5      8d0c4a         lea ecx, [edx + ecx*2]
+        |   0x004f19f8      8d348de058..   lea esi, [ecx*4 + 0xa758e0]
+        |   0x004f19ff      8d0cc0         lea ecx, [eax + eax*8]
+        |   0x004f1a02      8d0c48         lea ecx, [eax + ecx*2]
+        |   0x004f1a05      8d3c8de058..   lea edi, [ecx*4 + 0xa758e0]
+        |   0x004f1a0c      b913000000     mov ecx, 0x13               ; 19
+        |   0x004f1a11      f3a5           rep movsd dword es:[edi], dword [esi]
+        |   0x004f1a13      5f             pop edi
+        `-> 0x004f1a14      8b742408       mov esi, dword [esp + 8]
+            0x004f1a18      8d0cc0         lea ecx, [eax + eax*8]
+            0x004f1a1b      8d0c48         lea ecx, [eax + ecx*2]
+            0x004f1a1e      c1e102         shl ecx, 2
+            0x004f1a21      c7812859a7..   mov dword [ecx + 0xa75928], 1 ; [0xa75928:4]=0
+            0x004f1a2b      89b1e058a700   mov dword [ecx + 0xa758e0], esi ; [0xa758e0:4]=0
+            0x004f1a31      8991e458a700   mov dword [ecx + 0xa758e4], edx ; [0xa758e4:4]=0
+            0x004f1a37      5e             pop esi
+            0x004f1a38      c3             ret
+            0x004f1a39      90             nop
+            0x004f1a3a      90             nop
+            0x004f1a3b      90             nop
+            0x004f1a3c      90             nop
+            0x004f1a3d      90             nop
+            0x004f1a3e      90             nop
+            0x004f1a3f      90             nop
+            0x004f1a40      8b442404       mov eax, dword [esp + 4]
+            0x004f1a44      8d0cc0         lea ecx, [eax + eax*8]
+            0x004f1a47      8d1448         lea edx, [eax + ecx*2]
+            0x004f1a4a      c704952859..   mov dword [edx*4 + 0xa75928], 0 ; [0xa75928:4]=0
+            0x004f1a55      c3             ret
+            0x004f1a56      90             nop

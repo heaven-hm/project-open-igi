@@ -1,0 +1,34 @@
+            0x004f1bc0      53             push ebx
+            0x004f1bc1      8b5c240c       mov ebx, dword [esp + 0xc]
+            0x004f1bc5      55             push ebp
+            0x004f1bc6      8b6c240c       mov ebp, dword [esp + 0xc]
+            0x004f1bca      0fbed3         movsx edx, bl
+            0x004f1bcd      8d44ed00       lea eax, [ebp + ebp*8]
+            0x004f1bd1      56             push esi
+            0x004f1bd2      57             push edi
+            0x004f1bd3      bee458a700     mov esi, 0xa758e4
+            0x004f1bd8      8d4c4500       lea ecx, [ebp + eax*2]
+            0x004f1bdc      8b44241c       mov eax, dword [esp + 0x1c]
+            0x004f1be0      03ca           add ecx, edx
+            0x004f1be2      33ff           xor edi, edi
+            0x004f1be4      89048de858..   mov dword [ecx*4 + 0xa758e8], eax ; [0xa758e8:4]=0
+        .-> 0x004f1beb      8b4644         mov eax, dword [esi + 0x44]
+        :   0x004f1bee      85c0           test eax, eax
+       ,==< 0x004f1bf0      7413           je 0x4f1c05
+       |:   0x004f1bf2      392e           cmp dword [esi], ebp
+      ,===< 0x004f1bf4      750f           jne 0x4f1c05
+      ||:   0x004f1bf6      8b4c241c       mov ecx, dword [esp + 0x1c]
+      ||:   0x004f1bfa      51             push ecx
+      ||:   0x004f1bfb      53             push ebx
+      ||:   0x004f1bfc      57             push edi
+      ||:   0x004f1bfd      e8beffffff     call 0x4f1bc0
+      ||:   0x004f1c02      83c40c         add esp, 0xc
+      ``--> 0x004f1c05      83c64c         add esi, 0x4c               ; 76
+        :   0x004f1c08      47             inc edi
+        :   0x004f1c09      81fee46ba700   cmp esi, 0xa76be4
+        `=< 0x004f1c0f      7cda           jl 0x4f1beb
+            0x004f1c11      5f             pop edi
+            0x004f1c12      5e             pop esi
+            0x004f1c13      5d             pop ebp
+            0x004f1c14      5b             pop ebx
+            0x004f1c15      c3             ret
