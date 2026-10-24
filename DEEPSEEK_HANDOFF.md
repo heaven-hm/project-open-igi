@@ -580,3 +580,29 @@ Still to read before transcription: the exact argument order (arg1 class word vi
 `[esp+0x14]`; `edx` from `[esp+0x18]`; another from `[esp+0x1c]` that is forwarded in the recursive call), and
 `0x401400`'s body. Do not guess the signature: the earlier `0x401900` episode showed the argument count is
 readable directly from the callee's own `[esp+N]` accesses.
+
+## 0x401530 and 0x401400 argument frames derived from their own bodies (round 153)
+
+Re-derived the stack frames from the callees' own `[esp+N]` reads rather than from call sites, the method that
+settled the 0x401900 question.
+
+`0x401530` (158 B, 7 blocks) - **three arguments**, not five:
+- after `push ebx`/`push ebp` (8 bytes) `mov eax,[esp+0xc]` is **arg1**; it is `and eax,0xffff` and used as the
+  id/index into the handler table at `0x00A96AE0` (`mov dword [eax*4+0xa96ae0], edx`).
+- after `push esi` (12 bytes) `mov edx,[esp+0x18]` is **arg3**, stored into that handler table - so arg3 is the
+  handler/state value.
+- after `push edi` (16 bytes) `mov eax,[esp+0x1c]` is also **arg3**, forwarded to the recursive self-call.
+- the recursive call at `0x004015A5` passes `(ebx, ebp, arg3)` = (class-record index, the word compared against
+  the record's class word, handler value), so arg2 is the class word and the record word at `[edi]` is the
+  candidate derived class.
+- returns the decremented registration counter and stores it back at `0x00567C70`.
+- `call 0x4014B0` runs after the propagation loop.
+
+`0x401400` (164 B, 7 blocks) is the sibling registrar and takes **three arguments** too: `mov ebp,[esp+0x10]`
+after `push ebx`/`push ebp` (8) is arg2, `and eax,0xff` masks it to eight bits, and `mov edx,[esp+0x18]` after
+`push esi` (12) is arg3. It uses the same derived-class counter `0x00536148` and its own registration counter at
+`0x00567C6C` (note: 0x401530 uses 0x00567C70 - two separate counters, do not merge them).
+
+Both remain untranscribed. Open before writing: where arg2 is read in `0x401530` (it does not appear in the
+filtered instruction set - likely consumed by the same propagation comparison the recursive call uses), and the
+full body of `0x4014B0` which both call.
