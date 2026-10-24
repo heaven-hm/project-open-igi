@@ -549,3 +549,34 @@ opposite direction.
 23 of 84 handlers now exist and none can execute. Further handler batches add coverage without reachability, so
 the next work is the `0x401530` / `0x401400` invocation path and the class table, with class-method signatures
 kept blocked until the invocation sites are evidenced.
+
+## Class channel: first structural facts (round 152)
+
+`0x401530` is `0x00DF` bytes, 7 blocks, and it is the class-property/method registrar the six class-method
+handlers and the thirteen constants are waiting on. What its body establishes:
+
+- **Class record table: base `0x00AF5EE8`, stride `0x30`, 384 records.** The loop runs `edi` from `0xAF5EE8` to
+  `0xAFA6E8` (`add edi,0x30` / `cmp edi,0xa...e8` / `jl`), i.e. `(0xAFA6E8-0xAF5EE8)/0x30 = 384`. It reads
+  `word [edi]` (the class word) and `byte [edi+0x1D]` (the name byte). This is the SAME table `0x401900` scans:
+  `0x401900` walks from `0xAF5F05` (= record base + 0x1D) to `0xAFA705` (= last record base + 0x1D). So the two
+  registrars share one 384 x 0x30 class table with the name at +0x1D, the class word at +0x00, and the
+  parent/derived links the earlier auditors found at +0x04/+0x08/+0x0C/+0x28. Any storage claimed for this table
+  must be one object of 384 x 0x30, not two.
+- **Handler/state table: `0x00A96AE0`, indexed by `id * 4`**, receives `edx` (the handler or state value) at
+  `0x0040156E: mov dword [eax*4 + 0xa96ae0], edx`.
+- **Flag bytes at `0x0054FF34 + id`**, written as `cl` where `cl = (registration_counter == 1)`
+  (`cmp ecx,1; sete cl`), and read back inside the subclass-propagation loop as
+  `byte [esi + ebx + 0x54ff34]` to skip already-propagated records. This region is NOT yet modelled and is an
+  eight-bit store - the exact class that produced the very first CFG-invisible defect.
+- **Registration counter at `0x00567C70`** incremented on entry and decremented on exit; its value seeds the id
+  range. **Derived-class counter at `0x00536148`** (`inc ebp` / `mov [0x536148],ebp`).
+- **Propagation:** when a record's class word matches the argument and its flag byte is still zero, it calls
+  itself recursively with `(ebx, ebp, arg3)`, so a property registered on a base class is applied to each
+  derived class as well. The recursion is why the flag bytes exist.
+- **`call 0x4014B0` after the loop** - a rebuild/invalidate step that must be transcribed before the registrar's
+  behaviour is complete, since it runs on every registration.
+
+Still to read before transcription: the exact argument order (arg1 class word via `and eax,0xffff`; `ebp` from
+`[esp+0x14]`; `edx` from `[esp+0x18]`; another from `[esp+0x1c]` that is forwarded in the recursive call), and
+`0x401400`'s body. Do not guess the signature: the earlier `0x401900` episode showed the argument count is
+readable directly from the callee's own `[esp+N]` accesses.
