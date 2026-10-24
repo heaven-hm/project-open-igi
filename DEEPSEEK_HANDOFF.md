@@ -707,3 +707,23 @@ every root record. Both are real arithmetic in retail and must be transcribed as
 Next: agent-check corrections 1-6 against the current task_types.cpp before editing, then implement QTask_Init's
 zero-fill and make 0x401530 a proper native at its own VA. Do not treat any of the above as verified until the
 existing code is diffed against it.
+
+## First verification of the six corrections against the tree (round 157)
+
+Spot-checked the analyst's claims in the current source rather than trusting them:
+
+- **Index formula: the PORT is right, my note was wrong.** `task_types.cpp:22`, `:476`, `:491`, `flow.cpp:180`,
+  `game_flow.cpp:32` and `terrain_storage.cpp:139` all already describe `class_id + phase * 384`. Since
+  0x180 = 384 those agree with the proven index `class_id + phase*0x180`. The transposition was in my handoff
+  note only, not in engine code. Correction 3 is withdrawn as a code defect.
+- **The 0x17D00 zero-fill is genuinely absent.** No `0x17D00` appears anywhere under `engine/`; the only
+  occurrences of the table address are comments. So QTask_Init's `mov ecx,0x17d00 / mov edi,0xa96ae0 / rep stosd`
+  block - the very instruction trio that proves the extent - is not transcribed, and no storage of 0x17D00
+  elements exists. Corrections 5 and 6 stand and are the next concrete code work.
+- Still to verify before editing: the actual array declarations behind the handler/flag tables (the comments
+  say `class_id + phase*384`, so a 0x17D00-element declaration may already be right in size while the initialiser
+  is missing), and whether `link_handler` matches 0x401530 (analyst says it does not: no propagation loop, no
+  0x4014B0 tail, wrong return value, extra mask).
+
+Rule for this verification pass: take each correction to the file and line that would show it, publish only what
+the source shows, and withdraw the ones the source disproves - as with correction 3 here.
