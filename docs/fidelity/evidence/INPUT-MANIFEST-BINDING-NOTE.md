@@ -94,3 +94,37 @@ was discovered (`native_48f090.cpp` built fine). Candidate causes: the
 `extern "C"`-only signature (no `NATIVE_DECL` token), or the `IAT thunk` phrase in
 the name. Fix belongs in the provenance/signature comment of those three files or
 in the recognizer's pattern list - not in a hand-written manifest record.
+
+## Round 14: the three VAs are already in the manifest - with wrong identities
+
+The recognizer is fine: `ng.implementation_natives` returns the expected native for
+all four files (`0x0048F090`, `0x0048F0A0`, `0x004AF740`, `0x004AE730`). The
+builder skipped three because the manifest already contains those addresses:
+
+| VA | existing manifest name/status | existing implementation |
+| --- | --- | --- |
+| `0x0048F0A0` | `AppContext_GethWnd`, **VERIFIED** | `scripts/GameNatives/0048f0a0-AppContext_GethWnd.cpp` |
+| `0x004AF740` | `Camera_ApplyBandFilter_30`, STRUCTURALLY_VERIFIED | `scripts/GameNatives/camera/004AF740-Camera_ApplyBandFilter_30 2.cpp` |
+| `0x004AE730` | `Camera_SetFieldOfView_30`, STRUCTURALLY_VERIFIED | `scripts/GameNatives/camera/004AE730-Camera_SetFieldOfView_30 2.cpp` |
+
+So the catalog carries **stale/incorrect identities for these exact VAs**:
+`0x004AF740`/`0x004AE730` are the `DirectInputCreateA`/`DirectInputCreateEx` IAT
+thunks (`ff 25 38/3c 30 53 00`), not camera functions, and `0x0048F0A0` is the
+window-handle getter (`a1 c4 8b 5c 00 c3`), not `AppContext_GethWnd`. One of them
+is even marked VERIFIED against a different implementation.
+
+This is a fidelity problem, not a bookkeeping nuisance: a VERIFIED status on the
+wrong identity can hide a real native, and it is exactly the failure mode
+`--changed` cannot surface because the address is "already covered".
+
+## Required next steps
+
+1. Re-point those three records at the engine transcription (`implementation.path`
+   + sha256), correct the names to the behavior the bytes prove, and drop the
+   VERIFIED status until this session's evidence supports it - using
+   `scripts/apply_manifest_names.py` / the record tooling, not hand edits that
+   bypass the evidence schema.
+2. Re-run `build_native_records.py` for the three with `--force` so BN+r2
+   artifacts are generated from the retail image and the CFG score is recorded.
+3. Audit for other catalog entries whose names disagree with their bytes; the
+   camera-named thunks suggest the old catalog had address/name drift.
