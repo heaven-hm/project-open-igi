@@ -555,3 +555,22 @@ So the NodeCriteria chain now has a second kind of blocker beyond missing callee
 unowned retail state. This is the same situation as `0x4AF810`'s `0x00936274`, which
 suggests the next productive step is transcribing the module initializer that sets these
 globals rather than continuing to decode their consumers.
+
+### 0x4C0560 preliminary (192 B, 4 blocks) - hash-list insert/lookup for node records
+
+Entry shape:
+
+```
+push ebx; ebx = arg3; push ebp; ebp = arg2; lea eax, [arg3]; push ebx; push eax; push ebp
+call 0x004C04B0(arg2, &arg3, arg3); add esp,0xc
+test al,al; je 0x4C058D
+```
+
+So it delegates the work to `0x004C04B0` (three arguments: the list head passed by `0x4BAAC0`',
+a pointer to the caller's out-slot, and the value), branching on the boolean result. Because
+`0x4BAAC0` stores the return in `[record+0x14]`, this is the routine that yields the handle.
+
+New dependency named: `0x004C04B0`. Its size/blocks are not yet captured, so `0x4C0560` and
+therefore `0x4BAAC0` remain unwritable. Chain for the NodeCriteria path is now:
+`0x5186C0 -> 0x4B8810 -> 0x4BAAC0 -> {0x4B0D60 (landed), 0x4B0C60 (landed), 0x4AF960/0x4AF8F0
+(landed), 0x4C0560 -> 0x4C04B0 (missing), 0x4B8830 (missing)}`.
