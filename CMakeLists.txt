@@ -104,6 +104,14 @@ add_executable(igi WIN32
     engine/src/retail/config/native_416880.cpp
     engine/src/retail/config/native_416890.cpp
     engine/src/retail/sys/native_4aa0a0.cpp
+    engine/src/retail/sys/native_47b100.cpp
+    engine/src/retail/sys/native_477bf0.cpp
+    engine/src/retail/sys/native_46ab20.cpp
+    engine/src/retail/sys/native_448550.cpp
+    engine/src/retail/sys/native_443e80.cpp
+    engine/src/retail/sys/native_430950.cpp
+    engine/src/retail/sys/native_42fdc0.cpp
+    engine/src/retail/sys/native_424b80.cpp
     engine/src/retail/sys/native_4f1e20.cpp
     engine/src/retail/sys/native_4f1e10.cpp
     engine/src/retail/sys/native_4f1e00.cpp
