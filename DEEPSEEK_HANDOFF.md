@@ -932,3 +932,23 @@ with a dropped pool branch. What is genuinely absent from the manifest is the re
 deleting input_port_process.cpp's wrong version in the same change (one implementation per VA); (2) add
 0x4014B0/0x4014E0; (3) fix the FrameHandler ABI and every registrar call site as one change; (4) only then wire
 0x401A60, whose storage comes from the rewritten allocator.
+
+## Gate is vacuous when run after commit; targeted gate exposes the real evidence gaps (round 166)
+
+`scripts/native_gate.py --changed` examines STAGED, UNSTAGED and UNTRACKED native files only. Because this session
+commits each change before gating, every `--changed` run reported "0 changed native(s) passed" - it checked nothing.
+That is a process defect, not a pass: §10.7 says the gate selects edited native sources, and after a commit there are
+no edited sources. Run it PRE-COMMIT, or target the change explicitly with
+`--file <source> --address <VA>` (repeatable `--address`) / `--tree`.
+
+First non-vacuous run, on the allocator changed today:
+`python3 scripts/native_gate.py --root . --file engine/src/retail/core/task_types.cpp --address 0x004017C0
+ --threshold VERIFIED --cfg-threshold 0.85 --require-semantic-evidence --require-behavioral-tests`
+=> **BLOCKED, 6 issues**: status STRUCTURALLY_VERIFIED is below the required VERIFIED; the implementation changed
+since its evidence record was reviewed; and the required structural/semantic artifacts do not exist:
+docs/fidelity/evidence/0x004017C0-binaryninja.json, -radare2.json, -semantic-review.json.
+
+So 0x004017C0 is behaviour-verified by hand but not gate-verified. Closing that gap is the Tester's work: produce the
+BN graph JSON, the radare2 graph JSON, a semantic-review JSON authorising the runtime contract, then promote only if
+the gate passes. Also note the gate treats a multi-line Behavior/CFG section as a malformed five-line block; the
+allocator's provenance is now a genuine five-line block.

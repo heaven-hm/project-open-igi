@@ -511,13 +511,8 @@ std::uint16_t NATIVE_DECL QTask_GetCurrentType()
 // Native: QTask_AllocateEvent; retail VA 0x004017C0.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004017C0..0x0040180C.
-// Behavior/CFG: starts the event id at 0x20 and scans the six-byte event table from 0x0054F9F2
-//           for a free entry, raising "Unable to allocate event" when the table is full. For a
-//           free entry it marks the entry used at 0x0054F932 + id * 6, stores the argument in the
-//           entry's word at 0x0054F930 + id * 6 and marks the entry at 0x0054F933 + id * 6 used.
-//           The event id is returned in AL.
-// Status/limits: STRUCTURALLY_VERIFIED; the scan, the retail store order (+2, one 16-bit +0, +3) and the dword
-//           id return all match, and exhaustion is Debug_Error("Unable to allocate event") then jmp $.
+// Behavior/CFG: scans the 6-byte table from 0x0054F9F2 while record+2 is set; marks +2=1, stores the value word at +0, sets +3=1, returns the id in EAX; exhaustion pushes "Unable to allocate event", calls Debug_Error (0x004AF7B0) and jmp $ at 0x004017E8.
+// Status/limits: STRUCTURALLY_VERIFIED; scan bounds, store order (+2, one 16-bit +0, +3), the dword id return and the exhaustion spin match retail; runtime unobserved for the allocation path because the startup boundary precedes it.
 std::uint32_t NATIVE_DECL QTask_AllocateEvent(std::uint16_t value)
 {
     std::uint32_t event_id = igi::retail::core::first_event_id;
