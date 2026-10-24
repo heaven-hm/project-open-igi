@@ -505,3 +505,26 @@ Neither routine has a provenance line, and the callback is a runtime-installed p
 Consequence: `0x4F9DF0` cannot be written until the logging family exists, even though its
 own 7-block logic is fully decoded. That makes the logging pair the next ordered target,
 because it will also serve other nodes later.
+
+### CORRECTION (round 66) to the 0x4AF810 dependency note
+
+The round-65 note claimed `0x4A53B3` and `0x4A5702` "have no provenance line". Wrong - the
+checks in that same command showed both are implemented in
+`engine/src/retail/error/error_show.cpp`:
+
+- `0x004A5702` = `String_VFormat` (STRUCTURALLY_VERIFIED, 81 B, 4 blocks)
+- `0x004A53B3` also lives in the same module
+
+The static buffer `0x00A84640` is already covered too: `error_show.cpp:8` declares it as
+storage for retail `0x00936268 / 0x0093626C / 0x00A84640` via `ErrorGlobalsState`.
+
+What is genuinely still unowned is the **indirect callback global `0x00936274`** used by
+`0x4AF810` - note that it is a *different* address from the two callback pointers
+`0x00936268/0x0093626C` already stored, so it cannot be folded into them. `0x4AF810` also
+has no transcription yet (no provenance line for `0x004AF810` anywhere).
+
+Also recorded for honesty: `String_VFormat` is implemented by calling the CRT's `vsprintf`
+rather than by transcribing retail's `_output`/`_flsbuf` path. That is pre-existing tree
+debt in the error module - not something introduced by this work - but it means the logging
+path `0x4AF810` would sit on a non-retail implementation, so claiming it VERIFIED later
+requires flagging that dependency scope explicitly.
