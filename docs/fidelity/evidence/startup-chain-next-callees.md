@@ -444,3 +444,74 @@ engine native for `0x00424CE0` must exist in `engine/src/retail/<domain>/` with 
 - No runtime evidence was collected for any address in this report; statements about runtime values
   are explicitly marked unknown.
 - No decompiler pass exists for these bodies (§5.5).
+
+## 9. Wave A / Wave B execution record (post-gate transcriptions)
+
+This section supersedes §8's "nothing was transcribed" for the addresses listed here only. Every file
+below keeps the five-line provenance block with the retail VA, the image hash, the r2 CFG numbers, the
+entry-argument reads and the limits.
+
+### 9.1 Files written (new, `engine/src/retail/core/`)
+
+| Retail VA | File | r2 CFG (af/pd) | Entry arguments |
+| --- | --- | --- | --- |
+| `0x00424C10` | `native_424c10.cpp` | 47 B, 1 block, 0 edges, 12 instrs | two stack args: `[esp+4]` record pointer, `[esp+8]` context word |
+| `0x00424CA0` | `native_424ca0.cpp` | 50 B, 4 blocks, 5 edges, 13 instrs | four-word WinProc frame: `[esp+4]` window (unread), `[esp+8]` message, `[esp+0xC]` wparam (unread), `[esp+0x10]` lparam |
+| `0x00424280` | `native_424280.cpp` | 117 B, 10 blocks, 14 edges, 40 instrs | one stack arg: `[esp+4]` record pointer |
+| `0x00424B90` | `native_424b90.cpp` | 121 B, 1 block, 0 edges, 33 instrs | no arguments (registrar) |
+
+All four are syntax-checked with `clang++ -std=c++17 -fsyntax-only -Iengine/include`; nothing else was
+built or run (`TRANSCRIBED`, runtime UNOBSERVED).
+
+### 9.2 Dispatch shape per handler
+
+- `0x00424C10` reads a second stack argument, so it belongs to the two-word phase-0 dispatch at
+  `0x004012DE` (`QTask_RegisterInputPortHandler` pushes the record and a 32-bit context, cleans 8),
+  not to the one-word dispatch at `0x00402481`. The second argument is stored at `+0x20`; its meaning
+  is not established by any reader.
+- `0x00424CA0` is a window-procedure handler: registered through `0x0048F490` into the chain at
+  `0x005C8DF0`, whose call frame at `0x0048F970` passes four words and whose entry type is declared in
+  `engine/include/igi/retail/core/native_0048f970.hpp`. Plain `ret`; the caller cleans.
+- `0x00424280` takes one argument and calls its selected table handler with one argument, so it is a
+  one-word dispatch handler (`0x00402481` path) and `FrameHandler`-compatible.
+- `0x00424B90` is called with no arguments from the startup sequence at `0x00402BC9`; the deferred
+  argument cleanup is `add esp,0x38` (fourteen words) and then `add esp,0x10` (four words).
+
+### 9.3 Globals defined
+
+- `0x0057BC58` / `0x0057BC5C` (cursor x/y, written by `0x00424CA0`, read by `0x00424CE0`) are
+  unowned elsewhere in the tree, so `native_424ca0.cpp` defines them as `std::int32_t` with initial
+  value 0. Both VAs lie beyond the `.data` raw bytes (raw `.data` ends at VA `0x00552000`), so the
+  image leaves them zero-initialised; the signedness follows the `movswl` stores.
+- `0x0057BC60` (Cursor class id, written by `0x00424B90`) is defined as `std::uint16_t` with initial
+  value 0 in `native_424b90.cpp`, for the same zero-fill reason.
+
+### 9.4 Still blocked
+
+- `0x00424C40` — `0x004B4E00` is not in the manifest. `0x004B4E00` is a 317-byte, 74-instruction,
+  single-block **leaf**: no calls at all and no code immediates, so it is transcribable on its own and
+  is the cheapest unblocking step. Its only other dependency is a float immediate, not a call.
+- `0x00424CE0` — no engine native; the manifest record is VERIFIED only through the reference
+  candidate `scripts/GameNatives/00424ce0-Cursor_RunHandler.cpp`. An engine transcription would also
+  need `0x00491CF0` (`Display_GetActiveMode`), which has no engine implementation (only comments in
+  `render/view_block.cpp` and `terrain/terrain_draw.cpp` reference it).
+- `0x00424B90` was written despite §6's conclusion, because the corpus precedent
+  `engine/src/retail/core/native_005310e0.cpp` pushes handler words as retail-VA literals. Two of its
+  five literals (`0x00424C40`, `0x00424CE0`) therefore have no engine native behind them; the
+  `0x00424C10` and `0x00424CA0` literals can be replaced by `Cursor_InitState_424C10` /
+  `Cursor_WinProcMouseMove_424CA0` once those files join the build.
+- Wave B item 5, `0x0046DFB0` (583 B, 9 blocks, 154 instrs) — of its eight call targets only
+  `0x00401CF0` (VERIFIED), `0x00416830` and `0x00416840` (TRANSCRIBED) exist;
+  `0x00416920`, `0x004528F0`, `0x00460BE0`, `0x004B3790`, `0x004CC2A0` are all absent from the
+  manifest. `0x0046DF70` and `0x0046DF10` depend on `0x0046DFB0`, so they stay blocked with it.
+- Wave B item 6 — `0x004150E0` needs `0x00491610`, `0x004905A0` and the code immediate `0x00415170`;
+  `0x00415380` needs `0x00490D10`, `0x004903B0`, `0x004905A0` and `0x00415170`; `0x00415450` needs
+  `0x004903B0`; all absent from the manifest. `0x00415070` additionally needs `0x004E68D0`, which has
+  no engine implementation, so that registrar stays blocked after its handlers land.
+
+### 9.5 Open review note for the Lead
+
+`engine/include/igi/retail/core/task_types.hpp` still names the two link-native arguments
+`event_id, context` (`0x00401530`/`0x00401400` declarations) while the corrected bodies use the first
+as the class id and the second as the phase. The header was not edited (Lead owns it); the
+`0x00424B90` transcription relies on the corrected roles, so the parameter names are stale.

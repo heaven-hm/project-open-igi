@@ -11,6 +11,31 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - Wave A of the startup chain: Cursor registrar and its handlers (internal build, no release)
+
+- **Integrated 4 new natives**, each with the five-line provenance block, one file per retail VA, CFG measured on both engines:
+  | VA | native | size / CFG (Binary Ninja = radare2) |
+  | --- | --- | --- |
+  | `0x00424280` | `Task_WalkAndDispatchEvent_424280` | 117 B, 10 blocks / 14 edges |
+  | `0x00424B90` | `Cursor_Init_424B90` (registrar called from `0x00402BC9`) | 121 B, 1 block / 0 edges |
+  | `0x00424C10` | `Cursor_InitState_424C10` (phase-0 handler) | 47 B, 1 block / 0 edges |
+  | `0x00424CA0` | `Cursor_WinProcMouseMove_424CA0` (WM_MOUSEMOVE handler) | 50 B, 4 blocks / 5 edges |
+  Score: **1.000** on all four (node/edge Jaccard, Binary Ninja view vs radare2 `afbj`), status `STRUCTURALLY_VERIFIED`, build green.
+- **ABI facts recorded, not papered over**: `0x00424C10` reads a second stack argument, so it belongs to the two-word phase-0 dispatch at
+  `0x004012DE` (push context, push record, clean 8), not the one-word `0x00402481` site; `0x00424CA0` is a four-word window-procedure
+  frame; `0x00424280` is one-word and `FrameHandler`-compatible. `FrameHandler` itself is unchanged.
+- **Globals** `0x0057BC58`/`0x0057BC5C` (cursor x/y) and `0x0057BC60` (Cursor class id) had no owner in the tree; each is now defined
+  exactly once, in the file of the native that owns it, as image zero-fill with the retail signedness.
+- **Header correction**: `task_types.hpp` still called the link-native arguments `event_id, context`; the corrected bodies take
+  `class_id` first and the event word second (`0x00401400` masks it to its low byte, `0x00401530` uses the full word), so the parameters,
+  their documentation and the two natives now agree.
+- **Still blocked, with the reason recorded**: `0x00424C40` needs `0x004B4E00` (absent from the manifest; it is a 317 B single-block leaf,
+  the cheapest unblock), `0x00424CE0` needs `0x00491CF0`, and the Wave B registrars need `0x00416920`/`0x004528F0`/`0x00460BE0`/
+  `0x004B3790`/`0x004CC2A0`/`0x00491610`/`0x004905A0`/`0x00490D10`/`0x004903B0`. `docs/fidelity/evidence/startup-chain-next-callees.md` §9
+  carries the per-address blocker table.
+- **Reachability unchanged**: the candidate still stops at the `0x00402930` guard, so these four natives are built and structurally
+  verified but not yet reached at runtime; no runtime claim is made.
+
 ### 2026-10-25 - correction: the candidate "scene" capture was the desktop, not candidate output (internal build, no release)
 
 - **Correction of the 2026-10-25 paired scene entry above**: the candidate image was not the candidate's output. Captured region

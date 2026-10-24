@@ -150,19 +150,21 @@ void TaskTypes_RegisterRetailClasses(std::uint16_t first_id, std::uint16_t last_
 // Native: QTask_LinkQTaskEventHandlerNoContextFn() - VA 0x00401530 - complete port.
 // Behavior: increments the no-context handler count at 0x00567C70 and the
 //           linked-handler counter at 0x00536148, computes the handler table
-//           index as class_id + phase * 384, stores the handler at
+//           index as class_id + event_id * 384 (no mask: the full 32-bit event
+//           word is the phase), stores the handler at
 //           0x00A96AE0 + index * 4 and the first-link flag at 0x0054FF34 +
 //           index.
 std::uint32_t NATIVE_DECL QTask_LinkQTaskEventHandlerNoContextFn(
-    std::uint16_t event_id, std::uint32_t context,
+    std::uint16_t class_id, std::uint32_t event_id,
     igi::retail::core::FrameHandler handler);
 
 // Native: QTask_LinkQTaskEventHandler() - VA 0x00401400 - complete port.
 // Behavior: the context variant of the link native. It increments the context
-//           handler count at 0x00567C6C instead of 0x00567C70 and otherwise
-//           stores the handler and the flag the same way.
+//           handler count at 0x00567C6C instead of 0x00567C70, masks the event
+//           word to its low byte for the phase (index = class_id + (event_id &
+//           0xFF) * 384) and stores the handler and the flag the same way.
 std::uint32_t NATIVE_DECL QTask_LinkQTaskEventHandler(
-    std::uint16_t event_id, std::uint32_t context,
+    std::uint16_t class_id, std::uint32_t event_id,
     igi::retail::core::FrameHandler handler);
 
 // Native: QTask_GetCurrentType() - VA 0x004018F0 - complete port.
