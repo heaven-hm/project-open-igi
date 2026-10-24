@@ -10,9 +10,8 @@ Chain calls: 155 (154 distinct). In catalog: 22. Missing: 133.
 Landability is measured per native's own body, not by distance in the call graph: a chain entry is landable when every
 callee and every code-address immediate its body uses is already transcribed (AGENTS.md section 21.7).
 
-## Landable now with no new dependency: 1
+## Landable now with no new dependency: 0 (after the correction below)
 
-- 0x453550: 68 instructions, 214 bytes
 
 ## One to four missing dependencies (the next wave): 21
 
@@ -46,3 +45,17 @@ natives that are themselves untranscribed, so the chain must be filled by depend
 uses already-landed callees and already-landed code addresses first, then the natives that reference it. The
 one-per-round habit therefore has to be one *wave* per round, not one chain index per round, or the boundary never
 clears.
+
+## Correction to the first pass (same day)
+
+The first pass counted 0x00453550 as landable because all of its *calls* and all of its code immediates resolved. It is not
+landable: its last instruction is `jmp 0x00453600`, a tail jump into a routine that has no catalog record at all. A tail
+target is a code-address dependency exactly like a call, so the rule has to include it.
+
+With that correction the chain has **zero** natives that can be landed without a new transcription. Every one of the 133
+missing entries needs at least one more native first, and the blockers are callback and handler bodies (for example
+0x00453600) that are not themselves chain entries, so they never appear in a "walk the chain in order" work list.
+
+The next measurement therefore has to be the dependency closure: repeatedly take the natives whose body's calls, code
+immediates *and* tail targets are all transcribed, and land that frontier. That is the only ordering that shrinks the
+closure, and it is what the following rounds do.
