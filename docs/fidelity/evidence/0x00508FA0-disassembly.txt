@@ -1779,3 +1779,11 @@ Deliberately NOT transcribed this round: the storage size and the descriptor-arr
 (`0xA758E4`, stride 0x4C, active byte at `+0x44`) are not yet established by any owner, and declaring
 them would be inventing layout. The semantics above are recorded so the routine can be written as soon
 as the descriptor array's owner is transcribed.
+
+### Descriptor-array owner search: /r finds no direct references (round 134)
+
+`/r 0xA758E4` and `/r 0xA758E8` return no `mov [0xA758xx]` writers, so nothing addresses those cells
+directly: the array is reached through a computed base (`lea`/`base+index*stride`), which is why the
+immediate-reference search misses it. Next search must scan the 0x4F1x-0x4F2x disassembly for
+immediates/displacements containing `0xA758E4`/`0xA758E8` rather than asking r2 for references to the
+exact cell, e.g. `pd` a wide window and grep for `0xa758` in the rendered operands.
