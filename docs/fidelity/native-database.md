@@ -92,9 +92,9 @@ coverage, whatever the status word.
 | `Native_004A7EFF` | `uint32_t __cdecl Native_004A7EFF(uint32_t** cursor);` | `0x004A7EFF` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `Qvm_ReportError` | `std::int32_t Qvm_ReportError(const char* format, ...)` | `0x004B7E10` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 
-## STRUCTURALLY_VERIFIED (1070)
+## STRUCTURALLY_VERIFIED (1077)
 
-133 of these rows have code but no semantic review bound; the comment column says so per row.
+140 of these rows have code but no semantic review bound; the comment column says so per row.
 
 806 of these rows have no implementation file; their comment column says so and they are not
 coverage, whatever the status word.
@@ -1055,7 +1055,14 @@ coverage, whatever the status word.
 | `Script_StringHash` | `unestablished` | `0x004F9E70` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `Sys_GetGlobal16_4FB5E0` | `unestablished` | `0x004FB5E0` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `Sys_GetGlobal8_4FC840` | `unestablished` | `0x004FC840` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Sys_GetGlobal8_4FC860` | `unestablished` | `0x004FC860` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Sys_GetGlobal16_5034D0` | `unestablished` | `0x005034D0` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Sys_GetGlobal16_503BF0` | `unestablished` | `0x00503BF0` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `Physics_VirmodelIsNull` | `struct status_msg* Physics_VirmodelIsNull(void * context, int arg2, int arg3, int arg4, int* arg5)` | `0x00503CC0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
+| `Sys_GetGlobal16_5042A0` | `unestablished` | `0x005042A0` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Sys_GetGlobal8_504DF0` | `unestablished` | `0x00504DF0` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Sys_GetGlobal16_505C80` | `unestablished` | `0x00505C80` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Sys_GetGlobal16_505D40` | `unestablished` | `0x00505D40` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `TextureModifier_Push` | `void* __cdecl TextureModifier_Push(void* self);` | `0x00505E40` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `TextureModifier_Create` | `void* TextureModifier_Create(void* context)` | `0x00505ED0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `TextureModifier_Init_2` | `void* TextureModifier_Init_2(void* context)` | `0x00505F20` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
