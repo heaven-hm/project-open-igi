@@ -858,3 +858,23 @@ the same pattern that worked for the flag-stack family.
 
 Ordering note: this init must land (plus `0x4C0360`) before `0x4BAAC0`, and the teardown at
 `0x4BAD52` (which zeroes `0x00A43E88`) belongs to the matching destroy routine, not here.
+
+### 0x4C0360 partial (87 B, 5 blocks) - bucket array allocator
+
+```
+push esi; push edi
+call Mem_Alloc(8, 4)              ; 0x4C0366 (push 8; push 4) - header object
+edi = [arg]; esi = eax
+call Mem_Alloc(...)               ; second allocation, argument built from edi*3
+                                  ; lea eax,[edi+edi*2] -> 3*count, so the bucket block is
+                                  ; 3 dwords per bucket = 12 bytes each, matching the stride
+                                  ; already confirmed at 0x4C04B0 and 0x4C0560
+```
+
+Two allocations: an 8-byte header and a `count*3*4` bucket block. The 12-byte stride is now
+independently confirmed by the allocator itself, which is a useful cross-check of the decode
+done from the consumer side.
+
+Remaining: the tail from `0x4C0373` (field stores and the second allocation's size/count
+plumbing) must be captured before writing. Dependency count is low: `Mem_Alloc` is landed and
+this routine appears to have no other callees.
