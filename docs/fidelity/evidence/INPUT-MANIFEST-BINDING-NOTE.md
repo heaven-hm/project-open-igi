@@ -128,3 +128,32 @@ wrong identity can hide a real native, and it is exactly the failure mode
    artifacts are generated from the retail image and the CFG score is recorded.
 3. Audit for other catalog entries whose names disagree with their bytes; the
    camera-named thunks suggest the old catalog had address/name drift.
+
+## Round 16: multi-block binding - three natives score below the 0.85 threshold
+
+`build_native_records.py --force` bound the multi-block input natives. CFG scores
+(the script's BN-vs-r2 comparison over retail-derived artifacts) are:
+
+| VA | BN nodes/edges | r2 nodes/edges | score | verdict |
+| --- | --- | --- | --- | --- |
+| `0x00509CC0` | 3/2 | 3/2 | 1.000 | pass |
+| `0x00509E90` | 9/11 | 9/11 | 1.000 | pass |
+| `0x00509F00` | 1/0 | 1/0 | 1.000 | pass |
+| `0x00490120` | 5/6 | 5/3 | **0.675** | BLOCKED (<0.85) |
+| `0x0048FED0` | 10/11 | 10/3 | **0.527** | BLOCKED (<0.85) |
+| `0x00490190` | 10/10 | 10/2 | **0.480** | BLOCKED (<0.85) |
+
+`0x0048FA80` and `0x0048FD90` produced no record (not reported at all - to
+diagnose next; likely not discovered or already present with another path).
+
+The three failures are **tool-disagreement on edges**, not node disagreement:
+both tools find the same block count, but Binary Ninja reports many more edges
+than radare2 (e.g. 10 nodes 11 BN edges vs 3 r2 edges). That pattern is what a
+switch/jump-table function looks like when one tool resolves indirect targets and
+the other does not - and all three are exactly jump-table dispatchers
+(`0x490120` message table, `0x48FED0` message table, `0x490190` selector table).
+
+Per the gate rules these three must not be treated as CFG-verified and must not be
+routed through runtime until the disagreement is resolved. The honest state is:
+transcribed, evidence artifacts exist, CFG score below threshold, cause identified
+as indirect-branch recovery, not as a suspected transcription error.

@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "kind": "native-disassembly",
+  "tool": "binary_ninja",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "function_entry": "0x0048FED0",
+  "signature": "unknown",
+  "cfg": {
+    "nodes": [
+      {
+        "address": "0x0048FED0"
+      },
+      {
+        "address": "0x0048FEE2"
+      },
+      {
+        "address": "0x0048FEE9"
+      },
+      {
+        "address": "0x0048FF18"
+      },
+      {
+        "address": "0x0048FF28"
+      },
+      {
+        "address": "0x0048FF38"
+      },
+      {
+        "address": "0x0048FF48"
+      },
+      {
+        "address": "0x0048FF58"
+      },
+      {
+        "address": "0x0048FF68"
+      },
+      {
+        "address": "0x0048FF72"
+      }
+    ],
+    "edges": [
+      {
+        "source": "0x0048FED0",
+        "target": "0x0048FEE2",
+        "kind": "branch"
+      },
+      {
+        "source": "0x0048FED0",
+        "target": "0x0048FF72",
+        "kind": "branch"
+      },
+      {
+        "source": "0x0048FEE2",
+        "target": "0x0048FEE9",
+        "kind": "branch"
+      },
+      {
+        "source": "0x0048FEE2",
+        "target": "0x0048FF18",
+        "kind": "branch"
+      },
+      {
+        "source": "0x0048FEE2",
+        "target": "0x0048FF28",
+        "kind": "branch"
+      },
+      {
+        "source": "0x0048FEE2",
+        "target": "0x0048FF38",
+        "kind": "branch"
+      },
+      {
+        "source": "0x0048FEE2",
+        "target": "0x0048FF48",
+        "kind": "branch"
+      },
+      {
+        "source": "0x0048FEE2",
+        "target": "0x0048FF58",
+        "kind": "branch"
+      },
+      {
+        "source": "0x0048FEE2",
+        "target": "0x0048FF68",
+        "kind": "branch"
+      },
+      {
+        "source": "0x0048FEE2",
+        "target": "0x0048FF72",
+        "kind": "branch"
+      },
+      {
+        "source": "0x0048FF68",
+        "target": "0x0048FF72",
+        "kind": "branch"
+      }
+    ]
+  }
+}
