@@ -33,7 +33,6 @@ std::uint32_t ElapsedTicks() noexcept
 }
 
 // The retail's flow handlers, the addresses the class registration links.
-void Flow_Start_Handler(void* flow);
 void Flow_RunHandler_Handler(void* flow);
 void Flow_Delete_Handler(void* flow);
 
@@ -265,7 +264,7 @@ void NATIVE_DECL Flow_Init()
     const std::uint16_t parent = QTask_GetCurrentType();
     const std::uint16_t class_id = TaskType_Register("Flow", 0x54U, parent, 0U);
     QTask_FlowClassId = class_id;
-    QTask_LinkQTaskEventHandler(class_id, 0U, &Flow_Start_Handler);
+    QTask_LinkQTaskEventHandler(class_id, 0U, &Flow_Start);
     QTask_LinkQTaskEventHandlerNoContextFn(class_id, 1U, &Flow_RunHandler_Handler);
     QTask_LinkQTaskEventHandlerNoContextFn(class_id, 2U, &Flow_Delete_Handler);
 }
@@ -497,7 +496,6 @@ void NATIVE_DECL Flow_Delete(void* flow)
 
 namespace {
 
-void Flow_Start_Handler(void* flow) { Flow_Start(flow); }
 void Flow_RunHandler_Handler(void* flow) { Flow_RunHandler(flow); }
 void Flow_Delete_Handler(void* flow) { Flow_Delete(flow); }
 
