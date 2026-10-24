@@ -777,3 +777,40 @@ not have.
 
 Rule restated for the third time in this stretch: a dead pushed argument is not an argument. Verify the callee's
 own [esp+N] reads before assigning meaning to a push, and cite the callee, not the call site.
+
+## CORRECTION 2: the phase pushes are NOT dead - they are the link call's second argument (round 162)
+
+Round 161 called the four `push 0/1/2/3` instructions dead caller-side padding. They are not. Read the two link
+natives' own stack accesses:
+
+`0x401860` (41 bytes, 1 block):
+    eax = [esp+8]; dx = word [esp+4]; eax &= 0xff
+    eax = eax*3; eax <<= 1                  // eax = phase * 6
+    byte [eax+0x54F932] = 1
+    word [eax+0x54F930] = dx
+    byte [eax+0x54F933] = 1
+    ret
+
+`0x401890` (36 bytes, 1 block): identical except it does NOT mask with 0xff and it writes
+`byte [eax+0x54F933] = 0` instead of 1.
+
+So the link call takes TWO arguments: arg1 = `word [esp+4]` (the current type returned by 0x4018F0 and pushed
+back), arg2 = `dword [esp+8]` (the phase pushed before the 0x4018F0 call). The stack explains it:
+
+    push phase            ; sits on the stack
+    call 0x4018F0         ; takes NO argument, so it does not disturb the phase dword
+    push eax              ; current type becomes arg1, phase is now [esp+8] = arg2
+    call 0x401860/0x401890
+    add esp,8             ; both pushes cleaned together
+
+0x4018F0 being argument-less is exactly what makes the phase survive into the next call. My round-161 reading
+("dead padding") was the mirror error of the same mistake: I verified the callee's reads for 0x4018F0 but stopped
+there instead of following the stack into the call that consumes it.
+
+Semantics established: the pair writes a six-byte record per phase at 0x54F930 + phase*6 -
+- `word +0x00` = current type (the QTask class id),
+- `byte +0x02` = 1 for both link natives,
+- `byte +0x03` = 1 via 0x401860 and 0 via 0x401890.
+
+So phases 1..3 differ from phase 0 only in that third byte. That is the real distinction the two natives encode,
+and it is why phase 0 uses 0x401860 while 1..3 use 0x401890.
