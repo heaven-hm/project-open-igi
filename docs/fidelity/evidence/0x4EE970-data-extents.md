@@ -5300,3 +5300,279 @@ r2 -q -e scr.color=0 -e bin.relocs.apply=true -c 'aaa; s 0x004015f0; pdf' igi.ex
 ndisasm -b32 -o0x4015F0 /tmp/fa14/f15f0.bin                                                    # independent decoder (391 raw bytes)
 ```
 Extraction used for `ndisasm`: image offset `0x1000 + (0x4015F0 - 0x401000)` = `0x15F0`, 391 bytes. Cross-check result: 134 instructions, identical addresses/bytes to `pdj`, byte sum 391, last row `0x401776 C3 ret`. Call-site scan: exhaustive `E8` enumeration over `.text` (`.text` VA `0x401000`, raw `0x1000`, raw size `0x132000`). The 391-byte window contains no `.rdata` reference, so the "no strings" row in 18.4 is exhaustive over the function.
+
+## §19. APPENDED — `0x00402930` (startup init sequence; the manifest calls it `QTask_RegisterClasses`): 780 B, 1 block, 156 instructions, 155 calls + 1 tail jump
+
+Static derivation only. No runtime evidence; no decompiler was run. Everything below is from r2 6.2.0 (`pdj`, `afij`, `afbj`) and an independent NASM `ndisasm` decode of the same raw bytes, cross-checked instruction by instruction.
+
+### 19.0 Inputs, method, and the tiling check (read this first: the "first ret" heuristic gives a WRONG extent here)
+
+- Artifact: retail `igi.exe`, SHA-256 `dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01`; PE32 i386, base `0x400000`; `.text` VA `0x401000`, raw `0x1000`.
+- **Extent: `0x00402930`–`0x00402C3B`, 780 bytes (`0x30C`).**
+- Instruction count: **156**; every instruction is exactly 5 bytes: **155 x `E8 rel32` (call) + 1 x `E9 rel32` (jmp)**. Tiling: `156 x 5 = 780 = extent` — exact, no padding, no gap. Both decoders agree: `pdj` 156 rows / 780 bytes, `ndisasm` 156 rows / 780 bytes, **0 byte-and-address mismatches** between them.
+- **Last instruction is NOT `ret`.** It is `0x00402C37  E9 F4 C2 0C 00  jmp 0x004CEF30` (rel32 `0x000CC2F4`; `0x402C37+5+0xCC2F4 = 0x4CEF30` ok). The function has **no `ret` at all** and exactly one exit: a tail call into a separate 3-instruction routine at `0x004CEF30` (`mov eax,[0xA4EDEC]`; `mov [0xA4EDF0],eax`; `ret`), which owns the `ret`.
+- After the tail jump: 4 `nop` bytes `0x00402C3C`–`0x00402C3F`, then a *different* routine begins at `0x00402C40` (reached only by a tail `jmp` from `0x004010C7`; it calls `0x00402F50`, and `0x00402F50`'s body ends with the first `ret` in the byte stream).
+- **Trap, stated numerically:** a linear decode from `0x402930` to the first `ret` ends at `0x00402FEB` and yields **1724 bytes / 402 instructions** — 944 bytes and 246 instructions too many. That window silently swallows two other routines (`0x00402C40`–`0x00402F47`, `0x00402F50`–`0x00402FEB`). The "decode until `ret`" extent test is invalid here; the valid test is "extent ends at the terminator, and the terminator is a tail `jmp`" — i.e. tiling `156 x 5 = 780` with the tail target resolved as a separate entry.
+- Blocks: **1** (`0x00402930`–`0x00402C3B`); **0** branch instructions of any kind; edges: **1** outgoing (the tail jump). Stack frame: **0** bytes; no locals, no prologue, no epilogue, no argument access, and **no memory operand anywhere in the body** (all 156 instructions are `rel32`-only). r2 `afij` reports `nbbs 2 / edges 1 / realsz 791` — `791 = 780 + 11` because r2 folds the 11-byte tail target at `0x004CEF30` into the function; its `size 837131`, `minaddr/maxaddr` around `0x4CEEF0` and `ninstrs 159` fields are unusable (r2 merged a bogus far block). Use the numbers above, not `afij`.
+
+### 19.1 Identity and ABI — what the call sites say
+
+- **Callers: exactly one direct call site, `0x00401011`** (`E8 1A 19 00 00`), inside the function at `0x00401000`. Exhaustive `E8`/`E9` scan over `.text` finds no other call or jump to `0x00402930`; a 4-byte little-endian immediate scan over the whole image finds **no data reference** to `0x00402930`, so there is no function-pointer/vtable reference in the file either.
+- Caller chain: `0x0048F530` (`WinMain`/`main`) -> `call 0x00401000` at `0x0048F7AA` -> `call 0x00402930` at `0x00401011`. `0x0048F530` itself is called from `entry0` at `0x004A51BE`.
+- **Arguments: zero words pushed.** At the call site: `0x0040100A push 1` -> `0x0040100C call 0x0048F330` -> `0x00401011 call 0x00402930` -> `0x00401016 push 0` -> `0x00401018 call 0x00402800` -> `0x0040101D add esp,0xC`. The three pushed words belong to the *three other* calls (`0x00401000` `push 0x536144` = `"IGI"`, `0x0040100A` `push 1`, `0x00401016` `push 0`) and are cleaned together by the one `add esp,0xC`; nothing is pushed for, or cleaned after, `0x00402930`. Callee convention is cdecl (the tail target ends in a plain `ret`), and the function touches no stack.
+- **Return value: not read.** The instruction after the call (`0x00401016`) is `push 0`; EAX from `0x004CEF30` (`= [0xA4EDEC]`) is overwritten by the next call before any use. (One-instruction lookahead only — same caveat as 18.8 item 3.)
+- => Signature for transcription: **`void __cdecl QTask_RegisterClasses_402930(void)`** — no arguments, `void` result. The `0x004CEF30` tail target is a **separate native** (11 bytes, 3 instructions, `ret` last) and must be transcribed as its own file.
+- **Manifest discrepancy to check (not fixed here):** the tree's manifest maps `0x00401000` to `QTask_CreateTask` (`engine/src/retail/core/qtask_create_task.cpp`). The retail bytes at `0x00401000` are a startup sequence (`push "IGI"; call 0x48F100` -> `push 1; call 0x48F330` -> `call 0x402930` -> `push 0; call 0x402800` -> `add esp,0xC` -> `call 0x48F220` -> `test eax,eax` -> two exits, both `mov al,1; ret`), not a task constructor. The call-site chain in this section is unaffected, but that record's name does not describe the retail VA.
+
+### 19.2 Block table — the whole function
+
+| block | VA range | bytes | instrs | terminator | successor |
+|---|---|---|---|---|---|
+| B0 | `0x00402930`–`0x00402C3B` | 780 | 156 | `jmp 0x004CEF30` (tail call) | `0x004CEF30` — separate native |
+
+Tail target as its own unit: `0x004CEF30`–`0x004CEF3A`, 11 bytes, 3 instructions:
+
+```
+0x004CEF30  A1 EC ED A4 00        mov eax, dword [0x00A4EDEC]
+0x004CEF35  A3 F0 ED A4 00        mov dword [0x00A4EDF0], eax
+0x004CEF3A  C3                    ret
+```
+
+There is nothing to say about store order or reloads *inside* the registrar: the body contains no store, no load and no memory operand of any kind. The only order-sensitive content is the **call order**, reproduced in full below.
+
+### 19.3 Block sketch B0 — the 155 calls in retail order
+
+Each line is one instruction of B0 in address order. `MISSING` = no manifest record; `engine:` = implementation under `engine/`; `ref:` = reference candidate under `scripts/GameNatives/` (not linked into `engine/`); `external:` = outside this tree.
+
+```
+    0x00402930  call 0x00508F80  MISSING
+    0x00402935  call 0x00489560  engine: AI_Detection_Init [TRANSCRIBED]
+    0x0040293A  call 0x00407D60  ref: HumanPlayer_Setactivematerial [STRUCTURALLY_VERIFIED]
+    0x0040293F  call 0x00488BB0  MISSING
+    0x00402944  call 0x00402FF0  ref: Config_FillPlayerProfileListBox_2 [STRUCTURALLY_VERIFIED]
+    0x00402949  call 0x00415530  engine: Game_Init [STRUCTURALLY_VERIFIED]
+    0x0040294E  call 0x004C1780  engine: AnimSound_LoadParameters [STRUCTURALLY_VERIFIED]
+    0x00402953  call 0x00401FC0  engine: Flow_Init [STRUCTURALLY_VERIFIED]
+    0x00402958  call 0x00488800  MISSING
+    0x0040295D  call 0x00488620  MISSING
+    0x00402962  call 0x00487BE0  MISSING
+    0x00402967  call 0x004872C0  MISSING
+    0x0040296C  call 0x00415070  MISSING
+    0x00402971  call 0x00486900  MISSING
+    0x00402976  call 0x00485A40  MISSING
+    0x0040297B  call 0x00485330  MISSING
+    0x00402980  call 0x004851B0  MISSING
+    0x00402985  call 0x00484F30  MISSING
+    0x0040298A  call 0x004825C0  ref: HumanCamera_Init [STRUCTURALLY_VERIFIED]
+    0x0040298F  call 0x004813E0  MISSING
+    0x00402994  call 0x004801B0  MISSING
+    0x00402999  call 0x0047E700  MISSING
+    0x0040299E  call 0x0047CF70  MISSING
+    0x004029A3  call 0x0047CF20  MISSING
+    0x004029A8  call 0x0047CAB0  external: AmmoTypeOpen [VERIFIED]
+    0x004029AD  call 0x00413DF0  MISSING
+    0x004029B2  call 0x00407290  MISSING
+    0x004029B7  call 0x0047B4B0  MISSING
+    0x004029BC  call 0x00477E30  MISSING
+    0x004029C1  call 0x00477220  MISSING
+    0x004029C6  call 0x00476730  MISSING
+    0x004029CB  call 0x00476110  MISSING
+    0x004029D0  call 0x00475AC0  MISSING
+    0x004029D5  call 0x00475380  MISSING
+    0x004029DA  call 0x00473ED0  MISSING
+    0x004029DF  call 0x004739D0  MISSING
+    0x004029E4  call 0x004733F0  MISSING
+    0x004029E9  call 0x00472D00  MISSING
+    0x004029EE  call 0x00472A70  MISSING
+    0x004029F3  call 0x00472670  MISSING
+    0x004029F8  call 0x00470FA0  MISSING
+    0x004029FD  call 0x00470610  MISSING
+    0x00402A02  call 0x00470410  MISSING
+    0x00402A07  call 0x0046F2B0  MISSING
+    0x00402A0C  call 0x0046E370  MISSING
+    0x00402A11  call 0x0046DF10  MISSING
+    0x00402A16  call 0x0046DD00  MISSING
+    0x00402A1B  call 0x0046DB40  MISSING
+    0x00402A20  call 0x0046D420  MISSING
+    0x00402A25  call 0x0046CB70  MISSING
+    0x00402A2A  call 0x0046C0C0  MISSING
+    0x00402A2F  call 0x0046BA60  MISSING
+    0x00402A34  call 0x0046B7F0  MISSING
+    0x00402A39  call 0x0046B510  MISSING
+    0x00402A3E  call 0x0046AB60  MISSING
+    0x00402A43  call 0x004696B0  MISSING
+    0x00402A48  call 0x00468E20  MISSING
+    0x00402A4D  call 0x004688B0  MISSING
+    0x00402A52  call 0x004682F0  MISSING
+    0x00402A57  call 0x00467700  MISSING
+    0x00402A5C  call 0x00466F70  MISSING
+    0x00402A61  call 0x00466E40  MISSING
+    0x00402A66  call 0x004663D0  MISSING
+    0x00402A6B  call 0x00465BC0  MISSING
+    0x00402A70  call 0x00465A10  ref: HumanAttach_Init [STRUCTURALLY_VERIFIED]
+    0x00402A75  call 0x00464260  ref: HumanView_Init [STRUCTURALLY_VERIFIED]
+    0x00402A7A  call 0x0045E450  ref: Human_Init [STRUCTURALLY_VERIFIED]
+    0x00402A7F  call 0x0040FE30  ref: HumanPlayer_Init [STRUCTURALLY_VERIFIED]
+    0x00402A84  call 0x0045DB70  ref: HumanPlayerInput_Init [STRUCTURALLY_VERIFIED]
+    0x00402A89  call 0x0045CAB0  ref: HumanSoldier_Init [STRUCTURALLY_VERIFIED]
+    0x00402A8E  call 0x00459880  ref: HumanSoldierPistol_Init [STRUCTURALLY_VERIFIED]
+    0x00402A93  call 0x00456AD0  ref: HumanSoldierRPG_Init [STRUCTURALLY_VERIFIED]
+    0x00402A98  call 0x00454970  ref: HumanSoldierFemale_Init [STRUCTURALLY_VERIFIED]
+    0x00402A9D  call 0x00453550  MISSING
+    0x00402AA2  call 0x004533B0  MISSING
+    0x00402AA7  call 0x0044C8D0  ref: HumanAI_Init [STRUCTURALLY_VERIFIED]
+    0x00402AAC  call 0x00406450  ref: HumanAIConfig_Init [STRUCTURALLY_VERIFIED]
+    0x00402AB1  call 0x0044C130  MISSING
+    0x00402AB6  call 0x00449D30  MISSING
+    0x00402ABB  call 0x00449970  MISSING
+    0x00402AC0  call 0x00449360  MISSING
+    0x00402AC5  call 0x00448D30  MISSING
+    0x00402ACA  call 0x004485E0  MISSING
+    0x00402ACF  call 0x00447DB0  MISSING
+    0x00402AD4  call 0x004464C0  MISSING
+    0x00402AD9  call 0x00444BF0  MISSING
+    0x00402ADE  call 0x00443ED0  MISSING
+    0x00402AE3  call 0x00443680  MISSING
+    0x00402AE8  call 0x00440FD0  MISSING
+    0x00402AED  call 0x00440C20  MISSING
+    0x00402AF2  call 0x00440710  MISSING
+    0x00402AF7  call 0x004403E0  MISSING
+    0x00402AFC  call 0x0043F900  MISSING
+    0x00402B01  call 0x0043EFF0  MISSING
+    0x00402B06  call 0x0043E8D0  MISSING
+    0x00402B0B  call 0x0043E4F0  MISSING
+    0x00402B10  call 0x0043CC70  MISSING
+    0x00402B15  call 0x0043C6D0  MISSING
+    0x00402B1A  call 0x0043BFD0  MISSING
+    0x00402B1F  call 0x0043B850  MISSING
+    0x00402B24  call 0x0043B2F0  MISSING
+    0x00402B29  call 0x0043AD80  MISSING
+    0x00402B2E  call 0x0043A840  MISSING
+    0x00402B33  call 0x004397C0  MISSING
+    0x00402B38  call 0x00438DF0  MISSING
+    0x00402B3D  call 0x004388B0  MISSING
+    0x00402B42  call 0x00438390  MISSING
+    0x00402B47  call 0x00437510  MISSING
+    0x00402B4C  call 0x00436B10  MISSING
+    0x00402B51  call 0x00436780  MISSING
+    0x00402B56  call 0x004361D0  MISSING
+    0x00402B5B  call 0x00435D90  MISSING
+    0x00402B60  call 0x00435870  MISSING
+    0x00402B65  call 0x004351E0  MISSING
+    0x00402B6A  call 0x004330F0  MISSING
+    0x00402B6F  call 0x004C1780  engine: AnimSound_LoadParameters [STRUCTURALLY_VERIFIED]
+    0x00402B74  call 0x004310F0  MISSING
+    0x00402B79  call 0x0042FF00  MISSING
+    0x00402B7E  call 0x0042FE40  MISSING
+    0x00402B83  call 0x0042DCF0  MISSING
+    0x00402B88  call 0x0042DAC0  MISSING
+    0x00402B8D  call 0x0042D2B0  MISSING
+    0x00402B92  call 0x0042BEB0  MISSING
+    0x00402B97  call 0x0042ACC0  MISSING
+    0x00402B9C  call 0x00427FF0  MISSING
+    0x00402BA1  call 0x00427D90  MISSING
+    0x00402BA6  call 0x00427830  MISSING
+    0x00402BAB  call 0x004272A0  MISSING
+    0x00402BB0  call 0x00426D90  MISSING
+    0x00402BB5  call 0x00426630  MISSING
+    0x00402BBA  call 0x00425C80  MISSING
+    0x00402BBF  call 0x00424E80  MISSING
+    0x00402BC4  call 0x004170A0  MISSING
+    0x00402BC9  call 0x00424B90  MISSING
+    0x00402BCE  call 0x00423FC0  MISSING
+    0x00402BD3  call 0x004230A0  MISSING
+    0x00402BD8  call 0x00422B40  ref: ModelViewBox_Init [STRUCTURALLY_VERIFIED]
+    0x00402BDD  call 0x004223D0  MISSING
+    0x00402BE2  call 0x00421750  MISSING
+    0x00402BE7  call 0x00421430  MISSING
+    0x00402BEC  call 0x00420CC0  MISSING
+    0x00402BF1  call 0x00420300  MISSING
+    0x00402BF6  call 0x0041F340  MISSING
+    0x00402BFB  call 0x0041E690  MISSING
+    0x00402C00  call 0x0041DC50  MISSING
+    0x00402C05  call 0x0041D080  MISSING
+    0x00402C0A  call 0x0041C700  MISSING
+    0x00402C0F  call 0x0041B8E0  MISSING
+    0x00402C14  call 0x0041B310  MISSING
+    0x00402C19  call 0x0041AAF0  MISSING
+    0x00402C1E  call 0x0041A1E0  MISSING
+    0x00402C23  call 0x004199F0  MISSING
+    0x00402C28  call 0x00419760  MISSING
+    0x00402C2D  call 0x004190E0  MISSING
+    0x00402C32  call 0x00402F50  ref: Config_YmbeAfp [STRUCTURALLY_VERIFIED]
+    0x00402C37  jmp  0x004CEF30  MISSING (tail call; separate 3-instruction native)
+```
+
+The C++ body is one call per row above, in table order; the final row is the function's `return`:
+
+```cpp
+void NATIVE_DECL QTask_RegisterClasses_402930(void)
+{
+    /* 0x00402930 .. 0x00402C32: one call per row of the 19.3 table, in that exact order */
+    return QTask_RegisterClasses_Tail_4CEF30();   /* 0x00402C37: jmp 0x004CEF30 (tail call) */
+}
+```
+
+Two order facts worth preserving: `0x004C1780` (`AnimSound_LoadParameters`, engine transcription) is called **twice** in the body — at `0x0040294E` and `0x00402953`, adjacent to each other; and `0x00402F50` (`Config_YmbeAfp`) is the last ordinary call before the tail jump. No other target repeats.
+
+### 19.4 What the function touches (and the limit of that answer)
+
+- **The registrar body itself reads and writes no data.** Proof: all 156 instructions are `E8`/`E9` with a `rel32` immediate; no ModRM byte, no displacement, no immediate other than the branch offset. It is a pure ordered call sequence.
+- Data reached through the two decoded first-level paths (each decoded statement by statement; not exhaustive over all 155 callees):
+  - `0x004FAA60` (Graph registrar, missing) writes class-id word **`0x0054E364`** (the return of `TaskType_Register` for name `"Graph"` at **`0x0054DF48`**, size `0x80`), then ten byte flags **`0x0054E368`–`0x0054E371`** in the store order `368, 369, 36A, 36B, 36C, 36F, 371, 370, 36D, 36E` (`0x004FAA8E`–`0x004FAAF0`), then links handlers via `0x00401400` (handler `0x004F90B0`) and `0x00401530` (handlers `0x004C1780` phase 1, `0x004F9160` phase 2, `0x004FADB0` phase 3), and calls `0x005034D0` (missing) whose EAX becomes the third argument of `0x00401900`.
+  - `0x00508FA0` (AIGraph registrar, missing) writes class-id word **`0x0054E83C`** (the return of `0x00401900` for `"AIGraph"` at **`0x0054E888`**, size `0xC0`), links handlers through the same `0x00401400`/`0x00401530`, and calls `0x004F9210` (missing).
+- Data reached through already-transcribed/verified registration natives (observed as immediate operands in their bodies, not re-derived here):
+  - **`0x00401900`** `TaskType_Register`: `0x00A96AE0` (handler-table base) and `0x00AF5EE0` slots (`+0x00`/`+0x04`/`+0x08`/`+0x0C`, plus record bytes `+0x24`/`+0x25` seen as `0xAF5F04`/`0xAF5F05`).
+  - **`0x00401400`** `QTask_LinkQTaskEventHandler` (`[STRUCTURALLY_VERIFIED]`): `0x00A96AE0`, `0x00AF5EE8`, `0x00AF5F08`, **`0x0054FF24`**, **`0x0054FF34`**, `0x00AFA6E8`, `0x00AFA708`.
+  - **`0x00401530`** `QTask_LinkQTaskEventHandlerNoContextFn` (`[TRANSCRIBED]`): `0x00A96AE0`, **phase-3 column `0x00A97CE0`**, `0x00AF5EE8`, `0x0054FF34`, `0x00AFA6E0`, `0x00AFA6E8`, `0x00AFA7E0` (dispatch depth).
+  - **`0x004017C0`** (`[STRUCTURALLY_VERIFIED]`): `0x0054F928`, `0x0054F930`, `0x0054F932`, `0x0054F933`, `0x0054F9F2`, `0x0054FF26`.
+- One of the 155 calls is a bulk data initializer, not a registrar: **`0x00407D60`** walks `0x00569474` upward in `0x268` steps writing zero bytes until `0x0056E174` (`0x0056E174 - 0x00569474 = 0x4D00`, i.e. 32 slots of `0x268`).
+- **Cannot** be a complete inventory: it would require decoding all 155 callees. Six were decoded for this section (`0x508F80`, `0x508FA0`, `0x5183D0`, `0x4FAA60`, `0x407D60`, plus the four registration natives above). The `0x00A96AE0` phase stride `0x180`, the type-slot range `0xAF5EE0`–`0xAFA6E0` (`0x4800` = 384 x `0x30`) and the `0x54FF34` flag-array range are consistent with the observed references, but the array *extents* are not re-derived here.
+
+### 19.5 Callee inventory and transcription status — the landing question
+
+- **155 call sites, 154 distinct call targets, plus 1 tail-jump target = 155 distinct natives reachable directly.** 156 rows total (19.3).
+- Present in `docs/fidelity/native-verification.json`: **21**. Of those, **4 have an implementation under `engine/`**, 16 have only a reference candidate under `scripts/GameNatives/`, 1 is external (`/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json`). Engine-resident four: `0x00401FC0 Flow_Init` (`engine/src/retail/core/flow.cpp`), `0x00415530 Game_Init` (`engine/src/retail/core/game_flow.cpp`), `0x00489560 AI_Detection_Init` (`engine/src/retail/core/native_489560.cpp`), `0x004C1780 AnimSound_LoadParameters` (`engine/src/retail/core/native_4c1780.cpp`).
+- **Missing: 134** (133 call targets with no manifest record + the `0x004CEF30` tail target, which also has none). Present and absent are marked row by row in 19.3.
+- Consequently: **this native cannot be landed as a working step.** A transcription of `0x00402930` is a 155-line call list whose callees are 86 % absent from the tree; it can be written and reviewed, but it cannot execute past its first call (`0x00508F80`) and it registers nothing. Only 4 of the 21 "present" are linked engine implementations; `scripts/GameNatives/` candidates are reference material, not engine transcription.
+
+### 19.6 The dependency wall — depth to the Graph registrar (`0x004FAA60`) and what is actually in the tree
+
+- First target of the function (also the point where the current candidate stub throws, per the manifest limitation on `0x00401000`): **`0x00508F80`, missing.** Its entire body is 10 bytes:
+  - `0x00508F80  call 0x005183D0` (first hop)
+  - `0x00508F85  jmp 0x00508FA0` (tail call to the AIGraph registrar; 6 `nop` bytes `0x00508F8A`–`0x00508F8F` follow)
+- **Path to the Graph registrar: `0x00402930` -> `0x00508F80` -> `0x005183D0` -> `0x004FAA60` — three calls deep.** Status along that path: `0x00508F80` missing; **`0x005183D0` has a manifest record but it is misnamed**: recorded as `Terrain_CalculateNormals_8` (`scripts/GameNatives/terrain/005183D0-Terrain_CalculateNormals_8.cpp`, `STRUCTURALLY_VERIFIED`), while the bytes call `0x004ED510 InputPort_Init`, `0x00530220 CamTask_Init`, `0x004FAA60` (Graph registrar) and ~67 other startup routines. That record must not be counted as "the startup chain is in the tree" without a re-check; `0x004FAA60` is missing.
+- `0x004FAA60` itself: linear decode to its first `ret` = `0x004FAA60`–`0x004FADA4` (837 bytes, 225 instructions; extent is a linear bound, not independently bracket-supported), **18 direct calls, 8 of them missing**: `0x4F0EF0`, `0x4F1000`, `0x4F1010`, `0x4F1020`, `0x4F1A60`, `0x4F1A70`, `0x4F9DF0`, `0x5034D0`. The other ten are present (`0x401400`, `0x401530`, `0x4017C0`, `0x401900`, `0x401B20`, `0x4A53B3` [`ANALYZED` only], `0x4AF8F0`, `0x4AF960`, `0x4B0C60`, `0x4B8A20`).
+- Closure magnitude (method: all `E8`/`E9` targets inside each function's next-entry-bounded window; windows can absorb a following routine's calls, so L2/L3 are **upper bounds**):
+  - depth 1: 155 distinct, **134 missing** (exact — the body extent is verified).
+  - depth 2: 763 distinct, 643 missing (bound).
+  - depth 3: 573 distinct, 465 missing (bound).
+  - cumulative <=3 hops: 1491 distinct, **1242 missing** (bound).
+  - from the first wall `0x00508F80` alone: depth 1 = 3 nodes / 2 missing; depth 2 = 94 / **78 missing**; depth 3 = 367 / 279 missing (bound).
+- **Answer to "one native away or twenty": neither — it is 134 direct natives away, and roughly 10^3 natives away in the depth-3 closure.** The wall is not a single missing function that unlocks the sequence; the first wall (`0x00508F80`) alone sits on top of >=78 missing natives within two hops, and the Graph chain first needs `0x5183D0`'s record re-checked and then `0x4FAA60` and `0x5034D0` transcribed before the first class exists.
+
+### 19.7 What a transcription would look like (shape only; no values stated)
+
+The honest form is exactly 19.3's table: 155 `__cdecl` calls in retail order, each to its own transcribed native, then `return` of the `0x004CEF30` native. No arguments, no locals, no logging, no guards. Its *content* is entirely determined by the 155 callees, so writing the file today produces a fail-closed stub identical in spirit to the tree's current one; the useful work is the callees, in table order, starting with `0x00508F80` (the wall), then `0x00508FA0`, `0x005183D0` (after re-checking its record), `0x004FAA60`, `0x005034D0`.
+
+### 19.8 Cannot prove — explicit gaps
+
+1. **What each of the 133 missing callees does.** Shapes were sampled (registration routines, data initializers, subsystem `_Init` routines), but only six callees were decoded. "The 155 calls are a startup init sequence" rests on the 21 named targets (`*_Init`, `Game_Init`, `Flow_Init`, `Human*_Init`) and the two decoded registrars, not on all 155.
+2. **Why the order matters.** Retail's order is the instruction order (proven). Whether any call depends on an earlier one (allocation, table fill, class id) is not established.
+3. **The semantics of `0x004CEF30`'s copy `[0xA4EDEC] -> [0xA4EDF0]`.** Mechanics proven, meaning unknown. It is a separate 3-instruction native reachable only from this tail jump (no other call/jmp/data reference in the image).
+4. **`0x005183D0`'s manifest record** (`Terrain_CalculateNormals_8`) contradicts its observed callees; treated as a mapping defect here, unresolved.
+5. **`0x00401000`'s manifest name** (`QTask_CreateTask`) contradicts the retail bytes (startup sequence); flagged, unresolved.
+6. **Exact function extents behind the chain.** `0x5183D0`, `0x508FA0`, `0x4FAA60` extents are linear/next-entry bounds, not bracket-supported; the L2/L3 counts inherit that.
+7. **Complete data inventory** — only six callees decoded; array extents (`a96ae0` stride, `af5ee0` slots, `54ff34` flags) taken from existing transcripts, not re-derived.
+8. **No runtime evidence.** No call counts, no observed arguments, no observed class ids.
+9. **Tail-jump vs separate function** is a convention question: `0x4CEF30` is a separate code unit with a `ret`, referenced only by this `jmp`; transcribed as its own native (one implementation per VA, §10.15 item 13).
+
+### 19.9 Reproduction
+
+```
+r2 -q -e scr.color=0 -e bin.relocs.apply=true -c 'aaa; s 0x00402930; pdj 200' igi.exe     # 156 rows, 0x402930-0x402C3B
+ndisasm -b32 -o0x402930 /tmp/fa19/f2930b.bin                                              # same 156 rows, sum 780
+# exhaustive E8/E9 scan over .text (image offset 0x1000, raw size 0x132000) for call/jmp sources
+# 4-byte little-endian immediate scan over the whole image for pointer references
+```
+Raw slice for `ndisasm`: image offset `0x1000 + (0x402930 - 0x401000)` = `0x2930`, 780 bytes. The tail target's `rel32` was re-derived: `0x00402C37 + 5 + 0x000CC2F4 = 0x004CEF30`.

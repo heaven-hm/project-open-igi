@@ -1255,3 +1255,72 @@ past the 0x2C0-byte window I disassembled. Do not claim the A->B->C order until 
 
 Status stays TRANSCRIBED: two of the four section-18 codegen checks pass, one is unresolved, and the CFG comparison has
 not been run.
+
+## Destructor 0x004015F0 landed and structurally verified; gate blocked only on runtime_contract (round 191)
+
+engine/src/retail/core/native_4015f0.cpp is in the tree and green. Generated CFG artifacts: bn 25 blocks / 37 edges,
+r2 25 blocks / 37 edges, score 1.000 - retail's own shape, and notably the two retail returns did NOT collapse, contrary
+to what section 18.7 expected GCC to do.
+
+All four section-18 codegen checks are now confirmed in the emitted listing (0x00416CC0, ends at 0x00416EC0 next symbol):
+- six separate type-word loads at task+0x1C;
+- the live-count decrement is the first memory write and is the same symbol the allocator increments (0x6260A0; the
+  address moved from 0x625F80 because this translation unit grew BSS - one symbol, both writers);
+- the child-tail load 0x10(%ebx) after the phase-3 indirect call and before the recursive self-call;
+- the three pool swap stores in retail order: A indices[position] (strength-reduced to lea (%esi,%ecx,4) into ebp then
+  mov %esi,0x0(%ebp)), B indices[lastPosition] at 0x00416... mov %edi,(%esi,%eax,4) with esi = class+0x10, C
+  *(lastElement+tail) mov %ecx,(%edx,%eax,1) with eax = class+0x20. Order A -> B -> C matches 0x401737/0x40174C/0x401761.
+
+Status in the record: STRUCTURALLY_VERIFIED. Gate result: BLOCKED on exactly one remaining requirement,
+"semantic review has no authorized runtime_contract". Everything else the gate asked for was satisfied in this round:
+- evidence artifact schema: semantic-review-report, schema_version 1, result passed, binary_sha256 and
+  implementation_sha256 bound, address normalised;
+- checks must use the accepted {"name","result","rationale"} shape, not {"id","detail"}. This cost several iterations;
+  copy docs/fidelity/evidence/0048F1A0-semantic-review.json as the template next time;
+- the review must carry reviewed_by (a string here), reviewed=true, reviewed_date-style fields, and review_scope;
+- the manifest binds it as verification.semantic_review = {"evidence_path","evidence_sha256"}, NOT as a bare path string
+  and NOT as {"path","sha256"}. A bare string produces "missing semantic review report reference".
+
+The remaining blocker is structural, not clerical: authorizing a runtime_contract requires runtime evidence of this
+native, and 0x004015F0 is unreachable before the QTask_RegisterClasses boundary. It is the same shape as 0x004017C0. Do
+not fabricate a contract to clear it; either lift the boundary or accept that pre-boundary natives stop at
+STRUCTURALLY_VERIFIED.
+
+Lesson for the next native: the gate's evidence schema is strict and its error messages are one requirement at a time.
+Read the accepted example artifact first instead of iterating against the gate - that cost five gate runs here.
+
+## The startup wall is not one native: 0x00402930 has 155 distinct callees, 134 missing (round 192, section 19)
+
+Section 19 appended to docs/fidelity/evidence/0x4EE970-data-extents.md. What it establishes changes the shape of the
+remaining work, so read it before planning anything past this point.
+
+Extent and structure: 0x00402930-0x00402C3B = 780 bytes, 156 instructions, EVERY ONE 5 BYTES (155 x E8 plus 1 x E9),
+and 156 x 5 = 780 exactly. Two decoder cross-check, 0 mismatches. One basic block, zero branches. It does not end in ret
+- it TAIL JUMPS to 0x004CEF30 (a separate 11-byte native: mov eax,[0xA4EDEC]; mov [0xA4EDF0],eax; ret). Decoding to the
+first ret gives 1724 bytes / 402 instructions, which is wrong by 944 bytes and swallows two neighbouring functions; the
+first-ret heuristic is how you get this native wrong.
+
+It is the startup init sequence, not a class registrar and not the "AI graph registrar" our error message calls it: 155
+calls in order, including Flow_Init 0x00401FC0, Game_Init 0x00415530, Human*_Init, Config_*, HumanPlayer_Init and
+AI_Detection_Init 0x00489560, then the tail call above.
+
+Signature: one caller only (0x00401011), zero arguments pushed for it, no caller reads EAX before overwriting it, so
+void __cdecl f(void). Call chain: entry0 0x004A51BE -> WinMain 0x0048F530 -> 0x0048F7AA -> 0x00401000 -> 0x00401011 ->
+0x00402930. Body touches no data itself: all 156 instructions are rel32-only.
+
+Cost: 155 distinct natives. Only 21 exist in the manifest, 4 of them engine (Flow_Init, Game_Init, AI_Detection_Init,
+AnimSound_LoadParameters), the rest reference-only. 134 are absent (133 targets plus 0x004CEF30). The graph chain inside
+it is 3 calls deep (0x00402930 -> 0x00508F80 -> 0x005183D0 -> 0x004FAA60) and 0x004FAA60 alone has 18 direct calls of
+which 8 are missing. Cumulative closure to depth 3 is about 1491 distinct natives with about 1242 missing (upper bound).
+Conclusion: the MVP cannot be reached by transcribing this native or the next few; the missing set is of order 10^3.
+
+Two record discrepancies found and NOT yet fixed (they are separate work, and renaming without evidence would be worse):
+- the manifest maps 0x00401000 to QTask_CreateTask, but the retail bytes at 0x00401000 are the startup function that calls
+  0x00402930, with pushes for "IGI", 1 and 0 around it;
+- 0x005183D0 is recorded as Terrain_CalculateNormals_8 and STRUCTURALLY_VERIFIED, but its bytes call 0x004ED510
+  InputPort_Init, 0x00530220 CamTask_Init and 0x004FAA60 - the record name contradicts the VA and the status was
+  assigned to the wrong function.
+
+Also worth recording as a project-accuracy defect: our fail-closed message at 0x00402930 says the AI graph registrar is
+outside MVP scope, but the function is the startup init sequence. The message is at least incomplete and should be
+corrected in the same change that transcribes the native, not silently kept.
