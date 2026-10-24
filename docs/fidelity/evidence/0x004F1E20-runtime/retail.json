@@ -1,0 +1,457 @@
+{
+  "kind": "igi-tester-native-probe",
+  "schema_version": 1,
+  "result": "observed",
+  "verified": false,
+  "captured_at": "2026-10-24T21:39:28.933707+00:00",
+  "targets": [
+    {
+      "address": "0x004F1E20",
+      "name": "probe",
+      "probe": "/Users/haseeb-mir/Documents/Code/project-open-igi/docs/fidelity/evidence/0x004F1E20-runtime/probe_0x004F1E20.js",
+      "probe_sha256": "0d620c3fed8050969028cfb946fb96ef2f6fb90589d497729e0b27f869d153fc",
+      "observations": {
+        "name": null,
+        "entries": 5,
+        "returns": 5
+      },
+      "retailName": "probe"
+    }
+  ],
+  "executable": {
+    "path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+    "sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+    "preferred_base": "0x00400000",
+    "module": "igi.exe"
+  },
+  "probe_template_sha256": "8472074d6840df8a07f63fe4460771357e99b8b584e9a1bbc7997450359ad84c",
+  "environment": {
+    "frida_host": "127.0.0.1:27042",
+    "frida_client": "17.24.0",
+    "game_directory": "/Users/haseeb-mir/Downloads/IGI",
+    "level": 1,
+    "arguments": [
+      "window",
+      "level1"
+    ],
+    "scenario": {
+      "observe_seconds": 64.0,
+      "scripted_actions": "none (idle observation)"
+    }
+  },
+  "arguments": {
+    "arg_words": 4,
+    "native_size": null,
+    "mem_arg": null,
+    "return_mem": null,
+    "watch": [],
+    "max_calls": 256
+  },
+  "hooks": [
+    {
+      "address": "0x004F1E20",
+      "name": "probe",
+      "module": "igi.exe",
+      "moduleBase": "0x400000",
+      "target": "0x4f1e20",
+      "rva": "0xf1e20",
+      "preferredBase": 4194304,
+      "argWords": 4,
+      "memArg": null,
+      "maxCalls": 256,
+      "retailVA": "0x004F1E20",
+      "sideAddress": "0x004F1E20"
+    }
+  ],
+  "evidence_input": null,
+  "entries": [
+    {
+      "type": "observed",
+      "callIndex": 1,
+      "address": "0x004F1E20",
+      "phase": "entry",
+      "esp": "0x22f930",
+      "caller": "0x5081d7",
+      "at": 1792877983201,
+      "args": [
+        {
+          "value": 7,
+          "hex": "0x7",
+          "source": "stack[esp+4+0]"
+        },
+        {
+          "value": 10990184,
+          "hex": "0xa7b268",
+          "source": "stack[esp+4+4]"
+        },
+        {
+          "value": 4892287,
+          "hex": "0x4aa67f",
+          "source": "stack[esp+4+8]"
+        },
+        {
+          "value": 80,
+          "hex": "0x50",
+          "source": "stack[esp+4+12]"
+        }
+      ],
+      "memory": null,
+      "watch": null
+    },
+    {
+      "type": "observed",
+      "callIndex": 2,
+      "address": "0x004F1E20",
+      "phase": "entry",
+      "esp": "0x22f870",
+      "caller": "0x4781a7",
+      "at": 1792877984672,
+      "args": [
+        {
+          "value": 7,
+          "hex": "0x7",
+          "source": "stack[esp+4+0]"
+        },
+        {
+          "value": 5693992,
+          "hex": "0x56e228",
+          "source": "stack[esp+4+4]"
+        },
+        {
+          "value": 707668480,
+          "hex": "0x2a2e2a00",
+          "source": "stack[esp+4+8]"
+        },
+        {
+          "value": 0,
+          "hex": "0x0",
+          "source": "stack[esp+4+12]"
+        }
+      ],
+      "memory": null,
+      "watch": null
+    },
+    {
+      "type": "observed",
+      "callIndex": 3,
+      "address": "0x004F1E20",
+      "phase": "entry",
+      "esp": "0x22f9d8",
+      "caller": "0x46dbe4",
+      "at": 1792877984675,
+      "args": [
+        {
+          "value": 7,
+          "hex": "0x7",
+          "source": "stack[esp+4+0]"
+        },
+        {
+          "value": 6033648,
+          "hex": "0x5c10f0",
+          "source": "stack[esp+4+4]"
+        },
+        {
+          "value": 4,
+          "hex": "0x4",
+          "source": "stack[esp+4+8]"
+        },
+        {
+          "value": 4959013,
+          "hex": "0x4bab25",
+          "source": "stack[esp+4+12]"
+        }
+      ],
+      "memory": null,
+      "watch": null
+    },
+    {
+      "type": "observed",
+      "callIndex": 4,
+      "address": "0x004F1E20",
+      "phase": "entry",
+      "esp": "0x22f8e8",
+      "caller": "0x46d5a9",
+      "at": 1792877984675,
+      "args": [
+        {
+          "value": 7,
+          "hex": "0x7",
+          "source": "stack[esp+4+0]"
+        },
+        {
+          "value": 6033648,
+          "hex": "0x5c10f0",
+          "source": "stack[esp+4+4]"
+        },
+        {
+          "value": 0,
+          "hex": "0x0",
+          "source": "stack[esp+4+8]"
+        },
+        {
+          "value": 0,
+          "hex": "0x0",
+          "source": "stack[esp+4+12]"
+        }
+      ],
+      "memory": null,
+      "watch": null
+    },
+    {
+      "type": "observed",
+      "callIndex": 5,
+      "address": "0x004F1E20",
+      "phase": "entry",
+      "esp": "0x22f8c8",
+      "caller": "0x46ccf9",
+      "at": 1792877984675,
+      "args": [
+        {
+          "value": 7,
+          "hex": "0x7",
+          "source": "stack[esp+4+0]"
+        },
+        {
+          "value": 5693992,
+          "hex": "0x56e228",
+          "source": "stack[esp+4+4]"
+        },
+        {
+          "value": 0,
+          "hex": "0x0",
+          "source": "stack[esp+4+8]"
+        },
+        {
+          "value": 4642279,
+          "hex": "0x46d5e7",
+          "source": "stack[esp+4+12]"
+        }
+      ],
+      "memory": null,
+      "watch": null
+    }
+  ],
+  "returns": [
+    {
+      "type": "observed",
+      "callIndex": 1,
+      "address": "0x004F1E20",
+      "phase": "return",
+      "esp": "0x22f930",
+      "caller": "0x5081d7",
+      "at": 1792877983201,
+      "args": [
+        {
+          "value": 7,
+          "hex": "0x7",
+          "source": "stack[esp+4+0]"
+        },
+        {
+          "value": 10990184,
+          "hex": "0xa7b268",
+          "source": "stack[esp+4+4]"
+        },
+        {
+          "value": 4892287,
+          "hex": "0x4aa67f",
+          "source": "stack[esp+4+8]"
+        },
+        {
+          "value": 80,
+          "hex": "0x50",
+          "source": "stack[esp+4+12]"
+        }
+      ],
+      "eax": "0x1d",
+      "eaxValue": 29,
+      "memory": null,
+      "returnMemory": null,
+      "watch": null
+    },
+    {
+      "type": "observed",
+      "callIndex": 2,
+      "address": "0x004F1E20",
+      "phase": "return",
+      "esp": "0x22f870",
+      "caller": "0x4781a7",
+      "at": 1792877984672,
+      "args": [
+        {
+          "value": 7,
+          "hex": "0x7",
+          "source": "stack[esp+4+0]"
+        },
+        {
+          "value": 5693992,
+          "hex": "0x56e228",
+          "source": "stack[esp+4+4]"
+        },
+        {
+          "value": 707668480,
+          "hex": "0x2a2e2a00",
+          "source": "stack[esp+4+8]"
+        },
+        {
+          "value": 0,
+          "hex": "0x0",
+          "source": "stack[esp+4+12]"
+        }
+      ],
+      "eax": "0x1d",
+      "eaxValue": 29,
+      "memory": null,
+      "returnMemory": null,
+      "watch": null
+    },
+    {
+      "type": "observed",
+      "callIndex": 3,
+      "address": "0x004F1E20",
+      "phase": "return",
+      "esp": "0x22f9d8",
+      "caller": "0x46dbe4",
+      "at": 1792877984675,
+      "args": [
+        {
+          "value": 7,
+          "hex": "0x7",
+          "source": "stack[esp+4+0]"
+        },
+        {
+          "value": 6033648,
+          "hex": "0x5c10f0",
+          "source": "stack[esp+4+4]"
+        },
+        {
+          "value": 4,
+          "hex": "0x4",
+          "source": "stack[esp+4+8]"
+        },
+        {
+          "value": 4959013,
+          "hex": "0x4bab25",
+          "source": "stack[esp+4+12]"
+        }
+      ],
+      "eax": "0x1d",
+      "eaxValue": 29,
+      "memory": null,
+      "returnMemory": null,
+      "watch": null
+    },
+    {
+      "type": "observed",
+      "callIndex": 4,
+      "address": "0x004F1E20",
+      "phase": "return",
+      "esp": "0x22f8e8",
+      "caller": "0x46d5a9",
+      "at": 1792877984675,
+      "args": [
+        {
+          "value": 7,
+          "hex": "0x7",
+          "source": "stack[esp+4+0]"
+        },
+        {
+          "value": 6033648,
+          "hex": "0x5c10f0",
+          "source": "stack[esp+4+4]"
+        },
+        {
+          "value": 0,
+          "hex": "0x0",
+          "source": "stack[esp+4+8]"
+        },
+        {
+          "value": 0,
+          "hex": "0x0",
+          "source": "stack[esp+4+12]"
+        }
+      ],
+      "eax": "0x1d",
+      "eaxValue": 29,
+      "memory": null,
+      "returnMemory": null,
+      "watch": null
+    },
+    {
+      "type": "observed",
+      "callIndex": 5,
+      "address": "0x004F1E20",
+      "phase": "return",
+      "esp": "0x22f8c8",
+      "caller": "0x46ccf9",
+      "at": 1792877984675,
+      "args": [
+        {
+          "value": 7,
+          "hex": "0x7",
+          "source": "stack[esp+4+0]"
+        },
+        {
+          "value": 5693992,
+          "hex": "0x56e228",
+          "source": "stack[esp+4+4]"
+        },
+        {
+          "value": 0,
+          "hex": "0x0",
+          "source": "stack[esp+4+8]"
+        },
+        {
+          "value": 4642279,
+          "hex": "0x46d5e7",
+          "source": "stack[esp+4+12]"
+        }
+      ],
+      "eax": "0x1d",
+      "eaxValue": 29,
+      "memory": null,
+      "returnMemory": null,
+      "watch": null
+    }
+  ],
+  "messages": 10,
+  "summary": null,
+  "limitations": [
+    "Finite idle observation interval only; no scripted gameplay actions.",
+    "Only the process this driver spawned is terminated; attach mode never terminates the target.",
+    "A pointer snapshot is read only after Process.findRangeByAddress proves the range readable; unknown pointer contents remain unobserved rather than guessed.",
+    "Observed calls are not proof of behavioral parity by themselves; a typed comparator is required.",
+    "Result 'unobserved' means only that this capture did not reach the native; it is not a pass or fail."
+  ],
+  "capture": {
+    "mode": "spawn-suspended",
+    "owned_pid": 1620,
+    "arguments": [
+      "Z:\\Users\\haseeb-mir\\Downloads\\IGI\\igi.exe",
+      "window",
+      "level1"
+    ],
+    "cwd": "Z:\\Users\\haseeb-mir\\Downloads\\IGI",
+    "exited_before_observe_end": null,
+    "alive_at_end": true
+  },
+  "summaries": [
+    {
+      "address": "0x004F1E20",
+      "name": "Sys_GetGlobal32_4F1E20",
+      "hooksInstalled": 1,
+      "callsObserved": 5,
+      "entryMessages": 5,
+      "returnMessages": 5,
+      "overflow": false,
+      "errors": []
+    }
+  ],
+  "counts": {
+    "entry": 5,
+    "return_": 5,
+    "unmatched_entries": 0
+  },
+  "cleanup": {
+    "owned_process_exited": true
+  }
+}

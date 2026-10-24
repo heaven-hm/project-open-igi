@@ -94,8 +94,11 @@ def main() -> int:
             following |= {dep for dep in dependencies(span(functions, instructions, addresses, va)) if dep not in known}
         frontier = following
 
+    implemented = {int(path.name[7:13], 16) for path in (ROOT / "engine/src/retail").glob("*/native_*.cpp")}
     picks = []
     for va in sorted(closure):
+        if va in implemented:  # already has an implementation file, even if the manifest row is missing
+            continue
         body = span(functions, instructions, addresses, va)
         if len(body) != 2 or body[1][1] != "ret" or CRT_LO <= va < CRT_HI:
             continue
@@ -119,7 +122,7 @@ def main() -> int:
         name = f"Sys_GetGlobal32_{va:06X}"
         symbol = f"g_{address:06x}"
         owners = [line for line in subprocess.run(
-            ["grep", "-rl", f"0x{address:08X}", "engine/src/retail", "--include=*.cpp"],
+            ["grep", "-rlE", rf"^\s*(std::)?uint32_t {symbol}\s*(=|;)", "engine/src/retail", "--include=*.cpp"],
             cwd=ROOT, capture_output=True, text=True).stdout.split()
             if f"native_{va:06x}" not in line]
         owner_note = (f"// 0x{address:08X}: four-byte object, defined by {owners[0].split('/')[-1]} which assigns it; this file only reads it."
