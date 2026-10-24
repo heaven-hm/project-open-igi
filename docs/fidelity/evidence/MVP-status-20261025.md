@@ -88,3 +88,34 @@ execute a game native, so the MVP objective is not closer than it was 18 rounds 
 that matters. The next session should start at the boundary - 0x00402930's callees, by in-degree - and
 should not continue landing leaves until that boundary is understood, because the leaf supply is now
 exhausted: the dword pool is empty and the narrow pool is down to single digits.
+
+## Final state at the end of the round budget (2026-10-25, round 256)
+
+Verified from the tree in the last round, not from earlier narration:
+
+- build: `cmake --build build-win32-no-verify-gate -j8` exit 0; candidate `igi1.exe` 14,197,862 bytes
+- manifest rows: **1284**, of which **300** have an implementation file
+- records at CFG 1.000 with code: **296**; game-classified **273**, CRT-range **23**
+- those records with a semantic-review file on disk: **189**
+- generators: both pools exhausted, no mechanical batch work left
+
+This session landed **190** game natives at CFG 1.000, each with a review file, catalog candidate and a retail probe where reachable
+(observations recorded per native, including the zero-entry results). It also produced four corrections that reduce the apparent
+progress rather than raise it: a landed CRT helper reclassified, a 329-instruction pattern compiler identified as not-a-leaf, 984
+manifest rows found to have no code, and a review-search bug found in the audit that had just reported a gap.
+
+## What is not delivered, stated without qualification
+
+**A playable Level 1 is not delivered.** `igi1.exe` builds and exits 3 at `0x00402930` before executing any game native. No native can
+advance past TRANSCRIBED, because that status requires paired retail/candidate runtime evidence and the candidate half cannot run. The
+objective's own criteria (all game natives at CFG >= 0.85, runtime verified, tested end to end) are therefore unmet by a wide margin:
+273 of roughly 1,900 reachable natives exist, and the boundary that gates the rest needs 133 callees each with its own closure.
+
+## What the next session should do first
+
+1. Read `docs/fidelity/evidence/0x402930-boundary-map.md` - it now records the 133-callee table, the in-degree reasoning, the CRT
+   exclusions and the corrected classification of the apparent shortcuts.
+2. Start at the boundary, not at the leaves. The leaf supply is spent and no further batch generation is possible.
+3. Keep `docs/fidelity/native-database.md` regenerated: it is the only surface that distinguishes code from records.
+4. Do not mark anything VERIFIED without the paired runtime half; the protocol and the owner rules forbid it, and this branch's history
+   shows how easy the row count makes that mistake.
