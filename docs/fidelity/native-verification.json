@@ -3900,7 +3900,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "VERIFIED",
+        "status": "TRANSCRIBED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -3908,7 +3908,8 @@
         },
         "limitations": [
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
-          "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md)."
+          "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md).",
+          "The VERIFIED status was unsupported: retail 0x401530 contains a propagation loop at 0x401582-0x4015AD that walks the class records from 0xAF5EE8, compares each record word against arg1, tests the phase flag byte at [esi+ebx+0x54FF34] and pushes arg3 for the matching ones, plus a call at 0x4015B9. The candidate omits the loop and that call, so the status is withdrawn to TRANSCRIBED until it is written."
         ],
         "behavioral_runner": {
           "path": "scripts/native_diff_runner.py",
