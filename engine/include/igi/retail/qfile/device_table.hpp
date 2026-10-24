@@ -5,9 +5,10 @@
 // observed by transcribed code so far: +0x00 the dispatch handler, +0x1C the present word, +0x40 the
 // NUL-terminated device name. The rest stays padding and is deliberately unnamed.
 //
-// The retail writer of +0x1C is 0x004B1B90, now transcribed in native_4b1b90.cpp; nothing in the current startup path
-// calls it yet (its own caller is not transcribed), so this storage still starts zeroed and every dispatch takes the
-// "Device not present" path until a transcribed caller reaches the registrar.
+// The retail writer of +0x1C is 0x004B1B90, now transcribed in native_4b1b90.cpp. In this retail build that registrar is
+// UNREFERENCED (no call and no immediate anywhere in igi.exe) and the table itself is BSS, so retail starts with five empty
+// records and every dispatch takes the "Device not present" path - the zeroed storage here reproduces retail's own initial
+// state, not a port shortcut. See evidence sheet section 22.
 
 #include <cstdint>
 

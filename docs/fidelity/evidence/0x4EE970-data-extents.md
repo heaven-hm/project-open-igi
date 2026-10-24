@@ -6198,3 +6198,21 @@ Section 20's call column is also stale in the other direction: it was taken befo
 - The `133` row set, extents and instruction totals are those of section 20; the replay here re-decodes
   each row from `igi.exe` SHA-256
   `dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01` and keeps every extent unchanged.
+## §22. The device table is never populated in this retail build (round 204)
+
+Measured while landing the qfile chain (0x004B11A0, 0x004B1DE0, 0x004B1420, 0x004B1B90):
+
+1. **No reference to 0x004B1B90 exists anywhere in retail igi.exe.** A whole-file scan finds no E8 call whose target is
+   0x004B1B90 and no 32-bit immediate equal to 0x004B1B90 in any section, including .data. The registrar that writes the
+   record's +0x1C present word is therefore unreferenced in this build: nothing can make a device record present through it.
+2. **The table itself is zero at runtime.** 0x009436EC lies past the end of .data's raw extent (0x00136000 + 0x1A000 =
+   0x00150000), so the five 0x8C-byte records are BSS: every handler pointer is 0, every present word is 0 and every name
+   field is empty at process start. Reading the file image at each record's +0x00, +0x1C and +0x40 confirms 0, 0 and "".
+3. Consequence for 0x004B1420: with the table zeroed and the registrar unreachable, every fielded index is absent, so a
+   dispatch reaches 0x004B14E4 and calls Debug_Error("Device not present: %s") then spins at 0x004B14F8. That is retail's
+   own behaviour in this build, not a port gap - the port's zeroed table now reproduces retail's initial state exactly.
+
+This corrects the earlier framing in §21.5 that treated "no transcribed registrar" as a port-side limitation: the honest
+statement is that the registrar exists, is now transcribed, and is dead code in this executable, while the table's initial
+(and, in the observed static image, permanent) state is empty. Whether any runtime path writes the table by other means -
+direct stores from untranscribed code - is not established by this scan and is left open.
