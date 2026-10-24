@@ -3527,3 +3527,733 @@ r2 -q -e scr.color=0 -c 'pd 30 @ 0x4F9DF0' -c 'pd 24 @ 0x4F9E70' -c 'px 64 @ 0x5
 ```
 
 Reference scans: call sites by enumerating every `e8` in `.text` and computing `target = site+5+rel`; stores/loads by exhaustive 4-byte literal scans for the VA; the ten-slot order and every cleanup byte count above come from the raw instruction table in 15.2, not from r2 `pd` alone (the NOP-padded tail misaligns r2 beyond `0x4FAD9C`).
+
+## §16. APPENDED — `0x401530` completed, and the two owners of `0x567C58`: `0x4015F0` (release) and `0x4012F0` (allocate)
+
+Requested by the Lead in two parts: (a) complete the `0x401530` derivation (propagation loop + `0x4014B0` call the candidate omits), (b) the `0x4015F0` / `0x567C58` material originally asked for as "§14". **Numbering:** the Lead renumbered this material to §16 after §15 landed; §16 therefore holds both parts. There is no §14 in this document; nothing between §13 and §15 was renumbered or edited. This section is append-only: no earlier section, appendix, `engine/` file, manifest record, listing or git state was touched by this pass.
+
+**Artifact:** `/Users/haseeb-mir/Downloads/IGI/igi.exe`, SHA-256 `dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01`, PE32 i386, image base `0x400000`, `.text` VA `0x401000` raw `0x1000` size `0x132000`, `.rdata` VA `0x533000` raw `0x133000`, `.data` VA `0x536000` raw `0x136000` size `0x1A000` virtual `0x6FC558` (so everything above VA `0x550000` is zero-filled at load).
+
+**Method and limits:** radare2 6.2.0 (`aaa`, `afij`, `afbj`, `pdj`) for decode, block recovery and callee lists; every byte string, every `E8`/`E9` `rel32` target, every 4-byte global literal and every function-boundary claim re-derived by direct reads of the image in Python (raw scans over the whole `.text`). **No decompiler was invoked** for these targets (no Binary Ninja, no Ghidra), so no pseudocode is quoted anywhere below; the C++ is a statement-level reading of the retail instructions, in retail order. No runtime evidence was collected and the game was not launched (tester owns the runtime lease). Every claim that the instructions do not settle is listed in 16.9 rather than guessed.
+
+### 16.0 What this section answers
+
+| Lead question | Answer | Where |
+|---|---|---|
+| 1. Complete `0x401530`: instruction table, argument frame, the `0xAF5EE8` walk, `0x54FF34`, the `0x4014B0` call | 51 instructions, 3 cdecl args (entry+4/+8/+0x0C), 384-iteration derived-class walk, flag array `0x54FF34`, `0x4014B0` called with **zero arguments** | 16.1 |
+| 2. Are `0x567C70` and `0x536148` separate counters that must not be merged? | **Yes, separate** — and `0x536148` is not private to `0x401530` (3 further sites) | 16.1.5 |
+| 3. `0x4015F0` and the `0x567C58` owners | `0x4015F0` = QTask instance release/destructor, 391 bytes, 25 blocks, 134 instructions, 1 argument; `0x567C58` = live-instance count, written by exactly two functions | 16.2–16.4 |
+| 4. Do `0x4015F0` and `0x401530` overlap / share state? | **No overlap.** Two separate functions with `0x4015D0` between them; they share the handler table and the type table, but not the counters | 16.7 |
+
+### 16.1 `0x401530` — completion and verification
+
+Entry `0x00401530`, size 158 bytes (`0x401530`–`0x4015CD`), `ret` at `0x4015CD`, then two `90` bytes (`0x4015CE`–`0x4015CF`), then the 19-byte helper `0x4015D0`, then thirteen `90` bytes (`0x4015E3`–`0x4015EF`), then `0x4015F0`. r2 `aaa`: 158 bytes, 51 instructions, **7 basic blocks / 10 edges** (the self-recursive call makes r2 split more blocks than the 4 statement-level regions in §11), `stackframe 28` = 16 bytes of saved registers (`ebx`,`ebp`,`esi`,`edi`) + **12 bytes of cdecl arguments**, which independently corroborates the 3-argument frame in 16.1.1; `indegree 623`. The 623 call sites are the `0x401530` registration sites (§11).
+
+#### 16.1.1 Argument frame, proven from the pushed words
+
+The function has **3 cdecl arguments**, and the caller cleans them (`add esp,0xC` in the recursive call; the 623 external sites clean too):
+
+| read site | `[esp+N]` at that point | bytes already pushed | `Eoff = N - pushed` | conclusion |
+|---|---|---|---|---|
+| `0x40153E` | `+0x0C` | 8 (`ebx`,`ebp`) | `+4` | **arg1 = class word** |
+| `0x40154B` | `+0x14` | 12 (`ebx`,`ebp`,`esi`) | `+8` | **arg2 = phase id** |
+| `0x40154F` | `+0x18` | 12 | `+0x0C` | **arg3 = handler** |
+| `0x401589` | `+0x14` | 16 (`+edi`) | `+4` | **arg1 again** (compared against each record's parent word) |
+| `0x40159E` | `+0x1C` | 16 | `+0x0C` | **arg3 again** (re-pushed for the recursion) |
+
+The pushed words are consumed as follows: `arg3` is stored into `QTask_HandlerTable` at `0x40156E` and re-pushed at `0x4015A2`; `arg2` becomes the phase multiplier `esi = arg2*0x180` at `0x401558`/`0x401562` and is re-pushed at `0x4015A3`; `arg1` is masked to a 16-bit class word at `0x401553`, compared against `word [edi]` at `0x40158E`, and re-pushed (as `ebx = i`) at `0x4015A4`. No pushed word is dead.
+
+Return: `EAX` at `0x4015CD` is the value of `0x567C70` **before** this call, i.e. the nesting depth at entry (`mov eax,[0x567C70]` at `0x4015BE` then `dec eax` at `0x4015C4` — the counter was already incremented and stored at `0x40155C`). §11 records this; it is confirmed here from the same instructions.
+
+#### 16.1.2 Full instruction table (51 instructions, `0x401530`–`0x4015CD`)
+
+| VA | bytes | retail instruction | note |
+|---|---|---|---|
+| `0x00401530` | `8b0d707c5600` | `mov ecx, dword [0x567c70]` | `ecx = QTask_NoContextHandlerCount` (`0x567C70`, dword read) |
+| `0x00401536` | `53` | `push ebx` | save ebx |
+| `0x00401537` | `55` | `push ebp` | save ebp |
+| `0x00401538` | `8b2d48615300` | `mov ebp, dword [0x536148]` | `ebp = QTask_LinkedHandlerCounter` (`0x536148`, dword read; image value `FF FF FF FF`) |
+| `0x0040153E` | `8b44240c` | `mov eax, dword [esp + 0xc]` | `eax = [esp+0x0C]`; frame is 8 bytes at this point → **entry+4 = arg1** (class word) |
+| `0x00401542` | `41` | `inc ecx` | `ecx = old + 1` (depth+1) |
+| `0x00401543` | `45` | `inc ebp` | `ebp = [0x536148] + 1` |
+| `0x00401544` | `56` | `push esi` | save esi |
+| `0x00401545` | `892d48615300` | `mov dword [0x536148], ebp` | `[0x536148] = ebp` — stored, **never restored** by this function |
+| `0x0040154B` | `8b6c2414` | `mov ebp, dword [esp + 0x14]` | `ebp = [esp+0x14]`; frame is 12 bytes → **entry+8 = arg2** (phase id); `ebp` is overwritten, the counter value is already stored |
+| `0x0040154F` | `8b542418` | `mov edx, dword [esp + 0x18]` | `edx = [esp+0x18]`; frame 12 → **entry+0x0C = arg3** (handler) |
+| `0x00401553` | `25ffff0000` | `and eax, 0xffff` | `eax = arg1 & 0xFFFF` (class is a 16-bit word) |
+| `0x00401558` | `8d746d00` | `lea esi, [ebp + ebp*2]` | `esi = arg2 * 3` |
+| `0x0040155C` | `890d707c5600` | `mov dword [0x567c70], ecx` | `[0x567C70] = ecx` (depth+1 committed) |
+| `0x00401562` | `c1e607` | `shl esi, 7` | `esi = arg2 * 0x180` (phase stride) |
+| `0x00401565` | `03c6` | `add eax, esi` | `eax = class + phase*0x180` (handler-table index) |
+| `0x00401567` | `83f901` | `cmp ecx, 1` | `cmp ecx,1` — ecx is depth+1 |
+| `0x0040156A` | `0f94c1` | `sete cl` | `cl = (depth+1 == 1)`, i.e. **true only when the pre-increment depth was 0** (outermost call) |
+| `0x0040156D` | `57` | `push edi` | save edi (frame now 16) |
+| `0x0040156E` | `891485e06aa900` | `mov dword [eax*4 + 0xa96ae0], edx` | `QTask_HandlerTable[class + phase*0x180] = arg3` (dword write) |
+| `0x00401575` | `888834ff5400` | `mov byte [eax + 0x54ff34], cl` | `QTask_FirstLinkFlag[class + phase*0x180] = cl` (byte write, `0x54FF34`) |
+| `0x0040157B` | `33db` | `xor ebx, ebx` | `ebx = 0` (record index / recursion argument) |
+| `0x0040157D` | `bfe85eaf00` | `mov edi, 0xaf5ee8` | `edi = 0xAF5EE8` = `&QTask_TypeTable[0].parentType` (cursor) |
+| `0x00401582` | `8a471d` | `mov al, byte [edi + 0x1d]` | `al = byte [edi+0x1D]` = `QTask_TypeTable[i].inUse` (`0xAF5F05`) |
+| `0x00401585` | `84c0` | `test al, al` | `test al,al` |
+| `0x00401587` | `7424` | `je 0x4015ad` | record unused → next |
+| `0x00401589` | `668b542414` | `mov dx, word [esp + 0x14]` | `dx = [esp+0x14]`; frame 16 → **entry+4 = arg1** (the same class word) |
+| `0x0040158E` | `663917` | `cmp word [edi], dx` | `word [edi]` = record's parent type word (`0xAF5EE8`) vs arg1 |
+| `0x00401591` | `751a` | `jne 0x4015ad` | not a direct child of arg1 → next |
+| `0x00401593` | `8a841e34ff5400` | `mov al, byte [esi + ebx + 0x54ff34]` | `al = QTask_FirstLinkFlag[phase*0x180 + i]` (byte read, `esi`=phase*0x180, `ebx`=i) |
+| `0x0040159A` | `84c0` | `test al, al` | `test al,al` |
+| `0x0040159C` | `750f` | `jne 0x4015ad` | already has its **own** (outermost) registration → do not overwrite it |
+| `0x0040159E` | `8b44241c` | `mov eax, dword [esp + 0x1c]` | `eax = [esp+0x1C]`; frame 16 → **entry+0x0C = arg3** (handler) |
+| `0x004015A2` | `50` | `push eax` | push handler |
+| `0x004015A3` | `55` | `push ebp` | push phase (ebp = arg2) |
+| `0x004015A4` | `53` | `push ebx` | push i (ebx = the derived class word) |
+| `0x004015A5` | `e886ffffff` | `call fcn.00401530` | **recursive self-call** `0x401530(i, arg2, arg3)` — depth+1 inside |
+| `0x004015AA` | `83c40c` | `add esp, 0xc` | cdecl cleanup of the 3 arguments |
+| `0x004015AD` | `83c730` | `add edi, 0x30` | `edi += 0x30` (record stride) |
+| `0x004015B0` | `43` | `inc ebx` | `ebx++` (next record index) |
+| `0x004015B1` | `81ffe8a6af00` | `cmp edi, 0xafa6e8` | `cmp edi, 0xAFA6E8` |
+| `0x004015B7` | `7cc9` | `jl 0x401582` | loop while `edi < 0xAFA6E8`; `(0xAFA6E8-0xAF5EE8)/0x30 = 0x4800/0x30 = 384` → **exactly the 384 type records** |
+| `0x004015B9` | `e8f2feffff` | `call fcn.004014b0` | `TaskType_RefreshHandlerMask()` — **no arguments pushed** |
+| `0x004015BE` | `a1707c5600` | `mov eax, dword [0x567c70]` | `eax = [0x567C70]` (the value stored at 0x40155C) |
+| `0x004015C3` | `5f` | `pop edi` | pop edi |
+| `0x004015C4` | `48` | `dec eax` | `eax--` |
+| `0x004015C5` | `5e` | `pop esi` | pop esi |
+| `0x004015C6` | `5d` | `pop ebp` | pop ebp |
+| `0x004015C7` | `a3707c5600` | `mov dword [0x567c70], eax` | `[0x567C70] = eax` — depth counter restored |
+| `0x004015CC` | `5b` | `pop ebx` | pop ebx |
+| `0x004015CD` | `c3` | `ret` | ret; **EAX = pre-increment depth** (0 for the outermost call) |
+
+#### 16.1.3 The `0xAF5EE8` walk, per iteration
+
+The cursor is `edi = 0xAF5EE8`, which is `QTask_TypeTable[0] + 0x08`, i.e. the **parent-type word** of the first 384-record type table whose base is `0xAF5EE0` (§10.9 proves that base from three writers). One iteration, with `i = ebx` and `phase*0x180 = esi`:
+
+1. `0x401582` read `byte [edi+0x1D]` — because the cursor sits at record+8, `edi+0x1D` is record+0x25 = the **in-use byte** `0xAF5F05`. `0` → skip.
+2. `0x401589`/`0x40158E` compare `word [edi]` = record+0x08 = the record's **parent type id** with `arg1`. Not equal → skip. This is what makes the walk a *direct-derived-class* walk rather than a whole-table walk.
+3. `0x401593` read `QTask_FirstLinkFlag[esi + ebx]` = `0x54FF34 + phase*0x180 + i`. Non-zero → skip: that derived class already has its **own** outermost registration for this phase and must not be overwritten.
+4. Otherwise `0x4015A2`–`0x4015A5` push `arg3`, `arg2` (phase) and `i` (the derived class word) and **recurse into `0x401530` itself**. The recursion increments both counters, writes the derived class's handler entry, sets its flag (with `depth+1 != 1`, i.e. `cl = 0`, so the flag records "propagated, not own"), and then walks *its* derived classes.
+5. `0x4015AD`–`0x4015B7` advance: `edi += 0x30`, `ebx++`, loop while `edi < 0xAFA6E8`.
+
+Loop bound proof: `0xAFA6E8 - 0xAF5EE8 = 0x4800`, `0x4800 / 0x30 = 384` — exactly the type-record count, so the walk covers every registered type once per invocation, and `ebx` is simultaneously the loop index, the class word passed to the recursion and the index into the flag array.
+
+#### 16.1.4 `0x54FF34` — the "own registration" flag array
+
+* Indexing: written at `0x401575` as `byte [eax + 0x54FF34]` with `eax = class + phase*0x180`, and read at `0x401593` as `byte [esi + ebx + 0x54FF34]` with `esi = phase*0x180`, `ebx = class`. Same index → one byte per (class, phase) pair.
+* Value: `cl` from `0x401567`/`0x40156A`, i.e. `1` **iff the pre-increment value of `0x567C70` was 0**, otherwise `0`. Meaning: "this (class, phase) handler was registered by an outermost call". (Naming trap for a transcription: the compare at `0x401567` is on the *already incremented* register, so the predicate is `old == 0`, not `old == 1`. §11's prose calls the post-increment register `old`; the emitted store is correct, the label is not.)
+* Extent: the largest index is `253*0x180 + 383 = 97,471 = 0x17CBF`, and `0x54FF34 + 0x17D00 = 0x567C34`; the array is exactly `254 * 384 = 0x17D00` bytes. Its neighbours `0x54FF24`/`0x54FF28`/`0x54FF2C`/`0x54FF30` are the four dwords set to `-1` by `QTask_Init` `0x4010D0` (`0x401100`–`0x401118`), so the flag array starts immediately after them.
+* The same array is used by the sibling registrar `0x401400` (literal references at `0x40144D` and `0x40146C`), so the two registrars share the "own registration" bookkeeping. `0x401400` is a *different* entry (it masks the class with `0x00FF`, uses `0x567C6C` instead of `0x567C70`, and registers a *state* byte); it is outside this section's scope, but the shared `0x54FF34` means a transcription of either must keep the other's semantics in mind.
+
+#### 16.1.5 The `0x4014B0` call at `0x4015B9`: no arguments
+
+`0x4015B9 e8 f2 fe ff ff` → `next_ip 0x4015BE + (-0x10E) = 0x4014B0`. The instruction before it is `0x4015B7 7c c9` (loop back) and the instruction after is `0x4015BE a1 70 7c 56 00` (`mov eax,[0x567C70]`); **no `push` precedes the call and no `add esp` follows it** → `0x4014B0` takes zero arguments and returns nothing the caller consumes.
+
+`0x4014B0` (43 bytes, `0x4014B0`–`0x4014DA`, the document's `TaskType_RefreshHandlerMask`) walks the same 384 records with cursor `0xAF5F08` (`record+0x28`, stride `0x30`, bound `0xAFA708`; `(0xAFA708-0xAF5F08)/0x30 = 384`), and for every record whose in-use byte (`[esi-3]` = `0xAF5F05`) is set calls `0x4014E0(recordIndex)` and stores the returned word at `[esi]` = record+0x28. `0x4014E0` (`TaskType_HandlerPhaseMask`, 75 bytes) walks the 254 phase records at `0x54FF24` (`ecx` = 0…0x0F, `cmp ecx,0x10`, i.e. **16 phases only**), skips records whose byte is `0xFF` (`0x4014F0`), and builds a bit mask `bit(phase) = (QTask_HandlerTable[phase*0x180 + class] != 0)`, finally `or ah,0x80`. So the call at `0x4015B9` refreshes the per-type handler mask after a registration changed the table. §11 already lists this call as a missing candidate instruction (its D2); this section confirms the target, the zero-argument frame and the effect.
+
+#### 16.1.6 Counter verdict: `0x567C70` and `0x536148` are separate and must not be merged
+
+Independent exhaustive 4-byte literal scans over the whole `.text`:
+
+| global | literal occurrences in `.text` | sites |
+|---|---|---|
+| `0x567C70` | **4** | `0x401532` (read), `0x40155E` (write), `0x4015BF` (read), `0x4015C8` (write) — all four inside `0x401530` |
+| `0x536148` | **7** | `0x40140F`, `0x40141E` (inside `0x401400`), `0x40153A`, `0x401547` (inside `0x401530`), `0x4C5C47`, `0x4CE5C2`, `0x4CE603` |
+
+`0x567C70`: `ecx = [0x567C70]` (`0x401530`) → `inc ecx` (`0x401542`) → `[0x567C70] = ecx` (`0x40155C`) → `eax = [0x567C70]` (`0x4015BE`) → `dec eax` (`0x4015C4`) → `[0x567C70] = eax` (`0x4015C7`). A **balanced nesting-depth counter**, restored on every return path (this function has a single `ret`). Initial value: `0x567C70 > 0x550000`, i.e. in the zero-filled part of `.data` → **0**.
+
+`0x536148`: `ebp = [0x536148]` (`0x401538`) → `inc ebp` (`0x401543`) → `[0x536148] = ebp` (`0x401545`) — and **never restored** in this function. Image bytes at `0x536148` are `FF FF FF FF` (file offset `0x136148`), so the first increment produces 0 and the value is a **monotonic invocation counter**, not a depth. Refinement to the Lead's framing: it counts *every* entry of `0x401530`, recursive calls included — it is not specifically a "derived-class counter" — and it is **not private** to `0x401530`: `0x401400` reads/increments it the same way (`0x40140F`, `0x40141E`) and three further sites touch it (`0x4C5C47` inside `QTask_InitPhaseHandlers` `0x4C5900`, `0x4CE5C2`, `0x4CE603`). Both facts are instruction-level; the two globals are distinct dwords at `0x567C70` and `0x536148` and no instruction aliases them.
+
+#### 16.1.7 Deltas for the candidate (confirmation of §11)
+
+§11's D-list stands, re-verified against the bytes: the candidate for `0x401530` must contain (D1) the `0xAF5EE8` walk with stride `0x30` and bound `0xAFA6E8` = 384 records, (D2) the `call 0x4014B0` at `0x4015B9` with no arguments, (D3) the recursive self-call at `0x4015A5` with `(derivedClass, phase, handler)`, and (D4) the `0x54FF34` flag byte with the `old == 0` predicate. One addition to §11's prose, not to its code: the flag predicate compares the **post-increment** register (`0x401567 cmp ecx,1` where `ecx` was incremented at `0x401542`), so it is true only for the outermost call.
+
+#### 16.1.8 Not proven for `0x401530`
+
+* Whether any of the 623 call sites consume the returned depth in `EAX` (not checked site by site).
+* Why `0x536148` exists (it is written and never read by this function; its three other sites are outside this section).
+* The meaning of the 16-phase limit in `0x4014E0` (only `ecx < 0x10` are folded into the mask, while the handler table and the flag array are 254 phases wide).
+
+### 16.2 `0x4015F0` — full derivation
+
+#### 16.2.1 Boundaries and structural facts
+
+| fact | value | how verified |
+|---|---|---|
+| entry | `0x004015F0` | first instruction `8b 15 58 7c 56 00` |
+| body | `0x4015F0`–`0x401776`, **391 bytes** | `ret` at `0x401776`; r2 `afij` size 391, `maxaddr 0x401777` |
+| padding before | thirteen `90` bytes at `0x4015E3`–`0x4015EF` | raw read |
+| padding after | nine `90` bytes at `0x401777`–`0x40177F`, then `0x401780` | raw read |
+| basic blocks | **25** | r2 `afbj` (block table in 16.2.3) |
+| instructions | **134** | `pdj` rows `0x4015F0`…`0x401776`; the 25 blocks' `ninstr` sum to 134 |
+| edges | 37; recursive (one self-call at `0x40165F`) | `afij` |
+| calling convention | **cdecl, exactly 1 argument** (entry+4), caller cleans | `push esi` + `call` at `0x40164E`/`0x401681`, `push eax` + `call` at `0x40165E`, `add esp,4` after each; argument read at `0x401608` with 16 bytes pushed → `0x10-16 = +4` |
+| stack frame | 20 bytes (4 saved registers + one pushed argument slot) | `afij` `stackframe 20` |
+| callers | **120** direct `E8` call sites (indegree 120) | exhaustive `E8` scan: every `site+5+rel32 == 0x4015F0` |
+| return value | two `ret` sites (`0x401768`, `0x401776`); `EAX` is not a proven contract | see 16.2.6 |
+| strings | **none** | no data reference to any string in the body |
+
+#### 16.2.2 Instruction table (134 instructions)
+
+| VA | bytes | retail instruction | note |
+|---|---|---|---|
+| `0x004015F0` | `8b15587c5600` | `mov edx, dword [0x567c58]` | `edx = QTask_LiveTaskCount` (`0x567C58`, dword read) |
+| `0x004015F6` | `53` | `push ebx` | save ebx |
+| `0x004015F7` | `4a` | `dec edx` | `edx--` |
+| `0x004015F8` | `55` | `push ebp` | save ebp |
+| `0x004015F9` | `8915587c5600` | `mov dword [0x567c58], edx` | `QTask_LiveTaskCount = edx` (dword write) — committed **before** the object is touched |
+| `0x004015FF` | `8b15e0a7af00` | `mov edx, dword [0xafa7e0]` | `edx = QTask_EventDispatchDepth` (`0xAFA7E0`, dword read) |
+| `0x00401605` | `33c0` | `xor eax, eax` | `eax = 0` (search index) |
+| `0x00401607` | `56` | `push esi` | save esi |
+| `0x00401608` | `8b742410` | `mov esi, dword [esp + 0x10]` | `esi = [esp+0x10]`; frame 16 → **entry+4 = arg1** (the instance) |
+| `0x0040160C` | `57` | `push edi` | save edi |
+| `0x0040160D` | `85d2` | `test edx, edx` | `test edx,edx` |
+| `0x0040160F` | `7e2c` | `jle 0x40163d` | `depth <= 0` → skip the stack search |
+| `0x00401611` | `b9e0a6af00` | `mov ecx, 0xafa6e0` | `ecx = 0xAFA6E0` = `&QTask_EventDispatchStack[0]` |
+| `0x00401616` | `3931` | `cmp dword [ecx], esi` | `[ecx] == esi` (slot holds this instance?) |
+| `0x00401618` | `740a` | `je 0x401624` | found → 0x401624 |
+| `0x0040161A` | `40` | `inc eax` | `eax++` |
+| `0x0040161B` | `83c104` | `add ecx, 4` | `ecx += 4` |
+| `0x0040161E` | `3bc2` | `cmp eax, edx` | `eax < depth` |
+| `0x00401620` | `7cf4` | `jl 0x401616` | loop |
+| `0x00401622` | `eb19` | `jmp 0x40163d` | not found → 0x40163D |
+| `0x00401624` | `8b16` | `mov edx, dword [esi]` | `edx = *(int*)esi` (`instance+0x00`, the sibling link) |
+| `0x00401626` | `85d2` | `test edx, edx` | `test edx,edx` |
+| `0x00401628` | `740a` | `je 0x401634` | null → ecx = 0 |
+| `0x0040162A` | `8b0a` | `mov ecx, dword [edx]` | `ecx = *(int*)edx` |
+| `0x0040162C` | `f7d9` | `neg ecx` | `neg ecx` |
+| `0x0040162E` | `1bc9` | `sbb ecx, ecx` | `sbb ecx,ecx` |
+| `0x00401630` | `23ca` | `and ecx, edx` | `and ecx,edx` |
+| `0x00401632` | `eb02` | `jmp 0x401636` | → 0x401636 |
+| `0x00401634` | `33c9` | `xor ecx, ecx` | `ecx = 0` |
+| `0x00401636` | `890c85e0a6af00` | `mov dword [eax*4 + 0xafa6e0], ecx` | `QTask_EventDispatchStack[eax] = (edx != 0 && *(int*)edx != 0) ? edx : 0` — the slot is replaced, not removed |
+| `0x0040163D` | `33c0` | `xor eax, eax` | `eax = 0` |
+| `0x0040163F` | `668b461c` | `mov ax, word [esi + 0x1c]` | `ax = word [esi+0x1C]` (`instance+0x1C`, 16-bit type id read) |
+| `0x00401643` | `8b0485e07ca900` | `mov eax, dword [eax*4 + 0xa97ce0]` | `handler = QTask_HandlerTable[type + 3*0x180]` = `0xA96AE0 + 0x1200 = 0xA97CE0` (dword read) |
+| `0x0040164A` | `85c0` | `test eax, eax` | `test eax,eax` |
+| `0x0040164C` | `7406` | `je 0x401654` | no handler → 0x401654 |
+| `0x0040164E` | `56` | `push esi` | push the instance |
+| `0x0040164F` | `ffd0` | `call eax` | `handler(instance)` — **one argument** |
+| `0x00401651` | `83c404` | `add esp, 4` | cdecl cleanup |
+| `0x00401654` | `8b4610` | `mov eax, dword [esi + 0x10]` | `eax = *(int*)(esi+0x10)` = last child (or `&instance+8` when the list is empty) |
+| `0x00401657` | `8b7804` | `mov edi, dword [eax + 4]` | `edi = *(int*)(eax+4)` = that node's previous sibling (0 when empty) |
+| `0x0040165A` | `85ff` | `test edi, edi` | `test edi,edi` |
+| `0x0040165C` | `7412` | `je 0x401670` | no children → 0x401670 |
+| `0x0040165E` | `50` | `push eax` | push the child to release |
+| `0x0040165F` | `e88cffffff` | `call fcn.004015f0` | **recursive self-call** `0x4015F0(child)` |
+| `0x00401664` | `8bc7` | `mov eax, edi` | `eax = edi` (cached previous sibling) |
+| `0x00401666` | `8b7f04` | `mov edi, dword [edi + 4]` | `edi = *(int*)(edi+4)` (its previous sibling) |
+| `0x00401669` | `83c404` | `add esp, 4` | cleanup |
+| `0x0040166C` | `85ff` | `test edi, edi` | `test edi,edi` |
+| `0x0040166E` | `75ee` | `jne 0x40165e` | loop while non-zero |
+| `0x00401670` | `33c9` | `xor ecx, ecx` | `ecx = 0` |
+| `0x00401672` | `668b4e1c` | `mov cx, word [esi + 0x1c]` | `cx = word [esi+0x1C]` (type id) |
+| `0x00401676` | `8b048de076a900` | `mov eax, dword [ecx*4 + 0xa976e0]` | `handler = QTask_HandlerTable[type + 2*0x180]` = `0xA96AE0 + 0xC00 = 0xA976E0` (dword read) |
+| `0x0040167D` | `85c0` | `test eax, eax` | `test eax,eax` |
+| `0x0040167F` | `7406` | `je 0x401687` | — |
+| `0x00401681` | `56` | `push esi` | push the instance |
+| `0x00401682` | `ffd0` | `call eax` | `handler(instance)` — **one argument** |
+| `0x00401684` | `83c404` | `add esp, 4` | cdecl cleanup |
+| `0x00401687` | `8b4618` | `mov eax, dword [esi + 0x18]` | `eax = *(int*)(esi+0x18)` = registry reference count |
+| `0x0040168A` | `85c0` | `test eax, eax` | — |
+| `0x0040168C` | `7436` | `je 0x4016c4` | zero → 0x4016C4 |
+| `0x0040168E` | `a1407c5600` | `mov eax, dword [0x567c40]` | `eax = QTask_RegistryCount` (`0x567C40`) |
+| `0x00401693` | `33c9` | `xor ecx, ecx` | — |
+| `0x00401695` | `85c0` | `test eax, eax` | — |
+| `0x00401697` | `8bd0` | `mov edx, eax` | — |
+| `0x00401699` | `7e29` | `jle 0x4016c4` | — |
+| `0x0040169B` | `a13c7c5600` | `mov eax, dword [0x567c3c]` | `eax = QTask_RegistryIndexArray` (`0x567C3C`) |
+| `0x004016A0` | `8b1d387c5600` | `mov ebx, dword [0x567c38]` | — |
+| `0x004016A6` | `8b0488` | `mov eax, dword [eax + ecx*4]` | — |
+| `0x004016A9` | `0faf05487c5600` | `imul eax, dword [0x567c48]` | — |
+| `0x004016B0` | `8b3c18` | `mov edi, dword [eax + ebx]` | — |
+| `0x004016B3` | `03c3` | `add eax, ebx` | — |
+| `0x004016B5` | `3bfe` | `cmp edi, esi` | — |
+| `0x004016B7` | `7506` | `jne 0x4016bf` | — |
+| `0x004016B9` | `c70000000000` | `mov dword [eax], 0` | — |
+| `0x004016BF` | `41` | `inc ecx` | — |
+| `0x004016C0` | `3bca` | `cmp ecx, edx` | — |
+| `0x004016C2` | `7cd7` | `jl 0x40169b` | — |
+| `0x004016C4` | `56` | `push esi` | push the instance |
+| `0x004016C5` | `e806ffffff` | `call fcn.004015d0` | `QTask_UnlinkTaskFromOwner(instance)` — 1 argument |
+| `0x004016CA` | `8a461e` | `mov al, byte [esi + 0x1e]` | — |
+| `0x004016CD` | `83c404` | `add esp, 4` | — |
+| `0x004016D0` | `84c0` | `test al, al` | — |
+| `0x004016D2` | `0f8491000000` | `je 0x401769` | — |
+| `0x004016D8` | `33c0` | `xor eax, eax` | `ecx = 0` |
+| `0x004016DA` | `668b461c` | `mov ax, word [esi + 0x1c]` | `cx = word [esi+0x1C]` (type id) |
+| `0x004016DE` | `8d0440` | `lea eax, [eax + eax*2]` | `edx = 0xAF5EE0 + type*0x30` (class record; `imul edx,edx,0x30` folded to `lea`/`imul`) |
+| `0x004016E1` | `c1e004` | `shl eax, 4` | — |
+| `0x004016E4` | `8b88005faf00` | `mov ecx, dword [eax + 0xaf5f00]` | — |
+| `0x004016EA` | `8ba8f45eaf00` | `mov ebp, dword [eax + 0xaf5ef4]` | — |
+| `0x004016F0` | `4d` | `dec ebp` | — |
+| `0x004016F1` | `8b3c31` | `mov edi, dword [ecx + esi]` | `edi = *(int*)(QTask_TypeTable[type].poolTailOffset + esi)` (`0xAF5F00`) = the pool position this instance was allocated at |
+| `0x004016F4` | `89a8f45eaf00` | `mov dword [eax + 0xaf5ef4], ebp` | — |
+| `0x004016FA` | `33c0` | `xor eax, eax` | — |
+| `0x004016FC` | `668b461c` | `mov ax, word [esi + 0x1c]` | — |
+| `0x00401700` | `8d0c40` | `lea ecx, [eax + eax*2]` | `QTask_TypeTable[type].poolUsed = ebp` (dword write) |
+| `0x00401703` | `c1e104` | `shl ecx, 4` | — |
+| `0x00401706` | `8b81f45eaf00` | `mov eax, dword [ecx + 0xaf5ef4]` | — |
+| `0x0040170C` | `3bf8` | `cmp edi, eax` | — |
+| `0x0040170E` | `7462` | `je 0x401772` | — |
+| `0x00401710` | `8b91f05eaf00` | `mov edx, dword [ecx + 0xaf5ef0]` | `edx = QTask_TypeTable[type].poolIndexArray` (`0xAF5EF0`) |
+| `0x00401716` | `8b99ec5eaf00` | `mov ebx, dword [ecx + 0xaf5eec]` | `ebx = QTask_TypeTable[type].poolBase` (`0xAF5EEC`) |
+| `0x0040171C` | `8b0482` | `mov eax, dword [edx + eax*4]` | `eax = indexArray[used]` = slot id of the element that was last |
+| `0x0040171F` | `8b2cba` | `mov ebp, dword [edx + edi*4]` | `ebp = indexArray[position]` = this instance's slot id |
+| `0x00401722` | `0faf81fc5eaf00` | `imul eax, dword [ecx + 0xaf5efc]` | `eax *= QTask_TypeTable[type].poolElemSize` (`0xAF5EFC`) |
+| `0x00401729` | `8b89005faf00` | `mov ecx, dword [ecx + 0xaf5f00]` | `ecx = QTask_TypeTable[type].poolTailOffset` (`0xAF5F00`) |
+| `0x0040172F` | `03c3` | `add eax, ebx` | `eax += base` = address of the last element |
+| `0x00401731` | `8b1c01` | `mov ebx, dword [ecx + eax]` | `ebx = *(int*)(element + tailOffset)` = that element's stored position |
+| `0x00401734` | `8b0c9a` | `mov ecx, dword [edx + ebx*4]` | `ecx = indexArray[ebx]` |
+| `0x00401737` | `890cba` | `mov dword [edx + edi*4], ecx` | `indexArray[position] = indexArray[used]` |
+| `0x0040173A` | `33c9` | `xor ecx, ecx` | — |
+| `0x0040173C` | `668b4e1c` | `mov cx, word [esi + 0x1c]` | — |
+| `0x00401740` | `8d1449` | `lea edx, [ecx + ecx*2]` | — |
+| `0x00401743` | `c1e204` | `shl edx, 4` | — |
+| `0x00401746` | `8b8af05eaf00` | `mov ecx, dword [edx + 0xaf5ef0]` | — |
+| `0x0040174C` | `892c99` | `mov dword [ecx + ebx*4], ebp` | — |
+| `0x0040174F` | `33c9` | `xor ecx, ecx` | — |
+| `0x00401751` | `668b4e1c` | `mov cx, word [esi + 0x1c]` | — |
+| `0x00401755` | `8d1449` | `lea edx, [ecx + ecx*2]` | — |
+| `0x00401758` | `c1e204` | `shl edx, 4` | — |
+| `0x0040175B` | `8b8a005faf00` | `mov ecx, dword [edx + 0xaf5f00]` | — |
+| `0x00401761` | `893c01` | `mov dword [ecx + eax], edi` | — |
+| `0x00401764` | `5f` | `pop edi` | — |
+| `0x00401765` | `5e` | `pop esi` | — |
+| `0x00401766` | `5d` | `pop ebp` | — |
+| `0x00401767` | `5b` | `pop ebx` | — |
+| `0x00401768` | `c3` | `ret` | — |
+| `0x00401769` | `56` | `push esi` | push the instance |
+| `0x0040176A` | `e8a1f50a00` | `call fcn.004b0d10` | `Mem_Free(instance)` (`0x4B0D10`) — 1 argument |
+| `0x0040176F` | `83c404` | `add esp, 4` | cleanup |
+| `0x00401772` | `5f` | `pop edi` | pop edi |
+| `0x00401773` | `5e` | `pop esi` | pop esi |
+| `0x00401774` | `5d` | `pop ebp` | pop ebp |
+| `0x00401775` | `5b` | `pop ebx` | pop ebx |
+| `0x00401776` | `c3` | `ret` | ret (second return path) |
+
+#### 16.2.3 The 25 basic blocks and retail-order C++
+
+| # | block VA | insns | ends | successors | retail-order C++ |
+|---|---|---|---|---|---|
+| B1 | `0x004015F0` | 12 | `0x00401611` | `0x0040163D`, `0x00401611` | — |
+| B2 | `0x00401611` | 1 | `0x00401616` | `0x00401616` | — |
+| B3 | `0x00401616` | 2 | `0x0040161A` | `0x00401624`, `0x0040161A` | — |
+| B4 | `0x0040161A` | 4 | `0x00401622` | `0x00401616`, `0x00401622` | — |
+| B5 | `0x00401622` | 1 | `0x00401624` | `0x0040163D` | — |
+| B6 | `0x00401624` | 3 | `0x0040162A` | `0x00401634`, `0x0040162A` | — |
+| B7 | `0x0040162A` | 5 | `0x00401634` | `0x00401636` | — |
+| B8 | `0x00401634` | 1 | `0x00401636` | `0x00401636` | — |
+| B9 | `0x00401636` | 1 | `0x0040163D` | `0x0040163D` | — |
+| B10 | `0x0040163D` | 5 | `0x0040164E` | `0x00401654`, `0x0040164E` | — |
+| B11 | `0x0040164E` | 3 | `0x00401654` | `0x00401654` | — |
+| B12 | `0x00401654` | 4 | `0x0040165E` | `0x00401670`, `0x0040165E` | — |
+| B13 | `0x0040165E` | 7 | `0x00401670` | `0x0040165E`, `0x00401670` | — |
+| B14 | `0x00401670` | 5 | `0x00401681` | `0x00401687`, `0x00401681` | — |
+| B15 | `0x00401681` | 3 | `0x00401687` | `0x00401687` | — |
+| B16 | `0x00401687` | 3 | `0x0040168E` | `0x004016C4`, `0x0040168E` | — |
+| B17 | `0x0040168E` | 5 | `0x0040169B` | `0x004016C4`, `0x0040169B` | — |
+| B18 | `0x0040169B` | 8 | `0x004016B9` | `0x004016BF`, `0x004016B9` | — |
+| B19 | `0x004016B9` | 1 | `0x004016BF` | `0x004016BF` | — |
+| B20 | `0x004016BF` | 3 | `0x004016C4` | `0x0040169B`, `0x004016C4` | — |
+| B21 | `0x004016C4` | 6 | `0x004016D8` | `0x00401769`, `0x004016D8` | — |
+| B22 | `0x004016D8` | 16 | `0x00401710` | `0x00401772`, `0x00401710` | — |
+| B23 | `0x00401710` | 27 | `0x00401769` | return | — |
+| B24 | `0x00401769` | 3 | `0x00401772` | `0x00401772` | — |
+| B25 | `0x00401772` | 5 | `0x00401777` | return | — |
+
+`ret` sites: **`0x401768`** (pooled path — the object memory is not freed, the pool slot is returned) and **`0x401776`** (heap path, reached either from `0x4016D2 je 0x401769` or from `0x40170E je 0x401772`). Both restore the same four registers in the same order (`edi`, `esi`, `ebp`, `ebx`), matching the entry push order `ebx`,`ebp`,`esi`,`edi`.
+
+#### 16.2.4 Globals read and written, with width
+
+| global | width | access | sites |
+|---|---|---|---|
+| `0x567C58` | dword | **read then written** | `0x4015F0` read, `0x4015F9` write |
+| `0xAFA7E0` | dword | read | `0x4015FF` |
+| `0xAFA6E0` | dword array | read + **written** | `0x401616` read, `0x401636` write (`[eax*4+0xAFA6E0]`) |
+| `0xA97CE0` | dword table | read | `0x401643` (`[eax*4+0xA97CE0]`, `eax` = 16-bit type id) |
+| `0xA976E0` | dword table | read | `0x401676` |
+| `0x567C40` | dword | read | `0x40168F` |
+| `0x567C3C` | dword | read | `0x40169C` |
+| `0x567C38` | dword | read | `0x4016A2` |
+| `0x567C48` | dword | read | `0x4016AC` |
+| `0xAF5EF4` | dword | read + written | `0x4016F5` read, `0x401700` write (per-type pool used count) |
+| `0xAF5EF0` | dword | read | `0x401710` (pool index array) |
+| `0xAF5EEC` | dword | read | `0x401716` (pool base) |
+| `0xAF5EFC` | dword | read | `0x401722` (aligned element size) |
+| `0xAF5F00` | dword | read | `0x401729`, `0x401731`, and the write at the swap tail (`[ecx+eax]` with `ecx = [0xAF5F00]`) |
+
+Instance fields touched (all through `esi` = arg1): `+0x00` dword read (`0x401624`), `+0x04` dword read (`0x401657`, `0x401666`), `+0x08` dword read (`0x401654`), `+0x10` dword read (`0x401654`), `+0x14` dword read (`0x4015D4`, inside `0x4015D0`), `+0x18` dword read (`0x401687`), `+0x1C` **word** read three times (`0x40163F`, `0x401672`, `0x4016DA`), `+0x1E` **byte** read (`0x4016D8`). Note the asymmetry to preserve in a transcription: the type id is always read as 16 bits, the pool flag as 8 bits, everything else as 32.
+
+#### 16.2.5 Callees, with argument order proven from the callee
+
+| callee | argument(s) pushed | proof |
+|---|---|---|
+| `0x4015F0` (self) | 1 — `push eax` at `0x40165E`, `add esp,4` at `0x401669` | the callee reads `[esp+0x10]` with 16 bytes pushed → entry+4 |
+| `0x4B0D10` (`Mem_Free`) | 1 — `push esi` at `0x401769`, `add esp,4` at `0x40176F` | `0x4B0D10` is 42 bytes and reads its pointer from `[esp+4]` |
+| `0x4015D0` (`QTask_UnlinkTaskFromOwner`) | 1 — `push esi` at `0x4016C4`, `add esp,4` at `0x4016C9` | `0x4015D0` reads `[esp+4]` at `0x4015D0`, then `[eax+0x14]`, and calls `0x4AF960(eax)` |
+| `QTask_HandlerTable[type+3*0x180]` | 1 — `push esi` at `0x40164E` | the handler is entered with the instance as entry+4 (retail handlers such as `0x402740` read their single argument at `[esp+4]`) |
+| `QTask_HandlerTable[type+2*0x180]` | 1 — `push esi` at `0x401681` | same |
+
+The two indirect calls are the reason `0xA97CE0` and `0xA976E0` have no immediate-write references anywhere in the image (exhaustive literal scan: `0xA97CE0` = **1** occurrence, the read at `0x401646`; `0xA976E0` = **15**, one here plus 14 dispatch reads). They are not separate tables: `0xA976E0 = 0xA96AE0 + 2*0x600` and `0xA97CE0 = 0xA96AE0 + 3*0x600`, and the handler table's phase stride is `0x180` entries = `0x600` bytes (proven in §10 from the writers, and used by `0x401530`/`0x401400`/`0x401D80`). So the destructor invokes **phase 2 and phase 3** of the instance's own type: phase 3 first (`0x401643`, before the children), then the children tail-to-head, then phase 2 (`0x401676`).
+
+#### 16.2.6 Return paths
+
+* `0x401768`: reached from the pooled path when the freed slot is not the last used slot (`0x40170E je 0x401772` jumps over the epilogue, so the epilogue at `0x401764` is reached by fall-through) — the object's memory is **not** returned to the allocator, only its pool slot is freed.
+* `0x401776`: reached from the heap path (`0x4016D2 je 0x401769` → `Mem_Free` → fall into `0x401772`) and from the pooled path's early exit (`0x40170E je 0x401772`).
+* `EAX` on return is whatever the last write left; the two callers inside the QTask core (`0x4010B0` at `0x4010BF`, `0x401780` at `0x4017A4`) do not consume it. **Not proven** for the other 118 sites.
+
+#### 16.2.7 Strings
+
+`0x4015F0` references **no** string. The strings that identify the subsystem it belongs to are, with exact bytes (`.rdata`, verified with `px`):
+
+| VA | bytes |
+|---|---|
+| `0x53614C` | `51 54 41 53 4B 5F 54 59 50 45 5F 55 4E 44 45 46 49 4E 45 44 00 00` = `QTASK_TYPE_UNDEFINED` |
+| `0x536164` | `51 54 61 73 6B 00` = `QTask` |
+| `0x53616C` | `51 54 61 73 6B 74 79 70 65 20 22 25 73 22 20 6E 6F 74 20 64 65 61 6C 6C 6F 63 61 74 65 64 00` = `QTasktype "%s" not deallocated` |
+| `0x53618C` | `51 54 61 73 6B 20 65 76 65 6E 74 20 6E 6F 74 20 64 65 61 6C 6C 6F 63 61 74 65 64 00` = `QTask event not deallocated` |
+| `0x5361C4` | `55 6E 61 62 6C 65 20 74 6F 20 61 6C 6C 6F 63 61 74 65 20 74 61 73 6B 20 74 79 70 65 00` = `Unable to allocate task type` |
+| `0x5361E4` | `51 54 61 73 6B 20 74 79 70 65 20 22 25 73 22 20 6E 6F 74 20 64 65 66 69 6E 65 64 00` = `QTask type "%s" not defined` |
+
+The first two are printed by the two diagnostics in `QTask_Shutdown` `0x4011F0` (`0x401230` prints `QTasktype "%s" not deallocated` per still-in-use type, `0x401270` prints the event variant); `QTask` is the name passed to `TaskType_Register` by `QTask_Init` `0x4010D0` (`0x401129 push 0x536164`), which is why the root type's record at `0xAF5EE0` holds a pointer to it. None of this is evidence about `0x4015F0`'s own behaviour; it is the naming context only.
+
+### 16.3 `0x4015F0` as C++ (whole function, retail order)
+
+The block table in 16.2.3 is the authoritative statement-level reading. Reading the 25 blocks as one function:
+
+```c
+void QTask_ReleaseTaskInstance(void *instance)          /* cdecl, 1 arg, 0x4015F0 */
+{
+    QTask_LiveTaskCount = QTask_LiveTaskCount - 1;       /* 0x4015F0/0x4015F7/0x4015F9 */
+    depth = QTask_EventDispatchDepth;                    /* 0x4015FF  0xAFA7E0 */
+    index = 0;                                           /* 0x401605 */
+    if (depth > 0) {                                     /* 0x40160D/0x40160F */
+        for (ecx = 0xAFA6E0; index < depth; index++, ecx += 4) {   /* 0x401611–0x401620 */
+            if (*(int *)ecx == instance) {               /* 0x401616/0x401618 */
+                edx = *(int *)instance;                  /* 0x401624  instance+0x00 */
+                ecx = (edx != 0 && *(int *)edx != 0) ? edx : 0;   /* 0x40162A–0x401632 */
+                *(int *)(0xAFA6E0 + index * 4) = ecx;    /* 0x401636 */
+                break;
+            }
+        }
+    }
+    handler = QTask_HandlerTable[(uint16)*(uint16 *)((char *)instance + 0x1C) + 3 * 0x180];
+    if (handler != 0) handler(instance);                 /* 0x40163D–0x401651  phase 3 */
+    eax = *(int *)((char *)instance + 0x10);             /* 0x401654  last child */
+    edi = *(int *)(eax + 4);                             /* 0x401657  previous sibling */
+    while (edi != 0) {                                   /* 0x40165A–0x40166E */
+        QTask_ReleaseTaskInstance(eax);                  /* 0x40165E/0x40165F */
+        eax = edi;                                       /* 0x401664 */
+        edi = *(int *)(edi + 4);                         /* 0x401666 */
+    }
+    handler = QTask_HandlerTable[(uint16)*(uint16 *)((char *)instance + 0x1C) + 2 * 0x180];
+    if (handler != 0) handler(instance);                 /* 0x401670–0x401684  phase 2 */
+    if (*(int *)((char *)instance + 0x18) != 0) {        /* 0x401687  registry references */
+        count = QTask_RegistryCount;                     /* 0x40168E  0x567C40 */
+        for (index = 0; index < count; index++) {        /* 0x40169B–0x4016C2 */
+            slot = QTask_RegistryBase
+                 + QTask_RegistryIndexArray[index] * QTask_RegistryStride;
+            if (*(int *)slot == instance) *(int *)slot = 0;   /* 0x4016B9 */
+        }
+    }
+    QTask_UnlinkTaskFromOwner(instance);                 /* 0x4016C4/0x4016C5  0x4015D0 */
+    if (*(uint8 *)((char *)instance + 0x1E) == 0) {      /* 0x4016D8  heap-allocated */
+        Mem_Free(instance);                              /* 0x401769  0x4B0D10 */
+        return;                                          /* 0x401776 */
+    }
+    class = 0xAF5EE0 + (uint16)*(uint16 *)((char *)instance + 0x1C) * 0x30;
+    position = *(int *)(class->poolTailOffset + (int)instance);      /* 0xAF5F00 */
+    used = class->poolUsed - 1;                          /* 0xAF5EF4 */
+    class->poolUsed = used;                              /* 0x401700 */
+    if (position != used) {                              /* 0x401710 … */
+        lastSlot = class->poolIndexArray[used];          /* 0xAF5EF0 */
+        mySlot   = class->poolIndexArray[position];
+        lastElem = class->poolBase + lastSlot * class->poolElemSize;  /* 0xAF5EEC/0xAF5EFC */
+        lastPos  = *(int *)(class->poolTailOffset + lastElem);
+        class->poolIndexArray[position] = class->poolIndexArray[lastPos];
+        class->poolIndexArray[lastPos]  = mySlot;
+        *(int *)(class->poolTailOffset + lastElem) = position;
+    }
+    return;                                              /* 0x401768 */
+}
+```
+
+The child-list walk is worth stating explicitly because it is the part most likely to be transcribed wrongly: `instance+0x10` holds the **last** child (or `instance+8`, the head field address, when the list is empty) and each child's `+0x04` is its **previous** sibling, with the first child's `+0x04` = `instance+8` and `*(int*)(instance+0x0C) = 0` terminating the chain. That is exactly what `0x4AF8F0` (`insert at end`: `node->prev = head->tail`, `node->next = head+4`, `oldTail->next = node`, `head->tail = node` — bytes `8b 44 24 04 8b 4c 24 08 8b 50 08 89 51 04 8d 50 04 89 11 8b 50 08 89 0a 89 48 08 c3`), `0x4AF910` (`insert at front`) and `0x4AF960` (`unlink`: `node->prev->next = node->next`, `node->next->prev = node->prev`, then both fields zeroed) construct; the allocator's init sequence (`0x40139F`–`0x4013A3`) sets `+8 = +0x0C`, `+0x0C = 0`, `+0x10 = +8`. Children are therefore released **tail-to-head**, i.e. in reverse insertion order, and destroying a child unlinks it from this list while the cached `prev` pointers stay valid because the list head lives inside the parent.
+
+### 16.4 `0x567C58` — verdict, demonstrated
+
+`0x567C58` is a **4-byte live-instance counter of the QTask system** (`QTask_LiveTaskCount`). Exhaustive 4-byte literal scan over `.text` finds **exactly five** references, and they are the five the Lead reported:
+
+| # | site | instruction | role |
+|---|---|---|---|
+| 1 | `0x4012FB` (insn `0x4012F9`) | `8b 35 58 7c 56 00` `mov esi,[0x567c58]` | read in `QTask_AllocateTaskInstance` |
+| 2 | `0x40130D` (insn `0x40130B`) | `89 35 58 7c 56 00` `mov [0x567c58],esi` | **write** — after `inc esi` at `0x401307` |
+| 3 | `0x4015F2` (insn `0x4015F0`) | `8b 15 58 7c 56 00` `mov edx,[0x567c58]` | read in `QTask_ReleaseTaskInstance` |
+| 4 | `0x4015FB` (insn `0x4015F9`) | `89 15 58 7c 56 00` `mov [0x567c58],edx` | **write** — after `dec edx` at `0x4015F7` |
+| 5 | `0x401A61` (insn `0x401A60`) | `a1 58 7c 56 00` `mov eax,[0x567c58]` | read-only getter |
+
+(The Lead's addresses `0x4012F9`/`0x40130B`/`0x4015F0`/`0x4015F9` are the *instruction* addresses; §15's list `0x4012FB`/`0x40130D`/`0x4015F2`/`0x4015FB` are the *literal* offsets, i.e. instruction+2. Both lists are the same five sites.)
+
+**Storage definition, proven:**
+
+* Width 32 bits. All three access forms are 5-byte absolute dword instructions (`a1`/`a3`/`8b 15`/`89 15`), and every one of the five references is a full dword. No 8- or 16-bit access exists anywhere.
+* Location and initial value: `0x567C58` is inside `.data` (VA `0x536000`, virtual size `0x6FC558`) but **beyond the raw-backed part** of that section (`0x536000 + 0x1A000 = 0x550000`), so the loader maps it zeroed. Initial value **0**. It is therefore not a pointer and not a sentinel; a fresh process starts with zero live tasks.
+* Invariant: `inc` in the allocator (`0x401307`) and `dec` in the release path (`0x4015F7`), both committed before the object is used or touched, and neither is conditional inside its function. The getter `0x401A60` reads it. Nothing else in the image reads or writes it.
+* **No other owner.** The Lead's rule "whichever one is truly the writer defines the storage" is satisfiable here: there is exactly one incrementing writer (`0x4012F0`) and exactly one decrementing writer (`0x4015F0`), and their widths agree (dword). This resolves the §15 blocker ("`0x401A60` / `0x567C58` … stays blocked"): the writer pair is now identified and derived in full.
+* Consumer: `0x4010B0` (`0x4010B9 call 0x401A60`, then `test eax,eax` and `0x4010BF call 0x4015F0` with `Game_GetContext()`), i.e. at shutdown, if any task is still live, the context task is released — which recursively releases the whole task tree through the child walk in 16.3. A second consumer of `0x401A60` exists (`0x431560 + 0x288` region), not analysed here.
+
+**What `0x567C58` is *not*, on this evidence:** it is not `0xAFA7E0` (the event-dispatch depth: different address, incremented/decremented by `0x401D80`/`0x401E30`/`0x401E70`), it is not `0x567C70` (the `0x401530` registration depth) and it is not `0x536148` (the `0x401530`/`0x401400` invocation counter). All four are separate dwords with disjoint reference sets.
+
+### 16.5 `0x4012F0` — the incrementing owner
+
+| fact | value |
+|---|---|
+| entry / body | `0x004012F0` … `0x4013AC` (**189 bytes**), `ret` at `0x4013AC`, three `90` bytes `0x4013AD`–`0x4013AF`, then `0x4013B0` |
+| blocks / instructions | 6 basic blocks, 61 instructions (`afij`: `nbbs 6`, `ninstr 61`, `edges 7`, `recursive false`, `stackframe 28`, `cdecl`) |
+| arguments | **2**, cdecl: arg1 = owner pointer (entry+4, read at `0x401381` with 16 bytes pushed → `0x14-16 = +4`), arg2 = type id (entry+8, read at `0x4012F2` with 8 pushed → `+8`) |
+| return | the new instance (`eax = esi` at `0x4013A6`) |
+| callers | exactly **2**: `0x4012AC` inside `0x4012A0` and `0x4013BC` inside `0x4013B0` |
+| role | allocates and constructs one QTask instance of a registered type: either recycles a per-type pool element or heap-allocates `QTask_TypeTable[type].size` bytes with alignment 4 under `Mem_Lock(1)`/`Mem_Unlock()`, then writes the whole header (`+0`,`+4`,`+8`,`+0x0C`,`+0x10`,`+0x14`,`+0x18`,`+0x1C`,`+0x1E`) and increments `QTask_LiveTaskCount` |
+
+Blocks and retail-order C++:
+
+| # | block VA | insns | ends | successors | retail-order C++ |
+|---|---|---|---|---|---|
+| B1 | `0x004012F0` | 16 | `0x0040131E` | `0x00401362`, `0x0040131E` | `esi = QTask_LiveTaskCount; esi++; QTask_LiveTaskCount = esi;` // 0x4012F9/0x401307/0x40130B<br>`class = 0xAF5EE0 + (arg2 & 0xFFFF) * 0x30; bl = 0;` // 0x4012FF–0x401311<br>`if (QTask_TypeTable[class].poolPresent == 0) goto L_401362;` // 0x401314/0x40131C |
+| B2 | `0x0040131E` | 4 | `0x0040132E` | `0x00401360`, `0x0040132E` | `if (poolUsed >= poolCapacity) goto L_401360;` // 0x40131E–0x40132C unsigned `jge` on the compare at 0x40132A |
+| B3 | `0x0040132E` | 12 | `0x00401360` | `0x00401381` | `slot = poolIndexArray[poolUsed];` // 0xAF5EF0<br>`obj = poolBase + slot * poolElemSize;` // 0xAF5EEC / 0xAF5EFC<br>`*(int*)(obj + poolTailOffset) = poolUsed;` // 0xAF5F00, 0x40134E<br>`poolUsed++; bl = 1;` // 0xAF5EF4<br>`goto L_401381;` |
+| B4 | `0x00401360` | 1 | `0x00401362` | `0x00401362` | `bl = 0;` // pool exhausted |
+| B5 | `0x00401362` | 9 | `0x00401381` | `0x00401381` | `Mem_Lock(1);` // 0x4B0D60<br>`obj = Mem_Alloc(QTask_TypeTable[class].size, 4);` // 0xAF5EE4 → 0x4B0C60<br>`Mem_Unlock();` // 0x4B0D90 |
+| B6 | `0x00401381` | 19 | `0x004013AD` | return | `*(int*)(obj+4) = 0; *(int*)obj = 0;`<br>`*(int*)(obj+0x14) = arg1;` // owner<br>`*(uint8*)(obj+0x1E) = bl; *(uint16*)(obj+0x1C) = (uint16)arg2; *(int*)(obj+0x18) = 0;`<br>`*(int*)(obj+8) = obj+0x0C; *(int*)(obj+0x0C) = 0; *(int*)(obj+0x10) = obj+8;` // empty child list<br>`return obj;` |
+
+Instruction table:
+
+| VA | bytes | retail instruction | note |
+|---|---|---|---|
+| `0x004012F0` | `53` | `push ebx` | save ebx |
+| `0x004012F1` | `55` | `push ebp` | save ebp |
+| `0x004012F2` | `8b6c2410` | `mov ebp, dword [esp + 0x10]` | `ebp = [esp+0x10]`; frame 8 → **entry+8 = arg2** (type id) |
+| `0x004012F6` | `56` | `push esi` | save esi |
+| `0x004012F7` | `8bc5` | `mov eax, ebp` | `eax = ebp` |
+| `0x004012F9` | `8b35587c5600` | `mov esi, dword [0x567c58]` | `esi = QTask_LiveTaskCount` (`0x567C58`, dword read) — reference 1 of 5 |
+| `0x004012FF` | `25ffff0000` | `and eax, 0xffff` | `eax = type & 0xFFFF` |
+| `0x00401304` | `57` | `push edi` | save edi |
+| `0x00401305` | `32db` | `xor bl, bl` | `bl = 0` (pool-recycled flag default) |
+| `0x00401307` | `46` | `inc esi` | `esi++` |
+| `0x00401308` | `8d3c40` | `lea edi, [eax + eax*2]` | `edi = (type & 0xFFFF) * 3` |
+| `0x0040130B` | `8935587c5600` | `mov dword [0x567c58], esi` | `QTask_LiveTaskCount = esi` (dword write) — reference 2 of 5 |
+| `0x00401311` | `c1e704` | `shl edi, 4` | `edi <<= 4` → `edi = type * 0x30` (class record offset) |
+| `0x00401314` | `8a87045faf00` | `mov al, byte [edi + 0xaf5f04]` | `al = QTask_TypeTable[type].poolPresent` (`0xAF5F04`, byte read) |
+| `0x0040131A` | `84c0` | `test al, al` | `test al,al` |
+| `0x0040131C` | `7444` | `je 0x401362` | no pool → heap path at 0x401362 |
+| `0x0040131E` | `8b87f45eaf00` | `mov eax, dword [edi + 0xaf5ef4]` | `eax = QTask_TypeTable[type].poolUsed` (`0xAF5EF4`) |
+| `0x00401324` | `8b8ff85eaf00` | `mov ecx, dword [edi + 0xaf5ef8]` | `ecx = QTask_TypeTable[type].poolCapacity` (`0xAF5EF8`) |
+| `0x0040132A` | `3bc1` | `cmp eax, ecx` | `used < capacity ?` |
+| `0x0040132C` | `7d32` | `jge 0x401360` | exhausted → 0x401360 (bl = 0, heap path) |
+| `0x0040132E` | `8b8ff05eaf00` | `mov ecx, dword [edi + 0xaf5ef0]` | `ecx = QTask_TypeTable[type].poolIndexArray` (`0xAF5EF0`) |
+| `0x00401334` | `8b97005faf00` | `mov edx, dword [edi + 0xaf5f00]` | `edx = QTask_TypeTable[type].poolTailOffset` (`0xAF5F00`) |
+| `0x0040133A` | `b301` | `mov bl, 1` | `bl = 1` (this instance comes from the pool) |
+| `0x0040133C` | `8b3481` | `mov esi, dword [ecx + eax*4]` | `esi = indexArray[used]` (slot id) |
+| `0x0040133F` | `8b8fec5eaf00` | `mov ecx, dword [edi + 0xaf5eec]` | `ecx = QTask_TypeTable[type].poolBase` (`0xAF5EEC`) |
+| `0x00401345` | `0fafb7fc5eaf00` | `imul esi, dword [edi + 0xaf5efc]` | `esi *= QTask_TypeTable[type].poolElemSize` (`0xAF5EFC`) |
+| `0x0040134C` | `03f1` | `add esi, ecx` | `esi += base` (element address) |
+| `0x0040134E` | `890432` | `mov dword [edx + esi], eax` | `*(int*)(element + tailOffset) = used` — the element stores its own pool position |
+| `0x00401351` | `8b87f45eaf00` | `mov eax, dword [edi + 0xaf5ef4]` | `eax = poolUsed` |
+| `0x00401357` | `40` | `inc eax` | `eax++` |
+| `0x00401358` | `8987f45eaf00` | `mov dword [edi + 0xaf5ef4], eax` | `poolUsed = eax` (dword write) |
+| `0x0040135E` | `eb21` | `jmp 0x401381` | → 0x401381 |
+| `0x00401360` | `32db` | `xor bl, bl` | `bl = 0` (heap-allocated instance) |
+| `0x00401362` | `6a01` | `push 1` | push 1 |
+| `0x00401364` | `e8f7f90a00` | `call fcn.004b0d60` | `Mem_Lock(1)` (`0x4B0D60`) — 1 argument, caller cleans |
+| `0x00401369` | `8b87e45eaf00` | `mov eax, dword [edi + 0xaf5ee4]` | `eax = QTask_TypeTable[type].size` (`0xAF5EE4`, dword read) |
+| `0x0040136F` | `6a04` | `push 4` | push 4 (alignment) |
+| `0x00401371` | `50` | `push eax` | push size |
+| `0x00401372` | `e8e9f80a00` | `call fcn.004b0c60` | `Mem_Alloc(size, 4)` (`0x4B0C60`) — 2 arguments |
+| `0x00401377` | `83c40c` | `add esp, 0xc` | cleanup of 3 dwords (lock argument + 2 alloc arguments) |
+| `0x0040137A` | `8bf0` | `mov esi, eax` | `esi = eax` (new object) |
+| `0x0040137C` | `e80ffa0a00` | `call fcn.004b0d90` | `Mem_Unlock()` (`0x4B0D90`) — 0 arguments |
+| `0x00401381` | `8b4c2414` | `mov ecx, dword [esp + 0x14]` | `ecx = [esp+0x14]`; frame 16 → **entry+4 = arg1** (owner) |
+| `0x00401385` | `33d2` | `xor edx, edx` | `edx = 0` |
+| `0x00401387` | `895604` | `mov dword [esi + 4], edx` | `*(int*)(esi+4) = 0` (prev link) |
+| `0x0040138A` | `8916` | `mov dword [esi], edx` | `*(int*)esi = 0` (next link) |
+| `0x0040138C` | `894e14` | `mov dword [esi + 0x14], ecx` | `*(int*)(esi+0x14) = owner` |
+| `0x0040138F` | `8d460c` | `lea eax, [esi + 0xc]` | `eax = esi + 0x0C` |
+| `0x00401392` | `8d4e08` | `lea ecx, [esi + 8]` | `ecx = esi + 8` |
+| `0x00401395` | `885e1e` | `mov byte [esi + 0x1e], bl` | `*(uint8*)(esi+0x1E) = bl` (pool flag) |
+| `0x00401398` | `66896e1c` | `mov word [esi + 0x1c], bp` | `*(uint16*)(esi+0x1C) = bp` (type id) |
+| `0x0040139C` | `895618` | `mov dword [esi + 0x18], edx` | `*(int*)(esi+0x18) = 0` (registry reference count) |
+| `0x0040139F` | `8901` | `mov dword [ecx], eax` | `*(int*)(esi+8) = esi+0x0C` (child list head = terminator) |
+| `0x004013A1` | `8910` | `mov dword [eax], edx` | `*(int*)(esi+0x0C) = 0` (terminator next) |
+| `0x004013A3` | `894e10` | `mov dword [esi + 0x10], ecx` | `*(int*)(esi+0x10) = esi+8` (tail = head address) |
+| `0x004013A6` | `8bc6` | `mov eax, esi` | `eax = esi` |
+| `0x004013A8` | `5f` | `pop edi` | pop edi |
+| `0x004013A9` | `5e` | `pop esi` | pop esi |
+| `0x004013AA` | `5d` | `pop ebp` | pop ebp |
+| `0x004013AB` | `5b` | `pop ebx` | pop ebx |
+| `0x004013AC` | `c3` | `ret` | ret (returns the instance) |
+
+Its two callers are the QTask constructors, and they differ only in list insertion:
+
+| function | body | difference |
+|---|---|---|
+| `0x4012A0` (72 bytes, 5 blocks, 110 call sites) | `obj = 0x4012F0(owner, type); if (owner != 0) 0x4AF8F0(owner + 8, obj); handler = QTask_HandlerTable[obj->type]; if (handler) handler(obj, data); return obj;` | appends the new task as the **last** child of `owner` (`0x4AF8F0`), then runs the phase-0 handler with 2 arguments (`push data; push obj`) |
+| `0x4013B0` (72 bytes, 5 blocks) | identical except `0x4AF910(owner + 8, obj)` | inserts as the **first** child |
+
+Evidence for the phase-0 handler arity: `0x4012D8`/`0x4012DC`/`0x4012DD` push `[esp+0x14]` (= arg3/data) then `esi` (= obj) before `call eax`; the retail phase-0 handler for the Flow type, `0x402070`, reads its argument at `[esp+0x0C]` with 8 bytes pushed → entry+4 = the object, and stores it in `Game_GetContext()`'s global `0x567C8C` (`0x402079 mov [0x567c8c],esi`). The same handler then creates a root `QTask` instance (`0x4018F0` → the root class word from `0x54F928`; `0x4012A0(0, rootClass, 0)`) and stores it at `context+0x48` (`0x402091 mov [ecx+0x48],eax`). That is the pointer `0x402740` later passes to `0x4015F0` (`0x40275D mov ecx,[eax+0x48]`, `0x402761 call 0x4015F0`) before clearing `0x567C8C` — a concrete, retail-side proof that `0x4015F0` is the *release* routine and that phase 2 of the Flow type is the teardown hook.
+
+### 16.6 `0x401A60` — the getter
+
+`0x401A60`–`0x401A65`, 6 bytes, one block: `a1 58 7c 56 00` `mov eax,[0x567c58]` / `c3` `ret`. Zero arguments, no other access, no side effect. Two callers (`0x4010B9` inside `0x4010B0`, plus one outside the QTask core). The external-catalogue name `QTask_DispatchEvent_2` (recorded in §12 C7) is contradicted by the body: it neither dispatches nor takes an event; the only thing it does is return `QTask_LiveTaskCount`.
+
+### 16.7 The 120 `0x4015F0` call sites, grouped by caller
+
+All 120 sites are direct `E8 rel32` calls whose target is exactly `0x4015F0` (exhaustive `.text` scan). Grouping rule, stated so it can be re-run or challenged: a site's enclosing function entry is the largest address `≤ site` that is preceded by **at least two `90` bytes** and, before that padding run, by a terminator byte (`c3`/`c2`/`cc`/`eb`/`e9`) — the MSVC layout invariant. That rule is a heuristic, not a proof; the "also an `e8` call target?" column marks whether the entry is independently corroborated as a function entry by the exhaustive call-target enumeration. Region labels are a coarse reading of the address neighbourhood, not proof of subsystem membership.
+
+| entry (rule) | sites | also an e8 call target? | region | site VAs |
+|---|---|---|---|---|
+| `0x004010A0` | 1 | yes | QTask core (0x401000-0x402100) | `0x004010BF` |
+| `0x004015F0` | 1 | yes | QTask core (0x401000-0x402100) | `0x0040165F` |
+| `0x00401780` | 1 | yes | QTask core (0x401000-0x402100) | `0x004017A4` |
+| `0x00402240` | 2 | no | Flow phase handlers (0x402200-0x402C40) | `0x00402674`, `0x00402761` |
+| `0x00415380` | 1 | no | engine/game object code (0x415000-0x48A000) | `0x00415440` |
+| `0x00415AB0` | 1 | no | engine/game object code (0x415000-0x48A000) | `0x00415AC1` |
+| `0x004161D0` | 1 | yes | engine/game object code (0x415000-0x48A000) | `0x00416335` |
+| `0x00416550` | 2 | no | engine/game object code (0x415000-0x48A000) | `0x00416587`, `0x00416598` |
+| `0x00416D90` | 1 | yes | engine/game object code (0x415000-0x48A000) | `0x00416F22` |
+| `0x00418B00` | 1 | yes | engine/game object code (0x415000-0x48A000) | `0x00418D75` |
+| `0x00419210` | 1 | no | engine/game object code (0x415000-0x48A000) | `0x00419285` |
+| `0x0041DEB0` | 2 | no | engine/game object code (0x415000-0x48A000) | `0x0041DEE2`, `0x0041DEEE` |
+| `0x00422DF0` | 2 | no | engine/game object code (0x415000-0x48A000) | `0x00422DFC`, `0x00422E05` |
+| `0x004251C0` | 1 | yes | engine/game object code (0x415000-0x48A000) | `0x004251D6` |
+| `0x00428390` | 2 | no | engine/game object code (0x415000-0x48A000) | `0x00428582`, `0x004285F7` |
+| `0x0042B700` | 1 | no | engine/game object code (0x415000-0x48A000) | `0x0042B78D` |
+| `0x0042BBA0` | 1 | no | engine/game object code (0x415000-0x48A000) | `0x0042BBDE` |
+| `0x0042E320` | 1 | no | engine/game object code (0x415000-0x48A000) | `0x0042E3BC` |
+| `0x0042FC70` | 1 | no | engine/game object code (0x415000-0x48A000) | `0x0042FCCA` |
+| `0x004301C0` | 1 | no | engine/game object code (0x415000-0x48A000) | `0x004301FF` |
+| `0x004316D0` | 1 | no | engine/game object code (0x415000-0x48A000) | `0x00431A24` |
+| `0x00438000` | 1 | no | engine/game object code (0x415000-0x48A000) | `0x0043803B` |
+| `0x004395D0` | 1 | no | engine/game object code (0x415000-0x48A000) | `0x004396F3` |
+| `0x0043A270` | 1 | no | engine/game object code (0x415000-0x48A000) | `0x0043A2BA` |
+| `0x0043A3C0` | 1 | no | engine/game object code (0x415000-0x48A000) | `0x0043A419` |
+| `0x0043A450` | 1 | no | engine/game object code (0x415000-0x48A000) | `0x0043A521` |
+| `0x0043FC30` | 1 | no | engine/game object code (0x415000-0x48A000) | `0x0043FC86` |
+| `0x00444660` | 1 | no | engine/game object code (0x415000-0x48A000) | `0x004446AD` |
+| `0x004446E0` | 1 | no | engine/game object code (0x415000-0x48A000) | `0x004447AE` |
+| `0x00446AC0` | 1 | no | engine/game object code (0x415000-0x48A000) | `0x00446ADF` |
+| `0x00447830` | 1 | no | engine/game object code (0x415000-0x48A000) | `0x004479B9` |
+| `0x00449A80` | 1 | no | engine/game object code (0x415000-0x48A000) | `0x00449AF3` |
+| `0x00449E50` | 1 | no | engine/game object code (0x415000-0x48A000) | `0x0044A18D` |
+| `0x0044A1A0` | 1 | no | engine/game object code (0x415000-0x48A000) | `0x0044A1AB` |
+| `0x0045EEA0` | 1 | no | engine/game object code (0x415000-0x48A000) | `0x0045EECD` |
+| `0x00465AE0` | 1 | no | engine/game object code (0x415000-0x48A000) | `0x00465AEF` |
+| `0x0046BF80` | 2 | no | engine/game object code (0x415000-0x48A000) | `0x0046BFAD`, `0x0046BFC0` |
+| `0x0046C050` | 1 | yes | engine/game object code (0x415000-0x48A000) | `0x0046C056` |
+| `0x0046CEA0` | 1 | no | engine/game object code (0x415000-0x48A000) | `0x0046D033` |
+| `0x0046D740` | 1 | no | engine/game object code (0x415000-0x48A000) | `0x0046D74F` |
+| `0x0046DC40` | 1 | no | engine/game object code (0x415000-0x48A000) | `0x0046DC89` |
+| `0x0046DEE0` | 1 | no | engine/game object code (0x415000-0x48A000) | `0x0046DEEB` |
+| `0x0046E370` | 1 | yes | engine/game object code (0x415000-0x48A000) | `0x0046E7CB` |
+| `0x0046E7F0` | 1 | no | engine/game object code (0x415000-0x48A000) | `0x0046E8B2` |
+| `0x00471330` | 1 | no | engine/game object code (0x415000-0x48A000) | `0x0047139D` |
+| `0x004713C0` | 1 | no | engine/game object code (0x415000-0x48A000) | `0x0047141F` |
+| `0x00475C10` | 1 | no | engine/game object code (0x415000-0x48A000) | `0x00475D1C` |
+| `0x00476340` | 1 | no | engine/game object code (0x415000-0x48A000) | `0x004764A1` |
+| `0x00476AC0` | 2 | no | engine/game object code (0x415000-0x48A000) | `0x00476B79`, `0x00476C21` |
+| `0x004782D0` | 1 | no | engine/game object code (0x415000-0x48A000) | `0x004784DA` |
+| `0x00478640` | 1 | no | engine/game object code (0x415000-0x48A000) | `0x00478671` |
+| `0x00478840` | 2 | no | engine/game object code (0x415000-0x48A000) | `0x0047889B`, `0x004788BE` |
+| `0x00478BA0` | 1 | no | engine/game object code (0x415000-0x48A000) | `0x0047962C` |
+| `0x0047A960` | 1 | no | engine/game object code (0x415000-0x48A000) | `0x0047A976` |
+| `0x0047B170` | 1 | yes | engine/game object code (0x415000-0x48A000) | `0x0047B187` |
+| `0x0047B690` | 1 | no | engine/game object code (0x415000-0x48A000) | `0x0047B73F` |
+| `0x0047D320` | 1 | no | engine/game object code (0x415000-0x48A000) | `0x0047D410` |
+| `0x0047E0C0` | 1 | no | engine/game object code (0x415000-0x48A000) | `0x0047E19B` |
+| `0x0047E820` | 1 | no | engine/game object code (0x415000-0x48A000) | `0x0047E959` |
+| `0x00480420` | 1 | no | engine/game object code (0x415000-0x48A000) | `0x00480430` |
+| `0x004806E0` | 1 | no | engine/game object code (0x415000-0x48A000) | `0x0048077A` |
+| `0x00480F30` | 1 | no | engine/game object code (0x415000-0x48A000) | `0x00480F71` |
+| `0x004855F0` | 1 | no | engine/game object code (0x415000-0x48A000) | `0x00485657` |
+| `0x00487EE0` | 1 | no | engine/game object code (0x415000-0x48A000) | `0x00487F51` |
+| `0x00488220` | 1 | yes | engine/game object code (0x415000-0x48A000) | `0x004883AE` |
+| `0x00498A70` | 1 | yes | display/WinMain area (0x498000) | `0x00498A99` |
+| `0x004DA160` | 1 | yes | script/QVM + task dispatch (0x4D0000-0x510000) | `0x004DA170` |
+| `0x004DDFF0` | 2 | no | script/QVM + task dispatch (0x4D0000-0x510000) | `0x004DE015`, `0x004DE028` |
+| `0x004DE740` | 1 | no | script/QVM + task dispatch (0x4D0000-0x510000) | `0x004DE75E` |
+| `0x004DEEC0` | 2 | yes | script/QVM + task dispatch (0x4D0000-0x510000) | `0x004DF494`, `0x004DF4A7` |
+| `0x004E09C0` | 1 | no | script/QVM + task dispatch (0x4D0000-0x510000) | `0x004E09C8` |
+| `0x004E8840` | 2 | no | script/QVM + task dispatch (0x4D0000-0x510000) | `0x004E8850`, `0x004E8898` |
+| `0x004E9AA0` | 1 | no | script/QVM + task dispatch (0x4D0000-0x510000) | `0x004E9AB0` |
+| `0x004EA880` | 1 | no | script/QVM + task dispatch (0x4D0000-0x510000) | `0x004EA88F` |
+| `0x004EB3D0` | 1 | no | script/QVM + task dispatch (0x4D0000-0x510000) | `0x004EB44C` |
+| `0x004F2290` | 1 | yes | script/QVM + task dispatch (0x4D0000-0x510000) | `0x004F22DE` |
+| `0x004F2B50` | 1 | no | script/QVM + task dispatch (0x4D0000-0x510000) | `0x004F2B60` |
+| `0x004F2B90` | 1 | yes | script/QVM + task dispatch (0x4D0000-0x510000) | `0x004F2C9D` |
+| `0x004F3AC0` | 1 | no | script/QVM + task dispatch (0x4D0000-0x510000) | `0x004F3B1F` |
+| `0x004F4800` | 1 | yes | script/QVM + task dispatch (0x4D0000-0x510000) | `0x004F4830` |
+| `0x004F50E0` | 4 | no | script/QVM + task dispatch (0x4D0000-0x510000) | `0x004F5160`, `0x004F5179`, `0x004F5192`, `0x004F51AB` |
+| `0x004F51D0` | 4 | no | script/QVM + task dispatch (0x4D0000-0x510000) | `0x004F5310`, `0x004F5329`, `0x004F5342`, `0x004F535B` |
+| `0x004F55D0` | 4 | yes | script/QVM + task dispatch (0x4D0000-0x510000) | `0x004F6082`, `0x004F60ED`, `0x004F6153`, `0x004F627A` |
+| `0x004F6520` | 4 | no | script/QVM + task dispatch (0x4D0000-0x510000) | `0x004F6533`, `0x004F654C`, `0x004F6565`, `0x004F657E` |
+| `0x004F8780` | 1 | no | script/QVM + task dispatch (0x4D0000-0x510000) | `0x004F87FF` |
+| `0x004FD4E0` | 1 | yes | script/QVM + task dispatch (0x4D0000-0x510000) | `0x004FDC10` |
+| `0x005035B0` | 1 | no | script/QVM + task dispatch (0x4D0000-0x510000) | `0x005035DA` |
+| `0x00503BB0` | 1 | no | script/QVM + task dispatch (0x4D0000-0x510000) | `0x00503BBF` |
+| `0x005062A0` | 1 | no | script/QVM + task dispatch (0x4D0000-0x510000) | `0x005062FF` |
+| `0x00507410` | 1 | no | script/QVM + task dispatch (0x4D0000-0x510000) | `0x00507477` |
+| `0x00508350` | 3 | no | script/QVM + task dispatch (0x4D0000-0x510000) | `0x00508397`, `0x005083BF`, `0x005083E7` |
+| `0x005188C0` | 1 | no | 0x402C40 shutdown cascade chain (0x518000-0x532000) | `0x005188C5` |
+| `0x0051F9E0` | 1 | no | 0x402C40 shutdown cascade chain (0x518000-0x532000) | `0x0051FA83` |
+| `0x00530AD0` | 1 | no | 0x402C40 shutdown cascade chain (0x518000-0x532000) | `0x00530C2F` |
+| `0x00531250` | 1 | yes | 0x402C40 shutdown cascade chain (0x518000-0x532000) | `0x005312BA` |
+
+Summary by region:
+
+| region | sites | reading |
+|---|---|---|
+| QTask core `0x401000`–`0x402100` | 3 | `0x4010BF` (inside `0x4010B0`, the shutdown dispatch), `0x40165F` (the self-recursion), `0x4017A4` (inside `0x401780`, "release all children of a task") |
+| Flow phase handlers `0x402200`–`0x402C40` | 2 | `0x402674` inside the Flow phase-1 handler `0x402260`; `0x402761` inside the Flow phase-2 handler `0x402740` (the teardown that clears `Game_GetContext()`) |
+| engine/game object code `0x415000`–`0x48A000` | **68** | object/model/world/AI teardown paths; no QTask-core caller |
+| display / WinMain area (`0x498A70`) | 1 | `0x498A99` inside the 51-byte `0x498A70`, immediately after the `0x498480` display-probe region of §12 |
+| script/QVM and task dispatch `0x4D0000`–`0x510000` | **42** | the largest single block; includes the repeated `0x4F5160`–`0x4F657E` groups (script/task dispatch helpers) and `0x4F55D0` (4 sites) |
+| `0x402C40` shutdown-cascade chain `0x518000`–`0x532000` | 4 | `0x5188C5`, `0x51FA83`, `0x530C2F`, `0x5312BA` — all inside the tail chain §12 C4 records (`0x508F90` → `0x518550` → … → `0x532490`) |
+
+**Answer to the Lead's question 3:** the call sites are *not* predominantly the QTask startup path. 110 of 120 sites sit in game-object code (68) and script/QVM-side code (42); only 10 are on the startup/shutdown spine — 3 in the QTask core, 2 in the Flow handlers, 1 in the display/WinMain area and 4 in the `0x402C40` shutdown cascade. The destructor is therefore **not** startup-blocking, but it *is* on the shutdown path (the cascade plus `0x4010B0`) and on every runtime object-deletion path, and its counter (`0x567C58`) is what `0x4010B0` tests at shutdown. The allocator `0x4012F0` is the opposite case: it is reached from `0x4012A0` (110 call sites) and `0x4013B0` and is therefore on the critical path of every task creation.
+
+### 16.8 Does `0x4015F0` overlap or share state with `0x401530`?
+
+**No overlap; two distinct functions, one increment is fine.**
+
+| check | result |
+|---|---|
+| boundaries | `0x401530` ends at `0x4015CD` (158 bytes, 4 blocks, its own `ret`); `0x4015D0` (19 bytes) sits between them; `0x4015F0` starts after thirteen `90` bytes |
+| calls between them | `0x401530` calls only `0x4014B0` (`0x4015B9`) and itself (`0x4015A5`); `0x4015F0` calls only `0x4015F0` (self), `0x4015D0`, `0x4B0D10` and the two indirect handlers. **Neither calls the other.** |
+| shared globals | the handler table `0xA96AE0` (written by `0x401530`/`0x401400`; read by `0x4015F0` as its phases 2/3 slices), the type table `0xAF5EE0` (walked by both, different fields), the flag array `0x54FF34` (written by `0x401530`/`0x401400`, not read by `0x4015F0`) |
+| counters | **disjoint**: `0x401530` uses `0x567C70` and `0x536148`; `0x4015F0`/`0x4012F0` use `0x567C58`; no instruction aliases them |
+| shared state at runtime | yes, in the natural way: registering a type/phase (`0x401530`) is what puts a handler in the slot that `0x4015F0` later invokes. A transcription of either is behaviourally incomplete without the other's table semantics, which is why they are one increment here. |
+
+### 16.9 Not proven (explicit list)
+
+1. **The purpose of the `0xAFA6E0` slot rewrite in `0x4015F0`.** The instructions are exact (`stack[index] = (p && *p) ? p : 0`, slot replaced, `0xAFA7E0` not decremented), but *why* the replacement value is the instance's `+0x00` link is not established. Working hypothesis only: the array is the event-dispatch stack (`0x401D80` stores the dispatched task at `[0xAFA6E0 + depth*4]` and increments `0xAFA7E0`; `0x401E30` walks children the same way), and `0x401D80`'s post-call test `if (task == stack[depth-1])` is trivially true unless something rewrote the slot — which is exactly what a release during dispatch does. This section does not claim that.
+2. **Phase semantics.** The destructor calls handler-table rows `type + 3*0x180` and `type + 2*0x180` with **one** argument. For the Flow type, phase 2 is `0x402740`, which is demonstrably a teardown (it destroys the task at `Game_GetContext()+0x48` and zeroes `0x567C8C`), and phase 0 is `0x402070`, demonstrably a constructor. But `0x4B8810("FLOW_EVENT_QUIT", 1)` / `("FLOW_EVENT_INTRO", 2)` / `("FLOW_EVENT_MAINMENU", 3)` register ids 1/2/3 in a **24-byte-record** symbol table (through `0x4BAAC0`), while the event table `0x54F930` used by `0x401860`/`0x401890` is **6-byte** records. Whether the ids in the two tables are the same namespace — i.e. whether "phase 2" is "FLOW_EVENT_INTRO" — is **not settled** by the evidence collected here. Do not name the phases from the strings.
+3. **`0x4015F0`'s return value contract.** Not proven for the 118 sites whose continuation was not inspected.
+4. **`0x4015D0`'s owner field.** `0x4015D0` unlinks the instance whenever `[instance+0x14] != 0`; that the field is always the owner set by `0x4012F0` (`0x40138C`) is proven for the allocation path but not for every instance in the image.
+5. **`0x4012F0`'s heap path lock scope.** `Mem_Lock(1)` … `Mem_Unlock()` bracket the allocation; whether `0x4B0C60` can call back into QTask is not checked.
+6. **`0x401780`'s exact contract.** It walks `[arg+8]` and calls `0x4015F0` on each child with a validated-next loop (8 call sites). Its own argument count and return are not derived here; only the one call site `0x4017A4` that matters for the 120-site census.
+7. **`0x401400` (the sibling registrar).** Referenced only as it shares `0x54FF34` and `0x536148`; not derived in this section.
+8. **Catalogue name contradictions are recorded, not acted on** (see 16.10).
+
+### 16.10 Corrections and contradictions recorded (no file changes)
+
+* **§12 C7 name corrections, from bodies:** `0x4015F0` is **not** a "find type" routine (the external-catalogue label `QTask_FindType` is contradicted by 16.2/16.3 — the only search it performs is over the event-dispatch stack, and its main effect is destroying the instance tree); `0x401A60` is **not** `QTask_DispatchEvent_2` (16.6: it returns `0x567C58` and does nothing else). Proposed behaviour-derived names, all still **PROPOSED / not renamed in the tree**: `QTask_LiveTaskCount` (`0x567C58`), `QTask_LiveTaskCountGet` (`0x401A60`), `QTask_AllocateTaskInstance` (`0x4012F0`), `QTask_CreateTaskAppend` (`0x4012A0`), `QTask_CreateTaskPrepend` (`0x4013B0`), `QTask_ReleaseTaskInstance` (`0x4015F0`), `QTask_UnlinkTaskFromOwner` (`0x4015D0`), `QTask_ReleaseTaskChildren` (`0x401780`), `QTask_Shutdown` (`0x4011F0`).
+* **§15's blocker line is now answerable:** `0x401A60` / `0x567C58` are unblocked by 16.4 (both owners derived: `0x4012F0` increments, `0x4015F0` decrements, 4-byte zero-initialised dword, no other reference in `.text`).
+* **Catalogue candidates stay in the tree.** Per the Lead's ruling, the `scripts/GameNatives/display/00498480-*` candidates are reference material; the contradiction (the routine is a platform probe, not the DirectInput DLL loader) belongs in this sheet, which is where §12 C7 records it. **No file under `scripts/GameNatives/` was deleted, moved or edited by this pass** — this pass wrote only `/tmp` scratch files and appended this section to the evidence sheet.
+* **§11 is confirmed, not superseded.** Its instruction-level derivation, its D-deltas and its frame all re-check against the bytes; the only prose clarification is the post-increment `cmp ecx,1` in 16.1.4/16.1.7.
+
+### 16.11 Reproduction
+
+```
+r2 -q -e scr.color=0 -e bin.relocs.apply=true -c 'aaa; s 0x00401530; pd 70'  igi.exe   # 0x401530
+r2 -q -e scr.color=0 -e bin.relocs.apply=true -c 'aaa; s 0x004015f0; pd 140' igi.exe   # 0x4015F0
+r2 -q -e scr.color=0 -e bin.relocs.apply=true -c 'aaa; s 0x004015f0; afbj'  igi.exe   # 25 blocks
+r2 -q -e scr.color=0 -e bin.relocs.apply=true -c 'aaa; s 0x004012f0; pd 62'  igi.exe   # 0x4012F0
+r2 -q -e scr.color=0 -e bin.relocs.apply=true -c 'aaa; s 0x00401a60; pd 3'   igi.exe   # 0x401A60
+r2 -q -e scr.color=0 -e bin.relocs.apply=true -c 'aaa; s 0x004014b0; pd 20'  igi.exe   # 0x4014B0
+```
+Python scans used for every claim above (run from `/Users/haseeb-mir/Downloads/IGI`): exhaustive `E8` enumeration over `.text` (`site+5+rel32 == 0x4015F0` → 120 sites); exhaustive 4-byte literal scans for `0x567C58` (5), `0x567C70` (4), `0x567C6C` (4), `0x536148` (7), `0x54FF34` (4), `0xA97CE0` (1), `0xA976E0` (15), `0x567C38` (5), `0x567C3C` (4), `0x567C40` (6), `0x567C48` (3); PE section arithmetic from the header (`0x536000 + 0x1A000 = 0x550000` → `0x567C58` is zero-filled); function-entry rule as stated in 16.7.

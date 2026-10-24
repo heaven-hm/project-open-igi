@@ -865,3 +865,29 @@ Corrections to what I had recorded:
 - **Eight stand-ins to delete** once Graph_Init exists: g_54e364, g_a76d10, g_54e369, g_54e36b/c/d/e/f; slots
   0x54E368/36A/370 gain real storage for the first time; that is what makes 0x4F9270 a real reader instead of a
   reader of invented storage.
+
+## §16 delivered: 0x401530 completed, 0x567C58 identified, and the 0x401A60 blocker narrowed
+
+flow-analyst appended §16 (730 lines). Key results:
+
+- **0x401530 is 3-arg cdecl, 158 B**: (class, phase, handler). Its 0xAF5EE8 walk is 384 iterations of stride 0x30
+  bound 0xAFA6E8; per iteration it matches record+8 (parent) against arg1, tests the per-(class,phase) flag byte at
+  0x54FF34, and **recurses into itself** at 0x4015A5 with (i, phase, handler). The 0x4015B9 call to 0x4014B0 takes
+  ZERO arguments (nothing pushed, no add esp after). The flag byte is `cl = (ecx==1)` computed AFTER `inc ecx` at
+  0x401542, so it marks only the outermost call as "own registration" - §11's prose read the compare as if on the
+  pre-increment value; the code there is right and the label was wrong.
+- **0x567C70 = balanced recursion depth counter restored on the single ret; 0x536148 = monotonic invocation counter,
+  stored and never restored.** They are distinct; my "derived-class counter" label was too narrow (it counts
+  recursive entries) and it is not private to 0x401530.
+- **0x567C58 = QTask_LiveTaskCount** (4 bytes), exactly five .text refs: increment 0x401307 in the allocator 0x4012F0,
+  decrement 0x4015F7 in the destructor 0x4015F0, getter 0x401A61. Zero-initialised. So the global now has exactly one
+  incrementing and one decrementing writer - the meaning is proven. **0x401A60 still cannot be wired until 0x4012F0
+  is transcribed**, because that is the writer that must define the storage. Record the order; do not define the
+  global in the reader.
+- **0x4015F0 = the QTask instance destructor** (391 B, 25 blocks, 1 arg, recursive): decrement the live count,
+  rewrite the 0xAFA6E0 slot if the instance sits there (purpose unproven), invoke handler-table phase 3 then phase 2,
+  release children tail-to-head, unlink via 0x4015D0, free via pool or Mem_Free. 120 call sites: 68 object teardown,
+  42 script/QVM - the game object channel, not the startup channel.
+- **0x4012F0 = allocator** (189 B, 2 args: owner, type id) and its 0x4012A0 wrapper has indegree 110; it is on the
+  critical path of every task creation. Transcribing 0x4012F0 + 0x4014B0/0x4014E0 is what unlocks the task globals.
+- Numbering: §16 holds both the 0x401530 completion and the 0x4015F0 material requested as "§14"; there is no §14.
