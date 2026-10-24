@@ -106,9 +106,12 @@ std::uint32_t NATIVE_DECL Flow_SetState(std::uint32_t value);
 //                 digest ee3c22c2c4363e72b7199c5ea3ec80e0c5661a1354a9c93b5b3ff1b4fd0e1464.
 // CFG: radare2 1 block/0 edges; Binary Ninja 1 block; 100% structural agreement.
 // Confidence: high for exact instruction behavior.
-// Signature: x86 cdecl void(uint8_t value); ported as void Loop_SetStatusByte(std::uint8_t value).
+// Signature: x86 cdecl, one uint8_t argument. Retail 0x0048F480 is `mov al,byte [esp+4]` / `mov byte [0x5C8DE8],al`
+// / `ret`: the loaded byte is in AL when the function returns, so the value is also the result. Ported as
+// std::uint32_t Loop_SetStatusByte(std::uint8_t value) returning the stored byte. Note retail writes only AL, so
+// the upper bits of EAX are not defined by those three instructions; the candidate returns the zero-extended byte.
 // Usage/tests: called by QTask_OpenEvent (0x00401050) on nonlocal abort; exercised by frame_natives_test.cpp.
-void NATIVE_DECL Loop_SetStatusByte(std::uint8_t value);
+std::uint32_t NATIVE_DECL Loop_SetStatusByte(std::uint8_t value);
 
 // Native: AppContext_SetIsActive() - VA 0x0048F140 - complete port.
 // Behavior: sign-extends the low byte of the argument, stores it in the global

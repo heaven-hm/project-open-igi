@@ -48,9 +48,12 @@ std::uint32_t NATIVE_DECL Flow_SetState(std::uint32_t value)
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x0048F480-0x0048F48A, 10 bytes, digest ee3c22c2c4363e72b7199c5ea3ec80e0c5661a1354a9c93b5b3ff1b4fd0e1464.
 // Behavior/CFG: stores `value` into the global loop status byte at 0x005C8DE8. radare2 1 block/0 edges; Binary Ninja 1 block; 100% structural agreement.
 // Status/limits: VERIFIED; high for exact instruction behavior, checked against the retail's own bytes under unicorn in 8 of 8 cases.
-void NATIVE_DECL Loop_SetStatusByte(std::uint8_t value)
+std::uint32_t NATIVE_DECL Loop_SetStatusByte(std::uint8_t value)
 {
+    // 0x0048F480 mov al,byte [esp+4] / 0x0048F484 mov byte [0x5C8DE8],al / 0x0048F489 ret - the loaded
+    // byte stays in EAX, so the value is returned as the function's result as well as stored.
     Loop_StatusByte = value;
+    return value;
 }
 
 // Native: QTask_OpenEvent; retail VA 0x00401050; signature/calling convention unknown.
