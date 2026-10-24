@@ -193,7 +193,7 @@ void NATIVE_DECL InputPort_Process(void* input_port)
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004012A0..0x004012E7; evidence sheet section 17.
 // Behavior/CFG: calls the allocator 0x004012F0 with (arg1, arg2), links the new task into the list at arg1+8 through 0x004AF8F0 when arg1 is not null, then reads the handler index from the object's own +0x1C word, dispatches QTask_HandlerTable[index] with two cdecl arguments (the object, then arg3) and cleans 8 bytes; returns the object.
-// Status/limits: TRANSCRIBED; the argument order, the arg1 null test, the +0x1C read and the two-argument dispatch follow section 17, but the handler table type is still one-argument, so the dispatch is cast at this call site until the ABI is corrected.
+// Status/limits: TRANSCRIBED; the argument order, the arg1 null test, the +0x1C read and the two-argument dispatch follow section 17. Retail handlers are bare function pointers with no single signature: this site pushes two words and cleans 8 (0x004012DC-0x004012E0) while the Flow walks at 0x00402365, 0x004023CE and 0x00402481 push one word and clean 4, so the cast at this call site is the faithful representation and not a temporary workaround.
 std::uint32_t NATIVE_DECL QTask_RegisterInputPortHandler(
     std::uint32_t object, std::uint32_t port_index, std::uint32_t context)
 {

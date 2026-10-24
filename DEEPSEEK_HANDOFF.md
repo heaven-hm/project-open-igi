@@ -1055,3 +1055,19 @@ complete while the dispatch ABI is wrong.
 So the change was reverted and the tree is green again. Before the ABI lands, each of the three Flow dispatch sites
 must be transcribed from its own retail instructions: 0x00402365 in the Flow node walk, plus the two in
 Flow_RunHandler. That is the next analysis task, not a compilation exercise.
+
+## The handler ABI question is settled against the tree's one-argument type (round 173)
+
+Retail handlers have no single signature - every dispatch site pushes what it wants and cleans what it pushed:
+  0x00402364 push edx ; 0x00402365 call ecx ; 0x0040236C add esp,4   -> ONE argument (Flow phase walk)
+  0x004023CE and 0x00402481 likewise push the node and clean 4 bytes
+  0x004012DC-0x004012E0 in the allocator wrapper pushes TWO words (arg3 then the object) and cleans 8
+
+So widening `FrameHandler` to two arguments would have been WRONG for the three Flow walk sites: they call handlers
+with one argument and clean 4, and a two-argument prototype at those sites would describe an ABI the retail dispatcher
+does not use. My round-172 plan (widen the type, then fill the missing second argument at three sites) was therefore
+based on a false premise: those sites do not have a missing argument, they have one argument.
+
+Correct representation, now implemented and documented at both places: keep the one-argument `FrameHandler` and cast at
+the one site that genuinely pushes two words (the allocator wrapper 0x004012A0), with the retail pushes cited. The
+"ABI gap" recorded in section 17.6 is real for that wrapper only, not for the handler table as a whole.
