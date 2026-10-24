@@ -138,3 +138,36 @@ Method rules learned the hard way this arc:
   anchor never matched; always verify the anchor and print the count before/after.
 - Strings must stay byte-identical; non-obvious retail orders (0x4F1840's EB,EA,E7,E8,E9,E6 slot
   stores) and sentinel values (0x181, 0xFF) are preserved, never normalised.
+
+## Round 148-149 (resumed after the blocked round): 36 natives, frozen d136e0b3
+
+- Landed this arc: `0x4F1B60`, `0x4F1B70`, `0x4F1B80`, `0x4F1B90`, `0x4F1BA0`, `0x4F1BB0`
+  (six parameter-event state getters over `g_54e0e4[8]` owned by `0x4F1A60`, indices 6/2/7/5/3/4),
+  `0x4B8890` (QHash node register wrapper forwarding to the landed `0x4BAAC0` as
+  `(arg0, arg1, arg2, arg3, 1, 0, 0)`), and `0x4EE960` (`arg0 % 251` unsigned bucket helper).
+  All bind 1/0 at 1.000.
+- Frozen and deployed: `d136e0b3` (`d136e0b30ca55470bf01e0635ad6844b52e3202ae56a21188a5f42ce048d0933`),
+  `compiled_sources` 142, Tester-verified: binding confirmed independently, boundary unchanged
+  (position 1 / id 0, exit 3), the eight new VAs absent from stderr and the `+seh` unwind. One
+  unexplained cold outlier (28.6 s) that did not reproduce (6.17 s / 10.11 s).
+- `0x4EE970` (catalogue, `0x4EE970`-`0x4EF7EC`, ~1000 instructions) has a full captured listing at
+  `docs/fidelity/evidence/0x4EE970-full-listing.txt` (1010 lines). Its call inventory is complete and
+  every callee is landed EXCEPT three: `0x4CEA10`, `0x4CEA20` and `0x4F1180`.
+- `0x4CEA10`/`0x4CEA20` are 6-byte getters of `0x548176`/`0x548177`; those bytes are written at
+  `0x4C5983`/`0x4C5992` inside an as-yet-unbounded registration routine in `0x4C58xx`-`0x4C59xx`
+  (static boundary recovery fails there; a retail call-target probe was requested from the Tester).
+- `0x4F1180` (27 B) chains: `0x4F11A0` (68 B) -> `0x4EE960` (landed) + `0x4F0C90` (31 B) ->
+  `0x401B20` (98 B, virtual-array free-list over `0x567C38/3C/40/48/4C`) + `0x4B0D10` (42 B) ->
+  `0x4A6A50` (105 B) -> the allocator internals `0x4AAD90` (43 B), `0x4AADBB` (809 B),
+  `0x4AB7F5` (87 B), `0x4AB84C` (69 B). Those internals touch the mem subsystem already partly
+  transcribed in `engine/src/retail/mem/` (`0x4AA670`, `0x4AA682`, `0x4AA6AE`, `0x4AD722`,
+  `0x4AF8F0`, `0x4AF960`, `0x4B0BA0`, `0x4B0C60`, `0x4B0D40`, `0x4B0D50`, `0x4B0D60`, `0x4B0D90`,
+  `0x4B0B00`), so the allocator block is the next real frontier.
+- New tool: `scripts/linkable_frontier.py` lists routines in a range whose direct callees are all
+  landed. It works well in regions of small padded routines (it enumerated the six `0x4F10xx`
+  getters correctly) but its `ret`+nop splitter mis-groups dense big functions (it reports
+  696/1827-instruction bodies in the `0x4AA000`-`0x4AC000` allocator region), so treat its output
+  there as a lower bound, not boundaries.
+- `0x4F1000`, `0x4F1010`, `0x4F1020` are 6-byte getters of `0xA70C90`, `0xA70C88`, `0xA70CA0`; all
+  three globals are written inside `0x4EE970` (at `0x4EF4DA`, `0x4EF767`, and the `"Graph"` handle
+  store), which is exactly why the catalogue must land before them.
