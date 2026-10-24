@@ -18,7 +18,7 @@ was achieved and how many natives the manifest holds at that release.
 - Chain instrumentation limits declared, not hidden: `0x402930` 152/156 rows, `0x5183D0` 66/74, verdict `RETAIL_CHAIN_PARTIAL` (never a pass).
 
 **Natives at this release** (manifest)
-- 998 records: 132 VERIFIED, 18 VERIFIED_WITH_DOCUMENTED_SCOPE, 12 RUNTIME_TESTED, 815 STRUCTURALLY_VERIFIED, 26 TRANSCRIBED, rest ANALYZED/INCONCLUSIVE.
+- 998 records: 124 VERIFIED, 18 VERIFIED_WITH_DOCUMENTED_SCOPE, 12 RUNTIME_TESTED, 2 BUILD_VERIFIED, 815 STRUCTURALLY_VERIFIED, 26 TRANSCRIBED, 1 INCONCLUSIVE.
 - EU catalog (BlankNameES, human-verified): 55; HeavenHM catalog (human-verified): 78 unique addresses — attributed in the provenance blocks.
 
 **Candidate binary**: `igi1.exe` SHA-256 `30c39039b1948475def85283960d9775686b7204d1dd1ec6cb17f6e140614d9b` (built by `build_no_verify.sh`, deployed to `/Users/haseeb-mir/Downloads/IGI`).
