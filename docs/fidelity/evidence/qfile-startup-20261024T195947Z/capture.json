@@ -1,0 +1,5029 @@
+{
+  "kind": "retail-startup-native-observation",
+  "schema": 1,
+  "captured_utc": "20261024T195947Z",
+  "retail": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+  "retail_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "probe": "/Users/haseeb-mir/Documents/Code/project-open-igi/scripts/tester/frida_qfile_startup_probe.js",
+  "probe_sha256": "63c9c669033c5270f26dd45475e3a9ddbce35991c4e9f04f0488be2dac4d7bc3",
+  "arguments": [
+    "window",
+    "level1"
+  ],
+  "requested_cwd": "Z:\\Users\\haseeb-mir\\Downloads\\IGI",
+  "frida_python": "17.24.0",
+  "result": "captured",
+  "limitations": [
+    "Retail only; no candidate runtime evidence exists because the candidate throws at 0x00402930.",
+    "This is not a paired differential and does not prove candidate parity.",
+    "Hooks are installed before resume but late thread creation can still miss very early thread-local calls.",
+    "The game is launched as a normal startup + level-1 load and left stationary; no movement input is sent.",
+    "Table reads are raw reads of known retail addresses; undefined record fields are not interpreted."
+  ],
+  "game_processes_before": [],
+  "frida_server_processes": [
+    "igi-frida-server-17.24.0-windows-x86.exe"
+  ],
+  "pid": 1068,
+  "hooks_loaded": true,
+  "observed_cwd": "Z:\\Users\\haseeb-mir\\Downloads\\IGI",
+  "module": {
+    "type": "module",
+    "name": "igi.exe",
+    "base": "0x400000",
+    "size": 8605696
+  },
+  "ready": {
+    "type": "ready",
+    "installed": [
+      {
+        "id": "lookup",
+        "label": "QFile_LookupDeviceByName_4B1620",
+        "address": "0x004b1620"
+      },
+      {
+        "id": "clear",
+        "label": "QFile_ClearEntryByName_4B13A0",
+        "address": "0x004b13a0"
+      },
+      {
+        "id": "walker",
+        "label": "QFile_FindRecordAtAddress_4B1A90",
+        "address": "0x004b1a90"
+      },
+      {
+        "id": "rendermode",
+        "label": "Sys_AddRenderMode_4B0E00",
+        "address": "0x004b0e00"
+      },
+      {
+        "id": "slot",
+        "label": "Sys_AddSlot_4B0E70",
+        "address": "0x004b0e70"
+      }
+    ],
+    "failures": [],
+    "targets": [
+      "lookup",
+      "clear",
+      "walker",
+      "rendermode",
+      "slot"
+    ]
+  },
+  "pre_resume_snapshot": {
+    "installed": [
+      {
+        "id": "lookup",
+        "label": "QFile_LookupDeviceByName_4B1620",
+        "address": "0x004b1620"
+      },
+      {
+        "id": "clear",
+        "label": "QFile_ClearEntryByName_4B13A0",
+        "address": "0x004b13a0"
+      },
+      {
+        "id": "walker",
+        "label": "QFile_FindRecordAtAddress_4B1A90",
+        "address": "0x004b1a90"
+      },
+      {
+        "id": "rendermode",
+        "label": "Sys_AddRenderMode_4B0E00",
+        "address": "0x004b0e00"
+      },
+      {
+        "id": "slot",
+        "label": "Sys_AddSlot_4B0E70",
+        "address": "0x004b0e70"
+      }
+    ],
+    "failures": [],
+    "counts": {},
+    "first": {},
+    "last": {},
+    "final": {
+      "lookup": {
+        "names": [
+          {
+            "index": 0,
+            "pointer": "0x53b604",
+            "text": "r"
+          },
+          {
+            "index": 1,
+            "pointer": "0x546f18",
+            "text": "r+"
+          },
+          {
+            "index": 2,
+            "pointer": "0x538354",
+            "text": "w"
+          },
+          {
+            "index": 3,
+            "pointer": "0x543a60",
+            "text": "w+"
+          }
+        ],
+        "values": [
+          1,
+          3,
+          2,
+          3
+        ],
+        "terminatorIndex": 4,
+        "nonNullNames": 4
+      },
+      "clear": {
+        "records": [
+          {
+            "index": 0,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 1,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 2,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 3,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 4,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 5,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 6,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 7,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 8,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 9,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 10,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 11,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 12,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 13,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 14,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 15,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 16,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 17,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 18,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 19,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 20,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 21,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 22,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 23,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 24,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 25,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 26,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 27,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 28,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 29,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 30,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 31,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          }
+        ]
+      },
+      "walker": {
+        "head": "0x0",
+        "records": []
+      },
+      "rendermode": {
+        "records": [
+          {
+            "index": 0,
+            "namePointer": "0x0",
+            "name": null,
+            "flag204": 0
+          },
+          {
+            "index": 1,
+            "namePointer": "0x0",
+            "name": null,
+            "flag204": 0
+          },
+          {
+            "index": 2,
+            "namePointer": "0x0",
+            "name": null,
+            "flag204": 0
+          },
+          {
+            "index": 3,
+            "namePointer": "0x0",
+            "name": null,
+            "flag204": 0
+          },
+          {
+            "index": 4,
+            "namePointer": "0x0",
+            "name": null,
+            "flag204": 0
+          },
+          {
+            "index": 5,
+            "namePointer": "0x0",
+            "name": null,
+            "flag204": 0
+          },
+          {
+            "index": 6,
+            "namePointer": "0x0",
+            "name": null,
+            "flag204": 0
+          },
+          {
+            "index": 7,
+            "namePointer": "0x0",
+            "name": null,
+            "flag204": 0
+          }
+        ],
+        "used": 0
+      },
+      "slot": {
+        "records": [
+          {
+            "index": 0,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 1,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 2,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 3,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 4,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 5,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 6,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 7,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 8,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 9,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 10,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 11,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 12,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 13,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 14,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 15,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 16,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 17,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 18,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 19,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 20,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 21,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 22,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 23,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 24,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 25,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 26,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 27,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 28,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 29,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 30,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 31,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 32,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 33,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 34,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 35,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 36,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 37,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 38,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 39,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 40,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 41,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 42,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 43,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 44,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 45,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 46,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 47,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 48,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 49,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 50,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 51,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 52,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 53,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 54,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 55,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 56,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 57,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 58,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 59,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 60,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 61,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 62,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 63,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 64,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 65,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 66,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 67,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 68,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 69,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 70,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 71,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 72,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 73,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 74,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 75,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 76,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 77,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 78,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 79,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 80,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 81,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 82,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 83,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 84,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 85,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 86,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 87,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 88,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 89,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 90,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 91,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 92,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 93,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 94,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 95,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 96,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 97,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 98,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 99,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 100,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 101,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 102,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 103,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 104,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 105,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 106,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 107,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 108,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 109,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 110,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 111,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 112,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 113,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 114,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 115,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 116,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 117,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 118,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 119,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 120,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 121,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 122,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 123,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 124,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 125,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 126,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 127,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          }
+        ],
+        "used": 0
+      }
+    }
+  },
+  "resumed_after_cwd_hooks_and_module": true,
+  "post_capture_snapshot": {
+    "installed": [
+      {
+        "id": "lookup",
+        "label": "QFile_LookupDeviceByName_4B1620",
+        "address": "0x004b1620"
+      },
+      {
+        "id": "clear",
+        "label": "QFile_ClearEntryByName_4B13A0",
+        "address": "0x004b13a0"
+      },
+      {
+        "id": "walker",
+        "label": "QFile_FindRecordAtAddress_4B1A90",
+        "address": "0x004b1a90"
+      },
+      {
+        "id": "rendermode",
+        "label": "Sys_AddRenderMode_4B0E00",
+        "address": "0x004b0e00"
+      },
+      {
+        "id": "slot",
+        "label": "Sys_AddSlot_4B0E70",
+        "address": "0x004b0e70"
+      }
+    ],
+    "failures": [],
+    "counts": {
+      "slot": 64,
+      "rendermode": 2,
+      "clear": 7,
+      "lookup": 351,
+      "walker": 135
+    },
+    "first": {
+      "slot": {
+        "type": "call",
+        "id": "slot",
+        "label": "Sys_AddSlot_4B0E70",
+        "address": "0x004b0e70",
+        "callIndex": 0,
+        "caller": "0x49172e",
+        "argRaw": "0x542430",
+        "argText": "DisplayOpen",
+        "argU32": null,
+        "ret": null,
+        "match": {
+          "firstFreeBefore": 0,
+          "firstFreeAfter": 1,
+          "newIndex": 0
+        },
+        "before": {
+          "records": [
+            {
+              "index": 0,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 1,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 2,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 3,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 4,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 5,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 6,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 7,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 8,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 9,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 10,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 11,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 12,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 13,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 14,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 15,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 16,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 17,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 18,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 19,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 20,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 21,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 22,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 23,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 24,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 25,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 26,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 27,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 28,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 29,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 30,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 31,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 32,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 33,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 34,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 35,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 36,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 37,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 38,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 39,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 40,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 41,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 42,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 43,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 44,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 45,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 46,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 47,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 48,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 49,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 50,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 51,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 52,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 53,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 54,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 55,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 56,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 57,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 58,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 59,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 60,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 61,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 62,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 63,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 64,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 65,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 66,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 67,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 68,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 69,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 70,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 71,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 72,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 73,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 74,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 75,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 76,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 77,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 78,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 79,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 80,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 81,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 82,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 83,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 84,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 85,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 86,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 87,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 88,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 89,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 90,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 91,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 92,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 93,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 94,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 95,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 96,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 97,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 98,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 99,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 100,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 101,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 102,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 103,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 104,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 105,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 106,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 107,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 108,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 109,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 110,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 111,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 112,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 113,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 114,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 115,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 116,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 117,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 118,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 119,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 120,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 121,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 122,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 123,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 124,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 125,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 126,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 127,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            }
+          ],
+          "used": 0
+        },
+        "after": {
+          "records": [
+            {
+              "index": 0,
+              "namePointer": "0x542430",
+              "name": "DisplayOpen",
+              "flag4": 1
+            },
+            {
+              "index": 1,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 2,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 3,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 4,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 5,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 6,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 7,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 8,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 9,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 10,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 11,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 12,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 13,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 14,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 15,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 16,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 17,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 18,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 19,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 20,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 21,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 22,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 23,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 24,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 25,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 26,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 27,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 28,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 29,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 30,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 31,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 32,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 33,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 34,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 35,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 36,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 37,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 38,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 39,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 40,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 41,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 42,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 43,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 44,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 45,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 46,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 47,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 48,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 49,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 50,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 51,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 52,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 53,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 54,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 55,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 56,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 57,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 58,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 59,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 60,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 61,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 62,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 63,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 64,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 65,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 66,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 67,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 68,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 69,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 70,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 71,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 72,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 73,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 74,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 75,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 76,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 77,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 78,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 79,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 80,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 81,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 82,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 83,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 84,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 85,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 86,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 87,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 88,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 89,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 90,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 91,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 92,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 93,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 94,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 95,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 96,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 97,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 98,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 99,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 100,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 101,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 102,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 103,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 104,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 105,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 106,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 107,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 108,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 109,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 110,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 111,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 112,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 113,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 114,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 115,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 116,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 117,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 118,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 119,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 120,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 121,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 122,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 123,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 124,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 125,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 126,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            },
+            {
+              "index": 127,
+              "namePointer": "0x0",
+              "name": null,
+              "flag4": 0
+            }
+          ],
+          "used": 1
+        },
+        "firstDifference": {
+          "changed": true
+        },
+        "newIndex": 0
+      },
+      "rendermode": {
+        "type": "call",
+        "id": "rendermode",
+        "label": "Sys_AddRenderMode_4B0E00",
+        "address": "0x004b0e00",
+        "callIndex": 0,
+        "caller": "0x49358b",
+        "argRaw": "0x5436a4",
+        "argText": "Direct3D",
+        "argU32": null,
+        "ret": null,
+        "match": {
+          "firstFreeBefore": 0,
+          "firstFreeAfter": 1,
+          "newIndex": 0
+        },
+        "before": {
+          "records": [
+            {
+              "index": 0,
+              "namePointer": "0x0",
+              "name": null,
+              "flag204": 0
+            },
+            {
+              "index": 1,
+              "namePointer": "0x0",
+              "name": null,
+              "flag204": 0
+            },
+            {
+              "index": 2,
+              "namePointer": "0x0",
+              "name": null,
+              "flag204": 0
+            },
+            {
+              "index": 3,
+              "namePointer": "0x0",
+              "name": null,
+              "flag204": 0
+            },
+            {
+              "index": 4,
+              "namePointer": "0x0",
+              "name": null,
+              "flag204": 0
+            },
+            {
+              "index": 5,
+              "namePointer": "0x0",
+              "name": null,
+              "flag204": 0
+            },
+            {
+              "index": 6,
+              "namePointer": "0x0",
+              "name": null,
+              "flag204": 0
+            },
+            {
+              "index": 7,
+              "namePointer": "0x0",
+              "name": null,
+              "flag204": 0
+            }
+          ],
+          "used": 0
+        },
+        "after": {
+          "records": [
+            {
+              "index": 0,
+              "namePointer": "0x5436a4",
+              "name": "Direct3D",
+              "flag204": 1
+            },
+            {
+              "index": 1,
+              "namePointer": "0x0",
+              "name": null,
+              "flag204": 0
+            },
+            {
+              "index": 2,
+              "namePointer": "0x0",
+              "name": null,
+              "flag204": 0
+            },
+            {
+              "index": 3,
+              "namePointer": "0x0",
+              "name": null,
+              "flag204": 0
+            },
+            {
+              "index": 4,
+              "namePointer": "0x0",
+              "name": null,
+              "flag204": 0
+            },
+            {
+              "index": 5,
+              "namePointer": "0x0",
+              "name": null,
+              "flag204": 0
+            },
+            {
+              "index": 6,
+              "namePointer": "0x0",
+              "name": null,
+              "flag204": 0
+            },
+            {
+              "index": 7,
+              "namePointer": "0x0",
+              "name": null,
+              "flag204": 0
+            }
+          ],
+          "used": 1
+        },
+        "firstDifference": {
+          "changed": true
+        },
+        "newIndex": 0
+      },
+      "clear": {
+        "type": "call",
+        "id": "clear",
+        "label": "QFile_ClearEntryByName_4B13A0",
+        "address": "0x004b13a0",
+        "callIndex": 0,
+        "caller": "0x4b1314",
+        "argRaw": "0x5394a4",
+        "argText": "INTROSCREEN:",
+        "argU32": null,
+        "ret": null,
+        "match": {
+          "matchIndex": -1
+        },
+        "before": {
+          "records": [
+            {
+              "index": 0,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 1,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 2,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 3,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 4,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 5,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 6,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 7,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 8,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 9,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 10,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 11,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 12,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 13,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 14,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 15,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 16,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 17,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 18,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 19,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 20,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 21,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 22,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 23,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 24,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 25,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 26,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 27,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 28,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 29,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 30,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 31,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            }
+          ]
+        },
+        "after": {
+          "records": [
+            {
+              "index": 0,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 1,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 2,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 3,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 4,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 5,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 6,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 7,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 8,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 9,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 10,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 11,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 12,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 13,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 14,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 15,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 16,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 17,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 18,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 19,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 20,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 21,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 22,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 23,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 24,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 25,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 26,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 27,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 28,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 29,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 30,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            },
+            {
+              "index": 31,
+              "name": "",
+              "flag90": 0,
+              "parallel": 0
+            }
+          ]
+        },
+        "firstDifference": {
+          "changed": false
+        },
+        "matchIndex": -1
+      },
+      "lookup": {
+        "type": "call",
+        "id": "lookup",
+        "label": "QFile_LookupDeviceByName_4B1620",
+        "address": "0x004b1620",
+        "callIndex": 0,
+        "caller": "0x4b151e",
+        "argRaw": "0x53b604",
+        "argText": "r",
+        "argU32": null,
+        "ret": 1,
+        "match": {
+          "matchIndex": 0,
+          "matchPointer": "0x53b604",
+          "matchValue": 1
+        },
+        "before": {
+          "names": [
+            {
+              "index": 0,
+              "pointer": "0x53b604",
+              "text": "r"
+            },
+            {
+              "index": 1,
+              "pointer": "0x546f18",
+              "text": "r+"
+            },
+            {
+              "index": 2,
+              "pointer": "0x538354",
+              "text": "w"
+            },
+            {
+              "index": 3,
+              "pointer": "0x543a60",
+              "text": "w+"
+            }
+          ],
+          "values": [
+            1,
+            3,
+            2,
+            3
+          ],
+          "terminatorIndex": 4,
+          "nonNullNames": 4
+        },
+        "after": {
+          "names": [
+            {
+              "index": 0,
+              "pointer": "0x53b604",
+              "text": "r"
+            },
+            {
+              "index": 1,
+              "pointer": "0x546f18",
+              "text": "r+"
+            },
+            {
+              "index": 2,
+              "pointer": "0x538354",
+              "text": "w"
+            },
+            {
+              "index": 3,
+              "pointer": "0x543a60",
+              "text": "w+"
+            }
+          ],
+          "values": [
+            1,
+            3,
+            2,
+            3
+          ],
+          "terminatorIndex": 4,
+          "nonNullNames": 4
+        },
+        "firstDifference": {
+          "changed": false
+        },
+        "matchIndex": 0,
+        "matchValue": 1
+      },
+      "walker": {
+        "type": "call",
+        "id": "walker",
+        "label": "QFile_FindRecordAtAddress_4B1A90",
+        "address": "0x004b1a90",
+        "callIndex": 0,
+        "caller": "0x4b1a3c",
+        "argRaw": "0x22f518",
+        "argText": null,
+        "argU32": 67895356,
+        "ret": null,
+        "match": {
+          "argMatchesRecord": true,
+          "listLength": 2
+        },
+        "before": {
+          "head": "0x3e9c61c",
+          "records": [
+            {
+              "index": 0,
+              "address": "0x3e9c61c",
+              "next": "0x943974",
+              "address18": 67895356
+            },
+            {
+              "index": 1,
+              "address": "0x943974",
+              "next": "0x0",
+              "address18": 0
+            }
+          ]
+        },
+        "after": {
+          "head": "0x3e9c61c",
+          "records": [
+            {
+              "index": 0,
+              "address": "0x3e9c61c",
+              "next": "0x943974",
+              "address18": 67895356
+            },
+            {
+              "index": 1,
+              "address": "0x943974",
+              "next": "0x0",
+              "address18": 0
+            }
+          ]
+        },
+        "firstDifference": {
+          "changed": false
+        },
+        "argMatchesRecord": true
+      }
+    },
+    "last": {
+      "slot": {
+        "type": "call",
+        "id": "slot",
+        "label": "Sys_AddSlot_4B0E70",
+        "address": "0x004b0e70",
+        "callIndex": 63,
+        "caller": "0x4978da",
+        "argRaw": "0x53bd5c",
+        "argText": "AfterburnerPrimitive",
+        "argU32": null,
+        "ret": null,
+        "match": {
+          "firstFreeBefore": 63,
+          "firstFreeAfter": 64,
+          "newIndex": 63
+        },
+        "before": null,
+        "after": null,
+        "firstDifference": null
+      },
+      "rendermode": {
+        "type": "call",
+        "id": "rendermode",
+        "label": "Sys_AddRenderMode_4B0E00",
+        "address": "0x004b0e00",
+        "callIndex": 1,
+        "caller": "0x49808a",
+        "argRaw": "0x543b00",
+        "argText": "OffscreenBuffer",
+        "argU32": null,
+        "ret": null,
+        "match": {
+          "firstFreeBefore": 1,
+          "firstFreeAfter": 2,
+          "newIndex": 1
+        },
+        "before": null,
+        "after": null,
+        "firstDifference": null
+      },
+      "clear": {
+        "type": "call",
+        "id": "clear",
+        "label": "QFile_ClearEntryByName_4B13A0",
+        "address": "0x004b13a0",
+        "callIndex": 6,
+        "caller": "0x4b1314",
+        "argRaw": "0x539770",
+        "argText": "MISSION:",
+        "argU32": null,
+        "ret": null,
+        "match": {
+          "matchIndex": -1
+        },
+        "before": null,
+        "after": null,
+        "firstDifference": null
+      },
+      "lookup": {
+        "type": "call",
+        "id": "lookup",
+        "label": "QFile_LookupDeviceByName_4B1620",
+        "address": "0x004b1620",
+        "callIndex": 350,
+        "caller": "0x4b151e",
+        "argRaw": "0x53b604",
+        "argText": "r",
+        "argU32": null,
+        "ret": 1,
+        "match": {
+          "matchIndex": 0,
+          "matchPointer": "0x53b604",
+          "matchValue": 1
+        },
+        "before": null,
+        "after": null,
+        "firstDifference": null
+      },
+      "walker": {
+        "type": "call",
+        "id": "walker",
+        "label": "QFile_FindRecordAtAddress_4B1A90",
+        "address": "0x004b1a90",
+        "callIndex": 134,
+        "caller": "0x4b1a3c",
+        "argRaw": "0x22f324",
+        "argText": null,
+        "argU32": 156585196,
+        "ret": null,
+        "match": {
+          "argMatchesRecord": true,
+          "listLength": 41
+        },
+        "before": null,
+        "after": null,
+        "firstDifference": null
+      }
+    },
+    "final": {
+      "lookup": {
+        "names": [
+          {
+            "index": 0,
+            "pointer": "0x53b604",
+            "text": "r"
+          },
+          {
+            "index": 1,
+            "pointer": "0x546f18",
+            "text": "r+"
+          },
+          {
+            "index": 2,
+            "pointer": "0x538354",
+            "text": "w"
+          },
+          {
+            "index": 3,
+            "pointer": "0x543a60",
+            "text": "w+"
+          }
+        ],
+        "values": [
+          1,
+          3,
+          2,
+          3
+        ],
+        "terminatorIndex": 4,
+        "nonNullNames": 4
+      },
+      "clear": {
+        "records": [
+          {
+            "index": 0,
+            "name": "INTROSCREEN:",
+            "flag90": 1,
+            "parallel": 1
+          },
+          {
+            "index": 1,
+            "name": "STATUSSCREEN:",
+            "flag90": 1,
+            "parallel": 1
+          },
+          {
+            "index": 2,
+            "name": "COMPUTER:",
+            "flag90": 1,
+            "parallel": 1
+          },
+          {
+            "index": 3,
+            "name": "MENUSYS:",
+            "flag90": 1,
+            "parallel": 1
+          },
+          {
+            "index": 4,
+            "name": "LANGUAGE:",
+            "flag90": 1,
+            "parallel": 1
+          },
+          {
+            "index": 5,
+            "name": "MISSION:",
+            "flag90": 1,
+            "parallel": 1
+          },
+          {
+            "index": 6,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 7,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 8,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 9,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 10,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 11,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 12,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 13,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 14,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 15,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 16,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 17,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 18,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 19,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 20,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 21,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 22,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 23,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 24,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 25,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 26,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 27,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 28,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 29,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 30,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          },
+          {
+            "index": 31,
+            "name": "",
+            "flag90": 0,
+            "parallel": 0
+          }
+        ]
+      },
+      "walker": {
+        "head": "0x3e9ccac",
+        "records": [
+          {
+            "index": 0,
+            "address": "0x3e9ccac",
+            "next": "0x3e9cd1c",
+            "address18": 66237036
+          },
+          {
+            "index": 1,
+            "address": "0x3e9cd1c",
+            "next": "0x3e9cd8c",
+            "address18": 66246324
+          },
+          {
+            "index": 2,
+            "address": "0x3e9cd8c",
+            "next": "0x3e9cdfc",
+            "address18": 66255596
+          },
+          {
+            "index": 3,
+            "address": "0x3e9cdfc",
+            "next": "0x3e9ce6c",
+            "address18": 66264660
+          },
+          {
+            "index": 4,
+            "address": "0x3e9ce6c",
+            "next": "0x3e9cedc",
+            "address18": 66274604
+          },
+          {
+            "index": 5,
+            "address": "0x3e9cedc",
+            "next": "0x3e9cf4c",
+            "address18": 66284084
+          },
+          {
+            "index": 6,
+            "address": "0x3e9cf4c",
+            "next": "0x3e9cfbc",
+            "address18": 66294076
+          },
+          {
+            "index": 7,
+            "address": "0x3e9cfbc",
+            "next": "0x3e9d02c",
+            "address18": 66300852
+          },
+          {
+            "index": 8,
+            "address": "0x3e9d02c",
+            "next": "0x3f7a00c",
+            "address18": 66310796
+          },
+          {
+            "index": 9,
+            "address": "0x3f7a00c",
+            "next": "0x3f7a08c",
+            "address18": 67046972
+          },
+          {
+            "index": 10,
+            "address": "0x3f7a08c",
+            "next": "0x3f7a10c",
+            "address18": 67118564
+          },
+          {
+            "index": 11,
+            "address": "0x3f7a10c",
+            "next": "0x3f7a18c",
+            "address18": 67171612
+          },
+          {
+            "index": 12,
+            "address": "0x3f7a18c",
+            "next": "0x3f7a28c",
+            "address18": 98304060
+          },
+          {
+            "index": 13,
+            "address": "0x3f7a28c",
+            "next": "0x673d5bc",
+            "address18": 67750068
+          },
+          {
+            "index": 14,
+            "address": "0x673d5bc",
+            "next": "0x6741d54",
+            "address18": 112459836
+          },
+          {
+            "index": 15,
+            "address": "0x6741d54",
+            "next": "0x6741dd4",
+            "address18": 108346596
+          },
+          {
+            "index": 16,
+            "address": "0x6741dd4",
+            "next": "0x678a7cc",
+            "address18": 115408956
+          },
+          {
+            "index": 17,
+            "address": "0x678a7cc",
+            "next": "0x678a83c",
+            "address18": 108571804
+          },
+          {
+            "index": 18,
+            "address": "0x678a83c",
+            "next": "0x678a8ac",
+            "address18": 109040964
+          },
+          {
+            "index": 19,
+            "address": "0x678a8ac",
+            "next": "0x678a91c",
+            "address18": 109278668
+          },
+          {
+            "index": 20,
+            "address": "0x678a91c",
+            "next": "0x678a98c",
+            "address18": 107973516
+          },
+          {
+            "index": 21,
+            "address": "0x678a98c",
+            "next": "0x678a9fc",
+            "address18": 108477044
+          },
+          {
+            "index": 22,
+            "address": "0x678a9fc",
+            "next": "0x678aa6c",
+            "address18": 109715876
+          },
+          {
+            "index": 23,
+            "address": "0x678aa6c",
+            "next": "0x693db44",
+            "address18": 122355772
+          },
+          {
+            "index": 24,
+            "address": "0x693db44",
+            "next": "0x94c2824",
+            "address18": 123076668
+          },
+          {
+            "index": 25,
+            "address": "0x94c2824",
+            "next": "0x94c2d64",
+            "address18": 156046988
+          },
+          {
+            "index": 26,
+            "address": "0x94c2d64",
+            "next": "0x939826c",
+            "address18": 125501500
+          },
+          {
+            "index": 27,
+            "address": "0x939826c",
+            "next": "0x93982ec",
+            "address18": 156343820
+          },
+          {
+            "index": 28,
+            "address": "0x93982ec",
+            "next": "0x939836c",
+            "address18": 156369460
+          },
+          {
+            "index": 29,
+            "address": "0x939836c",
+            "next": "0x93983ec",
+            "address18": 156394812
+          },
+          {
+            "index": 30,
+            "address": "0x93983ec",
+            "next": "0x939846c",
+            "address18": 156420484
+          },
+          {
+            "index": 31,
+            "address": "0x939846c",
+            "next": "0x94c2dd4",
+            "address18": 156446572
+          },
+          {
+            "index": 32,
+            "address": "0x94c2dd4",
+            "next": "0x94c2e44",
+            "address18": 156473108
+          },
+          {
+            "index": 33,
+            "address": "0x94c2e44",
+            "next": "0x94c2eb4",
+            "address18": 156496652
+          },
+          {
+            "index": 34,
+            "address": "0x94c2eb4",
+            "next": "0x94c2f24",
+            "address18": 156499988
+          },
+          {
+            "index": 35,
+            "address": "0x94c2f24",
+            "next": "0x94c2f94",
+            "address18": 156503244
+          },
+          {
+            "index": 36,
+            "address": "0x94c2f94",
+            "next": "0x94c3004",
+            "address18": 156506516
+          },
+          {
+            "index": 37,
+            "address": "0x94c3004",
+            "next": "0x94c3074",
+            "address18": 156509932
+          },
+          {
+            "index": 38,
+            "address": "0x94c3074",
+            "next": "0x95b2a14",
+            "address18": 156513396
+          },
+          {
+            "index": 39,
+            "address": "0x95b2a14",
+            "next": "0x95b3074",
+            "address18": 154712204
+          },
+          {
+            "index": 40,
+            "address": "0x95b3074",
+            "next": "0x95baad4",
+            "address18": 154712748
+          },
+          {
+            "index": 41,
+            "address": "0x95baad4",
+            "next": "0x95bab34",
+            "address18": 154713292
+          },
+          {
+            "index": 42,
+            "address": "0x95bab34",
+            "next": "0x95e97fc",
+            "address18": 108318372
+          },
+          {
+            "index": 43,
+            "address": "0x95e97fc",
+            "next": "0x95e985c",
+            "address18": 107278852
+          },
+          {
+            "index": 44,
+            "address": "0x95e985c",
+            "next": "0x95e98bc",
+            "address18": 112425644
+          },
+          {
+            "index": 45,
+            "address": "0x95e98bc",
+            "next": "0x95fe734",
+            "address18": 107279300
+          },
+          {
+            "index": 46,
+            "address": "0x95fe734",
+            "next": "0x9602224",
+            "address18": 108318948
+          },
+          {
+            "index": 47,
+            "address": "0x9602224",
+            "next": "0x9602284",
+            "address18": 112426108
+          },
+          {
+            "index": 48,
+            "address": "0x9602284",
+            "next": "0x96022e4",
+            "address18": 105198180
+          },
+          {
+            "index": 49,
+            "address": "0x96022e4",
+            "next": "0x9602344",
+            "address18": 108319524
+          },
+          {
+            "index": 50,
+            "address": "0x9602344",
+            "next": "0x96023a4",
+            "address18": 112426572
+          },
+          {
+            "index": 51,
+            "address": "0x96023a4",
+            "next": "0x9602404",
+            "address18": 112427036
+          },
+          {
+            "index": 52,
+            "address": "0x9602404",
+            "next": "0x9602464",
+            "address18": 112427500
+          },
+          {
+            "index": 53,
+            "address": "0x9602464",
+            "next": "0x96024c4",
+            "address18": 112427964
+          },
+          {
+            "index": 54,
+            "address": "0x96024c4",
+            "next": "0x9602524",
+            "address18": 112428428
+          },
+          {
+            "index": 55,
+            "address": "0x9602524",
+            "next": "0x9602584",
+            "address18": 112428892
+          },
+          {
+            "index": 56,
+            "address": "0x9602584",
+            "next": "0x96025e4",
+            "address18": 108320100
+          },
+          {
+            "index": 57,
+            "address": "0x96025e4",
+            "next": "0x9602644",
+            "address18": 108320676
+          },
+          {
+            "index": 58,
+            "address": "0x9602644",
+            "next": "0x96026a4",
+            "address18": 108321252
+          },
+          {
+            "index": 59,
+            "address": "0x96026a4",
+            "next": "0x9602704",
+            "address18": 108321828
+          },
+          {
+            "index": 60,
+            "address": "0x9602704",
+            "next": "0x9602764",
+            "address18": 101433668
+          },
+          {
+            "index": 61,
+            "address": "0x9602764",
+            "next": "0x96027c4",
+            "address18": 108322404
+          },
+          {
+            "index": 62,
+            "address": "0x96027c4",
+            "next": "0x9602824",
+            "address18": 108322980
+          },
+          {
+            "index": 63,
+            "address": "0x9602824",
+            "next": "0x9602884",
+            "address18": 108323556
+          },
+          {
+            "index": 64,
+            "address": "0x9602884",
+            "next": "0x96028e4",
+            "address18": 157494148
+          },
+          {
+            "index": 65,
+            "address": "0x96028e4",
+            "next": "0x963b73c",
+            "address18": 157494724
+          },
+          {
+            "index": 66,
+            "address": "0x963b73c",
+            "next": "0x963b79c",
+            "address18": 157495300
+          },
+          {
+            "index": 67,
+            "address": "0x963b79c",
+            "next": "0x943974",
+            "address18": 157495876
+          },
+          {
+            "index": 68,
+            "address": "0x943974",
+            "next": "0x0",
+            "address18": 0
+          }
+        ]
+      },
+      "rendermode": {
+        "records": [
+          {
+            "index": 0,
+            "namePointer": "0x5436a4",
+            "name": "Direct3D",
+            "flag204": 1
+          },
+          {
+            "index": 1,
+            "namePointer": "0x543b00",
+            "name": "OffscreenBuffer",
+            "flag204": 1
+          },
+          {
+            "index": 2,
+            "namePointer": "0x0",
+            "name": null,
+            "flag204": 0
+          },
+          {
+            "index": 3,
+            "namePointer": "0x0",
+            "name": null,
+            "flag204": 0
+          },
+          {
+            "index": 4,
+            "namePointer": "0x0",
+            "name": null,
+            "flag204": 0
+          },
+          {
+            "index": 5,
+            "namePointer": "0x0",
+            "name": null,
+            "flag204": 0
+          },
+          {
+            "index": 6,
+            "namePointer": "0x0",
+            "name": null,
+            "flag204": 0
+          },
+          {
+            "index": 7,
+            "namePointer": "0x0",
+            "name": null,
+            "flag204": 0
+          }
+        ],
+        "used": 2
+      },
+      "slot": {
+        "records": [
+          {
+            "index": 0,
+            "namePointer": "0x542430",
+            "name": "DisplayOpen",
+            "flag4": 1
+          },
+          {
+            "index": 1,
+            "namePointer": "0x542420",
+            "name": "DisplayClose",
+            "flag4": 1
+          },
+          {
+            "index": 2,
+            "namePointer": "0x542410",
+            "name": "DisplaySetMode",
+            "flag4": 1
+          },
+          {
+            "index": 3,
+            "namePointer": "0x5423fc",
+            "name": "DisplayUnsetMode",
+            "flag4": 1
+          },
+          {
+            "index": 4,
+            "namePointer": "0x5423ec",
+            "name": "DisplayRestore",
+            "flag4": 1
+          },
+          {
+            "index": 5,
+            "namePointer": "0x5423dc",
+            "name": "DisplayVSync",
+            "flag4": 1
+          },
+          {
+            "index": 6,
+            "namePointer": "0x5423c8",
+            "name": "DisplaySwapBuffers",
+            "flag4": 1
+          },
+          {
+            "index": 7,
+            "namePointer": "0x5423b8",
+            "name": "DisplayClear",
+            "flag4": 1
+          },
+          {
+            "index": 8,
+            "namePointer": "0x5423b0",
+            "name": "Enum",
+            "flag4": 1
+          },
+          {
+            "index": 9,
+            "namePointer": "0x5423a4",
+            "name": "GetGFXCaps",
+            "flag4": 1
+          },
+          {
+            "index": 10,
+            "namePointer": "0x542390",
+            "name": "ClipWindowPrimitive",
+            "flag4": 1
+          },
+          {
+            "index": 11,
+            "namePointer": "0x542380",
+            "name": "BlitPrimitive",
+            "flag4": 1
+          },
+          {
+            "index": 12,
+            "namePointer": "0x54236c",
+            "name": "SnapshotPrimitive",
+            "flag4": 1
+          },
+          {
+            "index": 13,
+            "namePointer": "0x54720c",
+            "name": "AllocPalette",
+            "flag4": 1
+          },
+          {
+            "index": 14,
+            "namePointer": "0x5471fc",
+            "name": "DeAllocPalette",
+            "flag4": 1
+          },
+          {
+            "index": 15,
+            "namePointer": "0x5471ec",
+            "name": "DownloadPalette",
+            "flag4": 1
+          },
+          {
+            "index": 16,
+            "namePointer": "0x547064",
+            "name": "AllocTexture",
+            "flag4": 1
+          },
+          {
+            "index": 17,
+            "namePointer": "0x547054",
+            "name": "DeAllocTexture",
+            "flag4": 1
+          },
+          {
+            "index": 18,
+            "namePointer": "0x547044",
+            "name": "DownloadTexture",
+            "flag4": 1
+          },
+          {
+            "index": 19,
+            "namePointer": "0x547030",
+            "name": "BeginTextureList",
+            "flag4": 1
+          },
+          {
+            "index": 20,
+            "namePointer": "0x547020",
+            "name": "EndTextureList",
+            "flag4": 1
+          },
+          {
+            "index": 21,
+            "namePointer": "0x547018",
+            "name": "GetTMUs",
+            "flag4": 1
+          },
+          {
+            "index": 22,
+            "namePointer": "0x547008",
+            "name": "SetActiveTMU",
+            "flag4": 1
+          },
+          {
+            "index": 23,
+            "namePointer": "0x546ff8",
+            "name": "GetActiveTMU",
+            "flag4": 1
+          },
+          {
+            "index": 24,
+            "namePointer": "0x546fe8",
+            "name": "RefreshTexture",
+            "flag4": 1
+          },
+          {
+            "index": 25,
+            "namePointer": "0x546fd8",
+            "name": "ReloadTexture",
+            "flag4": 1
+          },
+          {
+            "index": 26,
+            "namePointer": "0x546fc8",
+            "name": "GetTextureSize",
+            "flag4": 1
+          },
+          {
+            "index": 27,
+            "namePointer": "0x546fc0",
+            "name": "SetLOD",
+            "flag4": 1
+          },
+          {
+            "index": 28,
+            "namePointer": "0x5470b8",
+            "name": "QVertex:RegisterStrip",
+            "flag4": 1
+          },
+          {
+            "index": 29,
+            "namePointer": "0x54e894",
+            "name": "QVertex:DrawStrip",
+            "flag4": 1
+          },
+          {
+            "index": 30,
+            "namePointer": "0x543a9c",
+            "name": "TransContextPrimitive",
+            "flag4": 1
+          },
+          {
+            "index": 31,
+            "namePointer": "0x543a84",
+            "name": "SetActiveTransContext",
+            "flag4": 1
+          },
+          {
+            "index": 32,
+            "namePointer": "0x543a6c",
+            "name": "SetNearClippingPlane",
+            "flag4": 1
+          },
+          {
+            "index": 33,
+            "namePointer": "0x5471e0",
+            "name": "SortRender",
+            "flag4": 1
+          },
+          {
+            "index": 34,
+            "namePointer": "0x54eba8",
+            "name": "TerrainMesh_RenderAll",
+            "flag4": 1
+          },
+          {
+            "index": 35,
+            "namePointer": "0x54f75c",
+            "name": "WaterMesh",
+            "flag4": 1
+          },
+          {
+            "index": 36,
+            "namePointer": "0x54f8a8",
+            "name": "TransparencyListPrimitive",
+            "flag4": 1
+          },
+          {
+            "index": 37,
+            "namePointer": "0x54f888",
+            "name": "TransparencyListStartPrimitive",
+            "flag4": 1
+          },
+          {
+            "index": 38,
+            "namePointer": "0x548258",
+            "name": "InitModels",
+            "flag4": 1
+          },
+          {
+            "index": 39,
+            "namePointer": "0x548248",
+            "name": "DeinitModels",
+            "flag4": 1
+          },
+          {
+            "index": 40,
+            "namePointer": "0x54823c",
+            "name": "LoadModel",
+            "flag4": 1
+          },
+          {
+            "index": 41,
+            "namePointer": "0x548230",
+            "name": "UnloadModel",
+            "flag4": 1
+          },
+          {
+            "index": 42,
+            "namePointer": "0x54ebd8",
+            "name": "GlowReadBufferPrimitive",
+            "flag4": 1
+          },
+          {
+            "index": 43,
+            "namePointer": "0x54ebc0",
+            "name": "GlowInstancePrimitive",
+            "flag4": 1
+          },
+          {
+            "index": 44,
+            "namePointer": "0x543c68",
+            "name": "PolyListDynCubeObjPrimitive",
+            "flag4": 1
+          },
+          {
+            "index": 45,
+            "namePointer": "0x548420",
+            "name": "GenericUVFromRenderModeUV",
+            "flag4": 1
+          },
+          {
+            "index": 46,
+            "namePointer": "0x548404",
+            "name": "RenderModeUVFromGenericUV",
+            "flag4": 1
+          },
+          {
+            "index": 47,
+            "namePointer": "0x5483f4",
+            "name": "DrawRigidMesh",
+            "flag4": 1
+          },
+          {
+            "index": 48,
+            "namePointer": "0x5483e4",
+            "name": "DrawBoneMesh",
+            "flag4": 1
+          },
+          {
+            "index": 49,
+            "namePointer": "0x5483d4",
+            "name": "DrawSplineMesh",
+            "flag4": 1
+          },
+          {
+            "index": 50,
+            "namePointer": "0x5483c0",
+            "name": "DrawLightmapMesh",
+            "flag4": 1
+          },
+          {
+            "index": 51,
+            "namePointer": "0x5483b0",
+            "name": "ExcludeObject",
+            "flag4": 1
+          },
+          {
+            "index": 52,
+            "namePointer": "0x543d80",
+            "name": "DrawLineFilter",
+            "flag4": 1
+          },
+          {
+            "index": 53,
+            "namePointer": "0x543d70",
+            "name": "DrawBandFilter",
+            "flag4": 1
+          },
+          {
+            "index": 54,
+            "namePointer": "0x543d5c",
+            "name": "DrawHandiCamFilter",
+            "flag4": 1
+          },
+          {
+            "index": 55,
+            "namePointer": "0x543dc0",
+            "name": "LineFilter",
+            "flag4": 1
+          },
+          {
+            "index": 56,
+            "namePointer": "0x543dac",
+            "name": "WideScreenFilter",
+            "flag4": 1
+          },
+          {
+            "index": 57,
+            "namePointer": "0x543da0",
+            "name": "BandFilter",
+            "flag4": 1
+          },
+          {
+            "index": 58,
+            "namePointer": "0x543d90",
+            "name": "HandiCamFilter",
+            "flag4": 1
+          },
+          {
+            "index": 59,
+            "namePointer": "0x54e2e8",
+            "name": "Line",
+            "flag4": 1
+          },
+          {
+            "index": 60,
+            "namePointer": "0x53f540",
+            "name": "ComputerStartup",
+            "flag4": 1
+          },
+          {
+            "index": 61,
+            "namePointer": "0x53f540",
+            "name": "ComputerStartup",
+            "flag4": 1
+          },
+          {
+            "index": 62,
+            "namePointer": "0x53bd90",
+            "name": "RotorPrimitive",
+            "flag4": 1
+          },
+          {
+            "index": 63,
+            "namePointer": "0x53bd5c",
+            "name": "AfterburnerPrimitive",
+            "flag4": 1
+          },
+          {
+            "index": 64,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 65,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 66,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 67,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 68,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 69,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 70,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 71,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 72,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 73,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 74,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 75,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 76,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 77,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 78,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 79,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 80,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 81,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 82,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 83,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 84,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 85,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 86,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 87,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 88,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 89,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 90,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 91,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 92,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 93,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 94,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 95,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 96,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 97,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 98,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 99,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 100,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 101,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 102,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 103,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 104,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 105,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 106,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 107,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 108,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 109,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 110,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 111,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 112,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 113,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 114,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 115,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 116,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 117,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 118,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 119,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 120,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 121,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 122,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 123,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 124,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 125,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 126,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          },
+          {
+            "index": 127,
+            "namePointer": "0x0",
+            "name": null,
+            "flag4": 0
+          }
+        ],
+        "used": 64
+      }
+    }
+  },
+  "owned_process_terminated_after_capture": true,
+  "game_processes_after": [],
+  "frida_messages": 567
+}
