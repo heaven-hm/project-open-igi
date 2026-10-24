@@ -1145,3 +1145,28 @@ visible from `0x401400`'s read side at all.
 new dependency - checked first this time, per the round-104 lesson.
 
 With the tail and callee resolved by evidence, `0x401927` is transcription-ready.
+
+### BOUNDARY CORRECTION: 0x401927 is NOT the function start - the writer begins at 0x401900
+
+```
+0x4018F0  mov ax,[0x54F928]; ret; nops
+0x401900  push ebp; xor ebp,ebp; eax = 0xAF5F05      ; TRUE ENTRY
+0x401908  cmp byte [eax],0; je found
+0x40190D    eax += 0x30; ++ebp; cmp eax,0xAFA705; jl 0x401908
+0x401918  push "Unable to allocate task ty..."; call 0x4AF7B0; add esp,4; jmp $   ; fail-closed
+0x401927  found: ... (registration body captured in earlier rounds)
+```
+
+So the routine scans slot presence bytes from `0xAF5F05` at 48-byte stride until a free slot,
+fails closed through `Debug_Error` (0x4AF7B0, already transcribed) with the string at `0x5361C4`,
+and only then registers. Its argument list is `(arg1 unused?, arg2, arg3, arg4, arg5)` with arg4 at
+`[esp+0x18]` and arg5 at `[esp+0x1C]` after the two pushes.
+
+Second boundary correction: the `je 0x4019EB` at `0x4019B2` jumps PAST the `ret` at `0x4019EA` to
+the sentinel path at `0x4019EB`, so the function's real end is beyond `0x4019EA`, not at it. The
+round-102 extent figure (196 bytes, ending at the `ret`) was therefore too small - captured as a
+correction rather than silently reused.
+
+Consequence: `0x401927` must be transcribed as `0x401900` with its full multi-exit CFG; the earlier
+decode of the registration body remains valid, but block count and entry will differ from the
+round-102 estimate.
