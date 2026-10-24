@@ -585,7 +585,9 @@ void NATIVE_DECL QTask_ClearTaskTypes()
 //           and the current type write are the retail's. The retail's
 //           handler links for the QTask class run through the natives at
 //           0x00401860 and 0x00401890, which the port does not use for its
-//           own phase table.
+//           own phase table. INTERMEDIATE PLACEMENT: the handler-table clear sits after the class
+//           registration because retail's phase 0..3 links (0x0040113E-0x00401176) are not transcribed
+//           yet; once they land the clear must follow them, immediately before 0x4B0B00/0x4B8810.
 void NATIVE_DECL QTask_Init()
 {
     QTask_ClearEventTable();
