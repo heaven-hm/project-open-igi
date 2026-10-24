@@ -161,3 +161,36 @@ parameters (16 bytes). Two possibilities, both need evidence, neither is assumed
 against reading the two pushes as its arguments. Until this is settled from the
 decompile of 0x4D9730 (BN) plus the 0x401900 body's parameter reads, writing
 0x4D9730 would either invent an argument or silently drop one. Blocked, not guessed.
+
+## Round 35: half of the arity question settled (getter is argument-free)
+
+`0x004018F0` is a **7-byte leaf, no prologue, no argument reads**:
+
+```
+0x004018F0  66 a1 28 f9 54 00   mov ax, word [0x54F928]
+0x004018F6  c3                  ret
+```
+
+So `QTask_GetCurrentType()`'s engine declaration (no parameters, returns the 16-bit
+current type at `0x0054F928`) is **correct**, and the two `push 0; push 0` before
+calling it cannot be its arguments - the callee never touches the stack. Those two
+dwords therefore stay on the stack and are consumed by the following `0x401900`
+call, which matches `add esp,0x14` (5 dwords).
+
+`0x00401900` body facts so far (no frame pointer; direct `[esp+...]` reads):
+
+- `[esp+0x8]` -> `eax` at `0x0040192B` = **arg1** (name pointer)
+- `[esp+0xC]` -> `ecx` at `0x00401927` = **arg2** (object size)
+- after `push esi; push edi`, `[esp+0x18]` = old `[esp+0x10]` = **arg3** (parent)
+
+Remaining question: whether the body reads **arg4 and arg5** further in, i.e.
+whether the site's five pushes are all meaningful or the 5th is a cdecl extra that
+the callee ignores. Next evidence needed: the remainder of `0x00401900`
+(`0x00401943-0x00401A10`) listing every `[esp+N]` read, plus its stored fields in
+the 0x30-byte slot at `0x00AF5EE0`.
+
+Practical consequence for the next transcription: `0x4D9730` must reproduce the
+retail's five pushes **regardless** of how many the engine declaration exposes -
+dropping a push because "the signature has four parameters" would change the stack
+layout at that call site, and adding a fifth parameter without evidence would
+change the ABI. The body waits for the read-set to be established.
