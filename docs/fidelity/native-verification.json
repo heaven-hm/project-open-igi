@@ -66606,6 +66606,114 @@
       }
     },
     {
+      "address": "0x004F0F20",
+      "name": "Sys_GetGlobal32_4F0F20",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/sys/native_4f0f20.cpp",
+        "sha256": "331d9c2ce9f194630570ba0b03e762cc81c0fa1a11fe4924e28c151b1ff91874",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/script/004F0F20-Script_ParseEnumString_2 2.cpp",
+        "sha256": "88e34c53d50d4462fc494f125f1d601b9c82447b0dc608e69b96e0604640a85a",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x004F0F20",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004F0F20-binaryninja.json",
+          "evidence_sha256": "7051020165fa830f20375c9bbeee1513da4e8db3d9235f719b4a65970bdc155a"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x004F0F20",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004F0F20-radare2.json",
+          "evidence_sha256": "9cd8074308ccc4fc657b2018f4dc341f53fd34d0fc57fc5bb2eb5273ac18e05c"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0
+      }
+    },
+    {
+      "address": "0x004F0F30",
+      "name": "Sys_GetGlobal32_4F0F30",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/sys/native_4f0f30.cpp",
+        "sha256": "f19bc07ed79fd95ed83f70749302622abe96896db5f4962c3bc93a14fd49b328",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/script/004F0F30-Script_ExecuteLevelScript_2 2.cpp",
+        "sha256": "5f4f1a15b557da3512d98df3323860d3844f1f0920829e5d5b6338076d160dad",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x004F0F30",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004F0F30-binaryninja.json",
+          "evidence_sha256": "1a197bb5b7585ba2155e45a7a9da1d4c92df59c822c2a4739d3b39a8d7aabf86"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x004F0F30",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004F0F30-radare2.json",
+          "evidence_sha256": "f2aea5e52ed66caa7197af2a49d016127c5bb75e179463bc6a0495a5cca76b51"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0
+      }
+    },
+    {
+      "address": "0x004F0F40",
+      "name": "Sys_GetGlobal32_4F0F40",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/sys/native_4f0f40.cpp",
+        "sha256": "3766ce4aa9414da7ab5ea2e604284ba98d0733a2953bf47bc477db3d152fac7e",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/script/004F0F40-Script_CallNativeHandler_2 2.cpp",
+        "sha256": "31e1208af3df5d29e8bfc4f0f7352237097d0818767c744fad6bfd38fbbd475a",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x004F0F40",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004F0F40-binaryninja.json",
+          "evidence_sha256": "a7f0ee5e43d2e6a2c146055642026501eed5c9d74b8a50b915da9c1a7a3603c8"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x004F0F40",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004F0F40-radare2.json",
+          "evidence_sha256": "d0eed9248d504d5f4fe2991e93f48fafb22109f5a640eff238fd145752ae2f1d"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0
+      }
+    },
+    {
       "address": "0x004F0F50",
       "name": "Sys_GetGlobal32_4F0F50",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
@@ -66643,6 +66751,42 @@
           "evidence_path": "docs/fidelity/evidence/0x004F0F50-semantic-review.json",
           "evidence_sha256": "cc69fc8f125da71070257189fef1c1b19757b7eb61f0e2adf48e6caf7109e6c1"
         }
+      }
+    },
+    {
+      "address": "0x004F0F60",
+      "name": "Sys_GetGlobal32_4F0F60",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/sys/native_4f0f60.cpp",
+        "sha256": "67c1929a4a934ec3f9233a24d01ee2135492be35c9f2b5e9815348f50f7c3270",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/script/004F0F60-Script_FormatString_2 2.cpp",
+        "sha256": "e4ed4bcd617feb98305ad9b8105ceb14fa5a15690a61959a757fda37e7c4da64",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x004F0F60",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004F0F60-binaryninja.json",
+          "evidence_sha256": "f76daf6117f3b39fd54d82b282c89110485c627d6a1ce56a60bd1ee4e8d30748"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x004F0F60",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004F0F60-radare2.json",
+          "evidence_sha256": "f564939b5b38a1261278aee96ef3ebef97de29491045d1f4759bc8583a98b27b"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0
       }
     },
     {
@@ -66722,6 +66866,42 @@
       }
     },
     {
+      "address": "0x004F0F90",
+      "name": "Sys_GetGlobal32_4F0F90",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/sys/native_4f0f90.cpp",
+        "sha256": "4bf06626c4ea64a3b09ed6332a6ff335469fe0cb933b0d872418f6fb61890803",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/script/004F0F90-Script_ParseEnumReal32_3 2.cpp",
+        "sha256": "862d12a0cbf7ea11dcf1a0ca032db13fc9b6e48fa741d34ea75bbbb07980a9ba",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x004F0F90",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004F0F90-binaryninja.json",
+          "evidence_sha256": "2cab6fe9be491ed7d7af7dad047c7cedce1d3495c8dd6bcf3aa3c35451043865"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x004F0F90",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004F0F90-radare2.json",
+          "evidence_sha256": "3177a20f5eee183a653cde93b8ae84d34528e0824df01ecd44cfd65fb19c9009"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0
+      }
+    },
+    {
       "address": "0x004F0FA0",
       "name": "Core_GetRenderWordA_4F0FA0",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
@@ -66759,6 +66939,42 @@
           "evidence_path": "docs/fidelity/evidence/0x004F0FA0-semantic-review.json",
           "evidence_sha256": "276872d0f71501e815d5fc57e13d3b54e479a6b11de28abd936e9bc0e1a753b0"
         }
+      }
+    },
+    {
+      "address": "0x004F0FB0",
+      "name": "Sys_GetGlobal32_4F0FB0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/sys/native_4f0fb0.cpp",
+        "sha256": "3f57f4fb97d8bc03983fdf34683b54e314421a7fe0d012eeb80267cf7b2ab09c",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/script/004F0FB0-Script_ExecuteLevelScript_3 2.cpp",
+        "sha256": "78b43c340b0f2e717238558152598724847d6950d8b0aa49264401a300e075a1",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x004F0FB0",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004F0FB0-binaryninja.json",
+          "evidence_sha256": "86feebd828d10775bb819660539e1a470352bfe42f03c6da1a0c365ceeea77c1"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x004F0FB0",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004F0FB0-radare2.json",
+          "evidence_sha256": "fd42c3ccd5d3758e864895e3d5cff44f7b5ce04bd18ebbc85e2b4a9af4eca5f5"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0
       }
     },
     {
