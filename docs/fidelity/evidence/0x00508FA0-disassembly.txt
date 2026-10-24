@@ -293,3 +293,38 @@ r2 reports 5 stack arguments (`sp[0x4..0x18]`) but the body reads `byte [arg_20h
 `int8_t` yet read as a dword too). Writing the signature from that guess would be a
 fabricated ABI. Next step: derive the true slot from the caller sites inside `0x508FA0`
 (number of pushes before each `call 0x4F1A80`), then transcribe.
+
+### 0x4F1A80 argument layout: contradiction found, unresolved (round 55)
+
+Counted the pushes at **all seven** `call fcn.004f1a80` sites in `0x508FA0`: every one
+pushes exactly **four** dwords. Pattern at each site:
+
+```
+push eax                    ; value  -> arg4
+mov  eax, dword [0xa7b2cc]  ; container global
+lea  edx, [var_ch]          ; -> arg2
+push ecx                    ; -> arg3 (lea of a local)
+push edx
+push eax                    ; -> arg1 = container
+call 0x4F1A80
+```
+
+Callee reads at entry-relative `+4, +8, +0xC, +0x10` map to arg1..arg4 consistently:
+arg1 container, arg2/arg3 pointers to locals, arg4 a value. But the body also reads a
+**fifth slot** 4 bytes above arg4 (`bl = byte [...]`, then a dword from the same slot)
+while the callers push only four dwords. Under plain cdecl that extra read lands on the
+caller's own stack word, not on an argument.
+
+Two explanations remain, and neither is yet proven:
+
+1. retail genuinely over-reads one caller stack word here (the AI-graph parameter record
+   gets a field from unrelated caller state - a retail quirk that must be reproduced,
+   not fixed), or
+2. one push is not visible in the linear listing as a `push` mnemonic (e.g. a store-based
+   argument passing) and there really are five arguments.
+
+Until disambiguated, `0x4F1A80` stays TRANSCRIBED-NOT-WRITTEN. Choosing either guess would
+put a fabricated ABI under the AI-graph registrar. Next evidence: read the caller's own
+frame around `0x00509153` (what `[esp+0x14]` holds at the call) or compare with a
+decompiler view of the same site; the caller body is single-block, so its locals are fully
+visible.
