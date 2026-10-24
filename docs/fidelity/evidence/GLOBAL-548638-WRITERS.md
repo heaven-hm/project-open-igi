@@ -194,3 +194,34 @@ retail's five pushes **regardless** of how many the engine declaration exposes -
 dropping a push because "the signature has four parameters" would change the stack
 layout at that call site, and adding a fifth parameter without evidence would
 change the ABI. The body waits for the read-set to be established.
+
+## Round 36: arity settled - TaskType_Register takes FOUR arguments
+
+Full stack-read enumeration of `0x00401900` body (after the two `push esi/push edi`
+at `0x0040192F/0x00401937`, so the window's `[esp+0x1c]` equals the caller's
+`[esp+0x14]` = arg4):
+
+| caller slot | callee read | meaning |
+| --- | --- | --- |
+| `[esp+0x8]` | `[esp+0x8]` -> eax | arg1 name |
+| `[esp+0xC]` | `[esp+0xC]` -> ecx | arg2 size |
+| `[esp+0x10]` | `[esp+0x18]` (post-push) | arg3 parent |
+| `[esp+0x14]` | `[esp+0x1c]` (post-push) | arg4 |
+
+**No fifth read exists.** So the API is 4-parameter, `engine/include/igi/retail/core/task_types.hpp:129`
+is correct, and every existing registrar call site is fine. The five pushes at
+`0x004D9730` (cleanup `add esp,0x14`) include one **extra cdecl dword the callee
+never reads** - a retail stack artefact, not a fifth parameter.
+
+### Consequences for the 0x4D9730 transcription
+
+1. The body may call the 4-parameter `TaskType_Register`; passing a fifth argument
+   is impossible in C++ and would change the declaration/ABI.
+2. Fidelity note required in the provenance block: retail pushes a stray extra
+   dword at this site (5 pushes, 20-byte cleanup) while the callee reads only four;
+   the transcription calls the same API with the same four meaningful arguments.
+   The extra dword is unobservable to the callee, so this is a **documented benign
+   divergence in stack traffic only**, not in behaviour.
+3. The two `push 0` sequence is therefore "one stray dword + arg4 = 0", not two
+   meaningful arguments - and the QObj registration still receives parent from
+   `0x4018F0` (arg3) and 0 (arg4), matching what the capture implies for QObj.
