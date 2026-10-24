@@ -1419,3 +1419,29 @@ sources present, one `IGI1MUTEX`. Runs: 8718.954 / 2932.095 / 566.635 ms (cold, 
 `+seh` 2549.513 ms; **all exit 3**, uncaught `std::logic_error`, boundary unchanged at position 1 /
 id 0 with the same `QTask_RegisterClasses` message. Verdict: usable diagnostic evidence, no native
 acceptance. The long 8718 ms cold start is environment-dominated and is not a progress signal.
+
+### Stream init boundary: angr CFGFast and radare2 aa both fail to recover an entry (round 120)
+
+```
+.venv-angr/bin/python scripts/angr_analyze.py --binary igi.exe --address 0x4FAD50
+-> {"function_entry": null, "result": "inconclusive",
+    "reason": "CFGFast did not recover an exact function entry"}
+radare2 aa + afl over 0x4FA800-0x4FB400 -> no recovered functions in that range
+prologue byte search /x 558bec -> no match anywhere in the region
+```
+
+So the registration series is not recoverable as a single function by either tool: no `push ebp; mov
+ebp,esp` prologue, no CFG entry, no data-flow seed that lands in a function. Combined with the
+earlier observation that repeatedly walking backwards hits mid-instruction bytes, the most likely
+explanation is that this is **not one large function** but a run of small leaf routines (each
+starting with `push edi; push <code>; call 0x4F1020` at 0x4FAC09, 0x4FAC2B, ...), with the apparent
+"continuation" being the next routine's body rather than the same CFG.
+
+Recorded as an open boundary question with the two decisive next experiments:
+1. run angr CFGFast seeded at each candidate leaf start (0x4FAC09, 0x4FAC2B, 0x4FABFD, ...) and see
+   which seeds recover exact entries - that distinguishes "one big function" from "many small ones";
+2. probe retail at runtime to record which entries are actually called during startup registration,
+   which settles it regardless of static ambiguity.
+
+No transcription attempted while this is open - a guessed boundary here would mis-attribute argument
+loads, the same failure mode already caught at 0x401927.
