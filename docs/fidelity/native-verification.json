@@ -50545,6 +50545,46 @@
       ]
     },
     {
+      "address": "0x004B1620",
+      "name": "QFile_LookupDeviceByName_4B1620",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/qfile/native_4b1620.cpp",
+        "sha256": "e2410afa1bff6c93ecd25b5bd0a55c982b608b943fc8bcfd82c97db56b50a164",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/qfile/004B1620-QFile_DeviceHandlerLookup.cpp",
+        "sha256": "f29c08cee7bb286d6a9754d674a54f06f4f453f6f5a40c8f7b3e9f843279acf4",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x004B1620",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004B1620-binaryninja.json",
+          "evidence_sha256": "dbd0e9c7d2bcba56552ca68bc1006fc10a999c79977323bee6723c1f4900f9b8"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x004B1620",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004B1620-radare2.json",
+          "evidence_sha256": "70c9169db3ed63391faabf82e4de25babbc03f51c081d3d6a0f85356e357c62e"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004B1620-semantic-review.json",
+          "evidence_sha256": "3ae808847019d3eba526d1d11172676ca2ff415d6780888a2559afc828d22419"
+        }
+      }
+    },
+    {
       "address": "0x004B1690",
       "name": "Device_CloseStream",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",

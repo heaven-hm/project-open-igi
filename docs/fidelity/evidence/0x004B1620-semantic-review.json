@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "address": "0x004B1620",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "e2410afa1bff6c93ecd25b5bd0a55c982b608b943fc8bcfd82c97db56b50a164",
+  "implementation_path": "engine/src/retail/qfile/native_4b1620.cpp",
+  "reviewed_by": "lead",
+  "reviewed": true,
+  "review_scope": "static: retail instructions and emitted candidate listing",
+  "result": "passed",
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "rationale": "102 bytes, 46 instructions, 13 blocks, 18 edges; both decoders and the emitted candidate report 13/18, score 1.000."
+    },
+    {
+      "name": "cfg_match",
+      "result": "passed",
+      "rationale": "Block and edge counts match retail exactly (13/18). The two-byte unrolled comparison produces the same branch lattice rather than collapsing into a strcmp call."
+    },
+    {
+      "name": "inlined_compare",
+      "result": "passed",
+      "rationale": "Retail's compare loop consumes two bytes per iteration with the sequence first-byte compare, end-of-string test, second-byte compare, advance by two, end-of-string test, and jumps back to the FIRST byte compare. The transcription keeps that exact order, including the second end-of-string test happening after the advance."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "passed",
+      "rationale": "One cdecl argument read at [esp+0x14] after four saved registers (ebx, ebp, esi, edi); it is the compared name and is never written."
+    },
+    {
+      "name": "table_walk",
+      "result": "passed",
+      "rationale": "The outer walk keeps a pointer slot (edi) into 0x00546F04, reloads the next slot after each mismatch, increments a 1-based position counter (ebp) only on mismatch, and returns the paired word 0x00534A70[position] on a match; empty and exhausted table both return 0."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "passed",
+      "rationale": "Both exits are transcribed: the null-slot exits load EAX with zero (xor eax,eax), and the match exit loads the paired word. No error message is emitted by this routine in retail and none was added."
+    }
+  ],
+  "evidence": "docs/fidelity/evidence/0x4EE970-data-extents.md section 22.3",
+  "limitations": [
+    "Runtime unobserved.",
+    "Neither 0x00546F04 nor 0x00534A70 has an external owner in the tree, so this file defines both and they start zeroed; retail populates them elsewhere.",
+    "The meaning of the paired word in 0x00534A70 is not established, only its address, 4-byte stride and that it is indexed by the matched name's position.",
+    "The table extents are definition sizes, not retail facts; the walk is bounded by the null terminator retail itself tests, so the declared size does not change behavior for a properly terminated table."
+  ]
+}
