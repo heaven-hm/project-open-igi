@@ -11,11 +11,11 @@
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
-#define IGI_RETAIL_CDECL __cdecl
+#define NATIVE_DECL __cdecl
 #elif defined(__i386__) && (defined(__GNUC__) || defined(__clang__))
-#define IGI_RETAIL_CDECL __attribute__((cdecl))
+#define NATIVE_DECL __attribute__((cdecl))
 #else
-#define IGI_RETAIL_CDECL
+#define NATIVE_DECL
 #endif
 
 namespace igi::retail::config {
@@ -70,8 +70,8 @@ extern std::uint32_t InputRemap_Table[igi::retail::config::remap_table_size];
 //           arguments with the frame reader at 0x004B8A20, stores them in the
 //           remap table at 0x00BC25BC, and returns the third argument masked
 //           to the low 30 bits.
-std::uint32_t* IGI_RETAIL_CDECL GOInRemap(void* qvm_context);
+std::uint32_t* NATIVE_DECL GOInRemap(void* qvm_context);
 
 } // extern "C"
 
-#undef IGI_RETAIL_CDECL
+#undef NATIVE_DECL

@@ -13,11 +13,11 @@
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
-#define IGI_RETAIL_CDECL __cdecl
+#define NATIVE_DECL __cdecl
 #elif defined(__i386__) && (defined(__GNUC__) || defined(__clang__))
-#define IGI_RETAIL_CDECL __attribute__((cdecl))
+#define NATIVE_DECL __attribute__((cdecl))
 #else
-#define IGI_RETAIL_CDECL
+#define NATIVE_DECL
 #endif
 
 extern "C" {
@@ -36,22 +36,22 @@ extern char const* AppTitle;
 
 // Native at VA 0x0048F0C0.
 // mov eax,[esp+4]; mov [0x005C8BC8],eax; ret -- the argument bits are the return value.
-char const* IGI_RETAIL_CDECL StoreCommandLine(char const* command_line);
+char const* NATIVE_DECL StoreCommandLine(char const* command_line);
 
 // Native at VA 0x0048F080 (record name GetCommandLine; the C identifier must
 // not collide with the Win32 GetCommandLine macro).
 // mov eax,[0x005C8BC8]; ret
-char const* IGI_RETAIL_CDECL GameCommandLine();
+char const* NATIVE_DECL GameCommandLine();
 
 // Native at VA 0x0048F0D0.
 // mov eax,[esp+4]; mov [0x005C8BC0],eax; ret -- the argument bits are the return value.
-void* IGI_RETAIL_CDECL StoreInstanceHandle(void* instance);
+void* NATIVE_DECL StoreInstanceHandle(void* instance);
 
 // Native at VA 0x0048F0B0.
 // mov eax,[0x005C8BD4]; ret -- returns the window-text pointer, not the
 // instance handle (which the separate 0x0048F090 getter reads from 0x005C8BC0).
-char const* IGI_RETAIL_CDECL GetAppTitle();
+char const* NATIVE_DECL GetAppTitle();
 
 } // extern "C"
 
-#undef IGI_RETAIL_CDECL
+#undef NATIVE_DECL

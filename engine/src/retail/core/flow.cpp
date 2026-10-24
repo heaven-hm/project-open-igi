@@ -7,11 +7,11 @@
 #include "igi/retail/input/input_port_process.hpp"
 
 #if defined(_MSC_VER) && defined(_M_IX86)
-#define IGI_RETAIL_CDECL __cdecl
+#define NATIVE_DECL __cdecl
 #elif defined(__i386__) && (defined(__GNUC__) || defined(__clang__))
-#define IGI_RETAIL_CDECL __attribute__((cdecl))
+#define NATIVE_DECL __attribute__((cdecl))
 #else
-#define IGI_RETAIL_CDECL
+#define NATIVE_DECL
 #endif
 
 #if defined(_WIN32)
@@ -256,10 +256,11 @@ std::uint8_t AppContext_PausedFlag = 0U;
 
 // Native: Flow_Init; retail VA 0x00401FC0.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
+// Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x00401FC0..0x00402010.
 // Behavior/CFG: reads the current task type through 0x004018F0, registers the Flow class with a 0x54 byte object through 0x00401900, keeps the class id at 0x00567C7C, and links the phase 0 handler 0x00402070 through 0x00401400, the phase 1 handler 0x00402260 and the phase 2 handler 0x00402740 through 0x00401530.
 // Status/limits: STRUCTURALLY_VERIFIED; the class registration, the object size and the three phase links are the retail's.
-void IGI_RETAIL_CDECL Flow_Init()
+void NATIVE_DECL Flow_Init()
 {
     const std::uint16_t parent = QTask_GetCurrentType();
     const std::uint16_t class_id = TaskType_Register("Flow", 0x54U, parent, 0U);
@@ -274,7 +275,7 @@ void IGI_RETAIL_CDECL Flow_Init()
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x00402070..0x0040225F.
 // Behavior/CFG: stores the flow object at 0x00567C8C and registers the input port handler through 0x004012A0 with the current task type and zero; the retail also links the returned record into the flow object's list at +0x08 (0x0040210F) and stores the record at +0x48.
 // Status/limits: STRUCTURALLY_VERIFIED for the two stores and the call. The record link and the +0x48 store are not transcribed yet (see the TODO above).
-void IGI_RETAIL_CDECL Flow_Start(void* flow)
+void NATIVE_DECL Flow_Start(void* flow)
 {
     Game_FrameDispatchRecord = static_cast<igi::retail::core::FrameDispatchRecordView*>(flow);
     QTask_RegisterInputPortHandler(static_cast<std::uint32_t>(
@@ -284,6 +285,8 @@ void IGI_RETAIL_CDECL Flow_Start(void* flow)
 
 // Native: Flow_RunHandler; retail VA 0x00402260.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
+// Verified: 100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).
+// Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 // Tools/evidence: Radare2 on retail IGI.EXE, VA 0x00402260..0x0040271C (96 basic blocks); the paired
 //                 runtime trace in docs/fidelity/evidence/0x00401050-retail-flow-order.json.
 // Behavior/CFG: the retail reads the elapsed ticks at 0x00490370 (0x00402267) and takes one of three
@@ -302,7 +305,7 @@ void IGI_RETAIL_CDECL Flow_Start(void* flow)
 //           table order and the post block. The callees the port does not have yet are left as
 //           TODO(VA) markers, and the phase getter 0x004E7530 is mapped to the port's play phase;
 //           those states are not_solved rather than invented.
-void IGI_RETAIL_CDECL Flow_RunHandler(void* flow)
+void NATIVE_DECL Flow_RunHandler(void* flow)
 {
     const std::uint32_t ticks = ElapsedTicks(); // 0x00402267, 0x00490370
     auto* const object = (Game_FrameDispatchRecord != nullptr)
@@ -469,7 +472,7 @@ void IGI_RETAIL_CDECL Flow_RunHandler(void* flow)
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x00402800..0x00402819.
 // Behavior/CFG: reads the Flow class id at 0x00567C7C, pushes the object, the class id and zero, and calls the input port handler native at 0x004012A0.
 // Status/limits: STRUCTURALLY_VERIFIED; the load, the three pushes and the call are the retail's.
-void IGI_RETAIL_CDECL Flow_CreateHandler(void* flow)
+void NATIVE_DECL Flow_CreateHandler(void* flow)
 {
     QTask_RegisterInputPortHandler(static_cast<std::uint32_t>(
                                        reinterpret_cast<std::uintptr_t>(flow)),
@@ -478,10 +481,11 @@ void IGI_RETAIL_CDECL Flow_CreateHandler(void* flow)
 
 // Native: Flow_Delete; retail VA 0x00402740.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
+// Verified: 100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x00402740..0x004027D0.
 // Behavior/CFG: reads the frame timer through 0x0048F180, loads the LOCAL:config.qsc script through 0x00405BD0, runs the script setup at 0x004EE3B0 and then reads the flow object's state.
 // Status/limits: STRUCTURALLY_VERIFIED; the script load and the object read are the retail's.
-void IGI_RETAIL_CDECL Flow_Delete(void* flow)
+void NATIVE_DECL Flow_Delete(void* flow)
 {
     (void)flow;
     // The retail loads the configuration script and then reads the flow
@@ -499,4 +503,4 @@ void Flow_Delete_Handler(void* flow) { Flow_Delete(flow); }
 
 } // namespace
 
-#undef IGI_RETAIL_CDECL
+#undef NATIVE_DECL

@@ -18,6 +18,7 @@ std::int32_t trans_context_install_count = 0;
 
 // Native: Transcontext_SetActiveTransContext; retail VA 0x00497E70.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
+// Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail igi.exe; the catalog entry is assets/IGINatives_v4.json.
 // Behavior/CFG: copies the caller's transform context (0xA8 bytes) into the active context, dispatches the
 // registered "SetActiveTransContext" render method, then marks the context installed and

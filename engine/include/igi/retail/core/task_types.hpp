@@ -11,11 +11,11 @@
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
-#define IGI_RETAIL_CDECL __cdecl
+#define NATIVE_DECL __cdecl
 #elif defined(__i386__) && (defined(__GNUC__) || defined(__clang__))
-#define IGI_RETAIL_CDECL __attribute__((cdecl))
+#define NATIVE_DECL __attribute__((cdecl))
 #else
-#define IGI_RETAIL_CDECL
+#define NATIVE_DECL
 #endif
 
 namespace igi::retail::core {
@@ -114,7 +114,7 @@ inline igi::retail::core::FrameHandler* QTask_Phase1HandlerTable()
 //           0x004B0B00 creation path, and it does not copy the parent's
 //           handler phases (the retail tail loop at 0x004019CD); see
 //           task_types.cpp for the full evidence record.
-std::uint16_t IGI_RETAIL_CDECL TaskType_Register(const char* name, std::uint32_t object_size,
+std::uint16_t NATIVE_DECL TaskType_Register(const char* name, std::uint32_t object_size,
                                                  std::uint16_t parent_type,
                                                  std::uint32_t task_list_argument);
 
@@ -134,7 +134,7 @@ void TaskTypes_RegisterRetailClasses(std::uint16_t first_id, std::uint16_t last_
 //           index as class_id + phase * 384, stores the handler at
 //           0x00A96AE0 + index * 4 and the first-link flag at 0x0054FF34 +
 //           index.
-std::uint32_t IGI_RETAIL_CDECL QTask_LinkQTaskEventHandlerNoContextFn(
+std::uint32_t NATIVE_DECL QTask_LinkQTaskEventHandlerNoContextFn(
     std::uint16_t event_id, std::uint32_t context,
     igi::retail::core::FrameHandler handler);
 
@@ -142,13 +142,13 @@ std::uint32_t IGI_RETAIL_CDECL QTask_LinkQTaskEventHandlerNoContextFn(
 // Behavior: the context variant of the link native. It increments the context
 //           handler count at 0x00567C6C instead of 0x00567C70 and otherwise
 //           stores the handler and the flag the same way.
-std::uint32_t IGI_RETAIL_CDECL QTask_LinkQTaskEventHandler(
+std::uint32_t NATIVE_DECL QTask_LinkQTaskEventHandler(
     std::uint16_t event_id, std::uint32_t context,
     igi::retail::core::FrameHandler handler);
 
 // Native: QTask_GetCurrentType() - VA 0x004018F0 - complete port.
 // Behavior: returns the 16-bit current task type at 0x0054F928 in AX.
-std::uint16_t IGI_RETAIL_CDECL QTask_GetCurrentType();
+std::uint16_t NATIVE_DECL QTask_GetCurrentType();
 
 // Native: QTask_Init() - VA 0x004010D0 - complete port.
 // Behavior: zeroes the 0x40 dwords at 0x00AFA6E0, clears the word at
@@ -157,26 +157,26 @@ std::uint16_t IGI_RETAIL_CDECL QTask_GetCurrentType();
 //           fills the 0x3F dwords at 0x00A969E0 with -1, registers the
 //           "QTask" class with a 0x20 byte object and the parent 0x0181, keeps
 //           the class id at 0x0054F928, and links the phase handlers.
-void IGI_RETAIL_CDECL QTask_Init();
+void NATIVE_DECL QTask_Init();
 
 // Native: QTask_ClearEventTable() - VA 0x004011D0 - complete port.
 // Behavior: clears the used byte of every six-byte event entry from
 //           0x0054F932 to 0x0054FF26.
-void IGI_RETAIL_CDECL QTask_ClearEventTable();
+void NATIVE_DECL QTask_ClearEventTable();
 
 // Native: QTask_ClearTaskTypes() - VA 0x004011B0 - complete port.
 // Behavior: clears the in-use byte at slot + 0x25 and the name dword at slot
 //           + 0x00 for every 0x30-byte task type slot from 0x00AF5EE0 to
 //           0x00AFA6E0.
-void IGI_RETAIL_CDECL QTask_ClearTaskTypes();
+void NATIVE_DECL QTask_ClearTaskTypes();
 
 // Native: QTask_AllocateEvent() - VA 0x004017C0 - complete port.
 // Behavior: scans the event table from id 0x20 in six-byte steps for a free
 //           entry, marks it used, stores the argument in the entry's first
 //           word and returns the event id in AL. It raises "Unable to
 //           allocate event" when the table is full.
-std::uint8_t IGI_RETAIL_CDECL QTask_AllocateEvent(std::uint16_t value);
+std::uint8_t NATIVE_DECL QTask_AllocateEvent(std::uint16_t value);
 
 } // extern "C"
 
-#undef IGI_RETAIL_CDECL
+#undef NATIVE_DECL

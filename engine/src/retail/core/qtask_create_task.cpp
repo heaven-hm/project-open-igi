@@ -5,11 +5,11 @@
 #include "igi/retail/script/qvm_native_loader.hpp"
 
 #if defined(_MSC_VER) && defined(_M_IX86)
-#define IGI_RETAIL_CDECL __cdecl
+#define NATIVE_DECL __cdecl
 #elif defined(__i386__) && (defined(__GNUC__) || defined(__clang__))
-#define IGI_RETAIL_CDECL __attribute__((cdecl))
+#define NATIVE_DECL __attribute__((cdecl))
 #else
-#define IGI_RETAIL_CDECL
+#define NATIVE_DECL
 #endif
 
 #if defined(_WIN32)
@@ -88,7 +88,7 @@ std::int32_t GetStartupMode() noexcept
 // Tools/evidence: Binary Ninja MCP, Radare2 and angr CFGFast on retail IGI.EXE; VA 0x00401000..0x00401042 (67 bytes, 3 blocks, 2 direct edges), bytes 68 44 61 53 00 e8 f6 e0 08 00 6a 01 e8 1f e3 08 00 e8 1a 19 00 00 6a 00 e8 e3 17 00 00 83 c4 0c e8 fb e1 08 00 85 c0 75 0d 6a 04 e8 70 18 00 00 83 c4 04 b0 01 c3 6a 02 e8 63 18 00 00 83 c4 04 b0 01 c3.
 // Behavior/CFG: calls 0x0048F100 with the "IGI" string at 0x00536144, calls 0x0048F330(1) to set the force-precompiled flag at 0x005C8BF0, calls QTask_RegisterClasses at 0x00402930, calls Flow_CreateHandler at 0x00402800 with null, reads the startup-mode flag at 0x005C8C08 through 0x0048F220, and calls Flow_SetState at 0x004028A0 with 2 when it is non-zero or 4 when it is zero; both paths then set AL to 1 and return, so the observed int32 result is 1.
 // Status/limits: BUILD_VERIFIED; the linked symbol now exists, but QTask_RegisterClasses still reports its untranscribed registrars and throws before the flow calls, the candidate main does not call 0x00401000, and no paired retail/candidate runtime observation exists.
-extern "C" int IGI_RETAIL_CDECL QTask_CreateTask()
+extern "C" int NATIVE_DECL QTask_CreateTask()
 {
     SetAppTitle("IGI");
     SetForcePrecompiled(1);
@@ -102,4 +102,4 @@ extern "C" int IGI_RETAIL_CDECL QTask_CreateTask()
     return static_cast<std::int32_t>((state_result & 0xFFFFFF00U) | 1U);
 }
 
-#undef IGI_RETAIL_CDECL
+#undef NATIVE_DECL

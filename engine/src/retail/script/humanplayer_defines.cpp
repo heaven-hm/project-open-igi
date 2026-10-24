@@ -9,11 +9,11 @@
 #include <cstring>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
-#define IGI_RETAIL_CDECL __cdecl
+#define NATIVE_DECL __cdecl
 #elif defined(__i386__) && (defined(__GNUC__) || defined(__clang__))
-#define IGI_RETAIL_CDECL __attribute__((cdecl))
+#define NATIVE_DECL __attribute__((cdecl))
 #else
-#define IGI_RETAIL_CDECL
+#define NATIVE_DECL
 #endif
 
 extern "C" {
@@ -43,7 +43,7 @@ igi::retail::script::HumanPlayerScriptParameter HumanPlayer_GeneralParameterTabl
 // Behavior/CFG: one entry block, then the straight-line argument stores; two do-while table
 //                 walks at 0x00410145 and 0x00410164; the value-block build and rep movsd at
 //                 0x00410187-0x004101AD; return.
-void* IGI_RETAIL_CDECL DefineHumanPlayerGeneral(void* context, std::int32_t argument_slot,
+void* NATIVE_DECL DefineHumanPlayerGeneral(void* context, std::int32_t argument_slot,
                                                 void* frame)
 {
     // The second stack argument is passed by the script VM but never read by the retail body
@@ -126,6 +126,7 @@ void* IGI_RETAIL_CDECL DefineHumanPlayerGeneral(void* context, std::int32_t argu
 
 // Native: HumanPlayer_LoadParameters; retail VA 0x004137A0.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
+// Verified: 100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).
 // Tools/evidence: Binary Ninja, Radare2 6.2.0 and angr 10.0.4.post1 CFGFast on retail IGI.EXE;
 //                 VA 0x004137A0-0x004137D4, 57 bytes, 4 blocks/4 edges;
 //                 docs/fidelity/evidence/0x004137A0-*.json.
@@ -136,7 +137,7 @@ void* IGI_RETAIL_CDECL DefineHumanPlayerGeneral(void* context, std::int32_t argu
 //                 (0x004137C5-0x004137D4) calls Debug_Error("HumanPlayer_LoadParameters: Couldn't
 //                 load script \"%s\"", path) and then jumps to itself at 0x004137D7: the failure
 //                 path has no return.
-std::int32_t IGI_RETAIL_CDECL HumanPlayer_LoadParameters()
+std::int32_t NATIVE_DECL HumanPlayer_LoadParameters()
 {
     void* const qvm = igi::retail::script::Qvm_Load("LOCAL:humanplayer/humanplayer.qsc");
     if (qvm == nullptr) {
@@ -160,13 +161,14 @@ std::int32_t IGI_RETAIL_CDECL HumanPlayer_LoadParameters()
 //   0x00405B30 Config_Language_2           152 bytes,  3 blocks, returns through EAX
 // All four are cdecl. Config_Read discards the first three results; Config_Language_2's EAX is
 // what Config_Read returns.
-void IGI_RETAIL_CDECL Config_SaveGraphicOptions();
-void IGI_RETAIL_CDECL Config_SaveSoundOptions();
-void IGI_RETAIL_CDECL Config_NoD3DDriversWithHard();
-std::int32_t IGI_RETAIL_CDECL Config_Language_2();
+void NATIVE_DECL Config_SaveGraphicOptions();
+void NATIVE_DECL Config_SaveSoundOptions();
+void NATIVE_DECL Config_NoD3DDriversWithHard();
+std::int32_t NATIVE_DECL Config_Language_2();
 
 // Native: Config_Read; retail VA 0x00405850.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
+// Verified: 100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).
 // Tools/evidence: Binary Ninja, Radare2 6.2.0 and angr 10.0.4.post1 CFGFast on retail IGI.EXE;
 //                 VA 0x00405850-0x00405899, 74 bytes, 3 blocks/2 edges;
 //                 docs/fidelity/evidence/0x00405850-*.json.
@@ -178,7 +180,7 @@ std::int32_t IGI_RETAIL_CDECL Config_Language_2();
 //                 0x00405300, 0x004058A0, 0x00405980 and 0x00405B30 in that order and returns the
 //                 last call's EAX. Each branch cleans its own 8 bytes of Qvm_Execute/Qvm_Cleanup
 //                 arguments at 0x00405870.
-std::int32_t IGI_RETAIL_CDECL Config_Read(const char* path)
+std::int32_t NATIVE_DECL Config_Read(const char* path)
 {
     void* const qvm = igi::retail::script::Qvm_Load(path);
     if (qvm == nullptr) {
@@ -197,4 +199,4 @@ std::int32_t IGI_RETAIL_CDECL Config_Read(const char* path)
 
 } // extern "C"
 
-#undef IGI_RETAIL_CDECL
+#undef NATIVE_DECL

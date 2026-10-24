@@ -1,11 +1,11 @@
 #include "igi/retail/core/native_0048f0f0.hpp"
 
 #if defined(_MSC_VER) && defined(_M_IX86)
-#define IGI_RETAIL_CDECL __cdecl
+#define NATIVE_DECL __cdecl
 #elif defined(__i386__) && (defined(__GNUC__) || defined(__clang__))
-#define IGI_RETAIL_CDECL __attribute__((cdecl))
+#define NATIVE_DECL __attribute__((cdecl))
 #else
-#define IGI_RETAIL_CDECL
+#define NATIVE_DECL
 #endif
 
 extern "C" {
@@ -17,7 +17,7 @@ std::int32_t Native_005C8BCC = 0;
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x0048F0F0..0x0048F0FA.
 // Behavior/CFG: one basic block loads the 32-bit argument, stores it at 0x005C8BCC, and returns the same bits in EAX.
 // Status/limits: STRUCTURALLY_VERIFIED; the global's semantic name and paired startup runtime comparison remain unresolved. A byte search of the whole retail image finds no other reference to 0x005C8BCC, so the global has no reader the name could be derived from and the address-based identity stands.
-std::int32_t IGI_RETAIL_CDECL SetConfigFileName(std::int32_t value)
+std::int32_t NATIVE_DECL SetConfigFileName(std::int32_t value)
 {
     Native_005C8BCC = value;
     return value;
@@ -25,4 +25,4 @@ std::int32_t IGI_RETAIL_CDECL SetConfigFileName(std::int32_t value)
 
 } // extern "C"
 
-#undef IGI_RETAIL_CDECL
+#undef NATIVE_DECL

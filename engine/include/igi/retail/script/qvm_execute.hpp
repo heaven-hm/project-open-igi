@@ -11,17 +11,18 @@
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
-#define IGI_RETAIL_CDECL __cdecl
+#define NATIVE_DECL __cdecl
 #elif defined(__i386__) && (defined(__GNUC__) || defined(__clang__))
-#define IGI_RETAIL_CDECL __attribute__((cdecl))
+#define NATIVE_DECL __attribute__((cdecl))
 #else
-#define IGI_RETAIL_CDECL
+#define NATIVE_DECL
 #endif
 
 extern "C" {
 
 // Native: Qvm_Execute() - VA 0x004B85B0 - complete transcription.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
+// Verified: 100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).
 // Tools/evidence: Binary Ninja MCP, Radare2 6.2.0 and angr 10.0.4.post1 CFGFast on retail IGI.EXE;
 //                 VA 0x004B85B0-0x004B86DC, 301 bytes, 14 blocks/20 edges, digest ae94640768a02e53ab44e0873dda2ded792eca51ddf4f5dc7b912d359151ecdc;
 //                 docs/fidelity/evidence/0x004B85B0-*.json.
@@ -43,7 +44,7 @@ extern "C" {
 //           the three shared QVM state words this native reads are still internal to
 //           qvm_native_loader.cpp, so the object compiles for x86 but does not link yet. No runtime
 //           capture exists, so BUILD_VERIFIED/RUNTIME_TESTED are not claimed.
-std::int32_t IGI_RETAIL_CDECL Qvm_Execute(void* qvm);
+std::int32_t NATIVE_DECL Qvm_Execute(void* qvm);
 
 // Native: Qvm_GetFloatArg() - VA 0x004B8A50 - complete transcription.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
@@ -64,6 +65,6 @@ std::int32_t IGI_RETAIL_CDECL Qvm_Execute(void* qvm);
 //           each callee instead of using call/ret). The two retail callees are declared but not yet
 //           transcribed, so the object compiles for x86 but does not link yet. No runtime capture
 //           exists, so BUILD_VERIFIED/RUNTIME_TESTED are not claimed.
-long double IGI_RETAIL_CDECL Qvm_GetFloatArg(void* argument_frame, std::int32_t index);
+long double NATIVE_DECL Qvm_GetFloatArg(void* argument_frame, std::int32_t index);
 
 } // extern "C"

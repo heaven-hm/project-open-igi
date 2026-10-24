@@ -1,5 +1,7 @@
 // Native: Terrain_OutOfTerrainRenderch; retail VA 0x00514680.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01
+// Verified: 100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).
+// Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 //   (1,384,448 bytes, PE i386, image base 0x00400000, entry 0x004A50F5).
 // Tools/evidence (this transcription): Binary Ninja MCP 0.1.0 (`bn_function_info`,
 //   `bn_function_basic_blocks`, `bn_function_decompile`, `bn_function_disassembly`,

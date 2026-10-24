@@ -14,6 +14,8 @@ SysResourceFn g_sys_resource = nullptr;
 
 // Native: Resource_Unload; retail VA 0x004B6380; signature/calling convention unknown.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
+// Verified: 100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).
+// Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE (SHA256: dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01); VA 0x004B6380-0x004B63C3, 67 bytes, digest 14f9f39cad1672b7ab5c4799581eff2192c542b44cb75b36f6e263c4c74a0345; CLEAN/resource/004B6380-Resource_Unload.c.
 // Behavior/CFG: probes Is_ResourceLoaded(resource_path, &node) (0x004B5B90); when found, reads `node->kind` at offset +0x24 (`entity_val[9]`); if `kind != 3 && kind != 1`, calls Resource_FreeNode(node) (0x004B5C90); otherwise returns `kind`. When not found, invokes Debug_Error("Resource_Unload() : Resource '%s' is not loaded.") (0x004AF7B0). radare2 7 blocks/9 edges; Binary Ninja 7 blocks; 100.0% structural agreement.
 // Status/limits: VERIFIED; high for exact control flow, offset +0x24 check, and callee dispatch.
@@ -44,6 +46,7 @@ std::int32_t Resource_Unload(const char* resource_path)
 
 // Native: Resource_Load; retail VA 0x004B5F00; signature/calling convention unknown.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
+// Verified: 100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004B5F00-0x004B5F7D, 125 bytes, digest 3250eca00c444e0774a6c8ca33df90e7bd63930021d542840e463b93421aa1d6; CLEAN/resource/004B5F00-Resource_Load.c.
 // Behavior/CFG: probes Is_ResourceLoaded(resource_path, &node) (0x004B5B90); if cached, writes `*(node + 0x28)` to `*out_size` when `out_size != nullptr`, sets `*(node + 0x2C) = 1`, and returns `*(node + 0x34)`. Otherwise calls Resource_PackUnpack(resource_path, &size) (0x004B18B0); when non-null, writes `size` to `*out_size` (if non-null) and returns Sys_Resource(QFile_GetResolvedAlias(), data, size) (0x004B5F80). When null, calls Debug_Error("Failed to load resource: '%s'") (0x004AF7B0). radare2 10 blocks/12 edges; Binary Ninja 10 blocks; 100.0% structural agreement.
 // Status/limits: VERIFIED; high for exact cache hit/miss branches and node offsets (+0x28, +0x2C, +0x34).

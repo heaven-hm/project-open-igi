@@ -17,11 +17,11 @@
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
-#define IGI_RETAIL_CDECL __cdecl
+#define NATIVE_DECL __cdecl
 #elif defined(__i386__) && (defined(__GNUC__) || defined(__clang__))
-#define IGI_RETAIL_CDECL __attribute__((cdecl))
+#define NATIVE_DECL __attribute__((cdecl))
 #else
-#define IGI_RETAIL_CDECL
+#define NATIVE_DECL
 #endif
 
 namespace igi::retail::core {
@@ -61,8 +61,8 @@ extern "C" {
 //           registrars the MVP demo needs register their classes, and the
 //           ones outside the MVP scope report that they are not transcribed
 //           rather than shifting the ids silently.
-void IGI_RETAIL_CDECL QTask_RegisterClasses();
+void NATIVE_DECL QTask_RegisterClasses();
 
 } // extern "C"
 
-#undef IGI_RETAIL_CDECL
+#undef NATIVE_DECL

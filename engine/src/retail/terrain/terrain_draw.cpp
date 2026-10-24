@@ -1,5 +1,6 @@
 // Native: Terrain_Draw; retail VA 0x00512C30.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; 1,384,448 bytes, PE i386, image base 0x00400000, entry 0x004A50F5.
+// Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 // Tools/evidence: Binary Ninja MCP 0.1.0, radare2 6.2.0 and angr 10.0.4.post1 CFGFast on retail IGI.EXE; evidence artefacts docs/fidelity/evidence/0x00512C30-*.json.
 // Behavior/CFG: retail range 0x00512C30-0x005144DC, 6317 bytes, 144 blocks / 215 edges, 1670 instructions; Binary Ninja and radare2 recover the same graph, and the 17-property source comparison is docs/fidelity/evidence/0x00512C30-structural-comparison.json.
 // Status/limits: STRUCTURALLY_VERIFIED (source/object-level property comparison; not CFG-isomorphic; not RUNTIME_TESTED); the detailed limits are at the end of this header.

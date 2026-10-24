@@ -4,11 +4,11 @@
 #include "igi/retail/core/game_flow.hpp"
 
 #if defined(_MSC_VER) && defined(_M_IX86)
-#define IGI_RETAIL_CDECL __cdecl
+#define NATIVE_DECL __cdecl
 #elif defined(__i386__) && (defined(__GNUC__) || defined(__clang__))
-#define IGI_RETAIL_CDECL __attribute__((cdecl))
+#define NATIVE_DECL __attribute__((cdecl))
 #else
-#define IGI_RETAIL_CDECL
+#define NATIVE_DECL
 #endif
 
 #include <stdexcept>
@@ -48,7 +48,7 @@ extern "C" {
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x00402930..0x00402A40.
 // Behavior/CFG: the retail's class registration sequence. It calls the class registrars in order: the AI graph at 0x00508F80, the AI detection at 0x00489560, the material defines at 0x00407D60, the level flow at 0x00488BB0, the game options at 0x00402FF0, the Level and Game classes at 0x00415530, the task list at 0x004C1780, the Flow class at 0x00401FC0, and the registrars after it. The class ids the handler table is indexed by follow this order.
 // Status/limits: STRUCTURALLY_VERIFIED for the sequence's order and the two registrars the MVP demo needs. The registrars before the Game class are outside the MVP scope, so the port reports them instead of registering fewer classes and silently shifting every id that follows.
-void IGI_RETAIL_CDECL QTask_RegisterClasses()
+void NATIVE_DECL QTask_RegisterClasses()
 {
     ReportNotTranscribed("AI graph");
     ReportNotTranscribed("AI detection");
@@ -62,4 +62,4 @@ void IGI_RETAIL_CDECL QTask_RegisterClasses()
 
 } // extern "C"
 
-#undef IGI_RETAIL_CDECL
+#undef NATIVE_DECL

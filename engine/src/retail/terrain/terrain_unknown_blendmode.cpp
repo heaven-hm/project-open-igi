@@ -1,5 +1,7 @@
 // Native: Terrain_UnknownBlendmode; retail VA 0x005144E0.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
+// Verified: 100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).
+// Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 // Tools/evidence: Binary Ninja MCP 0.1.0 (single selected decompiler), radare2 6.2.0 CFG and angr 10.0.4.post1 CFGFast on retail IGI.EXE; evidence docs/fidelity/evidence/0x005144E0-*.json; no Ghidra analysis was run for this target.
 // Behavior/CFG: modes 0/1/2 each reload 0x005CA114 and call device vtable +0x50 and +0x94, returning the last +0x50 HRESULT; any other mode reports "Unknown blendmode" through 0x004AF7B0 and does not return. Binary Ninja and radare2 recover the same retail graph.
 // Status/limits: STRUCTURALLY_VERIFIED; not wired into CMakeLists.txt; no runtime capture exists. The null-device and scope limits are detailed below.

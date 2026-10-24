@@ -12,11 +12,11 @@
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
-#define IGI_RETAIL_CDECL __cdecl
+#define NATIVE_DECL __cdecl
 #elif defined(__i386__) && (defined(__GNUC__) || defined(__clang__))
-#define IGI_RETAIL_CDECL __attribute__((cdecl))
+#define NATIVE_DECL __attribute__((cdecl))
 #else
-#define IGI_RETAIL_CDECL
+#define NATIVE_DECL
 #endif
 
 namespace igi::retail::script {
@@ -111,11 +111,12 @@ extern igi::retail::script::HumanPlayerScriptParameter
 // Status/limits: STRUCTURALLY_VERIFIED; the block layout, the argument indices, the scales and
 //           the x87 order are the retail's. The port leaves the block's undefined +0x04 dword
 //           zero where retail copies stack residue. No runtime capture exists.
-void* IGI_RETAIL_CDECL DefineHumanPlayerGeneral(void* context, std::int32_t argument_slot,
+void* NATIVE_DECL DefineHumanPlayerGeneral(void* context, std::int32_t argument_slot,
                                                void* frame);
 
 // Native: HumanPlayer_LoadParameters() - VA 0x004137A0 - complete transcription.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
+// Verified: 100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).
 // Tools/evidence: Binary Ninja, Radare2 6.2.0 and angr 10.0.4.post1 CFGFast on retail IGI.EXE;
 //                VA 0x004137A0-0x004137D4, 57 bytes, 4 blocks/4 edges;
 //                docs/fidelity/evidence/0x004137A0-*.json.
@@ -129,10 +130,11 @@ void* IGI_RETAIL_CDECL DefineHumanPlayerGeneral(void* context, std::int32_t argu
 //           the failure path never returns.
 // Status/limits: STRUCTURALLY_VERIFIED; the path, the call order, the error format and the halt
 //           loop are the retail's. No runtime capture exists.
-std::int32_t IGI_RETAIL_CDECL HumanPlayer_LoadParameters();
+std::int32_t NATIVE_DECL HumanPlayer_LoadParameters();
 
 // Native: Config_Read() - VA 0x00405850 - complete transcription.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
+// Verified: 100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).
 // Tools/evidence: Binary Ninja, Radare2 6.2.0 and angr 10.0.4.post1 CFGFast on retail IGI.EXE;
 //                VA 0x00405850-0x00405899, 74 bytes, 3 blocks/2 edges;
 //                docs/fidelity/evidence/0x00405850-*.json.
@@ -146,8 +148,8 @@ std::int32_t IGI_RETAIL_CDECL HumanPlayer_LoadParameters();
 // Status/limits: STRUCTURALLY_VERIFIED; the branch order and the call set are the retail's. The
 //           four callees are declared below and are not transcribed yet, so this unit compiles
 //           but does not link. No runtime capture exists.
-std::int32_t IGI_RETAIL_CDECL Config_Read(const char* path);
+std::int32_t NATIVE_DECL Config_Read(const char* path);
 
 } // extern "C"
 
-#undef IGI_RETAIL_CDECL
+#undef NATIVE_DECL

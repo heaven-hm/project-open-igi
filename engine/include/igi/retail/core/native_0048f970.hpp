@@ -10,11 +10,11 @@
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
-#define IGI_RETAIL_CDECL __cdecl
+#define NATIVE_DECL __cdecl
 #elif defined(__i386__) && (defined(__GNUC__) || defined(__clang__))
-#define IGI_RETAIL_CDECL __attribute__((cdecl))
+#define NATIVE_DECL __attribute__((cdecl))
 #else
-#define IGI_RETAIL_CDECL
+#define NATIVE_DECL
 #endif
 
 namespace igi::retail::core {
@@ -54,7 +54,7 @@ extern std::uint32_t DebugKeyFlag;
 // native and posts the quit message, WM_KEYUP clears the debug key flag when
 // F12 is released, WM_KEYDOWN runs the debug key handler when 's' is pressed,
 // and every other message goes to DefWindowProcA.
-std::intptr_t IGI_RETAIL_CDECL WindowProcedure(void* window, std::uint32_t message,
+std::intptr_t NATIVE_DECL WindowProcedure(void* window, std::uint32_t message,
                                               std::uintptr_t wparam, std::intptr_t lparam);
 
 // Links a handler into the retail's window message chain.
@@ -62,4 +62,4 @@ void LinkWindowHandler(igi::retail::core::WindowHandlerEntry* entry) noexcept;
 
 } // extern "C"
 
-#undef IGI_RETAIL_CDECL
+#undef NATIVE_DECL

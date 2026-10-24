@@ -3,15 +3,17 @@
 #include "igi/retail/core/task_types.hpp"
 
 #if defined(_MSC_VER) && defined(_M_IX86)
-#define IGI_RETAIL_CDECL __cdecl
+#define NATIVE_DECL __cdecl
 #elif defined(__i386__) && (defined(__GNUC__) || defined(__clang__))
-#define IGI_RETAIL_CDECL __attribute__((cdecl))
+#define NATIVE_DECL __attribute__((cdecl))
 #else
-#define IGI_RETAIL_CDECL
+#define NATIVE_DECL
 #endif
 
 // Native: Game_Init; retail VA 0x00415530.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
+// Verified: 100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).
+// Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x00415530..0x00415653.
 // Behavior/CFG: retail 0x00415530 begins with AppMain_ParseCmdLineArgs("Level", 0x00415B10).
 //           0x0048F360 is the command-line token matcher: it copies the command line (0x0048F080),
@@ -53,7 +55,7 @@ extern "C" {
 std::uint16_t QTask_GameClassId = 0U;
 std::uint8_t QTask_ClassEventIds[15] = {};
 
-IGI_RETAIL_CDECL void Game_Init()
+NATIVE_DECL void Game_Init()
 {
     // The retail derives the Game class from the current task type, which the
     // native at 0x004018F0 reads from 0x0054F928.
@@ -74,10 +76,12 @@ IGI_RETAIL_CDECL void Game_Init()
 
 // Native: Level_Start; retail VA 0x00415B30.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
+// Verified: 100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).
+// Verified: 100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x00415B30..0x00415D40.
 // Behavior/CFG: the retail's phase 0 handler runs the level start. It brings the task list up through 0x00402820 and 0x004028D0, looks the mission up through 0x00485170, reads the mission path with "MISSION:" through 0x004B12F0, and then loads the content in the retail's order: the terrain textures and lightmaps through 0x004C5F00 and the terrain through 0x004C6240 at 0x00415C31 and 0x00415C44, the level package through 0x004CFBD0 at 0x00415C88, the common package through 0x004CFC00 at 0x00415C92, and the common forms through 0x004CEFA0 at 0x00415C9E. The calls for the mission scripts, the sound and the camera sit around them and are outside the MVP scope, so this transcription skips them and the port runs the content through the phase 0 hook.
 // Status/limits: STRUCTURALLY_VERIFIED; the content order is the retail's.
-IGI_RETAIL_CDECL void Level_Start(void* game)
+NATIVE_DECL void Level_Start(void* game)
 {
     if (igi::retail::core::g_level_start_hook != nullptr)
     {
@@ -85,7 +89,7 @@ IGI_RETAIL_CDECL void Level_Start(void* game)
     }
 }
 
-IGI_RETAIL_CDECL void Game_Setup(void* game)
+NATIVE_DECL void Game_Setup(void* game)
 {
     if (igi::retail::core::g_per_frame_hook != nullptr)
     {
@@ -93,7 +97,7 @@ IGI_RETAIL_CDECL void Game_Setup(void* game)
     }
 }
 
-IGI_RETAIL_CDECL void Game_DeleteHandler(void* game)
+NATIVE_DECL void Game_DeleteHandler(void* game)
 {
     if (igi::retail::core::g_shutdown_hook != nullptr)
     {
@@ -103,4 +107,4 @@ IGI_RETAIL_CDECL void Game_DeleteHandler(void* game)
 
 } // extern "C"
 
-#undef IGI_RETAIL_CDECL
+#undef NATIVE_DECL

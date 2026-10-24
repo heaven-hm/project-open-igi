@@ -17,11 +17,11 @@
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
-#define IGI_RETAIL_CDECL __cdecl
+#define NATIVE_DECL __cdecl
 #elif defined(__i386__) && (defined(__GNUC__) || defined(__clang__))
-#define IGI_RETAIL_CDECL __attribute__((cdecl))
+#define NATIVE_DECL __attribute__((cdecl))
 #else
-#define IGI_RETAIL_CDECL
+#define NATIVE_DECL
 #endif
 
 namespace igi::retail::input {
@@ -83,7 +83,7 @@ extern std::uint32_t QTask_InputPortCounter;
 // Behavior: reads the 16-bit input port index at 0x00A5EFA0, and calls the
 //           handler native at 0x004012A0 with the object, the port index and
 //           zero.
-void IGI_RETAIL_CDECL InputPort_Process(void* input_port);
+void NATIVE_DECL InputPort_Process(void* input_port);
 
 // Native: QTask_RegisterInputPortHandler() - VA 0x004012A0 - complete port.
 // Behavior: allocates the port record through the native at 0x004012F0, links
@@ -91,7 +91,7 @@ void IGI_RETAIL_CDECL InputPort_Process(void* input_port);
 //           null, and then dispatches it: the record's dispatch index at
 //           +0x1C selects the handler in the table at 0x00A96AE0, and the
 //           handler is called with the record and the object.
-std::uint32_t IGI_RETAIL_CDECL QTask_RegisterInputPortHandler(
+std::uint32_t NATIVE_DECL QTask_RegisterInputPortHandler(
     std::uint32_t object, std::uint32_t port_index, std::uint32_t context);
 
 // Native: QTask_AllocateInputPort() - VA 0x004012F0 - complete port.
@@ -100,9 +100,9 @@ std::uint32_t IGI_RETAIL_CDECL QTask_RegisterInputPortHandler(
 //           the port record with the class's object size through the native at
 //           0x004B0C60. The record is cleared, its port index, dispatch index
 //           and appended flag are stored, and the list node is linked.
-igi::retail::input::InputPortRecord* IGI_RETAIL_CDECL QTask_AllocateInputPort(
+igi::retail::input::InputPortRecord* NATIVE_DECL QTask_AllocateInputPort(
     std::uint32_t port_index, std::uint32_t context);
 
 } // extern "C"
 
-#undef IGI_RETAIL_CDECL
+#undef NATIVE_DECL

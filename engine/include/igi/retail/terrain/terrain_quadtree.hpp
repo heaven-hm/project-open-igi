@@ -1,5 +1,7 @@
 // Native: Terrain_TraverseContourQuadtree; retail VA 0x004D14E0.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
+// Verified: 100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).
+// Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 //   1,384,448 bytes, image base 0x00400000, entry 0x004A50F5, machine i386.
 // Tools/evidence: Binary Ninja 5.0 (function 0x004D14E0, 4181 bytes, 146 blocks, 228 edges,
 //   1265 instructions); radare2 6.0.5 `afij` (size 4181, 146 blocks, 228 edges, exact match);

@@ -18,7 +18,7 @@
 extern "C" {
 
 // Retail logger used by the sound natives for empty or dotless paths.
-void IGI_RETAIL_CDECL Engine_LogFormattedMessage(const char* format, ...)
+void NATIVE_DECL Engine_LogFormattedMessage(const char* format, ...)
 {
     char buffer[512];
     va_list arguments;

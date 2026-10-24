@@ -18,11 +18,11 @@
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
-#define IGI_RETAIL_CDECL __cdecl
+#define NATIVE_DECL __cdecl
 #elif defined(__i386__) && (defined(__GNUC__) || defined(__clang__))
-#define IGI_RETAIL_CDECL __attribute__((cdecl))
+#define NATIVE_DECL __attribute__((cdecl))
 #else
-#define IGI_RETAIL_CDECL
+#define NATIVE_DECL
 #endif
 
 namespace igi::retail::core {
@@ -67,13 +67,13 @@ extern std::uint8_t AppContext_PausedFlag;
 //           class id at 0x00567C7C, and links the phase 0 handler 0x00402070
 //           through 0x00401400, the phase 1 handler 0x00402260 and the phase 2
 //           handler 0x00402740 through 0x00401530.
-void IGI_RETAIL_CDECL Flow_Init();
+void NATIVE_DECL Flow_Init();
 
 // Native: Flow_Start() - VA 0x00402070 - complete port.
 // Behavior: stores the flow object at 0x00567C8C, the same global the frame
 //           dispatch record at 0x00402880 returns, and registers the input port
 //           handler through 0x004012A0 with the current task type and zero.
-void IGI_RETAIL_CDECL Flow_Start(void* flow);
+void NATIVE_DECL Flow_Start(void* flow);
 
 // Native: Flow_RunHandler() - VA 0x00402260 - complete port.
 // Behavior: reads the elapsed ticks through 0x00490370, and dispatches on the
@@ -82,19 +82,19 @@ void IGI_RETAIL_CDECL Flow_Start(void* flow);
 //           stack from the flow object's counter, factor and base. The
 //           states the MVP demo does not enter are not transcribed and report
 //           themselves as such.
-void IGI_RETAIL_CDECL Flow_RunHandler(void* flow);
+void NATIVE_DECL Flow_RunHandler(void* flow);
 
 // Native: Flow_CreateHandler() - VA 0x00402800 - complete port.
 // Behavior: reads the Flow class id at 0x00567C7C and registers the input port
 //           handler through 0x004012A0 with the object, the class id and zero.
-void IGI_RETAIL_CDECL Flow_CreateHandler(void* flow);
+void NATIVE_DECL Flow_CreateHandler(void* flow);
 
 // Native: Flow_Delete() - VA 0x00402740 - complete port.
 // Behavior: reads the frame timer through 0x0048F180, loads the
 //           "LOCAL:config.qsc" script through 0x00405BD0, runs the script
 //           setup at 0x004EE3B0 and then reads the flow object's state.
-void IGI_RETAIL_CDECL Flow_Delete(void* flow);
+void NATIVE_DECL Flow_Delete(void* flow);
 
 } // extern "C"
 
-#undef IGI_RETAIL_CDECL
+#undef NATIVE_DECL

@@ -5,11 +5,11 @@
 #include "igi/retail/mem/mem_alloc.hpp"
 
 #if defined(_MSC_VER) && defined(_M_IX86)
-#define IGI_RETAIL_CDECL __cdecl
+#define NATIVE_DECL __cdecl
 #elif defined(__i386__) && (defined(__GNUC__) || defined(__clang__))
-#define IGI_RETAIL_CDECL __attribute__((cdecl))
+#define NATIVE_DECL __attribute__((cdecl))
 #else
-#define IGI_RETAIL_CDECL
+#define NATIVE_DECL
 #endif
 
 namespace igi::retail::input {
@@ -174,7 +174,7 @@ std::uint32_t QTask_InputPortCounter = 0xFFFFFFFFU;
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004ED5C0..0x004ED5D7.
 // Behavior/CFG: reads the 16-bit input port index at 0x00A5EFA0, pushes the object, the port index and zero, and calls the handler native at 0x004012A0. It returns nothing.
 // Status/limits: STRUCTURALLY_VERIFIED; the load, the three pushes and the call are the retail's.
-void IGI_RETAIL_CDECL InputPort_Process(void* input_port)
+void NATIVE_DECL InputPort_Process(void* input_port)
 {
     const std::uint16_t index = InputPort_CurrentIndex;
     QTask_RegisterInputPortHandler(static_cast<std::uint32_t>(
@@ -187,7 +187,7 @@ void IGI_RETAIL_CDECL InputPort_Process(void* input_port)
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004012A0..0x004012E8.
 // Behavior/CFG: allocates the port record through the native at 0x004012F0, links it into the handler list at 0x004AF8F0 when the context is not null, and then dispatches it: the record's dispatch index at +0x1C selects the handler in the table at 0x00A96AE0, and the handler is called with the record and the object. The record is returned in EAX.
 // Status/limits: STRUCTURALLY_VERIFIED; the calls, the index read and the dispatch are the retail's.
-std::uint32_t IGI_RETAIL_CDECL QTask_RegisterInputPortHandler(
+std::uint32_t NATIVE_DECL QTask_RegisterInputPortHandler(
     std::uint32_t object, std::uint32_t port_index, std::uint32_t context)
 {
     auto* const record = QTask_AllocateInputPort(port_index, context);
@@ -211,10 +211,12 @@ std::uint32_t IGI_RETAIL_CDECL QTask_RegisterInputPortHandler(
 
 // Native: QTask_AllocateInputPort; retail VA 0x004012F0.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
+// Verified: 100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).
+// Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004012F0..0x004013B0.
 // Behavior/CFG: increments the port counter at 0x00567C58, reads the class's task list from the task type slot, and appends the port index to it when the list has room. Otherwise it allocates the port record with the class's object size through the native at 0x004B0C60. The record is then cleared, its port index, dispatch index and appended flag are stored, and the list node is linked. The record is returned in EAX.
 // Status/limits: STRUCTURALLY_VERIFIED; the counter, the slot reads, the allocation and the record writes are the retail's.
-igi::retail::input::InputPortRecord* IGI_RETAIL_CDECL QTask_AllocateInputPort(
+igi::retail::input::InputPortRecord* NATIVE_DECL QTask_AllocateInputPort(
     std::uint32_t port_index, std::uint32_t context)
 {
     ++QTask_InputPortCounter;
@@ -251,4 +253,4 @@ igi::retail::input::InputPortRecord* IGI_RETAIL_CDECL QTask_AllocateInputPort(
 
 } // extern "C"
 
-#undef IGI_RETAIL_CDECL
+#undef NATIVE_DECL

@@ -83,47 +83,47 @@ extern "C" {
 
 // 0x004BD080 - runs the resolved precompiled program and returns the interpreter's error code
 // (0 when the program ran); it drives Qvm_ExecuteInstructions (0x004BCFD0).
-std::int32_t IGI_RETAIL_CDECL Qvm_RunProgram_4BD080(std::uint32_t program);
+std::int32_t NATIVE_DECL Qvm_RunProgram_4BD080(std::uint32_t program);
 
 // 0x004C0200 - initialises the script-source buffer over the loaded resource.
-void IGI_RETAIL_CDECL Qvm_SourceBufferInit_4C0200(void* buffer, void* source_stack, void* text,
+void NATIVE_DECL Qvm_SourceBufferInit_4C0200(void* buffer, void* source_stack, void* text,
                                                  std::int32_t text_size);
 
 // 0x004BF1C0 - attaches the loaded script bytes to the source reader.
-void IGI_RETAIL_CDECL Qvm_SourceReaderInit_4BF1C0(void* source_stack, std::uint32_t data,
+void NATIVE_DECL Qvm_SourceReaderInit_4BF1C0(void* source_stack, std::uint32_t data,
                                                   std::uint32_t size);
 
 // 0x004BFC70 - reads the next source block; returns 0 at the end of the buffer.
-std::int32_t IGI_RETAIL_CDECL Qvm_ReadNextBlock_4BFC70(void* buffer, void* out_block);
+std::int32_t NATIVE_DECL Qvm_ReadNextBlock_4BFC70(void* buffer, void* out_block);
 
 // 0x004BF1F0 - parses one block; returns non-zero when a block was produced.
-std::int32_t IGI_RETAIL_CDECL Qvm_ParseBlock_4BF1F0(void* buffer, void* out_block);
+std::int32_t NATIVE_DECL Qvm_ParseBlock_4BF1F0(void* buffer, void* out_block);
 
 // 0x004BFA80 - recursively releases a parsed block tree.
-void IGI_RETAIL_CDECL Qvm_ReleaseBlockTree_4BFA80(void* block);
+void NATIVE_DECL Qvm_ReleaseBlockTree_4BFA80(void* block);
 
 // 0x004BF8F0 - releases one parsed block.
-void IGI_RETAIL_CDECL Qvm_ReleaseBlock_4BF8F0(void* block);
+void NATIVE_DECL Qvm_ReleaseBlock_4BF8F0(void* block);
 
 // 0x004BEFC0 - releases the source reader. Its EAX is returned unchanged as Qvm_Execute's
 // result on the source path.
-std::int32_t IGI_RETAIL_CDECL Qvm_ReleaseSourceReader_4BEFC0(void* source_stack);
+std::int32_t NATIVE_DECL Qvm_ReleaseSourceReader_4BEFC0(void* source_stack);
 
 // 0x004BD010 - reads argument `index` from the interpreter frame and returns it as a real in
 // ST0 (the retail body ends with `fld dword [esp+0x14]`).
-long double IGI_RETAIL_CDECL Qvm_ReadIndexedArgument_4BD010(void* argument_frame,
+long double NATIVE_DECL Qvm_ReadIndexedArgument_4BD010(void* argument_frame,
                                                             std::int32_t index);
 
 // 0x004B9660 - evaluates one argument expression node and leaves its real value in ST0
 // (`fild` / `fld dword` / `fld qword`); its recursion, type dispatch, "Unknown identifier
 // '%s' in expression, line %d" error report and 0x00A965A8 error store live inside it.
-long double IGI_RETAIL_CDECL Qvm_EvaluateArgumentValue_4B9660(const void* node);
+long double NATIVE_DECL Qvm_EvaluateArgumentValue_4B9660(const void* node);
 
 } // extern "C"
 
 namespace igi::retail::script {
 
-extern "C" std::int32_t IGI_RETAIL_CDECL Qvm_Execute(void* qvm)
+extern "C" std::int32_t NATIVE_DECL Qvm_Execute(void* qvm)
 {
     g_a965a4 = 0;
     g_a965a8 = 0;
@@ -197,7 +197,7 @@ extern "C" std::int32_t IGI_RETAIL_CDECL Qvm_Execute(void* qvm)
     return release_result;
 }
 
-extern "C" long double IGI_RETAIL_CDECL Qvm_GetFloatArg(void* argument_frame, std::int32_t index)
+extern "C" long double NATIVE_DECL Qvm_GetFloatArg(void* argument_frame, std::int32_t index)
 {
     if (load_word(argument_frame, kArgumentTableFlagOffset) != 0U)
     {

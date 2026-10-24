@@ -5,18 +5,18 @@
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
-#define IGI_RETAIL_CDECL __cdecl
+#define NATIVE_DECL __cdecl
 #elif defined(__i386__) && (defined(__GNUC__) || defined(__clang__))
-#define IGI_RETAIL_CDECL __attribute__((cdecl))
+#define NATIVE_DECL __attribute__((cdecl))
 #else
-#define IGI_RETAIL_CDECL
+#define NATIVE_DECL
 #endif
 
 namespace igi::retail::core {
 
-using FrameDispatchCallback = void (IGI_RETAIL_CDECL *)(void*);
+using FrameDispatchCallback = void (NATIVE_DECL *)(void*);
 // The optional handler the retail calls from AppContext_SetIsActive (0x0048F140).
-using FrameFlagHandler = std::int32_t (IGI_RETAIL_CDECL *)(std::int32_t, std::int32_t);
+using FrameFlagHandler = std::int32_t (NATIVE_DECL *)(std::int32_t, std::int32_t);
 
 // The retail Flow object at 0x00567C8C. The class registers a 0x54 byte object
 // through 0x00401900, and Flow_RunHandler (0x00402260) reads the fields from
@@ -78,7 +78,7 @@ igi::retail::core::FrameDispatchCallback* QTask_Phase1HandlerTable();
 // Confidence: high for exact control flow, offsets, and call order.
 // Signature: x86 cdecl void(); ported as void QTask_OpenEvent().
 // Usage/tests: invoked by retail main message loop (0x0048F530); exercised by frame_natives_test.cpp.
-void IGI_RETAIL_CDECL QTask_OpenEvent();
+void NATIVE_DECL QTask_OpenEvent();
 
 // Native: Game_GetContext() - VA 0x00402880 - complete port.
 // Behavior: returns the global game-context pointer stored at 0x00567C8C.
@@ -88,7 +88,7 @@ void IGI_RETAIL_CDECL QTask_OpenEvent();
 // Confidence: high for exact instruction behavior.
 // Signature: x86 cdecl FrameDispatchRecordView*(); ported as FrameDispatchRecordView* Game_GetContext().
 // Usage/tests: called by QTask_OpenEvent (0x00401050); exercised by frame_natives_test.cpp.
-igi::retail::core::FrameDispatchRecordView* IGI_RETAIL_CDECL Game_GetContext();
+igi::retail::core::FrameDispatchRecordView* NATIVE_DECL Game_GetContext();
 
 // Native: Flow_SetState() - VA 0x004028A0 - complete port.
 // Behavior: writes `value` into the 32-bit field at offset +0x2C of the global context at 0x00567C8C.
@@ -98,7 +98,7 @@ igi::retail::core::FrameDispatchRecordView* IGI_RETAIL_CDECL Game_GetContext();
 // Confidence: high for exact instruction behavior.
 // Interface: retail writes the argument and leaves its bits in EAX; uint32_t preserves that observed result. The original source type is unknown.
 // Usage/tests: stores pending flow state in game context; exercised by frame_natives_test.cpp.
-std::uint32_t IGI_RETAIL_CDECL Flow_SetState(std::uint32_t value);
+std::uint32_t NATIVE_DECL Flow_SetState(std::uint32_t value);
 
 // Native: Loop_SetStatusByte() - VA 0x0048F480 - complete port.
 // Behavior: stores `value` into the global loop status byte at 0x005C8DE8.
@@ -108,22 +108,22 @@ std::uint32_t IGI_RETAIL_CDECL Flow_SetState(std::uint32_t value);
 // Confidence: high for exact instruction behavior.
 // Signature: x86 cdecl void(uint8_t value); ported as void Loop_SetStatusByte(std::uint8_t value).
 // Usage/tests: called by QTask_OpenEvent (0x00401050) on nonlocal abort; exercised by frame_natives_test.cpp.
-void IGI_RETAIL_CDECL Loop_SetStatusByte(std::uint8_t value);
+void NATIVE_DECL Loop_SetStatusByte(std::uint8_t value);
 
 // Native: AppContext_SetIsActive() - VA 0x0048F140 - complete port.
 // Behavior: sign-extends the low byte of the argument, stores it in the global
 //           frame flag at 0x005C8BFC, and when the optional handler at
 //           0x005C8C18 is set, calls it with the argument at 0x005C8C1C and
 //           returns its result.
-std::int32_t IGI_RETAIL_CDECL AppContext_SetIsActive(std::int32_t value);
+std::int32_t NATIVE_DECL AppContext_SetIsActive(std::int32_t value);
 
 // Native: AppContext_GetIsActive() - VA 0x0048F170 - complete port.
 // Behavior: returns the global frame flag at 0x005C8BFC. The retail main loop
 //           (0x0048F544) calls it between the frame clear (0x00498460) and
 //           the per-frame dispatch (0x00401050) and branches on the result:
 //           non-zero dispatches the frame, zero sleeps 500 ms.
-std::int32_t IGI_RETAIL_CDECL AppContext_GetIsActive();
+std::int32_t NATIVE_DECL AppContext_GetIsActive();
 
 }
 
-#undef IGI_RETAIL_CDECL
+#undef NATIVE_DECL

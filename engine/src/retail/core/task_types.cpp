@@ -1,11 +1,11 @@
 #include "igi/retail/core/task_types.hpp"
 
 #if defined(_MSC_VER) && defined(_M_IX86)
-#define IGI_RETAIL_CDECL __cdecl
+#define NATIVE_DECL __cdecl
 #elif defined(__i386__) && (defined(__GNUC__) || defined(__clang__))
-#define IGI_RETAIL_CDECL __attribute__((cdecl))
+#define NATIVE_DECL __attribute__((cdecl))
 #else
-#define IGI_RETAIL_CDECL
+#define NATIVE_DECL
 #endif
 
 #include <cstring>
@@ -374,7 +374,7 @@ std::uint32_t QTask_NoContextHandlerCount = 0U;
 //           parent's handler phases through the 0x004019CD loop. The classes the port dispatches
 //           link their handlers explicitly after registration, so the phase table stays correct
 //           for them; classes that only inherit handlers keep null entries here.
-std::uint16_t IGI_RETAIL_CDECL TaskType_Register(const char* name, std::uint32_t object_size,
+std::uint16_t NATIVE_DECL TaskType_Register(const char* name, std::uint32_t object_size,
                                                 std::uint16_t parent_type,
                                                 std::uint32_t task_list_argument)
 {
@@ -447,6 +447,7 @@ void TaskTypes_RegisterRetailClasses(std::uint16_t first_id, std::uint16_t last_
 
 // Native: QTask_LinkQTaskEventHandlerNoContextFn; retail VA 0x00401530.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
+// Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x00401530..0x0040159F.
 // Behavior/CFG: reads the no-context handler count at 0x00567C70 and the linked-handler counter
 //           at 0x00536148, increments both, computes the handler table index as class_id +
@@ -454,7 +455,7 @@ void TaskTypes_RegisterRetailClasses(std::uint16_t first_id, std::uint16_t last_
 //           0x0054FF34 + index.
 // Status/limits: STRUCTURALLY_VERIFIED; the index arithmetic and the two table writes are the
 //           retail's.
-std::uint32_t IGI_RETAIL_CDECL QTask_LinkQTaskEventHandlerNoContextFn(
+std::uint32_t NATIVE_DECL QTask_LinkQTaskEventHandlerNoContextFn(
     std::uint16_t event_id, std::uint32_t context, igi::retail::core::FrameHandler handler)
 {
     return link_handler(event_id, context, handler, QTask_NoContextHandlerCount);
@@ -469,7 +470,7 @@ std::uint32_t IGI_RETAIL_CDECL QTask_LinkQTaskEventHandlerNoContextFn(
 //           first-link flag at 0x0054FF34 + index.
 // Status/limits: STRUCTURALLY_VERIFIED; the index arithmetic and the two table writes are the
 //           retail's.
-std::uint32_t IGI_RETAIL_CDECL QTask_LinkQTaskEventHandler(
+std::uint32_t NATIVE_DECL QTask_LinkQTaskEventHandler(
     std::uint16_t event_id, std::uint32_t context, igi::retail::core::FrameHandler handler)
 {
     return link_handler(event_id, context, handler, QTask_ContextHandlerCount);
@@ -480,7 +481,7 @@ std::uint32_t IGI_RETAIL_CDECL QTask_LinkQTaskEventHandler(
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004018F0..0x004018F7.
 // Behavior/CFG: loads the 16-bit current task type at 0x0054F928 into AX and returns it.
 // Status/limits: STRUCTURALLY_VERIFIED; the load and the AX return match the retail exactly.
-std::uint16_t IGI_RETAIL_CDECL QTask_GetCurrentType()
+std::uint16_t NATIVE_DECL QTask_GetCurrentType()
 {
     return QTask_CurrentType;
 }
@@ -495,7 +496,7 @@ std::uint16_t IGI_RETAIL_CDECL QTask_GetCurrentType()
 //           The event id is returned in AL.
 // Status/limits: STRUCTURALLY_VERIFIED; the scan, the three writes and the AL return match the
 //           retail exactly.
-std::uint8_t IGI_RETAIL_CDECL QTask_AllocateEvent(std::uint16_t value)
+std::uint8_t NATIVE_DECL QTask_AllocateEvent(std::uint16_t value)
 {
     std::uint32_t event_id = igi::retail::core::first_event_id;
     while (event_id < igi::retail::core::event_table_entry_count &&
@@ -522,7 +523,7 @@ std::uint8_t IGI_RETAIL_CDECL QTask_AllocateEvent(std::uint16_t value)
 //           and steps six bytes at a time until 0x0054FF26.
 // Status/limits: STRUCTURALLY_VERIFIED; the start, the stride and the end are
 //           the retail's.
-void IGI_RETAIL_CDECL QTask_ClearEventTable()
+void NATIVE_DECL QTask_ClearEventTable()
 {
     for (std::size_t entry = 0U; entry < igi::retail::core::event_table_entry_count; ++entry)
     {
@@ -538,7 +539,7 @@ void IGI_RETAIL_CDECL QTask_ClearEventTable()
 //           in-use byte at slot + 0x25.
 // Status/limits: STRUCTURALLY_VERIFIED; the base, the stride, the end and
 //           the two cleared fields are the retail's.
-void IGI_RETAIL_CDECL QTask_ClearTaskTypes()
+void NATIVE_DECL QTask_ClearTaskTypes()
 {
     for (std::size_t slot = 0U; slot < igi::retail::core::task_type_slot_count; ++slot)
     {
@@ -561,7 +562,7 @@ void IGI_RETAIL_CDECL QTask_ClearTaskTypes()
 //           handler links for the QTask class run through the natives at
 //           0x00401860 and 0x00401890, which the port does not use for its
 //           own phase table.
-void IGI_RETAIL_CDECL QTask_Init()
+void NATIVE_DECL QTask_Init()
 {
     QTask_ClearEventTable();
     QTask_ClearTaskTypes();
@@ -570,4 +571,4 @@ void IGI_RETAIL_CDECL QTask_Init()
 
 } // extern "C"
 
-#undef IGI_RETAIL_CDECL
+#undef NATIVE_DECL

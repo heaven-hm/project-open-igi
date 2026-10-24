@@ -4,6 +4,8 @@
 // and this is the only candidate symbol bound to it; the former Error_Show name was port
 // scaffolding for the same retail body and was removed.
 // Artifact: retail igi.exe, SHA-256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01,
+// Verified: 100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).
+// Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 //   1,384,448 bytes, image base 0x00400000, entry 0x004A50F5, machine i386.
 // Tools/evidence (single decompiler: Binary Ninja, plus Radare2 CFG and angr CFGFast):
 //   * Binary Ninja: function 0x004AF7B0, 89 bytes (0x004AF7B0-0x004AF808), 5 basic blocks,

@@ -5,11 +5,11 @@
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
-#define IGI_RETAIL_CDECL __cdecl
+#define NATIVE_DECL __cdecl
 #elif defined(__i386__) && (defined(__GNUC__) || defined(__clang__))
-#define IGI_RETAIL_CDECL __attribute__((cdecl))
+#define NATIVE_DECL __attribute__((cdecl))
 #else
-#define IGI_RETAIL_CDECL
+#define NATIVE_DECL
 #endif
 
 namespace {
@@ -33,7 +33,7 @@ char uppercase_ascii_lowercase(char value) noexcept
 
 extern "C" {
 
-void IGI_RETAIL_CDECL Sound_ExtractNameFromPath(char* output, char* input_path)
+void NATIVE_DECL Sound_ExtractNameFromPath(char* output, char* input_path)
 {
     *output = '\0';
 
@@ -68,7 +68,7 @@ void IGI_RETAIL_CDECL Sound_ExtractNameFromPath(char* output, char* input_path)
     output[output_length] = '\0';
 }
 
-std::int32_t IGI_RETAIL_CDECL Sound_ComputeRollingNameHash(char* name)
+std::int32_t NATIVE_DECL Sound_ComputeRollingNameHash(char* name)
 {
     // Listing-derived register result; Ghidra pseudocode declares this routine void.
     std::uint32_t hash_remainder = 0U;
@@ -91,7 +91,7 @@ std::int32_t IGI_RETAIL_CDECL Sound_ComputeRollingNameHash(char* name)
     return static_cast<std::int32_t>(hash_remainder);
 }
 
-std::int32_t IGI_RETAIL_CDECL Sound_ComputeWeightedNameHash(char* name)
+std::int32_t NATIVE_DECL Sound_ComputeWeightedNameHash(char* name)
 {
     std::uint32_t hash_value = 0U;
     std::uint32_t character_weight = 1U;
@@ -113,4 +113,4 @@ std::int32_t IGI_RETAIL_CDECL Sound_ComputeWeightedNameHash(char* name)
 
 } // extern "C"
 
-#undef IGI_RETAIL_CDECL
+#undef NATIVE_DECL
