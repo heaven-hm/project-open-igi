@@ -15,6 +15,8 @@ extern "C" std::int32_t AI_Detection_Init();
 #define NATIVE_DECL
 #endif
 
+#include "igi/diagnostic_log.hpp"
+
 #include <stdexcept>
 #include <string>
 
@@ -37,6 +39,7 @@ void RegisterFlowClass()
 // classes and silently shifting every id that follows.
 [[noreturn]] void ReportNotTranscribed(const char* registrar)
 {
+    IGI_DIAG("0x00402930", "fail-closed: startup init sequence not transcribed, stopping at %s", registrar);
     throw std::logic_error(
         std::string("QTask_RegisterClasses (0x00402930): the retail function at this address is the startup init "
                     "sequence, 155 ordered init/open/load calls ending in a tail jump to 0x004CEF30, not a class "

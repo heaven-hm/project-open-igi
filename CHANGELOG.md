@@ -11,6 +11,18 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - diagnostic logging + paired same-level capture (internal build, no release)
+
+- **Added**: `engine/include/igi/diagnostic_log.hpp` - diagnostic-only logging infrastructure (owner rule 3(a)): never changes control
+  flow, values or ordering, writes `$TMPDIR/igi1-diagnostic.log`, one line per call, flushed. First call site: the fail-closed guard in
+  `class_registration.cpp`, which now logs `fail-closed: startup init sequence not transcribed, stopping at AI graph` before throwing.
+  Verified live: the candidate ran under CrossOver wine and the log line was produced at
+  `[0x00402930] fail-closed: startup init sequence not transcribed, stopping at AI graph`.
+- **Captured**: same-level runs of retail `igi.exe` and candidate `igi1.exe` with `window level1`, screenshots by the macOS
+  `screencapture` tool: `screenshots/pair-2026-10-25/retail-level1.png` and `screenshots/pair-2026-10-25/candidate-level1.png`.
+- **Result**: retail ran (process alive at capture); the candidate reached the guard and terminated, so the candidate capture is not a
+  level render. No release; T1 still blocked on T0.
+
 ### 2026-10-25 - T0/T1 start: flow order tool, dead-code and port-constant fixes (internal build, no release)
 
 - **Task state**: T1 (3D objects + terrain visible) is **not** started because T0 blocks it: the candidate still fails closed at
