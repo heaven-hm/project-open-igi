@@ -157,3 +157,22 @@ Per the gate rules these three must not be treated as CFG-verified and must not 
 routed through runtime until the disagreement is resolved. The honest state is:
 transcribed, evidence artifacts exist, CFG score below threshold, cause identified
 as indirect-branch recovery, not as a suspected transcription error.
+
+## Round 17: root cause of the "missing" records - NATIVE_COMMENT needs the VA on line 1
+
+`ng.implementation_natives` matches `NATIVE_COMMENT`:
+`^\s*//\s*Native:\s*(?P<name>.*?)\b(?:retail\s+)?VA\s+0x(?P<address>[0-9A-Fa-f]{8})\b`
+
+`native_48fa80.cpp` and `native_48fd90.cpp` put the extent on the *Artifact* line
+instead, so their `// Native:` line had no `VA 0x........` and the recognizer
+returned `[]` - silently, with no gate error. Fixed by moving
+"; retail VA 0x........-0x........" into the `// Native:` line (BN alias moved to a
+parenthesis). Both then bind:
+
+| VA | BN | r2 | score |
+| --- | --- | --- | --- |
+| `0x0048FA80` DirectInput_ErrorText | 59/64 | 59/58 | **0.939** (pass) |
+| `0x0048FD90` Input_MouseGetCaps | 4/4 | 4/4 | **1.000** (pass) |
+
+Note both are the *retail-derived* CFGs the builder writes; the score is
+tool-to-tool agreement, not a claim about the C++ transcription.

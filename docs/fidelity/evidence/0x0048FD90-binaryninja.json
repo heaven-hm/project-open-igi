@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "kind": "native-disassembly",
+  "tool": "binary_ninja",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "function_entry": "0x0048FD90",
+  "signature": "unknown",
+  "cfg": {
+    "nodes": [
+      {
+        "address": "0x0048FD90"
+      },
+      {
+        "address": "0x0048FDAF"
+      },
+      {
+        "address": "0x0048FDBC"
+      },
+      {
+        "address": "0x0048FDBE"
+      }
+    ],
+    "edges": [
+      {
+        "source": "0x0048FD90",
+        "target": "0x0048FDAF",
+        "kind": "branch"
+      },
+      {
+        "source": "0x0048FD90",
+        "target": "0x0048FDBE",
+        "kind": "branch"
+      },
+      {
+        "source": "0x0048FDAF",
+        "target": "0x0048FDBC",
+        "kind": "branch"
+      },
+      {
+        "source": "0x0048FDBC",
+        "target": "0x0048FDBC",
+        "kind": "branch"
+      }
+    ]
+  }
+}

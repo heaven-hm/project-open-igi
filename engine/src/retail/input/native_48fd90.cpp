@@ -1,5 +1,5 @@
-// Native: Input_MouseGetCaps_48FD90 (placeholder until VERIFIED; BN alias FX_CouldNotGetMouseCaps).
-// Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x0048FD90-0x0048FDD1 (66 bytes, 4 blocks).
+// Native: Input_MouseGetCaps_48FD90 (placeholder until VERIFIED); retail VA 0x0048FD90-0x0048FDD1 (66 bytes, 4 blocks, BN alias FX_CouldNotGetMouseCaps).
+// Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: Binary Ninja MCP disassembly/decompile + radare2 6.2.0 bytes; DINPUT-LAYER packet §3.4 (COM GetCapabilities = vtable +0x0C).
 // Behavior/CFG: builds caps{dwSize=0x2C}, calls the mouse device's GetCapabilities; on failure Debug_Error("Could not get mouse caps!") and spin; otherwise stores 0x00C28F80=1 and 0x00C28F81=caps byte +0x10 and returns it.
 // Status/limits: TRANSCRIBED; only callee Debug_Error is an engine native; the device object is runtime data (0x005C8E1C). Return leaves the caps byte in eax (callers ignore it) - documented limit. Runtime UNOBSERVED.
