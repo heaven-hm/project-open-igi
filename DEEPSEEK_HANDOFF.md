@@ -260,3 +260,30 @@ Method rules learned the hard way this arc:
   MEM_DECOMMIT) at `0x4AB771`, `0x3ff000`/`0x1000` strides over a `0x2010`-byte node, `[0x936200]`
   counter, and `[esi+0x0C]`/`[esi+0x18]` bound maintenance), then `0x4AB84C`, then `0x4AADBB`,
   `0x4A6A50`, `0x4B0D10`.
+
+## Round 151-152: mode-2 bucket heap complete; frozen 770d5b8d (156 sources)
+
+- Landed the whole mode-2 bucket set: `0x4AB6DD` (node free, bn=5/5 **1.000**), `0x4AB733` (page purge,
+  bn=20/33 **1.000**, matching retail's 20 blocks), `0x4AB7F5` (finder, 9/12 **1.000**), `0x4AB84C`
+  (page marker, 4/5 **1.000**). Layout now lives in `engine/include/igi/retail/mem/mode2_bucket.hpp`
+  and the static data (sentinel `0x005446B0`, `0x005466D0`, `0x00936200`) in
+  `engine/src/retail/mem/mode2_bucket_globals.cpp`; every pointer is candidate-relative so the linker
+  emits relocations. Tester verified: sentinel self-consistent at `0x00567040`, payload at
+  `0x00567058`, four HIGHLOW relocations, and no retail VA anywhere in runtime data sections.
+- **Decoded traps recorded:** `or dword [edi],0xFFFFFFFF` writes -1 to the slot flag; the 0xF1 store at
+  `entry+4` in `0x4AB84C` sits *between* the `cmp` and the `jne`, so it is unconditional; `0x5446C0`
+  that `0x4AB6DD` writes is the sentinel's `+0x10` bound word, not a separate global; the `0x2010`
+  offsets mean the node is `0x2018` bytes with entries walked backwards from `node+0x2010` to
+  `node+0x18`, page `0x3FF-i` for entry `i`.
+- **Settled by Tester:** direct `::VirtualFree`/`::HeapFree` calls are the fidelity-correct choice; a
+  `Mem_*` wrapper would be a non-retail abstraction inside a native flow.
+- Frozen `770d5b8d` (`770d5b8deaa6f1f89da35f928899de98e82cdd092c8e7e0c9733eaabc96b47eb`), 156 sources,
+  clean rebuild, deployed hash-verified.
+- NEXT (single blocker): `0x4AADBB`, 809 bytes / ~340 instructions, the mode-3 small-block pool
+  allocator. Needs a dedicated careful pass: 0x204-byte bucket stride, 0x144 offset, header bit tests,
+  `0x3F` clamp on `(word >> 4) - 1`, `[ebx+4] != [ebx+8]` free-list checks, and the `0x80000000` mask
+  that r2 renders as the `DirectSoundCreate` import symbol (an address constant, NOT a call). After it:
+  `0x4A6A50` (body already fully read: mode 3 -> `0x4AAD90`+`0x4AADBB`, mode 2 -> `0x4AB7F5`+`0x4AB84C`,
+  else KERNEL32 `HeapFree` on `g_c32428`), then `0x4B0D10` (`Mem_DeAllocFn`), which unblocks
+  `QTaskList_Delete` (`0x4C1830`, documented blocked in `engine/src/retail/core/qtask_list.cpp`) and
+  the `0x4F1180` branch of the `0x4EE970` catalogue.
