@@ -1616,3 +1616,30 @@ without holding 3400 bytes in one step.
 
 Dependency question newly raised: the `0x4F1B60`-`0x4F1BC0` family (8 distinct addresses, ~70 calls
 here) is the real workhorse. Its provenance must be checked before this routine is transcribed.
+
+### 0x4F1Bxx family: four 6-byte state getters over 0x54E0E7-0x54E0EA; writers live in 0x4F18xx
+
+```
+0x4F1B60  mov al, byte [0x54E0EA]; ret
+0x4F1B90  mov al, byte [0x54E0E9]; ret
+0x4F1BA0  mov al, byte [0x54E0E7]; ret
+0x4F1BB0  mov al, byte [0x54E0E8]; ret
+static image bytes at 0x54E0E6: ff ff ff ff ff ff 55 6e   -> all four are 0xFF (unset sentinel)
+writers:  0x4F1896 mov byte [0x54E0E7], al
+          0x4F1912 mov byte [0x54E0E7], al
+          (readers 0x4F18D7/0x4F18D8 and the getters above)
+```
+
+So these are **runtime state readers**, not constants: the bytes initialise to `0xFF` ("unset") in the
+image and are written by the `0x4F18xx` state routine. Each getter therefore cannot be linked until
+that owner lands - the same rule, one layer deeper.
+
+**Structural conclusion worth recording:** the AI-graph subsystem is a web where almost every leaf's
+storage is owned by an earlier routine in the same address range. The dependency graph fans
+*backwards*. Practical strategy from here: transcribe in **increasing address order within the
+subsystem** (0x4F18xx -> 0x4F19C0/0x4F1Bxx -> 0x4FAA60 -> 0x4EE970 caller region), so each native's
+globals are already owned by the time it is written, instead of chasing owners for every leaf and
+then revisiting it.
+
+This also explains the recurring "unowned global" blocker across the arc: it was never scarce storage
+- it was always ordering.
