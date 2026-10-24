@@ -1138,3 +1138,19 @@ exact frozen copy, and only then hand to the Tester for the paired runtime obser
 
 Also outstanding from earlier rounds and unchanged: the tracked scripts/__pycache__/*.pyc churn, and the frozen
 artifacts igi1-fbd69730.exe / igi1-ff02eb9c.exe which are neither HEAD nor deployed.
+
+## Fresh artifact frozen and deployed for HEAD (round 187)
+
+  frozen   build/artifacts/igi1-b071553f.exe
+  receipt  build/artifacts/igi1-b071553f-receipt.json
+  plain    b071553f76c932b639b5099c1cfd9f396edead5614e7a48e4e275242d8eb3ebd
+  normalised 2dd3a951461478bc9d92156434d676c9752578e0f81a4a31b97f79f46a37a880
+  deployed /Users/haseeb-mir/Downloads/IGI/igi1.exe  (plain b071553f76c932b6)
+
+This supersedes the stale 96fc1442 deployment and is built from HEAD 23c18e69, so it contains the allocator rewrite,
+the unlink native and the wired live-count reader.
+
+IMPORTANT: candidate_build_receipt.py wrote build/diagnostic-candidate-build.json, i.e. this is a DIAGNOSTIC build, not a
+strict-gate release attestation. It is deployed for observation only and must not be presented as a verified release.
+The boundary-at-exit-3 result therefore has to be re-established on this artifact by the Tester before any runtime claim
+about the current source is repeated.
