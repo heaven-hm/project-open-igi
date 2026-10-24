@@ -25,6 +25,7 @@ std::uint32_t& g_936250 = g_mem_globals.bucket_sentinel_936250;
 NewHandlerFn& g_936254 = g_mem_globals.new_handler_936254;
 std::uint32_t& g_c3242c = g_mem_globals.heap_mode_c3242c;
 void*& g_c32428 = g_mem_globals.heap_handle_c32428;
+std::int32_t& g_c321e8 = g_mem_globals.pool_segment_c321e8;
 std::uint32_t& g_c321e4 = g_mem_globals.pool_slot_count_c321e4;
 void*& g_c321ec = g_mem_globals.pool_block_c321ec;
 std::uint32_t& g_c321f0 = g_mem_globals.pool_used_c321f0;
