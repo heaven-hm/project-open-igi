@@ -6238,3 +6238,30 @@ What survives from §22: the table at 0x009436EC is BSS, so it starts with five 
 0x005098B0 -> 0x004B1B90 is itself not reached by any transcribed startup code yet. So the running port still observes
 empty records, but for a different reason than §22 claimed - not "retail cannot populate the table", rather "the
 population path exists and is not yet transcribed on the path being executed".
+
+### §22.2 Qfile device-driver table geometry (round 206) and the next blockers (round 207)
+
+The table the device natives use has base **0x009436B0**, stride **0x8C**, five records:
+
+- 0x004B1180 allocates the next index from the counter 0x0094396C and stores it at record+0x54 (0x00943704 + 0x8C*index).
+- Twelve setters store their second argument at record+0x00, +0x04, +0x08, +0x0C, +0x10, +0x14, +0x18, +0x1C, +0x20,
+  +0x24, +0x2C, +0x30: 0x004B1BE0, 0x004B1C00, 0x004B1C20, 0x004B1C40, 0x004B1C60, 0x004B1C80, 0x004B1CA0, 0x004B1CC0,
+  0x004B1CE0, 0x004B1D40, 0x004B1D20, 0x004B1D00. Every one is 28 bytes, 1 block, 0 edges.
+- The "device sub-record" in 0x004B1420/0x004B11A0/0x004B1DE0/0x004B1B90 is record+0x3C: handler at record+0x3C
+  (0x009436EC), present at record+0x58 (0x00943708), name at record+0x7C (0x0094372C).
+- The five-record extent is confirmed arithmetically, not counted: 0x0094396C - 0x009436B0 = 0x2BC = 5 * 0x8C.
+
+Chain status after this: 0x004B1200 (qfile init, 82 bytes, 1 block) needs 0x004B12D0 (landed) and 0x005098B0 (19 bytes,
+1 block). 0x005098B0 in turn needs the code immediate 0x00509F50, the "LOCAL:" device callback. That callback is 231 bytes /
+3 blocks and installs eleven further code immediates into the driver record via the setters now landed:
+
+  0x004C1780, 0x0050A370, 0x0050A430, 0x0050A450, 0x0050A490, 0x0050A4D0,
+  0x0050A510, 0x0050A550, 0x0050A570, 0x0050A5A0, 0x0050A5B0
+
+None of those eleven exists in engine/. So the qfile init chain is not one native away: it is twelve, and each of the
+eleven callbacks is itself a file operation of unknown size. That is the honest state, recorded before more work is chosen
+rather than after it stalls.
+
+Consequence for planning: prefer the landability rule from §21.7 over call-graph distance. The setter family landed in round
+206 was chosen because all eighteen of its instructions have no callees and no code immediates, so it was landable in one
+step; the qfile init chain is not, for a reason that is visible in the bytes only after the callback list is extracted.
