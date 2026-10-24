@@ -526,3 +526,35 @@ Consequence for this work: transcribing `0x4B0D40`/`0x4B0D50`/`0x4B0D60` faithfu
 requires operating on the retail **addresses** (or a correctly laid-out image), not on the
 struct fields - otherwise the aliasing with `0x009422FC` is lost. Recorded as a blocker to
 resolve deliberately (fix the storage model or document the aliasing), not silently patched.
+
+## Round 72: push counterpart decoded; the family is now complete
+
+`0x004B0D90` (24 B, 1 block, no calls):
+
+```
+eax = dword [0x00A960E0]           ; current index
+cl  = byte  [eax + 0x009422E8]     ; saved flag at current slot
+eax += 1; byte [0x009422FD] = cl; [0x00A960E0] = eax
+ret
+```
+
+So the family is symmetric and complete:
+
+| VA | size | role |
+| --- | --- | --- |
+| `0x4B0D40` | 7 B | flag := 1 |
+| `0x4B0D50` | 7 B | flag := 0 |
+| `0x4B0D60` | 34 B | pop: index--, save current flag into slot, install caller's flag |
+| `0x4B0D90` | 24 B | push: read slot at index, install it as the flag, index++ |
+
+Together they implement a 16-entry (`index` seeded to `0x10`) flag stack over the byte array
+at `0x009422E8`, with the live flag at `0x009422FD`.
+
+Storage consequence remains the blocker from round 71: the live flag byte aliases the second
+byte of the dword at `0x009422FC`, which the engine models as an unrelated field. Writing
+these four bodies therefore requires the storage model fix first (address-accurate image with
+the aliasing preserved), because raw retail addresses cannot be used - the port does not map
+the retail image, so writing `*(uint8_t*)0x9422FD` would be a wild write in the host process.
+
+That last point is worth stating plainly: "use the retail address" is **not** available as a
+faithful shortcut here; the engine symbol layout must actually be corrected.
