@@ -5003,7 +5003,7 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/core/class_registration.cpp",
-        "sha256": "ba853c0c1105d5660bb21e1430b776008b06e2e7edae865af4e73c605a2ef770",
+        "sha256": "d587b63c21b2fd77b77dfff5fb26d80ff033061843ab57974bf364486a7af09d",
         "signature": "unknown (not transcribed; fail-closed stub throws)"
       },
       "game_natives": {
@@ -5020,8 +5020,8 @@
         },
         "limitations": [
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
-          "NOT TRANSCRIBED. engine/src/retail/core/class_registration.cpp is a deliberate fail-closed stub that throws std::logic_error with the class-id mismatch message; it is not a transcription of retail 0x00402930. Previous STRUCTURALLY_VERIFIED status was unsupported by any implementation and has been withdrawn.",
-          "Must not count toward transcribed or verified totals. Blocked on the registrar sequence (0x401530/0x401400 chain) being transcribed first."
+          "Must not count toward transcribed or verified totals. Blocked on the registrar sequence (0x401530/0x401400 chain) being transcribed first.",
+          "PARTIAL transcription only: the registrar aborts by design through ReportNotTranscribed before the AI graph, so class ids after that point cannot match retail. Not a completed transcription and must not count toward the totals."
         ],
         "behavioral_runner": {
           "path": "scripts/native_diff_runner.py",

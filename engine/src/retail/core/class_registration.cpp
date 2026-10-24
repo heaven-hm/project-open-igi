@@ -51,9 +51,11 @@ extern "C" {
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x00402930..0x00402A40.
 // Behavior/CFG: the retail's class registration sequence. It calls the class registrars in order: the AI graph at 0x00508F80, the AI detection at 0x00489560, the material defines at 0x00407D60, the level flow at 0x00488BB0, the game options at 0x00402FF0, the Level and Game classes at 0x00415530, the task list at 0x004C1780, the Flow class at 0x00401FC0, and the registrars after it. The class ids the handler table is indexed by follow this order.
-// Status/limits: ANALYZED, NOT TRANSCRIBED. This file is the deliberate fail-closed stub that throws; it does not
-//           transcribe retail 0x00402930. No signature, no CFG claim, and it must not count toward transcribed or
-//           verified totals until the registrar sequence is actually written. (was: STRUCTURALLY_VERIFIED for the sequence's order and the two registrars the MVP demo needs. The registrars before the Game class are outside the MVP scope, so the port reports them instead of registering fewer classes and silently shifting every id that follows.
+// Status/limits: ANALYZED, PARTIAL. The registrar sequence is transcribed only up to the report calls; the file
+//           deliberately aborts through ReportNotTranscribed before the AI graph and the material defines, so the
+//           class ids after that point cannot match retail. No CFG claim, no signature claim, and it must not count
+//           toward transcribed or verified totals until the AI graph path is actually transcribed.
+
 void NATIVE_DECL QTask_RegisterClasses()
 {
     ReportNotTranscribed("AI graph");
