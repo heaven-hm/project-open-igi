@@ -60,6 +60,8 @@ def comment_of(row: dict) -> str:
         bits.append("bn evidence")
     elif verification.get("radare2"):
         bits.append("r2 evidence")
+    if not has_code(row):
+        return "NO IMPLEMENTATION FILE: record exists, no code backs it"
     review = verification.get("semantic_review")
     if isinstance(review, dict) and review.get("evidence_path"):
         bits.append(f"review `{pathlib.Path(review['evidence_path']).name}`")
@@ -87,6 +89,18 @@ def signature_of(row: dict) -> str:
     if isinstance(other, str) and other.strip() and other != "unknown":
         return other.replace("|", "/")
     return "unestablished"
+
+
+IMPLEMENTED = {int(path.name[7:13], 16) for path in
+               (ROOT / "engine/src/retail").glob("*/native_*.cpp")}
+
+
+def has_code(row: dict) -> bool:
+    """True when the manifest row's address has a real implementation file."""
+    try:
+        return int(row["address"], 16) in IMPLEMENTED
+    except (KeyError, ValueError):
+        return False
 
 
 def has_evidence(row: dict) -> bool:
@@ -143,6 +157,12 @@ def main() -> int:
         if status == "TRANSCRIBED":
             lines.append(SESSION_EXPLANATION)
             lines.append("")
+        if status in ("VERIFIED", "VERIFIED_WITH_DOCUMENTED_SCOPE"):
+            no_code = sum(1 for row in rows_for_status if not has_code(row))
+            if no_code:
+                lines.append(f"{no_code} of these rows have no implementation file; their comment column says so and they are not")
+                lines.append("coverage, whatever the status word.")
+                lines.append("")
         lines.append("| native name | signature | retail address | CFG | verification comment |")
         lines.append("| --- | --- | --- | --- | --- |")
         for row in rows_for_status:
