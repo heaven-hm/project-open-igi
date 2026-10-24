@@ -653,3 +653,32 @@ compare loop (bucket descriptor vs node) so the hit path stores the matched node
 its predecessor into `*out`. The loop's `mov ebp,edi; mov edi,[edi]` advance means `ebp` lags
 `edi` by one node, so the store target on the hit path must be checked against the compare
 target rather than assumed.
+
+### 0x4C04B0 semantics settled from the prologue bytes
+
+```
+push ebx;  ebx = [esp+0x10]  -> arg3 = value
+push ebp; push esi; esi = [esp+0x10] -> arg1 = list
+push edi                     -> arg2 = [esp+0x18] = out
+eax = [esi+4]                ; bucket count
+call 0x4C0530(value, count)
+edx = [esi]                  ; bucket array
+ecx = hash*3; ebp = [edx+ecx*4]   ; bucket head node
+edi = [ebp]                  ; node->next
+if (!edi) -> miss
+loop: esi = [ebp+8]          ; IMAGEULATION: node->key at +8 (not a stack arg)
+      cmp(value, key)        ; 2-byte unrolled, sbb sign trick
+      equal -> hit: *out = ebp, return 1
+      else: ebp = edi; edi = [edi]; if (edi) goto loop
+      miss: *out = 0, return 0
+```
+
+So the round-79 `ebp`-lag question is **closed**: the comparison targets `[ebp+8]`, i.e. exactly
+the node stored on the hit path, so `*out = ebp` is the matched node, not its predecessor. The
+literal retail quirk to keep: the guard tests `edi` (next) *before* comparing `ebp`, and after
+advancing, a null next jumps straight to the miss path without comparing the new node - so a
+chain whose tail has no successor never compares its final node. That is retail behaviour and
+must not be "fixed".
+
+With this, `0x4C04B0` is ready to write: signature `f(void* list, void** out, const char* value)`,
+plus the already-landed `0x4C0530` hash.
