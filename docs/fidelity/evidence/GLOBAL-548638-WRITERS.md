@@ -495,3 +495,34 @@ array's only writers are the stack push/pop pair themselves (`0x4B0D40`, `0x4B0D
 ownership rather than invented storage. Note also that the engine stores `g_9422fd` as a
 32-bit field while retail touches a single byte - the transcription must write the byte to
 match.
+
+## Round 71: flag setters decoded, and a storage-aliasing defect found in MemGlobals
+
+Two trivial setter leaves around the pop helper:
+
+```
+0x4B0D40 (7 B): mov byte [0x9422FD], 1 ; ret
+0x4B0D50 (7 B): mov byte [0x9422FD], 0 ; ret
+0x4B0D60 (34 B): pop helper (already decoded)
+```
+
+**Defect found while checking them:** retail's byte at `0x009422FD` lies *inside* the dword
+at `0x009422FC` - i.e. `heap_init_9422fc` (int32, `0x009422FC..0x009422FF`) and the byte
+`g_9422fd` **alias the same retail storage**. The engine models them as two separate
+`MemGlobals` fields, so:
+
+- in retail, `mov byte [0x9422FD],1` also changes the second byte of the dword at
+  `0x009422FC`;
+- in the port, writing `g_9422fd` leaves `heap_init_9422fc` untouched.
+
+That is a fidelity discrepancy in pre-existing engine storage, not something introduced
+here, but it makes any transcription that touches `0x009422FD` semantically wrong unless the
+aliasing is preserved. It also means `MemGlobals` is **not** address-accurate: fields are
+declared in an order that does not correspond to their retail addresses (e.g.
+`0x009422FC` is followed by `0x00A960F0` in the struct, then `0x00A960E0`), so the struct
+cannot be used as a byte-level image of retail memory.
+
+Consequence for this work: transcribing `0x4B0D40`/`0x4B0D50`/`0x4B0D60` faithfully
+requires operating on the retail **addresses** (or a correctly laid-out image), not on the
+struct fields - otherwise the aliasing with `0x009422FC` is lost. Recorded as a blocker to
+resolve deliberately (fix the storage model or document the aliasing), not silently patched.
