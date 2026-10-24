@@ -241,3 +241,24 @@ for the rest of the ranking: every callee is small in itself and gated on one or
 The correct order is therefore leaf-first inside the boundary, not boundary-first: close `0x004F1CD0` and `0x004F1DB0` (both small, both
 called from several registration routines), then the callee that uses them becomes landable. That is the same in-degree logic that worked
 for the getter waves, applied one level down from the boundary instead of at the leaves of the whole image.
+
+## The two dependencies are themselves gated (round 241)
+
+Reading the two routines the smallest boundary callee needs:
+
+    0x004F1CD0 (6 instructions): tail-constructs a list head with context 0x004F1CF0
+      0x004F1CD4: push $0x004F1CF0        ; context argument is a CODE address
+      0x004F1CD9: push %eax               ; the caller's object
+      0x004F1CDA: call 0x004F1D60         ; already transcribed (Sys_InitListHead_4F1D60)
+
+    0x004F1DB0 (22 instructions): allocates 0x480C bytes via 0x004B0C60, then initialises regions through
+      0x004AF9D0 and 0x004AF8F0.
+
+0x004F1CD0 is gated for a subtle reason worth recording: its second argument is the *code address* 0x004F1CF0, so a faithful
+transcription must reference that routine by its candidate address rather than store the retail number. That makes 0x004F1CF0 a
+dependency of 0x004F1CD0 even though it is never called from it - a data reference to code, not a call. 0x004F1DB0 needs the
+allocator 0x004B0C60 and the two initialisers, none of which are transcribed.
+
+So the boundary's dependency tree does not stop one level below the callees: it continues through code-address constants and
+allocator helpers. This is recorded so the next attempt does not mistake "small callee" for "one-step callee". The tractable order
+remains leaf-first, but the leaf set for the boundary is those allocator/initialiser helpers, not the registration routines.
