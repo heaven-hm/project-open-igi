@@ -1,0 +1,10 @@
+{"monotonic": 1792850949.4367769, "message": {"type": "send", "payload": {"type": "observed", "phase": "entry", "address": "0x4191b0", "scope": "WinMain mutex prefix only"}}, "data": null}
+{"monotonic": 1792850949.43711, "message": {"type": "send", "payload": {"type": "mutex_prefix", "name": "WinMain", "phase": "entry"}}, "data": null}
+{"monotonic": 1792850949.437557, "message": {"type": "send", "payload": {"type": "mutex_prefix", "name": "CreateMutexA", "phase": "entry", "callerRva": "0x191e8", "securityIsNull": true, "initialOwner": 1, "mutexName": "IGI1MUTEX"}}, "data": null}
+{"monotonic": 1792850949.4379709, "message": {"type": "send", "payload": {"type": "mutex_prefix", "name": "CreateMutexA", "phase": "return", "value": 264}}, "data": null}
+{"monotonic": 1792850949.438381, "message": {"type": "send", "payload": {"type": "mutex_prefix", "name": "GetLastError", "phase": "entry", "callerRva": "0x19204"}}, "data": null}
+{"monotonic": 1792850949.4386911, "message": {"type": "send", "payload": {"type": "mutex_prefix", "name": "GetLastError", "phase": "return", "value": 0}}, "data": null}
+{"monotonic": 1792850949.439032, "message": {"type": "send", "payload": {"type": "mutex_prefix", "name": "GetLastError", "phase": "entry", "callerRva": "0x19211"}}, "data": null}
+{"monotonic": 1792850949.4393039, "message": {"type": "send", "payload": {"type": "mutex_prefix", "name": "GetLastError", "phase": "return", "value": 0}}, "data": null}
+{"monotonic": 1792850949.4396448, "message": {"type": "send", "payload": {"type": "mutex_prefix", "name": "CoInitialize", "phase": "entry", "callerRva": "0x1922e", "reservedIsNull": true}}, "data": null}
+{"monotonic": 1792850949.440392, "message": {"type": "send", "payload": {"type": "mutex_prefix", "name": "CoInitialize", "phase": "return", "value": 0}}, "data": null}

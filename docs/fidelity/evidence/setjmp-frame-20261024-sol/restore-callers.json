@@ -1,0 +1,9 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "---\ntool: \"bn_function_callers\"\nfunction: \"0x4a507c\"\narch: \"x86\"\nname: \"Camera_ApplyBandFilter_3\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 1000\ncount: 1\ntotal: 1\nnextOffset: null\ntruncated: false\n---\n\n| Callsite | Architecture | Caller Function |\n| --- | --- | --- |\n| 0x4010a7 | x86 | QTask_CloseEvent (0x4010a0 (x86)) |\n"
+    }
+  ],
+  "isError": false
+}

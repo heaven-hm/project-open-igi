@@ -1,11 +1,11 @@
 // Native: Native_004A5000; retail VA 0x004A5000.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Tools/evidence: Radare2 6.2.0 and angr CFGFast; Binary Ninja MCP unavailable in this run, so no second decompiler was used.
+// Tools/evidence: Binary Ninja 6.0.10601, Radare2 6.2.0 and angr CFGFast; docs/fidelity/evidence/setjmp-frame-20261024-sol/.
 // CFG/behavior: 123 bytes, 10 basic blocks, 14 edges; saves the x86 register/return state into arg1,
 // writes the 0x56433230 "02CV" cookie, captures fs:[0], processes the _setjmp3 variadic unwind words,
 // and returns zero. Caller 0x00401050 passes 0x0054F8E0 as arg1 and zero as the count.
-// Status/limits: BUILD_VERIFIED only; paired retail/candidate runtime evidence is unavailable because the
-// candidate does not currently execute this address and the Frida provider is blocked by tool health.
+// Status/limits: BUILD_VERIFIED only; two live retail count=0 calls satisfy the saved-state checks.
+// Candidate linkage/runtime and count!=0/nonlocal-resume behavior remain unverified.
 
 #include "004A5000-Native_004A5000.hpp"
 
@@ -63,5 +63,5 @@ extern "C" __attribute__((naked)) int __cdecl Native_004A5000(
         "ret\n");
 }
 #else
-#error "Setjmp3Frame_004A5000 requires the x86 compiler used for the retail candidate"
+#error "Native_004A5000 requires the x86 compiler used for the retail candidate"
 #endif

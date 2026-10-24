@@ -1,0 +1,106 @@
+{
+  "kind": "igi-main-mutex-prefix-diagnostic",
+  "identities": {
+    "/Users/haseeb-mir/Downloads/IGI/igi.exe": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+    "/Users/haseeb-mir/Documents/Code/project-open-igi/build-mutex-prefix-sol/igi1.exe": "1f2290efe0ad6067534da524e32aff9e1763ec0ec0d65edb8f7ff28c547b0c13",
+    "/Users/haseeb-mir/Documents/Code/project-open-igi/scripts/tester/frida_main_mutex_prefix.js": "7c75324b0a939deb95397e292539757aa0bbba4a86d53d985ebfbdc5321b47de",
+    "build-mutex-prefix-sol/diagnostic-receipt.json": "3aa9199574ebeb8132cfd76cc49fd6ba6a761a17405316bc3b5458f866244bb1"
+  },
+  "candidate_main_va": "0x4191b0",
+  "orders": {
+    "retail": [
+      "WinMain",
+      "CreateMutexA",
+      "GetLastError",
+      "GetLastError",
+      "CoInitialize"
+    ],
+    "candidate": [
+      "WinMain",
+      "CreateMutexA",
+      "GetLastError",
+      "GetLastError",
+      "CoInitialize"
+    ]
+  },
+  "scope": "natural successful mutex path, entry through CoInitialize",
+  "verified": false,
+  "candidate_source_freshness": "receipt validated before and after capture",
+  "same_api_order": true,
+  "checks": [
+    {
+      "side": "retail",
+      "check": "exact successful-path API order",
+      "pass": true
+    },
+    {
+      "side": "retail",
+      "check": "CreateMutexA typed arguments",
+      "pass": true
+    },
+    {
+      "side": "retail",
+      "check": "successful non-null handle",
+      "pass": true
+    },
+    {
+      "side": "retail",
+      "check": "both observed error returns are zero",
+      "pass": true,
+      "observed": [
+        0,
+        0
+      ]
+    },
+    {
+      "side": "retail",
+      "check": "CoInitialize null argument",
+      "pass": true
+    },
+    {
+      "side": "retail",
+      "check": "capture has no probe failures and owned process exited",
+      "pass": true
+    },
+    {
+      "side": "candidate",
+      "check": "exact successful-path API order",
+      "pass": true
+    },
+    {
+      "side": "candidate",
+      "check": "CreateMutexA typed arguments",
+      "pass": true
+    },
+    {
+      "side": "candidate",
+      "check": "successful non-null handle",
+      "pass": true
+    },
+    {
+      "side": "candidate",
+      "check": "both observed error returns are zero",
+      "pass": true,
+      "observed": [
+        0,
+        0
+      ]
+    },
+    {
+      "side": "candidate",
+      "check": "CoInitialize null argument",
+      "pass": true
+    },
+    {
+      "side": "candidate",
+      "check": "capture has no probe failures and owned process exited",
+      "pass": true
+    }
+  ],
+  "prefix_checks_passed": true,
+  "limits": [
+    "Failure/null/duplicate-handle paths are not exercised.",
+    "IGI_TESTING_MUTEX changes only the candidate mutex name.",
+    "Whole WinMain, later startup, frame dispatch and gameplay remain unverified."
+  ]
+}

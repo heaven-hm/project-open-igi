@@ -1,0 +1,16 @@
+{
+  "kind": "native-build-observation",
+  "schema_version": 1,
+  "address": "0x004A5000",
+  "implementation": "scripts/GameNatives/qtask/004A5000-Native_004A5000 2.cpp",
+  "implementation_sha256": "4cfa7dde706b3fe7094a61f5b6a05bb5d815eaefd29c8ebd62006fea52a43515",
+  "compiler": "i686-w64-mingw32-g++ 16.2.0",
+  "command": "i686-w64-mingw32-g++ -std=c++20 -c 'scripts/GameNatives/qtask/004A5000-Native_004A5000 2.cpp' -o build/native-analysis/0x004A5000/candidate-sol.o",
+  "object_sha256": "b4224ecdb8712bbaeddfc107193a26077bd3c0311b26daf27d67c66ff8cf049e",
+  "result": "compiled",
+  "compared_body_bytes": 123,
+  "retail_candidate_body_equal": true,
+  "body_sha256": "c24e8aaed4de58907df11c265260404d68e8b92e1a6373d11e2db8e73238e755",
+  "linked": false,
+  "verified": false
+}

@@ -1,0 +1,35 @@
+native_gate: angr CFGFast 2/2 exact entries recovered (structural evidence only)
+native_gate: v4 catalog consistency checked for 0 selected entries
+native_gate: checking 0x0048F530 (engine/src/retail/core/main.cpp)
+native_gate: 0x0048F530 BLOCKED: 9 issue(s)
+native_gate: checking 0x004A5000 (scripts/GameNatives/qtask/004A5000-Native_004A5000 2.cpp)
+native_gate: 0x004A5000 BLOCKED: 17 issue(s)
+native_gate: WARNING: 0x004A5000: native comment name does not match its verification record (source='Native_004A5000 2')
+native_gate: BLOCKED 2 changed native(s) (status>=VERIFIED, CFG>=0.85, behavioral-tests=required)
+  - 0x0048F530: status STRUCTURALLY_VERIFIED is below required VERIFIED
+  - 0x0048F530 binary_ninja: artifact signature differs from the manifest evidence signature
+  - 0x0048F530 radare2: artifact signature differs from the manifest evidence signature
+  - 0x0048F530: function symbol/signature comparison has not passed review
+  - 0x0048F530 semantic review: SHA-256 does not match docs/fidelity/evidence/0x0048f530-semantic-review.json
+  - 0x0048F530 semantic review: result must be 'passed'
+  - 0x0048F530 semantic review: report is not bound to the current implementation source
+  - 0x0048F530 semantic review must contain a checks array
+  - 0x0048F530: semantic review has no authorized runtime_contract
+  - 0x004A5000: status BUILD_VERIFIED is below required VERIFIED
+  - 0x004A5000: missing binary_ninja function signature
+  - 0x004A5000 binary_ninja: artifact signature differs from the manifest evidence signature
+  - 0x004A5000: missing radare2 function signature
+  - 0x004A5000 radare2: artifact signature differs from the manifest evidence signature
+  - 0x004A5000: function symbol/signature comparison has not passed review
+  - 0x004A5000: recorded CFG score does not match recomputed graph score 1.000
+  - 0x004A5000 build: evidence/source path is missing
+  - 0x004A5000 semantic review: SHA-256 does not match docs/fidelity/evidence/0x004A5000-semantic-review.json
+  - 0x004A5000 semantic review: expected schema_version=1 and kind='semantic-review-report'
+  - 0x004A5000 semantic review: result must be 'passed'
+  - 0x004A5000 semantic review: report is not bound to the current implementation source
+  - 0x004A5000 semantic review: invalid/missing address: invalid address type: NoneType
+  - 0x004A5000 semantic review must record reviewed=true
+  - 0x004A5000 semantic review must identify the reviewer
+  - 0x004A5000 semantic review must contain a checks array
+  - 0x004A5000: semantic review has no authorized runtime_contract
+Comments and manifest status labels alone do not authorize compilation.

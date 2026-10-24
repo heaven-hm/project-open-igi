@@ -1,0 +1,160 @@
+{
+  "kind": "igi-tester-native-probe",
+  "schema_version": 1,
+  "result": "observed",
+  "verified": false,
+  "captured_at": "2026-10-24T14:04:21.840948+00:00",
+  "targets": [
+    {
+      "address": "0x4191b0",
+      "name": "WinMain",
+      "probe": "/Users/haseeb-mir/Documents/Code/project-open-igi/scripts/tester/frida_main_mutex_prefix.js",
+      "probe_sha256": "bd9b1552ff394dc6ef43d964850b3e321071a6349fbbadee57c6284ea31ab054",
+      "observations": {
+        "name": null,
+        "entries": 1,
+        "returns": 0
+      },
+      "retailName": "WinMain"
+    }
+  ],
+  "executable": {
+    "path": "/Users/haseeb-mir/Documents/Code/project-open-igi/build-win32-no-verify-gate/igi1.exe",
+    "sha256": "a1f2ab616cd952c766ea34d016e45ec39fdf703e9f790412e3cf63e2ac7510a4",
+    "preferred_base": "0x00400000",
+    "module": "igi1.exe"
+  },
+  "probe_template_sha256": "8472074d6840df8a07f63fe4460771357e99b8b584e9a1bbc7997450359ad84c",
+  "environment": {
+    "frida_host": "127.0.0.1:27042",
+    "frida_client": "17.24.0",
+    "game_directory": "/Users/haseeb-mir/Downloads/IGI",
+    "level": 1,
+    "arguments": [
+      "window",
+      "level1"
+    ],
+    "scenario": {
+      "observe_seconds": 3.0,
+      "scripted_actions": "none (idle observation)"
+    }
+  },
+  "arguments": {
+    "arg_words": 4,
+    "mem_arg": null,
+    "return_mem": null,
+    "watch": [],
+    "max_calls": 256
+  },
+  "hooks": [
+    {
+      "installed": true,
+      "target": "0x4191b0",
+      "module": "igi1.exe",
+      "scope": "WinMain entry through CoInitialize; natural successful mutex path only",
+      "name": "WinMain",
+      "retailVA": "0x4191b0",
+      "sideAddress": "0x4191b0"
+    }
+  ],
+  "entries": [
+    {
+      "type": "observed",
+      "phase": "entry",
+      "address": "0x4191b0",
+      "scope": "WinMain mutex prefix only"
+    }
+  ],
+  "returns": [],
+  "messages": 8,
+  "summary": null,
+  "limitations": [
+    "Finite idle observation interval only; no scripted gameplay actions.",
+    "Only the process this driver spawned is terminated; attach mode never terminates the target.",
+    "A pointer snapshot is read only after Process.findRangeByAddress proves the range readable; unknown pointer contents remain unobserved rather than guessed.",
+    "Observed calls are not proof of behavioral parity by themselves; a typed comparator is required.",
+    "Result 'unobserved' means only that this capture did not reach the native; it is not a pass or fail."
+  ],
+  "capture": {
+    "mode": "spawn-suspended",
+    "owned_pid": 860,
+    "arguments": [
+      "Z:\\Users\\haseeb-mir\\Documents\\Code\\project-open-igi\\build-win32-no-verify-gate\\igi1.exe",
+      "window",
+      "level1"
+    ],
+    "cwd": "Z:\\Users\\haseeb-mir\\Downloads\\IGI",
+    "session_detach": {
+      "reason": "process-terminated",
+      "at": 1792850662.9120798,
+      "crash": null
+    },
+    "exited_before_observe_end": {
+      "at": 1792850662.951761,
+      "elapsed_seconds": 0.516
+    },
+    "alive_at_end": false
+  },
+  "events": [
+    {
+      "type": "mutex_prefix",
+      "name": "WinMain",
+      "phase": "entry"
+    },
+    {
+      "type": "mutex_prefix",
+      "name": "CreateMutexA",
+      "phase": "entry",
+      "callerRva": "0x191ef",
+      "securityIsNull": true,
+      "initialOwner": 1,
+      "mutexName": "IGI1MUTEX\ufffdError\ufffdIGI is already running.\ufffdInnerloop\ufffdfilesys.cfg\ufffd\ufffdW"
+    },
+    {
+      "type": "mutex_prefix",
+      "name": "CreateMutexA",
+      "phase": "return",
+      "value": 264
+    },
+    {
+      "type": "mutex_prefix",
+      "name": "GetLastError",
+      "phase": "entry",
+      "callerRva": "0x191fa"
+    },
+    {
+      "type": "mutex_prefix",
+      "name": "GetLastError",
+      "phase": "return",
+      "value": 0
+    },
+    {
+      "type": "mutex_prefix",
+      "name": "CoInitialize",
+      "phase": "entry",
+      "callerRva": "0x19222",
+      "reservedIsNull": true
+    },
+    {
+      "type": "mutex_prefix",
+      "name": "CoInitialize",
+      "phase": "return",
+      "value": 0
+    }
+  ],
+  "summaries": [],
+  "summary_errors": [
+    {
+      "probe": "/Users/haseeb-mir/Documents/Code/project-open-igi/scripts/tester/frida_main_mutex_prefix.js",
+      "error": "InvalidOperationError: script has been destroyed"
+    }
+  ],
+  "counts": {
+    "entry": 1,
+    "return_": 0,
+    "unmatched_entries": 1
+  },
+  "cleanup": {
+    "owned_process_exited": true
+  }
+}

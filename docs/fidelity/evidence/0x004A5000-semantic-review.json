@@ -16,8 +16,8 @@
   "source_level_names": "unresolved; no guessed camera or CRT symbol name is asserted",
   "runtime_contract": null,
   "blocking_limits": [
-    "Frida provider is blocked by workflow doctor.",
+    "Binary Ninja and Frida are reachable outside the localhost network sandbox; the earlier unavailable diagnosis was incorrect.",
     "The current candidate does not yet have a paired game-runtime probe that observes this address.",
-    "Therefore this record is not RUNTIME_TESTED or VERIFIED."
+    "Two retail count=0 calls are captured under docs/fidelity/evidence/setjmp-frame-20261024-sol; no paired candidate observation exists, so this record is not RUNTIME_TESTED or VERIFIED."
   ]
 }

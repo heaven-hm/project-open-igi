@@ -73,11 +73,16 @@ rabin2 -I igi.exe                                                             # 
 
 ```sh
 .venv-angr/bin/python scripts/angr_analyze.py --binary /Users/haseeb-mir/Downloads/IGI/igi.exe \
-    --address 0x0048F530 --json build/audit/angr-0048F530.json
+    --address 0x0048F530 > build/audit/angr-0048F530.json
 ```
 
 - Provides an independent exact-entry recovery and CFGFast recovery; unresolved flow must be recorded
   rather than smoothed over. An approximate CFG never proves behavior.
+- The current helper emits JSON to stdout and accepts only `--binary` and `--address`; `--json` is not an option.
+- Localhost MCP/Frida checks run inside the network sandbox can fail with `Operation not permitted`.
+  Retry with the approved network permission before declaring a provider unavailable. On 2026-10-24,
+  the approved doctor check reached both Binary Ninja and Frida successfully; its separate RE-Agent
+  CLI/module checks failed because `/Users/haseeb-mir/Documents/Code/re-agent` was absent.
 
 ### 2.4 Ghidra (fallback only)
 

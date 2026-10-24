@@ -80,11 +80,11 @@ int WINAPI WinMain(HINSTANCE const h_instance, HINSTANCE const h_previous_instan
 #else
     HANDLE const mutex = ::CreateMutexA(nullptr, TRUE, "IGIMUTEX");
 #endif
-    // Retail 0x0048F559-0x0048F573: one GetLastError result is compared with
-    // 0xB7 (ERROR_ALREADY_EXISTS) and 0x6 (ERROR_INVALID_HANDLE); BOTH values
-    // jump to the fatal 0x48F8F0 path. The handle itself is not tested.
-    DWORD const last_error = ::GetLastError();
-    if (last_error == ERROR_ALREADY_EXISTS || last_error == ERROR_INVALID_HANDLE)
+    // 0x48F54A/554: NULL handle takes the fatal path before GetLastError.
+    // 0x48F560/567 and 0x48F56D/572 are separate calls and conditional branches.
+    // Short-circuit evaluation retains that order and skips the later calls on failure.
+    if (mutex == nullptr || ::GetLastError() == ERROR_ALREADY_EXISTS ||
+        ::GetLastError() == ERROR_INVALID_HANDLE)
     {
         ::MessageBoxA(nullptr, "IGI is already running.", "Error", MB_ICONERROR);
         return 0;

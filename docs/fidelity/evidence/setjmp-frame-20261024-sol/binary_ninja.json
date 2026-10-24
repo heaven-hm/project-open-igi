@@ -1,0 +1,117 @@
+{
+  "kind": "native-disassembly",
+  "schema_version": 1,
+  "tool": "binary_ninja",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "function_entry": "0x004A5000",
+  "signature": "See retained decompiler output; source types/names remain inferred",
+  "cfg": {
+    "nodes": [
+      {
+        "address": "0x004A5000"
+      },
+      {
+        "address": "0x004A503D"
+      },
+      {
+        "address": "0x004A5034"
+      },
+      {
+        "address": "0x004A504F"
+      },
+      {
+        "address": "0x004A5045"
+      },
+      {
+        "address": "0x004A5078"
+      },
+      {
+        "address": "0x004A5057"
+      },
+      {
+        "address": "0x004A5061"
+      },
+      {
+        "address": "0x004A5074"
+      },
+      {
+        "address": "0x004A506F"
+      }
+    ],
+    "edges": [
+      {
+        "source": "0x004A5000",
+        "target": "0x004A503D",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004A5000",
+        "target": "0x004A5034",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004A503D",
+        "target": "0x004A504F",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004A503D",
+        "target": "0x004A5045",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004A5034",
+        "target": "0x004A5078",
+        "kind": "unconditional"
+      },
+      {
+        "source": "0x004A504F",
+        "target": "0x004A5078",
+        "kind": "unconditional"
+      },
+      {
+        "source": "0x004A5045",
+        "target": "0x004A5057",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004A5045",
+        "target": "0x004A504F",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004A5057",
+        "target": "0x004A5078",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004A5057",
+        "target": "0x004A5061",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004A5061",
+        "target": "0x004A5074",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004A5061",
+        "target": "0x004A506F",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004A5074",
+        "target": "0x004A5078",
+        "kind": "unconditional"
+      },
+      {
+        "source": "0x004A506F",
+        "target": "0x004A5074",
+        "kind": "unconditional"
+      }
+    ]
+  },
+  "raw_capture": "capture.json",
+  "raw_capture_sha256": "ab1984c77657cc469aa9b62387014ba815aba4f80488a6b130e3a6ade658eadd",
+  "verified": false
+}

@@ -1,0 +1,9 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "---\ntool: \"bn_function_disassembly\"\nfunction: \"0x4a507c\"\narch: \"x86\"\nname: \"Camera_ApplyBandFilter_3\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 1000\ncount: 54\ntotal: 54\nnextOffset: null\ntruncated: false\n---\n\n````asm\n  int32_t Camera_ApplyBandFilter_3(int32_t* arg1, int32_t arg2)\n\n0x4a507c  mov     ebx, dword [esp+0x4]\n0x4a5080  mov     ebp, dword [ebx]\n0x4a5082  mov     esi, dword [ebx+0x18]\n0x4a5085  cmp     esi, dword [fs:0x0]\n0x4a508c  je      0x4a5097\n\n0x4a508e  push    esi\n0x4a508f  call    Camera_UpdateTransform_7\n0x4a5094  add     esp, 0x4\n\n0x4a5097  cmp     esi, 0x0\n0x4a509a  je      0x4a50cc\n\n0x4a509c  lea     eax, [ebx+0x20]\n0x4a509f  push    eax\n0x4a50a0  call    Camera_ApplyBandFilter_7\n0x4a50a5  or      eax, eax\n0x4a50a7  je      0x4a50bf\n\n0x4a50a9  mov     eax, dword [ebx+0x20]\n0x4a50ac  cmp     eax, 0x56433230\n0x4a50b1  jne     0x4a50bf\n\n0x4a50b3  mov     eax, dword [ebx+0x24]\n0x4a50b6  or      eax, eax\n0x4a50b8  je      0x4a50cc\n\n0x4a50ba  push    ebx\n0x4a50bb  call    eax\n0x4a50bd  jmp     0x4a50cc\n\n0x4a50bf  mov     eax, dword [ebx+0x1c]\n0x4a50c2  push    eax\n0x4a50c3  push    esi\n0x4a50c4  call    Camera_SetFieldOfView_7\n0x4a50c9  add     esp, 0x8\n\n0x4a50cc  push    0x0\n0x4a50ce  mov     eax, dword [ebx+0x14]\n0x4a50d1  call    Camera_ApplyLineFilter_7\n0x4a50d6  mov     edx, ebx\n0x4a50d8  mov     ebx, dword [edx+0x4]\n0x4a50db  mov     edi, dword [edx+0x8]\n0x4a50de  mov     esi, dword [edx+0xc]\n0x4a50e1  mov     eax, dword [esp+0x8]\n0x4a50e5  cmp     eax, 0x1\n0x4a50e8  adc     eax, 0x0\n0x4a50eb  mov     esp, dword [edx+0x10]\n0x4a50ee  add     esp, 0x4\n0x4a50f1  ❓jmp     dword [edx+0x14]\n````\n"
+    }
+  ],
+  "isError": false
+}
