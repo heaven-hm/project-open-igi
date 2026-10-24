@@ -31,7 +31,7 @@
 // them at [esp+0x478], [esp+0x47C], [esp+0x480] and [esp+0x484].
 extern "C" {
 
-// Native: Main() - VA 0x0048F530 - complete port.
+// Native: WinMain() - VA 0x0048F530 - the retail Windows entry point.
 // Behavior: creates the IGIMUTEX mutex with the initial owner and leaves when
 //           the mutex already exists or the handle is invalid, initialises
 //           COM, registers the window class with the window procedure at
@@ -44,7 +44,6 @@ extern "C" {
 //           per-frame loop: the x87 precision setup, the app context's
 //           isActive flag, the frame dispatch or a 500 ms sleep, the loop
 //           status byte and the message pump.
-int __stdcall Main(void* h_instance, void* h_previous_instance, char* command_line, int show_command);
 
 } // extern "C"
 

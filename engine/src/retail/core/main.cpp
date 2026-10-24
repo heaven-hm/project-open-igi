@@ -59,15 +59,13 @@ extern "C" {
 int NATIVE_DECL QTask_CreateTask();
 }
 
-extern "C" {
-
-// Native: Main; VA 0x0048F530.
+// Native: WinMain; VA 0x0048F530.
 // Artifact: original igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: Binary Ninja MCP (selected decompiler), Radare2 CFG and angr CFGFast on IGI.EXE; full disassembly build/main-0048f530.disasm.txt; static packets build/audit/p05b..p05e; Tester retail records build/tester/20261023T220230Z/.
 // Behavior/CFG: retail opens with CreateMutexA(NULL,TRUE,"IGIMUTEX") and the duplicate path to MessageBoxA("IGI is already running.","Error",MB_ICONERROR)/return 0, CoInitialize, LoadIconA/LoadCursorA/RegisterClassA for class "Innerloop" (WNDCLASSA style 3, lpfnWndProc 0x48F970, hbrBackground 7, menu+class name "Innerloop"), then the startup block 0x48F5F4-0x48F6EE (StoreCommandLine, StoreInstanceHandle, SetConfigFileName "filesys.cfg", SetAppTitle_48F100 "Innerloop", SetIsActive 1, SetScreenMode 1, SetDebugged 0, SetDebugCompileState 1, SetDebugtextState 0, SetLightmapsUsed 1, SetTerrainLightmapsUsed 1, SetWinInput 0, Set5C8C0C 0, Set5C8C10 0, SetStartupMode 1, SetGermanVersion 0, SetLanguage 0x567C74, Set5C8C04 0), WinProc list init, four ParseCmdLineArgs registrations, DX-tier gate (0x498480, currently NOT linked), CreateWindowExA (style from GetScreenMode, 640x480 centered), ShowCursor(0)/ShowWindow(10)/UpdateWindow, StoreWindowHandle 0x48F0E0, QTask_CreateTask 0x401000 with AL spilled to 0x5C8DE8, ParseCmdLineArgs "HardcoreGerman", then the loop with FPU self-check, 0x498460, GetIsActive/Sleep(500) or QTask_OpenEvent, DestroyWindow when 0x5C8DE8==0, Peek/Get/Translate/Dispatch pump, and shutdown SetForegroundWindow/UnregisterClassA "Innerloop"/CoUninitialize/ReleaseMutex with `add esp,0x464; retn 0x10`.
 // Status/limits: STRUCTURALLY_VERIFIED; startup call order/arguments checked against the retail disassembly and Tester individual retail records; the mutex name, the absent DX gate, the absent 0x498460 and the throwing QTask_CreateTask are recorded divergences; candidate runtime parity is not claimed.
-int __stdcall Main(void* const h_instance, void* const h_previous_instance,
-                   char* const command_line, int const show_command)
+int WINAPI WinMain(HINSTANCE const h_instance, HINSTANCE const h_previous_instance,
+                   LPSTR const command_line, int const show_command)
 {
 #if defined(_WIN32)
     // 0x0048F544 CreateMutexA(NULL, TRUE, "IGIMUTEX"), name pointer 0x00541ECC.
@@ -284,7 +282,5 @@ int __stdcall Main(void* const h_instance, void* const h_previous_instance,
     return 1;
 #endif
 }
-
-} // extern "C"
 
 #undef NATIVE_DECL

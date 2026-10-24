@@ -16,7 +16,6 @@ endif()
 # flow being certified; other ported units are added only when their headers
 # and link dependencies exist on this branch.
 add_executable(igi WIN32
-    engine/platform/windows/scene_main.cpp
     engine/src/retail/audio/sound_adpcm_decoder.cpp
     engine/src/retail/audio/sound_attenuation_table.cpp
     engine/src/retail/audio/sound_ilsf_header.cpp
