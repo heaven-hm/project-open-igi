@@ -28,6 +28,9 @@ add_executable(igi WIN32
     engine/src/retail/config/retail_config.cpp
     engine/src/retail/config/retail_input_bindings.cpp
     engine/src/retail/core/app_context.cpp
+    engine/src/retail/core/app_context_extra.cpp
+    engine/src/retail/core/app_main_commands.cpp
+    engine/src/retail/core/app_startup_globals.cpp
     engine/src/retail/core/app_startup_natives.cpp
     engine/src/retail/core/class_registration.cpp
     engine/src/retail/core/debug_command_line.cpp
@@ -39,6 +42,7 @@ add_executable(igi WIN32
     engine/src/retail/core/native_0048f0f0.cpp
     engine/src/retail/core/native_0048f970.cpp
     engine/src/retail/core/qtask_create_task.cpp
+    engine/src/retail/core/qtask_list.cpp
     engine/src/retail/core/retail_error.cpp
     engine/src/retail/core/main.cpp
     engine/src/retail/core/task_types.cpp
@@ -152,3 +156,10 @@ target_compile_features(igi_humanplayer_defines_object PRIVATE cxx_std_20)
 add_dependencies(igi igi_humanplayer_defines_object)
 
 include(cmake/NativeVerification.cmake)
+
+# Testing only: candidate uses IGI1MUTEX instead of retail IGIMUTEX so retail
+# igi.exe and igi1.exe can run side by side. Must stay OFF for production.
+option(IGI_TESTING_MUTEX "Use IGI1MUTEX so retail and candidate can run together" OFF)
+if(IGI_TESTING_MUTEX)
+  target_compile_definitions(igi PRIVATE IGI_TESTING_MUTEX)
+endif()

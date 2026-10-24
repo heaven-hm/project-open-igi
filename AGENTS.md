@@ -4,6 +4,8 @@
 
 The goal is to reconstruct native functions from the original retail Project IGI binary (`igi.exe`) as faithfully as possible. The executable is the source of truth. AI-generated code is only a reconstruction until supported by static analysis, structural verification, and runtime evidence.
 
+> **Tool inventory:** every installed static/runtime/automation tool, its exact path, version and usage (Binary Ninja MCP, Radare2, angr, Ghidra, Frida + frida-server, CUA/CuaDriver, CrossOver/Wine, build and gate scripts) is documented in `TOOLS.md`. Read it before invoking a tool; if `python3 scripts/igi_workflow.py doctor` disagrees with it, the doctor output wins and `TOOLS.md` must be corrected.
+
 ### 10.1. Required Tools and Responsibilities
 
 | Tool                                                   | Responsibility                                                                                                                                                                                                  |
@@ -174,3 +176,28 @@ Commands: `python3 scripts/igi_workflow.py doctor --check`; `python3 scripts/igi
 Issue tracker: 'GitHub Issues are the tracker. See `docs/agents/issue-tracker.md`.'
 
 Domain docs: 'This is a single-context layout. See `docs/agents/domain.md`.'
+
+### 10.13 Owner instruction: matching decompilation only (recorded 2026-10-24)
+
+This work is **matching decompilation of `igi.exe`, not a re-implementation**. The rules below are binding for every native, every file under `engine/`, and every agent:
+
+1. **Byte-faithful flow.** Every function, branch, loop, call, argument, constant, string, ABI and memory reference must be traceable to retail instructions, with the evidence recorded in the provenance block above the native. If the evidence does not establish something, leave it blocked and record the gap; never guess, simplify, substitute, or invent.
+2. **No invented helpers or methods.** Do not add helper functions, wrapper types, adapter layers, or convenience APIs to `engine/`. If retail calls a routine, that routine must be its own transcribed native (for example `StoreCommandLine` 0x0048F0C0, `SetWindowHandle` 0x0048F0E0). Port-only scaffolding must never sit inside a native's flow.
+3. **Permitted additions only:** (a) logging that never changes control flow, values, or ordering, clearly marked as infrastructure; (b) a dev-mode command-line switch for testing, isolated from retail command-line parsing and documented as diagnostic-only. Nothing else.
+4. **Testing stays outside `engine/`.** Static and runtime verification scripts live in `scripts/`/`build/`. No unit tests, no contract tests, no test code inside engine sources.
+5. **Engine code stays simple, modular and well-defined:** one native per function/file, retail boundaries preserved, retail order preserved, no cross-native abstraction to tidy things up.
+6. **Comments and logs are required.** Every native keeps the five-line provenance block (VA, artifact hash, tools, CFG/behavior, status/limits); comments explain the retail instruction behind non-obvious code.
+7. **Nothing is promoted on the strength of a build.** Status only advances with the evidence the protocol requires; candidate runtime parity is never assumed.
+
+A change that adds logic absent from `igi.exe` fails review even if the game behaves well, and a developer or agent finding such a change must remove it rather than keep it for convenience.
+
+### 10.14 Naming, strings and no-helper rule (owner instruction, 2026-10-24)
+
+8. **Retail native naming only.** No function, type, macro or symbol may be named `Retail*`, `*Retail*`, `Host*`, `Host_*`, `Port*`, `Wrapper*`, `Adapter*` or similar. Retail routines are named the way the retail symbol/behavior indicates, in the project's native form: `NATIVE_DECL HumanPlayer_Load_Params()`. The declaration macro is `NATIVE_DECL` (not a `*_RETAIL_*` name); it expands to the retail calling convention (`__cdecl`/`__stdcall`) as the disassembly shows. A name is part of the reconstruction, not a label for its port status.
+9. **No helper methods at all.** Do not add helper functions to `engine/` — not for conversion, clamping, logging plumbing, memory access, string handling or convenience. If retail code needs behavior, that behavior is its own transcribed native at its retail address, or the block stays unresolved. Logging and the dev-mode switch (rule 3) are the only non-retail code and must live outside native flows.
+10. **Strings and messages are byte-identical.** Every literal — option names, window/class titles, file names, `MessageBoxA` texts such as `"IGI is already running."`, `"Error"`, `"Innerloop"`, `"filesys.cfg"`, format strings, separators — must match the retail bytes exactly, including punctuation, capitalization, spacing and terminators. No reworded or "cleaner" text. Where a string address in retail is a pointer into BSS/static data, use a literal with identical bytes.
+11. **Exact behavior over readability.** Do not reorder statements, merge branches, or hoist loops for style. Structure follows the retail control flow, even when that is less idiomatic C++.
+
+The only intentional non-retail differences allowed anywhere are the `IGI_TESTING_MUTEX` build switch (testing build name) recorded in §10.13/§10.14 and diagnostic logging; both must be documented at the exact site and absent from production builds.
+
+12. **Rename only after full verification.** Address-suffixed or decompiler-generated names (for example `SetAppTitle_48F100`, `Display_SetScreenMode_48F120`, `App_ContextSetDebugtextState`) are placeholders while a native is unverified or partially verified. Once a native reaches `VERIFIED` (or `VERIFIED_WITH_DOCUMENTED_SCOPE` for its declared scope), rename it to a clean retail-derived behavior name with no address suffix and no decompiler artifact name, update every call site, the provenance block (`// Native: <name>; retail VA 0x...` must still carry the VA), and the manifest record in the same change. Keep the old placeholder in the record's notes as an alias so evidence and prior captures remain traceable. Never rename a native before its evidence supports the name it is being given: an unverified native keeps its address-suffixed placeholder.
