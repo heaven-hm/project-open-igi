@@ -62986,7 +62986,7 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/script/native_4f19c0.cpp",
-        "sha256": "0919a070fb278e30f4cc49e860571017bcf8eed776305744ea648b2b65b7b428",
+        "sha256": "d9f1ae255d84c793ed86a4adeb438d8c4447ab717bb297fe6d60aae762a8e324",
         "signature": "unknown"
       },
       "game_natives": {
@@ -63382,7 +63382,7 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/script/native_4f1bc0.cpp",
-        "sha256": "8aa6cca9a75c455e6df5ece08e67dc5f7fcff7199293a8cad368f216718d441c",
+        "sha256": "4bc801e8dfd932e6d18a5791dc46dcb65f25a9c6604f5bca306258b8e4d8b9c9",
         "signature": "unknown"
       },
       "game_natives": {
