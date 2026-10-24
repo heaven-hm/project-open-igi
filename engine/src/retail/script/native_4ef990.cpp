@@ -3,6 +3,10 @@
 // Tools/evidence: radare2 6.2.0 complete listing (8b442408 56 8b742408 57 8b38 b90b000000 f3a5 5f 5e c3); one of the 83 handler pointers embedded by the 0x004EE970 catalogue.
 // Behavior/CFG: copies eleven dwords (0x2C bytes) from its first argument to the buffer whose address is stored at its second argument's target: dest = *arg2, then 11 dwords from arg1 to dest.
 // Status/limits: TRANSCRIBED (static only); the copy is retail's inline rep movsd of 11 dwords, transcribed as an explicit loop so no library call is introduced; runtime UNOBSERVED.
+// Residual difference (Tester-ruled, do not 'fix' with volatile): the optimiser emits the first source
+// word load before the destination-pointer load. Retail loads the destination pointer first. Both are loads
+// with no store between them, so no success-path state differs; forward word-by-word store order matches the
+// retail rep movsd. Only the fault order changes if both operands are invalid at once.
 #include <cstdint>
 
 extern "C" {

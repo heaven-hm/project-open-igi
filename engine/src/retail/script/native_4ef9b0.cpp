@@ -3,6 +3,8 @@
 // Tools/evidence: radare2 6.2.0 complete listing (8b442408 56 57 8b7c240c 8b30 b90b000000 f3a5 5f 5e c3); one of the 83 handler pointers embedded by the 0x004EE970 catalogue.
 // Behavior/CFG: copies eleven dwords (0x2C bytes) from the buffer whose address is stored at its second argument's target into its first argument: src = *arg2, then 11 dwords from src to arg1.
 // Status/limits: TRANSCRIBED (static only); the copy is retail's inline rep movsd of 11 dwords, transcribed as an explicit loop so no library call is introduced; runtime UNOBSERVED.
+// Load order matches retail: the source pointer is read before the first source word. The earlier
+// `mov eax,[esp+4]` in the candidate is a stack argument load, not a memory dereference.
 #include <cstdint>
 
 extern "C" {
