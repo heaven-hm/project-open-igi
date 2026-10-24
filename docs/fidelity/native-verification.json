@@ -50145,12 +50145,92 @@
       }
     },
     {
+      "address": "0x004B0E00",
+      "name": "Sys_AddRenderMode_4B0E00",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/sys/native_4b0e00.cpp",
+        "sha256": "f3a2451821b472ecfb707d171dad58292a46248c0c2d71612a81778bc63a257f",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/sys/004B0E00-Sys_RendermodeFailedToCr 2.cpp",
+        "sha256": "a98413218c80e26c16853db05166f36a168accfcc799379407f1bda19266bb64",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x004B0E00",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004B0E00-binaryninja.json",
+          "evidence_sha256": "bc72629061353905b7ae3f576053973f64d2197a0c025f787b3bc2c772c09c68"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x004B0E00",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004B0E00-radare2.json",
+          "evidence_sha256": "4e592fd73525507d235dc71a399047e79d8f2d6cc226c052d5c741ca2950f619"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004B0E00-semantic-review.json",
+          "evidence_sha256": "9326537ee7f4ab769f1a2318551c4881ac6fa3170e465a6113980894d0754c4c"
+        }
+      }
+    },
+    {
+      "address": "0x004B0E70",
+      "name": "Sys_AddSlot_4B0E70",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/sys/native_4b0e70.cpp",
+        "sha256": "2aad90c0cb3daab9b0132ffa8b401e1303d321a315bf217c4156edc7d1472c9a",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/sys/004B0E70-Sys_RendermodeFailedToCr_2 2.cpp",
+        "sha256": "076664a52a571d89cb8fb49810f73261402272ae44f056fd41f0f7d61ce1a340",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x004B0E70",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004B0E70-binaryninja.json",
+          "evidence_sha256": "3971db56006f2a3b8bef19734013268cb10969b5381fc791d83c647046f63f35"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x004B0E70",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004B0E70-radare2.json",
+          "evidence_sha256": "9f40e146caa01cb2c17e3ee6055611256dea5e54b281fb3672b632254bec70b2"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004B0E70-semantic-review.json",
+          "evidence_sha256": "53b34a197af6a1a1a520809daad26d785a1e355cecec10fdd9b8b19dfd00ef45"
+        }
+      }
+    },
+    {
       "address": "0x004B0EB0",
       "name": "Sys_ClearSlotByte_4B0EB0",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/sys/native_4b0eb0.cpp",
-        "sha256": "bc8494d28a2d29fb66c95a632d21eaa84e5a99b00c915f4cfa838f9248217246",
+        "sha256": "8a0f6ec790bac7aa41a0016e9c4fc5098a56f75cb5cf07eda1167387b5429255",
         "signature": "unknown"
       },
       "game_natives": {
@@ -50180,7 +50260,7 @@
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B0EB0-semantic-review.json",
-          "evidence_sha256": "a28f0209364e964ae4e2cb56e3468918748b38c76c018dbce054a96f161b9b17"
+          "evidence_sha256": "c506107b5ff1e3fa89df798c22579c8590814efc3f4b9f113693f688f0049d30"
         }
       }
     },

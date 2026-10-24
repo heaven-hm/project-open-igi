@@ -3,7 +3,7 @@
   "kind": "semantic-review-report",
   "address": "0x004B0EB0",
   "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
-  "implementation_sha256": "bc8494d28a2d29fb66c95a632d21eaa84e5a99b00c915f4cfa838f9248217246",
+  "implementation_sha256": "8a0f6ec790bac7aa41a0016e9c4fc5098a56f75cb5cf07eda1167387b5429255",
   "implementation_path": "engine/src/retail/sys/native_4b0eb0.cpp",
   "reviewed_by": "lead",
   "reviewed": true,
@@ -23,12 +23,12 @@
     {
       "name": "argument_mapping",
       "result": "passed",
-      "rationale": "One cdecl argument read from [esp+4], used as the index."
+      "rationale": "One cdecl argument read from [esp+4], used as the record index."
     },
     {
       "name": "constants_and_scaling",
       "result": "passed",
-      "rationale": "Stores 0 into 0x00A94A84 + index*8, exactly retail's mov byte [eax*8 + 0x00A94A84], 0."
+      "rationale": "Clears the byte at 0x00A94A84 + index*8, which is the +0x04 flag of the record at 0x00A94A80 + index*8; retail's separate absolute address and the record base differ by exactly 4."
     },
     {
       "name": "calls_and_side_effects",
@@ -43,7 +43,8 @@
   ],
   "evidence": "docs/fidelity/evidence/0x4EE970-data-extents.md section 22.3",
   "limitations": [
-    "Runtime unobserved; the table at 0x00A94A84 has no external owner, so this file defines it and it starts zeroed.",
-    "The table's real extent is unknown; 0x100 entries is a definition size, not a retail fact, and no transcribed caller indexes past it."
+    "Runtime unobserved.",
+    "Re-bound after this file was changed to refer to the table defined by native_4b0e70.cpp instead of defining a second overlapping array; the old definition would have aliased the same addresses as two objects.",
+    "Still no external owner of the table beyond that, and no transcribed reader of the flag."
   ]
 }

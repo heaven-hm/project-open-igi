@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "address": "0x004B0E00",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "f3a2451821b472ecfb707d171dad58292a46248c0c2d71612a81778bc63a257f",
+  "implementation_path": "engine/src/retail/sys/native_4b0e00.cpp",
+  "reviewed_by": "lead",
+  "reviewed": true,
+  "review_scope": "static: retail instructions and emitted candidate listing",
+  "result": "passed",
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "rationale": "75 bytes, 22 instructions, 6 blocks, 7 edges; both decoders and the emitted candidate report 6/7, score 1.000."
+    },
+    {
+      "name": "cfg_match",
+      "result": "passed",
+      "rationale": "Block and edge counts match retail exactly (6/7): the scan loop, the free-slot exit, and the error-and-spin exit."
+    },
+    {
+      "name": "scan_bounds",
+      "result": "passed",
+      "rationale": "Scan starts at the flag byte 0x00A952A4 and ends at 0xa962e4 with stride 0x208; the extent follows from the two addresses retail compares, not from an assumed count."
+    },
+    {
+      "name": "free_slot_write",
+      "result": "passed",
+      "rationale": "Stores the name pointer at 0x00A950A0 + index*0x208 and sets the +516 flag byte to 1; retail computes index<<6 + index then <<3, i.e. index*520, and the C++ keeps the 0x208 byte stride."
+    },
+    {
+      "name": "error_path",
+      "result": "passed",
+      "rationale": "Calls Debug_Error with the exact retail bytes \"RenderMode: Failed to create new rendermode '%s'\" and the name forwarded, then spins at a jmp $, reproduced as an empty infinite loop."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "passed",
+      "rationale": "One cdecl argument read from [esp+4] and stored verbatim; nothing else is read."
+    }
+  ],
+  "evidence": "docs/fidelity/evidence/0x4EE970-data-extents.md section 22.3",
+  "limitations": [
+    "Runtime unobserved; the table starts zeroed, so every slot reads free exactly as an unwritten table would.",
+    "0x00A950A0 has no external owner, so this file defines it; the record's fields beyond the +0x00 pointer and the +0x204 flag are not established.",
+    "Eight records is what the scanned extent 0x00A962E4-0x00A950A0 = 0x1244 yields at 0x208 stride, not an independent assumption."
+  ]
+}
