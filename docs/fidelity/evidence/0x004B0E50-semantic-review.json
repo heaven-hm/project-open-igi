@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "address": "0x004B0E50",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "fe937845922d8bdd589b3f0e222c8442f608f5024aecfea934df506aea685d5c",
+  "implementation_path": "engine/src/retail/sys/native_4b0e50.cpp",
+  "reviewed_by": "lead",
+  "reviewed": true,
+  "review_scope": "static: retail instructions and emitted candidate listing",
+  "result": "passed",
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "rationale": "20 bytes, 7 instructions, one block, zero edges; candidate 1/0, score 1.000."
+    },
+    {
+      "name": "cfg_match",
+      "rationale": "Both decoders and the candidate report 1/0.",
+      "result": "passed"
+    },
+    {
+      "name": "argument_mapping",
+      "rationale": "One cdecl argument read from [esp+4], used as the slot index.",
+      "result": "passed"
+    },
+    {
+      "name": "constants_and_scaling",
+      "rationale": "Clears 0x00A952A4 + index*0x208, i.e. the +0x204 flag of the record at 0x00A950A0 + index*0x208; retail's (index<<6 + index)<<3 is index*520.",
+      "result": "passed"
+    },
+    {
+      "name": "calls_and_side_effects",
+      "rationale": "One byte store, no calls.",
+      "result": "passed"
+    },
+    {
+      "name": "return_and_error_paths",
+      "rationale": "Returns void through a single ret; no index bound, matching retail.",
+      "result": "passed"
+    }
+  ],
+  "evidence": "docs/fidelity/evidence/0x4EE970-data-extents.md section 22.3",
+  "limitations": [
+    "Runtime unobserved.",
+    "The table is owned by sys/native_4b0e00.cpp and referred to here; no bound check exists, so an out-of-range index writes past the table exactly as retail would.",
+    "Which code clears a slot is unknown; only 0x004B0E00's registration and this clear are transcribed."
+  ]
+}

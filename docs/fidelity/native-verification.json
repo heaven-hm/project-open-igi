@@ -50042,6 +50042,46 @@
       }
     },
     {
+      "address": "0x004B0DC0",
+      "name": "Sys_ResetRenderTables_4B0DC0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/sys/native_4b0dc0.cpp",
+        "sha256": "c5b24275b268291f7d6cca2844fdc4b4b8f66e148b1a03aa62084e54679646f7",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/sys/004B0DC0-Sys_PushStack_2 2.cpp",
+        "sha256": "ee7a83327c065131b5ba6913ed22255d4182bb0cb2f8639772297443a563ed9e",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x004B0DC0",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004B0DC0-binaryninja.json",
+          "evidence_sha256": "8779d43169bb42b891626abab632e75e5afe8d26acb738ce4942586cd67142f8"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x004B0DC0",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004B0DC0-radare2.json",
+          "evidence_sha256": "f83c85464e439d55b3cef114aa71e740255c547e0895dfadf42e808a0bc46bae"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004B0DC0-semantic-review.json",
+          "evidence_sha256": "58aa199c5b272eaa5e4162f1f9c06c4a2ea67d01d7511c1637fed26c63728cf3"
+        }
+      }
+    },
+    {
       "address": "0x004B0E00",
       "name": "Sys_AddRenderMode_4B0E00",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
@@ -50078,6 +50118,46 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B0E00-semantic-review.json",
           "evidence_sha256": "9326537ee7f4ab769f1a2318551c4881ac6fa3170e465a6113980894d0754c4c"
+        }
+      }
+    },
+    {
+      "address": "0x004B0E50",
+      "name": "Sys_ClearRenderModeSlot_4B0E50",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/sys/native_4b0e50.cpp",
+        "sha256": "fe937845922d8bdd589b3f0e222c8442f608f5024aecfea934df506aea685d5c",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/sys/004B0E50-Sys_PopStack_2 2.cpp",
+        "sha256": "cb0a1a75ad868d5c7b76da344d9ee836fb33fad42ce5ec1ebcf051a73022a262",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x004B0E50",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004B0E50-binaryninja.json",
+          "evidence_sha256": "c45d32709a66b68854bd69c36fb7f9317bdd2e7b64d051d111cbe0a53ddfef07"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x004B0E50",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004B0E50-radare2.json",
+          "evidence_sha256": "3eb833f34b882f1d6dcab75dd055001f0602d46603d815357d6874c2a6e28e9b"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004B0E50-semantic-review.json",
+          "evidence_sha256": "ca946bed52e00f523545584d723eef110ff80b9d5941611789ed1aae0bb712ea"
         }
       }
     },
