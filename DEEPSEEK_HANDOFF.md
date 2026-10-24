@@ -349,3 +349,37 @@ instruction registrar: it clears 0x1000 dwords at 0x00A71890, registers classes 
 docs/fidelity/evidence/0x004EE970-full-listing.txt. Transcribe it into
 engine/src/retail/script/native_4ee970.cpp in reviewed sections (it must be complete before wiring), and
 do not present it as transcribable until the section-by-section pass finishes.
+
+## 0x4EE970 staging: ABI question resolved, data surface mapped (round 151)
+
+**Resolved - no ABI defect.** The registration call site pushes two zero words before `0x4018F0` and
+then `add esp,0x14` (five words), while `TaskType_Register` declares four parameters. Reading the callee
+settles it: `0x401900` reads only `[esp+8]` (name), `[esp+0xC]` (object size), `[esp+0x18]` (parent type,
+after the ebp/esi/edi pushes) and `[esp+0x1C]` (task-list argument). Four arguments. At a call site with
+the stack frame `[ebx][ebx][eax|type][size][name]`, the two zeros supply `task_list_argument = 0` and one
+extra word that nothing consumes. So the transcription calls `TaskType_Register(name, size,
+QTask_GetCurrentType(), 0)` and retail's fifth word is a harmless artifact; do NOT add a fifth parameter.
+`QTask_GetCurrentType` (0x004018F0) is a 6-byte leaf: `mov ax,[0x54F928]; ret`.
+
+**Class table owned by 0x401900, not by the catalogue.** Its prologue scans `0x00AF5F05` in 0x30-byte
+strides for a zero name byte, bounded at `0x00AFA705`: (0xAFA705 - 0xAF5F05) / 0x30 = 384 slots. Per-slot
+fields seen in the found branch: +0x00 name byte (at 0xAF5F05 + slot*0x30), +0x04 and +0x08 (two dwords
+stored from args 2 and 1), +0x0C word (parent type, `cmp di,0x181` special case storing 0x200 instead of
+copying the parent's word), +0x28 (position passed to 0x4B0B00 with arg4). The catalogue must not define
+storage for this table; `0x401900` owns it.
+
+**Data surface the catalogue touches (from the committed listing, all operands extracted):**
+- `0x0054DD0C`, `0x0054DD0E`, `0x0054DD10`, `0x0054DD12`, `0x0054DD14` - class ids, word stores, first five
+  registrations only (Level, Static, Dynamic, Idle, CameraBase). Then the pattern changes.
+- `0x0054DDA4`, `0x0054DDA5` (bytes), `0x0054DDA8`, `0x0054DDAC`, `0x0054DDB0` (dwords).
+- `0x00A70C68`, `6C`, `70`, `78`, `7C`, `80`, `84`, `88`, `8C`, `90`, `9C`, `A0`, `A4` - scattered dwords just
+  below the bucket table at `0x00A70CA8`, i.e. the same QHash control block the earlier batch modelled.
+- `0x00A7186C`, `70`, `74`, `78`, `7C`, `80`, `84`, `88`, `8C`, and the 0x1000-dword clear at `0x00A71890`.
+  Note `0x00A7186C` is exactly the end of the bucket table (see the [0x2F1] extent fix), so the catalogue
+  continues that structure immediately after it.
+- `0x00A75890`, `94`, `98`, `A0`, `BD`, `BE`, `C0`, `C4` - the parameter table just below `0x00A758E0`.
+
+**Consequence for transcription:** none of these regions has storage in the tree yet, and this is exactly
+where the last three data defects came from. Do not transcribe statements against them until each range's
+extent is derived from the instruction that consumes it and cross-checked against the next object's start.
+The catalogue's own clear (`0x1000` dwords at `0x00A71890`) is an inline `rep stosd`, not a call.
