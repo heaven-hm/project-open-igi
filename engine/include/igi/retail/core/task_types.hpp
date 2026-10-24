@@ -200,7 +200,7 @@ void NATIVE_DECL QTask_ClearTaskTypes();
 //           entry, marks it used, stores the argument in the entry's first
 //           word and returns the event id in AL. It raises "Unable to
 //           allocate event" when the table is full.
-std::uint8_t NATIVE_DECL QTask_AllocateEvent(std::uint16_t value);
+std::uint32_t NATIVE_DECL QTask_AllocateEvent(std::uint16_t value);  // retail returns the full id in EAX (AL read by callers)
 
 } // extern "C"
 

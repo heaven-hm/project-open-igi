@@ -516,9 +516,9 @@ std::uint16_t NATIVE_DECL QTask_GetCurrentType()
 //           free entry it marks the entry used at 0x0054F932 + id * 6, stores the argument in the
 //           entry's word at 0x0054F930 + id * 6 and marks the entry at 0x0054F933 + id * 6 used.
 //           The event id is returned in AL.
-// Status/limits: STRUCTURALLY_VERIFIED; the scan, the three writes and the AL return match the retail.
-//           The exhaustion branch now matches too: Debug_Error("Unable to allocate event") then jmp $.
-std::uint8_t NATIVE_DECL QTask_AllocateEvent(std::uint16_t value)
+// Status/limits: STRUCTURALLY_VERIFIED; the scan, the retail store order (+2, one 16-bit +0, +3) and the dword
+//           id return all match, and exhaustion is Debug_Error("Unable to allocate event") then jmp $.
+std::uint32_t NATIVE_DECL QTask_AllocateEvent(std::uint16_t value)
 {
     std::uint32_t event_id = igi::retail::core::first_event_id;
     while (event_id < igi::retail::core::event_table_entry_count &&
@@ -536,11 +536,13 @@ std::uint8_t NATIVE_DECL QTask_AllocateEvent(std::uint16_t value)
         }
     }
     const std::size_t entry = static_cast<std::size_t>(event_id) * 6U;
-    QTask_EventTable[entry] = static_cast<std::uint8_t>(value & 0xFFU);
-    QTask_EventTable[entry + 1U] = static_cast<std::uint8_t>((value >> 8) & 0xFFU);
+    // Retail store order and widths, 0x004017F7 / 0x004017FD / 0x00401804: byte +2 = 1, then ONE 16-bit store of
+    // the value word at +0 (`mov word [ecx+0x54F930], si`), then byte +3 = 1. Do not split the word store.
     QTask_EventTable[entry + 2U] = 1U;
+    *reinterpret_cast<std::uint16_t*>(&QTask_EventTable[entry]) = value;
     QTask_EventTable[entry + 3U] = 1U;
-    return static_cast<std::uint8_t>(event_id);
+    // Retail keeps the full id in EAX (inc eax from 0x20 at 0x004017D2) and returns it; callers read AL.
+    return static_cast<std::uint32_t>(event_id);
 }
 
 // Native: QTask_ClearEventTable; retail VA 0x004011D0.
