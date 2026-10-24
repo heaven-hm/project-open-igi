@@ -8,7 +8,7 @@
 #include <cstdint>
 
 extern "C" {
-std::uint16_t g_548638;  // retail 0x00548638: current parent class id (writer is outside this batch)
+extern std::uint16_t g_548638;  // retail 0x00548638: QObj class id, owned by 0x4D9730 (native_4d9730.cpp)
 std::uint16_t g_54875c;  // retail 0x0054875C: DynCubeObj class id, written here
 std::uint8_t g_54875e;   // retail 0x0054875E: QTask_AllocateEvent result, written here
 

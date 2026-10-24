@@ -19,14 +19,14 @@ char const* DirectInput_ErrorText_48FA80(std::int32_t hr)
     {
         switch (hr)
         {
-        case 0x80004001: return "DIERR_UNSUPPORTED";
-        case 0x80004002: return "DIERR_NOINTERFACE";
-        case 0x80004005: return "DIERR_GENERIC";
-        case 0x80040110: return "DIERR_NOAGGREGATION";
-        case 0x80040154: return "DIERR_DEVICENOTREG";
-        case 0x80040200: return "DIERR_INSUFFICIENTPRIVS";
-        case 0x80040201: return "DIERR_DEVICEFULL";
-        case 0x80040202: return "DIERR_MOREDATA";
+        case static_cast<std::int32_t>(0x80004001U): return "DIERR_UNSUPPORTED";
+        case static_cast<std::int32_t>(0x80004002U): return "DIERR_NOINTERFACE";
+        case static_cast<std::int32_t>(0x80004005U): return "DIERR_GENERIC";
+        case static_cast<std::int32_t>(0x80040110U): return "DIERR_NOAGGREGATION";
+        case static_cast<std::int32_t>(0x80040154U): return "DIERR_DEVICENOTREG";
+        case static_cast<std::int32_t>(0x80040200U): return "DIERR_INSUFFICIENTPRIVS";
+        case static_cast<std::int32_t>(0x80040201U): return "DIERR_DEVICEFULL";
+        case static_cast<std::int32_t>(0x80040202U): return "DIERR_MOREDATA";
         }
     }
     // 0x0048FAF0: lea ecx,[eax+0x7FFBFDFD]; cmp ecx,5; ja 0x0048FB50.
@@ -34,30 +34,30 @@ char const* DirectInput_ErrorText_48FA80(std::int32_t hr)
     {
         switch (hr)
         {
-        case 0x80040203: return "DIERR_NOTDOWNLOADED";
-        case 0x80040204: return "DIERR_HASEFFECTS";
-        case 0x80040205: return "DIERR_NOTEXCLUSIVEACQUIRED";
-        case 0x80040206: return "DIERR_INCOMPLETEEFFECT";
-        case 0x80040207: return "DIERR_NOTBUFFERED";
-        case 0x80040208: return "DIERR_EFFECTPLAYING";
+        case static_cast<std::int32_t>(0x80040203U): return "DIERR_NOTDOWNLOADED";
+        case static_cast<std::int32_t>(0x80040204U): return "DIERR_HASEFFECTS";
+        case static_cast<std::int32_t>(0x80040205U): return "DIERR_NOTEXCLUSIVEACQUIRED";
+        case static_cast<std::int32_t>(0x80040206U): return "DIERR_INCOMPLETEEFFECT";
+        case static_cast<std::int32_t>(0x80040207U): return "DIERR_NOTBUFFERED";
+        case static_cast<std::int32_t>(0x80040208U): return "DIERR_EFFECTPLAYING";
         }
     }
     // 0x0048FB50: second switch over the remaining literals; default 0x0048FBEA "Unknown error".
     switch (hr)
     {
-    case 0x8004020A: return "DIERR_REPORTFULL";
-    case 0x80070002: return "DIERR_NOTFOUND";
-    case 0x80070005: return "DIERR_OTHERAPPHASPRIO";
-    case 0x8007000C: return "DIERR_NOTACQUIRED";
-    case 0x8007000E: return "DIERR_OUTOFMEMORY";
-    case 0x80070015: return "DIERR_NOTINITIALIZED";
-    case 0x8007001E: return "DIERR_INPUTLOST";
-    case 0x80070057: return "DIERR_INVALIDPARAM";
-    case 0x80070077: return "DIERR_BADDRIVERVER";
-    case 0x800700AA: return "DIERR_ACQUIRED";
-    case 0x8007047E: return "DIERR_OLDDIRECTINPUTVERSION";
-    case 0x80070481: return "DIERR_BETADIRECTINPUTVERSION";
-    case 0x800704DF: return "DIERR_ALREADYINITIALIZED";
+    case static_cast<std::int32_t>(0x8004020AU): return "DIERR_REPORTFULL";
+    case static_cast<std::int32_t>(0x80070002U): return "DIERR_NOTFOUND";
+    case static_cast<std::int32_t>(0x80070005U): return "DIERR_OTHERAPPHASPRIO";
+    case static_cast<std::int32_t>(0x8007000CU): return "DIERR_NOTACQUIRED";
+    case static_cast<std::int32_t>(0x8007000EU): return "DIERR_OUTOFMEMORY";
+    case static_cast<std::int32_t>(0x80070015U): return "DIERR_NOTINITIALIZED";
+    case static_cast<std::int32_t>(0x8007001EU): return "DIERR_INPUTLOST";
+    case static_cast<std::int32_t>(0x80070057U): return "DIERR_INVALIDPARAM";
+    case static_cast<std::int32_t>(0x80070077U): return "DIERR_BADDRIVERVER";
+    case static_cast<std::int32_t>(0x800700AAU): return "DIERR_ACQUIRED";
+    case static_cast<std::int32_t>(0x8007047EU): return "DIERR_OLDDIRECTINPUTVERSION";
+    case static_cast<std::int32_t>(0x80070481U): return "DIERR_BETADIRECTINPUTVERSION";
+    case static_cast<std::int32_t>(0x800704DFU): return "DIERR_ALREADYINITIALIZED";
     }
     return "Unknown error";
 }
