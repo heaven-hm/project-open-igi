@@ -1,0 +1,48 @@
+{"monotonic": 1792852497.45279, "message": {"type": "send", "payload": {"type": "observed", "phase": "entry", "address": "0x00498480", "callIndex": 1, "outputsAlias": false, "callerRva": "0x8f6e7", "scope": "retail startup DirectX capability output and imported call observations"}}, "data": null}
+{"monotonic": 1792852497.453255, "message": {"type": "send", "payload": {"type": "directx_api", "phase": "entry", "name": "GetVersionExA", "callerRva": "0x984b9", "structureSize": 148}}, "data": null}
+{"monotonic": 1792852497.458452, "message": {"type": "send", "payload": {"type": "directx_api", "phase": "return", "name": "GetVersionExA", "eax": 1, "version": {"major": 6, "minor": 2, "build": 9200, "platform": 2}}}, "data": null}
+{"monotonic": 1792852497.458787, "message": {"type": "send", "payload": {"type": "directx_api", "phase": "entry", "name": "LoadLibraryA", "callerRva": "0x985a2", "text": "DDRAW.DLL"}}, "data": null}
+{"monotonic": 1792852497.459112, "message": {"type": "send", "payload": {"type": "directx_api", "phase": "return", "name": "LoadLibraryA", "nonNull": true}}, "data": null}
+{"monotonic": 1792852497.459487, "message": {"type": "send", "payload": {"type": "directx_api", "phase": "entry", "name": "GetProcAddress", "callerRva": "0x985d1", "procedure": "DirectDrawCreate"}}, "data": null}
+{"monotonic": 1792852497.459898, "message": {"type": "send", "payload": {"type": "directx_api", "phase": "return", "name": "GetProcAddress", "nonNull": true}}, "data": null}
+{"monotonic": 1792852497.4601789, "message": {"type": "send", "payload": {"type": "directx_com", "phase": "entry", "method": "DirectDrawCreate", "guidIsNull": true, "outerIsNull": true}}, "data": null}
+{"monotonic": 1792852500.461385, "message": {"type": "send", "payload": {"type": "directx_com", "phase": "return", "method": "DirectDrawCreate", "eax": 0, "objectId": 1}}, "data": null}
+{"monotonic": 1792852500.46244, "message": {"type": "send", "payload": {"type": "directx_com", "phase": "entry", "method": "QueryInterface", "objectId": 1, "callerRva": 624210, "interfaceGuid": "e0f3a6b3432bcf11a2de00aa00b93356"}}, "data": null}
+{"monotonic": 1792852500.464538, "message": {"type": "send", "payload": {"type": "directx_com", "phase": "return", "method": "QueryInterface", "eax": 0, "objectId": 2}}, "data": null}
+{"monotonic": 1792852500.4655738, "message": {"type": "send", "payload": {"type": "directx_com", "phase": "entry", "method": "Release", "objectId": 2, "callerRva": 624263}}, "data": null}
+{"monotonic": 1792852500.46596, "message": {"type": "send", "payload": {"type": "directx_com", "phase": "return", "method": "Release", "eax": 0}}, "data": null}
+{"monotonic": 1792852500.46627, "message": {"type": "send", "payload": {"type": "directx_api", "phase": "entry", "name": "LoadLibraryA", "callerRva": "0x98694", "text": "DINPUT.DLL"}}, "data": null}
+{"monotonic": 1792852500.466586, "message": {"type": "send", "payload": {"type": "directx_api", "phase": "return", "name": "LoadLibraryA", "nonNull": true}}, "data": null}
+{"monotonic": 1792852500.466923, "message": {"type": "send", "payload": {"type": "directx_api", "phase": "entry", "name": "GetProcAddress", "callerRva": "0x986cd", "procedure": "DirectInputCreateA"}}, "data": null}
+{"monotonic": 1792852500.467247, "message": {"type": "send", "payload": {"type": "directx_api", "phase": "return", "name": "GetProcAddress", "nonNull": true}}, "data": null}
+{"monotonic": 1792852500.467637, "message": {"type": "send", "payload": {"type": "directx_api", "phase": "entry", "name": "FreeLibrary", "callerRva": "0x9870c"}}, "data": null}
+{"monotonic": 1792852500.467963, "message": {"type": "send", "payload": {"type": "directx_api", "phase": "return", "name": "FreeLibrary", "eax": 1}}, "data": null}
+{"monotonic": 1792852500.468235, "message": {"type": "send", "payload": {"type": "directx_com", "phase": "entry", "method": "SetCooperativeLevel", "objectId": 1, "callerRva": 624450, "windowIsNull": true, "flags": 8}}, "data": null}
+{"monotonic": 1792852500.583762, "message": {"type": "send", "payload": {"type": "directx_com", "phase": "return", "method": "SetCooperativeLevel", "eax": 0}}, "data": null}
+{"monotonic": 1792852500.584595, "message": {"type": "send", "payload": {"type": "directx_com", "phase": "entry", "method": "CreateSurface", "objectId": 1, "callerRva": 624513, "descriptor": "6c0000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000020000", "outerIsNull": true}}, "data": null}
+{"monotonic": 1792852500.585015, "message": {"type": "send", "payload": {"type": "directx_com", "phase": "return", "method": "CreateSurface", "eax": 0, "objectId": 3}}, "data": null}
+{"monotonic": 1792852500.585383, "message": {"type": "send", "payload": {"type": "directx_com", "phase": "entry", "method": "QueryInterface", "objectId": 3, "callerRva": 624577, "interfaceGuid": "004e04dab269d011a1d500aa00b8dfbb"}}, "data": null}
+{"monotonic": 1792852500.585883, "message": {"type": "send", "payload": {"type": "directx_com", "phase": "return", "method": "QueryInterface", "eax": 0, "objectId": 4}}, "data": null}
+{"monotonic": 1792852500.5863512, "message": {"type": "send", "payload": {"type": "directx_com", "phase": "entry", "method": "QueryInterface", "objectId": 3, "callerRva": 624630, "interfaceGuid": "30862b0b35add0118ea600609797ea5b"}}, "data": null}
+{"monotonic": 1792852500.587059, "message": {"type": "send", "payload": {"type": "directx_com", "phase": "return", "method": "QueryInterface", "eax": 0, "objectId": 5}}, "data": null}
+{"monotonic": 1792852500.587541, "message": {"type": "send", "payload": {"type": "directx_com", "phase": "entry", "method": "Release", "objectId": 3, "callerRva": 624674}}, "data": null}
+{"monotonic": 1792852500.588022, "message": {"type": "send", "payload": {"type": "directx_com", "phase": "return", "method": "Release", "eax": 0}}, "data": null}
+{"monotonic": 1792852500.5893939, "message": {"type": "send", "payload": {"type": "directx_com", "phase": "entry", "method": "Release", "objectId": 1, "callerRva": 624684}}, "data": null}
+{"monotonic": 1792852500.629878, "message": {"type": "send", "payload": {"type": "directx_com", "phase": "return", "method": "Release", "eax": 0}}, "data": null}
+{"monotonic": 1792852500.6312509, "message": {"type": "send", "payload": {"type": "directx_api", "phase": "entry", "name": "CoInitialize", "callerRva": "0x9883c", "reservedIsNull": true}}, "data": null}
+{"monotonic": 1792852500.635155, "message": {"type": "send", "payload": {"type": "directx_api", "phase": "return", "name": "CoInitialize", "eax": 1}}, "data": null}
+{"monotonic": 1792852500.6354718, "message": {"type": "send", "payload": {"type": "directx_api", "phase": "entry", "name": "CoCreateInstance", "callerRva": "0x98855", "classGuid": "109f6b637d0cd11195b20020afdc7421", "outerIsNull": true, "context": 1, "interfaceGuid": "5a1136652d7bd211ba180000f875ac12"}}, "data": null}
+{"monotonic": 1792852501.867209, "message": {"type": "send", "payload": {"type": "directx_api", "phase": "return", "name": "CoCreateInstance", "eax": 0, "objectIsNonNull": true, "objectId": 6}}, "data": null}
+{"monotonic": 1792852501.86773, "message": {"type": "send", "payload": {"type": "directx_com", "phase": "entry", "method": "Release", "objectId": 6, "callerRva": 624770}}, "data": null}
+{"monotonic": 1792852501.8682501, "message": {"type": "send", "payload": {"type": "directx_com", "phase": "return", "method": "Release", "eax": 0}}, "data": null}
+{"monotonic": 1792852501.8689878, "message": {"type": "send", "payload": {"type": "directx_api", "phase": "entry", "name": "CoUninitialize", "callerRva": "0x98888"}}, "data": null}
+{"monotonic": 1792852501.870097, "message": {"type": "send", "payload": {"type": "directx_api", "phase": "return", "name": "CoUninitialize"}}, "data": null}
+{"monotonic": 1792852501.8710122, "message": {"type": "send", "payload": {"type": "directx_api", "phase": "entry", "name": "GetProcAddress", "callerRva": "0x98894", "procedure": "DirectDrawCreateEx"}}, "data": null}
+{"monotonic": 1792852501.8718011, "message": {"type": "send", "payload": {"type": "directx_api", "phase": "return", "name": "GetProcAddress", "nonNull": true}}, "data": null}
+{"monotonic": 1792852501.873353, "message": {"type": "send", "payload": {"type": "directx_com", "phase": "entry", "method": "DirectDrawCreateEx", "guidIsNull": true, "outerIsNull": true, "interfaceGuid": "c05ee6159c3bd211b92f00609797ea5b"}}, "data": null}
+{"monotonic": 1792852502.055081, "message": {"type": "send", "payload": {"type": "directx_com", "phase": "return", "method": "DirectDrawCreateEx", "eax": 0, "objectId": 7}}, "data": null}
+{"monotonic": 1792852502.055298, "message": {"type": "send", "payload": {"type": "directx_com", "phase": "entry", "method": "Release", "objectId": 7, "callerRva": 624828}}, "data": null}
+{"monotonic": 1792852502.464514, "message": {"type": "send", "payload": {"type": "directx_com", "phase": "return", "method": "Release", "eax": 0}}, "data": null}
+{"monotonic": 1792852502.464661, "message": {"type": "send", "payload": {"type": "directx_api", "phase": "entry", "name": "FreeLibrary", "callerRva": "0x988bf"}}, "data": null}
+{"monotonic": 1792852502.497118, "message": {"type": "send", "payload": {"type": "directx_api", "phase": "return", "name": "FreeLibrary", "eax": 1}}, "data": null}
+{"monotonic": 1792852502.4975739, "message": {"type": "send", "payload": {"type": "observed", "phase": "return", "address": "0x00498480", "callIndex": 1, "capability": 1792, "platform": 2, "eax": 1}}, "data": null}

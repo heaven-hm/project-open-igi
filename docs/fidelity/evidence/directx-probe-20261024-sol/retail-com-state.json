@@ -1,0 +1,631 @@
+{
+  "kind": "igi-tester-native-probe",
+  "schema_version": 1,
+  "result": "observed",
+  "verified": false,
+  "captured_at": "2026-10-24T14:38:10.921478+00:00",
+  "targets": [
+    {
+      "address": "0x00498480",
+      "name": "Native_00498480",
+      "probe": "/Users/haseeb-mir/Documents/Code/project-open-igi/scripts/tester/frida_directx_probe_retail.js",
+      "probe_sha256": "77dedc39c682d6f6fc503f00480a00dac74cec12eb2f0b47630402571ad7a529",
+      "observations": {
+        "name": null,
+        "entries": 1,
+        "returns": 1
+      },
+      "retailName": "Native_00498480"
+    }
+  ],
+  "executable": {
+    "path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+    "sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+    "preferred_base": "0x00400000",
+    "module": "igi.exe"
+  },
+  "probe_template_sha256": "8472074d6840df8a07f63fe4460771357e99b8b584e9a1bbc7997450359ad84c",
+  "environment": {
+    "frida_host": "127.0.0.1:27042",
+    "frida_client": "17.24.0",
+    "game_directory": "/Users/haseeb-mir/Downloads/IGI",
+    "level": 1,
+    "arguments": [
+      "window",
+      "level1"
+    ],
+    "scenario": {
+      "observe_seconds": 15.0,
+      "scripted_actions": "none (idle observation)"
+    }
+  },
+  "arguments": {
+    "arg_words": 2,
+    "mem_arg": null,
+    "return_mem": null,
+    "watch": [],
+    "max_calls": 256
+  },
+  "hooks": [
+    {
+      "installed": true,
+      "target": "0x498480",
+      "extent": 1098,
+      "scope": "retail-only analysis; imports, ordered COM calls and typed descriptor observations",
+      "name": "Native_00498480",
+      "retailVA": "0x00498480",
+      "sideAddress": "0x00498480"
+    }
+  ],
+  "entries": [
+    {
+      "type": "observed",
+      "phase": "entry",
+      "address": "0x00498480",
+      "callIndex": 1,
+      "outputsAlias": false,
+      "callerRva": "0x8f6e7",
+      "scope": "retail startup DirectX capability output and imported call observations"
+    }
+  ],
+  "returns": [
+    {
+      "type": "observed",
+      "phase": "return",
+      "address": "0x00498480",
+      "callIndex": 1,
+      "capability": 1792,
+      "platform": 2,
+      "eax": 1
+    }
+  ],
+  "messages": 48,
+  "summary": null,
+  "limitations": [
+    "Finite idle observation interval only; no scripted gameplay actions.",
+    "Only the process this driver spawned is terminated; attach mode never terminates the target.",
+    "A pointer snapshot is read only after Process.findRangeByAddress proves the range readable; unknown pointer contents remain unobserved rather than guessed.",
+    "Observed calls are not proof of behavioral parity by themselves; a typed comparator is required.",
+    "Result 'unobserved' means only that this capture did not reach the native; it is not a pass or fail."
+  ],
+  "capture": {
+    "mode": "spawn-suspended",
+    "owned_pid": 636,
+    "arguments": [
+      "Z:\\Users\\haseeb-mir\\Downloads\\IGI\\igi.exe",
+      "window",
+      "level1"
+    ],
+    "cwd": "Z:\\Users\\haseeb-mir\\Downloads\\IGI",
+    "exited_before_observe_end": null,
+    "alive_at_end": true
+  },
+  "events": [
+    {
+      "type": "directx_api",
+      "phase": "entry",
+      "name": "GetVersionExA",
+      "callerRva": "0x984b9",
+      "structureSize": 148,
+      "outputState": {
+        "capability": null,
+        "platform": null
+      }
+    },
+    {
+      "type": "directx_api",
+      "phase": "return",
+      "name": "GetVersionExA",
+      "eax": 1,
+      "version": {
+        "major": 6,
+        "minor": 2,
+        "build": 9200,
+        "platform": 2
+      },
+      "outputState": {
+        "capability": null,
+        "platform": null
+      }
+    },
+    {
+      "type": "directx_api",
+      "phase": "entry",
+      "name": "LoadLibraryA",
+      "callerRva": "0x985a2",
+      "text": "DDRAW.DLL",
+      "outputState": {
+        "capability": null,
+        "platform": 2
+      }
+    },
+    {
+      "type": "directx_api",
+      "phase": "return",
+      "name": "LoadLibraryA",
+      "nonNull": true,
+      "outputState": {
+        "capability": null,
+        "platform": 2
+      }
+    },
+    {
+      "type": "directx_api",
+      "phase": "entry",
+      "name": "GetProcAddress",
+      "callerRva": "0x985d1",
+      "procedure": "DirectDrawCreate",
+      "outputState": {
+        "capability": null,
+        "platform": 2
+      }
+    },
+    {
+      "type": "directx_api",
+      "phase": "return",
+      "name": "GetProcAddress",
+      "nonNull": true,
+      "outputState": {
+        "capability": null,
+        "platform": 2
+      }
+    },
+    {
+      "type": "directx_com",
+      "phase": "entry",
+      "method": "DirectDrawCreate",
+      "guidIsNull": true,
+      "outerIsNull": true,
+      "outputState": {
+        "capability": null,
+        "platform": 2
+      }
+    },
+    {
+      "type": "directx_com",
+      "phase": "return",
+      "method": "DirectDrawCreate",
+      "eax": 0,
+      "objectId": 1,
+      "outputState": {
+        "capability": null,
+        "platform": 2
+      }
+    },
+    {
+      "type": "directx_com",
+      "phase": "entry",
+      "method": "QueryInterface",
+      "objectId": 1,
+      "callerRva": 624210,
+      "interfaceGuid": "e0f3a6b3432bcf11a2de00aa00b93356",
+      "outputState": {
+        "capability": 256,
+        "platform": 2
+      }
+    },
+    {
+      "type": "directx_com",
+      "phase": "return",
+      "method": "QueryInterface",
+      "eax": 0,
+      "objectId": 2,
+      "outputState": {
+        "capability": 256,
+        "platform": 2
+      }
+    },
+    {
+      "type": "directx_com",
+      "phase": "entry",
+      "method": "Release",
+      "objectId": 2,
+      "callerRva": 624263,
+      "outputState": {
+        "capability": 256,
+        "platform": 2
+      }
+    },
+    {
+      "type": "directx_com",
+      "phase": "return",
+      "method": "Release",
+      "eax": 0,
+      "outputState": {
+        "capability": 256,
+        "platform": 2
+      }
+    },
+    {
+      "type": "directx_api",
+      "phase": "entry",
+      "name": "LoadLibraryA",
+      "callerRva": "0x98694",
+      "text": "DINPUT.DLL",
+      "outputState": {
+        "capability": 512,
+        "platform": 2
+      }
+    },
+    {
+      "type": "directx_api",
+      "phase": "return",
+      "name": "LoadLibraryA",
+      "nonNull": true,
+      "outputState": {
+        "capability": 512,
+        "platform": 2
+      }
+    },
+    {
+      "type": "directx_api",
+      "phase": "entry",
+      "name": "GetProcAddress",
+      "callerRva": "0x986cd",
+      "procedure": "DirectInputCreateA",
+      "outputState": {
+        "capability": 512,
+        "platform": 2
+      }
+    },
+    {
+      "type": "directx_api",
+      "phase": "return",
+      "name": "GetProcAddress",
+      "nonNull": true,
+      "outputState": {
+        "capability": 512,
+        "platform": 2
+      }
+    },
+    {
+      "type": "directx_api",
+      "phase": "entry",
+      "name": "FreeLibrary",
+      "callerRva": "0x9870c",
+      "outputState": {
+        "capability": 768,
+        "platform": 2
+      }
+    },
+    {
+      "type": "directx_api",
+      "phase": "return",
+      "name": "FreeLibrary",
+      "eax": 1,
+      "outputState": {
+        "capability": 768,
+        "platform": 2
+      }
+    },
+    {
+      "type": "directx_com",
+      "phase": "entry",
+      "method": "SetCooperativeLevel",
+      "objectId": 1,
+      "callerRva": 624450,
+      "windowIsNull": true,
+      "flags": 8,
+      "outputState": {
+        "capability": 768,
+        "platform": 2
+      }
+    },
+    {
+      "type": "directx_com",
+      "phase": "return",
+      "method": "SetCooperativeLevel",
+      "eax": 0,
+      "outputState": {
+        "capability": 768,
+        "platform": 2
+      }
+    },
+    {
+      "type": "directx_com",
+      "phase": "entry",
+      "method": "CreateSurface",
+      "objectId": 1,
+      "callerRva": 624513,
+      "descriptor": "6c0000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000020000",
+      "outerIsNull": true,
+      "outputState": {
+        "capability": 768,
+        "platform": 2
+      }
+    },
+    {
+      "type": "directx_com",
+      "phase": "return",
+      "method": "CreateSurface",
+      "eax": 0,
+      "objectId": 3,
+      "outputState": {
+        "capability": 768,
+        "platform": 2
+      }
+    },
+    {
+      "type": "directx_com",
+      "phase": "entry",
+      "method": "QueryInterface",
+      "objectId": 3,
+      "callerRva": 624577,
+      "interfaceGuid": "004e04dab269d011a1d500aa00b8dfbb",
+      "outputState": {
+        "capability": 768,
+        "platform": 2
+      }
+    },
+    {
+      "type": "directx_com",
+      "phase": "return",
+      "method": "QueryInterface",
+      "eax": 0,
+      "objectId": 4,
+      "outputState": {
+        "capability": 768,
+        "platform": 2
+      }
+    },
+    {
+      "type": "directx_com",
+      "phase": "entry",
+      "method": "QueryInterface",
+      "objectId": 3,
+      "callerRva": 624630,
+      "interfaceGuid": "30862b0b35add0118ea600609797ea5b",
+      "outputState": {
+        "capability": 1280,
+        "platform": 2
+      }
+    },
+    {
+      "type": "directx_com",
+      "phase": "return",
+      "method": "QueryInterface",
+      "eax": 0,
+      "objectId": 5,
+      "outputState": {
+        "capability": 1280,
+        "platform": 2
+      }
+    },
+    {
+      "type": "directx_com",
+      "phase": "entry",
+      "method": "Release",
+      "objectId": 3,
+      "callerRva": 624674,
+      "outputState": {
+        "capability": 1536,
+        "platform": 2
+      }
+    },
+    {
+      "type": "directx_com",
+      "phase": "return",
+      "method": "Release",
+      "eax": 0,
+      "outputState": {
+        "capability": 1536,
+        "platform": 2
+      }
+    },
+    {
+      "type": "directx_com",
+      "phase": "entry",
+      "method": "Release",
+      "objectId": 1,
+      "callerRva": 624684,
+      "outputState": {
+        "capability": 1536,
+        "platform": 2
+      }
+    },
+    {
+      "type": "directx_com",
+      "phase": "return",
+      "method": "Release",
+      "eax": 0,
+      "outputState": {
+        "capability": 1536,
+        "platform": 2
+      }
+    },
+    {
+      "type": "directx_api",
+      "phase": "entry",
+      "name": "CoInitialize",
+      "callerRva": "0x9883c",
+      "reservedIsNull": true,
+      "outputState": {
+        "capability": 1536,
+        "platform": 2
+      }
+    },
+    {
+      "type": "directx_api",
+      "phase": "return",
+      "name": "CoInitialize",
+      "eax": 1,
+      "outputState": {
+        "capability": 1536,
+        "platform": 2
+      }
+    },
+    {
+      "type": "directx_api",
+      "phase": "entry",
+      "name": "CoCreateInstance",
+      "callerRva": "0x98855",
+      "classGuid": "109f6b637d0cd11195b20020afdc7421",
+      "outerIsNull": true,
+      "context": 1,
+      "interfaceGuid": "5a1136652d7bd211ba180000f875ac12",
+      "outputState": {
+        "capability": 1536,
+        "platform": 2
+      }
+    },
+    {
+      "type": "directx_api",
+      "phase": "return",
+      "name": "CoCreateInstance",
+      "eax": 0,
+      "objectIsNonNull": true,
+      "objectId": 6,
+      "outputState": {
+        "capability": 1536,
+        "platform": 2
+      }
+    },
+    {
+      "type": "directx_com",
+      "phase": "entry",
+      "method": "Release",
+      "objectId": 6,
+      "callerRva": 624770,
+      "outputState": {
+        "capability": 1537,
+        "platform": 2
+      }
+    },
+    {
+      "type": "directx_com",
+      "phase": "return",
+      "method": "Release",
+      "eax": 0,
+      "outputState": {
+        "capability": 1537,
+        "platform": 2
+      }
+    },
+    {
+      "type": "directx_api",
+      "phase": "entry",
+      "name": "CoUninitialize",
+      "callerRva": "0x98888",
+      "outputState": {
+        "capability": 1537,
+        "platform": 2
+      }
+    },
+    {
+      "type": "directx_api",
+      "phase": "return",
+      "name": "CoUninitialize",
+      "outputState": {
+        "capability": 1537,
+        "platform": 2
+      }
+    },
+    {
+      "type": "directx_api",
+      "phase": "entry",
+      "name": "GetProcAddress",
+      "callerRva": "0x98894",
+      "procedure": "DirectDrawCreateEx",
+      "outputState": {
+        "capability": 1537,
+        "platform": 2
+      }
+    },
+    {
+      "type": "directx_api",
+      "phase": "return",
+      "name": "GetProcAddress",
+      "nonNull": true,
+      "outputState": {
+        "capability": 1537,
+        "platform": 2
+      }
+    },
+    {
+      "type": "directx_com",
+      "phase": "entry",
+      "method": "DirectDrawCreateEx",
+      "guidIsNull": true,
+      "outerIsNull": true,
+      "interfaceGuid": "c05ee6159c3bd211b92f00609797ea5b",
+      "outputState": {
+        "capability": 1537,
+        "platform": 2
+      }
+    },
+    {
+      "type": "directx_com",
+      "phase": "return",
+      "method": "DirectDrawCreateEx",
+      "eax": 0,
+      "objectId": 7,
+      "outputState": {
+        "capability": 1537,
+        "platform": 2
+      }
+    },
+    {
+      "type": "directx_com",
+      "phase": "entry",
+      "method": "Release",
+      "objectId": 7,
+      "callerRva": 624828,
+      "outputState": {
+        "capability": 1792,
+        "platform": 2
+      }
+    },
+    {
+      "type": "directx_com",
+      "phase": "return",
+      "method": "Release",
+      "eax": 0,
+      "outputState": {
+        "capability": 1792,
+        "platform": 2
+      }
+    },
+    {
+      "type": "directx_api",
+      "phase": "entry",
+      "name": "FreeLibrary",
+      "callerRva": "0x988bf",
+      "outputState": {
+        "capability": 1792,
+        "platform": 2
+      }
+    },
+    {
+      "type": "directx_api",
+      "phase": "return",
+      "name": "FreeLibrary",
+      "eax": 1,
+      "outputState": {
+        "capability": 1792,
+        "platform": 2
+      }
+    }
+  ],
+  "summaries": [
+    {
+      "count": 1,
+      "completed": 1,
+      "events": 48,
+      "verified": false,
+      "objectIdentities": 7,
+      "comMethodHooks": 16,
+      "missing": [
+        "candidate capture/comparison",
+        "error branch coverage"
+      ]
+    }
+  ],
+  "counts": {
+    "entry": 1,
+    "return_": 1,
+    "unmatched_entries": 0
+  },
+  "cleanup": {
+    "owned_process_exited": true
+  }
+}

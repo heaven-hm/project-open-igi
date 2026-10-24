@@ -1,0 +1,20 @@
+{
+  "kind": "retail-data-observations",
+  "schema_version": 1,
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "tool": "Binary Ninja bn_memory_read",
+  "reads": [
+    {"address": "0x00534A30", "length": 64, "hex": "30862b0b35add0118ea600609797ea5b004e04dab269d011a1d500aa00b8dfbbc05ee6159c3bd211b92f00609797ea5be0f3a6b3432bcf11a2de00aa00b93356"},
+    {"address": "0x005348E0", "length": 32, "hex": "5a1136652d7bd211ba180000f875ac12109f6b637d0cd11195b20020afdc7421"}
+  ],
+  "sdk_identities_by_exact_bytes": {
+    "0x00534A30": "IID_IDirectDrawSurface4",
+    "0x00534A40": "IID_IDirectDrawSurface3",
+    "0x00534A50": "IID_IDirectDraw7",
+    "0x00534A60": "IID_IDirectDraw2",
+    "0x005348E0": "IID_IDirectMusic",
+    "0x005348F0": "CLSID_DirectMusic"
+  },
+  "sdk_reference": "/opt/homebrew/opt/mingw-w64/toolchain-i686/i686-w64-mingw32/include/ddraw.h and dmusicc.h",
+  "verified_native": false
+}

@@ -15,7 +15,7 @@
     ],
     "note": ""
   },
-  "declared_build_divergences": [
+  "historical_profile_notes": [
     {
       "id": "mutex-name",
       "what": "\"IGI_TESTING_MUTEX\" build switch makes the mutex name \"IGI1MUTEX\"",
@@ -53,10 +53,13 @@
       "owner_authorization": "address relocation is inherent to the candidate image; the retail walk shape is compared by relation"
     }
   ],
+  "profile_notes_authorize_exemptions": false,
   "boundary": {
     "entry": "observed",
     "candidate_return": [],
-    "retail_return": "EAX 1"
+    "retail_return": [
+      1
+    ]
   },
   "matches": 50,
   "mismatches": 5,
@@ -274,7 +277,9 @@
     {
       "observable": "candidate QTask_CreateTask return",
       "status": "DECLARED_BOUNDARY_UNOBSERVED",
-      "retail": "retail EAX 1",
+      "retail": [
+        1
+      ],
       "candidate": [],
       "note": "outside the entry boundary; absence alone does not establish a throw or its cause"
     },
