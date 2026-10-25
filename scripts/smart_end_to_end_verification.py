@@ -37,6 +37,27 @@ def invoke(command, env, timeout=1200):
     return dict(command=command, exit_code=result.returncode, stdout=result.stdout, stderr=result.stderr)
 
 
+def build_evidence_manifest(root,address,record,binary_hash,source_hash,candidate,receipt,folder):
+    """Per-run catalog overlay containing an actual validated build, no statuses changed."""
+    data=validate_receipt(receipt,root,candidate,[root/record['implementation']['path']])
+    saved=folder/'candidate-receipt.json';saved.write_bytes(receipt.read_bytes())
+    target=root/'docs/fidelity/evidence'/('executed-build-'+address+'-'+digest(candidate)[:16]+'-'+folder.name+'.json')
+    target.parent.mkdir(parents=True,exist_ok=True)
+    value=dict(schema_version=1,kind='build-report',address=address,result='passed',executed=True,
+        binary_sha256=binary_hash,implementation_sha256=source_hash,
+        candidate_executable_sha256=digest(candidate),command=' '.join(data['command']),
+        receipt=dict(path=str(saved.relative_to(root)),sha256=digest(saved)),
+        scope='Actual source-bound compiler execution only; not native acceptance')
+    target.write_text(json.dumps(value,indent=2)+'\n')
+    document=json.loads((root/'docs/fidelity/native-verification.json').read_text())
+    rows=[row for row in document['natives'] if row['address']==address]
+    if len(rows)!=1 or rows[0]!=record:raise ValueError('native record changed before build evidence overlay')
+    rows[0]['verification']['build']=dict(evidence_path=str(target.relative_to(root)),evidence_sha256=digest(target))
+    overlay=folder/'build-evidence-manifest.json'
+    overlay.write_text(json.dumps(document,indent=2)+'\n')
+    return overlay
+
+
 def run(address: str, args) -> tuple[dict, int]:
     config = read_config()
     run_id = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ-') + uuid.uuid4().hex[:8]
@@ -83,10 +104,14 @@ def run(address: str, args) -> tuple[dict, int]:
             validate_receipt(receipt, ROOT, candidate, [implementation])
             env.update(IGI_CANDIDATE_EXE=str(candidate), IGI_CANDIDATE_BUILD_RECEIPT=str(receipt))
             report['candidate_sha256'] = digest(candidate)
+        manifest=ROOT/'docs/fidelity/native-verification.json'
+        if not args.static_only:
+            manifest=build_evidence_manifest(ROOT,address,record,digest(binary),digest(implementation),candidate,receipt,folder)
+            report['build_evidence_manifest']=str(manifest)
         if not args.static_only:
             env['FRIDA_HOST'] = runtime.enter_context(runtime_endpoint(config, folder))
         command = [sys.executable, str(ROOT / 'scripts/native_gate.py'), '--root', str(ROOT),
-            '--address', address, '--file', str(implementation.relative_to(ROOT)), '--binary', str(binary),
+            '--manifest', str(manifest), '--address', address, '--file', str(implementation.relative_to(ROOT)), '--binary', str(binary),
             '--threshold', 'VERIFIED', '--cfg-threshold', '0.85', '--require-semantic-evidence',
             '--require-behavioral-tests', '--report', str(static_report)]
         gate = invoke(command, env, 1800)

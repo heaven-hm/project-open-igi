@@ -65,6 +65,32 @@ class NativeRepairController(unittest.TestCase):
             self.assertEqual(len(visits),2)
             self.assertEqual(lock.call_count,2)
 
+    def test_annotation_identity_rejects_code_or_location_changes(self):
+        from native_source_review import annotation_equivalent
+        old=b'// Native fixture\n// Verified: historical fixture\n// Tools: fixture\nint f(){return 1;}\n'
+        moved=b'// Native fixture\n// Tools: fixture\n// Verified: historical fixture\nint f(){return 1;}\n'
+        self.assertTrue(annotation_equivalent(old,moved))
+        self.assertFalse(annotation_equivalent(old,moved.replace(b'return 1',b'return 2')))
+        self.assertFalse(annotation_equivalent(old,moved.replace(b'int f(){return 1;}',b'int f(){return __LINE__;}')))
+        self.assertFalse(annotation_equivalent(old,b'// Native fixture\n// Tools: fixture\nint f(){return 1;}\n// Verified: historical fixture\n'))
+
+    def test_executed_build_overlay_does_not_promote_native_or_edit_catalog(self):
+        from smart_end_to_end_verification import build_evidence_manifest
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);(root/'docs/fidelity').mkdir(parents=True)
+            record=dict(address='0x00400000',implementation={'path':'engine/fixture.cpp'},verification={'status':'TRANSCRIBED'})
+            manifest=root/'docs/fidelity/native-verification.json'
+            manifest.write_text(json.dumps({'natives':[record]}));original=manifest.read_bytes()
+            candidate=root/'fixture.exe';candidate.write_bytes(b'infrastructure fixture')
+            receipt=root/'receipt.json';receipt.write_text('{}')
+            folder=root/'run';folder.mkdir()
+            with patch('smart_end_to_end_verification.validate_receipt',return_value={'command':['cmake','--build','fixture']}):
+                path=build_evidence_manifest(root,'0x00400000',record,'retail','source',candidate,receipt,folder)
+            data=json.loads(path.read_text())['natives'][0]
+            self.assertEqual(data['verification']['status'],'TRANSCRIBED')
+            self.assertEqual(manifest.read_bytes(),original)
+            self.assertTrue((root/data['verification']['build']['evidence_path']).is_file())
+
     def test_startup_completion_requires_explicit_uniform_contract(self):
         from frida_scoped_capture import startup_completion
         self.assertIsNone(startup_completion({'0x0048F0C0':{}}))

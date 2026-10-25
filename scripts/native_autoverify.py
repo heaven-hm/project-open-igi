@@ -328,6 +328,38 @@ def verify_once(root, job, record, folder, args):
     return result
 
 
+def repair_annotation_source(root,job,record,result):
+    if 'source differs from reviewed record' not in result.get('error',''):
+        return None
+    from native_source_review import refresh_review
+    try:
+        refreshed=refresh_review(root,record)
+    except (OSError,ValueError,KeyError,subprocess.SubprocessError) as error:
+        result['source_review_repair_error']=str(error)
+        return None
+    if not refreshed:return None
+    manifest=root/'docs/fidelity/native-verification.json';original=manifest.read_bytes()
+    document=json.loads(original)
+    matches=[row for row in document['natives'] if row['address']==job['address']]
+    if len(matches)!=1 or matches[0]!=record:return None
+    if digest(root/job['source'])!=refreshed['source_sha256']:return None
+    updated=json.loads(json.dumps(record))
+    updated['implementation']['sha256']=refreshed['source_sha256']
+    header=updated['implementation'].get('header',{})
+    if header.get('path') in refreshed['headers']:
+        header['sha256']=refreshed['headers'][header['path']]
+    updated['verification']['semantic_review']=refreshed['semantic_review']
+    updated['verification']['source_identity_proof']=refreshed['proof']
+    updated['verification'].setdefault('limitations',[]).append('Only Verified annotation positions changed; previous runtime artifacts remain historical. Fresh build/live comparison still required.')
+    document['natives'][document['natives'].index(matches[0])]=updated
+    if manifest.read_bytes()!=original:return None
+    save(manifest,document,sort_keys=False)
+    record.clear();record.update(updated)
+    fresh,_,_,context=inventory(root)
+    job.update(fresh[job['address']])
+    return context
+
+
 def repair_scope_path(root,job,record,result):
     """Relocate an intact scope document after the gate reports a path error."""
     if 'path must be under docs/fidelity/scopes/' not in result.get('failure_details',''):
@@ -390,6 +422,12 @@ def verify(root, job, record, folder, args):
             if repaired:
                 repaired_context=repaired
                 policy='relocate_hash_checked_scope_document'
+            else:
+                repaired=repair_annotation_source(root,job,record,result)
+                if repaired:
+                    repaired_context=repaired
+                    policy='review_verified_annotation_relocation_without_reusing_runtime'
+                    result['source_review_repair']=True
         attempts.append(dict(number=number,result=result['status'],error=result.get('error'),
                              repair=policy,report=str(attempt/'result.json')))
         if result.get('verified') or policy=='evidence_or_behavior_gap_no_automatic_promotion':
