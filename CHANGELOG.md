@@ -11,6 +11,22 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - The 0x0053F316 byte gets an owner, and the CRT sweep confirms the category does not recur
+
+- `igi1.exe` 14,260,288 -> **14,260,556** bytes, green. `0x00460C30 Core_GetGlobal8_460C30` (`mov al,[0x0053F316]; ret`) linked,
+  `BUILD_VERIFIED`, runtime UNOBSERVED.
+- **My earlier "0x0053F316 looks unread" note was wrong**, and the correction is recorded here rather than quietly dropped: an aligned reference
+  search (`/r 0x53f316`) finds one writer (`0x0045E492`, untranscribed) and three readers (`0x0045E812`, `0x00460B5E`, `0x00460C30`). The byte block
+  `0x0053F314`-`0x0053F317` therefore has four owners now, one per address.
+- **CRT/compiler-emitted sweep result**: byte-exact fingerprints over the whole image found exactly one `__chkstk` (`0x4A54A0`), zero `__ftol2`, zero
+  `__security_check_cookie`, zero `__EH_prolog3`, and four SEH-prolog matches (`0x4A50F5`, `0x4A5DEE`, `0x4AD225`, `0x4AD4D3`). Cross-checking the
+  four by reference put three of them inside the CRT cluster only, and `0x4A50F5` had no references at all - so it is recorded as an uncertain
+  fingerprint, not a finding. Conclusion: no game registrar calls anything compiler-emitted except the stack probe, so that misclassification does
+  not recur in the named set.
+- **Method error in the first sweep, recorded because it is instructive**: it inspected the direct callees of `0x00402930`, but the stack probe is
+  called one level deeper, from the registrars. The first answer ("no CRT fingerprint among the missing callees") was true and worthless; the
+  image-wide, reference-cross-checked sweep is the one that means anything.
+
 ### 2026-10-25 - The named blocker set is cleared: five more leaves and one owner/extern pair
 
 - `igi1.exe` 14,258,968 -> **14,260,288** bytes, green. Five natives linked, all `BUILD_VERIFIED`, runtime UNOBSERVED:
