@@ -3221,3 +3221,50 @@ three regions (registration sweep `0x00402930`-`0x00402C37`, teardown sweep
 `0x00402C40`-`0x00402F42`, local helper `0x00402F50`-`0x00402FEB`) - beginning with the six
 opening calls; and **delete `ReportNotTranscribed` from `engine/` rather than leave it beside
 its replacement** (10.15 rule 16).
+
+## Scope conflict at the guard: retail's first call is the AI graph (2026-10-25)
+
+Measured while sizing the `0x00402930` transcription, and it needs an owner ruling because it is
+a scope decision rather than an engineering one.
+
+**Retail's guard call #1 is `0x00508F80`, and that is the AI graph entry.** Following it down:
+
+```
+0x00508F80  ->  0x00508FA0   (needs 34 undefined symbols)
+                0x005183D0   (no file exists)
+```
+
+`0x00508FA0` is a hub: nine `AIGraph_Handler_*`, ten `Graph_Get_*`, two `Camera_Get_*`, five
+`Script_*`, four `QTask_*`, and six globals - most with no implementation. `0x00509440` is close
+(it needs only `g_a7b2cc`), and `0x00508FA0` compiles clean, so the cluster is deep rather than
+impossible.
+
+**The conflict.** 10.13 rule 1 requires every call in the guard be traceable to retail and
+10.13 rule 2 forbids substituting for it - but 10.12 places AI outside the current MVP scope.
+**Retail's guard calls the AI graph first, before `Game_Init`.** The two instructions cannot both
+be satisfied, so one has to give and the choice belongs to the owner.
+
+**Three options, recorded with the reasoning rather than a preference alone:**
+
+1. **Transcribe with `0x00508F80` included and let it fail-closed** on the AI cluster. Faithful
+   to 10.13; the build refuses; nothing renders, because retail's own order reaches AI before
+   `Game_Init`.
+2. **Transcribe the AI graph cluster.** Faithful, but a large body of work that 10.12 defers.
+3. **Transcribe the guard with `Game_Init` reached and the AI call recorded as a blocked gap** -
+   which is what 10.13 rule 1 prescribes when scope does not permit the call: "leave it blocked
+   and record the gap". Gets Level 1 rendering soonest.
+
+**Recommended: 3.** It is the only option that uses the rules' own escape clause and matches
+10.12's ordering.
+
+**What option 3 does NOT license, stated here so it cannot be misread later:** it is not
+permission to reintroduce `RegisterGameClasses()` or any other stand-in under a new name. That
+substitution is the defect found today. **The AI call gets a recorded gap; it does not get a
+substitute.** A gap that is recorded is honest; a gap that is filled with invented code is the
+exact failure this file exists to document.
+
+**Also measured for the transcription, and now known rather than assumed:** five of the guard's
+six opening calls already have tree implementations and four are already in the build -
+`0x00489560`, `0x00407D60`, `0x00488BB0`, `0x00402FF0` and `Game_Init 0x00415530` itself.
+`0x00508F80` is the only one not built. So the guard's opening is mostly a matter of calling what
+already exists, and `0x00508F80` is the single gate on it.
