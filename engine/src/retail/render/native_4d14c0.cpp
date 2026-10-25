@@ -17,7 +17,7 @@
 extern "C" {
 
 // 0x00548441: the word this getter returns.
-std::uint8_t g_548441;
+std::uint8_t g_548441= 0xFFU;
 
 std::uint8_t NATIVE_DECL Render_GetByte_4D14C0(void)
 {

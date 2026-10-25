@@ -13,9 +13,9 @@ std::uint32_t g_5c8ac4[16] = {};  // retail 0x005C8AC4
 std::uint32_t g_5c8b0c = 0U;      // retail 0x005C8B0C
 std::uint32_t g_5c8b10 = 0U;      // retail 0x005C8B10
 std::uint32_t g_5c8b14 = 0U;      // retail 0x005C8B14
-std::uint8_t g_54127c = 0U;       // retail 0x0054127C
-std::uint8_t g_54127d = 0U;       // retail 0x0054127D
-std::uint8_t g_54127e = 0U;       // retail 0x0054127E
+std::uint8_t g_54127c = 0xFFU;       // retail 0x0054127C
+std::uint8_t g_54127d = 0xFFU;       // retail 0x0054127D
+std::uint8_t g_54127e = 0xFFU;       // retail 0x0054127E
 
 extern "C" {
 

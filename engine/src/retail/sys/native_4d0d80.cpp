@@ -17,7 +17,7 @@
 extern "C" {
 
 // 0x0054836C: the four-byte object this getter reads; nothing else in the tree owns it yet.
-std::uint32_t g_54836c;
+std::uint32_t g_54836c= 0xFFU;
 
 std::uint32_t NATIVE_DECL Sys_GetGlobal32_4D0D80(void)
 {

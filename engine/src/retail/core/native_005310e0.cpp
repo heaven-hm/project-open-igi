@@ -8,7 +8,7 @@
 #include <cstdint>
 
 extern "C" {
-std::uint16_t g_54f7d0;  // retail 0x0054F7D0: FreeCamera class id, written here
+std::uint16_t g_54f7d0= 0x181U;  // retail 0x0054F7D0: FreeCamera class id, written here
 
 std::int32_t FreeCamera_Init()
 {

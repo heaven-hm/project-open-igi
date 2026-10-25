@@ -8,8 +8,8 @@
 #include <cstdint>
 
 extern "C" {
-std::uint16_t g_54db68;  // retail 0x0054DB68: SoundSysMicrophone class id, written here
-std::uint8_t  g_54db6a;  // retail 0x0054DB6A: QTask_AllocateEvent result, written here
+std::uint16_t g_54db68= 0x181U;  // retail 0x0054DB68: SoundSysMicrophone class id, written here
+std::uint8_t  g_54db6a= 0xFFU;  // retail 0x0054DB6A: QTask_AllocateEvent result, written here
 
 std::int32_t SoundSysMicrophone_Init()
 {

@@ -111,7 +111,7 @@ extern void Task_RegisterAIEvents_44EEB0(void);
 
 // 0x0053C920: the "HumanAI" task type id (word). Image value 0 -> initialiser 0, symbol class `B`, writable `.data`: `.rdata` ends at
 // 0x005358F6 and `.data` starts at 0x00536000, and this image has no `.bss`, so a zero-image global is `.data` with a zero initialiser.
-std::uint16_t g_53c920 = 0U;
+std::uint16_t g_53c920 = 0x181U;
 
 // 0x0053C928: the nine script paths this body loads through Qvm_Load. The retail image holds nine absolute pointers to strings in `.data`; the
 // port holds its own pointers to byte-identical literals, in the retail order and with the retail text. The array is left non-const so it lands

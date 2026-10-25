@@ -17,7 +17,7 @@
 extern "C" {
 
 // 0x00547F3C: the word this getter returns.
-std::uint8_t g_547f3c;
+std::uint8_t g_547f3c= 0xFFU;
 
 std::uint8_t NATIVE_DECL DynObj_GetByte_4C56D0(void)
 {

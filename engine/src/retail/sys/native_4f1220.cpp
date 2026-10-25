@@ -18,7 +18,7 @@ extern "C" {
 
 // 0x0054DDAC: the 4-byte object this getter reads. No other owner in the tree; extent proven by the access width used
 // by every reference to this address in the image.
-std::uint32_t g_54ddac;
+std::uint32_t g_54ddac= 0xFFU;
 
 std::uint32_t NATIVE_DECL Sys_GetGlobal32_4F1220(void)
 {

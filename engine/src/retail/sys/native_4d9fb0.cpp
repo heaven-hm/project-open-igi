@@ -18,7 +18,7 @@ extern "C" {
 
 // 0x0054864A: the 1-byte object this getter reads. No other owner in the tree; extent proven by the access width used
 // by every reference to this address in the image.
-std::uint8_t g_54864a;
+std::uint8_t g_54864a= 0xFFU;
 
 std::uint8_t NATIVE_DECL Sys_GetGlobal8_4D9FB0(void)
 {

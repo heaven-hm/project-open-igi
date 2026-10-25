@@ -6,6 +6,7 @@
 // Status/limits: TRANSCRIBED; NOT LINKABLE - its four callees (0x004675B0, 0x00498040, 0x004B3C50, 0x004B5860) have no manifest record and no file, and each is declared below as a measured-arity gap rather than guessed at. STRUCTURALLY_VERIFIED against the 123-instruction listing (2 branches, 1 ret, 4 call sites, one loop-free body); BUILD_VERIFIED (i686-w64-mingw32-g++ -std=c++20 -O2 -Wall -Wextra single-file compile); runtime UNOBSERVED. LIMITS, stated rather than hidden: (a) the callee parameter types are NOT inferred - each is declared with the exact number of 4-byte stack slots the push sequence shows, and the four float immediates are passed as their exact bit patterns (0x400C0000, 0x3F400000, 0x44051EB8) so no float-vs-int claim is made; (b) the fourteen-argument call's argument ORDER is retail's push order reversed (arg1 = last pushed), which is cdecl; (c) what object is, what the table at 0x0053F5F0 holds, and what the colour array at 0x0053F608 means are not established by this body. Domain: core/, because its caller is core/native_413730.cpp and it operates on the core task object layout.
 
 #include <cstdint>
+#include <cstring>
 
 #ifndef NATIVE_DECL
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -70,15 +71,15 @@ void NATIVE_DECL Core_Unknown_467F30(void* argument)
 
     // 0x00467FCE-0x00467FE3: the two computed slots are copied back over the difference slots - frame[0x2C] = out1 (0x00467FDF)
     // and frame[0x28] = out0 (0x00467FE3) - which is why the frame bytes, not separate locals, are used here.
-    *reinterpret_cast<std::uint32_t*>(frame + 0x2C) = *reinterpret_cast<const std::uint32_t*>(&out1);
-    *reinterpret_cast<std::uint32_t*>(frame + 0x28) = *reinterpret_cast<const std::uint32_t*>(&out0);
+    std::memcpy(frame + 0x2C, &out1, sizeof(out1));
+    std::memcpy(frame + 0x28, &out0, sizeof(out0));
 
     // 0x00467FF0: lea eax,[eax+eax*2] with eax = [esi+0x20] (three floats per entry); 0x00467FFC: lea edi,[eax*4+0x53f608].
     const float* const colour = reinterpret_cast<const float*>(static_cast<std::uintptr_t>(*reinterpret_cast<std::uint32_t*>(object + 0x20)) * 12U + 0x0053F608U);
 
     // 0x00467FF4: fstp dword [esp+0x38] stores out2 into E-0x10, then 0x00468003 copies that dword to E-0x04 (frame[0x30]) with
     // `mov [esp+0x44],edx`; the frame[0x30] slot therefore holds out2's bits and is what the first call receives as its third slot's peer.
-    *reinterpret_cast<std::uint32_t*>(frame + 0x30) = *reinterpret_cast<const std::uint32_t*>(&out2);
+    std::memcpy(frame + 0x30, &out2, sizeof(out2));
 
     // 0x00467FEC-0x0046800C: lea ecx,[esp+0x38] = &frame[0x28]; lea edx,[esp+0x30] = &frame[0x1C]; push ecx; push edx; push esi.
     // cdecl: arg1 = last pushed = edx = &frame[0x1C], arg2 = &frame[0x28], arg3 = object.
@@ -117,6 +118,8 @@ void NATIVE_DECL Core_Unknown_467F30(void* argument)
     const std::uint32_t table_count = *reinterpret_cast<std::uint32_t*>(static_cast<std::uintptr_t>(index) * 8U + 0x0053F5F4U);
     const std::uint32_t table_pointer = *reinterpret_cast<std::uint32_t*>(static_cast<std::uintptr_t>(index) * 8U + 0x0053F5F0U);
     const float negated = -*reinterpret_cast<float*>(frame + 0x00);
+    std::uint32_t negated_bits = 0U;                                  // arg10 is the negated float's exact bits.
+    std::memcpy(&negated_bits, &negated, sizeof(negated_bits));
     Sub_4B5860(table_pointer,
                table_count,
                *reinterpret_cast<const std::uint32_t*>(frame + 0x1C),
@@ -126,7 +129,7 @@ void NATIVE_DECL Core_Unknown_467F30(void* argument)
                *reinterpret_cast<const std::uint32_t*>(&colour[1]),
                *reinterpret_cast<const std::uint32_t*>(&colour[2]),
                0x3F400000U,
-               *reinterpret_cast<const std::uint32_t*>(&negated),
+               negated_bits,
                *reinterpret_cast<const std::uint32_t*>(frame + 0x14),
                *reinterpret_cast<const std::uint32_t*>(frame + 0x18),
                0x400C0000U,

@@ -14,7 +14,7 @@ extern "C" void Script_QHashNodeRegister(void* const arg1, void* const value); /
 
 extern "C" {
 
-std::uint16_t g_53fe84 = 0U; // retail 0x0053FE84: the "KnifeStab" task type id written here
+std::uint16_t g_53fe84 = 0x181U; // retail 0x0053FE84: the "KnifeStab" task type id written here
 
 void Task_DefineKnifeStab()
 {

@@ -17,8 +17,8 @@ void TaskType_SetPhaseHandlerByte(std::int32_t value, std::int32_t slot);
 
 extern std::uint16_t g_54875c; // 0x0054875C, written outside this routine
 
-std::uint8_t g_548176;         // 0x00548176, first allocated 0x181 event id
-std::uint8_t g_548177;         // 0x00548177, second allocated 0x181 event id
+std::uint8_t g_548176= 0xFFU;         // 0x00548176, first allocated 0x181 event id
+std::uint8_t g_548177= 0xFFU;         // 0x00548177, second allocated 0x181 event id
 std::uint32_t g_a44348[17];    // 0x00A44348..0x00A4438B, cleared here
 
 void QTask_InitPhaseHandlers()

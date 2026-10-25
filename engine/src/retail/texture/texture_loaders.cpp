@@ -19,8 +19,8 @@ std::int32_t g_a94a64 = 0;
 std::int8_t g_943b3c = 0;
 
 // Port-owned storage for callback table `0x00A94E84` and indices `0x00546FA8`, `0x00546FB0`, `0x00A84A48`.
-std::int32_t g_546fa8 = 0;
-std::int32_t g_546fb0 = 1;
+std::int32_t g_546fa8 = 0xFFFFFFFFU;
+std::int32_t g_546fb0 = 0xFFFFFFFFU;
 std::int32_t g_a84a48 = 2;
 TextureBackendDispatchFn g_a94e84[0x10]{};
 

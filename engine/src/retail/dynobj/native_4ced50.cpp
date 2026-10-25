@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA-256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; image base 0x00400000; .text VA 0x00401000 raw 0x1000.
 // Tools/evidence: capstone 5.0.7 reachability decode from the verified entry (fallthrough plus every branch target, no fallthrough past a ret). The extent is bounded by the `ret` at 0x004CEE26 and NINE `90` nops follow it (read byte-by-byte from the image; the next entry 0x004CEE30 starts `mov 0x00A4EC60,%eax`). Exact bytes 83 EC 24 53 8B 5C 24 2C 55 56 57 33 ED 8D 7B 14 83 C9 FF 33 C0 89 6B 24 F2 AE F7 D1 2B F9 8D 54 24 14 8B C1 8B F7 8B FA 68 18 C9 53 00 C1 E9 02 F3 A5 8B C8 83 E1 03 F3 A4 8D 4C 24 18 51 E8 1D 6E FD FF 89 6C 24 18 83 C4 08 BE 01 00 00 00 8D 6B 3E 8B CE B8 64 00 00 00 0F AF CE 99 F7 F9 8D 54 24 14 52 66 89 45 00 E8 73 00 00 00 83 C4 04 89 03 85 C0 74 4C 8D 7C 24 14 83 C9 FF 33 C0 83 C5 02 F2 AE F7 D1 49 8D 7C 24 14 83 C3 04 8A 54 0C 13 83 C9 FF FE C2 F2 AE 8B 44 24 10 F7 D1 49 40 46 89 44 24 10 83 FE 06 88 54 0C 13 7C A3 66 8B D0 8B 44 24 38 5F 5E 5D 66 89 50 3C 5B 83 C4 24 C3 8B 44 24 38 66 8B 4C 24 10 5F 5E 5D 66 89 48 3C 5B 83 C4 24 C3. Call displacements resolve as v+5+rel32: 0x004CED8E + 0xFFFD6E1D (-168419) = 0x004A5BB0; 0x004CEDB8 + 0x73 (115) = 0x004CEE30. The literal pushed at 0x004CED78 is 0x0053C918 and its bytes are "johan" followed by a terminator. Call census from the image's 0xE8 enumeration: TWO call sites image-wide, 0x004CED18 and 0x004CF05E (the package sweep in dynobj/native_4cf050.cpp).
 // Behavior/CFG: one cdecl pointer argument (the record), no return value. The frame is `sub $0x24,%esp`. It zeroes the record's dword at +0x24, copies the record's NUL-terminated name from +0x14 into the frame (rep movsd then rep movsb, terminator included), calls 0x004A5BB0 with a pointer four bytes into that buffer and the literal "johan" - discarding the result, which retail never reads - then loops five times with the index 1..5: it computes the SIGNED quotient 100/(index*index), stores it as a word at +0x3E+2*(index-1) BEFORE the call, calls 0x004CEE30 with the name buffer, stores the returned pointer at +0x00+4*(index-1), and on a null result leaves through the tail epilogue. On a non-null result it re-scans the name, increments its LAST character in place, and counts the load. Both epilogues write the low word of the count to +0x3C of the ORIGINAL argument - not of the advanced slot pointer, which is why the argument is re-read from the stack at 0x004CEE02/0x004CEE12. THE FRAME ALIASES AND IS MODELLED AS ONE ARRAY: the pointer pushed at 0x004CED89 is [esp+0x18], which is four bytes into the buffer written through [esp+0x14] at 0x004CED6E, and the last-character read at [esp+0x13+ecx] falls one byte BELOW that buffer when the name is empty - two separate C++ objects would not reproduce either overlap. Note also that the counter is initialized at 0x004CED93 as `mov %ebp,0x18(%esp)` while the loop reads it as `0x10(%esp)`: the same slot, addressed eight bytes higher because the two call arguments are still pushed at that point.
-// Status/limits: TRANSCRIBED; NOT LINKABLE - undefined in tree, measured: Str_FindSubstring_4A5BB0 (0x004A5BB0) and DynObj_ParseConfigFile_13 (0x004CEE30), both assigned to another writer and neither stubbed here. NAME COORDINATION: 0x004CEE30 is declared with its manifest name, so the implementation of that VA must define exactly this symbol; 0x004A5BB0 has no manifest record and is declared with an address-suffixed placeholder derived from its measured behavior, so that name must be reconciled with the writer's file or the link error will look like a missing implementation. STRUCTURALLY_VERIFIED against the 84-instruction listing (5 blocks, 6 edges); BUILD_VERIFIED (i686-w64-mingw32-g++ -std=c++20 -O2 -Wall -Wextra single-file compile, rc=0, zero warnings); runtime UNOBSERVED. Domain: dynobj/.
+// Status/limits: TRANSCRIBED; NOT LINKABLE - undefined in tree, measured: Str_FindSubstring_4A5BB0 (0x004A5BB0, no manifest record, no implementation). 0x004CEE30 is no longer a gap: its file is dynobj/native_4cee30.cpp, written under the address-suffixed placeholder DynObj_LookupPackageItem_4CEE30 because its body contradicts the manifest name DynObj_ParseConfigFile_13, and this file declares and calls that name. STRUCTURALLY_VERIFIED against the 84-instruction listing (5 blocks, 6 edges); BUILD_VERIFIED (i686-w64-mingw32-g++ -std=c++20 -O2 -Wall -Wextra single-file compile, rc=0, zero warnings); runtime UNOBSERVED. Domain: dynobj/.
 
 #include <cstdint>
 
@@ -16,11 +16,15 @@
 
 extern "C" {
 
-// NATIVE GAP: 0x004CEE30 has no implementation under engine/ (its manifest record names
-// scripts/GameNatives/dynobj/004CEE30-DynObj_ParseConfigFile_13.cpp, a path outside the tree). Declared with the
-// manifest's name so this file and that implementation agree. One cdecl pointer argument (the name buffer); the
-// returned pointer is stored in the record, and a null result ends the loop.
-void* NATIVE_DECL DynObj_ParseConfigFile_13(void* name_buffer);
+// NATIVE GAP: 0x004CEE30 now has its own file, dynobj/native_4cee30.cpp. The manifest record for that VA names it
+// DynObj_ParseConfigFile_13 (path scripts/GameNatives/dynobj/004CEE30-DynObj_ParseConfigFile_13.cpp, outside the
+// tree), but its body performs no parsing and no file access - it walks the package list at 0x00A4EC60 comparing the
+// argument against each item's name and returns the matching item pointer - so the body contradicts the manifest
+// name and the file is written under the address-suffixed placeholder DynObj_LookupPackageItem_4CEE30. This
+// declaration and the call site below use that name so the two files link; the manifest record needs the same
+// correction. One cdecl pointer argument (the name buffer); the returned pointer is stored in the record, and a
+// null result ends the loop.
+void* NATIVE_DECL DynObj_LookupPackageItem_4CEE30(char const* name);
 
 // NATIVE GAP: 0x004A5BB0 has no implementation and no manifest record. Measured behavior: a read-only substring
 // search - it takes its second argument's first byte and scans its first argument for it, returning a pointer into
@@ -91,7 +95,7 @@ void NATIVE_DECL DynObj_LoadRecordVariants_4CED50(void* record_argument)
         // 0x004CEDAF/0x004CEDB3/0x004CEDB4: lea 0x14(%esp),%edx; push %edx; mov %ax,(%ebp) - the quotient is stored
         // as a WORD before the call, not after it.
         *reinterpret_cast<std::uint16_t*>(scale_slot) = static_cast<std::uint16_t>(scale);
-        void* const loaded = DynObj_ParseConfigFile_13(name_buffer);
+        void* const loaded = DynObj_LookupPackageItem_4CEE30(reinterpret_cast<char const*>(name_buffer));
 
         // 0x004CEDC0/0x004CEDC2/0x004CEDC4: mov %eax,(%ebx); test %eax,%eax; je 0x004CEE12 - the pointer is stored
         // at +0x00+4*(index-1) and a null result leaves through the tail epilogue.

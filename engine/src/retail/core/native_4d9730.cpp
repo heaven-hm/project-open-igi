@@ -12,8 +12,8 @@ extern "C" {
 // Native: TaskEventTable_MarkSlot; retail VA 0x00401860.
 void TaskEventTable_MarkSlot(std::uint16_t value, std::uint32_t index);
 
-std::uint16_t g_548638;    // retail 0x00548638: QObj class id, written here
-std::uint8_t g_54863a;     // retail 0x0054863A: byte result of the 0x4017C0 call
+std::uint16_t g_548638= 0x181U;    // retail 0x00548638: QObj class id, written here
+std::uint8_t g_54863a= 0xFFU;     // retail 0x0054863A: byte result of the 0x4017C0 call
 
 std::int32_t QObj_Init()
 {

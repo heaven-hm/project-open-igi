@@ -17,7 +17,7 @@
 extern "C" {
 
 // 0x0054E4CE: the one-byte object this getter reads; nothing else in the tree owns it yet.
-std::uint8_t g_54e4ce;
+std::uint8_t g_54e4ce= 0xFFU;
 
 std::uint8_t NATIVE_DECL Sys_GetGlobal8_4FC860(void)
 {

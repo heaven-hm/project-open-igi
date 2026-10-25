@@ -15,7 +15,7 @@ extern "C" void Script_QHashNodeRegister(void* const arg1, void* const value);  
 
 extern "C" {
 
-std::uint16_t g_53fe68 = 0U; // retail 0x0053FE68: the "Gunx2" task type id written here
+std::uint16_t g_53fe68 = 0x181U; // retail 0x0053FE68: the "Gunx2" task type id written here
 
 void Task_DefineGunx2()
 {

@@ -18,7 +18,7 @@ extern "C" {
 
 // 0x00547F42: the 2-byte object this getter reads. No other owner in the tree; extent proven by the access width used
 // by every reference to this address in the image.
-std::uint16_t g_547f42;
+std::uint16_t g_547f42= 0x181U;
 
 std::uint16_t NATIVE_DECL Sys_GetGlobal16_4C48C0(void)
 {

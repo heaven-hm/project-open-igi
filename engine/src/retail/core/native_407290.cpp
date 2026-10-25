@@ -52,8 +52,8 @@ std::uint8_t g_5690e0[0x10] = {};
 std::uint8_t g_5691f0[0x10] = {};
 std::uint32_t g_569204 = 0U;
 std::uint32_t g_569208 = 0U;
-std::uint16_t g_5384c0 = 0U;
-std::uint16_t g_5384c2 = 0U;
+std::uint16_t g_5384c0 = 0x181U;
+std::uint16_t g_5384c2 = 0x181U;
 
 void NATIVE_DECL Task_DefineWeaponConfig_407290(void)
 {

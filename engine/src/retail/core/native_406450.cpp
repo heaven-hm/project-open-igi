@@ -33,8 +33,8 @@ extern "C" void* Script_TaskContainer_Append(std::int32_t* const container, std:
                                              std::int32_t const arg3, std::int32_t const arg4,
                                              std::int32_t const arg5, std::int32_t const arg6);
 
-std::uint16_t g_5383d8 = 0U;   // retail 0x005383D8: "HumanAIConfig" type id
-std::uint16_t g_5383da = 0U;   // retail 0x005383DA: "HumanAIConfigItem" type id
+std::uint16_t g_5383d8 = 0x181U;   // retail 0x005383D8: "HumanAIConfig" type id
+std::uint16_t g_5383da = 0x181U;   // retail 0x005383DA: "HumanAIConfigItem" type id
 std::uint32_t g_5690b0 = 0U;   // retail 0x005690B0: first container dword (a pointer, stored as a dword)
 std::uint32_t g_5690c8 = 0U;   // retail 0x005690C8: second container dword
 std::int32_t g_5690b8 = 0;     // retail 0x005690B8

@@ -8,7 +8,7 @@
 #include <cstdint>
 
 extern "C" {
-std::uint16_t g_54d974;  // retail 0x0054D974: CameraControlTask class id, written here
+std::uint16_t g_54d974= 0x181U;  // retail 0x0054D974: CameraControlTask class id, written here
 
 std::int32_t CameraControlTask_Init()
 {

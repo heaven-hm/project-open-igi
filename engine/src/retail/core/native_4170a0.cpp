@@ -38,7 +38,7 @@ void* NATIVE_DECL Script_TaskContainer_Append(std::int32_t* container, std::int3
                                               std::int32_t arg3, std::int32_t arg4,
                                               std::int32_t arg5, std::int32_t arg6);
 
-std::uint16_t g_539824 = 0U;
+std::uint16_t g_539824 = 0x181U;
 std::uint32_t g_57bae0 = 0U;
 
 void NATIVE_DECL Task_DefineMenuManager_4170A0(void)

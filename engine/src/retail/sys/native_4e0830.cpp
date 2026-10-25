@@ -17,7 +17,7 @@
 extern "C" {
 
 // 0x00548698: the two-byte object this getter reads; nothing else in the tree owns it yet.
-std::uint16_t g_548698;
+std::uint16_t g_548698= 0x181U;
 
 std::uint16_t NATIVE_DECL Sys_GetGlobal16_4E0830(void)
 {
