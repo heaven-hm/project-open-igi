@@ -11,6 +11,20 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - FlashBang and M203 registrars, and the first registrar that passes a non-zero fourth argument
+
+- `igi1.exe` 14,255,796 -> **14,257,059** bytes, green. `0x0047E700 Task_DefineFlashBang` (129 B / 1 block / 34 instructions) and
+  `0x00476110 Task_DefineM203` (150 B / 1 block / 39 instructions) linked, both `BUILD_VERIFIED`, runtime UNOBSERVED.
+- **Finding worth carrying to every later registrar**: FlashBang passes **4** as the fourth `TaskType_Register` argument, not 0. Verified in the
+  image at `0x0047E711` (`push 4`) with the stack layout `name, 0x48, parent, 4, 0`; `0x00401900` tests that word and calls `0x004B0B00` when it
+  is non-zero, so transcribing 0 there would change behaviour. Every other registrar landed so far passes 0.
+- **Second structural negative recorded**: FlashBang has no `Script_QHashNodeRegister` call, so it receives no `TASKTYPE_` script name - the same
+  shape as Computer. Two negatives now, so "every registrar registers a script name" is demonstrably false and must not be assumed.
+- Both cleanups close exactly: FlashBang `add esp,0x40` = 16 dwords (2 register slots + 3 register arguments + 3*3 link arguments + 2 registry
+  lookup arguments); M203 `add esp,0x38` = 14 and `add esp,0x18` = 6.
+- Branch lists for the earlier branchy bodies were recorded with the branch condition behind each jump (`0x004169D0`'s 13 blocks per-block counts,
+  `0x00467D90`'s single sentinel test), so those two are no longer "walked, probably fine" entries.
+
 ### 2026-10-25 - The 17-registrar unblocker, and two config tables that are not leaf getters
 
 - `igi1.exe` 14,254,193 -> **14,255,796** bytes, green. Four natives linked, all `BUILD_VERIFIED`, runtime UNOBSERVED:

@@ -3834,7 +3834,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -3870,7 +3871,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -3906,7 +3908,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -3942,7 +3945,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -4021,7 +4025,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004015F0-semantic-review.json",
           "evidence_sha256": "d5044665323c77677fd3e02f1bf67ec0ccffa7d13c89d04cf364a1af7863c10f"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -4100,7 +4105,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -4136,7 +4142,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `TaskEventTable_MarkSlot_401860` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -4173,7 +4180,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `TaskEventTable_MarkSlotNoMask_401890` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -4210,7 +4218,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `TaskEventTable_ClearSlot_4018C0` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -4405,7 +4414,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `QHashSlotTable_Release_401B20` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -4442,7 +4452,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 0.05833333333333333
+        "cfg_similarity": 0.05833333333333333,
+        "limitations": []
       },
       "notes": "Renamed from `TaskType_SetPhaseHandlerByte_401D30` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -5308,7 +5319,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004036B0-semantic-review.json",
           "evidence_sha256": "7bb867acdf7eef74bfeda90b518f9248aee14dcf23c32fddcbc8fdd84f35bf5a"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -5348,7 +5360,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00403750-semantic-review.json",
           "evidence_sha256": "1fb03def40a2841627a4bde874207dc718e3caa426c91cda6bf426ffe7014e93"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -5388,7 +5401,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004037C0-semantic-review.json",
           "evidence_sha256": "a658f57a98f1ef0b39b1c791738374057e825a355f3db5aa8f0d66ec8c533b33"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -5428,7 +5442,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00403870-semantic-review.json",
           "evidence_sha256": "a6bfef7cd285d58d8687c823f9580de4ced3cded8e7345d71806a01d24cb467e"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -5468,7 +5483,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004038E0-semantic-review.json",
           "evidence_sha256": "0bb7472fda0842c1cb7709a57d5b12fa977b38c3848708affaf129bd81763508"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -5508,7 +5524,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00403950-semantic-review.json",
           "evidence_sha256": "cb3be8f01894f98a83e94e8dc4292ccb2936e597b95dc16452d5b2c80573f250"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -5548,7 +5565,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00403A00-semantic-review.json",
           "evidence_sha256": "876883d0b338b6694c6ba4800faad91d259e33a0821a224720ad91f84cef29d9"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -5588,7 +5606,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00403AC0-semantic-review.json",
           "evidence_sha256": "41d85b0499f0daf89b620b9e16c89e8b2708971fde4f5b276668fe8fe4078d35"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -6087,7 +6106,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00403DF0-semantic-review.json",
           "evidence_sha256": "40dd1748f0075443603447ab536e904e20889f1adda48d3b6b2fd6e9d87021e6"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -6127,7 +6147,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00403E60-semantic-review.json",
           "evidence_sha256": "5e4197f0ff1252ac9f97715476120e42f0986dd8a30f0f6c93d3fa57ee58ad66"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -6167,7 +6188,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00403EF0-semantic-review.json",
           "evidence_sha256": "dacedd655614d44b79d5a1d52119da7a6c01981b28f2b8f409cc4e031ce38674"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -6207,7 +6229,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00403F80-semantic-review.json",
           "evidence_sha256": "eef6cacc1b64062eb59ae44c20172d8b7fc6b75d28ae65e7e65afebe38ec8bb1"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -6247,7 +6270,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00404010-semantic-review.json",
           "evidence_sha256": "abc96deb1168c39cce717f3a8a939b521a23634a098742422af656f375bba289"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -6287,7 +6311,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00404080-semantic-review.json",
           "evidence_sha256": "69a4cc5c54c892f569c0f5e799b1c4ab3c8d0a9b89fd158fb46600cdba5fe1b4"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -6327,7 +6352,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004040F0-semantic-review.json",
           "evidence_sha256": "7d8546816d8c43ea3d0d2725293a8dfb7ad1719ce95d1b766d3a9f577e5e18f2"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -12045,7 +12071,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004071D0-semantic-review.json",
           "evidence_sha256": "ca47f9f139f15e532ad47b80357c19b80461c1cba05ef184cec77844b0e65e6f"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -12175,7 +12202,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00407E30-semantic-review.json",
           "evidence_sha256": "6a9b2ccc3d19028757fb9c02f5856d3f80a253b96826d5e146a2870dcdfdcd32"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -12215,7 +12243,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00407F50-semantic-review.json",
           "evidence_sha256": "5a4b774e828cf49de83bc81330ba2a61bb70bb6055796b6c3765ee14afd58f35"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -22504,7 +22533,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004101C0-semantic-review.json",
           "evidence_sha256": "859c776ccd8efe585b91f4884e30adec171f86134ce68d8e7270655c2694447f"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -22544,7 +22574,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00410240-semantic-review.json",
           "evidence_sha256": "09c2c1f9cc6adabb67953028cdd63b8d71089204cd035b53e0ef69a265f6009a"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -22584,7 +22615,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004102D0-semantic-review.json",
           "evidence_sha256": "b8bf7545d9cc0cc11546ed2f8f4aafd60b40219f1082b9b512f147631a9f9236"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -23083,7 +23115,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004108C0-semantic-review.json",
           "evidence_sha256": "4ec7a0ad055ade7e2780a9ba053d424809f3e23b3834c1765976cc2f0c49cbe1"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -25231,7 +25264,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00413B20-semantic-review.json",
           "evidence_sha256": "4f528977ebb1d150cfcf8694974e6bbea5227f184a5e56af0da9562e3e0079e6"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -26667,7 +26701,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004167D0-semantic-review.json",
           "evidence_sha256": "3bd82c56a36fc3ffba8c1d052fbbcf6be4ef0ef8d848cb03416931931cea07bc"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -26707,7 +26742,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004167E0-semantic-review.json",
           "evidence_sha256": "3727eb3705787f3ebeff7b64e4bb672255b896c12604535f1cb43b7e995354a7"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -26747,7 +26783,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004167F0-semantic-review.json",
           "evidence_sha256": "295f8d1cf0b6f82faf19f4185586832e46df36e45f049d07a0f3221d9e5d923f"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -26787,7 +26824,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00416800-semantic-review.json",
           "evidence_sha256": "e77553b29aac40a219940912bc25ab26ad09c4dd19e7f67673dea3f221ffb2ea"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -26827,7 +26865,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00416810-semantic-review.json",
           "evidence_sha256": "187fc6d78fb7a1d6595d15cb631f32feca35840d13c250e302bc120e1c95a854"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -26867,7 +26906,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00416820-semantic-review.json",
           "evidence_sha256": "9cd439c6604b7f0c123f05e83648556c8d225a7e6a9bb9b4d26324b396a3c12f"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -26907,7 +26947,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00416830-semantic-review.json",
           "evidence_sha256": "41ca72a008d9684eec5af827044997b32f8675780ef4f2fc4f67dc02c615ec52"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -26947,7 +26988,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00416840-semantic-review.json",
           "evidence_sha256": "a630edf76c921afa04a835fbc643febb2506a5ec2292001251f6fc2dafd621d7"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -26987,7 +27029,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00416850-semantic-review.json",
           "evidence_sha256": "7edbab75179438c9aacbfafb528c25f0701bafbf125a10a5d51c8a6145980a8b"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -27027,7 +27070,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00416860-semantic-review.json",
           "evidence_sha256": "89243ec7faff0b5937ec21533486179ccaee11cd449b28b6e92e438fa35cd0ab"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -27067,7 +27111,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00416880-semantic-review.json",
           "evidence_sha256": "ddb0f8e11b97f0661f099dbe225d2cc72c25d3a27142237c2d2590eb108b2049"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -27107,7 +27152,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00416890-semantic-review.json",
           "evidence_sha256": "5d1cb549a0ff5a39267ecda37ef444927d009fe4e977ab4190f4f6e8677709de"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -27723,7 +27769,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -27763,7 +27810,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00424850-semantic-review.json",
           "evidence_sha256": "e97cd0bf564a04acc2f8b45e22af0a4b878e358de98633f4cf9588c497e08369"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -27803,7 +27851,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00424870-semantic-review.json",
           "evidence_sha256": "74b6ae237de3f4ac759977a6659e66a6222c6aab7d2b8d73107cf2d51cb9bb39"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -27843,7 +27892,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00424880-semantic-review.json",
           "evidence_sha256": "2e5f9ccba5ead6d104aab2b439553790458c357987a17821e636d78ccf7c36d9"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -27883,7 +27933,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00424890-semantic-review.json",
           "evidence_sha256": "73ecd55a0efee8e22472cbc5088c305df680019835c46a133272035a596747a6"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -27923,7 +27974,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00424B80-semantic-review.json",
           "evidence_sha256": "072fbbd86fea207609c5eebf29472a90f3139775fb63e8cb889d5c114e1906ff"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -27959,7 +28011,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -27995,7 +28048,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -28031,7 +28085,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -28084,7 +28139,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -28120,7 +28176,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -28160,7 +28217,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x0042FDC0-semantic-review.json",
           "evidence_sha256": "8360fc697ec1b3469ba27b9b583cc4251c927653f9c3cd42dd1f62734742e326"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -28200,7 +28258,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00430950-semantic-review.json",
           "evidence_sha256": "9ff68fd2b2ad3a496e0f54f5d26f8d8df7c5b00d3da7e7efacfc04e298458963"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -28450,7 +28509,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00443E80-semantic-review.json",
           "evidence_sha256": "a491b531e63258ddabe3dd75d25368ae14d6403c1544bd925632ffb6c15942a9"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -28490,7 +28550,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00443E90-semantic-review.json",
           "evidence_sha256": "9096b052d2c6e04676a573b96aa5e74e3a07889d511d00b62dd0ea9f99dfcbe5"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -28547,7 +28608,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00448550-semantic-review.json",
           "evidence_sha256": "a582a604a2a845f82cb6868dfc6d0541c1eda717a62f063230ea3e2546daccd3"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -28587,7 +28649,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00448560-semantic-review.json",
           "evidence_sha256": "56ab007274126381e6fe5bdc85e02203999c2829ec0d5f985ce69c98dc9194d0"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -39938,7 +40001,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00468BB0-semantic-review.json",
           "evidence_sha256": "b4493955f73373e9858a29c302c8bacd07d97eb87c3241398bcb0dadeafbc42b"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -39978,7 +40042,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x0046AB20-semantic-review.json",
           "evidence_sha256": "2c44ef8fcee3e98c313a9b710c672e5b2e0adec2ee7f084f8629626f681f7428"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -40018,7 +40083,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x0046B040-semantic-review.json",
           "evidence_sha256": "c1af6113fd6a270dc0140120aa15cac608416330a571bdb925a902463c972737"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -40058,7 +40124,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x0046B4D0-semantic-review.json",
           "evidence_sha256": "18b98614aeebcc39f9ab0b9e70481dd07ddbd284710b9e8ee844e56edf16628d"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -40197,7 +40264,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00477BF0-semantic-review.json",
           "evidence_sha256": "689bd70a55350d4d1adc32f59cf201db9649b5446e490a3b71dc3f17b2ecb22b"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -40237,7 +40305,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x0047B100-semantic-review.json",
           "evidence_sha256": "00a6b60bf2bf3b04743a9d73d76f312cea7d880333a1497ced6ee52d4bd26c12"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -40277,7 +40346,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x0047CAD0-semantic-review.json",
           "evidence_sha256": "fac7d3318fbfeaa658267b96797ad30c6b46c7f989fc9ba172bb76360887d664"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -40317,7 +40387,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x0047E6F0-semantic-review.json",
           "evidence_sha256": "92a7197553d623567d697a3011d2f675a5712922d5001f0084854f84f6aed066"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -40376,7 +40447,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00481340-semantic-review.json",
           "evidence_sha256": "06e808e4f77043d04eb06a12c4f0343bb8d532e03c7a0f71a0bf60a18ed54d84"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -40416,7 +40488,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00481350-semantic-review.json",
           "evidence_sha256": "1076340dde1d9d5845ea69c099dbab74a27c4c3c3343f4d3551c7f0d79723587"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -40667,7 +40740,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00484F60-semantic-review.json",
           "evidence_sha256": "1bfcf08e3e1e7af6ecb0ba33fa59314943c670faf82500da13c021f321911214"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -40764,7 +40838,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00487190-semantic-review.json",
           "evidence_sha256": "1e2f84141e6054692dab3744b19a96628b0c1c89eb45164721ae480ea2b5a679"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -40804,7 +40879,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004871B0-semantic-review.json",
           "evidence_sha256": "100d74899558a665bbbf338ddb86d3d31b35bddad296d8d5c1d32235b6ed96b0"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -40844,7 +40920,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00488700-semantic-review.json",
           "evidence_sha256": "d26c5884d2858f95bd554aa63e62e157bc1c48d6f060cf990e184713c1683bd3"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -40923,7 +41000,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00489610-semantic-review.json",
           "evidence_sha256": "2daf181af74bc713259eb1922a4a04ebfc1f89bd3a198e455d871935aa672988"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -40963,7 +41041,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00489620-semantic-review.json",
           "evidence_sha256": "661c38ba31ec488c318ee0b53c9be230589a15254dcc022f6e0c0b724abf1174"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -41003,7 +41082,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00489630-semantic-review.json",
           "evidence_sha256": "26d5610dbb538284b58093b837dbf453515ed568f680903d96bde61082502ecd"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -41185,7 +41265,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `GetInstanceHandle_48F090` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -41222,7 +41303,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `GetWindowHandle_48F0A0` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -43637,7 +43719,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Input_GetInstance_48F270` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -44189,7 +44272,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -44225,7 +44309,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -44543,7 +44628,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 0.9390625
+        "cfg_similarity": 0.9390625,
+        "limitations": []
       },
       "notes": "Renamed from `DirectInput_ErrorText_48FA80` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -44580,7 +44666,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Input_MouseGetCaps_48FD90` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -44617,7 +44704,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Mouse_WinProc_48FED0` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -44715,7 +44803,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00490120-semantic-review.json",
           "evidence_sha256": "1987ee448fb111e9a2dd7f29a7702f9d3e9da5560aeb09b7563fe5e3fe94e067"
-        }
+        },
+        "limitations": []
       },
       "notes": "Renamed from `Keyboard_WinProc_490120` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -44752,7 +44841,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Keyboard_VkToStateIndex_490190` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -44789,7 +44879,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Keyboard_Update_490230` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -45584,7 +45675,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004950E0-semantic-review.json",
           "evidence_sha256": "ff9eab6e612fc790bb02d8ade2a4b7c8836efd93e5450aec2a680901fec0aca5"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -46945,7 +47037,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Mem_FreeBlock_4A6A50` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -48197,7 +48290,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 0.013999999999999999
+        "cfg_similarity": 0.013999999999999999,
+        "limitations": []
       }
     },
     {
@@ -48806,7 +48900,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Pool_Init_4AAD48` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -48843,7 +48938,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Pool_FindBlock_4AAD90` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -48880,7 +48976,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Mem_FreeSmallBlock_4AADBB` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -48917,7 +49014,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Mem_FreeBucketNode_4AB6DD` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -48954,7 +49052,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Mem_PurgeBucketPages_4AB733` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -48991,7 +49090,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Mem_FindBucketBlock_4AB7F5` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -49028,7 +49128,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Mem_MarkBucketPage_4AB84C` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -49069,7 +49170,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004ABC46-semantic-review.json",
           "evidence_sha256": "631bce42b935afd3edd768914f389d49fd33b86c6c166b3b6af570a66e0c232e"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -49695,7 +49797,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004AD36E-semantic-review.json",
           "evidence_sha256": "052dc9b64a2be3a6cb03485fb126f1cab4bcbec504e86e4de48f14c21f429800"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -49911,7 +50014,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004AE670-semantic-review.json",
           "evidence_sha256": "eb90ae5e4666f14b954a4624363c526eb7adc08e7206de235dd94d04f5f3dd4b"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -49947,7 +50051,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -49983,7 +50088,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -50023,7 +50129,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004AF746-semantic-review.json",
           "evidence_sha256": "e3e7c6abfd827dc57cc6dcabde7152d5947e6a974c38ed25748563b1f787c0c0"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -50063,7 +50170,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004AF74C-semantic-review.json",
           "evidence_sha256": "47a39130d6415ccb3bcdc635903fd1978ebe8e430248756d7f0cced853929eb2"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -50103,7 +50211,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004AF752-semantic-review.json",
           "evidence_sha256": "614cecb0f96d6831f10d9f0e854e73ba60cee5efdc9a9f33ed0b77921cf2ca9c"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -50143,7 +50252,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004AF758-semantic-review.json",
           "evidence_sha256": "65d1e0d4f1d45b5bb7770f8a7d8d3dbe391f5f42f1514051fe675c7147b6c8df"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -50183,7 +50293,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004AF75E-semantic-review.json",
           "evidence_sha256": "0a8dd380b6e5c9d5f7a0b0494a492ed0a1a726f8fe3089eb6fe101a54a7e7bf1"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -50223,7 +50334,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004AF764-semantic-review.json",
           "evidence_sha256": "6e07179c331092c7995cba4b6f5fe1c7b2ca02bece4d0abaeed25c340d9a874e"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -50263,7 +50375,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004AF76A-semantic-review.json",
           "evidence_sha256": "0437b86f71e91c565227746d0af02b8770016e98ac0ba59ec99cf38420611f98"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -50303,7 +50416,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004AF770-semantic-review.json",
           "evidence_sha256": "c7f4f70686ae372db84e7d44672472de8647e144702fed0e69ac6a00a470be75"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -50343,7 +50457,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004AF776-semantic-review.json",
           "evidence_sha256": "06d2de3cd1aa0976eef7675e9f1304fea76fbcdc58a55703d00d1f4d71db9cb4"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -50383,7 +50498,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004AF77C-semantic-review.json",
           "evidence_sha256": "94f2c7cc2ee324903bc1cf596e7fec1229a1cf917f5eb3197029853b4569f87d"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -50423,7 +50539,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004AF782-semantic-review.json",
           "evidence_sha256": "e5809dd367bbbb1cea77a620b5ca0223c66f367338fb08eadc257e76d5c03d57"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -50463,7 +50580,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004AF788-semantic-review.json",
           "evidence_sha256": "9583fd275ac7333246cce6f66948dd170ca00c27fea98ed78bce9a9d5290852c"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -50503,7 +50621,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004AF78E-semantic-review.json",
           "evidence_sha256": "644c0c935c8f893d819b9092bad8d82c46b5b8069d5c233898f588021f38c795"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -50543,7 +50662,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004AF794-semantic-review.json",
           "evidence_sha256": "427ee4c407fb62280501f93395ba83b3912fec3c158e107322626c8dc8584b38"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -50583,7 +50703,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004AF79A-semantic-review.json",
           "evidence_sha256": "76538e9b7529b6e60b5d93d525a0c8556eeb46f5a2d225a26026b8ee9b1c8e21"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -50623,7 +50744,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004AF7A0-semantic-review.json",
           "evidence_sha256": "3a15f5fa1d604d4fafcc26337ce4390c85badd28bc93188e8e02c2049b5edb46"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -50663,7 +50785,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004AF7A6-semantic-review.json",
           "evidence_sha256": "8e0e37fb5408e6d5e335b3830dcfbc2003019d6a8665133bafa38398cb56c205"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -50770,7 +50893,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Script_WarningLog_4AF810` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -50811,7 +50935,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004AF860-semantic-review.json",
           "evidence_sha256": "74c72a4154779b5558cfb93699cb4475534d554bb474458c38938dcd01669482"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -50847,7 +50972,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -50883,7 +51009,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -50923,7 +51050,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004AF890-semantic-review.json",
           "evidence_sha256": "17ef8964042f31af84f61b4bfc3864433d8d4aaed5b291082eb24f304266e8ce"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -50963,7 +51091,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004AF8A0-semantic-review.json",
           "evidence_sha256": "a11429f26ddeaeceb6108bbae0cd752d22d032672ab5f63ede04758887541751"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -51003,7 +51132,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004AF8B0-semantic-review.json",
           "evidence_sha256": "87c8590cb1b8ca1fc5663de35ff116896122fd16140e370e27c6dfe5db2977fc"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -51044,7 +51174,8 @@
           "evidence_path": "docs/fidelity/evidence/0x004AF8F0-semantic-review.json",
           "evidence_sha256": "4c87628f90a871b0679d162d3d6b671541b8bbe566e5e37354fdaa9af48e0bad"
         },
-        "notes": "CLASSIFICATION CORRECTION (round 244): called from 0x004012BF inside the CRT startup region and placed among CRT pattern/list helpers (0x004AFF90, 0x004AFFB0, 0x004AF9D0), so this is runtime list support, not a game native. Kept as a transcribed record with its evidence; not boundary progress."
+        "notes": "CLASSIFICATION CORRECTION (round 244): called from 0x004012BF inside the CRT startup region and placed among CRT pattern/list helpers (0x004AFF90, 0x004AFFB0, 0x004AF9D0), so this is runtime list support, not a game native. Kept as a transcribed record with its evidence; not boundary progress.",
+        "limitations": []
       }
     },
     {
@@ -51080,7 +51211,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Script_QHashListInsert_4AF910` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -51207,7 +51339,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -51247,7 +51380,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B0B70-semantic-review.json",
           "evidence_sha256": "ed672ad509b603b9c93d3063e7f310246f5865ea9e5cf85d01286088434b61e6"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -51562,7 +51696,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Mem_DeAllocFn_4B0D10` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -51599,7 +51734,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -51635,7 +51771,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Mem_QHashFlagClear_4B0D50` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -51672,7 +51809,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Mem_FlagStackPop_4B0D60` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -51709,7 +51847,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Mem_FlagStackPush_4B0D90` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -51750,7 +51889,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B0DB0-semantic-review.json",
           "evidence_sha256": "672f235732f0463a4ef6eb8b7c617a16372595435ef92782017dffa23a213db6"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -51790,7 +51930,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B0DC0-semantic-review.json",
           "evidence_sha256": "58aa199c5b272eaa5e4162f1f9c06c4a2ea67d01d7511c1637fed26c63728cf3"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -51830,7 +51971,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B0E00-semantic-review.json",
           "evidence_sha256": "9326537ee7f4ab769f1a2318551c4881ac6fa3170e465a6113980894d0754c4c"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -51870,7 +52012,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B0E50-semantic-review.json",
           "evidence_sha256": "ca946bed52e00f523545584d723eef110ff80b9d5941611789ed1aae0bb712ea"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -51910,7 +52053,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B0E70-semantic-review.json",
           "evidence_sha256": "4c097ec424ed75956b6e6e62b9c4054ff10300b791baee072f311f561b901463"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -51950,7 +52094,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B0EB0-semantic-review.json",
           "evidence_sha256": "c506107b5ff1e3fa89df798c22579c8590814efc3f4b9f113693f688f0049d30"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -51990,7 +52135,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B0EC0-semantic-review.json",
           "evidence_sha256": "53d463f6eef82e974f4bd01880ab4847b8a800af1bc1af4fc887998f99ed20f8"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -52030,7 +52176,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B0EE0-semantic-review.json",
           "evidence_sha256": "385fae2bce9a6afd93668dbca134606bb56a1b2cea37bd10a9611cef458d8ec0"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -52070,7 +52217,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B0F30-semantic-review.json",
           "evidence_sha256": "c359d31d3873e313e17005553fa60bac4da5151bd0d169b9a8a11da78def2f84"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -52110,7 +52258,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B0F70-semantic-review.json",
           "evidence_sha256": "85e24120ed075c87c396b9b9ea8cfbae2aeb1bb23ff0b6e37c296a511eaad514"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -52227,7 +52376,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B0F90-semantic-review.json",
           "evidence_sha256": "23a3015b7133c361ef347d5926416008ebb86314e75a4cca482031bfb2c3906b"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -52267,7 +52417,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B0FD0-semantic-review.json",
           "evidence_sha256": "0b36a903fc91867e31c57f92f666a803eb2d169a41dce7a116596140f1739d11"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -52307,7 +52458,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B1000-semantic-review.json",
           "evidence_sha256": "db212f09959c7d6ff921a6689f364a570277b739278edb4aa4297cc398c7447e"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -52347,7 +52499,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B1020-semantic-review.json",
           "evidence_sha256": "d8bd6692bb0b379bdbf5639a9c82743192ec06c8d480cfb2672322808bba9001"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -52387,7 +52540,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B1180-semantic-review.json",
           "evidence_sha256": "a6b39f3c28129d72784691aa746a07d57749bd93eb63b706918c4244b9c911e3"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -52427,7 +52581,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B11A0-semantic-review.json",
           "evidence_sha256": "7e2434dd14496c5adf3912e5299cf8a62a58acf521f33837f3302a4c793e74db"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -52467,7 +52622,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B1290-semantic-review.json",
           "evidence_sha256": "4f1ed95f78ac980710ac679e3294d9e89b7819a7b1a27704590b3ff16ddb08dd"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -52507,7 +52663,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B12D0-semantic-review.json",
           "evidence_sha256": "410a80e89ae3eaf1c1d502746e23406d6ec24541dffa4ca81cd31b16766db988"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -52547,7 +52704,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B12F0-semantic-review.json",
           "evidence_sha256": "486c70af5bd8bb05b115e878b11de48237382f9e04c391456cf56ae386d6f691"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -52587,7 +52745,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B13A0-semantic-review.json",
           "evidence_sha256": "f76dac6d70a49dd561b56641418a36726b84e4e5e21b653b54838e5ad5ed2d34"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -52627,7 +52786,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B1420-semantic-review.json",
           "evidence_sha256": "85b0129eb6ff89dd2e50c3a9a795db738b94fda1d32f323c60a9eb49069fc2fa"
-        }
+        },
+        "limitations": []
       },
       "notes": [
         "Catalog name Sys_IllegalDeviceNameInP contradicted: 0x004B1420 is the QFile device-path dispatcher (all eight call sites are device-open wrappers) and the illegal-name Debug_Error at 0x004B14CD is one of its two fatal branches. Placeholder name kept until VERIFIED."
@@ -52670,7 +52830,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B1620-semantic-review.json",
           "evidence_sha256": "96e33025d38d7ebf7e69dff950f324f4a02444ecb2a8f6d617b662f8fe2bcbf7"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -52781,7 +52942,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B16D0-semantic-review.json",
           "evidence_sha256": "23464927edc21e172ea9d6df6c73ace5b2744a4285c3a1a9cf4986e3465aef2b"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -52821,7 +52983,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B1700-semantic-review.json",
           "evidence_sha256": "ea218b35f92f03fe8ab7177b69acd1937f5e482e1fe744a175107ea6b5289ea1"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -52861,7 +53024,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B1730-semantic-review.json",
           "evidence_sha256": "b56ebb3ef0bded2fdaa75641d9d0e0f3bd7e439c1bfe1ab74aceaf7f57283dab"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -52901,7 +53065,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B1760-semantic-review.json",
           "evidence_sha256": "8d1d08abf636731853361f4dfda91050961726543cd12f8d0c89c8181c1b5f81"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -53012,7 +53177,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B17A0-semantic-review.json",
           "evidence_sha256": "14a82c517be6fbb3445dfd2ef91fee81dde6bbc80e6feddd23ee314efdec6296"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -53052,7 +53218,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B17C0-semantic-review.json",
           "evidence_sha256": "7ffc3bf9f849c671721dfdb5787eba16a07dfa9e1f2ee2cdb4feccd31ad77f83"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -53234,7 +53401,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B19C0-semantic-review.json",
           "evidence_sha256": "e522e26e4cf4ecbdd21882aa7921d7909e4153554c9b43743829b4f48087aac8"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -53274,7 +53442,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B1A90-semantic-review.json",
           "evidence_sha256": "f7a6bf4ccbe570dd808e5188483b2ae05ca75210479ed139e9c6c81b5315ae48"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -53314,7 +53483,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B1B90-semantic-review.json",
           "evidence_sha256": "2c4d0ca3cc504fbf2c3b3d9bd4bc021e46013880b65cdbb44ce96f83cd92ecc4"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -53354,7 +53524,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B1BC0-semantic-review.json",
           "evidence_sha256": "2a2ef4cf6f333fb4144645b80fdb317af7047a3ce37564b1bf3e74bd7c515f1f"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -53394,7 +53565,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B1BE0-semantic-review.json",
           "evidence_sha256": "13320a0e7f273ada7e0c6baf27474f101f25e1ad8fb9df2cbe752c455ba5784c"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -53434,7 +53606,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B1C00-semantic-review.json",
           "evidence_sha256": "3b2f12829963529c6afaf5150b5b90ec5bec275f8c12a43f551f04431c166865"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -53474,7 +53647,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B1C20-semantic-review.json",
           "evidence_sha256": "3232ef5bc5bc15b1c7e9cbe8ec18e50c4655e2f48c8fbad775ae899933bdeb77"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -53514,7 +53688,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B1C40-semantic-review.json",
           "evidence_sha256": "c2ec6b46d77bfe04f68b3a1392bdee13f9a0f6bfeda49144105fcd08bc5d11c1"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -53554,7 +53729,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B1C60-semantic-review.json",
           "evidence_sha256": "6af3eed2e76e10774b510f16b49914c5b0cd7763eb05c51096997da6890d271a"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -53594,7 +53770,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B1C80-semantic-review.json",
           "evidence_sha256": "4a83e1340c918c9b71622fa1f30b6ddafcd5e8dda170bad055153df1c829bc03"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -53634,7 +53811,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B1CA0-semantic-review.json",
           "evidence_sha256": "46430d3c78eaf0c209a09998c179a4845b9899fc64d3843e0e2a07abfe45dabd"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -53674,7 +53852,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B1CC0-semantic-review.json",
           "evidence_sha256": "ed479316d60270a9c8a63a1611ba5ac56a55e2c9ac5ff20938e62fef7e705950"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -53714,7 +53893,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B1CE0-semantic-review.json",
           "evidence_sha256": "9b68ba6fae85e26af298eb0d301fee75580b0fb3bf3a3753eef3b7aa263eadb1"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -53754,7 +53934,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B1D00-semantic-review.json",
           "evidence_sha256": "f2c921f757c82e8792cfaa81e675bc77fcb0f5826853c235f887d2206f80cc7a"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -53794,7 +53975,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B1D20-semantic-review.json",
           "evidence_sha256": "de754cfd3da092b74b3a2b8f5224b68945b5784e185d99ef23aab051d4472156"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -53834,7 +54016,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B1D40-semantic-review.json",
           "evidence_sha256": "3e8d33bd18bad9f0b0e63c96b16cf722488d60839079123ecf8eacb1665b5188"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -53874,7 +54057,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B1D60-semantic-review.json",
           "evidence_sha256": "8c41098851199d25590d91ac31437f1e801e04b3954fbab53f3eea56d0cfc100"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -53914,7 +54098,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B1D80-semantic-review.json",
           "evidence_sha256": "438586f88c7ee7f2428416949041ef86c0548320ceaf51c4af7af9b097e6b88c"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -53954,7 +54139,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B1DA0-semantic-review.json",
           "evidence_sha256": "300ff6a7ce2a33091e24d7ba43163777814f659da8fa500b2bb752b97f254a3a"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -53994,7 +54180,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B1DC0-semantic-review.json",
           "evidence_sha256": "9fd7a5449ef0685cff0f7166463ea44784b7bbbf7d68446663cb44a11b8501cb"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -54034,7 +54221,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B1DE0-semantic-review.json",
           "evidence_sha256": "5c39d1b0259da3112dfcfce1bff1f56cec41ea06ec8673a4db6133f9bc418fa8"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -54188,7 +54376,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B1FB0-semantic-review.json",
           "evidence_sha256": "b97410fb5af7e476bd5a8edff0efe021bbc299a3a6b8086ac13f5ff5dd62f453"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -54522,7 +54711,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B4720-semantic-review.json",
           "evidence_sha256": "9dce7be4c1196cf49072386e85bc50631fad3081f2a57d71456c7e177a85075f"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -55455,7 +55645,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B6420-semantic-review.json",
           "evidence_sha256": "6fe5287ef07f54f20a5600da577f4229ff7dd0d58f9aa4ea61187da00f195d8d"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -55495,7 +55686,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B64F0-semantic-review.json",
           "evidence_sha256": "072ef8ffe26c240899551ebc5998b781ce95dfe9128867217569544db9d9f569"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -56727,7 +56919,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Script_QHashNodeRegister_4B8810` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -56764,7 +56957,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Script_QHashNodeRegisterEx_4B8890` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -56805,7 +56999,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B8970-semantic-review.json",
           "evidence_sha256": "d7aa17bb4cadd68eff095d99ef527a2e9c7661c29662c9de238d08687c7fd116"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -57046,7 +57241,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Qvm_IndexBelowCount_4B8B00` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -57087,7 +57283,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B8C10-semantic-review.json",
           "evidence_sha256": "25d4f2b924b899880e98d1cab36a9ccab74d3efffcf856824ee854baa10f3e23"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -57127,7 +57324,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B8C60-semantic-review.json",
           "evidence_sha256": "54c22a7059e40bb68d9eca4f25dadeda4a0283f0abe1078d37645f8f0bc1b66c"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -57163,7 +57361,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Script_QHashNodeCreate_4BAAC0` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -57200,7 +57399,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Script_QHashSymbolTableInit_4BACD0` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -57494,7 +57694,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004BF1E0-semantic-review.json",
           "evidence_sha256": "bf792fb703e5d9e9960466d29aa59db96d0ca613936078140fc674f19c21abfa"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -57534,7 +57735,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004C0170-semantic-review.json",
           "evidence_sha256": "47e65595383ecd5ae3918dd566adddcbeb08b9b8832bec25912f859f386e26f6"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -57574,7 +57776,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004C0230-semantic-review.json",
           "evidence_sha256": "ab674981bae51412721403b6ac5824c27cd6b5b1610be10dafe50b441368990c"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -57614,7 +57817,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004C0240-semantic-review.json",
           "evidence_sha256": "cc0bbb4fcf4772d649134da0875bdb6fb7d6fa02c9b4012833c062d585fb027e"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -57749,7 +57953,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Script_QHashTableCreate_4C0360` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -57786,7 +57991,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Script_QHashNodeLookup_4C04B0` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -57823,7 +58029,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Script_Hash32_4C0530` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -57860,7 +58067,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Script_QHashSymbolRegister_4C0560` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -58037,7 +58245,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -58315,7 +58524,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004C4520-semantic-review.json",
           "evidence_sha256": "ac488d1a4c0f17ba5c3786a32fcf8e8a0fb86954d86c03ba6328b44a1e61eb21"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -58355,7 +58565,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004C48C0-semantic-review.json",
           "evidence_sha256": "726b110ba207ed11e454b2b62504f4c75921d568a967b3822d563c9c09409e1d"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -58395,7 +58606,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004C56D0-semantic-review.json",
           "evidence_sha256": "5be00df8592996c5536a8a42fa1f2f8fa5c16104fb84ca9c54760612341a6837"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -58435,7 +58647,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004C56E0-semantic-review.json",
           "evidence_sha256": "facc7ff05075f622b6caab7bd236d70cd387b46ca477e3d598e2d0148a834164"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -58475,7 +58688,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004C56F0-semantic-review.json",
           "evidence_sha256": "74e4d3b46958a32a1c07407eaa2f6af0c51626ca54e48c738a47900e0c02db32"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -58515,7 +58729,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004C5700-semantic-review.json",
           "evidence_sha256": "8772e4ffc07f79fdffabb3dae155a6285e79d6cbca698b745be7bd659b7cd2b7"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -58555,7 +58770,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004C5800-semantic-review.json",
           "evidence_sha256": "b9d7373e3c97940c28093c17ff39e3001eaf210e08241ca8befcf681911f42e2"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -58630,7 +58846,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `QTask_InitPhaseHandlers_4C5900` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -59498,7 +59715,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from Script_StateByteGet_4CEA10; the value is a task/phase event id, not a state byte (proven in the evidence sheet section 13.8). Name stays address-suffixed while the native is only TRANSCRIBED."
     },
@@ -59535,7 +59753,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from Script_StateByteGet_4CEA20; the value is a task/phase event id, not a state byte (proven in the evidence sheet section 13.8). Name stays address-suffixed while the native is only TRANSCRIBED."
     },
@@ -59938,7 +60157,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004CEF30-semantic-review.json",
           "evidence_sha256": "0b987ee3b8fe757fc966e271e7b656dc9660b7f3997644cdd05f3c6d4308dc56"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -60964,7 +61184,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004D0D80-semantic-review.json",
           "evidence_sha256": "18f96bdaa3f8d900fa1e14edef6b9601f5166e5da72a4a87044f74309ec774d0"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -61144,7 +61365,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004D14C0-semantic-review.json",
           "evidence_sha256": "2b46882412cdd65898b2ca1e30ad2cdf4a07c16389b96785f27bd76b4b688477"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -61184,7 +61406,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004D14D0-semantic-review.json",
           "evidence_sha256": "a6c648c131eb60fc8eabf194ded1a3870e0d470f36ce92ca2fda48e3f70c9675"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -61463,7 +61686,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `QTask_NoOpHandler_4D3710` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -62098,7 +62322,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `QObj_Init_4D9730` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -62139,7 +62364,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004D97E0-semantic-review.json",
           "evidence_sha256": "5525c9ee2520a1ce7ae357b74228120da653086275d7e22ca13ab0ed4f1d0ed8"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -62179,7 +62405,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004D9850-semantic-review.json",
           "evidence_sha256": "1e153dc910caa9a38da535cc08603e8dba80b4375d15b059bbacc98b23166e5c"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -62359,7 +62586,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004D9FA0-semantic-review.json",
           "evidence_sha256": "61049a269d7f904b6885f0db87b7c05197f139205731f3b1b6ebf7a2794f1ddf"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -62399,7 +62627,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004D9FB0-semantic-review.json",
           "evidence_sha256": "12ffbfa3d721626f4b8de90b82753ce4f87db3526d24ccac88f65628ca50c4f3"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -62685,7 +62914,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -62791,7 +63021,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -62827,7 +63058,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -62863,7 +63095,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `DynCubeObj_Init_4E5370` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -62904,7 +63137,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004E7530-semantic-review.json",
           "evidence_sha256": "9ff34b78ef89e2164c5df07efbc013f06d39a675a73d39c907d93a2d7b61987d"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -62984,7 +63218,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004E8C60-semantic-review.json",
           "evidence_sha256": "4e299112bfb8737b7d5399a6fa14418403f5c18d502599366c79e168160d57c9"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -63024,7 +63259,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004E9EC0-semantic-review.json",
           "evidence_sha256": "5419583f6a1b8f8b6d674c6d587e77730939a65a4c06c712dd0eef97dfc5df8f"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -63064,7 +63300,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004EAD20-semantic-review.json",
           "evidence_sha256": "c443ea2950a9d80b23acafda36615cfcdcf7f23b05c9057f8b4e21106800e9be"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -63104,7 +63341,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004EBA90-semantic-review.json",
           "evidence_sha256": "cc8d5fe9301fba399db291400905073ac15ff8373d6006c2094293306f804126"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -63251,7 +63489,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `InputPort_Init_4ED510` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -63576,7 +63815,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -63612,7 +63852,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -63648,7 +63889,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -63964,7 +64206,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Script_HashBucket_4EE960` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -64071,7 +64314,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -64107,7 +64351,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -64143,7 +64388,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -64179,7 +64425,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -64215,7 +64462,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -64251,7 +64499,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -64287,7 +64536,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -64393,7 +64643,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -64569,7 +64820,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -65025,7 +65277,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -65271,7 +65524,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -65797,7 +66051,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -66113,7 +66368,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -66919,7 +67175,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Script_Clear_LevelState_4F0610` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -67026,7 +67283,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Script_ClearStaticState_4F0640` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -67203,7 +67461,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Script_Clear_DynamicState_4F06F0` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -67310,7 +67569,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Script_Clear_IdleState_4F0710` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -67417,7 +67677,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Script_Clear_CameraBaseState_4F0730` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -67454,7 +67715,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `QHashNode_Release_4F0C90` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -67566,7 +67828,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004F0EF0-semantic-review.json",
           "evidence_sha256": "4113b516272a4bccbfce21657ed726176c9df37bab9ad888f698258c23fe30a4"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -67606,7 +67869,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004F0F00-semantic-review.json",
           "evidence_sha256": "82055a81c0e4639f6e785e2b4c088818b284a34e5e3f2e61abfde9a0202ad28c"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -67646,7 +67910,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004F0F20-semantic-review.json",
           "evidence_sha256": "b2cca9384236b6131549b28d6a908f643d0a76eef56f46215a75cf6023397e53"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -67686,7 +67951,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004F0F30-semantic-review.json",
           "evidence_sha256": "3955a1ad620ff084ea9daf60815a7b1fd632d6fac0ef512e78c93537b6669697"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -67726,7 +67992,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004F0F40-semantic-review.json",
           "evidence_sha256": "3055e4cb9b78cb74e9bce237db5e0184b33cf5095cf11fad26b60eeca69e8661"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -67766,7 +68033,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004F0F50-semantic-review.json",
           "evidence_sha256": "cc69fc8f125da71070257189fef1c1b19757b7eb61f0e2adf48e6caf7109e6c1"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -67806,7 +68074,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004F0F60-semantic-review.json",
           "evidence_sha256": "3e07bef0c8da75d74ac7ad0c350b41e82ccb84224ad74a707887103ae1270091"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -67846,7 +68115,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004F0F70-semantic-review.json",
           "evidence_sha256": "3857874a1a2e5b6d0480ec7ef7ca661a756b5da49be7c7dff476562797bbf34d"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -67882,7 +68152,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -67922,7 +68193,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004F0F90-semantic-review.json",
           "evidence_sha256": "df9fe5d2f48ebe2dfaf6e0dac9a1a04310736a081e16cae11ee2ece08c143324"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -67962,7 +68234,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004F0FA0-semantic-review.json",
           "evidence_sha256": "276872d0f71501e815d5fc57e13d3b54e479a6b11de28abd936e9bc0e1a753b0"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -68002,7 +68275,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004F0FB0-semantic-review.json",
           "evidence_sha256": "333f1114679457695fdacc7dfb601acfca020d9ec5f529a0bb3771123b2e1b86"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -68042,7 +68316,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004F0FC0-semantic-review.json",
           "evidence_sha256": "0bcca22910348062226f104a1efc02913e9376897c59d6d64574e64e3bb85aab"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -68082,7 +68357,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004F0FD0-semantic-review.json",
           "evidence_sha256": "66f30ddbac9d0a9991340a2aaf9b0b697ae7d3cd41b6519e32deb0cbcd1443f7"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -68122,7 +68398,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004F0FE0-semantic-review.json",
           "evidence_sha256": "f2cc95b2d83dbb38c4a04559733fa81297a3e6fed1d041f4a0dc70542ef94c14"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -68162,7 +68439,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004F0FF0-semantic-review.json",
           "evidence_sha256": "07fd70ed6ef7ed0df002591d74ac547b1cfa19522bd1c1bbbc67d941b4191a1e"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -68198,7 +68476,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -68238,7 +68517,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004F1010-semantic-review.json",
           "evidence_sha256": "62578483d762d8d2c5de4e07137859b9817ef9ead1c1e91f765879fb2f764722"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -68365,7 +68645,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `QHash_FindValue_4F1180` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -68402,7 +68683,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `QHashNode_Find_4F11A0` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -68439,7 +68721,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -68479,7 +68762,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004F1210-semantic-review.json",
           "evidence_sha256": "04b61a9a8d378f62d64c292080cfc582298212bcf239cb336b1bd6c522add440"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -68519,7 +68803,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004F1220-semantic-review.json",
           "evidence_sha256": "bbd96714b065d2f8adbac007254615cc04e32b5e49f69b92f58ad474051f178f"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -68555,7 +68840,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Script_ParameterEventInit_4F1840` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -68592,7 +68878,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Script_ParameterEventReset_4F18C0` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -68629,7 +68916,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Script_TaskContainer_Alloc_4F1950` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -68666,7 +68954,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Script_TaskContainer_Grow_4F1980` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -68703,7 +68992,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Script_ParameterTypeRegister_4F19C0` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -68740,7 +69030,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Script_ParameterTypeFree_4F1A40` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -68777,7 +69068,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -68813,7 +69105,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -68849,7 +69142,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Script_TaskContainer_Append_4F1A80` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -68886,7 +69180,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Script_ParameterEventSlotAlloc_4F1B20` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -68923,7 +69218,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Script_ParameterEventSlotClear_4F1B50` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -68960,7 +69256,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Script_ParameterEventSlotGetEA_4F1B60` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -68997,7 +69294,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Script_ParameterEventSlotGetE6_4F1B70` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -69034,7 +69332,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Script_ParameterEventSlotGetEB_4F1B80` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -69071,7 +69370,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Script_ParameterEventSlotGetE9_4F1B90` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -69108,7 +69408,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Script_ParameterEventSlotGetE7_4F1BA0` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -69145,7 +69446,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Script_ParameterEventSlotGetE8_4F1BB0` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -69182,7 +69484,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Script_ParameterPropertySet_4F1BC0` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -69219,7 +69522,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Qvm_CheckParameterCount_4F1C20` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -69260,7 +69564,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004F1C90-semantic-review.json",
           "evidence_sha256": "80e6a63b5a1efe20828db838f90dab3d5935b994c8bb8e58f305bba35e5a6c2f"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -69300,7 +69605,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004F1CD0-semantic-review.json",
           "evidence_sha256": "efd81e117c08b48915b78cf671610c4794060a6a47046a61df0986baed45ebf9"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -69480,7 +69786,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004F1D60-semantic-review.json",
           "evidence_sha256": "99b1010bf04d99e60d9f92ee35b3085304e37fcd8116e38fc20f8f5240906368"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -69520,7 +69827,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004F1E00-semantic-review.json",
           "evidence_sha256": "5cbb6007475239b368d41ef360bf8cd63813e1d5b4c5657e35b8eada41c7f941"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -69560,7 +69868,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004F1E10-semantic-review.json",
           "evidence_sha256": "95efe8c14a91427c1315403143cb3d50097d99a043b8b31611e045ef2181ca21"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -69600,7 +69909,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004F1E20-semantic-review.json",
           "evidence_sha256": "031492f32f9d29521cdb6328159f78aecfb4f9bcd63437de89f482054293a73d"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -69636,7 +69946,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -69672,7 +69983,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -69708,7 +70020,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -69744,7 +70057,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -69780,7 +70094,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -69820,7 +70135,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004F2020-semantic-review.json",
           "evidence_sha256": "a3be721cfc6840dce1123b507e4ac138345af7850f8d367bad82aba59861624e"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -69860,7 +70176,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004F2030-semantic-review.json",
           "evidence_sha256": "e19901d88d42bb8c59842da7d4388880867d8fc2f9005bf80e8d8a779f06e182"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -69896,7 +70213,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -70492,7 +70810,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -70528,7 +70847,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -70564,7 +70884,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -70600,7 +70921,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -70636,7 +70958,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -70672,7 +70995,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -71128,7 +71452,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -71164,7 +71489,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -71200,7 +71526,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -71236,7 +71563,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -71667,7 +71995,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Script_NodeSizeTable_Set_4F9460` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -71704,7 +72033,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Script_StringHash_4F9E70` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -71741,7 +72071,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -71777,7 +72108,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -71813,7 +72145,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -72544,7 +72877,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -72580,7 +72914,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -72686,7 +73021,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -72722,7 +73058,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -72758,7 +73095,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -72794,7 +73132,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -73366,7 +73705,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00509860-semantic-review.json",
           "evidence_sha256": "5c1892ec98683e6f92b858c30849b54aaf289a2595421a7a4a0fd4436f55d9c9"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -73406,7 +73746,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00509870-semantic-review.json",
           "evidence_sha256": "e31be3c3c51817cadffb982b9405e5c4dd0f6f6e701f9e886c522739906b295a"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -73446,7 +73787,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00509880-semantic-review.json",
           "evidence_sha256": "cc4a8c823f6bb53b34a28976b723274a8fd9d0d776cfa2ad13a1453d6806450a"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -73486,7 +73828,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00509890-semantic-review.json",
           "evidence_sha256": "5c88e1247d97b7715420021764f338949431f917a5cff2932feb534beb1d698b"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -73526,7 +73869,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x005098A0-semantic-review.json",
           "evidence_sha256": "0e5f840859353dad9a5b718b3741686e49d3904f70d451ce8623480ff6d2d398"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -73562,7 +73906,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Joypad_IsAcquired_509CC0` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -73599,7 +73944,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Joypad_ReleaseAll_509E90` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -73636,7 +73982,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       },
       "notes": "Renamed from `Joypad_InitActionFlags_509F00` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -73694,7 +74041,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x0050A5A0-semantic-review.json",
           "evidence_sha256": "40dedab9fc4a71985b4f70f751e62c85ec1c5a75f763d96c381202765a594649"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -73734,7 +74082,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x0050A5B0-semantic-review.json",
           "evidence_sha256": "8d42085f83163e1e44313b5375f8f521671b7e11b0643cf787ba71c8a0560cbf"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -79775,7 +80124,8 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": []
       }
     },
     {
@@ -80375,7 +80725,8 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x005236C0-semantic-review.json",
           "evidence_sha256": "a70b12b6a5729d9c257c454d2a31a5029ba603f67404266681ddb68bc0b6bcdd"
-        }
+        },
+        "limitations": []
       }
     },
     {
@@ -84028,6 +84379,150 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x00467D90-behavioral.json",
           "evidence_sha256": "82978346db9b19090e96884300fbe55f34d11e559d611bdb9b11caf18e3ccc53"
+        }
+      }
+    },
+    {
+      "address": "0x0047E700",
+      "name": "Task_DefineFlashBang",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_0047e700.cpp",
+        "sha256": "505a85be1fe971e2cc4afc0a1c685f8c40e5b641aaf18b372138ccad77ba077e",
+        "signature": "unresolved"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/flashbang/0047E700-FlashBang_Init 2.cpp",
+        "sha256": "60947f6634e614c2976f4e524c85acfbaf240245511cd42e017bae5ea0d08342",
+        "signature": "unresolved"
+      },
+      "verification": {
+        "status": "BUILD_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
+          "Linked into igi1.exe (14,257,059 bytes); runtime UNOBSERVED.",
+          "129 bytes, single block, 34 instructions; cleanup add esp,0x40 = 16 dwords exactly. Structural negative: no Script_QHashNodeRegister, so FlashBang receives no TASKTYPE_ script name (same as Computer). Fourth TaskType_Register argument is 4, verified in the image at 0x0047E711; 0x00401900 tests it and calls 0x004B0B00 when non-zero, so 0 would change behaviour. Runtime UNOBSERVED."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x0047E700-radare2.json",
+          "evidence_sha256": "405ad97f809a22f82163b57328ee6c153b31c538aefe308f885fcae811dc36cb",
+          "evidence_id": "r2:live:0x0047E700",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x0047E700-binaryninja.json",
+          "evidence_sha256": "379d6aec924ef4c33599a7c84ec783a3fd96cbc4c0c192a55a3b140d4cc62eb6",
+          "evidence_id": "bn:live:0x0047E700",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x0047E700-semantic-review.json",
+          "evidence_sha256": "57b605bb0443da2ab6e548304c788c9c085fd69e245ca2af48ef20455d6cff83"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x0047E700-build.json",
+          "evidence_sha256": "70cceb000bfdfed30b1a4c4e43817968858ee7fdc373d56aba1180730910246a"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x0047E700-behavioral.json",
+          "evidence_sha256": "73c4b7058a4a408b9c15d7b69f82c589dfb47cd1f40b299a26f847bb5db43e8c"
+        }
+      }
+    },
+    {
+      "address": "0x00476110",
+      "name": "Task_DefineM203",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_00476110.cpp",
+        "sha256": "906f2979d523e833ff7ee75fdef2c5932059a8d0fefae31d3e16e1bfa6187e18",
+        "signature": "unresolved"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/m203/00476110-M203_Init 2.cpp",
+        "sha256": "9e499ce4c7efe8bf1338dcc3ada01aec29aa6f043786b60b5f0ad213561d4168",
+        "signature": "unresolved"
+      },
+      "verification": {
+        "status": "BUILD_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
+          "Linked into igi1.exe (14,257,059 bytes); runtime UNOBSERVED.",
+          "150 bytes, single block, 39 instructions; cleanups add esp,0x38 (14) and add esp,0x18 (6) both exact. Registers TASKTYPE_M203. Runtime UNOBSERVED."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x00476110-radare2.json",
+          "evidence_sha256": "9958e95ea14f22addfd247b25fb40eb3ae2bfae15461b77c8e6d76a62ca0b7fd",
+          "evidence_id": "r2:live:0x00476110",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x00476110-binaryninja.json",
+          "evidence_sha256": "3b996899a8aa4f41bc834542d03152d318fc1e16fddeee4c548c9c16f7fd30e8",
+          "evidence_id": "bn:live:0x00476110",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x00476110-semantic-review.json",
+          "evidence_sha256": "6155fe2fe89b0f83c6f258a1e13d4553774d8c6a24c3ccfd6ec9133336f716b2"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x00476110-build.json",
+          "evidence_sha256": "876f990aed3484bb124687baf34406319279fc9ae582c9d686893722a3eff90e"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x00476110-behavioral.json",
+          "evidence_sha256": "6fd10d9f958670602945aafb05d71f2c507ff76a9506aeae0e27f2aba08c64a7"
         }
       }
     }
