@@ -1,5 +1,29 @@
 ## Unreleased
 
+### My one-file-per-VA check was broken twice and reported a confident zero
+
+The check is supposed to catch §10.15 rule 13 violations. It reported **`owners=0`**
+for both new files - which reads as "these VAs are unclaimed", the opposite of the
+truth. Two independent bugs, both producing the same zero:
+
+1. **`tr -d '.cpp'` deletes a character set, not a suffix.** It removed every `.`,
+   `c` and `p` from the string, so `44a1c0` became `44a10` and the grep searched for
+   an address that does not exist.
+2. **Case mismatch.** The extracted VA was lowercased and grepped against provenance
+   lines carrying uppercase hex (`0x00449D30`), so even the correct address matched
+   nothing.
+
+Rewritten in Python with `re.I` and a proper suffix match: both files are **sole
+owners** of their VA, 1 each.
+
+**Fifth instance today of a zero from a pattern that cannot match**, and the second
+where I wrote the broken pattern myself. The recurring shape is that a checker
+returning zero looks identical whether the world is empty or the pattern is wrong -
+so the only defence is to run the pattern against a case where the answer is known
+non-zero, which is what caught this one.
+
+## Unreleased
+
 ### The 30 partial ports are honestly blocked - the gate is what is wrong
 
 Triaged all 30 natives whose `Status/limits` admits an untranscribed part:
