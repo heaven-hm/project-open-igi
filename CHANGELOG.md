@@ -1,5 +1,44 @@
 ## Unreleased
 
+### The link frontier is exact: 63 distinct symbols, and it is the AI-actions cluster
+
+The guard is real, so the linker now names every missing transcription instead of the build
+silently succeeding. Adding the seven natives that were on disk but absent from the target
+(`native_44cca0`, `native_508f80`, `native_508fa0`, `native_509440`, `native_413730`,
+`native_449330`, `native_449950` - all compile clean, zero warnings) turned an unknown frontier
+into a list. It is `docs/fidelity/evidence/link-frontier-63-symbols.txt`.
+
+**Composition, and this is the finding that matters:**
+
+| Group | Count |
+|---|---|
+| `AIGraph_*` / `InitStep_*` | 1 |
+| everything else | 62 |
+| **total** | **63** |
+
+The "everything else" is dominated by roughly fifty `Task_Handler_44Dxxx` entries - the AI-actions
+handlers registered by `0x0044CCA0` - plus a handful of `Sub_*`, `Core_Unknown_467F30` and
+`GraphStream_RegisterNode_4F9DF0`.
+
+**So the critical path is not the 73-call init chain I had been treating as the blocker.** That
+chain contributes exactly one undefined symbol, because its own body is one flat sequence of
+calls. The bulk of the frontier is the AI-actions handler family, which had no file and no
+manifest record and had not been scheduled at all.
+
+**Two link failures closed this change:**
+- `Task_DefineHumanAI` is **`0x0044C8D0`**; `core/native_44c8d0.cpp` defines it with correct C
+  linkage (`nm` emits `_Task_DefineHumanAI`), so it was a missing target entry, not missing code.
+- `0x004D9610` carried **two names for one VA**, which cannot link: the manifest calls it
+  `BoneDynCubeObj_GetQTaskType` and three tree files call it `Sys_GetGlobal16_4D9610`. The body is
+  `mov ax,[0x548618]; ret`, an argument-less word getter used by **two different callers as the
+  parent type for two different class families**. Naming it after one caller's parent makes the
+  name wrong at the other call site, so the address-suffixed placeholder wins - which is also what
+  section 10.14 rule 12 requires until the native is verified. The manifest record for `0x004D9610`
+  needs correcting to match.
+
+Build still does not link, deliberately, on the 63. A green build from invented logic is worse than
+a red build from a real one.
+
 ### The startup guard is the retail body; the invented registration table is gone
 
 `engine/src/retail/core/class_registration.cpp` was not a transcription. It was a partial
