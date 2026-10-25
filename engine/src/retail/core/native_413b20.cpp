@@ -16,11 +16,11 @@
 extern "C" {
 
 // 0x005391AE: the byte this native reads. No translation unit owns it; the retail image holds 255 here.
-std::uint8_t g_413b20 = 0xFFU;
+std::uint8_t g_5391ae = 0xFFU;
 
 std::uint8_t NATIVE_DECL Core_GetFlagByte_413B20()
 {
-    return ::g_413b20;   // 0x00413B20: mov al, byte [0x005391AE]
+    return ::g_5391ae;   // 0x00413B20: mov al, byte [0x005391AE]
 }                        // 0x00413B25: ret
 
 } // extern "C"

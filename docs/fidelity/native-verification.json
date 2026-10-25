@@ -25283,14 +25283,16 @@
         "signature": "int HumanPlayer_HandleInput_10(void)"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "BUILD_VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
           "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
         },
         "limitations": [
-          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
+          "Linked into igi1.exe (14,258,968 bytes); runtime UNOBSERVED.",
+          "6 bytes, leaf: mov al,[0x005391AF]; ret. Codegen deviation: retail writes AL only while a C++ byte return zero-extends EAX; recorded as not reproduced. Runtime UNOBSERVED."
         ],
         "behavioral_runner": {
           "path": "scripts/native_diff_runner.py",
@@ -25353,14 +25355,16 @@
         "signature": "int HumanPlayer_ApplyPhysics_10(void)"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "BUILD_VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
           "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
         },
         "limitations": [
-          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
+          "Linked into igi1.exe (14,258,968 bytes); runtime UNOBSERVED.",
+          "6 bytes, leaf: mov al,[0x005391B0]; ret. Same AL/EAX zero-extension deviation as 0x00413B30. Runtime UNOBSERVED."
         ],
         "behavioral_runner": {
           "path": "scripts/native_diff_runner.py",

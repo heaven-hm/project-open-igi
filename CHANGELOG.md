@@ -11,6 +11,19 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - Two config leaf bytes, and a blocker that turned out to be the compiler's stack probe
+
+- `igi1.exe` 14,258,430 -> **14,258,968** bytes, green. `0x00413B30` and `0x00413B40` linked (`mov al,[0x005391AF]; ret` and `[0x005391B0]`),
+  `BUILD_VERIFIED`, runtime UNOBSERVED. Their AL-only store versus C++ EAX zero-extension is recorded as a codegen deviation, not papered over.
+- **`0x004A54A0` is MSVC `__chkstk`, not a game native.** Verified against the image (`0x004A54A0..0x004A54CE`), sitting between the known CRT routines
+  `0x004A53B3` (sprintf) and `0x004A5500` (strncpy). It is now classified CRT in `scripts/native_coverage.py` and must never be hand-transcribed.
+  The 7 registrars counted behind it are therefore free, but each has a frame larger than 0x1000 and owns a real >=4 KB local array that must be
+  reproduced from the retail frame size rather than invented.
+- **Tool blind spot recorded**: `build/retail-dis.txt` does not render calls to `0x4A54A0` at all, while `r2 /r` lists callers at 0x004170A5,
+  0x0041AAF5, 0x0041B8E5, 0x0042DCF5, 0x004310F5, 0x0044C8D5, 0x0046E375 and 0x00485DB5. Callee counters that trust the listing cannot see it.
+- Global naming normalised: `g_413b20` (named after its function) became `g_5391ae` (named after its data address, the convention used everywhere
+  else), so the three-byte block 0x005391AE/AF/B0 now has one owner per address and one naming rule.
+
 ### 2026-10-25 - The three highest-leverage startup blockers
 
 - `igi1.exe` 14,257,059 -> **14,258,430** bytes, green. Three blockers linked, all `BUILD_VERIFIED`, runtime UNOBSERVED:

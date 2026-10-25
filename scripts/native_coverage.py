@@ -40,6 +40,7 @@ ROOT = Path(__file__).resolve().parent.parent
 CRT = {
     0x004A5000: "MSVC VC20 exception-registration record builder",
     0x004A53B3: "sprintf",
+    0x004A54A0: "MSVC __chkstk 4KB stack probe (compiler-emitted, never hand-transcribed)",
     0x004A5500: "strncpy",
     0x004A5AD5: "exit (doexit wrapper)",
     0x005169B0: "strncat",

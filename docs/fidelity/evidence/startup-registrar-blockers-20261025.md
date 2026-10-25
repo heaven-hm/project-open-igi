@@ -40,3 +40,17 @@ Transcribing registrars alphabetically or in call order wastes the leverage the 
 
 Caveat worth repeating: a "ready" registrar is ready in the sense that its callees exist, not that it has been transcribed or verified. Each one
 still needs its own per-instruction provenance, per-block counts, cleanup arithmetic and record before it counts towards closure.
+
+## Addendum: `0x004A54A0` is not a game native
+
+Follow-up measurement corrected the table above: `0x004A54A0` is MSVC `__chkstk`, the 4 KB stack-probe helper (- push ecx; cmp eax,0x1000;
+lea ecx,[esp+8]; jb done; page-touch loop; sub ecx,eax; mov eax,esp; test [ecx],eax; mov esp,ecx; ... push eax; ret -), confirmed against the
+image at `0x004A54A0..0x004A54CE`. It sits between the known CRT routines `0x004A53B3` (sprintf) and `0x004A5500` (strncpy) and is compiler-emitted,
+so it is classified CRT and must never be hand-transcribed: a C++ transcription of it would be an invented native.
+
+Consequences:
+- The 7 registrars counted behind it are not blocked on a missing game native. They are free to transcribe, but each owns a stack frame larger than
+  0x1000, so each has a real local array of at least 4 KB that must be reproduced from the retail frame size rather than invented.
+- `build/retail-dis.txt` does not render the calls to it at all (grep for `call 0x4a54a0` returns nothing), while `r2 /r 0x4a54a0` lists callers such as
+  0x004170A5, 0x0041AAF5, 0x0041B8E5, 0x0042DCF5, 0x004310F5, 0x0044C8D5, 0x0046E375, 0x00485DB5. Any tool that counts callees from that listing is
+  blind to this one, so the CRT classification is done in `scripts/native_coverage.py` rather than by the listing.
