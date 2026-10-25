@@ -1,5 +1,36 @@
 ## Unreleased
 
+### The guard's 154 callees are confirmed by two independent methods
+
+Every dispatch today rested on one list: the 154 routines called by the startup guard
+`0x00402930`. It was derived by parsing a markdown table in
+`docs/fidelity/evidence/startup-402930-call-sequence.md` - **a document, not the
+binary.** flow-analyst's `rel32` blind spot raised the obvious question I had not
+asked: if its call scan could not find real calls, could my list be wrong the same
+way?
+
+Checked by decoding the guard's actual `call rel32` targets from the image and
+comparing:
+
+```
+distinct call targets decoded from the guard: 154
+distinct targets in the evidence file:        154
+in evidence but NOT decoded from the image:     0
+decoded from the image but NOT in evidence:     0
+```
+
+**Zero disagreement in either direction, from two methods sharing nothing** - one
+parses a document, the other decodes instruction bytes.
+
+So the foundation under the day's work is sound: 154 callees, 26 with no
+implementation file, 30 outstanding. **The errors were in what I measured about that
+list, not in the list** - files versus binary (128 claimed vs 123 in the binary),
+band versus guard (three `0x449xxx` units that were never guard callees), and the
+handler population, which no guard-derived list can see at all (22 in this band, 71
+tree-wide).
+
+## Unreleased
+
 ### The real remaining work is larger than the guard figure: 71 handler-only entry points
 
 analyst flagged that the five handler entry points registered by `0x00421430` are
