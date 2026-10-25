@@ -3,7 +3,7 @@
 // Tools/evidence: build/retail-dis.txt (GNU objdump) 0x004F1030-0x004F104F; radare2 6.2.0 pd/afij (32 bytes, 5 blocks, 12 instructions); the table base 0x00A71890 and the 0x1000 bound are the immediates at 0x004F103F/0x004F1038, matching the 0x1000-dword clear in 0x004EE982; called from 0x004F1244 and 0x004F1252.
 // Behavior/CFG: five blocks, no loop. Rejects an index below zero or at/above 0x1000 with null, reads the table entry 0x00A71890[index], rejects a null entry, and returns the dword the entry points at (the object pointer stored at slot+0).
 // Status/limits: BUILD_VERIFIED; STRUCTURALLY_VERIFIED against the 12-instruction listing; runtime UNOBSERVED. Leaf: no call; the only global is
-//                the 0x00A71890 table already defined in script/native_4ee970_globals.cpp.
+//                the 0x00A71890 table already defined in script/script_state_globals_4ee970.cpp.
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -16,7 +16,7 @@
 
 extern "C" {
 
-extern std::uint32_t g_a71890[0x1000];   // 0x00A71890, defined in engine/src/retail/script/native_4ee970_globals.cpp
+extern std::uint32_t g_a71890[0x1000];   // 0x00A71890, defined in engine/src/retail/script/script_state_globals_4ee970.cpp
 
 void* NATIVE_DECL List_GetObject_4F1030(std::int32_t index)
 {

@@ -15,7 +15,7 @@
 
 extern "C" {
 
-// 0x0054DDA5: one-byte object, defined by native_4ee970_globals.cpp which assigns it; this file only reads it.
+// 0x0054DDA5: one-byte object, defined by script_state_globals_4ee970.cpp which assigns it; this file only reads it.
 extern std::uint8_t g_54dda5;
 
 std::uint8_t NATIVE_DECL Sys_GetGlobal8_4F1200(void)

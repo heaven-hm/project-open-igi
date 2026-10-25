@@ -90,7 +90,7 @@ So the object is at least 11 bytes: five 16-bit ids plus one 8-bit flag at +0x0A
 
 **Proven extent:** `[0x0054DD0C, 0x0054DD17)` = 11 bytes, highest byte accessed `0x0054DD16`.
 **UNKNOWN:** object start and end outside the accessed span. `0x0054DD0A` (the word before) and `0x0054DD17`+ have **zero** code references in the whole image, so neither the base nor the true end can be proven; only the accessed span is.
-**Owner / transcription status:** `0x4EE970` — partial native (`engine/src/retail/script/native_4ee970.cpp`, unwired, not in `native-verification.json`); globals declared in `engine/src/retail/script/native_4ee970_globals.cpp` as `g_54dd0c[5]` (clips the flag, see §5). Flag byte: `0x4F0E50` = `ScriptInit` (manifest `VERIFIED`, but the manifest implementation path points outside this checkout — cannot be inspected here); `0x4F0780` = Task_New, **no native**.
+**Owner / transcription status:** `0x4EE970` — partial native (`engine/src/retail/script/native_4ee970.cpp`, unwired, not in `native-verification.json`); globals declared in `engine/src/retail/script/script_state_globals_4ee970.cpp` as `g_54dd0c[5]` (clips the flag, see §5). Flag byte: `0x4F0E50` = `ScriptInit` (manifest `VERIFIED`, but the manifest implementation path points outside this checkout — cannot be inspected here); `0x4F0780` = Task_New, **no native**.
 **Clipping risk:** declaring `uint16_t[5]` (10 bytes) makes `0x0054DD16` fall onto the next declared object → **WOULD-CLIP**. Declare 5×`uint16` + `uint8` (+ 1 pad = 12 bytes), or model as offsets 0x00–0x0A of the enclosing area.
 
 ### R2 — `0x0054DDA4`, script callback ids

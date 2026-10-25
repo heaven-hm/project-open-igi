@@ -18,7 +18,7 @@
 
 extern "C" {
 
-extern std::uint32_t g_a71890[0x1000];   // 0x00A71890, defined in engine/src/retail/script/native_4ee970_globals.cpp
+extern std::uint32_t g_a71890[0x1000];   // 0x00A71890, defined in engine/src/retail/script/script_state_globals_4ee970.cpp
 
 // 0x004AF7B0: the fatal-error report/dispatch, transcribed as Debug_Error in engine/src/retail/core/retail_error.cpp (cdecl, (const char*, ...)).
 int Debug_Error(char const* format, ...);
