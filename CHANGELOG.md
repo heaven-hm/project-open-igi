@@ -1,3 +1,37 @@
+## Unreleased
+
+### A transient snapshot is not the state: I reported two false facts from one
+
+Two claims in this session came from a `git diff` and a build run taken while
+another agent was mid-operation, and both were wrong about the tree:
+
+1. **"975 lines deleted, 17 tracked natives gone, build red."** The build really
+   did fail at that instant (`exit=2`, 16 `No such file or directory` errors,
+   with all 17 still listed in `CMakeLists.txt`). Minutes later: zero deletions,
+   files restored, build `exit=0`. I had a snapshot of an operation in progress.
+2. **"The tree carries both 8-digit and 6-digit duplicates."** Measured now: 35
+   files match `native_00*.cpp`, and **zero** of their VAs have a 6-digit
+   counterpart. There is no duplication. The earlier `ls` that "found" 6-digit
+   files was seeing a rename in flight that was then reverted.
+
+So the correction is not that the build was fine or that the files were
+duplicates - it is that **`git diff`, `git status` and a build are measurements of
+a moment in a workspace with three concurrent writers, and I reported them as
+measurements of the state.** This is the stale-archive failure one level up: there
+the input was old, here the input was mid-flight. Both produce a confident,
+specific, wrong number.
+
+The rule this earns: **before reporting a fact about the tree, take the same
+measurement twice with a gap, and report a disagreement instead of the first
+reading.** Both false claims above would have been caught by one repeat.
+
+Also recorded from this tick: `check_native_linkable.py` answered from
+`build/engine/libigi_retail_engine.a` at mtime Oct 20 - five days stale - and
+returned `NOT LINKABLE` for two natives that link cleanly. handler-abi-worker
+reported both results rather than the favourable one, and quoted path, mtime, size
+and date. A checker that answers from a stale archive needs to refuse rather than
+answer.
+
 # Changelog
 
 ## Release policy
