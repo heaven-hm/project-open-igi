@@ -114,6 +114,8 @@ def run(address: str, args) -> tuple[dict, int]:
             '--manifest', str(manifest), '--address', address, '--file', str(implementation.relative_to(ROOT)), '--binary', str(binary),
             '--threshold', 'VERIFIED', '--cfg-threshold', '0.85', '--require-semantic-evidence',
             '--require-behavioral-tests', '--report', str(static_report)]
+        if getattr(args,'angr_evidence',None):
+            command += ['--angr-evidence',str(args.angr_evidence),'--angr-evidence-sha256',getattr(args,'angr_evidence_sha256',None) or '']
         gate = invoke(command, env, 1800)
         report['phases']['static_semantic_behavioral'] = gate
         if gate['exit_code']:
@@ -178,6 +180,8 @@ def scan_changed_native_addresses() -> list[str]:
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--address', type=lambda value: f'0x{int(value, 0):08X}')
+    parser.add_argument('--angr-evidence',type=Path)
+    parser.add_argument('--angr-evidence-sha256')
     parser.add_argument('--level', type=int, default=1, choices=range(1, 15))
     parser.add_argument('--binary', type=Path)
     parser.add_argument('--candidate', type=Path)

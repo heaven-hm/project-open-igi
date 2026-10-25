@@ -277,6 +277,11 @@ def verify_once(root, job, record, folder, args):
                 not isinstance(score, (int, float)) or score < .85
                 or summary.get('angr_exact_entry') is not True or summary.get('entry_bytes_match') is not True):
             raise ValueError('static entry/bytes/CFG comparison incomplete or below 0.85')
+        raw_angr=capture['artifacts']['angr']
+        reuse=folder/'angr-scoped.json'
+        save(reuse,dict(kind='igi-scoped-angr-reuse',executed=True,exit_code=raw_angr['exit_code'],
+            helper_sha256=raw_angr['helper_sha256'],interpreter_path=raw_angr['interpreter_path'],
+            interpreter_sha256=raw_angr['interpreter_sha256'],artifact=json.loads(raw_angr['stdout'])))
         # A custom reviewed typed probe is mandatory. Do not synthesize raw-word
         # probes or guessed pointer dereferences to make an intake turn green.
         probe_name = record.get('verification', {}).get('runtime_probe', {}).get('path')
@@ -297,7 +302,7 @@ def verify_once(root, job, record, folder, args):
         full = folder / 'end-to-end.json'
         command = [sys.executable, str(root / 'scripts/smart_end_to_end_verification.py'),
             '--address', job['address'], '--probe', str(root / probe_name), '--level', str(args.level),
-            '--report', str(full)]
+            '--report', str(full), '--angr-evidence',str(reuse),'--angr-evidence-sha256',digest(reuse)]
         # Reuse one unchanged freshly compiled candidate across a batch. A
         # separate rebuild per native would invalidate the preceding image.
         from candidate_build_receipt import validate_receipt

@@ -16,7 +16,7 @@ class WrongCandidateTests(unittest.TestCase):
                 Path('.'), Path('igi.exe'), 'image-digest', {'0x00405850': record}, native,
                 Path('scripts/GameNatives/config/00405850-Config_Read.cpp'),
                 'scripts/GameNatives/config/00405850-Config_Read.cpp',
-                'VERIFIED', 0.85, True, True, False, {}, [])
+                'VERIFIED', 0.85, True, True, False, False, {}, [])
         self.assertEqual(len(errors), 1)
         self.assertIn('implementation path does not match', errors[0])
         self.assertIsNone(details['cfg_similarity'])

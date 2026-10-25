@@ -27,7 +27,7 @@ class PhaseOrderTests(unittest.TestCase):
                 errors, details = gate.verify_record(
                     root, root / 'igi.exe', 'image-sha', {'0x00405850': record}, native,
                     source, 'engine/src/retail/test.cpp', 'VERIFIED', 0.85,
-                    True, True, False, {}, [])
+                    True, True, False, False, {}, [])
             self.assertTrue(errors)
             self.assertEqual(details['behavioral_tests']['result'], 'not-run')
             live.assert_not_called()

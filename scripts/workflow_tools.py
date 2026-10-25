@@ -76,8 +76,17 @@ def analyze(address, output):
     # This is radare2 command language, never shell command interpolation.
     artifacts['radare2_cfg'] = run(['r2','-q','-2','-e','bin.relocs.apply=true','-c',
         f'af @ {address}; agfj @ {address}; q',str(binary)], timeout=120)
-    artifacts['angr'] = run([os.environ.get('IGI_ANGR_PYTHON',c['angr_python']),str(ROOT/'scripts/angr_analyze.py'),
+    helper=ROOT/'scripts/angr_analyze.py'
+    requested_interpreter=Path(os.environ.get('IGI_ANGR_PYTHON',c['angr_python']))
+    interpreter=requested_interpreter.resolve()
+    helper_hash=hashlib.sha256(helper.read_bytes()).hexdigest()
+    interpreter_hash=hashlib.sha256(interpreter.read_bytes()).hexdigest()
+    artifacts['angr'] = run([str(requested_interpreter),str(helper),
                              '--binary',str(binary),'--address',address], timeout=180)
+    artifacts['angr'].update(helper_sha256=helper_hash,interpreter_path=str(interpreter),interpreter_sha256=interpreter_hash)
+    if hashlib.sha256(helper.read_bytes()).hexdigest()!=helper_hash or hashlib.sha256(interpreter.read_bytes()).hexdigest()!=interpreter_hash:
+        artifacts['angr']['exit_code']=1
+        artifacts['angr']['stderr']+='\nangr helper/interpreter changed during capture'
     ok = all(v['exit_code']==0 for v in artifacts.values())
     summary = {}
     if ok:

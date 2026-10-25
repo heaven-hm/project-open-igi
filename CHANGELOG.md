@@ -11,6 +11,33 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - scoped angr evidence reuse, and the guard tests it broke
+
+Five gate scripts gained a **scoped angr reuse** path. It does not skip verification:
+`reuse_analysis` in `scripts/angr_analyze.py` accepts a prior capture only when the
+report's SHA-256 matches, the recorded helper hash equals the current helper's hash, the
+interpreter path and hash equal the current interpreter's, the imported angr version
+matches the recorded one, the binary hash and mapped base (0x400000) match, and every
+requested address has an exact function entry with `has_unresolved_jumps is False`.
+`scripts/workflow_tools.py` also hashes helper and interpreter before and after the
+capture and **fails the capture if either changed during the run**.
+
+The change added a `warnings` parameter to `verify_record()` and broke two guard tests,
+which then failed on a signature mismatch rather than on the property they guard. They
+were fixed by supplying the argument, not by relaxing the assertion: the
+phase-order test still asserts that a failed static or semantic check leaves the
+runtime runner **not called**, and the wrong-candidate test still asserts that an
+unbound source blocks without hashing a different implementation. 80 tests pass.
+
+The two scripts that were never pinned are now pinned:
+`scripts/angr_analyze.py` and `scripts/workflow_tools.py`. The first is the script that
+produces angr evidence and the second orchestrates the capture, so both belong under the
+pin and their absence was a gap rather than a decision. 36 files pinned; gate exits 0.
+
+Integrated the upper lane's `Task_DefineRadio` (`0x0043AD80`),
+`Task_DefineGenerator` (`0x0043B2F0`) and `Task_DefineSimpointObjGenerator`
+(`0x0043B850`). Green at 14,379,887 bytes.
+
 ### 2026-10-25 - the container argument is a capacity, not the record count
 
 **A correction to a rule stated earlier in this file, made by the agent that proposed

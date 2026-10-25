@@ -1414,6 +1414,7 @@ def run_live_behavioral_runner(
 
 def run_angr_analysis(
     root: pathlib.Path, binary: pathlib.Path, binary_digest: str, addresses: list[str],
+    evidence: pathlib.Path | None = None, evidence_sha256: str | None = None,
 ) -> dict[str, Any]:
     """Recover the image CFG once for all addresses; failures remain gate errors."""
     helper = root / "scripts/angr_analyze.py"
@@ -1437,6 +1438,8 @@ def run_angr_analysis(
             command = [interpreter, str(helper), "--binary", str(binary.resolve())]
             for address in batch:
                 command.extend(["--address", address])
+            if evidence:
+                command.extend(['--reuse-report',str(evidence),'--reuse-report-sha256',evidence_sha256 or ''])
             commands.append(command)
             process = subprocess.run(command, cwd=root, text=True, capture_output=True,
                                      check=False, timeout=180)
@@ -1749,6 +1752,8 @@ def main() -> int:
                         help="Check every production C++ source/header under engine/src/retail, regardless of Git status.")
     parser.add_argument("--runtime-trace", type=pathlib.Path,
                         help="Check only natives observed during a complete load-phase IGI-Probe trace; development-only.")
+    parser.add_argument("--angr-evidence", type=pathlib.Path)
+    parser.add_argument("--angr-evidence-sha256")
     parser.add_argument("--binary", type=pathlib.Path, default=DEFAULT_BINARY)
     parser.add_argument("--manifest", type=pathlib.Path, default=DEFAULT_MANIFEST)
     parser.add_argument("--threshold", choices=STATUS_RANK, default="STRUCTURALLY_VERIFIED")
@@ -1919,7 +1924,7 @@ def main() -> int:
         except (GateError, OSError, ValueError):
             # The normal per-file pass below reports the precise source error.
             continue
-    angr_analysis = run_angr_analysis(root, binary_path, binary_digest, sorted(addresses))
+    angr_analysis = run_angr_analysis(root, binary_path, binary_digest, sorted(addresses),args.angr_evidence,args.angr_evidence_sha256)
     report["angr_analysis"] = angr_analysis
     report["supplemental_analysis_tools"] = ["angr"]
     if addresses:

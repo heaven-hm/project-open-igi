@@ -247,15 +247,50 @@ def analyze(binary: pathlib.Path, addresses: list[int]) -> dict[str, Any]:
     return artifact
 
 
+def reuse_analysis(binary,addresses,path,expected_sha):
+    import angr
+    if not callable(getattr(angr.analyses,'CFGFast',None)):
+        raise ValueError('angr CFGFast unavailable')
+    if sha256(path)!=expected_sha:raise ValueError('scoped angr evidence hash changed')
+    envelope=json.loads(path.read_text())
+    if (envelope.get('kind')!='igi-scoped-angr-reuse' or envelope.get('executed') is not True
+        or envelope.get('exit_code')!=0 or envelope.get('helper_sha256')!=sha256(pathlib.Path(__file__))
+        or envelope.get('interpreter_path')!=str(pathlib.Path(sys.executable).resolve())
+        or envelope.get('interpreter_sha256')!=sha256(pathlib.Path(sys.executable).resolve())):
+        raise ValueError('scoped angr helper/interpreter identity mismatch')
+    artifact=envelope.get('artifact',{})
+    if (artifact.get('kind')!='angr-analysis' or artifact.get('schema_version')!=1
+        or artifact.get('tool')!='angr' or artifact.get('angr_version')!=angr.__version__
+        or artifact.get('binary_sha256')!=sha256(binary)
+        or pathlib.Path(artifact.get('binary_path','')).resolve()!=binary.resolve()
+        or artifact.get('bits')!=32 or int(artifact.get('mapped_base','0'),0)!=0x400000
+        or artifact.get('result')!='pass'):
+        raise ValueError('scoped angr image/version/base mismatch')
+    functions=artifact.get('functions',{})
+    for address in addresses:
+        row=functions.get(f'0x{address:08X}',{})
+        if (row.get('result')!='pass' or int(row.get('function_entry','0'),0)!=address
+            or row.get('has_unresolved_jumps') is not False):
+            raise ValueError('scoped angr exact entry missing or unresolved')
+    artifact['reused_structural_capture']=dict(path=str(path),sha256=expected_sha,
+        note='Same-attempt immutable retail CFG; current angr import/CFGFast availability and identities rechecked')
+    return artifact
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--binary", required=True, type=pathlib.Path)
     parser.add_argument("--address", required=True, action="append", type=address_value)
+    parser.add_argument("--reuse-report", type=pathlib.Path)
+    parser.add_argument("--reuse-report-sha256")
     args = parser.parse_args()
     try:
         if not args.binary.is_file():
             raise OSError(f"retail executable not found: {args.binary}")
-        result = analyze(args.binary.resolve(), sorted(set(args.address)))
+        if args.reuse_report:
+            result=reuse_analysis(args.binary.resolve(),sorted(set(args.address)),args.reuse_report,args.reuse_report_sha256)
+        else:
+            result = analyze(args.binary.resolve(), sorted(set(args.address)))
     except Exception as error:  # Emit structured failure for the gate, never a fabricated pass.
         result = {
             "schema_version": 1,
