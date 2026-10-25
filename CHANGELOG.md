@@ -1,5 +1,46 @@
 ## Unreleased
 
+### 55 of the 63 link failures were self-inflicted, not missing work
+
+The frontier was reported as 63 symbols with 55 `Task_Handler_44Dxxx` entries, and the plan was to
+transcribe 55 handler bodies. That plan was wrong, and one instruction in retail shows why:
+
+```
+0x0044cca4   68e0d04400    push 0x44d0e0          <- the handler ADDRESS, as an immediate
+0x0044cca9   68dcd95300    push str.AIAction_Patrol
+0x0044ccae   e8ddbb0600    call 0x4b8890          <- the registrar
+```
+
+Retail **pushes each handler's address as an immediate**. There is no `E8` call to any of them.
+Verified by a byte-level scan of `.text` for `E8` instructions whose computed target is the
+handler: **0 call sites for `0x0044D0E0`, 0 for `0x0044D160`, 0 for `0x0044D260`.**
+
+`native_44cca0.cpp` declared all 55 as prototypes and took their addresses. A declaration that is
+only ever address-taken still produces a **relocation**, and the relocation is what the linker
+reports as an undefined symbol. So the file invented 55 link failures that retail does not have -
+and the fix is not to write 55 bodies, it is to stop declaring data as code.
+
+**Fixed** by passing each as the cast integer retail actually pushes:
+`reinterpret_cast<void*>(static_cast<std::uintptr_t>(0x0044D0E0U))`, and removing all 55
+declarations. This is the standing ruling applied: **a handler is data; a callee is code.**
+
+**Result: 63 undefined symbols -> 8.**
+
+| Remaining | |
+|---|---|
+| `AIGraph_InitChain_5183D0` | `0x005183D0`, file exists, not yet in the target |
+| `Core_Unknown_467F30` | no file |
+| `GraphStream_RegisterNode_4F9DF0` | no file |
+| `Sub_4168D0`, `Sub_4C17C0`, `Sub_4C7560`, `Sub_4F1340` | no file |
+| `g_a976e0` | a global, no definition |
+
+**A warning about how the first count was obtained, since it is the same failure this project keeps
+repeating.** An early attempt used `r2 -c '/c call 0x00<va>'` and returned **8** for `0x0044D0E0`,
+**8** for `0x0044D160` and **8** for `0x0044D260` - the same number for three different addresses.
+An identical count for different inputs is not evidence; it is a statement about the search string.
+The byte-level scan, which decodes the `E8` displacement and computes the target, returned 0 for
+all three. The pattern-based count would have sent 55 transcriptions in the wrong direction.
+
 ### The link frontier is exact: 63 distinct symbols, and it is the AI-actions cluster
 
 The guard is real, so the linker now names every missing transcription instead of the build
