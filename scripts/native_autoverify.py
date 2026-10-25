@@ -411,7 +411,7 @@ def repair_policy(result):
     return 'evidence_or_behavior_gap_no_automatic_promotion'
 
 
-def verify(root, job, record, folder, args):
+def verify(root, job, record, folder, args, *, context=None):
     folder.mkdir(parents=True)
     attempts=[]
     maximum=getattr(args,'max_attempts',3)
@@ -421,6 +421,28 @@ def verify(root, job, record, folder, args):
         attempt=folder/f'attempt-{number}'
         print(f"ATTEMPT {number}/{maximum} {job['address']}",flush=True,file=sys.stderr)
         result=verify_once(root,job,record,attempt,args)
+        if context is not None:
+            fresh, fresh_records, issues, current = inventory(root)
+            expected = repaired_context or context
+            next_job = fresh.get(job['address'])
+            if current != expected or not next_job or next_job['fingerprint'] != job['fingerprint']:
+                result.update(status='pending', verified=False,
+                              error='inputs changed during verification; result invalidated')
+                # Preserve the successful subphase report as historical evidence,
+                # but never reuse it to accept the newly captured inputs.
+                conflict = (not next_job or next_job['source'] != job['source'] or
+                            any(i.get('global') or i.get('address') == job['address'] or
+                                i.get('path') == job['source'] for i in issues))
+                if conflict:
+                    result.update(status='blocked',error='native mapping changed during verification; review required')
+                else:
+                    job.clear();job.update(next_job)
+                    record = fresh_records[job['address']]
+                    context = current
+                    repaired_context = None
+                save(attempt/'result.json',result)
+            else:
+                result['validated_context'] = current
         policy=repair_policy(result)
         if not result.get('verified') and number<maximum:
             repaired=repair_scope_path(root,job,record,result)
@@ -527,18 +549,19 @@ def cycle(root, args):
             if job['status'] == 'passed' or (job['status'] == 'blocked' and not args.retry):
                 continue
             print('VERIFY', va, job['name'], flush=True, file=sys.stderr)
-            result = verify(root, job, records[va], root / 'build/native-auto/runs' / run_id / va, args)
+            result = verify(root, job, records[va], root / 'build/native-auto/runs' / run_id / va, args, context=context)
             fresh, fresh_records, _, current = inventory(root)
-            expected_context=result.get('repair_context',context)
+            expected_context=result.get('validated_context',result.get('repair_context',context))
             if current != expected_context or fresh.get(va, {}).get('fingerprint') != job['fingerprint']:
                 result.update(status='pending', verified=False, error='inputs changed during verification; result invalidated')
                 # Reject this snapshot but continue the requested sequential
                 # queue against fresh inputs; never silently skip later VAs.
-                for next_va, next_job in fresh.items():
-                    if jobs.get(next_va, {}).get('fingerprint') != next_job['fingerprint']:
-                        jobs[next_va] = next_job
-                records, context = fresh_records, current
+            for next_va, next_job in fresh.items():
+                if jobs.get(next_va, {}).get('fingerprint') != next_job['fingerprint']:
+                    jobs[next_va] = next_job
+            records, context = fresh_records, current
             jobs[va] = result
+            save(root / 'build/native-auto/runs' / run_id / va / 'result.json', result)
             save(state_path, {'schema_version': 1, 'kind': 'igi-native-auto-state', 'tasks': jobs})
             refresh_ledger(root)
             print(result['status'].upper(), va, result.get('error', ''), flush=True,file=sys.stderr)

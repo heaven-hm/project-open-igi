@@ -12,6 +12,56 @@ from native_runtime_discovery import getter_probe
 
 
 class NativeRepairController(unittest.TestCase):
+    def test_private_server_identity_excludes_launchers_and_other_ports(self):
+        from native_test_runtime import server_processes
+        from types import SimpleNamespace
+        windows=r'Z:\private\tmp\frida-server.exe';host='127.0.0.1:12345'
+        listing=f'101 {windows} -l {host} \n102 winewrapper.exe --run -- {windows} -l {host}\n103 {windows} -l 127.0.0.1:12346\n'
+        with patch('native_test_runtime.subprocess.run',return_value=SimpleNamespace(stdout=listing)):
+            self.assertEqual(server_processes(windows,host),{101:f'{windows} -l {host}'})
+
+    def test_private_server_cleanup_signals_only_owned_unchanged_identity(self):
+        from native_test_runtime import stop_owned_server
+        import signal
+        with patch('native_test_runtime.server_processes',side_effect=[{101:'owned',102:'foreign'},{102:'foreign'}]),patch('native_test_runtime.os.kill') as kill:
+            stop_owned_server('fixture','host',{101:'owned'})
+            kill.assert_called_once_with(101,signal.SIGTERM)
+        with patch('native_test_runtime.server_processes',return_value={101:'reused-pid'}),patch('native_test_runtime.os.kill') as kill:
+            stop_owned_server('fixture','host',{101:'owned'})
+            kill.assert_not_called()
+
+    def test_concurrent_input_drift_retries_full_pipeline_on_fresh_fingerprint(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp)
+            job=dict(address='0x00400000',source='engine/fixture.cpp',fingerprint='before',status='pending')
+            fresh=dict(job,fingerprint='after')
+            seen=[]
+            def run(root,current,record,folder,args):
+                seen.append(current['fingerprint'])
+                return dict(current,status='passed',verified=True)
+            captured=({job['address']:fresh},{job['address']:{}},[],'new-context')
+            with patch.object(agent,'verify_once',side_effect=run),patch.object(agent,'inventory',return_value=captured),patch.object(agent.time,'sleep'):
+                result=agent.verify(root,job,{},root/'run',argparse.Namespace(max_attempts=3),context='old-context')
+            self.assertEqual(seen,['before','after'])
+            self.assertTrue(result['verified'])
+            self.assertEqual(result['validated_context'],'new-context')
+            rejected=json.loads((root/'run/attempt-1/result.json').read_text())
+            self.assertFalse(rejected['verified'])
+            self.assertEqual(result['attempts'][0]['result'],'pending')
+
+    def test_concurrent_mapping_change_never_retargets_or_accepts_a_native(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp)
+            job=dict(address='0x00400000',source='engine/fixture.cpp',fingerprint='before')
+            other=dict(job,source='engine/other.cpp',fingerprint='after')
+            captured=({job['address']:other},{job['address']:{}},[],'new-context')
+            with patch.object(agent,'verify_once',return_value=dict(job,status='passed',verified=True)) as run,patch.object(agent,'inventory',return_value=captured):
+                result=agent.verify(root,job,{},root/'run',argparse.Namespace(max_attempts=3),context='old-context')
+            self.assertEqual(run.call_count,1)
+            self.assertFalse(result['verified'])
+            self.assertEqual(result['status'],'blocked')
+            self.assertEqual(job['source'],'engine/fixture.cpp')
+
     def test_transient_failure_retries_and_retains_attempts(self):
         with tempfile.TemporaryDirectory() as folder:
             args=argparse.Namespace(max_attempts=3)

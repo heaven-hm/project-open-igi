@@ -31,6 +31,13 @@ their static/semantic/controlled/paired-runtime subphases for their tested image
 then correctly remained pending after concurrent input changes. These observations
 do not accept the current tree or establish playable Level 1.
 
+The repaired command completed all three attempts in
+`build/native-auto/runs/20261025T060637Z-a627d4c7/0x0048F0C0/`:
+each comparison passed for its tested image and each attempt stayed pending after
+input drift. The third live run confirmed actual private-server termination and
+listener closure in `build/native-one/0x0048F0C0/20261025T061116Z-d21f74d0/frida-service.json`.
+No native was added to the verified-only database.
+
 ### 2026-10-25 - 21 provenance comments asserted load addresses the image does not contain
 
 A real evidence defect, found by the agent that introduced it and verified here against

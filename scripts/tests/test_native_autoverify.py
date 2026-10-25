@@ -84,7 +84,7 @@ class AutomaticNativeVerification(unittest.TestCase):
         args=argparse.Namespace(state=None,scope='all',base=None,head='HEAD',address=[],
             command='run',level=1,timeout=1,retry=True)
         visited=[]
-        def verify(root,job,record,folder,args):
+        def verify(root,job,record,folder,args,**kwargs):
             visited.append(job['address'])
             if len(visited)==1:
                 self.source.write_text(self.source.read_text()+'// concurrent fixture edit\n')
@@ -104,7 +104,7 @@ class AutomaticNativeVerification(unittest.TestCase):
         args=argparse.Namespace(state=None,scope='changed',base=None,head='HEAD',address=[],
             command='run',level=1,timeout=1,retry=True)
         visited=[]
-        def verify(root,job,record,folder,args):
+        def verify(root,job,record,folder,args,**kwargs):
             visited.append(job['address'])
             self.assertEqual(record['verification']['status'],'TRANSCRIBED')
             self.assertEqual(record['implementation']['sha256'],auto.digest(path))
