@@ -40,7 +40,10 @@ namespace {
 // (SetDebugCompileState 0x0048F1C0); this file binds to that single owner instead of
 // keeping a second copy of the same retail address.
 extern "C" std::int32_t g_5c8bec;
-std::int32_t g_5c8bf0 = 0;
+// Retail 0x005C8BF0 storage is owned by the writer, engine/src/retail/core/
+// native_48f330.cpp (SetForcePrecompiled 0x0048F330); this file binds to that
+// single owner instead of keeping a second copy of the same retail address.
+extern "C" std::int32_t g_5c8bf0;
 
 // Port-owned storage for `0x00A43E68`, `0x00A43E70`.
 volatile std::int32_t g_a43e68 = 0;

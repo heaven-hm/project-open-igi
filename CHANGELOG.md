@@ -11,6 +11,44 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - the entry function's retail callees become natives instead of local stand-ins
+
+Three rule-9/13 violations on the MVP's first real function, found while mapping
+the entry chain, and removed.
+
+`core/qtask_create_task.cpp` transcribes retail `0x00401000`, the third statement
+of which is the class-registration guard. Its body called three retail routines
+that existed only as anonymous-namespace helpers inside the same translation
+unit: `SetAppTitle` `0x0048F100`, `SetForcePrecompiled` `0x0048F330` and
+`GetStartupMode` `0x0048F220`. A helper standing in for a retail routine is
+exactly what rules 2 and 9 forbid, and `SetAppTitle` was worse than a stand-in -
+it was a **second** implementation of `0x0048F100`, shadowing the real
+`extern "C"` native in `core/app_context_extra.cpp` inside that unit, and it read
+a second variable for the retail window handle `0x005C8BC4` (`g_retail_window`)
+where the real native reads `g_window_handle`. Two variables for one retail
+address is the duplicate-implementation smell in rule 13.
+
+Now `0x0048F330` and `0x0048F220` are transcribed as their own natives with
+their own provenance blocks:
+
+  `core/native_48f330.cpp` `SetForcePrecompiled` 9 bytes `8b 44 24 04 a3 f0 8b 5c 00 c3`
+  `core/native_48f220.cpp` `GetStartupMode`      6 bytes `a1 08 8c 5c 00 c3`
+
+and `0x00401000` calls the real `SetAppTitle`. The single caller of each is the
+entry function itself (`0x0040100C` and `0x00401020`), so their caller sets are
+fully enumerated rather than sampled.
+
+Storage ownership follows the writer, as with `0x005C8BEC` before it: the
+`0x005C8BF0` flag was defined inside the anonymous namespace of
+`script/qvm_native_loader.cpp`, which is the *reader* side, so no other unit
+could bind to it. It now lives with `0x0048F330` and `qvm_native_loader.cpp`
+declares it `extern "C"` - one definition, two users.
+
+Green at 14,354,342 bytes. Statuses stay STRUCTURALLY_VERIFIED: the call
+sequence is now the retail sequence, but `QTask_RegisterClasses 0x00402930` still
+throws on its untranscribed registrars before the flow calls run, so nothing here
+is promoted on the strength of a build.
+
 ### 2026-10-25 - the startup-chain keystone lands and the hold-out drops from ten files to two
 
 - **`0x004AF9D0` is transcribed and in the build** (`sys/native_4af9d0.cpp`, 1190 bytes / 68 blocks / 329 instructions / 97 edges).
