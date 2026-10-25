@@ -589,7 +589,9 @@ add_executable(igi WIN32
     engine/src/retail/render/native_491ea0.cpp
     engine/src/retail/script/native_4b88f0.cpp
     engine/src/retail/sys/native_4f1cb0.cpp
-    # Hold-out: three files remain outside the build target.
+    # Hold-out: five files remain outside the build target.
+    #   core/native_467700.cpp calls 0x00467DB0 and 0x00467DD0 (byte getters, unimplemented)
+    #   core/native_464260.cpp calls 0x004D9610 and 0x004E6610; core/native_465a10.cpp calls 0x00504DB0
     #   core/native_467700.cpp calls 0x00467DB0 and 0x00467DD0, two byte getters with no implementation yet
     #     (chain-worker measured them as reading 0x0053F583 and 0x0053F584).
     #   core/native_412420.cpp calls 0x0045E060 (858 bytes, 7 blocks, 237 instructions), which has no
@@ -620,6 +622,11 @@ add_executable(igi WIN32
     engine/src/retail/core/native_46c0c0.cpp
     engine/src/retail/core/native_4682f0.cpp
     engine/src/retail/core/native_46f2b0.cpp
+    engine/src/retail/script/native_4b7f40.cpp
+    engine/src/retail/core/native_4696b0.cpp
+    engine/src/retail/core/native_467db0.cpp
+    engine/src/retail/core/native_467dd0.cpp
+    engine/src/retail/core/native_467700.cpp
     engine/platform/windows/retail_native_verification_support.cpp)
 target_include_directories(igi PRIVATE engine/include)
 target_compile_features(igi PRIVATE cxx_std_20)

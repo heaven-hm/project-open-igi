@@ -15,8 +15,13 @@
 
 extern "C" {
 
-// 0x0053F760: the one-byte object this getter reads; nothing else in the tree owns it yet.
-std::uint8_t g_53f760;
+// 0x0053F760: the one-byte object this getter reads. This file does NOT own it. The definition belongs to the registrar that
+// writes it, core/native_4696b0.cpp (0x004696B0, Task_DefineComputerMap), which stores QTask_AllocateEvent(0) there and
+// initialises it to 0xFF - the image byte at 0x0053F760 is ff 00 00 00, so the object is .data, not .bss. This file previously
+// defined it as a zero-initialised std::uint8_t, which was wrong twice over: it duplicated the definition (the linker rejected
+// the pair with "multiple definition of g_53f760") and it declared the wrong storage class, since a zero image value is what
+// would put it in .bss. One owner per retail address, and the owner is the writer, not the reader.
+extern std::uint8_t g_53f760;
 
 std::uint8_t NATIVE_DECL Sys_GetGlobal8_46AB20(void)
 {

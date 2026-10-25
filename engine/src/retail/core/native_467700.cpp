@@ -12,10 +12,10 @@
 //   being called with pushes. Argument numbers were derived by counting the pushes above each access.
 // Behavior/CFG: one straight-line body with no frame of its own. It registers the "ComputerObject" task type of size 0x24 with parent
 //   QTask_GetCurrentType() -> id at 0x0053F580, links e0->0x004678F0 (0x00401400) and **event 2**->0x00467960 (0x00401530 - event 1 is
-//   skipped), then links 0x00467970 on the event id from 0x004E7530 through 0x00401530. It then calls the three argument-less byte getters
-//   0x00467D90, 0x00467DB0 and 0x00467DD0 and stores each returned byte back into 0x0053F582, 0x0053F583 and 0x0053F584 respectively - the two
-//   of those three getters that read exactly those slots (0x00467DB0 reads 0x0053F583, 0x00467DD0 reads 0x0053F584), so those two stores write
-//   back the value they have just read. It then links two further handlers THROUGH 0x00401400 to the type id that 0x004F45F0() and 0x004C48C0()
+//   skipped), then links 0x00467970 on the event id from 0x004E7530 through 0x00401530. It then calls the three lazy event-id
+//   allocators 0x00467D90, 0x00467DB0 and 0x00467DD0 - each compares its own cache byte with 0xFF and, only on 0xFF, calls
+//   QTask_AllocateEvent(0x181) and caches the result - and stores each returned byte back into 0x0053F582, 0x0053F583 and 0x0053F584, the very
+//   bytes those routines own, so each store writes back the value it has just read. It then links two further handlers THROUGH 0x00401400 to the type id that 0x004F45F0() and 0x004C48C0()
 //   return, not to its own id: 0x00467C60 on the event id from 0x00467D90, and 0x00467800 on the event id from 0x00467DD0. Finally it registers
 //   SEVEN script names through 0x004B8810: "MARKER_NONE" with 0xFFFFFFFF, "MARKER_BOX" with 0, "MARKER_COLOR_NONE" with 0xFFFFFFFF,
 //   "MARKER_COLOR_RED" with 0, "MARKER_COLOR_YELLOW" with 1, "MARKER_COLOR_GREEN" with 2 and "MARKER_COLOR_BLUE" with 4. One basic block, no
@@ -25,8 +25,9 @@
 //   IMAGE VALUE: `px 8 @ 0x0053F580` gives 81 01 ff ff ff 00 00 00. Its accesses are 16-bit (0x0046771E `mov %ax,0x53F580`, 0x00467729
 //   `mov 0x53F580,%ax`, 0x00467749 `%cx`), so width and image value are both established the same way as for 0x0053F6D0 in
 //   core/native_4682f0.cpp, and the same non-zero image value makes it initialised data (`D`). 0x0053F582, 0x0053F583 and 0x0053F584 each hold
-//   image value 0xFF and are declared std::uint8_t with that initialiser; the registrar writes all three from the getters' return values, and
-//   0x00467DB0/0x00467DD0 read the latter two, so this file declares the byte slots and the two in-lane getters that read them. The two
+//   image value 0xFF and are std::uint8_t; they are OWNED by the three routines that cache into them (0x00467D90, 0x00467DB0, 0x00467DD0 - one
+//   definition per address, in core/native_00467d90.cpp, core/native_467db0.cpp and core/native_467dd0.cpp) and only declared here, because this
+//   registrar writes all three. The two
 //   0x00401400 links in the middle are NOT linked to this type: their argument 1 comes from 0x004F45F0 (`mov ax,[0x54E200]`) and 0x004C48C0
 //   (`mov ax,[0x547F42]`), and radare2 reports 385 = 0x0181 at both globals - the same value this id slot holds in the image, which is recorded as
 //   an observation and not as a claim about what 0x0181 means. This is the first registrar in this lane that links handlers to a type other than
@@ -47,9 +48,9 @@
 #include <cstdint>
 
 extern "C" std::uint32_t Core_GetEventWord_4E7530(void);          // 0x004E7530: `mov eax,[0x5488C8]; ret` (event id)
-extern "C" std::uint8_t Task_GetCachedEventId_467D90(void);       // 0x00467D90: lazily allocated event id (core/native_467d90.cpp)
-extern "C" std::uint8_t Sys_GetGlobal8_467DB0(void);              // 0x00467DB0: `mov al,[0x53F583]; ret` (in-lane native gap)
-extern "C" std::uint8_t Sys_GetGlobal8_467DD0(void);              // 0x00467DD0: `mov al,[0x53F584]; ret` (in-lane native gap)
+extern "C" std::uint8_t Task_GetCachedEventId_467D90(void);       // 0x00467D90: lazy event-id allocation (core/native_00467d90.cpp)
+extern "C" std::uint8_t Task_GetCachedEventId_467DB0(void);       // 0x00467DB0: lazy event-id allocation (core/native_467db0.cpp)
+extern "C" std::uint8_t Task_GetCachedEventId_467DD0(void);       // 0x00467DD0: lazy event-id allocation (core/native_467dd0.cpp)
 extern "C" std::uint16_t Sys_GetGlobal16_4F45F0(void);            // 0x004F45F0: `mov ax,[0x54E200]; ret` (image 385 = 0x0181)
 extern "C" std::uint16_t Sys_GetGlobal16_4C48C0(void);            // 0x004C48C0: `mov ax,[0x547F42]; ret` (image 385 = 0x0181)
 extern "C" void Script_QHashNodeRegister(void* const arg1, void* const value); // 0x004B8810 (script/native_4b8810.cpp)
@@ -59,14 +60,14 @@ extern "C" {
 // 0x0053F580: the "ComputerObject" task type id. Image value 0x0181, so it is initialised data (`D`); the accesses are 16-bit.
 std::uint16_t g_53f580 = 0x0181U;
 
-// 0x0053F582: image value 0xFF. Written here from 0x00467D90's return value.
-std::uint8_t g_53f582 = 0xFFU;
-
-// 0x0053F583: image value 0xFF. Written here from 0x00467DB0's return value, and read by 0x00467DB0 itself.
-std::uint8_t g_53f583 = 0xFFU;
-
-// 0x0053F584: image value 0xFF. Written here from 0x00467DD0's return value, and read by 0x00467DD0 itself.
-std::uint8_t g_53f584 = 0xFFU;
+// 0x0053F582, 0x0053F583 and 0x0053F584 are DEFINED by the three routines that cache their event id into them - core/native_00467d90.cpp,
+// core/native_467db0.cpp and core/native_467dd0.cpp respectively - and are only DECLARED here, so that each of the three addresses keeps exactly
+// one definition in the tree. All three hold image value 0xFF, retail's "not allocated yet" sentinel. This body writes all three from those
+// routines' return values, which for each of them is the value the routine has just read from that same byte, so the stores cannot change what
+// the next read sees.
+extern std::uint8_t g_53f582; // retail 0x0053F582, image value 0xFF
+extern std::uint8_t g_53f583; // retail 0x0053F583, image value 0xFF
+extern std::uint8_t g_53f584; // retail 0x0053F584, image value 0xFF
 
 void Task_DefineComputerObject()
 {
@@ -103,11 +104,14 @@ void Task_DefineComputerObject()
     // 0x0046775A: call 0x467D90; 0x0046775F: mov byte [0x53F582],al.
     ::g_53f582 = Task_GetCachedEventId_467D90();
 
-    // 0x00467764: call 0x467DB0; 0x00467769: mov byte [0x53F583],al. 0x00467DB0 itself reads 0x0053F583, so this stores back the value it read.
-    ::g_53f583 = Sys_GetGlobal8_467DB0();
+    // 0x00467764: call 0x467DB0; 0x00467769: mov byte [0x53F583],al. 0x00467DB0 is NOT a plain load: it compares 0x0053F583 with 0xFF and, when
+    // it is 0xFF, calls QTask_AllocateEvent(0x181) and stores the result there first. It therefore returns the byte it cached, and this store
+    // writes that same value back, so it cannot change what the next read sees.
+    ::g_53f583 = Task_GetCachedEventId_467DB0();
 
-    // 0x0046776E: call 0x467DD0; 0x00467773: mov byte [0x53F584],al. 0x00467DD0 itself reads 0x0053F584, so this stores back the value it read.
-    ::g_53f584 = Sys_GetGlobal8_467DD0();
+    // 0x0046776E: call 0x467DD0; 0x00467773: mov byte [0x53F584],al. Same shape as the previous two: 0x00467DD0 lazily allocates against
+    // 0x0053F584 with sentinel 0xFF and the constant 0x181, so this store writes back the value it has just returned.
+    ::g_53f584 = Task_GetCachedEventId_467DD0();
 
     // 0x00467773: push 0x00467C60 (pre-pushed handler); 0x0046777D: call 0x467D90; 0x00467782: push eax (argument 2, the event id);
     // 0x00467783: call 0x4F45F0; 0x00467788: push eax (argument 1, the type id); 0x00467789: call 0x401400; 0x0046778E: add esp,0xC. Argument 1
@@ -122,7 +126,7 @@ void Task_DefineComputerObject()
     // the word at 0x00547F42, which also holds 0x0181 in the image. This link has no cleanup of its own: the final add esp,0x44 covers it together
     // with the seven script-registration tails.
     QTask_LinkQTaskEventHandler(static_cast<std::uint16_t>(Sys_GetGlobal16_4C48C0()), // 0x004677A1: push eax (argument 1)
-                                static_cast<std::uint32_t>(Sys_GetGlobal8_467DD0()), // 0x0046779B: push eax (argument 2)
+                                static_cast<std::uint32_t>(Task_GetCachedEventId_467DD0()), // 0x0046779B: push eax (argument 2)
                                 reinterpret_cast<igi::retail::core::FrameHandler>(
                                     static_cast<std::uintptr_t>(0x00467800U))); // 0x00467791: push handler
 
