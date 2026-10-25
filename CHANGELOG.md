@@ -1,5 +1,29 @@
 ## Unreleased
 
+### Nine natives had no manifest record, and one record contradicted its own file
+
+19 natives landed this session; **9 had no manifest record**, so the gate could not
+account for them: `0x00450CC0`, `0x00401F60`, `0x00401F80`, `0x0044EEB0`,
+`0x004B88C0`, `0x00504A30`, `0x004B3B60`, `0x004B3BA0`, `0x004B3BE0`. All nine are
+now built, every one at `score=1.000`.
+
+**And building them exposed a wrong claim I had been repeating.**
+`native_504a30.cpp`'s provenance says **"93 bytes, 1 block, 0 edges"**. The extent is
+right - `afi` agrees on 93 - but the body contains **3 branches**, so it cannot be
+one block with no edges. The measured CFG is **6 nodes, 7 edges**, and Binary Ninja
+and Radare2 agree on that independently (`bn=6/7 r2=6/7`).
+
+I had recorded "1 block, 0 edges" in my own notes and repeated it. It came from the
+file's comment, which is a claim about a past state, and I treated it as evidence
+about the present - the sixth rule, broken by me, on a file I had already reviewed.
+
+**The general lesson, now with a measurement behind it:** a CFG claim inside a
+provenance block is not verified by the block containing it. `build_native_records.py`
+measures the CFG from the image; the comment asserts it. Where they disagree, the
+measurement wins, and the disagreement is itself a finding about the file.
+
+## Unreleased
+
 ### The trampoline family: `0x00508FA0` is a separate entry, and the pair is byte-justified
 
 handler-abi-worker resolved the duplicate question from the provenance blocks, and I
