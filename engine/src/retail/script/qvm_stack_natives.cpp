@@ -58,7 +58,7 @@ std::uint32_t Qvm_ExecuteInstructions(QvmNativeStatePrefix* state)
         }
 
         const std::uint32_t opcode = std::to_integer<std::uint8_t>(
-            state->code_base[state->instruction_offset]);
+            static_cast<const std::byte*>(state->code_base)[state->instruction_offset]);
         QvmOpcodeHandlerTable[opcode].handlers[0U](state, 0U, opcode, 0U);
     } while (state->stop_flag == 0U);
 
