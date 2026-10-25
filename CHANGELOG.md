@@ -11,6 +11,17 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - Startup sequence sized: 154 callees, 67,560 bytes in retail call order
+
+- Added `docs/fidelity/evidence/startup-402930-callee-sizes.md`: every distinct callee of `0x00402930` in retail call order with its radare2 extent,
+  block/instruction counts and whether an engine implementation exists. 154 callees, sizes recovered for all, **67,560 bytes total**; 36 are <= 200 B,
+  101 are 201-800 B, 17 are > 800 B, and 8 have an engine implementation.
+- The order matters more than the total: the sequence's **first** callee is the AI graph registrar `0x00508F80` (787 B / 198 instrs) and its first
+  callee `0x005183D0` reports 4985 B over 90 instructions - a jump-table/data-bearing extent, so the AI graph is a subsystem wave, not a one-pass job.
+  Because the guard stops at the first untranscribed registrar, nothing after `0x00508F80` becomes observable until that cluster lands.
+- This replaces guessing about "277 small registrars" with measured buckets. Sizes are r2 extents and are planning data: a function whose tail r2 merges
+  with a neighbour can read large.
+
 ### 2026-10-25 - Startup guard's own gap figure corrected: 146 absent callees, not 134
 
 - Re-measured `0x00402930`'s callee closure against the tree rather than against the manifest's candidate paths: of **154 distinct callees, 8 have
