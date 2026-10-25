@@ -2815,3 +2815,65 @@ wrong number in a note. **This one produces an incomplete BODY** - and a transcr
 written from a body with five instructions missing is a transcription of a different
 function. `0x00407D60` and `0x00407DE0` are both on the guard's missing list and both
 were about to be transcribed from dumps that were silently short.
+
+## THE GUARD IS NOT THE PATH TO A WINDOW - flow-analyst's partition, and it is negative
+
+I asked flow-analyst for the shortest path from the startup guard `0x00402930` to a
+window, and told it a negative answer would be as valuable as a positive one. It is.
+
+**THE WINDOW IS NOT DOWNSTREAM OF THE GUARD.** Measured:
+- No guard target's direct callees include `0x0048F0E0` (StoreWindowHandle),
+  `0x0048F120` (Display_SetScreenMode), `0x0048F100` or `0x0048F0C0`. None.
+- `main.cpp` (retail `0x0048F530`) creates the window itself: `CreateWindowExA` at
+  `0x0048F770`, `ShowWindow(10)` at `0x0048F799`, `StoreWindowHandle` at `0x0048F7A0` -
+  **all in WinMain's startup block, BEFORE the guard's registrations run.**
+- The registration sweep's only exit is `jmp 0x004CEF30`, a three-instruction getter
+  that returns to its caller. **There is no path from the sweep toward a window.**
+
+**And the guard contains no terrain, model, texture or render loader at all.** Its
+registrars' only render-adjacent depth-2 callees are eight config-word getters plus
+`MTP_AddLODVirModel_4CEBA0` and `Terrain_CalculateNormals_8`.
+
+**So "how many of the 308 does the MVP need" was the wrong question, and my 129-missing
+figure - correct as a count - was a count of the wrong population.** The scene must be
+reached through the **level-load closure**, which is a different closure and has not been
+sized. **Every "distance to visibility" figure I have given this session was measured
+along a path that does not lead to visibility.**
+
+**Partial execution is unsafe for three measured reasons**, so "run only the registrars we
+need" is a restructuring rather than a subset:
+1. The sweep is 155 consecutive `call`s with no branch, no frame and no local state -
+   there is no point at which a subset could be entered or exited.
+2. **Order carries state:** the getter `0x00424850` (`mov ax,[0x0053B90C]` / `ret`)
+   supplies the parent for ten registrars, and `0x0053B90C` is written **only inside
+   `0x00423FC0 MenuWindow_Register`, guard call #135.** Every registrar after #135 reads
+   what MenuWindow left, and no build or link check can see that.
+3. Each teardown reads the container handle and class id its registrar wrote.
+
+**The guard is three regions, not one routine:** registration sweep
+`0x00402930`-`0x00402C37` (155 calls, 154 distinct, ends `jmp 0x004CEF30`), teardown sweep
+`0x00402C40`-`0x00402F42` (154 calls, 150 distinct, ends `jmp 0x00508F90`), and a local
+helper `0x00402F50`-`0x00402FEB` (78 instructions, 6 calls, real prologue, own `ret`).
+**The teardown sweep has exactly one entry in the whole image:** `jmp 0x00402C40` at
+`0x004010C7`, inside a shared tail block of the routine at `0x004010A0` - not a
+fall-through.
+
+**`0x005183D0` corrected, and my figure was an artifact.** Bounded by its tail
+`jmp 0x00519710` at `0x0051853D` it is **365 bytes, 74 instructions, 73 calls, 68 distinct
+targets**. My 164/163/148 is reproducible **exactly as a byte scan of
+`0x005183D0`-`0x00518869`** - it walks past the tail `jmp`, past the nops, and absorbs the
+sibling sequence `0x00518550`-`0x005186B7` (72 calls, 67 distinct) plus ~20 single-call
+bodies. **The AI graph is two sibling sequences with two entries:**
+`0x00508F80` -> `call 0x005183D0` (the guard's call #1) and `0x00508F90` ->
+`call 0x00509650`, which is **the tail of the guard's teardown sweep.** So the AI graph is
+entered from the guard's exit path, not only from its first call.
+
+**Independent confirmation of the fatal-path shape:** the guard's own local helper has the
+same infinite self-jump at `0x00402FE4` after `push 0x005363D8`. Two of these exist in
+this population; both are hangs, both are behaviour to preserve.
+
+**Re-measurement of my own counts, same tick:** `0x00407DE0` 18, `0x004BAAC0` 36 and
+`0x004B8890` 14 **all reproduce exactly.** `0x00407D60` does **not** - published 31,
+re-measured 27 - and I am recording that as an **open disagreement** rather than picking
+one, because I have already been wrong twice today by trusting the instrument that
+produced the first number.
