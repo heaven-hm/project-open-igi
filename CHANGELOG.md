@@ -1,5 +1,45 @@
 ## Unreleased
 
+### 18 natives whose CFG claim disagrees with the measured CFG
+
+After correcting `0x00504A30`'s "1 block, 0 edges" against a measured 6 nodes /
+7 edges, I swept for the class. **18 files carry a provenance CFG claim that
+disagrees with the CFG measured from the image:**
+
+```
+0x0042db00 claims  5b/ 8e  measured  7n/10e     0x004abc46 claims  7b/10e  measured 11n/14e
+0x00401b20 claims  4b/ 4e  measured  5n/ 6e     0x004ab733 claims 20b/22e  measured 20n/33e
+0x004c0170 claims 13b/17e  measured 16n/24e     0x004aad90 claims  1b/ 2e  measured  6n/ 7e
+0x004ef990 claims  3b/ 0e  measured  1n/ 0e     0x004b0d10 claims  1b/ 2e  measured  1n/ 0e
+0x004bac30 claims  3b/ 2e  measured  3n/ 4e     0x004ab84c claims  7b/ 8e  measured  4n/ 5e
+0x004bcae0 claims 15b/18e  measured 15n/22e     0x004ab7f5 claims  7b/ 8e  measured  9n/12e
+0x004f0c90 claims  1b/ 3e  measured  1n/ 0e     0x004aad48 claims  1b/ 0e  measured  3n/ 2e
+0x004f1180 claims  3b/ 3e  measured  3n/ 2e     0x00504a30 claims  1b/ 0e  measured  6n/ 7e
+0x004f11a0 claims  8b/10e  measured  8n/11e
+0x004f1a80 claims  4b/ 3e  measured  4n/ 4e
+```
+
+**Recorded as disagreements, not as 18 wrong claims.** The measurement can be wrong
+too - `afi` has been wrong about extent by a factor of 1,000 on the guard and has
+reported a frame for a body with no `sub esp`. What is established is that the
+comment and the measurement do not agree, so at least one of them is not evidence,
+and neither may be cited for these 18 until the disagreement is resolved.
+
+**Some are likely a boundary difference rather than an error:** several addresses
+are not 16-byte aligned (`0x004abc46`, `0x004ab733`, `0x004ab84c`, `0x004ab7f5`,
+`0x004aad90`, `0x004aad48`), which is consistent with mid-function entries where
+the two tools disagree about where the function starts. That is a hypothesis, not a
+finding, and it needs the same treatment as the rest.
+
+**Method note, because the first sweep was vacuous.** My initial run compared the
+claim against `cfg` on the *manifest record* and returned **0 disagreements** - the
+manifest record has no `cfg` field at all, so every comparison was skipped by an
+`if nodes` guard and the zero was a statement about my pattern, not about the files.
+The CFG lives in `docs/fidelity/evidence/<addr>-binaryninja.json`. Fourth instance
+today of a zero from a pattern that cannot match, and the second one that was mine.
+
+## Unreleased
+
 ### Nine natives had no manifest record, and one record contradicted its own file
 
 19 natives landed this session; **9 had no manifest record**, so the gate could not
