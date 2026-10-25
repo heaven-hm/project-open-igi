@@ -70,10 +70,19 @@ def main():
         'rint', 'rintf', 'rintl', 'copysignl', 'scalbnl', 'ldexpl',
     }
 
+    # Compiler-emitted stack probes. When a frame exceeds a page the compiler
+    # calls a CRT helper that lowers esp itself instead of emitting `sub esp`.
+    # Retail does this too: the MSVC 6 probe at 0x004A54A0 appears in
+    # native_41aaf0.cpp (frame 0x2244) and is never hand-transcribed. GCC emits
+    # ___chkstk_ms for the same frame, and `lstrip('_')` in symbols() reduces it
+    # to `chkstk_ms`, which escapes the `__`/`___` prefix filter above. A stack
+    # probe is a property of the frame size, not a native, so it belongs here.
+    CRT_PROBES = {'chkstk', 'chkstk_ms', 'alloca', 'alloca_probe'}
+
     def runtime_helper(n):
         return n in {'memcpy', 'memset', 'memmove', 'memcmp', 'strlen', 'sprintf', 'printf',
                      'snprintf', 'vsnprintf', 'vprintf', 'fprintf', 'abort', 'exit'} \
-            or n.startswith('mingw_') or n in MATH_HELPERS
+            or n.startswith('mingw_') or n in MATH_HELPERS or n in CRT_PROBES
 
     missing = sorted(n for n in need - have
                      if not n.startswith(('__', '___')) and not runtime_helper(n))
