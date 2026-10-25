@@ -1994,3 +1994,27 @@ reported it as committed and present in `igi1.exe` on the strength of a green
 build, without ever counting the symbol. It is present now and counted. Every
 presence claim in this project must name the symbol and the command that
 counted it.
+
+## Standing cautions from files 8-9 of the menu-registrar band
+
+- **Append offsets are not always aligned.** `0x00424E80` appends at frame+0xA8,
+  +0xA9 and +0xB3 - adjacent bytes, not dword slots. The callee only ever
+  subtracts them, so they stay unaligned; rounding them for tidiness would change
+  three records.
+- **The lea ordering is not uniform across the band.** In files 1-3 the high
+  pointer is computed after the handle push; in files 4 and 8 it is computed
+  before. Same frame offsets, different raw `lea` displacements. Derive the
+  order per site; do not carry it forward from a sibling.
+- **A parent getter is not uniform either.** Two of eight files read the parent
+  through `0x004018F0`; six through `0x00424850`. Reported as a split, not
+  harmonised toward the majority.
+- **An inline slot read is not a call.** `0x00424860` has exactly one call site
+  (`0x00417669`, found by decoding every `0xE8` in .text as `v+5+rel32`).
+  `0x004247EA` reads the same slot inline. Counting inline reads as callers
+  overstates reachability; they are different populations.
+- **Placement is by the file's own shape, not by its band address.** The
+  `0x53B9xx` getters go in `sys/` with their five identical siblings even though
+  the registrar that writes those slots is a `core/` band native. The
+  `ConditionalSound` registrar stays in `core/` for the opposite reason: its
+  body is core task registration, and the word "Sound" appears only in a string
+  literal it writes.
