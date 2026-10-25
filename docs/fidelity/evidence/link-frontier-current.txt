@@ -51,7 +51,6 @@
 `AIGraph_InitStep_52B6C0
 `AIGraph_InitStep_52C6B0
 `AIGraph_InitStep_52C820
-`AIGraph_InitStep_52CA70
 `DiscardTerrain_Init
 `GraphStream_RegisterNode_4F9DF0
 `Sub_4675B0
@@ -70,3 +69,4 @@
 `Sys_GetGlobal8_4F11F0
 `TerrainLightMap_Init
 `TextureModifier_Init
+`g_54f718
