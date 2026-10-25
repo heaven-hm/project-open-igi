@@ -31127,7 +31127,7 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/core/native_449260.cpp",
-        "sha256": "54858c86066bfccbae884d64df919a087b3d0880566dadf7f9a358f9db92333e",
+        "sha256": "7e4aad5489b938ad6f7f523512965d88bfd0db3be878d320640af357424512db",
         "signature": "unknown"
       },
       "game_natives": {
