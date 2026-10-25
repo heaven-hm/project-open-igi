@@ -231,3 +231,40 @@ observed at runtime until all 139 exist, which is also why the honest ceiling on
 | 153 | `0x4c1780` | MISSING |
 | 154 | `0x4c1780` | MISSING |
 | 155 | `0x508f80` | MISSING |
+
+## Fourth measurement, 2026-10-25 - authoritative, and it names the band
+
+Re-derived from the image with `pd 156 @ 0x00402930` and matched against every
+`engine/src` and `engine/include` file by searching for the address itself in
+three forms (`0x%08x`, `0x%x`, bare `%08x`), case-folded. Earlier counts in this
+file used a comment phrase or a filename and were lower bounds; this one uses the
+address, so it is the number to quote.
+
+    155 call sites, 154 distinct targets, tail `jmp 0x004CEF30`
+    present in tree: 74
+    STILL MISSING:   80
+
+The 80 by 64K band:
+
+    0040:  2      0043: 23
+    0041: 12      0044: 16
+    0042: 19      0045:  8
+
+Two consequences worth stating plainly.
+
+First, the whole of `0x00402930` is 780 bytes = 155 x `call rel32` (5 bytes) +
+1 x `jmp rel32` (5 bytes). It is not a decision procedure at all: it is an
+ordered list of 155 calls followed by a tail jump. Its transcription is
+therefore mechanical and is blocked by nothing except the 80 missing targets -
+there is no control flow to reconstruct and no branch to get wrong.
+
+Second, every one of the 80 lies in `0x00400000`-`0x0045FFFF`, so the entire
+remaining startup gap is in one address band. The 36 handlers that chain-worker
+is taking in `0x0046xxxx`-`0x0048xxxx` are a different closure: they are reached
+through the links that the registrars install, not from `0x00402930`, so they do
+not move this number. The 80 do.
+
+Current tree state: the guard is a fail-closed `std::logic_error` stub in
+`engine/src/retail/core/class_registration.cpp`, so startup aborts there and no
+candidate window appears. That stub is the single reason there is no playable
+game on screen yet, and the 80 are what it is waiting on.

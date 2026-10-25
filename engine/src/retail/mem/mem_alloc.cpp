@@ -190,11 +190,11 @@ void* Mem_AllocChunk(std::uint32_t size)
 
 // Native: Mem_Alloc; retail VA 0x004B0C60; signature/calling convention unknown.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Verified: 100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).
-// Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 // Tools/evidence: records `{result, total_bytes, user_bytes}` at header slots `2..4`, and on allocation Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004B0C60-0x004B0D39, 218 bytes, digest 2b9694a3f11f74ab26f0de07cf380ec2a235e63578a53d919529ff80d22ce245; CLEAN/mem/004B0C60-Mem_Alloc.c.
 // Behavior/CFG: increments `g_942300` (`0x00942300`), allocates `context + arg2 + 0x1C` bytes via `Camera_ApplyHandiCam_20` (0x004AA670), aligns the returned payload pointer to `arg2`, stores the raw block header pointer at `(result - 4) & 0xFFFFFFFC`, lazily initializes the heap list via `Mem_InitHeapState` (0x004B0BA0) when `g_9422fc == 0`, links the block into `g_a960f0` (`0x00A960F0`) via `Camera_SetFieldOfView_33` (0x004AF8F0), failure walks `g_a960f0` summing `i_1[3]` and `i_1[4]` before calling `Debug_Error` (0x004AF7B0). radare2 8 blocks/11 edges; Binary Ninja 8 blocks; 100.0% structural agreement. Terrain_TextureFileNotOfRequ, DynObj_LocalTexturesSTex, and Qvm_Load; exercised by mem_alloc_test.cpp.
 // Status/limits: VERIFIED; high for header layout, alignment formula, lazy init, list insert, and OOM walk.
+// Verified: 100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).
+// Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 void* Mem_Alloc(std::int32_t context, std::int32_t arg2)
 {
     g_942300 += 1;

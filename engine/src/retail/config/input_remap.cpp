@@ -17,10 +17,10 @@ std::uint32_t InputRemap_Table[igi::retail::config::remap_table_size] = {};
 
 // Native: GOInRemap; retail VA 0x004037C0.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 // Tools/evidence: Binary Ninja MCP and Radare2 VA 0x004037C0..0x0040385E; scripts/native_unicorn_runner.py differential; paired Frida capture retail/candidate call counts.
 // Behavior/CFG: reads the profile count at 0x00BC2380, takes the action slot from 0x00BC2358 at a 0x345-dword stride, computes slot=(count-1)*115+action, writes the three frame arguments (reader 0x004B8A20) to 0x00BC25BC at a three-dword stride masking the third to 30 bits, increments the action slot, then copies a 24-byte block {0,0,0,0,0x00567C74,uninitialised} to its destination and returns that destination.
 // Status/limits: VERIFIED; the table arithmetic, mask and returned block are retail-equivalent. Deviation: the retail caller supplies the destination buffer, while this port fills a private static block and returns it, because its config decoder discards the result.
+// Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 std::uint32_t* NATIVE_DECL GOInRemap(void* qvm_context)
 {
     const std::uint32_t count = InputRemap_ActionCount;

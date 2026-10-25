@@ -112,11 +112,11 @@ std::int32_t Texture_UploadPalettePacket(std::int32_t* arg1, void* arg2, std::in
 
 // Native: Texture_LoadLoopTextureFile; retail VA 0x004B24C0; signature/calling convention unknown.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Verified: 100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).
-// Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004B24C0-0x004B25AF, 239 bytes, digest 01d287da4b443fddcd7d6be5cdf3c1bc3df57987d4b5a46165182aa4d3b9c79c; CLEAN/sys/004B24C0-Sys_SIsNotAValidTextureF.c.
 // Behavior/CFG: loads `resource_path` (`arg3`) via Resource_Load(arg3, nullptr) (0x004B5F00), checks the `'LOOP'` header (`0x4C, 0x4F, 0x4F, 0x50`) and version at `+0x04` (`2` or `11`), calls Texture_EnableUpload() (0x004B26A0), extracts the version-specific 16-bit/32-bit header fields and pixel payload pointer (`+0x18` for v2, `+0x20` for v11), calls Texture_UploadMipmapPacket(...) (0x004B23B0), Resource_Unload(arg3) (0x004B6380), and Texture_DisableUpload() (0x004B26B0). On invalid header, calls Debug_Error("'%s' is not a valid Texture file.", arg3) (0x004AF7B0). radare2 15 blocks/22 edges; Binary Ninja 15 blocks; 100% structural agreement.
 // Status/limits: STRUCTURALLY_VERIFIED; high for exact LOOP v2/v11 field extraction and callee sequence.
+// Verified: 100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).
+// Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 std::int32_t Texture_LoadLoopTextureFile(std::int32_t* arg1, void* arg2, const char* arg3)
 {
     auto* const data_1 = static_cast<std::int32_t*>(resource::Resource_Load(arg3, nullptr));
@@ -199,10 +199,10 @@ std::int32_t Texture_LoadLoopTextureFile(std::int32_t* arg1, void* arg2, const c
 
 // Native: Terrain_LoadTexturePackage; retail VA 0x005175A0; signature/calling convention unknown.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Verified: 100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).
 // Tools/evidence: Texture_UploadPalettePacket (0x004B7CF0), allocates `header[8] * 0x24 + 0x30` bytes via Mem_Alloc, Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x005175A0-0x005177E2, 578 bytes, digest 450ad796b5382d56bd90a518553df529c860093b5070d3b3d7af6b886a82f530; CLEAN/terrain/005175A0-Terrain_TextureFileNotOfRequ.c.
 // Behavior/CFG: calls Texture_EnableUpload() (0x004B26A0), loads `resource_path` (`arg1`) via Resource_Load(arg1, nullptr) (0x004B5F00) (calling Debug_Error("Couldn't load texture file '%s'.", arg1) if null), checks `'LOOP'` (`0x4C, 0x4F, 0x4F, 0x50`) and version `7` or `9` at `+0x04`, allocates and uploads optional palette at `header[6]` via Mem_Alloc(0x0C, 4) and iterates `header[8]` records (stride `0x28` for v7 at `+0x3C`, stride `0x20` for v9 at `+0x40`) calling Texture_UploadMipmapPacket (0x004B23B0), then calls Texture_DisableUpload() and Resource_Unload(arg1). radare2 29 blocks/42 edges; Binary Ninja 29 blocks; 100% structural agreement.
 // Status/limits: STRUCTURALLY_VERIFIED; high for exact LOOP v7/v9 record strides, palette upload, and callee order.
+// Verified: 100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).
 std::int32_t* Terrain_LoadTexturePackage(const char* arg1)
 {
     Texture_EnableUpload();
@@ -331,11 +331,11 @@ std::int32_t* Terrain_LoadTexturePackage(const char* arg1)
 
 // Native: DynObj_LoadModelTextures; retail VA 0x004CF790; signature/calling convention unknown.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Verified: 100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).
-// Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 // Tools/evidence: allocates `count * 0x24` bytes at `*(context + 0x34)` and `count * 0x0C` bytes at Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004CF790-0x004CF865, 213 bytes, digest 75a65077e61f7571a67d6370e3eec880541dbaafcea3aed7af6dec07cf49002f; CLEAN/dynobj/004CF790-DynObj_LocalTexturesSTex.c.
 // Behavior/CFG: locates the `'TEXF'` (`0x54455846`) chunk inside `*(context + 0x08)` via Ilff_FindFormChunk (0x004CEAA0), stores `count = *texf` at `*(context + 0x40)`, `*(context + 0x38)` via Mem_Alloc (0x004B0C60) when `count > 0` (or clears both to 0), and iterates each NUL-terminated texture name formatting `"LOCAL:textures/%s.tex"` into `0x00A4EC6C` via sprintf (0x004A53B3) and calling Texture_LoadLoopTextureFile (0x004B24C0). radare2 7 blocks/8 edges; Binary Ninja 7 blocks; 100% structural agreement.
 // Status/limits: STRUCTURALLY_VERIFIED; high for exact TEXF chunk parsing, allocation sizes, and loop stride (+0x24 / +0x0C).
+// Verified: 100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).
+// Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 void* DynObj_LoadModelTextures(void* context)
 {
     auto* const context_bytes = static_cast<std::uint8_t*>(context);

@@ -6,10 +6,10 @@
 
 // Native: Display_ComputeScreenAspect; retail VA 0x00491D40; signature/calling convention x86 cdecl double().
 // Artifact: retail IGI.EXE SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; implementation engine/src/retail/render/view_block.cpp.
-// Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 // Tools/evidence: Binary Ninja + Radare2 CFG (docs/fidelity/evidence/0x00491D40-*.json); unicorn 2.1.4 execution of the retail bytes vs this candidate (docs/fidelity/evidence/0x00491D40-behavioral.json).
 // Behavior/CFG: one basic block, two calls to Display_GetActiveMode (0x00491CF0); fild dword [display+8] * 4.0 / (fild dword [display+4] * 3.0) in x87 extended precision. The declared parameters are never read by the retail body.
 // Status/limits: STRUCTURALLY_VERIFIED with live retail-byte execution; catalog aliases for this address (Display_ClearSurfaces_4) do not describe the body, which is the screen aspect factor.
+// Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 
 #include "igi/retail/render/view_block.hpp"
 

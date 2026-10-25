@@ -1080,10 +1080,10 @@ bool TextureModifier_CoversPoint(const TerrainTextureModifierTask& modifier,
 
 // Native: Terrain_CreateMaterial; retail VA 0x004C6670; signature/calling convention unknown.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 // Tools/evidence: Binary Ninja MCP and Radare2 CFG MCP on retail IGI.EXE (VA 0x004C6670-0x004C6755); candidate reference scripts/GameNatives/misc/004C6670-CreateTerrainMaterial.cpp.
 // Behavior/CFG: Reads the material index with Script_GetArg(args,0) (0x004B8A20), stores arg1 at 0x00C28FE0 + index*900, then writes 32 LOD entries of 0x1C bytes starting at group+4 (disassembly 0x004C66AA-0x004C671C): int arg[i-1], float args[i], float args[i+1], float args[i+2]*0.5 (constant 0x3F000000 at 0x00533504), int arg[i+3], float args[i+4]*0.5, int arg[i+5], with i stepping by 7 from 3 while i < 0xE3; finally copies the 24-byte {0,0,0,0,0x00567C74,*uninitialized*} block to the context with rep movsd x6.
 // Status/limits: VERIFIED; retail index arithmetic has no bounds check (negative/oversized indices write outside 0x00C28FE0 in retail), the port clamps into its 32-group store and documents that deviation; the context block's dwords 1 and 5 are uninitialized stack in retail and are written as zero by the port. Differential execution: scripts/native_unicorn_runner.py (8/8 bounded x86 replay fixtures); live game-loop reachability remains unproven.
+// Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 void* Terrain_CreateMaterial(void* context, const float* args)
 {
     if (args == nullptr)
@@ -1162,11 +1162,11 @@ void* Terrain_CreateTileMap(void* context, const float* args)
 
 // Native: TextureModifier_Push; retail VA 0x00505E40; x86 cdecl void*(void*).
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Verified: 100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).
-// Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 // Tools/evidence: Binary Ninja view_1; RE-Agent radare2 ev_0041b4b3f7b953ab4744f3a74c261506c6a81a78b59bfd384961ac0184b2d01e.
 // Behavior/CFG: Requires [self+0xBC] >= 0 and the source row [[self+0x68]+0xDCC] to hold a non-zero dword at counter*3 (0x00505E4E-0x00505E5E); pushes [self+0xE4] onto the 20-slot stack at 0x00B97DA0 under counter 0x00B97DF8, folds the packed bitmask 0x00BA5060 = (mask << 8) | (scratch+1), sets self[0xDC] = 1 and returns scratch+1; when the stack is full calls Debug_Error("Too many items in texture modifier stack!") (0x004AF7B0) and halts in the retail self-loop (0x00505E76 jmp $); otherwise self[0xDC] = 0 and returns self.
 // Status/limits: STRUCTURALLY_VERIFIED; scripts/texture_modifier_push_diff_runner.py cannot link the current translation unit (undefined resource symbols in unrelated host functions), so it produces no behavioral pass; natural runtime integration remains provisional.
+// Verified: 100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).
+// Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 void* TextureModifier_Push(void* self)
 {
     auto* bytes = static_cast<std::uint8_t*>(self);
@@ -1294,10 +1294,10 @@ void* Terrain_Load(void* context, const char* base_path)
 
 // Native: Terrain_LoadTexturesAndLightmaps; retail VA 0x004C5F00; signature int32_t __cdecl(void* context, const char* base_path).
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Verified: 100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).
 // Tools/evidence: Binary Ninja MCP (20 blocks, 599 bytes), Radare2 CFG (20 nodes/30 edges), angr CFGFast (exact entry, no unresolved jumps), live retail capture 20261023T015650-level1-retail (EAX 0x0000000A).
 // Behavior/CFG: HOST FILE-STAGE BRIDGE; retail returns 0 when App_ContextGetTerrainLightmapsUsed()==0 (0x004C600B) or Resource_FileExists("<path>.lmp")==0 (0x004C6096), otherwise the EAX of Resource_Unload (0x004C6144) survives to the single ret 0x004C6156.
 // Status/limits: STRUCTURALLY_VERIFIED (host file-stage bridge); the .lmp is not registered in the retail-style resource table, so the observed pool-count 0xA is not reproduced; no paired runtime capture.
+// Verified: 100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).
 // Note: Resource_Unload (0x004B6380) returns the node kind for kinds 1/3, otherwise Resource_FreeNode's EAX:
 // the remaining pool count, or the relocated node address when the freed slot was not last. The observed
 // 0xA is therefore the post-unload pool count (no slot swap), not a success flag. The host bridge returns 0

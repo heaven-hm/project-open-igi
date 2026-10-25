@@ -98,10 +98,10 @@ char* NATIVE_DECL AppMain_TokenizeDelimited(char* text, char const* delimiters)
 
 // Native: AppMain_ParseCmdLineArgs; retail VA 0x0048F360
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01
-// Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 // Tools/evidence: Binary Ninja MCP (Pseudo C + disassembly; selected decompiler), Radare2 CFG (22 blocks, 33 edges) and angr CFGFast (42 nodes/61 edges, automatic recovery); static capture build/native-analysis/0x0048F360/capture.json and build/audit/p05b-20261023T222309Z/per-native/0048f360.md
 // Behavior/CFG: 286 bytes 0x48F360..0x48F47D; frame 0x208 with a 0x200 stack copy of the stored command line 0x48F080; tokenizes that copy with 0x4A5A0C(" \t"); for each token longer than or equal to the option name it folds a-z to A-Z and compares the first strlen(name) bytes case-insensitively, and on equality calls the cdecl handler with token + strlen(name) (suffix inside the stack copy), ignoring the handler return; returns the final tokenizer result (null at end of the line); mutates only its stack copy
 // Status/limits: STRUCTURALLY_VERIFIED; retail full-game runtime observed 7 calls in `window level1` (main Window 0x48F6A6, WinInput 0x48F6B5, Germany 0x48F6C4, USA 0x48F6D3, HardcoreGerman 0x48F7BE; Game_Init "Level" 0x41553A; HumanPlayer_Init "UnlimitedAmmo" 0x410066), all returning 0; absent tokens mean the handler is registered and matched-checked but never dispatched; candidate runtime unobserved until main wiring
+// Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 void* NATIVE_DECL AppMain_ParseCmdLineArgs(char* option_name, AppMain_CmdLineHandler handler)
 {
     char copy[0x200];

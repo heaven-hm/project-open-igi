@@ -7,11 +7,11 @@
 
 // Native: Debug_Error; retail VA 0x004AF7B0; x86 cdecl int32_t(const char* format, ...).
 // Artifact: retail igi.exe SHA-256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Verified: 100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).
-// Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 // Tools/evidence: Binary Ninja (89 bytes, 5 blocks, 5 edges, 29 instructions), Radare2 6.2.0 (89 bytes, 5 blocks, 5 edges, cdecl), angr CFGFast (exact entry; 10 blocks / 11 edges under the retail initialized-callback model, no unresolved jumps).
 // Behavior/CFG: report-then-dispatch; when g_936268 is set it writes "Fatal error:\n\n" into 0x00A84640, appends the printf-formatted message at the first NUL via String_VFormat, and calls g_936268(0x00A84640); it then reads g_93626C, returns EAX=0 when that callback is null (`retn` at 0x004AF808), and otherwise tail-dispatches through it (`jmp eax` at 0x004AF806).
 // Status/limits: STRUCTURALLY_VERIFIED; compile-checked with MinGW x86, no runtime evidence. The candidate does not install g_936268/g_93626C, so its current runtime path is silent; the installed retail callbacks (0x004988D0 MessageBoxA, 0x00498930 DebugBreak+exit) remain unported.
+// Verified: 100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).
+// Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 //
 // Detail: the raw retail entry has a genuine return path. Its callers examined at 0x005144F7 ->
 // 0x00514504, 0x005146F1 -> 0x005146F9, 0x004D2425 -> 0x004D242D, 0x004D2434 -> 0x004D243C,

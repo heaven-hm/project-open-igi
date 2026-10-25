@@ -1,10 +1,10 @@
 // Native: Terrain_TraverseContourQuadtree; retail VA 0x004D14E0; signature int32_t __cdecl(void*).
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01 (1,384,448 bytes, image base 0x00400000, entry 0x004A50F5, machine i386).
-// Verified: 100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).
-// Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 // Tools/evidence: Binary Ninja 5.0, radare2 6.0.5 and angr CFGFast on 0x004D14E0 (exact counts and caveats below).
 // Behavior/CFG: 146 blocks / 228 edges; split/merge octree traversal with octant frustum culling, five-level descent callbacks and a 0x800-slot previous-frame cache; always returns 0x800.
 // Status/limits: STRUCTURALLY_VERIFIED (source/object level). The retail-derived level arithmetic is
+// Verified: 100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).
+// Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 // transcribed at every shift: cl = level+1 for centre_x/y/z, corner_z_level, half_extent and
 // world_x/y (0x004D1E6D..0x004D1F5C), and level for the merge undo (0x004D1B76) and the
 // post-increment corner advance (0x004D1D39). The worklist is retail's own 128-entry stack region

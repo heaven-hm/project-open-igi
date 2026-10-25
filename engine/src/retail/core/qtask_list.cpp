@@ -55,10 +55,10 @@ extern "C" {
 
 // Native: QTaskList_New; retail VA 0x004C1800
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01
-// Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 // Tools/evidence: Binary Ninja MCP (Pseudo C + disassembly; selected decompiler), Radare2 CFG and angr CFGFast; static capture build/native-analysis/0x004C1800/capture.json, per-tool records docs/fidelity/evidence/0x004C1800-*.json
 // Behavior/CFG: one block, no branches; `mov esi,[esp+4]; push 4; lea eax,[esi*4+8]; push eax; call Mem_AllocFn; add esp,8; mov [eax+4],esi; mov dword [eax],0; pop esi; retn`; returns the list pointer in EAX
 // Status/limits: STRUCTURALLY_VERIFIED; CFG 1.000 (BN 1 block = r2 1 block) and angr exact entry; behavioural differential and paired runtime are pending
+// Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 void* NATIVE_DECL QTaskList_New(std::int32_t capacity)
 {
     void* const task_list =
@@ -71,10 +71,10 @@ void* NATIVE_DECL QTaskList_New(std::int32_t capacity)
 
 // Native: QTaskList_Register; retail VA 0x004C1790
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01
-// Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 // Tools/evidence: Binary Ninja MCP (Pseudo C + disassembly; selected decompiler), Radare2 CFG and angr CFGFast; static capture build/native-analysis/0x004C1790/capture.json, per-tool records docs/fidelity/evidence/0x004C1790-*.json
 // Behavior/CFG: four blocks; `eax=[esp+4]; ecx=[eax]; edx=[eax+4]; cmp ecx,edx; jl 0x4C17AC` (signed); full-list path pushes "QTaskList is full" (0x00547EF4), calls Debug_Error, `jmp $`; success path `edx=[esp+8]; mov [eax+ecx*4+8],edx; ecx=[eax]; inc ecx; mov [eax],ecx; retn`; returns the list pointer
 // Status/limits: STRUCTURALLY_VERIFIED; CFG 1.000 (BN 4 blocks = r2 4 blocks) and angr exact entry; fatal path terminates in the retail self-loop until the caller path is runtime-observed
+// Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 void* NATIVE_DECL QTaskList_Register(void* task_list, void* task)
 {
     std::uint32_t* const words = list_words(task_list);
@@ -94,10 +94,10 @@ void* NATIVE_DECL QTaskList_Register(void* task_list, void* task)
 
 // Native: QTaskList_Remove; retail VA 0x004C17C0
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01
-// Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 // Tools/evidence: Binary Ninja MCP (Pseudo C + disassembly; selected decompiler), Radare2 CFG and angr CFGFast; static capture build/native-analysis/0x004C17C0/capture.json, per-tool records docs/fidelity/evidence/0x004C17C0-*.json
 // Behavior/CFG: seven blocks; `esi=[esp+8]; eax=0; ecx=[esi]; test ecx,ecx; jle error`; scans `edx=esi+8` with `cmp [edx],edi; je hit; inc eax; add edx,4; cmp eax,ecx; jl scan`; hit `dec ecx; [esi]=ecx; ecx=[esi+ecx*4+8]; [esi+eax*4+8]=ecx; retn` returns the removed index; miss pushes "Trying to remove unrigistered QTask from QTaskList" (0x00547F08), calls Debug_Error, `jmp $`
 // Status/limits: STRUCTURALLY_VERIFIED; CFG 1.000 (BN 7 blocks = r2 7 blocks) and angr exact entry; the search/swap order and the preserved retail message spelling are source-reviewed, pending behavioural and paired runtime evidence
+// Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 std::int32_t NATIVE_DECL QTaskList_Remove(void* task_list, void* task)
 {
     std::uint32_t* const words = list_words(task_list);

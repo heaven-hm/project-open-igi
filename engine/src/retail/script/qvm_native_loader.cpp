@@ -90,10 +90,10 @@ std::int32_t Script_GetForcePrecompiledState()
 
 // Native: Resource_FileExists; retail VA 0x004B5B60; signature/calling convention unknown.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Verified: 100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004B5B60-0x004B5B86, 38 bytes, digest 36a0b9cb50186197bae3f372447922d47d5c237e5a79558de984fe51d97ba92b.
 // Behavior/CFG: returns `1` if `Is_ResourceLoaded(path, nullptr) != 0` (0x004B5B90); otherwise returns `Sys_DispatchOpcode_7(path)` (0x004B1FC0). radare2 3 blocks/2 edges; Binary Ninja 3 blocks; 100% structural agreement.
 // Status/limits: STRUCTURALLY_VERIFIED; high for exact resource-existence probe.
+// Verified: 100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).
 std::int32_t Resource_FileExists(const char* path)
 {
     if (resource::Is_ResourceLoaded(path, nullptr) == 0)
@@ -182,11 +182,11 @@ namespace {
 
 // Native: Qvm_ReportError; retail VA 0x004B7E10; signature/calling convention unknown.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Verified: 100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).
-// Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 // Tools/evidence: Binary Ninja MCP, Radare2 6.2.0 and angr 10.0.4.post1 CFGFast on retail IGI.EXE; VA 0x004B7E10-0x004B7E76, 102 bytes, digest 3a498c19bab408f24ec62452e00b3aaf5ca8863717620b589f9c5004002f24e6; CLEAN/qvm/004B7E10-Qvm_ReportError.c.
 // Behavior/CFG: reads `g_a96598` and stores `g_a965a8 = 1`; if `g_a96598 == 0`, returns `0` (0x004B7E60-0x004B7E66); otherwise formats `format` + variadic args into a 0x400-byte stack buffer via String_VFormat (0x004A5702); when `g_a43e70` is non-null, returns `g_a43e70(buffer, g_a43e68)`; otherwise calls Debug_Error(buffer) (0x004AF7B0) with the buffer as its format argument and halts in the retail `jmp $`, so that path never returns. radare2 6 blocks/7 edges; Binary Ninja 6 blocks/7 edges; angr CFGFast 9 blocks/10 edges (it splits at calls), no unresolved jumps; 100% Binary Ninja/radare2 structural agreement.
 // Status/limits: BUILD_VERIFIED; the fallback now matches retail (Debug_Error with the formatted buffer, then a non-returning halt). The error-state globals are volatile so the compiled object keeps the retail flag store, disabled-state return and callback branch instead of constant-folding them. The retail display/exit callbacks installed by 0x00498900 (0x004988D0 MessageBoxA and 0x00498930 DebugBreak+exit) remain unported, so the candidate installs neither and its Debug_Error returns 0 on the no-callback path; the explicit self-loop reproduces the raw retail `jmp $` for that case. No paired retail/candidate runtime capture exists, so RUNTIME_TESTED/VERIFIED is not claimed.
+// Verified: 100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).
+// Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 std::int32_t Qvm_ReportError(const char* format, ...)
 {
     const std::int32_t a96598_1 = g_a96598;
@@ -221,11 +221,11 @@ std::int32_t Qvm_ReportError(const char* format, ...)
 
 // Native: Qvm_Cleanup; retail VA 0x004B83D0; signature/calling convention unknown.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Verified: 100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).
-// Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004B83D0-0x004B8407, 55 bytes, digest 15262421fde0740b2926521a46297cc4d7e66731665240f9736b56887a3f71ff.
 // Behavior/CFG: inspects `qvm[0x23]` (`qvm + 0x8C`); if null, calls `Resource_Unload((const char*)qvm)` (0x004B6380), otherwise calls the standalone release `Sys_CheckHeap_28(standalone)` (0x004BD380); both paths then call the block release `Sys_UnloadBlock(qvm)` (0x004B0D10) and return its value (disassembly 0x004B83DF-0x004B8402). radare2 3 blocks/2 edges; Binary Ninja 3 blocks; 100% structural agreement.
 // Status/limits: STRUCTURALLY_VERIFIED; high for the exact +0x8C branch, call order, and argument re-throws. The two release callees (0x004BD380 and 0x004B0D10) are not yet transcribed; they are invoked through injectable host boundaries (Sys_SetQvmStandaloneRelease / Sys_SetQvmBlockRelease) that return 0 until their allocator-free chains are ported, so the retail return value of that inner chain is not reproduced by the default boundaries.
+// Verified: 100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).
+// Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 std::int32_t Qvm_Cleanup(void* qvm)
 {
     auto* const bytes = static_cast<std::uint8_t*>(qvm);
@@ -245,11 +245,11 @@ std::int32_t Qvm_Cleanup(void* qvm)
 
 // Native: Qvm_Load; retail VA 0x004B80B0; signature/calling convention unknown.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Verified: 100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).
-// Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 // Tools/evidence: and loads raw bytes via `Resource_Load(qvm_path, &size)` (0x004B5F00); allocates a Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004B80B0-0x004B83CC, 796 bytes, digest 346d4966918bdacf55c0b3a684d1ff20464bb9aa1e7239118d1684355d71e79b; CLEAN/qvm/004B80B0-Qvm_Load.c.
 // Behavior/CFG: loads a compiled `.qvm` script object from `qvm_path`: checks `Script_GetDebugCompileState()` (0x0048F1D0); when 0 (or fallback), verifies `Resource_FileExists(qvm_path)` (0x004B5B60) `0x94`-byte QVM object via `Mem_AllocFn(0x94, 4)` (0x004B0C60), zeroes it, calls `Qvm_SetGlobalState(0)` (0x004B8A10), stores the loaded buffer at `+0x80` (`result[0x20]`), size at `+0x84` (`result[0x21]`), and copies the path string into `+0x00..+0x7F`. When `Script_GetDebugCompileState()` is non-zero, also supports `.qvm` extension replacement (`0x00547290` = `".qvm"`) and `.qas` assembly (`0x00547288` = `".qas"`). radare2 33 blocks/50 edges; Binary Ninja 33 blocks; 91.4% structural agreement.
 // Status/limits: STRUCTURALLY_VERIFIED; high for exact 0x94 object layout, +0x80/+0x84/+0x8C/+0x90 fields, and callee chain.
+// Verified: 100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).
+// Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 void* Qvm_Load(const char* qvm_path)
 {
     void* item_118 = nullptr;

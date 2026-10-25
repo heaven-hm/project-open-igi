@@ -32,11 +32,11 @@ LovsEntryLoaderFn g_lovs_entry_loader = nullptr;
 
 // Native: DynObj_LoadPackageAnimations; retail VA 0x004CF910; signature/calling convention unknown.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Verified: 100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).
-// Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE (SHA256: dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01); VA 0x004CF910-0x004CF9CA, 186 bytes, digest 9bc4b0a10b59709630cf47788d176a5bcca0360df50b4e8349e0edafa1a0d524; CLEAN/dynobj/004CF910-DynObj_LoadPackageAnimations.c.
 // Behavior/CFG: locates the `'BANM'` (`0x42414E4D`) chunk inside `*(context + 0x08)` via Ilff_FindFormChunk (0x004CEAA0); when present and `*banm > 0`, formats `"%sanims/%s.iff"` using either `g_a4edf8` (when `g_a4edf8[0] != 0`) or `g_a4ed6c` via sprintf (0x004A53B3) and calls Render_FileSIsNotIffFile (0x004D67A0) for each NUL-terminated animation name. radare2 10 blocks/14 edges; Binary Ninja 10 blocks; 100% structural agreement.
 // Status/limits: STRUCTURALLY_VERIFIED; high for exact BANM chunk tag, prefix selection (`0x00A4EDF8` vs `0x00A4ED6C`), and loop.
+// Verified: 100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).
+// Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 void* DynObj_LoadPackageAnimations(void* context)
 {
     auto* const ctx_bytes = static_cast<std::uint8_t*>(context);
@@ -128,11 +128,11 @@ void* DynObj_LoadPackageAnimations(void* context)
 
 // Native: DynObj_LoadPackagePalettes; retail VA 0x004CF870; signature/calling convention unknown.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Verified: 100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).
-// Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 // Tools/evidence: allocates `count * 0x0C` bytes via Mem_Alloc (0x004B0C60) into `*(context + 0x3C)` when Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004CF870-0x004CF909, 153 bytes, digest 246a42f51d3979bfd848ccefcef6fd53d81b2373c741392b5d719b6b46f29e09; CLEAN/dynobj/004CF870-DynObj_LoadPackagePalettes.c.
 // Behavior/CFG: locates the `'PALF'` (`0x50414C46`) chunk inside `*(context + 0x08)` via Ilff_FindFormChunk (0x004CEAA0), stores `count = *palf` at `*(context + 0x44)`, `count > 0` (or clears `*(context + 0x3C) = 0`), and iterates each NUL-terminated palette name formatting `"%spalettes/%s.pal"` into `0x00A4EC6C` via sprintf and calling Sys_SIsNotAValidPaletteF (0x004B7D30). radare2 7 blocks/8 edges; Binary Ninja 7 blocks; 100% structural agreement.
 // Status/limits: STRUCTURALLY_VERIFIED; high for exact PALF chunk tag, allocation stride `0x0C`, and callee sequence.
+// Verified: 100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).
+// Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 void* DynObj_LoadPackagePalettes(void* context)
 {
     auto* const ctx_bytes = static_cast<std::uint8_t*>(context);

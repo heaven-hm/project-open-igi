@@ -1,10 +1,10 @@
 // Native: Terrain_OutOfTerrainRenderch; retail VA 0x00514680.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Verified: 100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).
-// Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 // Tools/evidence: Binary Ninja MCP 0.1.0 (single selected decompiler), radare2 6.2.0 CFG and angr 10.0.4.post1 CFGFast on retail IGI.EXE; evidence docs/fidelity/evidence/0x00514680-*.json; no Ghidra analysis was run for this target.
 // Behavior/CFG: hash-bucketed render-chunk cache lookup ((arg2*0xB5AF + arg1*0x9D) % 0x1FD) returns a matching node or allocates from the 0x2EF8-stride pool; exhaustion reports "Out of terrain renderchunks" and halts. Binary Ninja and radare2 recover the same retail graph.
 // Status/limits: STRUCTURALLY_VERIFIED; not wired into CMakeLists.txt; no runtime capture exists. The retail pool initialisers 0x00516621 and 0x004B0B00 remain runtime preconditions, detailed below.
+// Verified: 100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).
+// Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 //
 // Retail structure (from instructions, not decompiler naming)
 //   0x00514680  push ebx/esi/edi

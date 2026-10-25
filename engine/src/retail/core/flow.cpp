@@ -317,8 +317,6 @@ void NATIVE_DECL Flow_Start(void* flow)
 
 // Native: Flow_RunHandler; retail VA 0x00402260.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Verified: 100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).
-// Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 // Tools/evidence: Radare2 on retail IGI.EXE, VA 0x00402260..0x0040271C (96 basic blocks); the paired
 //                 runtime trace in docs/fidelity/evidence/0x00401050-retail-flow-order.json.
 // Behavior/CFG: the retail reads the elapsed ticks at 0x00490370 (0x00402267) and takes one of three
@@ -334,6 +332,8 @@ void NATIVE_DECL Flow_Start(void* flow)
 //           into the state switch, which runs the pending state at +0x2C through the eight-case
 //           jump table at 0x00402720 and finishes with the post block at 0x004026E4.
 // Status/limits: STRUCTURALLY_VERIFIED for the three paths, the two walks, the state switch, the
+// Verified: 100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).
+// Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 //           table order and the post block. The callees the port does not have yet are left as
 //           TODO(VA) markers, and the phase getter 0x004E7530 is mapped to the port's play phase;
 //           those states are not_solved rather than invented.
@@ -513,10 +513,10 @@ void NATIVE_DECL Flow_CreateHandler(void* flow)
 
 // Native: Flow_Delete; retail VA 0x00402740.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Verified: 100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x00402740..0x004027D0.
 // Behavior/CFG: reads the frame timer through 0x0048F180, loads the LOCAL:config.qsc script through 0x00405BD0, runs the script setup at 0x004EE3B0 and then reads the flow object's state.
 // Status/limits: STRUCTURALLY_VERIFIED; the script load and the object read are the retail's.
+// Verified: 100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).
 void NATIVE_DECL Flow_Delete(void* flow)
 {
     (void)flow;
