@@ -11,6 +11,26 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - The DX gate is real now, and a paired runtime check caught a GUID bug static reading missed
+
+- `0x00498480 Display_ProbeDirectXVersion` is wired into WinMain at its retail site (`0x0048F6E2`) with the retail `< 0x700` requirement path
+  (`sprintf` 0x541E68, `MessageBoxA` "Error" `MB_ICONERROR`, `exit(1)`), and `0x00407D60 Material_DefineScriptNatives` is linked
+  (`igi1.exe` 14,244,376 -> **14,249,775** bytes, green).
+- **Paired runtime finding**: with the gate wired, the candidate showed the retail requirement dialog while retail `igi.exe`, run in the same CrossOver
+  bottle with the same arguments, passed the gate and opened its window. Cause: our transcription of `IID_IDirectDraw2` (`0x00534A60`) and
+  `IID_IDirectDrawSurface3` (`0x00534A40`) had `Data2`/`Data3` byte-swapped, so both `QueryInterface` calls failed and the tier stalled below 0x700.
+  The image bytes are `... 43 2b cf 11 ..` and `... b2 69 d0 11 ..`, i.e. little-endian words `0x2B43`/`0x11CF` and `0x69B2`/`0x11D0`. Both corrected
+  from the image, and the candidate now passes the gate and reaches `QTask_RegisterClasses` exactly like retail does.
+- **This is the first divergence the runtime side found that the static side had already "verified"**: the probe's provider block claimed byte-exact
+  GUIDs and 38/38 blocks, and it was still wrong on two GUIDs. Reading a GUID in a decompiler listing is not the same as decoding the image bytes in
+  memory order; the evidence now says which of the two happened.
+- `0x00498480` status is `RUNTIME_TESTED` with a documented scope (the tier outcome under CrossOver, paired with retail; COM internals not traced).
+  `0x00407D60` is `BUILD_VERIFIED`/runtime UNOBSERVED - it is entry #3 of the `0x00402930` sequence.
+- **Concurrent-writer incident, reported not hidden**: `CMakeLists.txt` gained five entries (`native_402870`, `native_402820`, `sys/native_490370`,
+  `core/native_4e6030`, `render/native_495cc0`) from another agent's lane; two of those files do not compile (`Game_FrameDispatchRecord` and two
+  `Native_*` declarations missing), which broke the shared build. The entries were removed from `CMakeLists.txt` (files left on disk, nothing deleted) so
+  the build is green again; they belong to that lane's integration, not this one.
+
 ### 2026-10-25 - BackgroundFX wave linked (10 natives) and the 0x00A94E84 dispatch blocker closed
 
 - `igi1.exe` 14,231,896 -> **14,244,376** bytes, build green with no undefined and no duplicate symbols. The wave adds `BackgroundFX_EmitAxisRuns_419330`

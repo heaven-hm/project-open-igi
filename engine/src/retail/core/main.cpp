@@ -18,12 +18,13 @@
 //
 // Known, explicitly recorded divergences (do not hide):
 //  * mutex name "IGI1MUTEX" instead of "IGIMUTEX" (owner-authorized side-by-side).
-//  * 0x00498480 Display_ProbeDirectXVersion is NOT linked yet (needs its own
-//    individual retail static+runtime record), so the DX-tier gate below is
-//    absent instead of faked.
-//  * 0x00498460 (x87 truncate-rounding control-word setter) is not linked; the
-//    port's FP_InitExtendedPrecision helper is used in the loop instead and this
-//    substitution is recorded as unresolved.
+//  * 0x00498480 Display_ProbeDirectXVersion is transcribed (native_00498480.cpp)
+//    and linked; the DX-tier gate at 0x0048F6E2 below is the retail call and the
+//    retail < 0x700 requirement path. Its status is STRUCTURALLY_VERIFIED plus a
+//    build of this target, not runtime-verified.
+//  * 0x00498460 is the retail x87 truncate-rounding control-word setter, already
+//    transcribed in fpu_state.cpp (provenance VA 0x00498460) and linked; both its
+//    WinMain call sites (0x0048F7A5 and the loop-top 0x0048F80D) call that native.
 //  * QTask_CreateTask currently throws inside QTask_RegisterClasses (untranscribed
 //    registrars), so the candidate is expected to abort at that call until the
 //    class registration is reconstructed; that is a documented dependency, not a
@@ -39,6 +40,7 @@
 #include "igi/retail/core/fpu_state.hpp"
 #include "igi/retail/core/frame_natives.hpp"
 #include "igi/retail/core/native_0048f0e0.hpp"
+#include "igi/retail/core/native_00498480.hpp"
 #include "igi/retail/core/native_0048f0f0.hpp"
 #include "igi/retail/core/native_0048f970.hpp"
 
@@ -53,6 +55,8 @@
 #if defined(_WIN32)
 #include <windows.h>
 
+#include <cstdio>
+#include <cstdlib>
 #include <cstring>
 #endif
 
@@ -174,8 +178,27 @@ int WINAPI WinMain(HINSTANCE const h_instance, HINSTANCE const h_previous_instan
     (void)AppMain_ParseCmdLineArgs("Germany", &AppMain_GermanyCommand);
     (void)AppMain_ParseCmdLineArgs("USA", &AppMain_USACommand);
 
-    // 0x0048F6E2 Display_ProbeDirectXVersion(&tier, &platform) + the < 0x700
-    // requirement box is NOT wired: the native is not linked yet (recorded gap).
+    // 0x0048F6E2 call 0x00498480: the probe writes two out-params; 0x0048F6E7 reads
+    // the tier back from the frame word (0x40(%esp) before the 0x30-byte argument
+    // block is released at 0x0048F6EB) and 0x0048F6EE compares it with 0x700.
+    std::uint32_t directx_tier = 0U;      // first out-param (the one WinMain tests)
+    std::uint32_t directx_platform = 0U;  // second out-param, not read by WinMain
+    Display_ProbeDirectXVersion(&directx_tier, &directx_platform);
+    static_cast<void>(directx_platform);
+    if (directx_tier < 0x700U)            // 0x0048F6EE cmp $0x700; 0x0048F6F4 jae
+    {
+        // 0x0048F6F3 push %ebx (0); 0x0048F6F6 push $0x7; 0x0048F6F8/0x48F6FC push the
+        // buffer and the format at 0x00541E68, i.e. version 7.0.
+        // Retail's frame extent for this buffer is not established; 0x100 covers the
+        // format's maximum expansion and the size is a port-side choice.
+        char requirement[0x100]{};
+        ::sprintf(requirement,
+                  "This application requires DirectX version %d.%d or greater to run.",
+                  7, 0);                  // 0x0048F702 call 0x004A53B3 sprintf
+        // 0x0048F70E push $0x10 (MB_ICONERROR); 0x0048F710 push "Error"; call *MessageBoxA.
+        ::MessageBoxA(nullptr, requirement, "Error", MB_ICONERROR);
+        ::exit(1);                        // 0x0048F71F push 1; 0x0048F71F call 0x004A5AD5 exit
+    }
 
     // 0x0048F754 GetScreenMode -> CreateWindowExA style:
     //   mode != 0 -> 0x96000000, mode == 0 -> 0x37C80000 (neg/sbb/and/add).
