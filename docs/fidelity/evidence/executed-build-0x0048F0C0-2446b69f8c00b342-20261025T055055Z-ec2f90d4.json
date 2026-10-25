@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "kind": "build-report",
+  "address": "0x0048F0C0",
+  "result": "passed",
+  "executed": true,
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "1880d321546bd9372e5ed72647b562c9fb45a80b8f7feb5389b45d388713aceb",
+  "candidate_executable_sha256": "2446b69f8c00b34298b75ecfd1a5a17536673caac396d5d48eb1e56899a27232",
+  "command": "cmake --build /Users/haseeb-mir/Documents/Code/project-open-igi/build-native-auto-win32 --target igi --clean-first -j4",
+  "receipt": {
+    "path": "build/native-one/0x0048F0C0/20261025T055055Z-ec2f90d4/candidate-receipt.json",
+    "sha256": "ce245b5d0640d5e5ea072bc6c4f95d3986f541b42a7cf33dc6e9be766ea58b43"
+  },
+  "scope": "Actual source-bound compiler execution only; not native acceptance"
+}
