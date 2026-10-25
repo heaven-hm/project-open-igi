@@ -9,33 +9,40 @@ Method: `r2 -q -c "pd 156 @ 0x402930"` on the image, extracting every `call` tar
 provenance header (`// Native: ...; retail VA 0x...`) of every `engine/src/retail/**/*.cpp`. Match by **content**, never by
 filename.
 
-## Result
+## Result (third measurement, and the first one that is right)
 
 - **155 call sites, 154 distinct targets.**
-- **88 targets are not transcribed anywhere** in `engine/src/retail`.
-- **6 are transcribed but not in the build target**: `0x464260`, `0x467700`, `0x4682F0`, `0x4696B0`, `0x46F2B0`, `0x508F80`.
-- **60 are transcribed and in the build.**
+- **71 targets are mentioned anywhere in `engine/src` or `engine/include`.**
+- **83 are mentioned nowhere at all** - no implementation, no provenance line, no comment.
 
-So the critical path is **94 remaining**, of which 88 have no implementation at all.
+Method, stated so it can be re-derived: search the whole of `engine/src` and `engine/include` for each VA, in any
+form. Two independent cross-checks agree: `handler-abi-worker` tested its own band by requiring a provenance line
+matching the tree's `retail VA 0x...` convention and got **80** for `0x400000`-`0x45FFFF`, and the remaining **3**
+are in the chain lane. 80 + 3 = 83.
 
-### Correction to the first version of this measurement
+The 83, in retail call order: `0x406450 0x407290 0x4170A0 0x4190E0 0x4199F0 0x41A1E0 0x41AAF0 0x41B310 0x41B8E0 0x41C700
+0x41D080 0x41DC50 0x41E690 0x41F340 0x420300 0x420CC0 0x421430 0x421750 0x4223D0 0x422B40 0x4230A0 0x423FC0 0x424E80
+0x425C80 0x426630 0x426D90 0x4272A0 0x427830 0x427D90 0x427FF0 0x42ACC0 0x42BEB0 0x42D2B0 0x4310F0 0x4330F0 0x4351E0
+0x435870 0x435D90 0x4361D0 0x436780 0x436B10 0x437510 0x438390 0x4388B0 0x438DF0 0x4397C0 0x43A840 0x43AD80 0x43B2F0
+0x43B850 0x43BFD0 0x43C6D0 0x43CC70 0x43E8D0 0x43EFF0 0x43F900 0x4403E0 0x440710 0x440C20 0x440FD0 0x443680 0x443ED0
+0x444BF0 0x4464C0 0x447DB0 0x4485E0 0x448D30 0x449360 0x449970 0x449D30 0x44C130 0x44C8D0 0x4533B0 0x453550 0x454970
+0x456AD0 0x459880 0x45CAB0 0x45DB70 0x45E450 0x465BC0 0x466E40 0x466F70`.
 
-The first run of this file reported "15 present, 139 missing". That was **wrong by 45** and `chain-worker` caught it. Two defects in the
-matcher, both mine:
+### Two corrections to this file's own earlier numbers
 
-1. **It was case-sensitive.** It searched for `retail VA 0x0*<lowercase hex>`, but a large part of the tree writes the VA in uppercase
-   (`0x0046DD00`). Every uppercase-provenance file counted as missing. `0x0046DD00` and `0x0046DF10` are both implemented and both in
-   `CMakeLists.txt`, and the matcher called them missing.
-2. **It required one exact phrasing.** `core/native_402ff0.cpp` exists but does not carry the literal string `retail VA 0x...` at all, so
-   content matching by that phrase missed it too.
+The first run reported "15 present, 139 missing" and the second reported "94 remaining". Both were wrong, in opposite
+directions, and both were found by a worker rather than by me.
 
-The fix was to stop matching prose: the index is now built from the **filename** (`native_<va>.cpp`) and from any `0x00XXXXXX` in the
-file's **first line**, compared **numerically** rather than as strings. `0x467DB0` and `0x467DD0`, which have no implementation, were
-re-checked by hand and are genuinely absent.
+1. **139 was case-sensitive.** The matcher searched for `retail VA 0x0*<lowercase hex>` and a large part of the tree
+   writes the VA in uppercase, so every such file counted as missing. It also required one exact prose phrase, which
+   some files do not use at all (`core/native_402ff0.cpp` is one).
+2. **94 was filename-based and first-line-based.** It built its index from `native_<va>.cpp` filenames and from
+   addresses on a file's first line, which misses every VA that lives in a hand-organised file - `core/flow.cpp`
+   (`Flow_Init`, `0x00401FC0`), `core/task_types.cpp`, `core/class_registration.cpp` are all that shape.
 
-**The rule this is an instance of**: a coverage number computed by matching a comment format is only as good as that format. Match
-addresses numerically, from filenames and structured records, and treat any prose-based match as a lower bound. The number in this file
-was a lower bound that was then quoted as if it were exact, which is worse than no number.
+**The rule, stated once**: a coverage number computed by matching a comment format or a filename is only as good as
+that convention. Search for the address itself, across the whole tree, and treat any prose-based match as a lower
+bound. Both wrong numbers in this file were quoted as if they were exact, which is worse than quoting none.
 
 ## The gap by address band
 
