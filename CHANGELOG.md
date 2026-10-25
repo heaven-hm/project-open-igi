@@ -2701,3 +2701,37 @@ closure from the guard, not by adjacency in the address space.
 `0x0051853D` and the nops after it, not by "the first `ret`" - an unbounded `pd` walks
 into `0x00518869`'s `ret` and silently absorbs another routine, which is the trap
 already recorded in the `0x0042ACC0` recon.
+
+## GUARD CALLEE COVERAGE: 143 OF 154 HAVE A FILE. MY FIRST COUNT SAID 19 MISSING.
+
+Corrected measurement of the startup guard `0x00402930`'s dependency:
+
+  distinct direct call targets: 154   (over 155 call sites)
+  HAVE a transcribed implementation file: 143
+  NO file: 11
+
+The eleven: `0x00401FC0` (Flow class), `0x00407D60` (material defines),
+`0x00415530` (Level and Game classes), `0x0042ACC0` (Train, mine), and seven in
+`0x0046xxxx`/`0x0047xxxx` - `0x0046BA60`, `0x0046DD00`, `0x0046DF10`, `0x00476110`,
+`0x0047B4B0`, `0x0047E700`, `0x004825C0`.
+
+**My first run of this count said 19 missing, and every one of the extra eight was a
+false negative.** The script discovered implementation files by regexing each file's
+`// Native:` line for a VA, and that regex failed to match files whose line reads
+`// Native: <Name>_Register_<VA> (placeholder name; ...)`. All eight files exist and
+have existed for days; the pattern did not match their text.
+
+**This is the fourth time today that a text pattern has been the fault rather than the
+world**, and it is the same one each time: the pattern encoded an assumption about
+formatting that the files did not share. The corrected version looks up
+`native_<last-6-hex>.cpp` directly, which cannot be defeated by how the comment is
+phrased. **Rule THREE - the name is metadata about the file, not evidence about the
+file - has a corollary: a regex over a comment is evidence about the comment.**
+
+**A number I cannot reconcile, recorded rather than smoothed over:** earlier in this
+session the guard's direct callee set was recorded as **308**, and this measurement
+gives **154 distinct over 155 call sites**. The guard is 156 instructions (155 calls +
+one tail `jmp`), so 155 call sites is consistent with the body. I cannot currently
+reproduce 308 from the guard's own bytes, and I am not going to assert which figure is
+right. What is certain is that the guard's direct callees number in the low hundreds,
+not the thousands, and that 143 of them already have files.
