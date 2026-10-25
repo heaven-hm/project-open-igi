@@ -2778,3 +2778,40 @@ extent. **In every case the output was true and the boundary was mine.** The gua
 against it is to derive the extent from the routine (`afi` size, or the `ret` plus its
 padding) and never from a number chosen for convenience - and then to say which one was
 used.
+
+## SIXTH INSTRUMENT FAULT: MY INSTRUCTION COUNT DROPS BRANCH-MARKED LINES
+
+Every instruction count I have taken this session used
+
+    r2 ... -c 'pd N @ VA' | grep -E '^\s+0x[0-9a-f]+\s+[0-9a-f]+\s'
+
+**r2 renders a branch target line with a leading marker - `.-->`, `,==<`, `` `=< `` - so
+those lines do not start with whitespace, and that grep silently discards every one of
+them.** Measured on `0x00407DE0`: **35 lines through the filter, 40 through a loose one.**
+Five instructions of a forty-instruction window, gone, with no error and no shortfall
+signal.
+
+**This invalidates counts I published this session:**
+- `0x00407D60` "31 instructions" - it has more; the loop lines were dropped.
+- `0x00407DE0` "18 instructions" - the body has a **32-byte gap** between `0x00407E05`
+  and `0x00407E28` in my dump, i.e. at least one branch and several instructions I never
+  saw.
+- `0x004BAAC0` "36 instructions" and `0x004B8890` "14 instructions" - both taken with
+  the same filter and **both to be treated as lower bounds, not counts.**
+
+**The guard's 402 survives, and I can say why rather than hoping:** it is one basic block
+of `call`s ending in a tail `jmp`, so it has no conditional branches and few marked
+lines - and its count came out exactly equal to the `pd` argument. **But "it came out
+right" is not the same as "the method is sound", and I am recording it as luck rather
+than as a validation.**
+
+**The fix is to count instructions by address, not by line shape.** Group the dump on
+the instruction address and count distinct addresses; that is immune to how r2 decides
+to draw a branch. **Any count taken from a `pd` dump by line pattern is suspect, and
+mine were.**
+
+**Why this one matters more than the other five:** the previous faults each produced a
+wrong number in a note. **This one produces an incomplete BODY** - and a transcription
+written from a body with five instructions missing is a transcription of a different
+function. `0x00407D60` and `0x00407DE0` are both on the guard's missing list and both
+were about to be transcribed from dumps that were silently short.
