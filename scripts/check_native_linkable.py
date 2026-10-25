@@ -21,9 +21,26 @@ def main():
     ap.add_argument('source')
     ap.add_argument('--archive', default='build-win32-no-verify-gate/CMakeFiles/igi.dir/objects.a')
     ap.add_argument('--object', default='/tmp/_probe.o')
+    ap.add_argument('--allow-stale', action='store_true',
+                    help='compare against a stale archive deliberately (the answer is about the archive)')
     a = ap.parse_args()
     if not pathlib.Path(a.archive).is_file():
         print(f'archive missing: {a.archive}', file=sys.stderr); return 2
+
+    # A stale archive is worse than a missing one: it answers, and the answer looks like a
+    # fact about the tree. handler-abi-worker hit exactly this - a default archive five days
+    # old returned NOT LINKABLE for two natives that link cleanly, because the archive could
+    # not contain symbols landed since it was built. Refuse rather than answer, and say the
+    # age, unless --allow-stale is passed deliberately.
+    import os, time
+    age_days = (time.time() - os.path.getmtime(a.archive)) / 86400.0
+    if age_days > 0.5 and not a.allow_stale:
+        print(f'archive is {age_days:.1f} days old: {a.archive}\n'
+              f'  a stale archive cannot contain recently landed symbols, so a NOT LINKABLE\n'
+              f'  answer from it is about the archive and not about the tree.\n'
+              f'  Rebuild first, or pass --allow-stale to compare against it deliberately.',
+              file=sys.stderr)
+        return 2
     r = subprocess.run(['i686-w64-mingw32-g++', '-std=c++20', '-O2', '-Wall', '-Wextra',
                         '-c', '-Iengine/include', a.source, '-o', a.object], capture_output=True, text=True)
     if r.returncode:
