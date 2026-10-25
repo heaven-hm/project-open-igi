@@ -639,6 +639,7 @@ add_executable(igi WIN32
     engine/src/retail/core/native_464260.cpp
     engine/src/retail/core/native_465a10.cpp
     engine/src/retail/core/native_466f70.cpp
+    engine/src/retail/core/native_4310f0.cpp
     engine/platform/windows/retail_native_verification_support.cpp)
 target_include_directories(igi PRIVATE engine/include)
 target_compile_features(igi PRIVATE cxx_std_20)
