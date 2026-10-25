@@ -1,5 +1,49 @@
 ## Unreleased
 
+### A provenance block that contradicts itself: Flow_Start is a partial port
+
+`flow.cpp` says two different things about `Flow_Start` (`0x00402070`):
+
+- `:305` `// Native: Flow_Start; retail VA 0x00402070.` and a header comment
+  describing it as a complete port;
+- `:211` `// TODO(0x0040208B): Flow_Start must store the record 0x004012A0
+  returns at +0x48; the port's Flow_Start does not yet, so this walk finds no list.`
+- `:309` `// Status/limits: STRUCTURALLY_VERIFIED for the two stores and the call.
+  The record link and the +0x48 store are not transcribed yet (see the TODO above).`
+
+Retail's `0x00402070` is **460 bytes**. The port has the two stores and the call,
+and explicitly not the record link or the `+0x48` store.
+
+**The gate sees `Flow_Start` as implemented.** The extractor returns it, the
+manifest has a record, it compiles and links - and part of its retail body is
+missing. This is the "green signal that means less than it appears" class, and the
+only thing that caught it was reading all five records from one file together
+rather than checking them one at a time.
+
+Found by handler-abi-worker while running the extractor across its own files. Not
+fixed here: correcting the body is a transcription task, and correcting the status
+is a decision about what the gate is allowed to count.
+
+### 0x00402780: an unclaimed address between two implemented neighbours
+
+The extractor returns five records from `flow.cpp` - `Flow_Init` `0x00401FC0`,
+`Flow_Start` `0x00402070`, `Flow_RunHandler` `0x00402260`, `Flow_Delete`
+`0x00402740`, `Flow_CreateHandler` `0x00402800`. `0x00402780` is not among them,
+and it sits **between `Flow_Delete` and `Flow_CreateHandler`**, inside a
+contiguous run of implemented members of the same handler set.
+
+That is stronger than the adjacency argument that first flagged it: it is not just
+near a body on the critical path, it is a gap in a run whose neighbours are all
+present - the same shape as `0x00567C5C` inside the `0x00567Cxx` run. Two
+independent instances in one session of a missing member inside a populated run.
+
+Also corrected: `flow.cpp`'s real names are `Flow_RunHandler` and `Flow_Delete`,
+not the `_Handler`-suffixed forms recorded earlier. Those came from inferring a
+suffix off the `FrameHandler` type rather than reading the file - a name supplied
+from a pattern, which is the same error as a filename used as a proxy.
+
+## Unreleased
+
 ### Binary Ninja evidence records: content verified, provenance not
 
 `scripts/build_native_records.py` writes `<addr>-binaryninja.json` and
