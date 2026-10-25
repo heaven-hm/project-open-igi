@@ -11,6 +11,17 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - The three highest-leverage startup blockers
+
+- `igi1.exe` 14,257,059 -> **14,258,430** bytes, green. Three blockers linked, all `BUILD_VERIFIED`, runtime UNOBSERVED:
+  `0x00401FA0 TaskType_SetInheritedFlags_401FA0`, `0x00460BF0 Task_GetCachedEventId_460BF0`, `0x004E6610 Task_GetCachedEventId_4E6610`.
+- Two of the three are the same 28-byte lazy event-id shape as `0x00467D90` (retail `0xFF` sentinel, one `QTask_AllocateEvent` path), which is why
+  they were cheap despite blocking 8 and 9 registrars respectively: the leverage table measured how many callers a body has, not how hard it is.
+- That is now three cached-event-id bodies in the tree with identical retail shape; the fourth, if one appears, should be transcribed by comparison
+  against these rather than from scratch - but still verified per instruction.
+- Each closure was checked by compiling the object and looking at `nm -u` rather than by reading the source, and every undefined symbol resolves in
+  the tree (`QTask_TypeTable`, `QTask_AllocateEvent`).
+
 ### 2026-10-25 - FlashBang and M203 registrars, and the first registrar that passes a non-zero fourth argument
 
 - `igi1.exe` 14,255,796 -> **14,257,059** bytes, green. `0x0047E700 Task_DefineFlashBang` (129 B / 1 block / 34 instructions) and
