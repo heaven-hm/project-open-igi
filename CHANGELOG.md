@@ -2191,3 +2191,34 @@ address someone else owns, which creates a silent second copy. This one is
 **declaring** an address someone else owns under a name you invented. Both are
 caught by the same discipline: grep the address in the tree before naming a
 callee, exactly as you grep before defining a global.
+
+## OPEN DEFECT: two files declare a retail VA that another file already owns
+
+Found by the one-file-per-VA sweep, which is the check rule 13 exists to enforce.
+It had never been run across the whole tree before.
+
+| VA | file A | reads | file B | reads |
+|---|---|---|---|---|
+| `0x004EE0E0` | `sys/native_4ee0e0.cpp` `Sys_GetGlobal8_4EE0E0` | `g_54dc30` | `sys/native_4eee0.cpp` `Sys_GetGlobal8_4EEE0` | `g_54dc92` |
+| `0x004EE0F0` | `sys/native_4ee0f0.cpp` `Sys_GetGlobal8_4EE0F0` | `g_54dc31` | `sys/native_4eef0.cpp` `Sys_GetGlobal8_4EEF0` | `g_54dc93` |
+
+All four files are tracked, all four are in `CMakeLists.txt`, and all four
+symbols are defined in `igi1.exe`. They are **four different getters** - each
+reads a different global - so this is not a duplicate body.
+
+**What is wrong is the declared VA on the `4eee0`/`4eef0` pair.** Each declares an
+address the other file already owns. The pair reads `g_54dc92`/`g_54dc93` while
+the files that legitimately own `0x004EE0E0`/`0x004EE0F0` read
+`g_54dc30`/`g_54dc31`, so the globals are the clue to the true addresses.
+
+**Not resolved here, and deliberately not guessed.** The correct fix requires
+establishing the real VAs from retail, not inferring them from the filenames -
+which are themselves suspect, since `native_4eee0.cpp` and `native_4eef0.cpp` are
+one character away from the names of the files they collide with. Two of the
+three address-suffixed names involved are plausible truncations of the other.
+
+**Also note the extractor defect this sweep exposed:** `implementation_natives()`
+returns more than one record for some files (`native_4c5900.cpp` returns three:
+its own VA plus `0x00401860` and `0x00401D30`; `native_4d9730.cpp` returns two).
+Those two are false positives of the sweep, not collisions. Any per-VA census
+must use each file's *own* native, not every record the extractor returns.
