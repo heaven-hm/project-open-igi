@@ -11,6 +11,26 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - retry concurrent edits inside the native verification command
+
+The automatic verifier now checks the input fingerprint inside its bounded attempt
+loop. Previously, a native could pass all subphases and then be invalidated by a
+concurrent checkout edit outside that loop, leaving the remaining attempts unused.
+It now rejects that attempt, captures fresh inputs, and reruns the complete pipeline.
+A changed or ambiguous native mapping blocks instead of silently retargeting the test.
+The final input check and verified-only database requirements remain enabled.
+
+Private Frida cleanup also identifies the detached Wine server by its exact
+private endpoint and executable command, excluding pre-existing PIDs and the
+launcher. It rechecks ownership before signalling and checks that the listener
+closed; launcher exit alone no longer counts as successful cleanup.
+
+Validation: 42 automation/repair/gate/database infrastructure tests passed, including
+fresh-input retry, mapping-change rejection and owned-server cleanup. Two live `0x0048F0C0` runs passed
+their static/semantic/controlled/paired-runtime subphases for their tested images,
+then correctly remained pending after concurrent input changes. These observations
+do not accept the current tree or establish playable Level 1.
+
 ### 2026-10-25 - 21 provenance comments asserted load addresses the image does not contain
 
 A real evidence defect, found by the agent that introduced it and verified here against
