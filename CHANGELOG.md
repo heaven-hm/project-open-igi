@@ -1,5 +1,35 @@
 ## Unreleased
 
+### 30 natives are partial ports the gate counts as implemented
+
+`Flow_Start` is not one file with a self-contradicting comment. A sweep for
+`Status/limits:` lines that themselves admit an untranscribed part or carry a
+`TODO` returns **30 natives**:
+
+`0x00402FF0`, `0x00407D60`, `0x0040FE30`, `0x004123F0`, `0x00413DF0`,
+`0x00415070`, `0x00419820`, `0x0042DAC0`, `0x0042DB00`, `0x0042FE40`,
+`0x0042FE80`, `0x00460C30`, `0x0046BA60`, `0x0046DD00`, `0x0046DF10`,
+`0x00472A70`, `0x00476110`, `0x0047B4B0`, `0x0047E700`, `0x004825C0`,
+`0x0048F970`, `0x004978F0`, `0x004B16D0`, `0x004DA1D0`, `0x004E68D0`,
+`0x00508FA0`, `0x005093B0`, `0x00509450`, `0x00509480`, `0x00509570`
+
+Every one compiles, links, has a manifest record, and is counted by the gate as
+implemented. Each is missing part of its retail body, and the only place that is
+recorded is a comment inside the file itself.
+
+**This is a measurement, not a defect list.** The distinction matters: some of
+these may be legitimately blocked on an untranscribed dependency, which is the
+honest state under 10.13 rule 1 ("leave it blocked and record the gap"). What is
+wrong is that the *gate* cannot tell a complete port from a partial one, so
+"implemented" currently means "a file exists". Any progress figure computed from
+file counts - including the guard's 122 of 154 - inherits that ambiguity.
+
+Found while chasing `Flow_Start` after handler-abi-worker flagged it. Not fixed
+here: completing 30 bodies is transcription work, and deciding what the gate may
+count is a separate decision that should be made once and applied to all 30.
+
+## Unreleased
+
 ### A provenance block that contradicts itself: Flow_Start is a partial port
 
 `flow.cpp` says two different things about `Flow_Start` (`0x00402070`):
