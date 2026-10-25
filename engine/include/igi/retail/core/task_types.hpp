@@ -47,6 +47,38 @@ static_assert(offsetof(TaskTypeSlot, in_use) == 0x25, "the retail slot layout");
 static_assert(offsetof(TaskTypeSlot, inherited_flags) == 0x2C, "the retail slot layout");
 
 // The class handler the retail stores in the handler table.
+//
+// KNOWN-POSSIBLY-UNDER-SPECIFIED. This type is a placeholder for a table whose
+// slots do not share one signature, and it is deliberately NOT widened. Do not
+// treat the single parameter as a claim about what retail passes; a cast to this
+// type is lossy and says nothing about the callee's real argument count.
+//
+// Measured by scripts/handler_abi_census.py over the 169 handler addresses the
+// tree actually installs, intersecting them with the image bodies and simulating
+// esp and any ebp frame (entry esp = 0; [esp+8] = arg2; [ebp+0xC] = arg2):
+//   - 86 read argument 1 only
+//   - 82 read argument 2 (49%): 67 in other shapes, 15 in the 4-instruction
+//     `mov eax,[esp+8]; mov ecx,[global]; mov [eax],ecx; ret` shape
+//   - 1 reads neither
+//   - controls: QTask_NoOpHandler 0x004D3710 reads neither;
+//     Script_SetConstant_51BAA0 reads arg2
+//
+// The invocation sites of the table 0x00401400/0x00401530 write
+// ([ecx*4+0xA96AE0]) agree with two arguments: over its 28 call sites, 19 push two
+// consecutive arguments, 5 push one, 4 push none immediately. See 0x004D1324
+// (`push edx; push eax; call [ecx*4+0xA96AE0]`) and 0x004E6C4F.
+//
+// COUNTER-EVIDENCE, UNRESOLVED: the two walk-and-dispatch routines 0x00424280
+// (`push esi; call eax; add esp,4`) and 0x00488700 (`push ecx; call eax; add esp,4`)
+// read the same table and push exactly one argument. Retail therefore invokes some
+// slots with one argument and others with two, and no transcribed body reconciles
+// that. The ABI appears to be per-slot, not per-table.
+//
+// What a caller must do: pass BOTH arguments when transcribing the dispatcher,
+// rather than re-deriving the count from this type. The 15 set-constant handlers
+// each write one of the band's container globals, a measured 1:1 pairing
+// (e.g. 0x00429890 -> 0x0057BC94, the handler registrar 0x00427FF0 links in its
+// event 4, writing that registrar's own container global).
 using FrameHandler = void (*)(void*);
 
 // The number of task type slots the retail reserves: 0x00AF5F05 to 0x00AFA705

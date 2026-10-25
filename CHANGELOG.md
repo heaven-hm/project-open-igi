@@ -2339,3 +2339,64 @@ corrected it to 5 in the next report. The byte, block, edge and call counts were
 all right; the error was only the instruction count, and it volunteered the
 correction before anyone could have found it. Recorded because the behaviour is
 the one that keeps this project honest, not the number.
+
+## RESOLVED: the handler ABI is two arguments for the majority, and per-slot
+
+analyst ran scripts/handler_abi_census.py over the **169 handler addresses the tree
+actually installs** (161 raw immediates inside `FrameHandler>(0x...)` casts, the
+handler argument of every `Script_QHashNodeRegisterEx`, and 9 symbol-referenced
+handlers resolved through the name-to-VA map), intersecting them with the image
+bodies and simulating esp and any ebp frame.
+
+| reads | count |
+|---|---|
+| argument 1 only | 86 |
+| **argument 2** | **82 (49%)** |
+| neither | 1 |
+
+Controls: `QTask_NoOpHandler` `0x004D3710` reads neither; `Script_SetConstant_51BAA0`
+reads arg2.
+
+**The named `Script_SetConstant_*` family is 3 of the 82, not the boundary of it.**
+The earlier statement that the two-argument shape was confined to that population
+was measured over the 10 installed handlers with transcribed bodies and generalised
+to 169 - a 6% sample. Retracted.
+
+**The 15 set-constant handlers each write one of the band's container globals, a
+measured 1:1 pairing** - including `0x00429890 -> 0x0057BC94`, which is exactly the
+handler registrar `0x00427FF0` links in its event 4, writing that registrar's own
+container global. A cross-file structural pairing, not an inference.
+
+**The invocation sites agree:** over the 28 call sites of the table
+`0x00401400`/`0x00401530` write (`[ecx*4+0xA96AE0]`), **19 push two consecutive
+arguments**, 5 push one, 4 push none immediately.
+
+**COUNTER-EVIDENCE, UNRESOLVED:** the walk-and-dispatch routines `0x00424280`
+(`push esi; call eax; add esp,4`) and `0x00488700` (`push ecx; call eax; add esp,4`)
+read the **same** table and push **exactly one** argument. Retail invokes some slots
+with one argument and others with two, and no transcribed body reconciles that.
+
+**Ruling: `FrameHandler` is not widened.** A single function-pointer type is a claim
+that every slot shares one signature, and the measurement says they do not. The
+header now records the measured counts, the unresolved counter-evidence, and the
+instruction to pass both arguments when transcribing the dispatcher. **The type
+stays a lossy placeholder; a cast to it says nothing about the callee's real
+argument count.**
+
+## The two-variable trap has a linkage axis, not only a namespace axis
+
+analyst found that `0x0053B6BC` and `0x0057BBE4` are owned by `native_41f340.cpp`,
+which defines them **inside its `extern "C"` block** - they are C-linkage symbols.
+Declaring them inside `namespace igi::retail::core` (the form `native_4192b0.cpp`
+uses for *its* globals, whose owner defines them at namespace scope) would have
+created two distinct symbols **with no link error**.
+
+So the known trap - "defining an address someone else owns" - has a third axis. The
+two already recorded are: a second **definition** (silent second copy), and a
+**declaration under an invented name** (resolves to nothing, NOT LINKABLE). This one
+is a **declaration under the right name but the wrong linkage** - it links cleanly
+and reads a different object. It is the only one of the three that fails silently at
+both compile and link.
+
+The check that catches all three is the same: grep the owner and read how it
+declares the symbol, not merely that it declares it.
