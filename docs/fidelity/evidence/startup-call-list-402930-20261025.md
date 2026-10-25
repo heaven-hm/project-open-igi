@@ -268,3 +268,49 @@ Current tree state: the guard is a fail-closed `std::logic_error` stub in
 `engine/src/retail/core/class_registration.cpp`, so startup aborts there and no
 candidate window appears. That stub is the single reason there is no playable
 game on screen yet, and the 80 are what it is waiting on.
+
+## The closure of the 80, measured 2026-10-25 - it is 110, not 80 + hundreds
+
+The 80 missing targets are **mutually independent**: not one of them calls
+another of the 80. There is no ordering constraint inside the lane, so the two
+halves can be worked in any order and in parallel.
+
+Their collective callee closure is small and bounded. Disassembling each of the
+80 bounded by the next guard target and stopping at the first `ret`:
+
+    2,411 call sites, 151 distinct call targets
+    30 of those 151 are missing from the whole tree
+    all 30 have no definition file at all - they are new work, not excluded files
+
+**So the guard's true closure is 80 + 30 = 110 natives**, and the 30 are a
+concrete, finite list rather than an open-ended tail.
+
+An earlier measurement of this same question returned **425** missing. That
+number is an artifact and should not be used: it came from disassembling a fixed
+900 instructions from each address, which runs past the end of these bodies into
+neighbouring functions and harvests their calls. `0x004310F0` is 1,096 bytes and
+312 instructions, so 900 instructions reaches roughly three functions. Bounding
+by the next guard target and stopping at the first `ret` removes the overrun.
+The lesson is the same one the coverage counts taught: a number is only as good
+as the boundary rule behind it.
+
+The 30, by address:
+
+    0x00401F60 0x00408320 0x00408330 0x00408340 0x00413B10 0x00413DB0
+    0x00413DC0 0x00413DD0 0x0044CCA0 0x0044EEB0 0x00450C80 0x00450CA0
+    0x00450CC0 0x00466230 0x0046C970 0x0046D410 0x00477030 0x00477C00
+    0x00477C10 0x00477C20 0x00477C30 0x00477C40 0x00484D30 0x004B38E0
+    0x004B4770 0x004F0F10 0x004F1FC0 0x004FDEF0 0x00504A30 0x005096A0
+
+Three clusters are visible and are worth taking as units rather than singly:
+`0x00408320/0x00408330/0x00408340`, `0x00413DB0/0x00413DC0/0x00413DD0`, and
+`0x00477C00/0x00477C10/0x00477C20/0x00477C30/0x00477C40`.
+
+## Unrelated, recorded so it is not re-derived
+
+`0x005183D0` (`AIGraph_InitChain_5183D0`) is a second batch initialiser of the
+same shape as `0x00402930`: 147 calls, 136 distinct targets, **119 missing**,
+ending in a plain `ret` at 0x00518713. It is not on the guard's path - it is not
+one of the 80 - and it blocks eleven finished files (`core/native_4f9df0.cpp`
+and the ten-file `0x00508xxx`/`0x00509xxx` AI-graph family). At 119 missing
+callees it is a project of its own, not a step. Do not start it as a quick win.
