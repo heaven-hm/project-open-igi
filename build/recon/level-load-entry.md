@@ -72,3 +72,39 @@ routine that stores code pointers into it is the registrar of the game states, a
 level-load handler is one of the entries it installs. **That routine is the real entry to
 the level-load closure, and it is not in the guard** - consistent with flow-analyst's
 result that the guard contains no terrain, model, texture or render loader.
+
+---
+
+## `0xA970E0` is the QTask handler dispatch table - and it has NO static writer
+
+Measured: **23 references, and all 23 are `CALL` through the table.** Examples:
+`call dword [ecx*4 + 0xa970e0]` at `0x4180BF`, `0x4180D6`, `0x4184A5`, `0x4184C3`,
+`0x418777`, `0x418929`, `0x41BE1D`, `0x41CDC6`, `0x41EC91`, `0x41EC9F`, `0x41FA69`,
+`0x41FA77`.
+
+**The callers are concentrated in the `0x0041xxxx` band** - the QTask handler family - with
+single sites at `0x004F46xx`, `0x004F2Axx` and `0x00474Fxx`. **Zero references are writes.**
+
+**So the table is populated indirectly.** A `pxw` read gives 64 zero bytes, the address is
+past the file-backed end of `.data`, and no `.text` instruction stores into it. **That
+means the population happens through a computed address - a table copy, a registration
+loop, or a `memset`/`memcpy` from another structure - and finding it needs a different
+instrument than `/r`, not a different guess.**
+
+**This is the structural picture, and it is coherent with everything measured today:**
+
+    0x00401050  (WinMain's last call - the game flow)
+      -> call 0x00402880, take word [eax+0x1c] as an index
+      -> call dword [index*4 + 0xA970E0]      <- the QTask handler table
+      -> call 0x00402880 again, pass that as the handler's argument
+
+**The `0x0042xxxx` registrars measured by analyst and flow-analyst register QTask classes
+and their handlers; `0xA970E0` is where those handlers are dispatched from; and the game
+flow is a loop over it.** The level-load path therefore runs *through a task handler*, not
+through the guard - which is exactly why the guard contains no terrain, model, texture or
+render loader.
+
+**Next instrument, not next guess:** the writer must be found by watching the table at
+runtime or by finding the structure it is copied from. **A static search has now been run
+and has returned zero writes; recording that as the result rather than concluding the
+table is never populated.**
