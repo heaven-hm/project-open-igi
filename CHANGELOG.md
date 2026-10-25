@@ -11,6 +11,26 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - `0x004F1A80` takes six arguments, not five: a wrong store corrected
+
+- **A worker's re-derivation corrected a claim I had written.** `docs/fidelity/evidence/type-id-slots-and-ordering-20261025.md`
+  asserted that `Script_TaskContainer_Append` (`0x004F1A80`) reads only four arguments and that the constant `7` and a sixth
+  pushed slot were dead. The body reads `[esp+0x20]` **twice**, with a `pop edi` between the reads, so the same textual offset
+  addresses two different slots: `0x004F1AB1 mov bl, byte [esp+0x20]` is arg5 (byte) and `0x004F1AC9 mov esi, dword [esp+0x20]`
+  is arg6. Both are stored - arg6 at record+`0x08`, byte(arg5) at record+`0x0C`.
+- **Confirmed from the call sites as well as the callee**, which is what makes it independent: at `0x00509136` the sequence is
+  `push $0x0; push $0x7; call 0x004F0F80` and the append cleans `add esp,0x18` - six words, with the two words pushed for the
+  preceding call reused as arg5 (`7`) and arg6 (`0`). The cleanup size settles the arity without reading the callee.
+- **The implementation was writing a wrong value**: it stored arg5 in both fields, so every append produced `{delta, type, 7, 7}`
+  where retail produces `{delta, type, arg6, 7}`. Fixed in `script/native_4f1a80.cpp` (six parameters, correct stores) and in
+  `core/native_508fa0.cpp` (all seven call sites pass the sixth word: `0`, except `0x00A7B2B8` in the fourth and `0x00A7B2A8`
+  in the seventh). Build green, 14,324,250 bytes.
+- **Remaining work, recorded rather than left implicit**: the other eleven caller files (107 call sites in the `0x0046xxxx-0x0048xxxx`
+  lane) still pass five arguments and must be backfilled; each site also has to adjust its `add esp` by 4, and some share a deferred
+  cleanup. That window is static-only - startup still aborts at the `0x00402930` registrar guard, so none of this executes yet.
+- **Method rule recorded**: two reads of the same textual stack offset are not two reads of the same slot unless `esp` is unchanged
+  between them. An argument-count claim must be made against a stack-state trace, not against a set of distinct offsets.
+
 ### 2026-10-25 - 35 more natives in the build, and a link closure that was measured rather than guessed
 
 - **Intake: 35 new native files added to the build target**, taking the candidate from 14,283,882 to **14,324,250** bytes with a green link

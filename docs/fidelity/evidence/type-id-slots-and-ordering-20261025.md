@@ -36,20 +36,37 @@ unidentified.
 
 ## A second finding: the append's later arguments are unread
 
-Measured on `0x004F1A80` over 140 instructions: the only argument reads are `[esp+4]`, `[esp+8]`,
-`[esp+0xC]`, `[esp+0x10]` and `[esp+0x20]` (the last one after the frame pushes, so it addresses an
-earlier argument, not a sixth). There is no read of `[esp+0x14]`.
+**CORRECTED 2026-10-25.** This section previously claimed that `0x004F1A80` reads only four
+arguments, that the constant `7` and a sixth pushed slot were dead, and that extending the
+declaration to six was unsupported. All three claims were wrong, and the error is worth recording
+because of how it was made.
 
-That matters for two reasons:
+The original measurement counted `[esp+0x20]` **once**. The body reads that textual offset
+**twice**, and the two reads address different slots because a `pop edi` sits between them:
 
-1. The registrars push a constant `7` as the fifth slot of every append, and `chain-worker` found
-   a sixth pushed slot whose value the callee never reads. Both are therefore **dead arguments in
-   retail**, not load-bearing parameters. A previous note in this project described "argument 5 is
-   7 in all 40 appends" as a pattern; the pattern is about what the call sites push, and it does
-   not imply the callee consumes it.
-2. Extending the tree's five-parameter declaration of `0x004F1A80` to six is **not** supported by
-   evidence. The correct transcription is what `chain-worker` did: keep the call, discard the
-   result, and say in the comment that the slot is unread. Do not change the callee's arity.
+- `0x004F1AB1  mov bl, byte [esp+0x20]` - after `push ebx; push esi; push edi` (12 bytes pushed),
+  so this is entry+`0x14` = **arg5**, read as a byte.
+- `0x004F1ABD  pop edi` - 4 of those 12 bytes are removed.
+- `0x004F1AC9  mov esi, dword [esp+0x20]` - the same textual offset is now entry+`0x18` = **arg6**,
+  read as a dword.
+
+Both are stored: `mov dword [edx+ecx+8], esi` at `0x004F1AD1` writes arg6 at record+`0x08`, and
+`mov byte [edx+ecx+0xc], bl` at `0x004F1ADE` writes the byte of arg5 at record+`0x0C`. So the record
+is `{arg3-arg2, arg4, arg6, byte(arg5)}`, the callee takes **six** arguments, and the tree's
+implementation - which stored arg5 in both fields - wrote a wrong value at every one of its call
+sites.
+
+The call sites confirm the arity independently. At `0x00509136` the sequence is
+`push $0x0; push $0x7; call 0x004F0F80` and then the append with a deferred `add esp,0x18`: six
+words cleaned, and the two words pushed for the *preceding* call are reused as the append's arg5
+(`7`) and arg6 (`0`). That is why the cleanup is `0x18` and not `0x14` - the arithmetic settles the
+arity without reading the callee at all.
+
+The generalisable lesson: **two reads of the same textual stack offset are not two reads of the
+same slot unless the stack pointer is unchanged between them.** An argument-count claim has to be
+made against a stack-state trace, not against a set of distinct offsets. This note made exactly
+that mistake, and the claim survived in the tree as a wrong store until `chain-worker` re-derived
+the body from the instructions.
 
 ## A trap worth naming
 
