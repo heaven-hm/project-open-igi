@@ -2531,3 +2531,36 @@ question rather than a discovery: `0x004C1830` unblocked 34 teardowns, the two
 these two data files unblocked seven input natives. **A small file that many others
 name is worth finding before writing the files that name it** - and the way to find
 it is to ask which committed, linkable files are not being built.
+
+## A BROKEN BUILD WAS COMMITTED, BY ME, AND THE CAUSE WAS MY OWN FORMATTING
+
+Commit `a2763130` added `script/native_4b8920.cpp` to the build. The build failed:
+`undefined reference to Script_QHashSymbolRemove_4BAB30`, ld exit 2, four errors.
+Reverted in the next commit; build green again.
+
+**The check was run and it did report the failure.** `check_native_linkable.py`
+returned `Script_QHashSymbolRemove_4BAB30` - which is its NOT LINKABLE output, a bare
+undefined symbol name. My command piped it through `sed 's/.*cpp: //'` and printed it
+with the label `link=`, so a **failure** was rendered as a value that looked like a
+success. I read the field and committed.
+
+**This is the fifth rule inverted.** The rule says `2>/dev/null` on a command whose
+exit status you are not checking is the same failure as a count of zero from an
+unverified pattern. Here the failure was *printed* and I still did not read it,
+because my own formatting had removed the word that distinguished pass from fail.
+Formatting that strips the verdict is worse than no output: it converts a failing
+check into a plausible success.
+
+**The three checks that would have caught it, none of which I ran before committing:**
+1. `check_native_linkable.py` exit status, not its text.
+2. The build itself - which is the project's own rule and which I ran *after*
+   committing rather than before.
+3. The standing unbuilt-file check, which would have shown the file's dependency as
+   unbuilt.
+
+**`0x004BAB30` is not a 12-byte forwarder.** The recon expectation from its caller's
+shape was wrong: it is `push esi; mov esi,[esp+8]; lea eax,[esp+8]; push eax;
+push esi; call 0x004BAB80; add esp,8; test eax,eax; ...` - a real body with a
+branch. It must be transcribed before `0x004B8920` can be built, which is exactly the
+double gap analyst flagged and I acknowledged in the commit message while committing
+the file anyway.
