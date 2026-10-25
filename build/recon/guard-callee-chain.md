@@ -109,3 +109,45 @@ every body here.
 `[esp+0x2c]`, `[esp+0x30]`, `[esp+0x34]` after three pushes). **Read each offset against
 the push state at that instruction**, not against the function entry - the same trap as
 `0x004B8890`'s re-read.
+
+
+---
+
+## CORRECTION: FIVE OF THIS NOTE'S "NOT TRANSCRIBED" VERDICTS WERE FALSE NEGATIVES
+
+This note was written from a check whose pattern was wrong. I passed a six-digit VA and
+matched `^// Native:.*0x00$va`, which expands to **`0x00004b8890` - ten hex digits**,
+where the VA has eight. It matched nothing, and I reported "NOT TRANSCRIBED" as though it
+were a fact about the tree.
+
+Re-checked by **direct filename lookup**, which cannot be defeated by comment format:
+
+| VA | this note said | actual |
+|---|---|---|
+| `0x004BAAC0` | NOT TRANSCRIBED | **EXISTS** `script/native_4baac0.cpp` |
+| `0x004B8890` | NOT TRANSCRIBED | **EXISTS** `script/native_4b8890.cpp` |
+| `0x004B0D60` | NOT TRANSCRIBED | **EXISTS** `mem/native_4b0d60.cpp` |
+| `0x004C0560` | NOT TRANSCRIBED | **EXISTS** `script/native_4c0560.cpp` |
+| `0x004B0D90` | NOT TRANSCRIBED | **EXISTS** `mem/native_4b0d90.cpp` |
+| `0x004017C0`, `0x00407DE0`, `0x00407E30`, `0x00407F50`, `0x004B0C60` | NOT TRANSCRIBED | correctly missing |
+
+**So the chain I dispatched as work - `0x004B8890` and `0x004BAAC0` - was already landed
+and linkable.** flow-analyst discharged the assignment by verification rather than
+transcription and told me so, which is how it was caught. **The work I asked for did not
+exist, and I asked for it with a measurement behind it that was a statement about my
+pattern.**
+
+**`0x00407D60` is also already transcribed, as `render/native_00407d60.cpp`** - the file
+name carries a **leading zero**, so `native_407d60.cpp` does not exist and a lookup by
+`native_<6 hex>.cpp` reports a gap that is not one. **flow-analyst warned me about exactly
+this trap with `0x004E6610` in the same message.** One VA, one file; there is **no double
+ownership**, and the routine is confirmed at 117 bytes / **31 instructions**,
+`0x00407D60`-`0x00407DD4` - which independently settles the 31-vs-27 disagreement in
+favour of 31 for the third time.
+
+**This is the fourth instance of one fault in this session:** a check that encodes an
+assumption the data does not share. `head -12` for exhaustiveness; a regex over a `//
+Native:` comment for the file's content; a `pd` window for an extent; and now `0x00` +
+a six-digit VA for an eight-digit address. **Every time the output was true and the
+boundary was mine. The durable fix is the same each time: look the file up by name, do
+not ask a pattern about it.**
