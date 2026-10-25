@@ -106,6 +106,8 @@ add_executable(igi WIN32
     engine/src/retail/core/native_41b260.cpp
     engine/src/retail/core/native_41b840.cpp
     engine/src/retail/core/native_41c660.cpp
+    engine/src/retail/core/native_41d050.cpp
+    engine/src/retail/core/native_4018e0.cpp
     engine/src/retail/input/dinput_globals.cpp
     engine/src/retail/input/dinput_image_data.cpp
     engine/src/retail/input/native_48fd90.cpp
@@ -336,6 +338,7 @@ add_executable(igi WIN32
     engine/src/retail/sys/native_4af8a0.cpp
     engine/src/retail/sys/native_4af8b0.cpp
     engine/src/retail/sys/native_4b0eb0.cpp
+    engine/src/retail/sys/native_4978e0.cpp
     engine/src/retail/sys/native_4b0e00.cpp
     engine/src/retail/sys/native_4b0e70.cpp
     engine/src/retail/qfile/native_4b1290.cpp
