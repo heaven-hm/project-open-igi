@@ -3268,3 +3268,35 @@ six opening calls already have tree implementations and four are already in the 
 `0x00489560`, `0x00407D60`, `0x00488BB0`, `0x00402FF0` and `Game_Init 0x00415530` itself.
 `0x00508F80` is the only one not built. So the guard's opening is mostly a matter of calling what
 already exists, and `0x00508F80` is the single gate on it.
+
+## OWNER RULING 2026-10-25: full game decompilation, AI included
+
+Asked whether retail's AI-graph call at the guard (`0x00508F80`, the first call in
+`0x00402930`) should be recorded as a blocked gap or transcribed, the owner ruled:
+
+> "No we want AI do full game decomp"
+
+**This is option 2 and it supersedes the MVP scoping question entirely. The target is full game
+decompilation, not a rendered Level 1 subset.** Consequences, applied from this point:
+
+- **No `ReportNotTranscribed`, no stand-in, no "deferred" marker anywhere in `engine/`.** The
+  `ReportNotTranscribed` helper found earlier today is deleted with the guard fix.
+- **No call skipped because it appears to do nothing.** `0x004C1780`, the `ret`-only registrar,
+  is still called because retail calls it.
+- **`0x00508F80` is transcribed as retail, not bypassed.** It is the gate on the guard's opening
+  and therefore on everything downstream of it.
+
+**Why this matters more than a scoping preference.** The port never reaches `Game_Init` because
+`class_registration.cpp` substitutes for retail's calls, and **retail's first call is the AI
+graph.** So until `0x00508F80` is real, the guard cannot be real, `Game_Init` cannot run, and
+nothing renders. Every transcription in this tree - including all of today's - is waiting on it.
+
+**Assigned: the AI graph cluster, entering at `0x00508F80`.** Measured so far: it leads to
+`0x00508FA0` (34 undefined symbols) and `0x005183D0` (no file). `0x00508FA0` is a hub of nine
+`AIGraph_Handler_*`, ten `Graph_Get_*`, two `Camera_Get_*`, `GraphStream_RegisterNode_4F9DF0`,
+five `Script_*`, four `QTask_*` and six globals. Of the 68 distinct targets in the AI-graph
+sequences, 11 have a file and 57 do not.
+
+**Noted for effort calibration:** this is not extending something half-built; it is building
+most of it. The worker has been asked to report the cluster's measured size rather than the
+estimated 68.
