@@ -1,60 +1,70 @@
-# 56 AIGraph_InitStep_* targets, size-sorted, regenerated with scripts/native_fidelity_audit.py
-# after the backward-tail-call fix. Counts are capstone instruction counts, cross-checked
-# against ndisasm. The first version of this list was generated BEFORE that fix and carried
-# 9 for 0x530270 where the true count is 7 - a stale input producing a confident wrong number.
-0x530270 7
-0x4EDCE0 16
-0x52CA70 24
-0x4F1E30 27
-0x503D60 36
-0x508D70 38
-0x505C90 42
-0x51B400 45
-0x4FCF50 47
-0x519760 52
-0x52C820 54
-0x4FB1B0 55
-0x5034E0 55
-0x504E10 56
-0x505630 59
-0x52AAF0 59
-0x5033F0 60
-0x51BFB0 61
-0x52C6B0 66
-0x51B960 67
-0x518760 71
-0x4EE410 76
-0x4F3440 77
-0x4F4190 80
-0x52B3B0 85
-0x504C50 90
-0x52B6C0 90
-0x51ECB0 93
-0x52AD10 96
-0x5207A0 98
-0x5043B0 108
-0x52B040 109
-0x51B140 112
-0x519850 114
-0x51BAC0 121
-0x4F2740 135
-0x4F36C0 178
-0x51EEE0 181
-0x4FE7C0 184
-0x526EE0 185
-0x520BB0 187
-0x51F580 195
-0x5284A0 204
-0x4F7360 205
-0x51C2B0 209
-0x518EF0 219
-0x4FAA60 225
-0x51FEF0 231
-0x507F10 258
-0x4ED6B0 264
-0x506FA0 276
-0x4F4B00 286
-0x51DDF0 293
-0x527C90 319
-0x502250 343
-0x526330 385
+# 56 AIGraph_InitStep_* targets, size-sorted, with names from an external symbol table
+#
+# NAMES: docs/fidelity/evidence/external/igi-re-names.tsv (github.com/slickdaddyy/IGI-RE,
+# symbols/names.tsv, 7068 symbols, source "manual" for 6956 of them). EXTERNAL AND UNTRUSTED
+# as a source of truth: these are naming CANDIDATES, not verified identities. Spot-checked on
+# four bodies before use and all four matched - including 0x4B9BE0, which the table calls
+# Expr_Free and which is in fact recursive (call 0x4b9be0 inside itself).
+#
+# Per the naming rule, an unverified native keeps its address-suffixed placeholder. Use these
+# names in the task and in provenance NOTES; rename the function only once its own evidence
+# supports the name.
+#
+# Format: VA  instruction_count  table_name
+
+0x530270    7  Engine_Init
+0x4EDCE0   16  PhysicsObjType_Open
+0x52CA70   24  PushButton_Init
+0x4F1E30   27  ParamEnum_InitTypes
+0x503D60   36  PhysicsMagicObj_Open
+0x508D70   38  Sync_Init
+0x505C90   42  Container_Init
+0x51B400   45  AnimSound_Open
+0x4FCF50   47  Particle2D_Open
+0x519760   52  ShadowTask_Open
+0x52C820   54  LevelScript_Init
+0x4FB1B0   55  PhysicsObj_Open
+0x5034E0   55  SimpointObj_Open
+0x504E10   56  MenuItemTask_Open
+0x505630   59  MenuItem_Open
+0x52AAF0   59  AnimObj_Open
+0x5033F0   60  EditorRigidObj_Open
+0x51BFB0   61  SoundManager_Open
+0x52C6B0   66  SkyTask_Init
+0x51B960   67  EditorMagicObj_Open
+0x518760   71  GraphNode_Open
+0x4EE410   76  ScreenGrab_Open
+0x4F3440   77  AnimTask_Open
+0x4F4190   80  Vehicle_Open
+0x52B3B0   85  CubeModifier_Init
+0x504C50   90  EditRigidObjAttachedToBone_Open
+0x52B6C0   90  DiscardTerrainArea_Init
+0x51ECB0   93  MipMapControl_Open
+0x52AD10   96  AnimScaleTask_Open
+0x5207A0   98  Origo_Init
+0x5043B0  108  AreaActivate_Open
+0x52B040  109  EditHazeLayer_Init
+0x51B140  112  SplinePathGuide_Open
+0x519850  114  SplinePathNode_Open
+0x51BAC0  121  LevelTimer_Open
+0x4F2740  135  EditRigidObj_Open
+0x4F36C0  178  AnimTask_InitType
+0x51EEE0  181  SmoothQTask_Open
+0x4FE7C0  184  TagItem_Init
+0x526EE0  185  Dirlight_Init
+0x520BB0  187  Lensflare_Init
+0x51F580  195  MoveRigidObj_Open
+0x5284A0  204  AnimCam_Open
+0x4F7360  205  RainObj_Open
+0x51C2B0  209  FlatWater_Open
+0x518EF0  219  Water_Open
+0x4FAA60  225  Graph_Open
+0x51FEF0  231  NoiseQTask_Init
+0x507F10  258  EditCamera_Init
+0x4ED6B0  264  LODSettings_Init
+0x506FA0  276  HeightMap_Init
+0x4F4B00  286  CutScene_Open
+0x51DDF0  293  FlatSky_Open
+0x527C90  319  GlobalLight_Open
+0x502250  343  SplineObj_Open
+0x526330  385  LightmapInfo_Init
