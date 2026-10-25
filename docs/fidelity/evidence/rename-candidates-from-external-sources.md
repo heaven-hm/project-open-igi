@@ -61,3 +61,33 @@ Six further disagreements are trailing-underscore weak-symbol variants
 
 Both were invented before the symbol table arrived. The IGI-RE names are real names from a
 decompilation that has a body for each.
+
+## Tree defect settled — `0x004EDB60` takes ONE argument, the tree declares two
+
+Measured: `0x4EDB60` spans `0x4EDB60-0x4EDBC2`, 39 instructions, tiling closes. It contains
+**exactly one stack read in the entire extent**:
+
+```
+0x4edb62  depth=8  mov edi, dword ptr [esp + 0xC]     -> arg1
+```
+
+No other `[esp+K]` or `[ebp+K]` read anywhere in those 39 instructions. At depth 8, `[esp+0xC]`
+is entry `[esp+4]` = arg1. So retail reads **one** argument, and names.tsv independently names it
+`ModelLODSettings_Changed`.
+
+| source | claim |
+|---|---|
+| retail (measured) | one argument |
+| names.tsv | `ModelLODSettings_Changed` |
+| IGI-RE | `ModelLODSettings_Changed`, one argument |
+| **this tree** | `LODSettings_LoadParameters(void* context, LODSettingsLookup lookup)` — **two parameters** |
+
+`engine/src/retail/render/lod_settings.cpp:37` and `engine/include/igi/retail/render/lod_settings.hpp:40`.
+The tree's second parameter is one retail never reads, and the tree's name is contradicted by two
+independent external sources.
+
+The converter flagged this and **declined to substitute**, keeping IGI-RE's name and leaving the link
+edge open rather than silently resolving it. That was the correct call.
+
+**Not changed.** It is an existing unverified native; the naming rule keeps its placeholder until
+verification. Recorded so the correction is not lost.
