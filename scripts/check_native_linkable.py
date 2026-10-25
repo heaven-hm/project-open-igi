@@ -31,8 +31,19 @@ def main():
     need = symbols(['i686-w64-mingw32-nm', '-u', a.object])
     have = symbols(['nm', '--defined-only', a.archive])
     have = {s for s in have if s}
-    missing = sorted(n for n in need - have if not n.startswith(('__', '___'))
-                     and n not in {'memcpy', 'memset', 'memmove', 'memcmp', 'strlen'})
+
+    # CRT/libmingwex helpers the linker resolves from the runtime rather than from the tree.
+    # The `mingw_` forms matter: the archive spells them `___mingw_sprintf`, and `lstrip('_')`
+    # in symbols() turns that into `mingw_sprintf`, which then escapes BOTH the `__` prefix
+    # filter below and a bare `sprintf` entry. So normalise the prefix here rather than
+    # assuming the strip left a name that matches the ignore set.
+    def runtime_helper(n):
+        return n in {'memcpy', 'memset', 'memmove', 'memcmp', 'strlen', 'sprintf', 'printf',
+                     'snprintf', 'vsnprintf', 'vprintf', 'fprintf', 'abort', 'exit'} \
+            or n.startswith('mingw_')
+
+    missing = sorted(n for n in need - have
+                     if not n.startswith(('__', '___')) and not runtime_helper(n))
     if missing:
         print(f'{a.source}: NOT LINKABLE — undefined in tree:', *missing, sep='\n  ')
         return 1

@@ -1,4 +1,4 @@
-// Native: Script_RegisterCriteria; retail VA 0x00504A30-0x00504A8C (93 bytes, 1 block, 0 edges).
+// Native: Script_RegisterCriteria_504A30 (placeholder until VERIFIED); retail VA 0x00504A30-0x00504A8C (93 bytes, 1 block, 0 edges).
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: radare2 6.2.0 complete listing (33c9 b840a6a700 803800 741a 83c00c 41 3da7a7b4 ... 7c ; then
 //   68bc e65400 e8b7adfaff 83c404 ebfe ; found: 8b542404 8bc8 lea/shl 56 8b74240c 88... c6..04 89..08 b801.. d3e6 56 52 e8.. 83c408 89f0 5e c3).
@@ -33,7 +33,7 @@ extern "C" {
 // C++ type: +0 is the in-use flag byte, +4 and +8 are the two stored dwords.
 std::uint8_t g_a7a640[31U * 12U] = {};
 
-std::int32_t NATIVE_DECL Script_RegisterCriteria(void* const arg1, void* const arg2)
+std::int32_t NATIVE_DECL Script_RegisterCriteria_504A30(void* const arg1, void* const arg2)
 {
     std::uint32_t index = 0U;
     std::uint32_t cursor = 0U;
