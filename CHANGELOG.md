@@ -1958,3 +1958,39 @@ is promoted on the strength of a build.
 - **A case-sensitive grep against a hex VA is a false-zero generator.** A
   case-insensitive ownership sweep is the only one that counts; the
   case-sensitive form reported 0 owners for files that each had exactly one.
+
+## Guard coverage: five figures in one turn, and why only one is defensible
+
+This turn produced guard-callee coverage figures of 131, 133, 122, 123 and 124
+of 154, from five runs of four different scripts, each wrong for a different
+reason. The only figure that is arithmetically self-consistent is:
+
+    guard 0x00402930: 155 rows, 154 distinct callees
+    124 symbols present in igi1.exe
+     14 files exist but their symbol is absent from igi1.exe
+     16 callees have no implementation file
+    124 + 14 + 16 = 154   (reconciles)
+
+The failures, in order, because the pattern matters more than the numbers:
+
+1. **131 / 133** — counted *files*, not symbols, and added nine files whose
+   symbols were not all in the binary. Inflated by exactly the thing this
+   session has been correcting.
+2. **0 targets** — my row regex expected `0x...` but the evidence file wraps
+   addresses in backticks: `` `0x00402B88` ``. A count of zero from a pattern is
+   a statement about the pattern.
+3. **122** — `nm` prints a **leading underscore** on PE symbols. My `defined`
+   set held `_Name` while my VA map held `Name`; the intersection was empty for
+   every ordinary symbol. The quirk was already recorded in this file and I
+   still walked into it.
+4. **123** — same run after fixing the underscore, but the VA-to-symbol map used
+   the *first* `0x` occurrence in each file rather than the extractor's record.
+5. **124** — via `native_gate.implementation_natives()`, the authoritative
+   extractor, with the underscore stripped. This is the figure to use.
+
+**A successful build is not a measurement of a symbol.** `native_41b310.cpp`
+was written, verified by its author, and absent from `CMakeLists.txt`; I
+reported it as committed and present in `igi1.exe` on the strength of a green
+build, without ever counting the symbol. It is present now and counted. Every
+presence claim in this project must name the symbol and the command that
+counted it.
