@@ -701,6 +701,8 @@ add_executable(igi WIN32
     engine/src/retail/terrain/terrain_scene_state.cpp
     engine/src/retail/terrain/terrain_storage.cpp
     engine/src/retail/terrain/terrain_unknown_blendmode.cpp
+  engine/src/retail/terrain/native_4ce3d0.cpp
+  engine/src/retail/terrain/native_4d11c0.cpp
     engine/src/retail/texture/loop_terrain_texture.cpp
     engine/src/retail/texture/model_texture_pixels.cpp
     engine/src/retail/texture/texture_loaders.cpp

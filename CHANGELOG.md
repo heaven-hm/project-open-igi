@@ -2904,3 +2904,63 @@ re-measurement's 27 was the artifact. **The lesson is not that my first number w
 - it is that my SECOND instrument was wrong in the same way as my first**, because it
 also failed to count the branch-marked loop lines. Two independent measurements agreeing
 is only evidence when they do not share a fault, and these two shared one.
+
+## The `Game_Init` extent claim was wrong in the direction of its own incompleteness (2026-10-25)
+
+`core/game_flow.cpp:15` claimed `Game_Init` spans `VA 0x00415530..0x00415653`.
+
+**The real extent is `0x00415530`-`0x004157CD`: 168 instructions, no branches, `ret` at
+`0x004157CD`, two alignment nops, then `0x004157D0` begins the next function
+(`sub esp,0x18` / `push esi` / `push edi` / `xor esi,esi`).** Verified by reading the byte
+at `0x004157CD` directly - it is `0xC3`.
+
+**`0x00415653` is `push 0x200`** - the first instruction of the first omitted effect group.
+
+So the implementation transcribes 4 of 11 effect groups and the provenance claims an
+extent that **truncates exactly where the implementation stops.** This is why it survived
+every check we have: **a file wrong about its own size in the same direction it is
+incomplete is contradicted by nothing.** No build, link, CFG or collision check can see it.
+Only reading retail's `ret` can.
+
+**Four rules this adds:**
+1. **An extent claim must be bounded by the `ret`, and the byte after the `ret` must be
+   read to confirm it.** A range ending in the middle of a body is indistinguishable from a
+   range ending at the body's end unless someone checks.
+2. **A provenance claim and its implementation can be wrong in a mutually-consistent way.**
+   Agreement between them is not evidence - they were written by the same author from the
+   same misunderstanding.
+3. **A name is metadata about a file, not evidence about a file.** `Game_Init` was reported
+   MISSING because a lookup asked for `native_415530.cpp` and the file is named for the
+   subsystem flow, `core/game_flow.cpp`, holding four natives. **The VA was the question;
+   the filename was not the answer.**
+4. **A handler is data; a callee is code.** `Game_Init` does not call `Level_Start` - it
+   links it into the QTask handler table as a code-pointer immediate at `0x0041561E`. The
+   guard installs the level-load entry as data and never calls it, which is why `0x00415B30`
+   has zero direct call sites image-wide.
+
+**And the actual break in port visibility is not a missing file:** `Level_Start`'s body is a
+hook (`g_level_start_hook`, `game_flow.cpp:41`, tested at `:86`) and
+`Terrain_Load`/`Terrain_LoadTexturesAndLightmaps` in `terrain_loaders.cpp` are
+self-described **"HOST FILE-STAGE BRIDGE"** implementations. **So the port's terrain path
+never executes retail's calls at `0x00415C31`/`0x00415C44` - transcribed, and unreached from
+that body.** That, not a missing transcription, is what stands between this tree and a
+rendered scene.
+
+### Two terrain natives integrated
+
+`native_4ce3d0.cpp` (`0x004CE3D0`, 3 instructions, 14 bytes) and `native_4d11c0.cpp`
+(`0x004D11C0`, **24** instructions, 91 bytes) - both `compile_rc=0 warning_lines=0`, no
+global symbols, **0 own-VA collisions across 803 files**, integrated after the file set was
+confirmed stable across two checks. `terrain_loaders.cpp` only *mentions* `0x004CE3D0` in a
+comment; it does not define it, so there is no rule-13 violation.
+
+**`0x004D11C0` is not terrain logic.** Its three calls allocate **1600x700 at 32bpp,
+3200x50 at 32bpp, and 8000x0** into `0x00B12B60`/`0x00B12C40`/`0x00B16CC0`, and it clears a
+2048-entry 28-byte-stride contour-hash table. `0x004B0B00`, its callee, is a **memory-pool
+constructor** (41 instructions to its first `ret` at `0x004B0B64`, second exit at
+`0x004B0B87`). **It is surface and quadtree-pool initialisation that `Terrain_Load` calls,
+not terrain logic** - and my own first description of it said otherwise.
+
+**I also mis-counted its body: I reported 22 instructions and the correct figure is 24.** I
+dropped `add esp,0x30` and the `ret` when counting my own dump. **The `pd`-window fault and
+this are one fault: I read a body I had dumped myself and still did not count it.**
