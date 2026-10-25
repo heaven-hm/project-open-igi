@@ -11,6 +11,38 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - two registrars integrated, raw-address and initialiser sweep
+
+Added `Task_DefinePatrolPathCommand` (0x004533B0) and `Task_DefinePatrolPath`
+(0x00453550) to the build. Both are compile-only, both linkable, and both confirmed
+present in `igi1.exe` by symbol lookup rather than by a green build — the check that
+matters here, because a stale cmake configure reports zero errors while never compiling
+an added file.
+
+Fixed ten sites across four files that dereferenced or stored a retail image address
+while the port defined a mirror of it (`native_46e370`, `native_473ed0`,
+`native_4813e0` x7, `native_485330`). All ten compiled and linked clean, because the
+defect is not a missing definition but a definition that exists and is bypassed.
+
+Gave five globals their retail image initialisers, all previously zero:
+`g_54f7a0`, `g_54ed4e`, `g_54875c` to `0x181U` and `g_54875e` to `0xFFU`. Zero-init meant
+"class 0" and "event 0" before registration instead of the unregistered sentinels. This
+image has no `.bss`, so the image bytes fix the initialiser.
+
+The discriminator for the whole raw-address class was wrong at first: "address
+>= 0x00500000 is data" flags correct code, because `.text` runs to `0x00532510`.
+`0x0051B940` is `.text` — a real handler — and appears as one in `native_42d2b0.cpp:48`
+and `native_42beb0.cpp:52`; both were left alone. The predicate is PE section membership,
+not magnitude. `scripts/check_native_raw_addresses.py` now uses membership and reports
+788 scanned / 17 flagged.
+
+Five remaining gaps stay blocked rather than filled: `0x00A969E0` (extent proven at
+252 B, definition and owner missing), `0x0057B5E8` / `0x0057B1A8` (extent unestablished;
+the `++::g_57bab4` walk degrades into unmapped memory each call), the eleven render
+getters (owner is the untranscribed writer `0x00491610`), and `native_44c8d0.cpp` (held
+untracked, five undefined symbols). An invented size or constant would make the reads
+look correct while producing plausible wrong data.
+
 ### 2026-10-25 - script caller ABI recovery
 
 Traced all 81 retail GOInRemap calls to the indirect dispatch at 0x004BD8FE in
