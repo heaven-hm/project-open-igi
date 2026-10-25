@@ -51,6 +51,20 @@ class NativeRepairController(unittest.TestCase):
                     ask('codex',root,root/'proposal','critic',CRITIC,'fixture source')
                 process.assert_not_called()
 
+    def test_watch_releases_worker_between_cycles_and_stops_only_on_real_pass(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);visits=[]
+            def cycle(root,args):
+                visits.append(1)
+                passed=len(visits)==2
+                agent.save(root/'build/native-auto/state.json',dict(verified=passed,selected_count=1))
+                return 0 if passed else 1
+            argv=['native_autoverify.py','watch','--root',str(root),'--until-passed','--watch-timeout','5']
+            with patch.object(sys,'argv',argv),patch.object(agent,'cycle',side_effect=cycle),patch.object(agent,'acquire_worker_lock') as lock,patch.object(agent.time,'sleep'):
+                self.assertEqual(agent.main(),0)
+            self.assertEqual(len(visits),2)
+            self.assertEqual(lock.call_count,2)
+
     def test_startup_completion_requires_explicit_uniform_contract(self):
         from frida_scoped_capture import startup_completion
         self.assertIsNone(startup_completion({'0x0048F0C0':{}}))

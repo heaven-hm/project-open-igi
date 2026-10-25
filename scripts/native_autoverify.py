@@ -607,6 +607,8 @@ def main():
     parser.add_argument('--timeout', type=float, default=600)
     parser.add_argument('--lock-timeout', type=float, default=600, help='Wait for the active sequential verifier rather than running concurrently')
     parser.add_argument('--interval', type=float, default=5)
+    parser.add_argument('--until-passed', action='store_true', help='In watch mode, stop only after a nonempty accepted scope')
+    parser.add_argument('--watch-timeout', type=float, default=0, help='Bound watch duration in seconds; zero means no deadline')
     parser.add_argument('--max-attempts', type=int, choices=range(1,6), default=3, help='Bounded autonomous repair attempts per native')
     parser.add_argument('--retry', action='store_true', help='Retry unchanged blocked jobs once')
     parser.add_argument('--demo-ref', default='game-engine-flow')
@@ -614,7 +616,7 @@ def main():
     parser.add_argument('--output', type=Path)
     args = parser.parse_args()
     args.scope = args.scope or ('all' if args.command == 'watch' else 'changed')
-    if not math.isfinite(args.timeout) or not math.isfinite(args.interval) or not math.isfinite(args.lock_timeout) or args.timeout <= 0 or args.interval <= 0 or args.lock_timeout < 0:
+    if not math.isfinite(args.timeout) or not math.isfinite(args.interval) or not math.isfinite(args.lock_timeout) or args.timeout <= 0 or args.interval <= 0 or args.lock_timeout < 0 or not math.isfinite(args.watch_timeout) or args.watch_timeout < 0:
         parser.error('timeout and interval must be positive')
     root = args.root.resolve()
     if args.command == 'audit-demo':
@@ -625,15 +627,22 @@ def main():
             return 1
     lock = root / 'build/native-auto/worker.lock'
     lock.parent.mkdir(parents=True, exist_ok=True)
+    started=time.monotonic()
     try:
-        with lock.open('a') as stream:
-            acquire_worker_lock(stream,args.lock_timeout)
-            while True:
-                code = cycle(root, args)
-                if args.command != 'watch':
-                    return code
-                args.retry = False
-                time.sleep(args.interval)
+        while True:
+            with lock.open('a') as stream:
+                acquire_worker_lock(stream,args.lock_timeout)
+                code=cycle(root,args)
+            if args.command!='watch':return code
+            state_path=args.state or root/'build/native-auto/state.json'
+            state=json.loads(state_path.read_text())
+            if args.until_passed and state.get('verified') is True and state.get('selected_count',0)>0:
+                return 0
+            if args.watch_timeout and time.monotonic()-started>=args.watch_timeout:
+                print('Watch deadline reached without native acceptance; reports retained',file=sys.stderr,flush=True)
+                return 1
+            args.retry=False
+            time.sleep(args.interval)
     except (OSError, ValueError, KeyError, subprocess.SubprocessError) as error:
         print('native auto-verification blocked:', error, file=sys.stderr)
         return 1

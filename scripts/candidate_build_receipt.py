@@ -177,7 +177,15 @@ def main():
     after = snapshot(root, build)
     if (before['compiler'] != after['compiler'] or
             stable_source_inputs(before, root, build) != stable_source_inputs(after, root, build)):
-        raise ValueError('source or compiler inputs changed during the clean build; no receipt issued')
+        left=stable_source_inputs(before,root,build);right=stable_source_inputs(after,root,build)
+        changes=[dict(path=name,before=left.get(name),after=right.get(name))
+                 for name in sorted(set(left)|set(right)) if left.get(name)!=right.get(name)]
+        failure=receipt.with_name(receipt.stem+'-rejected-'+datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%f')+'.json')
+        failure.parent.mkdir(parents=True,exist_ok=True)
+        failure.write_text(json.dumps(dict(kind='igi-build-input-drift',result='rejected',verified=False,
+            root=str(root),changed_sources=changes,compiler_changed=before['compiler']!=after['compiler']),indent=2)+'\n')
+        raise ValueError('source or compiler inputs changed during the clean build; no receipt issued; changed files: '+
+                         ', '.join(item['path'] for item in changes[:8])+'; report: '+str(failure))
     require_x86_pe(candidate)
     report = dict(schema_version=1, kind='diagnostic-candidate-build', result='built',
                   scope='Diagnostic compiler/source binding only; no native acceptance or deployment',
