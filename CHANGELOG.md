@@ -11,6 +11,19 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - instance-handle controlled comparison
+
+The single-command verifier rebuilt the candidate and passed the `0x0048F0D0`
+static/semantic gate (CFG 1.0, exact angr entry) and all eleven controlled paired
+Frida cases with the unified probe. Natural startup capture then blocked because
+compiler inputs no longer matched the build receipt. Overall acceptance remains
+pending; no verified database entry or gameplay claim was added. Reports:
+`build/native-auto/runs/20261025T064528Z-c23776a4/0x0048F0D0/attempt-1/` and
+`build/native-one/0x0048F0D0/20261025T064620Z-3df9b325/`.
+The private Frida service passed RPC health and was terminated with its listener
+closed. Updated `TOOLS.md` to identify the autonomous verifier's actual candidate
+path separately from the diagnostic deployment.
+
 ### 2026-10-25 - current configuration observation and second startup probe
 
 Decoded the installed configuration rather than reusing the old 27-binding scenario.

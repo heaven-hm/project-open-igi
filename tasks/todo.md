@@ -68,6 +68,20 @@ Binary Ninja MCP handshake/tool listing succeeded at `http://127.0.0.1:24642/mcp
 
 Record timestamp, active packet, owner/reviewer, source-write token holder, build/runtime owner, accepted scope, exact blocker and next ready task here. Do not start a competing source writer or game capture.
 
+- 2026-10-25 06:48 UTC / Codex / P03–P04 REVIEW: infrastructure self-check 12/12;
+  BN, r2, angr, compiler and retail identity healthy. Shared Frida port 27042 timed
+  out and the RE-Agent checkout is absent; the verifier's private Frida service
+  passed RPC health and cleaned up successfully. Run
+  `build/native-auto/runs/20261025T064528Z-c23776a4/0x0048F0D0/attempt-1/`
+  passed CFG 1.0, semantic checks and 11/11 controlled paired Frida cases. Natural
+  startup capture blocked on compiler-input drift after the build receipt;
+  overall pending, no native acceptance. Engine implementation remains with the
+  existing writer; this packet changed documentation only. Next acceptance step:
+  run the same single-command native verifier during a coordinated stable-source
+  window. No game/server from this run remains owned by this packet. Ready MVP
+  dependency research: the recorded GOInRemap ABI/output-buffer gap in
+  `docs/fidelity/evidence/current-config-20261025/observation.json`.
+
 <!-- progress log (appended by Lead; not a status promotion) -->
 - 2026-10-24: P05 flow-closure work is evidenced by build/audit/p05b..p05e packets and the ordered walk in docs/fidelity/main-call-flow.md; retail-vs-candidate evidence lives under build/tester/20261023T220230Z/.
 - Linked + retail-verified, candidate UNOBSERVED: startup globals 0x48F120/130/200/210/280/290/2A0/2B0/300, SetAppTitle 0x48F100, SetDebugCompileState 0x48F1C0, QTaskList 0x4C1790/17C0/1800, parser 0x48F360, tokenizer 0x4A5A0C, CLI handlers 0x48F350/920/930/950/960. Current deployed build: 102fe97ef2a6cc3ad846cdfd7fbf80718308d3e1ae08416349a8fccb0a2e9a72.

@@ -38,9 +38,14 @@ Rules that apply to every tool below:
 
 Project-local configuration: `scripts/igi-workflow.json` (retail exe, hashes, angr python, BN MCP URL,
 frida host, reference catalog, candidate/build directory). `scripts/igi-workflow.json` currently has
-`candidate: build-clean-win32/igi1.exe`; the active verification build is
-`build-win32-no-verify-gate/igi1.exe` deployed to `/Users/haseeb-mir/Downloads/IGI/igi1.exe`, so read
-the deploy line printed by `build_no_verify.sh` instead of trusting that field.
+`candidate: build-clean-win32/igi1.exe` is a legacy setting. The autonomous verifier
+uses `scripts/native_test_config.py`: its defaults are build directory
+`build-native-auto-win32` and candidate `build-native-auto-win32/igi1.exe`, overridable
+by `verification_build_directory` and `verification_candidate` in the configuration.
+Its build receipt and paired capture must refer to that freshly compiled candidate.
+`build_no_verify.sh` separately builds `build-win32-no-verify-gate/igi1.exe` and deploys
+to `/Users/haseeb-mir/Downloads/IGI/igi1.exe`; that diagnostic deployment does not
+replace the verifier's candidate or establish acceptance.
 
 ---
 
