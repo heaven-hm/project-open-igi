@@ -2426,3 +2426,32 @@ already makes each line a definition inside `extern "C" { }` - but it edits thre
 files outside every current worker's band, so it is recorded here as an open item
 rather than applied blind. It must be applied with a full build, not a per-file
 compile, which is the same instrument failure that hid it.
+
+## RESOLVED: the thirteen warnings, and the tree now builds with zero warning lines
+
+The open defect above is fixed. Thirteen lines across three files had the redundant
+`extern` keyword on a definition:
+
+  core/native_489560.cpp    7 scalars + 1 array (g_5c8ac4[16])
+  render/native_00407d60.cpp 3 scalars + 1 array (g_569474[0x4D00])
+  core/native_507e70.cpp    1 scalar
+
+Per the twelfth rule, `extern` plus an initializer **is** a definition, so dropping
+the keyword is semantically inert - but it had to be measured, not assumed. Counts
+taken before and after the edit, against the built binary:
+
+| | before | after |
+|---|---|---|
+| warning lines, full build | 13 | **0** |
+| the 13 symbols, each | 1 | **1** |
+
+**The full build now emits zero warning lines**, which is the first time this session
+that statement is true, and it is what makes `-Wall -Wextra` usable as a detector
+again: the standing rule says warning *lines* are the only instrument that catches an
+ABI or return-type disagreement across `extern "C"`, and thirteen standing warnings
+would have buried a fourteenth.
+
+**Two of the thirteen were arrays** (`g_5c8ac4[16]`, `g_569474[0x4D00]`) and my first
+pattern matched only scalars, so it found 11 of 13. The warning count was the check
+that caught the omission: 11 rewritten against 13 warnings reported is a
+disagreement, and the disagreement was mine.

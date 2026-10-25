@@ -6,7 +6,7 @@
 #include "igi/retail/core/task_types.hpp"
 #include <cstdint>
 
-extern "C" std::uint8_t g_a7b254 = 0U; // retail 0x00A7B254, .data zero-fill, image init 0
+std::uint8_t g_a7b254 = 0U; // retail 0x00A7B254, .data zero-fill, image init 0
 
 extern "C" {
 

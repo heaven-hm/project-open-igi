@@ -11,10 +11,10 @@ extern "C" void Script_QHashNodeRegisterEx(void* arg0, void* arg1, char const* a
 
 // Retail BSS/data the routine touches. The material table is 32 records of 0x268 bytes at 0x00569474..0x0056E174; this routine only
 // clears the byte at each record's start, so the region is declared as raw bytes with the retail stride rather than as an invented type.
-extern "C" std::uint8_t g_569474[0x4D00] = {}; // retail 0x00569474-0x0056E174
-extern "C" std::uint8_t g_538518 = 0xFFU;      // retail 0x00538518; image value 0xFF, not 0
-extern "C" std::uint8_t g_538519 = 0xFFU;      // retail 0x00538519; image value 0xFF, not 0
-extern "C" std::uint8_t g_53851a = 0xFFU;      // retail 0x0053851A; image value 0xFF, not 0
+std::uint8_t g_569474[0x4D00] = {}; // retail 0x00569474-0x0056E174
+std::uint8_t g_538518 = 0xFFU;      // retail 0x00538518; image value 0xFF, not 0
+std::uint8_t g_538519 = 0xFFU;      // retail 0x00538519; image value 0xFF, not 0
+std::uint8_t g_53851a = 0xFFU;      // retail 0x0053851A; image value 0xFF, not 0
 
 extern "C" {
 
