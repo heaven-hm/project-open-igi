@@ -22,7 +22,14 @@ CRITIC={'type':'object','additionalProperties':False,'properties':{
     'required':['approved_for_observation','reasons','unresolved']}
 
 
+def require_source_egress_approval(root):
+    config=json.loads((Path(root)/'scripts/igi-workflow.json').read_text())
+    if config.get('probe_agent_source_egress_approved') is not True:
+        raise ValueError('external model probe/review disabled: explicit source-egress approval required; local verification remains available')
+
+
 def ask(executable,root,folder,name,schema,prompt):
+    require_source_egress_approval(root)
     spec=folder/(name+'-schema.json');spec.write_text(json.dumps(schema))
     output=folder/(name+'.json')
     command=[executable,'exec','--ignore-user-config','--ephemeral','--sandbox','read-only',
@@ -34,6 +41,7 @@ def ask(executable,root,folder,name,schema,prompt):
 
 
 def generate_probe(root,folder,address,source,retail,candidate,candidate_va,symbols):
+    require_source_egress_approval(root)
     executable=shutil.which('codex')
     if executable is None:raise ValueError('Codex probe-generation backend unavailable')
     folder.mkdir(parents=True,exist_ok=True)

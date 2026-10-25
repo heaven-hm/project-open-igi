@@ -360,3 +360,10 @@ proposals retain diagnostic observation capture. No generated game edits, active
 NativeFunction calls, memory writes, gate changes or status promotions are applied.
 Authentication/provider failures are retained as backend failures. The backend
 has not yet been demonstrated to produce an accepted arbitrary-native contract.
+
+External model probe/review is opt-in: `probe_agent_source_egress_approved` in
+`scripts/igi-workflow.json` must be true following explicit owner approval for
+sending source/probe/analysis contents to the model service. The default is false.
+Local BN/r2/angr/build/Frida and deterministic probe generation do not need this
+approval and remain available. A rejected model request must never be retried
+through an alternate subprocess, provider or indirect path.

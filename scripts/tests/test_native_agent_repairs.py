@@ -33,6 +33,24 @@ class NativeRepairController(unittest.TestCase):
             self.assertEqual(once.call_count,1)
             self.assertFalse(result['verified'])
 
+    def test_worker_waits_for_existing_run_without_parallel_execution(self):
+        import io
+        with patch.object(agent.fcntl,'flock',side_effect=[BlockingIOError(),None]) as lock,patch.object(agent.time,'sleep'):
+            agent.acquire_worker_lock(io.StringIO(),1)
+        self.assertEqual(lock.call_count,2)
+        with patch.object(agent.fcntl,'flock',side_effect=BlockingIOError()):
+            with self.assertRaises(TimeoutError):agent.acquire_worker_lock(io.StringIO(),0)
+
+    def test_model_backend_does_not_send_source_without_approval(self):
+        from native_probe_agent import ask,CRITIC
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);(root/'scripts').mkdir()
+            (root/'scripts/igi-workflow.json').write_text('{}')
+            with patch('native_probe_agent.subprocess.run') as process:
+                with self.assertRaisesRegex(ValueError,'source-egress approval'):
+                    ask('codex',root,root/'proposal','critic',CRITIC,'fixture source')
+                process.assert_not_called()
+
     def test_startup_completion_requires_explicit_uniform_contract(self):
         from frida_scoped_capture import startup_completion
         self.assertIsNone(startup_completion({'0x0048F0C0':{}}))

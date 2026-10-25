@@ -592,6 +592,7 @@ add_executable(igi WIN32
     # Hold-out: five files remain outside the build target.
     #   core/native_467700.cpp calls 0x00467DB0 and 0x00467DD0 (byte getters, unimplemented)
     #   core/native_464260.cpp calls 0x004D9610 and 0x004E6610; core/native_465a10.cpp calls 0x00504DB0
+    #   core/native_465bc0.cpp calls 0x004D14D0
     #   core/native_467700.cpp calls 0x00467DB0 and 0x00467DD0, two byte getters with no implementation yet
     #     (chain-worker measured them as reading 0x0053F583 and 0x0053F584).
     #   core/native_412420.cpp calls 0x0045E060 (858 bytes, 7 blocks, 237 instructions), which has no

@@ -313,6 +313,8 @@ def verify_once(root, job, record, folder, args):
         phase = execute(root, command, folder, 'end-to-end', args.timeout)
         result['phases'].append(phase)
         evidence = json.loads(full.read_text()) if full.is_file() else {}
+        result['diagnostic_report']=str(full)
+        result['failure_details']='\n'.join(str(p.get('stdout',''))+str(p.get('stderr','')) for p in evidence.get('phases',{}).values())[-10000:]
         if phase['exit_code'] or not complete_report(evidence, job, config,
                 digest(candidate) if candidate.is_file() else None):
             raise ValueError('strict semantic/behavioral/build/paired-runtime verification did not pass')
@@ -326,9 +328,44 @@ def verify_once(root, job, record, folder, args):
     return result
 
 
+def repair_scope_path(root,job,record,result):
+    """Relocate an intact scope document after the gate reports a path error."""
+    if 'path must be under docs/fidelity/scopes/' not in result.get('failure_details',''):
+        return None
+    jobs,_,issues,_=inventory(root)
+    current=jobs.get(job['address'],{})
+    if current.get('source_sha256')!=record.get('implementation',{}).get('sha256'):
+        return None
+    if any(i.get('address')==job['address'] or i.get('path')==job['source'] for i in issues):
+        return None
+    reference=record.get('verification',{}).get('scope',{})
+    source=(root/reference.get('path','')).resolve()
+    if not source.is_relative_to((root/'docs/fidelity').resolve()) or not source.is_file():
+        return None
+    expected=reference.get('sha256')
+    if digest(source)!=expected:return None
+    target=root/'docs/fidelity/scopes'/('auto-'+job['address']+'-'+expected[:16]+'.md')
+    target.parent.mkdir(parents=True,exist_ok=True)
+    if target.is_file() and digest(target)!=expected:return None
+    manifest=root/'docs/fidelity/native-verification.json';original=manifest.read_bytes()
+    document=json.loads(original)
+    matches=[row for row in document['natives'] if row['address']==job['address']]
+    if len(matches)!=1 or matches[0]!=record:return None
+    if not target.exists():target.write_bytes(source.read_bytes())
+    if digest(target)!=expected:return None
+    updated=dict(path=str(target.relative_to(root)),sha256=expected)
+    matches[0]['verification']['scope']=updated
+    if manifest.read_bytes()!=original:return None
+    save(manifest,document,sort_keys=False)
+    record['verification']['scope']=updated
+    fresh,_,_,context=inventory(root)
+    job.update(fresh[job['address']])
+    return context
+
+
 def repair_policy(result):
     """Bounded recovery, never status/probe-contract weakening."""
-    message=result.get('error','').lower()
+    message=(result.get('error','')+'\n'+result.get('failure_details','')).lower()
     if any(word in message for word in ('timeout','timed out','frida','build/receipt',
                                        'inputs changed','compiler inputs','analysis failed')):
         return 'retry_fresh_tools_build_and_capture'
@@ -342,11 +379,17 @@ def verify(root, job, record, folder, args):
     attempts=[]
     maximum=getattr(args,'max_attempts',3)
     result=None
+    repaired_context=None
     for number in range(1,maximum+1):
         attempt=folder/f'attempt-{number}'
         print(f"ATTEMPT {number}/{maximum} {job['address']}",flush=True,file=sys.stderr)
         result=verify_once(root,job,record,attempt,args)
         policy=repair_policy(result)
+        if not result.get('verified') and number<maximum:
+            repaired=repair_scope_path(root,job,record,result)
+            if repaired:
+                repaired_context=repaired
+                policy='relocate_hash_checked_scope_document'
         attempts.append(dict(number=number,result=result['status'],error=result.get('error'),
                              repair=policy,report=str(attempt/'result.json')))
         if result.get('verified') or policy=='evidence_or_behavior_gap_no_automatic_promotion':
@@ -355,6 +398,7 @@ def verify(root, job, record, folder, args):
         # logic, status promotion or parallel native execution as a repair.
         if number<maximum:time.sleep(min(2**(number-1),4))
     result['attempts']=attempts
+    if repaired_context:result['repair_context']=repaired_context
     save(folder/'result.json',result)
     return result
 
@@ -442,7 +486,8 @@ def cycle(root, args):
             print('VERIFY', va, job['name'], flush=True, file=sys.stderr)
             result = verify(root, job, records[va], root / 'build/native-auto/runs' / run_id / va, args)
             fresh, fresh_records, _, current = inventory(root)
-            if current != context or fresh.get(va, {}).get('fingerprint') != job['fingerprint']:
+            expected_context=result.get('repair_context',context)
+            if current != expected_context or fresh.get(va, {}).get('fingerprint') != job['fingerprint']:
                 result.update(status='pending', verified=False, error='inputs changed during verification; result invalidated')
                 # Reject this snapshot but continue the requested sequential
                 # queue against fresh inputs; never silently skip later VAs.
@@ -533,6 +578,22 @@ def audit_demo(root, args):
     return 1 if result['unverified'] or not image_hash else 0
 
 
+def acquire_worker_lock(stream,timeout):
+    deadline=time.monotonic()+timeout
+    announced=False
+    while True:
+        try:
+            fcntl.flock(stream,fcntl.LOCK_EX|fcntl.LOCK_NB)
+            return
+        except BlockingIOError:
+            if time.monotonic()>=deadline:
+                raise TimeoutError('another native verifier still owns the sequential worker lock')
+            if not announced:
+                print('WAITING for the active native verifier; no parallel game testing',file=sys.stderr,flush=True)
+                announced=True
+            time.sleep(min(.5,max(0,deadline-time.monotonic())))
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('command', nargs='?', default='run', choices=['scan', 'run', 'watch', 'audit-demo'])
@@ -544,6 +605,7 @@ def main():
     parser.add_argument('--level', type=int, choices=range(1,15), default=1)
     parser.add_argument('--state', type=Path)
     parser.add_argument('--timeout', type=float, default=600)
+    parser.add_argument('--lock-timeout', type=float, default=600, help='Wait for the active sequential verifier rather than running concurrently')
     parser.add_argument('--interval', type=float, default=5)
     parser.add_argument('--max-attempts', type=int, choices=range(1,6), default=3, help='Bounded autonomous repair attempts per native')
     parser.add_argument('--retry', action='store_true', help='Retry unchanged blocked jobs once')
@@ -552,7 +614,7 @@ def main():
     parser.add_argument('--output', type=Path)
     args = parser.parse_args()
     args.scope = args.scope or ('all' if args.command == 'watch' else 'changed')
-    if not math.isfinite(args.timeout) or not math.isfinite(args.interval) or args.timeout <= 0 or args.interval <= 0:
+    if not math.isfinite(args.timeout) or not math.isfinite(args.interval) or not math.isfinite(args.lock_timeout) or args.timeout <= 0 or args.interval <= 0 or args.lock_timeout < 0:
         parser.error('timeout and interval must be positive')
     root = args.root.resolve()
     if args.command == 'audit-demo':
@@ -565,7 +627,7 @@ def main():
     lock.parent.mkdir(parents=True, exist_ok=True)
     try:
         with lock.open('a') as stream:
-            fcntl.flock(stream, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            acquire_worker_lock(stream,args.lock_timeout)
             while True:
                 code = cycle(root, args)
                 if args.command != 'watch':

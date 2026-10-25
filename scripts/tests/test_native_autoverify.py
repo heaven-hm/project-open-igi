@@ -156,6 +156,23 @@ class AutomaticNativeVerification(unittest.TestCase):
         path.write_text('// Native: NewCandidate; retail VA 0x00460C30.\n// void NewCandidate() {}\nvoid NewCandidate();\n')
         self.assertEqual(auto.intake_candidates(self.root,None,[]),[])
 
+    def test_scope_path_repair_preserves_content_status_and_rejects_stale_hash(self):
+        path=self.root/'docs/fidelity/evidence/draft.md'
+        path.parent.mkdir(parents=True);path.write_text('Infrastructure fixture scope.\n')
+        self.record['verification']['scope']={'path':str(path.relative_to(self.root)),'sha256':auto.digest(path)}
+        self.manifest.write_text(json.dumps({'natives':[self.record]}))
+        job=auto.inventory(self.root)[0]['0x0048F0C0']
+        failure={'failure_details':'verification scope: path must be under docs/fidelity/scopes/'}
+        self.assertIsNotNone(auto.repair_scope_path(self.root,job,self.record,failure))
+        updated=json.loads(self.manifest.read_text())['natives'][0]
+        self.assertEqual(updated['verification']['status'],'TRANSCRIBED')
+        reference=updated['verification']['scope']
+        self.assertTrue(reference['path'].startswith('docs/fidelity/scopes/'))
+        self.assertEqual((self.root/reference['path']).read_bytes(),path.read_bytes())
+        self.assertEqual(auto.digest(self.root/reference['path']),reference['sha256'])
+        (self.root/reference['path']).write_text('changed fixture\n')
+        self.assertIsNone(auto.repair_scope_path(self.root,job,self.record,failure))
+
     def test_partial_staging_is_blocked(self):
         self.source.write_text(self.source.read_text()+'// staged\n')
         subprocess.run(['git','add','.'],cwd=self.root,check=True)

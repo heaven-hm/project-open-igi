@@ -41344,7 +41344,7 @@
           "evidence_sha256": "67fa19253af86aa4ab2b08d723677fda9174f7785cee892105394fdf687facc3"
         },
         "scope": {
-          "path": "docs/fidelity/evidence/store-command-line-unified-20261025/scope.md",
+          "path": "docs/fidelity/scopes/auto-0x0048F0C0-a8bb452786bc6643.md",
           "sha256": "a8bb452786bc6643f914298e4c8fc4cc652ac14dbddf1341c3b1a91a9ba9cca3"
         },
         "acceptance": {
@@ -90034,6 +90034,23 @@
           "reachable_statically": true
         },
         "recorded_at": "2026-10-25T02:44:21Z"
+      }
+    },
+    {
+      "address": "0x004AF9D0",
+      "name": "Sys_CompilePattern_4AF9D0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/sys/native_4af9d0.cpp",
+        "sha256": "232319b15059f02542675d26a0f79f92998857c20e609d72b569826e41919a07"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "selected_decompiler": "binary_ninja",
+        "candidate_symbol": "_Sys_CompilePattern_4AF9D0",
+        "limitations": [
+          "Automatically registered from a unique source provenance VA and definition; ABI, static semantics and paired runtime remain unverified."
+        ]
       }
     }
   ],
