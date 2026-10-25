@@ -1,93 +1,188 @@
-// Infrastructure: development logging. This file is NOT a retail native and has no retail
-// VA. It exists under the permitted addition in section 10.13 rule 3(a) - "logging that
-// never changes control flow, values, or ordering, clearly marked as infrastructure" - and
-// section 10.14 rule 9, which places logging outside native flows.
+// igi.log - development logging for the retail-native reconstruction.
 //
-// It writes igi.log beside the executable. Nothing here may read or write a retail global,
-// call a retail routine, or alter any value a native computes. Every entry is a statement
-// whose only effect is an append to the log.
+// INFRASTRUCTURE, NOT A RETAIL NATIVE. This file has no retail VA and no manifest record. It is
+// authorized by section 10.13 rule 3(a): logging that never changes control flow, values or
+// ordering. Every macro here is do/while(0) guarded by an enabled check, evaluates no argument
+// when logging is off, returns no value, and has no side effect but the append. No call site may
+// make a log statement the only statement in a branch.
+//
+// ---------------------------------------------------------------------------------------------
+// LINE FORMAT
+// ---------------------------------------------------------------------------------------------
+//
+//   2026-10-25 17:45:12.345 [INFO ] StoreInstanceHandle        0x0048F0D0  entered
+//   ^--------------------^ ^-----^ ^-----------------------^  ^--------^  ^------^
+//   local wall clock        level   native name                retail VA   message
+//
+// Fixed-width columns so a run reads as a trace and can be grepped by level or by VA. The
+// timestamp is local wall-clock with milliseconds, not elapsed-since-open, because a run has to
+// be correlatable against other tools' output and against a debugger.
+//
+// ---------------------------------------------------------------------------------------------
+// LEVELS
+// ---------------------------------------------------------------------------------------------
+//
+//   ERROR  something failed, or a path retail treats as fatal was reached
+//   WARN   retail behaviour that is surprising, preserved on purpose, or a recorded deviation
+//   INFO   a native entry/exit, a stage boundary, or a value the caller supplied
+//   DEBUG  detail inside a method: each load, store, branch taken, allocation, format result
+//
+// INFO is the default so a normal run stays readable; DEBUG is opt-in through IGI_LOG_LEVEL so
+// the detailed form costs nothing unless it is asked for. ERROR and WARN are never suppressed.
+//
+// ---------------------------------------------------------------------------------------------
+// RECORDING INPUTS AND OUTPUTS
+// ---------------------------------------------------------------------------------------------
+//
+// There is no way to read a native's arguments or return value generically without touching the
+// stack or a register the caller owns, and doing that from a logger would be a real change to
+// machine state - exactly what rule 3(a) forbids. So arguments and return values are logged BY
+// THE TRANSCRIPTION, at the point where the transcription already knows the value, through
+// LOG_ARG / LOG_RET / LOG_VALUE. That is the only honest source for them: the logger reports what
+// the native itself observed and never guesses a value it did not see.
+//
+//   LOG_ARG("arg2", arg2)        a parameter, at the top of the body
+//   LOG_RET(result)              the value being returned, immediately before the return
+//   LOG_VALUE("record+0x08", h)  a load, a store, an allocation, an intermediate result
+//   LOG_STRING("name", name)     a string, printed with a visible truncation marker
+//
+// Values print as 0x%08X for integers and pointers. Strings are bounded and visibly marked,
+// because a format string that is not NUL-terminated is a real thing in this binary.
+//
+// ---------------------------------------------------------------------------------------------
+// USE
+// ---------------------------------------------------------------------------------------------
+//
+//   NATIVE_LOG_ENTER(name, va)      first statement of a native body
+//   NATIVE_LOG_LEAVE(name, va)      immediately before a return that carries no value
+//   NATIVE_LOG_RETURN(name, va, v)  immediately before a return that carries one
+//
+// The `va` argument is the native's OWN retail VA, resolved from
+// docs/fidelity/native-verification.json by the instrumentation pass. Where the manifest has no
+// record the string is empty and the logger says so rather than printing a fabricated address -
+// a wrong VA is worse than no VA, because it looks like evidence.
 #ifndef IGI_PLATFORM_WINDOWS_DEV_LOG_HPP
 #define IGI_PLATFORM_WINDOWS_DEV_LOG_HPP
 
+#include <cstdint>
+
 namespace igi::devlog {
 
-// Opens igi.log for appending. Called once from the WinMain transcription before any native
-// runs. Safe to call again; the second call is a no-op. If the file cannot be opened the
-// logger stays disabled and every later call is a cheap no-op, so a read-only directory can
-// never turn logging into a crash.
+enum class Level : int {
+    Error = 0,
+    Warn = 1,
+    Info = 2,
+    Debug = 3,
+};
+
+// Opens igi.log for appending and writes a run separator. Called once from the WinMain
+// transcription before any native runs. Safe to call again; the second call is a no-op. If the
+// file cannot be opened the logger stays disabled and every later call is a cheap no-op, so a
+// read-only directory can never turn logging into a crash.
 void Init(const char *path) noexcept;
 
-// True once Init has opened the file. Used by the macro below so that the common case of a
-// disabled logger costs one predictable branch and no call.
+// Applies IGI_LOG_LEVEL (error|warn|info|debug). Called by Init; exposed so a caller can change
+// the level later without reopening the file. An unset or unrecognised value leaves INFO.
+void SetLevelFromEnvironment() noexcept;
+void SetLevel(Level level) noexcept;
+Level GetLevel() noexcept;
+
+// True once Init has opened the file. The macros test this so a disabled logger costs one
+// predictable branch and no call.
 bool Enabled() noexcept;
+bool EnabledAt(Level level) noexcept;
 
-// Appends one line: "[<milliseconds since init>] <text>\r\n". Thread-safe. Never throws,
-// never allocates beyond a fixed buffer, never touches retail state.
-void Write(const char *text) noexcept;
+// The single place a formatted line is produced. Every public macro routes here. Thread-safe.
+// Never throws, never allocates beyond a fixed buffer, never touches retail state.
+void Write(Level level, const char *name, const char *va, const char *fmt, ...) noexcept;
 
-// Appends one line built from a printf-style format. Truncates rather than overflows; a
-// format that does not fit is logged in truncated form with a trailing marker, because a
-// dropped log line is worse than a short one.
-void Writef(const char *fmt, ...) noexcept;
-
-// Appends the native-entry line: "NATIVE ENTER <name> @ <va>". Kept separate from Writef so
-// the entry records have one shape and can be grepped and counted.
+// Native entry and exit. Entry is INFO so a plain run shows the call trace; exit is INFO too,
+// and deliberately carries no return value - see NATIVE_LOG_RETURN for the value-bearing form.
 void NativeEnter(const char *name, const char *va) noexcept;
+void NativeLeave(const char *name, const char *va) noexcept;
 
-// Appends the native-exit line. Never carries a return value: capturing EAX here would mean
-// reading a register the compiler may already have reused, and a wrong return value in the
-// log is worse than no return value.
-void NativeLeave(const char *name) noexcept;
+// Records one labelled value as part of the current method's detail. `label` is a short
+// description of what the value is ("arg2", "record+0x08", "sprintf result").
+void NativeValue(const char *name, const char *va, const char *label, std::uint32_t value) noexcept;
+void NativeValueString(const char *name, const char *va, const char *label,
+                       const char *text) noexcept;
 
-// Closes the file. Called at shutdown. Safe to call when never initialised.
 void Shutdown() noexcept;
 
 }  // namespace igi::devlog
 
-// NATIVE_LOG_ENTER - logs that a retail native was entered.
-//
-// Contract, and the reason this is a statement and not an expression: it evaluates no
-// argument, returns no value, and produces no side effect other than the log append. It is
-// written as `do { ... } while (0)` so it is safe in an unbraced if, and it is guarded by
-// Enabled() so a disabled logger cannot change the cost of a hot path enough to matter.
-//
-// It must never be placed where retail has no statement, and it must never be the only
-// statement in a branch, because adding it must not change which branch retail takes.
-//
-// The `va` argument is the function's OWN retail VA where the function name carries it as an
-// address suffix, which is the case for every address-suffixed placeholder. Where the name
-// carries no address - a behavior-derived name in a file with several functions - the value
-// is passed with a LEADING `~`, meaning "this is the file's provenance VA, not this function's
-// own". The logger prints it as "~0x..." so a reader cannot mistake it for the function's
-// address. The first version of this instrumentation stamped the file's first provenance VA
-// on every function in the file, which was right for single-function files and confidently
-// wrong for the rest; a runtime log showed six different natives all reporting 0x0048F120.
-#define NATIVE_LOG_ENTER(name, va)                       \
-    do {                                                 \
-        if (::igi::devlog::Enabled()) {                  \
-            ::igi::devlog::NativeEnter((name), (va));    \
-        }                                                \
+#define IGI_DEVLOG_ENABLED() (::igi::devlog::Enabled())
+
+#define LOG_ERROR(name, va, ...)                                                                   \
+    do {                                                                                           \
+        if (::igi::devlog::EnabledAt(::igi::devlog::Level::Error)) {                               \
+            ::igi::devlog::Write(::igi::devlog::Level::Error, (name), (va), __VA_ARGS__);          \
+        }                                                                                          \
     } while (0)
 
-// NATIVE_LOG_LEAVE - logs that a retail native is returning.
-//
-// Placed immediately before a retail `ret`, never before an early return that retail does
-// not have. On a native with several retail return paths, place one before each.
-#define NATIVE_LOG_LEAVE(name)                           \
-    do {                                                 \
-        if (::igi::devlog::Enabled()) {                  \
-            ::igi::devlog::NativeLeave((name));          \
-        }                                                \
+#define LOG_WARN(name, va, ...)                                                                    \
+    do {                                                                                           \
+        if (::igi::devlog::EnabledAt(::igi::devlog::Level::Warn)) {                                \
+            ::igi::devlog::Write(::igi::devlog::Level::Warn, (name), (va), __VA_ARGS__);           \
+        }                                                                                          \
     } while (0)
 
-// DEVLOG - a free-form infrastructure note. Use for port-level facts that are not a native
-// boundary (a file that failed to open, a level path that resolved). Never use it to record
-// a value a native computed as if retail had logged it.
-#define DEVLOG(...)                                      \
-    do {                                                 \
-        if (::igi::devlog::Enabled()) {                  \
-            ::igi::devlog::Writef(__VA_ARGS__);          \
-        }                                                \
+#define LOG_INFO(name, va, ...)                                                                    \
+    do {                                                                                           \
+        if (::igi::devlog::EnabledAt(::igi::devlog::Level::Info)) {                                \
+            ::igi::devlog::Write(::igi::devlog::Level::Info, (name), (va), __VA_ARGS__);           \
+        }                                                                                          \
+    } while (0)
+
+#define LOG_DEBUG(name, va, ...)                                                                   \
+    do {                                                                                           \
+        if (::igi::devlog::EnabledAt(::igi::devlog::Level::Debug)) {                               \
+            ::igi::devlog::Write(::igi::devlog::Level::Debug, (name), (va), __VA_ARGS__);          \
+        }                                                                                          \
+    } while (0)
+
+#define NATIVE_LOG_ENTER(name, va)                                                                 \
+    do {                                                                                           \
+        if (::igi::devlog::EnabledAt(::igi::devlog::Level::Info)) {                                \
+            ::igi::devlog::NativeEnter((name), (va));                                              \
+        }                                                                                          \
+    } while (0)
+
+#define NATIVE_LOG_LEAVE(name, va)                                                                 \
+    do {                                                                                           \
+        if (::igi::devlog::EnabledAt(::igi::devlog::Level::Info)) {                                \
+            ::igi::devlog::NativeLeave((name), (va));                                              \
+        }                                                                                          \
+    } while (0)
+
+#define NATIVE_LOG_RETURN(name, va, value)                                                         \
+    do {                                                                                           \
+        if (IGI_DEVLOG_ENABLED()) {                                                                \
+            ::igi::devlog::NativeValue((name), (va), "return",                                     \
+                                       static_cast<std::uint32_t>(value));                         \
+            ::igi::devlog::NativeLeave((name), (va));                                              \
+        }                                                                                          \
+    } while (0)
+
+// Argument and intermediate-value recording, called from inside a transcription at the point
+// where the value is already known. These are the only source of inputs and outputs in this log.
+#define LOG_ARG(name, va, label, value)                                                            \
+    do {                                                                                           \
+        if (IGI_DEVLOG_ENABLED()) {                                                                \
+            ::igi::devlog::NativeValue((name), (va), (label),                                      \
+                                       static_cast<std::uint32_t>(value));                         \
+        }                                                                                          \
+    } while (0)
+
+#define LOG_VALUE(name, va, label, value) LOG_ARG(name, va, label, value)
+
+#define LOG_RET(name, va, value) LOG_ARG(name, va, "return", value)
+
+#define LOG_STRING(name, va, label, text)                                                          \
+    do {                                                                                           \
+        if (IGI_DEVLOG_ENABLED()) {                                                                \
+            ::igi::devlog::NativeValueString((name), (va), (label), (text));                       \
+        }                                                                                          \
     } while (0)
 
 #endif  // IGI_PLATFORM_WINDOWS_DEV_LOG_HPP

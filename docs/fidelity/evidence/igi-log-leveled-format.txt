@@ -1,0 +1,51 @@
+2026-10-25 17:49:01.449 [INFO ] (devlog)                            (no record)   ================ igi.log opened (level=INFO) ================
+2026-10-25 17:49:01.450 [INFO ] WinMain                             0x0048F530    WinMain entered (retail VA 0x0048F530)
+2026-10-25 17:49:02.004 [INFO ] StoreCommandLine                    0x0048F0C0    entered
+2026-10-25 17:49:02.004 [INFO ] StoreInstanceHandle                 0x0048F0D0    entered
+2026-10-25 17:49:02.004 [INFO ] SetConfigFileName                   0x0048F0F0    entered
+2026-10-25 17:49:02.004 [INFO ] SetAppTitle                         0x0048F100    entered
+2026-10-25 17:49:02.004 [INFO ] AppContext_SetIsActive              0x0048F140    entered
+2026-10-25 17:49:02.004 [INFO ] Display_SetScreenMode               0x0048F120    entered
+2026-10-25 17:49:02.004 [INFO ] SetDebugCompileState                0x0048F1C0    entered
+2026-10-25 17:49:02.004 [INFO ] Input_SetUseWin32Input              0x0048F280    entered
+2026-10-25 17:49:02.004 [INFO ] AppMain_Set5C8C0C                   0x0048F290    entered
+2026-10-25 17:49:02.004 [INFO ] AppMain_Set5C8C10                   0x0048F2A0    entered
+2026-10-25 17:49:02.004 [INFO ] Game_SetStartupMode                 0x0048F210    entered
+2026-10-25 17:49:02.004 [INFO ] AppContext_SetGermanVersion         0x0048F2B0    entered
+2026-10-25 17:49:02.004 [INFO ] AppContext_SetLanguage              0x0048F300    entered
+2026-10-25 17:49:02.004 [INFO ] AppMain_Set5C8C04                   0x0048F200    entered
+2026-10-25 17:49:02.004 [INFO ] AppMain_ParseCmdLineArgs            0x0048F360    entered
+2026-10-25 17:49:02.004 [INFO ] GameCommandLine                     (no record)   entered
+2026-10-25 17:49:02.004 [INFO ] AppMain_TokenizeDelimited           0x004A5A0C    entered
+2026-10-25 17:49:02.004 [INFO ] AppMain_ParseCmdLineArgs            0x0048F360    entered
+2026-10-25 17:49:02.004 [INFO ] GameCommandLine                     (no record)   entered
+2026-10-25 17:49:02.004 [INFO ] AppMain_TokenizeDelimited           0x004A5A0C    entered
+2026-10-25 17:49:02.004 [INFO ] AppMain_ParseCmdLineArgs            0x0048F360    entered
+2026-10-25 17:49:02.004 [INFO ] GameCommandLine                     (no record)   entered
+2026-10-25 17:49:02.004 [INFO ] AppMain_TokenizeDelimited           0x004A5A0C    entered
+2026-10-25 17:49:02.004 [INFO ] AppMain_ParseCmdLineArgs            0x0048F360    entered
+2026-10-25 17:49:02.004 [INFO ] GameCommandLine                     (no record)   entered
+2026-10-25 17:49:02.004 [INFO ] AppMain_TokenizeDelimited           0x004A5A0C    entered
+2026-10-25 17:49:05.598 [INFO ] Display_GetScreenMode               0x0048F130    entered
+2026-10-25 17:49:05.600 [INFO ] WindowProcedure                     0x0048F970    entered
+2026-10-25 17:49:05.600 [INFO ] WindowProcedure                     0x0048F970    entered
+2026-10-25 17:49:05.601 [INFO ] WindowProcedure                     0x0048F970    entered
+2026-10-25 17:49:05.601 [INFO ] WindowProcedure                     0x0048F970    entered
+2026-10-25 17:49:05.601 [INFO ] WindowProcedure                     0x0048F970    entered
+2026-10-25 17:49:05.601 [INFO ] WindowProcedure                     0x0048F970    entered
+2026-10-25 17:49:05.601 [INFO ] WindowProcedure                     0x0048F970    entered
+2026-10-25 17:49:05.615 [INFO ] WindowProcedure                     0x0048F970    entered
+2026-10-25 17:49:05.615 [INFO ] WindowProcedure                     0x0048F970    entered
+2026-10-25 17:49:05.616 [INFO ] WindowProcedure                     0x0048F970    entered
+2026-10-25 17:49:05.616 [INFO ] WindowProcedure                     0x0048F970    entered
+2026-10-25 17:49:05.616 [INFO ] WindowProcedure                     0x0048F970    entered
+2026-10-25 17:49:05.616 [INFO ] WindowProcedure                     0x0048F970    entered
+2026-10-25 17:49:05.619 [INFO ] WindowProcedure                     0x0048F970    entered
+2026-10-25 17:49:06.595 [INFO ] WindowProcedure                     0x0048F970    entered
+2026-10-25 17:49:06.595 [INFO ] WindowProcedure                     0x0048F970    entered
+2026-10-25 17:49:06.596 [INFO ] WindowProcedure                     0x0048F970    entered
+2026-10-25 17:49:06.598 [INFO ] WindowProcedure                     0x0048F970    entered
+2026-10-25 17:49:06.598 [INFO ] SetWindowHandle                     0x0048F0E0    entered
+2026-10-25 17:49:06.598 [INFO ] SetAppTitle                         0x0048F100    entered
+2026-10-25 17:49:06.598 [INFO ] WindowProcedure                     0x0048F970    entered
+2026-10-25 17:49:06.598 [INFO ] QTask_RegisterClasses               0x00402930    entered

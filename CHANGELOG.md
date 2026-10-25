@@ -1,5 +1,47 @@
 ## Unreleased
 
+### igi.log now carries levels, wall-clock timestamps and per-method detail
+
+The owner's request was that the log say what happened to each method, with levels, and with a
+timestamp that is a real time rather than an elapsed tick count. The logger is rebuilt around a
+four-level scheme and a fixed-width line.
+
+**Line format**, so a run reads as a trace and greps by level or by VA:
+
+```
+2026-10-25 17:46:57.015 [INFO ] StoreCommandLine                    0x0048F0C0    entered
+^--------------------^ ^-----^ ^-----------------------------^      ^----------^  ^------^
+local wall clock        level   native name                          retail VA     message
+```
+
+**Levels.** `ERROR` a failure or a path retail treats as fatal; `WARN` retail behaviour that is
+surprising, preserved on purpose, or a recorded deviation; `INFO` native entry/exit and stage
+boundaries; `DEBUG` detail inside a method. `INFO` is the default, `DEBUG` is opt-in through
+`IGI_LOG_LEVEL` (`error|warn|info|debug`), and `ERROR`/`WARN` are never suppressed.
+
+**Inputs and outputs are recorded by the transcription, not read by the logger.** There is no way
+to read a native's arguments or return value generically without touching the stack or a register
+the caller owns, and doing that from a logger is a real change to machine state - exactly what
+section 10.13 rule 3(a) forbids. So the macros `LOG_ARG`, `LOG_VALUE`, `LOG_RET` and `LOG_STRING`
+are called from inside a transcription at the point where the value is already known. That is the
+only honest source for them.
+
+**A defect found by running it, not by reading it.** The first version of this change gated the
+`NATIVE_LOG_ENTER` macro on `Enabled()` - is the file open - while `NativeEnter` itself wrote
+unconditionally. The result was that `IGI_LOG_LEVEL=error` produced all 50 lines of a normal run:
+the filter existed, was documented, and did nothing. Found by running the binary with the variable
+set and counting lines, not by reading the code. Fixed at both layers - the macro tests the level
+and the function re-tests it, so a caller reaching it by any other route still respects the filter.
+Verified: `IGI_LOG_LEVEL=error` now produces 1 line (the unconditional open banner) against 51 for
+the default level.
+
+**Evidence.** `docs/fidelity/evidence/igi-log-leveled-format.txt` - 51 lines from a real Wine run
+of `build-win32-no-verify-gate/igi1.exe` at the default level.
+
+Still true and unchanged: `NativeLeave` carries no return value of its own. The value-bearing form
+is `NATIVE_LOG_RETURN`, which takes the value from the transcription.
+
+
 ### The guard's 154 callees are confirmed by two independent methods
 
 Every dispatch today rested on one list: the 154 routines called by the startup guard

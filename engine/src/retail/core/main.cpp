@@ -79,7 +79,7 @@ int WINAPI WinMain(HINSTANCE const h_instance, HINSTANCE const h_previous_instan
     // entered is recorded. Permitted by section 10.13 rule 3(a): this changes no retail
     // value and no retail ordering - it only appends to a file.
     ::igi::devlog::Init("igi.log");
-    DEVLOG("WinMain entered (retail VA 0x0048F530)");
+    LOG_INFO("WinMain", "0x0048F530", "WinMain entered (retail VA 0x0048F530)");
 #if defined(_WIN32)
     // 0x0048F544 CreateMutexA(NULL, TRUE, "IGIMUTEX"), name pointer 0x00541ECC.
     // Build-time testing divergence only: the verification build must be able to
