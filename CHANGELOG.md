@@ -2099,3 +2099,50 @@ cause: `implementation_natives()` returns addresses zero-padded (`00421430`) whi
 the `call` regex captures them unpadded (`421430`), so every lookup missed. A
 dictionary keyed on two different spellings of the same address returns zero and
 looks like a measurement. Normalise both sides to 8 hex digits before comparing.
+
+## Exit status is not the warning test
+
+A compile command that prints "COMPILE CLEAN" on `exit 0` is not clean if the
+compiler emitted warnings on the way. `-Wcast-function-type` on a handler cast
+was emitted with exit 0 and was reported as a clean compile until analyst caught
+it on its own file and re-counted warning *lines* instead.
+
+The verification command must print and check both:
+`... 2>/tmp/w.log; echo "exit=$? warning_lines=$(grep -c 'warning:' /tmp/w.log)"`
+
+This matters here more than usual: `check_native_linkable.py` cannot detect a
+return-type or ABI disagreement across an `extern "C"` symbol, because C linkage
+does not type-check. `-Wall -Wextra` warning lines are the only instrument that
+sees that class of defect, so treating exit status as the verdict removes the
+only detector.
+
+## The band has three parent getters, not two
+
+`0x00424850` in files 1-6, `0x004018F0` in files 7/8/10, `0x004D9FA0`
+(`mov ax,[0x00548648]; ret`) in file 11. `native_42d2b0.cpp` also uses
+`0x004D9FA0`, so it is a real third source rather than a one-off. Not harmonised.
+
+## One rule covers the handler path and the arg6 path
+
+An immediate pushed before an argument-less getter is **not** that getter's
+argument, whether it is a handler word or an arg6 pointer. It stays on the stack
+and is consumed by the following link. Six instances in `0x00426630`
+(`0x004D9FB0`, `0x00416840`, `0x00416860`, `0x004C56D0`, `0x004C56E0`,
+`0x00489610`), each explaining why its cleanup is 3 dwords rather than 2.
+
+A pre-pushed **literal zero** is a registered NULL handler, not an untranscribed
+address. It stays `nullptr` and must not be filled in.
+
+## Unresolved: the handler ABI
+
+`Script_SetConstant_51BAA0` is `uint32_t(void* const, uint32_t* const)` and its
+body reads its second argument (`mov eax,[esp+8]`). Installed as
+`FrameHandler = void(*)(void*)` and called with one argument, that parameter is
+whatever sits below the return address. Either retail's dispatcher passes two
+arguments to handlers, or `FrameHandler` is under-specified.
+
+Holding position: cast through `void (*)()`, which preserves the link edge
+without asserting a calling convention. **Not resolved.** The settling evidence
+is a census of transcribed handler bodies that read a second argument - if
+`0x0051BAA0` is the only one, it is a single mismatched link; if many, the
+typedef is wrong. Do not widen `FrameHandler` on one sample.
