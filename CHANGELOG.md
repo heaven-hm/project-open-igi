@@ -49,6 +49,21 @@ actual `sub esp` before being quoted, the same class of error as reading a
 comment as evidence. Its conclusion survived and got cleaner: with no frame,
 `0x54` is unambiguously the registered heap object's size.
 
+**The rule confirmed on a second body, independently.** I read `0x0042ACC0` (a
+guard callee in the Lead's band) and r2 reports `stackframe: 2316` for it. The
+actual prologue is `sub esp,0x8E0`, i.e. **2272**. The difference, 44 = `0x2C`, is
+the pushed-argument space r2 folds into the field. So `afi`'s `stackframe` is not
+the frame: it is the frame plus outgoing argument space, and it must be confirmed
+against the prologue's `sub esp` in every body, not only the ones with no frame.
+
+`0x0042ACC0` itself: 870 bytes, 1 block, 0 edges, 45 call sites over 24 distinct
+targets, `cdecl`, no arguments. It registers the class `"Train"` (literal
+`0x0053BD1C`) through `TaskType_Register` at `0x00401900` with a registered object
+size of `0x8E0` — **equal to the frame here**, unlike `0x00401FC0` where the
+registered size had no frame to be confused with. The id goes to `0x0057BCB8`
+with a 16-bit store, and `0x00429F80` is linked as a handler. Reconnaissance only;
+no file written.
+
 ### 2026-10-25 - startup guard re-measured: 120 of 154 callees, not 8
 
 `0x00402930` is the boundary this build fails closed at, and it is the only thing
