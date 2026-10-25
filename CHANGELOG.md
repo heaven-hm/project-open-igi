@@ -11,6 +11,44 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - a third class of entry point: handler-only, and the 34 was not the whole gap
+
+`handler-abi-worker` found that `0x00401FC0` pushes four code addresses as handler
+arguments — `0x00402070`, `0x00402260`, `0x00402740`, `0x00402780` — none of which
+is the target of a direct `call`. I checked all four against the guard's 155-call
+target column: **none is in it.** I also checked `0x004170A0`'s two successors
+(`0x00417260`, `0x004191F0`): **neither is in it either**, while `0x004170A0`
+itself is.
+
+So these are a **third class**, not missing guard callees. They are reachable only
+through handler dispatch: the guard calls the registrar, the registrar links the
+handler, and no direct call edge to the handler exists anywhere. A call graph
+cannot find them and the guard's own table does not list them.
+
+**Scale, as an upper bound.** A byte scan of `.text` for `push imm32` whose
+immediate falls inside `.text` (`0x00401000`-`0x00532510`) gives **2515 sites,
+2001 distinct code addresses**. Of those distinct addresses, 44 are in the build.
+That yields an upper bound of **1956 handler-only entry points not built**.
+
+This is an upper bound and is labelled as one: not every `push` of a code address
+is a handler link — function-pointer tables, jump tables and other data can hold
+one too. What it establishes is the order of magnitude, and that the number is
+not 34. The 34 remains the correct count for *getting startup through the guard*;
+the handler-only class is what gets reached progressively as events fire.
+
+**My error, caught by the worker.** I told it `0x004B8810`'s shape was
+`(name, 0x181)`, generalised from `QTask_Init`'s single call. Its five sites push
+1-5. The shape `(name, value)` holds; the value is per-site and `0x181` is one
+body's value, not the callee's signature. I generalised a constant from one
+observation into an interface while in the same message warning about counts.
+
+**A tool-artefact error the worker caught in itself.** It reported `stackframe: 64`
+for `0x00401FC0`; the body contains no `sub esp` and no callee-saved pushes at
+all. `afi`'s `stackframe` is a derived field and must be confirmed against an
+actual `sub esp` before being quoted, the same class of error as reading a
+comment as evidence. Its conclusion survived and got cleaner: with no frame,
+`0x54` is unambiguously the registered heap object's size.
+
 ### 2026-10-25 - startup guard re-measured: 120 of 154 callees, not 8
 
 `0x00402930` is the boundary this build fails closed at, and it is the only thing
