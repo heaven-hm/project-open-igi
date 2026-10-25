@@ -136,6 +136,14 @@ inline igi::retail::core::FrameHandler* QTask_Phase1HandlerTable()
 std::uint16_t NATIVE_DECL TaskType_Register(const char* name, std::uint32_t object_size,
                                                  std::uint16_t parent_type,
                                                  std::uint32_t task_list_argument);
+// Call-site arity differs from callee arity, established from 0x00401900's own bytes:
+// every retail registration call site pushes FIVE dwords (the 5-push / add esp,0x38
+// pattern), but the callee reads only four -- [esp+0xC], [esp+8], then after saving two
+// registers [esp+0x18] and [esp+0x1C]. Nothing in the body reads the fifth slot. The
+// extra dword is pushed and cleaned by every call site and ignored by the callee, so the
+// port's four-parameter signature is correct and the generated code legitimately emits
+// four pushes. This is why a provenance block counting "five registration pushes" is
+// describing retail's stack, not this signature.
 
 // Port-side startup replay bound to the live 0x00401900 registration capture
 // (docs/fidelity/evidence/0x00401900-retail-registration-order.json); not a
