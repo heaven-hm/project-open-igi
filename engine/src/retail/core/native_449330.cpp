@@ -29,8 +29,17 @@ extern "C" {
 extern std::uint32_t Sys_GetGlobal16_481340();                      // 0x00481340: transcribed (core/native_443680.cpp)
 extern void Sub_4F1340(void* region);                               // 0x004F1340: untranscribed
 
-// 0x00A976E0: the dispatch table. Zero-fill in the image, so it is populated at runtime; its length is not established by this body.
-extern void (*g_a976e0[])(void*);
+// 0x00A976E0: the dispatch table. Zero-fill in the image (BSS inside .data's virtual extent,
+// 0x00536000 + 0x6FD000 = 0x00C33000), so it is populated at runtime and the image records no
+// length. The only bound the evidence gives is the accessor's own mask - 0x0044933A is
+// `and eax, 0xffff` - so the table is defined at the largest index that instruction can produce.
+//
+// THIS IS A BOUND, NOT A MEASUREMENT. The image does not record a size, no manifest record bounds
+// it, and a byte scan for stores into the region finds none. Any length at or above the maximum
+// index actually used is behaviourally identical, because the region is zeroed and nothing in the
+// binary reads the table's extent. Recorded as a gap in the provenance above.
+constexpr std::uint32_t kA976E0IndexBound = 0x10000U;  // from `and eax, 0xffff` at 0x0044933A
+void (*g_a976e0[kA976E0IndexBound])(void*) = {};
 
 void NATIVE_DECL Task_DispatchAndRelease_449330(void* const object)
 {
