@@ -47,9 +47,6 @@ extern std::uint8_t Script_PhaseIdGetE4_4F1A60(void);        // 0x004F1A60
 extern std::uint8_t Script_PhaseIdGetE5_4F1A70(void);        // 0x004F1A70
 
 // Handler-only entry points: each has exactly one occurrence in .text, pushed as an argument here.
-void NATIVE_DECL MenuLoader_Handler_4191F0(void* task); // 0x004191F0
-void NATIVE_DECL MenuLoader_Handler_419210(void* task); // 0x00419210
-void NATIVE_DECL MenuLoader_Handler_4192A0(void* task); // 0x004192A0
 
 void NATIVE_DECL MenuLoader_Register_4190E0()
 {
@@ -61,15 +58,15 @@ void NATIVE_DECL MenuLoader_Register_4190E0()
     const std::uint16_t class_id =
         TaskType_Register("MenuLoader", 0x124U, parent, 0U);                 // 0x004190FA
     igi::retail::core::g_539adc = class_id;                                  // 0x00419107
-    QTask_LinkQTaskEventHandler(class_id, 0U, &MenuLoader_Handler_4191F0);   // 0x0041910D
+    QTask_LinkQTaskEventHandler(class_id, 0U, reinterpret_cast<igi::retail::core::FrameHandler>(reinterpret_cast<igi::retail::core::FrameHandler>(0x004191F0)));   // 0x0041910D
     QTask_LinkQTaskEventHandlerNoContextFn(
         class_id, 2U, reinterpret_cast<igi::retail::core::FrameHandler>(&QTask_NoOpHandler));   // 0x00419120
     QTask_LinkQTaskEventHandler(
         class_id, static_cast<std::uint32_t>(Script_PhaseIdGetE4_4F1A60()),
-        &MenuLoader_Handler_4192A0);                                         // 0x0041913B
+        reinterpret_cast<igi::retail::core::FrameHandler>(reinterpret_cast<igi::retail::core::FrameHandler>(0x004192A0)));                                         // 0x0041913B
     QTask_LinkQTaskEventHandler(
         class_id, static_cast<std::uint32_t>(Script_PhaseIdGetE5_4F1A70()),
-        &MenuLoader_Handler_419210);                                         // 0x00419156
+        reinterpret_cast<igi::retail::core::FrameHandler>(reinterpret_cast<igi::retail::core::FrameHandler>(0x00419210)));                                         // 0x00419156
     QTask_LinkQTaskEventHandlerNoContextFn(
         class_id, 1U, reinterpret_cast<igi::retail::core::FrameHandler>(&QTask_NoOpHandler));   // 0x00419169
     igi::retail::core::g_57baf4 = static_cast<std::uint32_t>(

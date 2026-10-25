@@ -46,14 +46,6 @@ extern std::uint8_t Script_PhaseIdGetE4_4F1A60(void);         // 0x004F1A60
 extern std::uint8_t Script_PhaseIdGetE5_4F1A70(void);         // 0x004F1A70
 
 // Handler-only entry points, each with a single occurrence in .text.
-void NATIVE_DECL ModelViewBox_Handler_422C90(void* task); // 0x00422C90
-void NATIVE_DECL ModelViewBox_Handler_422DF0(void* task); // 0x00422DF0
-void NATIVE_DECL ModelViewBox_Handler_422E40(void* task); // 0x00422E40
-void NATIVE_DECL ModelViewBox_Handler_422F10(void* task); // 0x00422F10
-void NATIVE_DECL ModelViewBox_Handler_422F30(void* task); // 0x00422F30
-void NATIVE_DECL ModelViewBox_Handler_422FB0(void* task); // 0x00422FB0
-void NATIVE_DECL ModelViewBox_Handler_422FC0(void* task); // 0x00422FC0
-void NATIVE_DECL ModelViewBox_Handler_423000(void* task); // 0x00423000
 
 void NATIVE_DECL ModelViewBox_Register_422B40()
 {
@@ -64,22 +56,22 @@ void NATIVE_DECL ModelViewBox_Register_422B40()
         TaskType_Register("ModelViewBox", 0xC8U, parent, 0U);                 // 0x00422B5A
     igi::retail::core::g_53b854 = class_id;                                   // 0x00422B67
     QTask_LinkQTaskEventHandlerNoContextFn(
-        class_id, 1U, &ModelViewBox_Handler_422F10);                          // 0x00422B6D
+        class_id, 1U, reinterpret_cast<igi::retail::core::FrameHandler>(reinterpret_cast<igi::retail::core::FrameHandler>(0x00422F10)));                          // 0x00422B6D
     QTask_LinkQTaskEventHandlerNoContextFn(
-        class_id, Core_GetEventWord_4E7530(), &ModelViewBox_Handler_422F30);  // 0x00422B87
+        class_id, Core_GetEventWord_4E7530(), reinterpret_cast<igi::retail::core::FrameHandler>(reinterpret_cast<igi::retail::core::FrameHandler>(0x00422F30)));  // 0x00422B87
     QTask_LinkQTaskEventHandlerNoContextFn(
-        class_id, 2U, &ModelViewBox_Handler_422DF0);                          // 0x00422B9B
-    QTask_LinkQTaskEventHandler(class_id, 0U, &ModelViewBox_Handler_422C90);  // 0x00422BAF
+        class_id, 2U, reinterpret_cast<igi::retail::core::FrameHandler>(reinterpret_cast<igi::retail::core::FrameHandler>(0x00422DF0)));                          // 0x00422B9B
+    QTask_LinkQTaskEventHandler(class_id, 0U, reinterpret_cast<igi::retail::core::FrameHandler>(reinterpret_cast<igi::retail::core::FrameHandler>(0x00422C90)));  // 0x00422BAF
     QTask_LinkQTaskEventHandler(
         class_id, static_cast<std::uint32_t>(Script_PhaseIdGetE4_4F1A60()),
-        &ModelViewBox_Handler_422FB0);                                        // 0x00422BC9
+        reinterpret_cast<igi::retail::core::FrameHandler>(reinterpret_cast<igi::retail::core::FrameHandler>(0x00422FB0)));                                        // 0x00422BC9
     QTask_LinkQTaskEventHandler(
         class_id, static_cast<std::uint32_t>(Script_PhaseIdGetE5_4F1A70()),
-        &ModelViewBox_Handler_422E40);                                        // 0x00422BE4
+        reinterpret_cast<igi::retail::core::FrameHandler>(reinterpret_cast<igi::retail::core::FrameHandler>(0x00422E40)));                                        // 0x00422BE4
     QTask_LinkQTaskEventHandlerNoContextFn(
-        class_id, Sys_GetGlobal32_4F1210(), &ModelViewBox_Handler_422FC0);    // 0x00422BFF
+        class_id, Sys_GetGlobal32_4F1210(), reinterpret_cast<igi::retail::core::FrameHandler>(reinterpret_cast<igi::retail::core::FrameHandler>(0x00422FC0)));    // 0x00422BFF
     QTask_LinkQTaskEventHandlerNoContextFn(
-        class_id, Sys_GetGlobal32_4F1220(), &ModelViewBox_Handler_423000);    // 0x00422C19
+        class_id, Sys_GetGlobal32_4F1220(), reinterpret_cast<igi::retail::core::FrameHandler>(reinterpret_cast<igi::retail::core::FrameHandler>(0x00423000)));    // 0x00422C19
     igi::retail::core::g_57bc28 = static_cast<std::uint32_t>(
         reinterpret_cast<std::uintptr_t>(Script_TaskContainer_Alloc(2)));     // 0x00422C34
     // 0x00422C41/0x00422C46: the 0x57BC30 pointer and the 7 are pre-pushed arguments for the append
