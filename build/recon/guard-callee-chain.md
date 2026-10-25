@@ -89,9 +89,21 @@ covers all of it. A port that allocates 0x1c but zeroes 6 dwords leaves 4 bytes 
 allocator garbage in a struct that is then filled from arguments - and nothing would
 catch it.
 
-**Blocked on `0x004B0D60`, `0x004B0C60`, `0x004C0560`** (transcribed status recorded in
-the run that produced this note) **and on the global `0xA43E88`,** which is read before
-the `0x004C0560` call.
+**Blocked on FOUR callees, not three:** `0x004B0D60` (called twice - once in the
+prologue with `push 1`, once in the epilogue at `0x004BAB20`), `0x004B0C60` (the
+allocator), `0x004C0560`, and `0x004B0D90`. All four are untranscribed. **I listed three
+in the first version of this note because I read the head of the body and stopped** -
+the fourth is only visible in the epilogue. That is the same fault as the guard's
+`pd 156`: I bounded the read and reported the bound as the routine.
+
+**The epilogue, and it reconciles:** `add esp,0x18` (24 bytes = 6 pushes) before the
+final stores. The pushes it cleans are `push 1`, `push 4`, `push 0x1c` (12 bytes) plus
+`push esi`, `push eax`, `push ecx` (12 bytes) = 24. **The cleanup size confirms the
+argument count independently of reading the calls**, which is the cross-check to run on
+every body here.
+
+**Global `0xA43E88` is owned by `script/native_4bab80.cpp`** - read before the
+`0x004C0560` call, so that file's definition must be reachable.
 
 **Note the argument offsets shift across the body** (`[esp+0x18]`, then `[esp+0x28]`,
 `[esp+0x2c]`, `[esp+0x30]`, `[esp+0x34]` after three pushes). **Read each offset against
