@@ -11,6 +11,24 @@ evidence and the exact remaining gaps.
 
 ## 1. Evidence
 
+**Current install check, 2026-10-25:** the `config.qvm` hash below is historical.
+The installed file now hashes to
+`4743dd505e4bfce8aa50b0f5d281974daf24d21fe2f771a3faaa86e68ca60e0d`.
+Fresh converter output contains 81 ordered `GOInRemap` calls. A pre-resume retail
+Frida capture observed all 81: profile-count words 1, 2 and 3 each had 27 calls,
+with ordinals 0 through 26 and the expected counter increments. The QVM calls
+specify WASD movement and E for jump; crouch/map/toggle bindings differ between
+profile blocks. Active-profile selection and effective input dispatch were not
+observed, so neither last-wins behavior nor active keys are accepted here.
+The installed `humanplayer.qvm` still matches the hash below.
+
+Current decode, exact configuration/tool hashes, BN/r2/angr capture, raw Frida
+trace, table observations and cleanup record are in
+[`current-config-20261025/observation.json`](evidence/current-config-20261025/observation.json).
+This is retail-only evidence. The compiled engine `GOInRemap` still has an
+incorrect one-argument interface/private return block, and its catalog record
+is bound to a historical source. It is not accepted for the current candidate.
+
 Decoded with `igi1conv` v1.11.0 (`qvm decompile`) and a byte-level read of the raw code
 table. Output and hashes:
 

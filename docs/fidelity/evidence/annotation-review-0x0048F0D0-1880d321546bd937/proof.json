@@ -1,0 +1,14 @@
+{
+  "kind": "igi-annotation-only-source-review",
+  "verified": false,
+  "address": "0x0048F0D0",
+  "baseline_commit": "994850a4539585c76b9c0ea2d2a6a7785ca3e703",
+  "baseline_source_sha256": "0cd758f2ad54db1e376f379e730f907a4c5dfb986d519302642cb948d41fdc08",
+  "current_source_sha256": "1880d321546bd9372e5ed72647b562c9fb45a80b8f7feb5389b45d388713aceb",
+  "identical_non_annotation_bytes": true,
+  "identical_executable_line_positions": true,
+  "headers": {
+    "engine/include/igi/retail/core/app_startup_natives.hpp": "cfc2817e345271be988c2f701602ae136aa7a737d5c2c2dff47f0ff2e105e242"
+  },
+  "scope": "Verified annotation relocation only; fresh compiler and runtime evidence still mandatory"
+}

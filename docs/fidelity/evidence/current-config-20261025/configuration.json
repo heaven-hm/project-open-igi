@@ -1,0 +1,369 @@
+{
+  "kind": "igi-runtime-scenario-configuration",
+  "schema_version": 1,
+  "verified": false,
+  "scope": "Current installed QVM decode only; not effective runtime bindings or candidate acceptance",
+  "inputs": [
+    {
+      "path": "/Users/haseeb-mir/Downloads/IGI/config.qvm",
+      "sha256": "4743dd505e4bfce8aa50b0f5d281974daf24d21fe2f771a3faaa86e68ca60e0d",
+      "size": 5055
+    },
+    {
+      "path": "/Users/haseeb-mir/Downloads/IGI/humanplayer/humanplayer.qvm",
+      "sha256": "6749062f42121bf66c045aa62cc0d93eaab60f81400a5c687f546d0ab57b15ce",
+      "size": 1457
+    }
+  ],
+  "converter": {
+    "path": "/Users/haseeb-mir/Documents/Code/project-igi-converter/build-unified/bin/igi1conv",
+    "version": "1.11.0",
+    "sha256": "9096ed6fbc78a82961804d1b58df0342107c8655bd99fd7e5444530ce15217f9"
+  },
+  "outputs": [
+    {
+      "path": "docs/fidelity/evidence/current-config-20261025/config.qsc",
+      "sha256": "7e0a78a10c3634631e52c6b2a54c9a1aea34e88b6de0858c40e11b674872d806"
+    },
+    {
+      "path": "docs/fidelity/evidence/current-config-20261025/config.qas",
+      "sha256": "190bd1af783ca142b9c58c639a0be0d62cd438acea2c781421f694e337581161"
+    },
+    {
+      "path": "docs/fidelity/evidence/current-config-20261025/humanplayer.qsc",
+      "sha256": "9aed3c099b53f8f53644af25655bf8d9538e4f6271685d3651b985c21ecf0e99"
+    }
+  ],
+  "cross_version_text_agreement": true,
+  "remap_calls": [
+    {
+      "source_line": 7,
+      "statement": "GOInRemap(MoveLeft, INPUTPORT_DEVICE_KEYBOARD, KEY_A);"
+    },
+    {
+      "source_line": 8,
+      "statement": "GOInRemap(MoveRight, INPUTPORT_DEVICE_KEYBOARD, KEY_D);"
+    },
+    {
+      "source_line": 9,
+      "statement": "GOInRemap(MoveUp, INPUTPORT_DEVICE_KEYBOARD, KEY_W);"
+    },
+    {
+      "source_line": 10,
+      "statement": "GOInRemap(MoveDown, INPUTPORT_DEVICE_KEYBOARD, KEY_S);"
+    },
+    {
+      "source_line": 11,
+      "statement": "GOInRemap(Fire, INPUTPORT_DEVICE_MOUSE, MOUSE_BUTTON_1);"
+    },
+    {
+      "source_line": 12,
+      "statement": "GOInRemap(Reload, INPUTPORT_DEVICE_KEYBOARD, KEY_R);"
+    },
+    {
+      "source_line": 13,
+      "statement": "GOInRemap(Activate, INPUTPORT_DEVICE_KEYBOARD, KEY_Q);"
+    },
+    {
+      "source_line": 14,
+      "statement": "GOInRemap(Crouch, INPUTPORT_DEVICE_KEYBOARD, KEY_C);"
+    },
+    {
+      "source_line": 15,
+      "statement": "GOInRemap(Jump, INPUTPORT_DEVICE_KEYBOARD, KEY_E);"
+    },
+    {
+      "source_line": 16,
+      "statement": "GOInRemap(NextWeapon, INPUTPORT_DEVICE_MOUSE, MOUSE_BUTTON_2);"
+    },
+    {
+      "source_line": 17,
+      "statement": "GOInRemap(PrevWeapon, INPUTPORT_DEVICE_KEYBOARD, KEY_O);"
+    },
+    {
+      "source_line": 18,
+      "statement": "GOInRemap(AlternateFire, INPUTPORT_DEVICE_KEYBOARD, KEY_F);"
+    },
+    {
+      "source_line": 19,
+      "statement": "GOInRemap(Peek, INPUTPORT_DEVICE_KEYBOARD, KEY_NUMPAD1);"
+    },
+    {
+      "source_line": 20,
+      "statement": "GOInRemap(Binoculars, INPUTPORT_DEVICE_KEYBOARD, KEY_SPACE);"
+    },
+    {
+      "source_line": 21,
+      "statement": "GOInRemap(MapComputer, INPUTPORT_DEVICE_KEYBOARD, KEY_M);"
+    },
+    {
+      "source_line": 22,
+      "statement": "GOInRemap(ToggleWalkRun, INPUTPORT_DEVICE_KEYBOARD, KEY_LEFT_SHIFT);"
+    },
+    {
+      "source_line": 23,
+      "statement": "GOInRemap(ZoomIn, INPUTPORT_DEVICE_KEYBOARD, KEY_PAGEUP);"
+    },
+    {
+      "source_line": 24,
+      "statement": "GOInRemap(ZoomOut, INPUTPORT_DEVICE_KEYBOARD, KEY_PAGEDOWN);"
+    },
+    {
+      "source_line": 25,
+      "statement": "GOInRemap(WeaponCategory1, INPUTPORT_DEVICE_KEYBOARD, KEY_1);"
+    },
+    {
+      "source_line": 26,
+      "statement": "GOInRemap(WeaponCategory2, INPUTPORT_DEVICE_KEYBOARD, KEY_2);"
+    },
+    {
+      "source_line": 27,
+      "statement": "GOInRemap(WeaponCategory3, INPUTPORT_DEVICE_KEYBOARD, KEY_3);"
+    },
+    {
+      "source_line": 28,
+      "statement": "GOInRemap(WeaponCategory4, INPUTPORT_DEVICE_KEYBOARD, KEY_4);"
+    },
+    {
+      "source_line": 29,
+      "statement": "GOInRemap(WeaponCategory5, INPUTPORT_DEVICE_KEYBOARD, KEY_5);"
+    },
+    {
+      "source_line": 30,
+      "statement": "GOInRemap(WeaponCategory6, INPUTPORT_DEVICE_KEYBOARD, KEY_6);"
+    },
+    {
+      "source_line": 31,
+      "statement": "GOInRemap(WeaponCategory7, INPUTPORT_DEVICE_KEYBOARD, KEY_7);"
+    },
+    {
+      "source_line": 32,
+      "statement": "GOInRemap(WeaponCategory8, INPUTPORT_DEVICE_KEYBOARD, KEY_8);"
+    },
+    {
+      "source_line": 33,
+      "statement": "GOInRemap(WeaponCategory9, INPUTPORT_DEVICE_KEYBOARD, KEY_9);"
+    },
+    {
+      "source_line": 48,
+      "statement": "GOInRemap(MoveLeft, INPUTPORT_DEVICE_KEYBOARD, KEY_A);"
+    },
+    {
+      "source_line": 49,
+      "statement": "GOInRemap(MoveRight, INPUTPORT_DEVICE_KEYBOARD, KEY_D);"
+    },
+    {
+      "source_line": 50,
+      "statement": "GOInRemap(MoveUp, INPUTPORT_DEVICE_KEYBOARD, KEY_W);"
+    },
+    {
+      "source_line": 51,
+      "statement": "GOInRemap(MoveDown, INPUTPORT_DEVICE_KEYBOARD, KEY_S);"
+    },
+    {
+      "source_line": 52,
+      "statement": "GOInRemap(Fire, INPUTPORT_DEVICE_MOUSE, MOUSE_BUTTON_1);"
+    },
+    {
+      "source_line": 53,
+      "statement": "GOInRemap(Reload, INPUTPORT_DEVICE_KEYBOARD, KEY_R);"
+    },
+    {
+      "source_line": 54,
+      "statement": "GOInRemap(Activate, INPUTPORT_DEVICE_KEYBOARD, KEY_Q);"
+    },
+    {
+      "source_line": 55,
+      "statement": "GOInRemap(Crouch, INPUTPORT_DEVICE_KEYBOARD, KEY_RIGHT_CTRL);"
+    },
+    {
+      "source_line": 56,
+      "statement": "GOInRemap(Jump, INPUTPORT_DEVICE_KEYBOARD, KEY_E);"
+    },
+    {
+      "source_line": 57,
+      "statement": "GOInRemap(NextWeapon, INPUTPORT_DEVICE_MOUSE, MOUSE_BUTTON_2);"
+    },
+    {
+      "source_line": 58,
+      "statement": "GOInRemap(PrevWeapon, INPUTPORT_DEVICE_KEYBOARD, KEY_O);"
+    },
+    {
+      "source_line": 59,
+      "statement": "GOInRemap(AlternateFire, INPUTPORT_DEVICE_KEYBOARD, KEY_F);"
+    },
+    {
+      "source_line": 60,
+      "statement": "GOInRemap(Peek, INPUTPORT_DEVICE_KEYBOARD, KEY_NUMPAD1);"
+    },
+    {
+      "source_line": 61,
+      "statement": "GOInRemap(Binoculars, INPUTPORT_DEVICE_KEYBOARD, KEY_SPACE);"
+    },
+    {
+      "source_line": 62,
+      "statement": "GOInRemap(MapComputer, INPUTPORT_DEVICE_KEYBOARD, KEY_C);"
+    },
+    {
+      "source_line": 63,
+      "statement": "GOInRemap(ToggleWalkRun, INPUTPORT_DEVICE_KEYBOARD, KEY_UP);"
+    },
+    {
+      "source_line": 64,
+      "statement": "GOInRemap(ZoomIn, INPUTPORT_DEVICE_KEYBOARD, KEY_PAGEUP);"
+    },
+    {
+      "source_line": 65,
+      "statement": "GOInRemap(ZoomOut, INPUTPORT_DEVICE_KEYBOARD, KEY_PAGEDOWN);"
+    },
+    {
+      "source_line": 66,
+      "statement": "GOInRemap(WeaponCategory1, INPUTPORT_DEVICE_KEYBOARD, KEY_1);"
+    },
+    {
+      "source_line": 67,
+      "statement": "GOInRemap(WeaponCategory2, INPUTPORT_DEVICE_KEYBOARD, KEY_2);"
+    },
+    {
+      "source_line": 68,
+      "statement": "GOInRemap(WeaponCategory3, INPUTPORT_DEVICE_KEYBOARD, KEY_3);"
+    },
+    {
+      "source_line": 69,
+      "statement": "GOInRemap(WeaponCategory4, INPUTPORT_DEVICE_KEYBOARD, KEY_4);"
+    },
+    {
+      "source_line": 70,
+      "statement": "GOInRemap(WeaponCategory5, INPUTPORT_DEVICE_KEYBOARD, KEY_5);"
+    },
+    {
+      "source_line": 71,
+      "statement": "GOInRemap(WeaponCategory6, INPUTPORT_DEVICE_KEYBOARD, KEY_6);"
+    },
+    {
+      "source_line": 72,
+      "statement": "GOInRemap(WeaponCategory7, INPUTPORT_DEVICE_KEYBOARD, KEY_7);"
+    },
+    {
+      "source_line": 73,
+      "statement": "GOInRemap(WeaponCategory8, INPUTPORT_DEVICE_KEYBOARD, KEY_8);"
+    },
+    {
+      "source_line": 74,
+      "statement": "GOInRemap(WeaponCategory9, INPUTPORT_DEVICE_KEYBOARD, KEY_9);"
+    },
+    {
+      "source_line": 89,
+      "statement": "GOInRemap(MoveLeft, INPUTPORT_DEVICE_KEYBOARD, KEY_A);"
+    },
+    {
+      "source_line": 90,
+      "statement": "GOInRemap(MoveRight, INPUTPORT_DEVICE_KEYBOARD, KEY_D);"
+    },
+    {
+      "source_line": 91,
+      "statement": "GOInRemap(MoveUp, INPUTPORT_DEVICE_KEYBOARD, KEY_W);"
+    },
+    {
+      "source_line": 92,
+      "statement": "GOInRemap(MoveDown, INPUTPORT_DEVICE_KEYBOARD, KEY_S);"
+    },
+    {
+      "source_line": 93,
+      "statement": "GOInRemap(Fire, INPUTPORT_DEVICE_MOUSE, MOUSE_BUTTON_1);"
+    },
+    {
+      "source_line": 94,
+      "statement": "GOInRemap(Reload, INPUTPORT_DEVICE_KEYBOARD, KEY_R);"
+    },
+    {
+      "source_line": 95,
+      "statement": "GOInRemap(Activate, INPUTPORT_DEVICE_KEYBOARD, KEY_Q);"
+    },
+    {
+      "source_line": 96,
+      "statement": "GOInRemap(Crouch, INPUTPORT_DEVICE_KEYBOARD, KEY_C);"
+    },
+    {
+      "source_line": 97,
+      "statement": "GOInRemap(Jump, INPUTPORT_DEVICE_KEYBOARD, KEY_E);"
+    },
+    {
+      "source_line": 98,
+      "statement": "GOInRemap(NextWeapon, INPUTPORT_DEVICE_MOUSE, MOUSE_BUTTON_2);"
+    },
+    {
+      "source_line": 99,
+      "statement": "GOInRemap(PrevWeapon, INPUTPORT_DEVICE_KEYBOARD, KEY_O);"
+    },
+    {
+      "source_line": 100,
+      "statement": "GOInRemap(AlternateFire, INPUTPORT_DEVICE_KEYBOARD, KEY_F);"
+    },
+    {
+      "source_line": 101,
+      "statement": "GOInRemap(Peek, INPUTPORT_DEVICE_KEYBOARD, KEY_NUMPAD1);"
+    },
+    {
+      "source_line": 102,
+      "statement": "GOInRemap(Binoculars, INPUTPORT_DEVICE_KEYBOARD, KEY_SPACE);"
+    },
+    {
+      "source_line": 103,
+      "statement": "GOInRemap(MapComputer, INPUTPORT_DEVICE_KEYBOARD, KEY_K);"
+    },
+    {
+      "source_line": 104,
+      "statement": "GOInRemap(ToggleWalkRun, INPUTPORT_DEVICE_KEYBOARD, KEY_UP);"
+    },
+    {
+      "source_line": 105,
+      "statement": "GOInRemap(ZoomIn, INPUTPORT_DEVICE_KEYBOARD, KEY_PAGEUP);"
+    },
+    {
+      "source_line": 106,
+      "statement": "GOInRemap(ZoomOut, INPUTPORT_DEVICE_KEYBOARD, KEY_PAGEDOWN);"
+    },
+    {
+      "source_line": 107,
+      "statement": "GOInRemap(WeaponCategory1, INPUTPORT_DEVICE_KEYBOARD, KEY_1);"
+    },
+    {
+      "source_line": 108,
+      "statement": "GOInRemap(WeaponCategory2, INPUTPORT_DEVICE_KEYBOARD, KEY_2);"
+    },
+    {
+      "source_line": 109,
+      "statement": "GOInRemap(WeaponCategory3, INPUTPORT_DEVICE_KEYBOARD, KEY_3);"
+    },
+    {
+      "source_line": 110,
+      "statement": "GOInRemap(WeaponCategory4, INPUTPORT_DEVICE_KEYBOARD, KEY_4);"
+    },
+    {
+      "source_line": 111,
+      "statement": "GOInRemap(WeaponCategory5, INPUTPORT_DEVICE_KEYBOARD, KEY_5);"
+    },
+    {
+      "source_line": 112,
+      "statement": "GOInRemap(WeaponCategory6, INPUTPORT_DEVICE_KEYBOARD, KEY_6);"
+    },
+    {
+      "source_line": 113,
+      "statement": "GOInRemap(WeaponCategory7, INPUTPORT_DEVICE_KEYBOARD, KEY_7);"
+    },
+    {
+      "source_line": 114,
+      "statement": "GOInRemap(WeaponCategory8, INPUTPORT_DEVICE_KEYBOARD, KEY_8);"
+    },
+    {
+      "source_line": 115,
+      "statement": "GOInRemap(WeaponCategory9, INPUTPORT_DEVICE_KEYBOARD, KEY_9);"
+    }
+  ],
+  "limitations": [
+    "81 ordered GOInRemap calls occur in the decoded current config, not the historical 27. Do not infer last-wins or active key behavior without retail profile/remap observations.",
+    "No game data, controls, profile or QVM was modified.",
+    "Startup-native captures completed before configuration load cannot establish these movement bindings."
+  ]
+}

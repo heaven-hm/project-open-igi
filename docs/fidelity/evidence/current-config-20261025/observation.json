@@ -1,0 +1,1158 @@
+{
+  "kind": "igi-retail-current-config-observation",
+  "schema_version": 1,
+  "result": "observations_collected",
+  "verified": false,
+  "retail_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "inputs_unchanged": true,
+  "scenario": {
+    "level": 1,
+    "args": [
+      "window",
+      "level1"
+    ],
+    "cwd": "/Users/haseeb-mir/Downloads/IGI",
+    "actions": {
+      "sent": true,
+      "processId": 1612,
+      "window": "0x600068"
+    }
+  },
+  "calls_observed": 81,
+  "profile_counts": {
+    "1": 27,
+    "2": 27,
+    "3": 27
+  },
+  "native_address": "0x004037C0",
+  "retail_facts": [
+    "Counter address is 0x00BC2358 + profile_count_word*345*4, with 345 decimal.",
+    "Entry address is 0x00BC25BC + ((profile_count_word-1)*115+ordinal)*12.",
+    "All observed counter transitions incremented by one; three count words each had ordinals 0..26.",
+    "The disassembly loads the VM argument frame from entry stack +0x0C and the caller destination from entry stack +0x04.",
+    "The native copies six dwords to that caller destination; two stack words are not initialized by this function."
+  ],
+  "candidate_gap": {
+    "path": "engine/src/retail/config/input_remap.cpp",
+    "sha256": "af438975fc93ef89f4ce5b80ea45be489e795cf855906261b2c7741162948148",
+    "limitations": [
+      "Current candidate takes one argument instead of the evidenced VM interface.",
+      "Current candidate returns a private static block and substitutes zero words; this is not the caller destination/uninitialized-word behavior.",
+      "Manifest entry is still bound to a historical GameNatives file, not this compiled engine definition."
+    ]
+  },
+  "owned_game_terminated": true,
+  "private_service": {
+    "kind": "igi-private-frida-service",
+    "host": "127.0.0.1:52001",
+    "owned_pid": 28513,
+    "server_path": "/private/tmp/igi-frida-server-17.24.0-windows-x86.exe",
+    "server_sha256": "d4b0b8af908b13c673d9e40b805b446182b051a61b4f62f519793ddaaa651d3b",
+    "bottle": "open-igi",
+    "rpc_health_passed": true,
+    "terminated": true,
+    "owned_server_pids": [
+      28567
+    ],
+    "listener_closed": true
+  },
+  "associations": [
+    {
+      "sequence": 1,
+      "qsc_line": 7,
+      "statement": "GOInRemap(MoveLeft, INPUTPORT_DEVICE_KEYBOARD, KEY_A);",
+      "profile_count_word": 1,
+      "ordinal": 0,
+      "counter_after": 1,
+      "entry_after": [
+        1,
+        1,
+        30
+      ]
+    },
+    {
+      "sequence": 2,
+      "qsc_line": 8,
+      "statement": "GOInRemap(MoveRight, INPUTPORT_DEVICE_KEYBOARD, KEY_D);",
+      "profile_count_word": 1,
+      "ordinal": 1,
+      "counter_after": 2,
+      "entry_after": [
+        2,
+        1,
+        32
+      ]
+    },
+    {
+      "sequence": 3,
+      "qsc_line": 9,
+      "statement": "GOInRemap(MoveUp, INPUTPORT_DEVICE_KEYBOARD, KEY_W);",
+      "profile_count_word": 1,
+      "ordinal": 2,
+      "counter_after": 3,
+      "entry_after": [
+        4,
+        1,
+        17
+      ]
+    },
+    {
+      "sequence": 4,
+      "qsc_line": 10,
+      "statement": "GOInRemap(MoveDown, INPUTPORT_DEVICE_KEYBOARD, KEY_S);",
+      "profile_count_word": 1,
+      "ordinal": 3,
+      "counter_after": 4,
+      "entry_after": [
+        8,
+        1,
+        31
+      ]
+    },
+    {
+      "sequence": 5,
+      "qsc_line": 11,
+      "statement": "GOInRemap(Fire, INPUTPORT_DEVICE_MOUSE, MOUSE_BUTTON_1);",
+      "profile_count_word": 1,
+      "ordinal": 4,
+      "counter_after": 5,
+      "entry_after": [
+        256,
+        3,
+        1
+      ]
+    },
+    {
+      "sequence": 6,
+      "qsc_line": 12,
+      "statement": "GOInRemap(Reload, INPUTPORT_DEVICE_KEYBOARD, KEY_R);",
+      "profile_count_word": 1,
+      "ordinal": 5,
+      "counter_after": 6,
+      "entry_after": [
+        512,
+        1,
+        19
+      ]
+    },
+    {
+      "sequence": 7,
+      "qsc_line": 13,
+      "statement": "GOInRemap(Activate, INPUTPORT_DEVICE_KEYBOARD, KEY_Q);",
+      "profile_count_word": 1,
+      "ordinal": 6,
+      "counter_after": 7,
+      "entry_after": [
+        1024,
+        1,
+        16
+      ]
+    },
+    {
+      "sequence": 8,
+      "qsc_line": 14,
+      "statement": "GOInRemap(Crouch, INPUTPORT_DEVICE_KEYBOARD, KEY_C);",
+      "profile_count_word": 1,
+      "ordinal": 7,
+      "counter_after": 8,
+      "entry_after": [
+        2048,
+        1,
+        46
+      ]
+    },
+    {
+      "sequence": 9,
+      "qsc_line": 15,
+      "statement": "GOInRemap(Jump, INPUTPORT_DEVICE_KEYBOARD, KEY_E);",
+      "profile_count_word": 1,
+      "ordinal": 8,
+      "counter_after": 9,
+      "entry_after": [
+        4096,
+        1,
+        18
+      ]
+    },
+    {
+      "sequence": 10,
+      "qsc_line": 16,
+      "statement": "GOInRemap(NextWeapon, INPUTPORT_DEVICE_MOUSE, MOUSE_BUTTON_2);",
+      "profile_count_word": 1,
+      "ordinal": 9,
+      "counter_after": 10,
+      "entry_after": [
+        8192,
+        3,
+        2
+      ]
+    },
+    {
+      "sequence": 11,
+      "qsc_line": 17,
+      "statement": "GOInRemap(PrevWeapon, INPUTPORT_DEVICE_KEYBOARD, KEY_O);",
+      "profile_count_word": 1,
+      "ordinal": 10,
+      "counter_after": 11,
+      "entry_after": [
+        524288,
+        1,
+        24
+      ]
+    },
+    {
+      "sequence": 12,
+      "qsc_line": 18,
+      "statement": "GOInRemap(AlternateFire, INPUTPORT_DEVICE_KEYBOARD, KEY_F);",
+      "profile_count_word": 1,
+      "ordinal": 11,
+      "counter_after": 12,
+      "entry_after": [
+        16384,
+        1,
+        33
+      ]
+    },
+    {
+      "sequence": 13,
+      "qsc_line": 19,
+      "statement": "GOInRemap(Peek, INPUTPORT_DEVICE_KEYBOARD, KEY_NUMPAD1);",
+      "profile_count_word": 1,
+      "ordinal": 12,
+      "counter_after": 13,
+      "entry_after": [
+        32768,
+        1,
+        79
+      ]
+    },
+    {
+      "sequence": 14,
+      "qsc_line": 20,
+      "statement": "GOInRemap(Binoculars, INPUTPORT_DEVICE_KEYBOARD, KEY_SPACE);",
+      "profile_count_word": 1,
+      "ordinal": 13,
+      "counter_after": 14,
+      "entry_after": [
+        65536,
+        1,
+        57
+      ]
+    },
+    {
+      "sequence": 15,
+      "qsc_line": 21,
+      "statement": "GOInRemap(MapComputer, INPUTPORT_DEVICE_KEYBOARD, KEY_M);",
+      "profile_count_word": 1,
+      "ordinal": 14,
+      "counter_after": 15,
+      "entry_after": [
+        131072,
+        1,
+        50
+      ]
+    },
+    {
+      "sequence": 16,
+      "qsc_line": 22,
+      "statement": "GOInRemap(ToggleWalkRun, INPUTPORT_DEVICE_KEYBOARD, KEY_LEFT_SHIFT);",
+      "profile_count_word": 1,
+      "ordinal": 15,
+      "counter_after": 16,
+      "entry_after": [
+        262144,
+        1,
+        42
+      ]
+    },
+    {
+      "sequence": 17,
+      "qsc_line": 23,
+      "statement": "GOInRemap(ZoomIn, INPUTPORT_DEVICE_KEYBOARD, KEY_PAGEUP);",
+      "profile_count_word": 1,
+      "ordinal": 16,
+      "counter_after": 17,
+      "entry_after": [
+        1048576,
+        1,
+        201
+      ]
+    },
+    {
+      "sequence": 18,
+      "qsc_line": 24,
+      "statement": "GOInRemap(ZoomOut, INPUTPORT_DEVICE_KEYBOARD, KEY_PAGEDOWN);",
+      "profile_count_word": 1,
+      "ordinal": 17,
+      "counter_after": 18,
+      "entry_after": [
+        2097152,
+        1,
+        209
+      ]
+    },
+    {
+      "sequence": 19,
+      "qsc_line": 25,
+      "statement": "GOInRemap(WeaponCategory1, INPUTPORT_DEVICE_KEYBOARD, KEY_1);",
+      "profile_count_word": 1,
+      "ordinal": 18,
+      "counter_after": 19,
+      "entry_after": [
+        4194304,
+        1,
+        2
+      ]
+    },
+    {
+      "sequence": 20,
+      "qsc_line": 26,
+      "statement": "GOInRemap(WeaponCategory2, INPUTPORT_DEVICE_KEYBOARD, KEY_2);",
+      "profile_count_word": 1,
+      "ordinal": 19,
+      "counter_after": 20,
+      "entry_after": [
+        8388608,
+        1,
+        3
+      ]
+    },
+    {
+      "sequence": 21,
+      "qsc_line": 27,
+      "statement": "GOInRemap(WeaponCategory3, INPUTPORT_DEVICE_KEYBOARD, KEY_3);",
+      "profile_count_word": 1,
+      "ordinal": 20,
+      "counter_after": 21,
+      "entry_after": [
+        16777216,
+        1,
+        4
+      ]
+    },
+    {
+      "sequence": 22,
+      "qsc_line": 28,
+      "statement": "GOInRemap(WeaponCategory4, INPUTPORT_DEVICE_KEYBOARD, KEY_4);",
+      "profile_count_word": 1,
+      "ordinal": 21,
+      "counter_after": 22,
+      "entry_after": [
+        33554432,
+        1,
+        5
+      ]
+    },
+    {
+      "sequence": 23,
+      "qsc_line": 29,
+      "statement": "GOInRemap(WeaponCategory5, INPUTPORT_DEVICE_KEYBOARD, KEY_5);",
+      "profile_count_word": 1,
+      "ordinal": 22,
+      "counter_after": 23,
+      "entry_after": [
+        67108864,
+        1,
+        6
+      ]
+    },
+    {
+      "sequence": 24,
+      "qsc_line": 30,
+      "statement": "GOInRemap(WeaponCategory6, INPUTPORT_DEVICE_KEYBOARD, KEY_6);",
+      "profile_count_word": 1,
+      "ordinal": 23,
+      "counter_after": 24,
+      "entry_after": [
+        134217728,
+        1,
+        7
+      ]
+    },
+    {
+      "sequence": 25,
+      "qsc_line": 31,
+      "statement": "GOInRemap(WeaponCategory7, INPUTPORT_DEVICE_KEYBOARD, KEY_7);",
+      "profile_count_word": 1,
+      "ordinal": 24,
+      "counter_after": 25,
+      "entry_after": [
+        268435456,
+        1,
+        8
+      ]
+    },
+    {
+      "sequence": 26,
+      "qsc_line": 32,
+      "statement": "GOInRemap(WeaponCategory8, INPUTPORT_DEVICE_KEYBOARD, KEY_8);",
+      "profile_count_word": 1,
+      "ordinal": 25,
+      "counter_after": 26,
+      "entry_after": [
+        536870912,
+        1,
+        9
+      ]
+    },
+    {
+      "sequence": 27,
+      "qsc_line": 33,
+      "statement": "GOInRemap(WeaponCategory9, INPUTPORT_DEVICE_KEYBOARD, KEY_9);",
+      "profile_count_word": 1,
+      "ordinal": 26,
+      "counter_after": 27,
+      "entry_after": [
+        1073741824,
+        1,
+        10
+      ]
+    },
+    {
+      "sequence": 28,
+      "qsc_line": 48,
+      "statement": "GOInRemap(MoveLeft, INPUTPORT_DEVICE_KEYBOARD, KEY_A);",
+      "profile_count_word": 2,
+      "ordinal": 0,
+      "counter_after": 1,
+      "entry_after": [
+        1,
+        1,
+        30
+      ]
+    },
+    {
+      "sequence": 29,
+      "qsc_line": 49,
+      "statement": "GOInRemap(MoveRight, INPUTPORT_DEVICE_KEYBOARD, KEY_D);",
+      "profile_count_word": 2,
+      "ordinal": 1,
+      "counter_after": 2,
+      "entry_after": [
+        2,
+        1,
+        32
+      ]
+    },
+    {
+      "sequence": 30,
+      "qsc_line": 50,
+      "statement": "GOInRemap(MoveUp, INPUTPORT_DEVICE_KEYBOARD, KEY_W);",
+      "profile_count_word": 2,
+      "ordinal": 2,
+      "counter_after": 3,
+      "entry_after": [
+        4,
+        1,
+        17
+      ]
+    },
+    {
+      "sequence": 31,
+      "qsc_line": 51,
+      "statement": "GOInRemap(MoveDown, INPUTPORT_DEVICE_KEYBOARD, KEY_S);",
+      "profile_count_word": 2,
+      "ordinal": 3,
+      "counter_after": 4,
+      "entry_after": [
+        8,
+        1,
+        31
+      ]
+    },
+    {
+      "sequence": 32,
+      "qsc_line": 52,
+      "statement": "GOInRemap(Fire, INPUTPORT_DEVICE_MOUSE, MOUSE_BUTTON_1);",
+      "profile_count_word": 2,
+      "ordinal": 4,
+      "counter_after": 5,
+      "entry_after": [
+        256,
+        3,
+        1
+      ]
+    },
+    {
+      "sequence": 33,
+      "qsc_line": 53,
+      "statement": "GOInRemap(Reload, INPUTPORT_DEVICE_KEYBOARD, KEY_R);",
+      "profile_count_word": 2,
+      "ordinal": 5,
+      "counter_after": 6,
+      "entry_after": [
+        512,
+        1,
+        19
+      ]
+    },
+    {
+      "sequence": 34,
+      "qsc_line": 54,
+      "statement": "GOInRemap(Activate, INPUTPORT_DEVICE_KEYBOARD, KEY_Q);",
+      "profile_count_word": 2,
+      "ordinal": 6,
+      "counter_after": 7,
+      "entry_after": [
+        1024,
+        1,
+        16
+      ]
+    },
+    {
+      "sequence": 35,
+      "qsc_line": 55,
+      "statement": "GOInRemap(Crouch, INPUTPORT_DEVICE_KEYBOARD, KEY_RIGHT_CTRL);",
+      "profile_count_word": 2,
+      "ordinal": 7,
+      "counter_after": 8,
+      "entry_after": [
+        2048,
+        1,
+        157
+      ]
+    },
+    {
+      "sequence": 36,
+      "qsc_line": 56,
+      "statement": "GOInRemap(Jump, INPUTPORT_DEVICE_KEYBOARD, KEY_E);",
+      "profile_count_word": 2,
+      "ordinal": 8,
+      "counter_after": 9,
+      "entry_after": [
+        4096,
+        1,
+        18
+      ]
+    },
+    {
+      "sequence": 37,
+      "qsc_line": 57,
+      "statement": "GOInRemap(NextWeapon, INPUTPORT_DEVICE_MOUSE, MOUSE_BUTTON_2);",
+      "profile_count_word": 2,
+      "ordinal": 9,
+      "counter_after": 10,
+      "entry_after": [
+        8192,
+        3,
+        2
+      ]
+    },
+    {
+      "sequence": 38,
+      "qsc_line": 58,
+      "statement": "GOInRemap(PrevWeapon, INPUTPORT_DEVICE_KEYBOARD, KEY_O);",
+      "profile_count_word": 2,
+      "ordinal": 10,
+      "counter_after": 11,
+      "entry_after": [
+        524288,
+        1,
+        24
+      ]
+    },
+    {
+      "sequence": 39,
+      "qsc_line": 59,
+      "statement": "GOInRemap(AlternateFire, INPUTPORT_DEVICE_KEYBOARD, KEY_F);",
+      "profile_count_word": 2,
+      "ordinal": 11,
+      "counter_after": 12,
+      "entry_after": [
+        16384,
+        1,
+        33
+      ]
+    },
+    {
+      "sequence": 40,
+      "qsc_line": 60,
+      "statement": "GOInRemap(Peek, INPUTPORT_DEVICE_KEYBOARD, KEY_NUMPAD1);",
+      "profile_count_word": 2,
+      "ordinal": 12,
+      "counter_after": 13,
+      "entry_after": [
+        32768,
+        1,
+        79
+      ]
+    },
+    {
+      "sequence": 41,
+      "qsc_line": 61,
+      "statement": "GOInRemap(Binoculars, INPUTPORT_DEVICE_KEYBOARD, KEY_SPACE);",
+      "profile_count_word": 2,
+      "ordinal": 13,
+      "counter_after": 14,
+      "entry_after": [
+        65536,
+        1,
+        57
+      ]
+    },
+    {
+      "sequence": 42,
+      "qsc_line": 62,
+      "statement": "GOInRemap(MapComputer, INPUTPORT_DEVICE_KEYBOARD, KEY_C);",
+      "profile_count_word": 2,
+      "ordinal": 14,
+      "counter_after": 15,
+      "entry_after": [
+        131072,
+        1,
+        46
+      ]
+    },
+    {
+      "sequence": 43,
+      "qsc_line": 63,
+      "statement": "GOInRemap(ToggleWalkRun, INPUTPORT_DEVICE_KEYBOARD, KEY_UP);",
+      "profile_count_word": 2,
+      "ordinal": 15,
+      "counter_after": 16,
+      "entry_after": [
+        262144,
+        1,
+        200
+      ]
+    },
+    {
+      "sequence": 44,
+      "qsc_line": 64,
+      "statement": "GOInRemap(ZoomIn, INPUTPORT_DEVICE_KEYBOARD, KEY_PAGEUP);",
+      "profile_count_word": 2,
+      "ordinal": 16,
+      "counter_after": 17,
+      "entry_after": [
+        1048576,
+        1,
+        201
+      ]
+    },
+    {
+      "sequence": 45,
+      "qsc_line": 65,
+      "statement": "GOInRemap(ZoomOut, INPUTPORT_DEVICE_KEYBOARD, KEY_PAGEDOWN);",
+      "profile_count_word": 2,
+      "ordinal": 17,
+      "counter_after": 18,
+      "entry_after": [
+        2097152,
+        1,
+        209
+      ]
+    },
+    {
+      "sequence": 46,
+      "qsc_line": 66,
+      "statement": "GOInRemap(WeaponCategory1, INPUTPORT_DEVICE_KEYBOARD, KEY_1);",
+      "profile_count_word": 2,
+      "ordinal": 18,
+      "counter_after": 19,
+      "entry_after": [
+        4194304,
+        1,
+        2
+      ]
+    },
+    {
+      "sequence": 47,
+      "qsc_line": 67,
+      "statement": "GOInRemap(WeaponCategory2, INPUTPORT_DEVICE_KEYBOARD, KEY_2);",
+      "profile_count_word": 2,
+      "ordinal": 19,
+      "counter_after": 20,
+      "entry_after": [
+        8388608,
+        1,
+        3
+      ]
+    },
+    {
+      "sequence": 48,
+      "qsc_line": 68,
+      "statement": "GOInRemap(WeaponCategory3, INPUTPORT_DEVICE_KEYBOARD, KEY_3);",
+      "profile_count_word": 2,
+      "ordinal": 20,
+      "counter_after": 21,
+      "entry_after": [
+        16777216,
+        1,
+        4
+      ]
+    },
+    {
+      "sequence": 49,
+      "qsc_line": 69,
+      "statement": "GOInRemap(WeaponCategory4, INPUTPORT_DEVICE_KEYBOARD, KEY_4);",
+      "profile_count_word": 2,
+      "ordinal": 21,
+      "counter_after": 22,
+      "entry_after": [
+        33554432,
+        1,
+        5
+      ]
+    },
+    {
+      "sequence": 50,
+      "qsc_line": 70,
+      "statement": "GOInRemap(WeaponCategory5, INPUTPORT_DEVICE_KEYBOARD, KEY_5);",
+      "profile_count_word": 2,
+      "ordinal": 22,
+      "counter_after": 23,
+      "entry_after": [
+        67108864,
+        1,
+        6
+      ]
+    },
+    {
+      "sequence": 51,
+      "qsc_line": 71,
+      "statement": "GOInRemap(WeaponCategory6, INPUTPORT_DEVICE_KEYBOARD, KEY_6);",
+      "profile_count_word": 2,
+      "ordinal": 23,
+      "counter_after": 24,
+      "entry_after": [
+        134217728,
+        1,
+        7
+      ]
+    },
+    {
+      "sequence": 52,
+      "qsc_line": 72,
+      "statement": "GOInRemap(WeaponCategory7, INPUTPORT_DEVICE_KEYBOARD, KEY_7);",
+      "profile_count_word": 2,
+      "ordinal": 24,
+      "counter_after": 25,
+      "entry_after": [
+        268435456,
+        1,
+        8
+      ]
+    },
+    {
+      "sequence": 53,
+      "qsc_line": 73,
+      "statement": "GOInRemap(WeaponCategory8, INPUTPORT_DEVICE_KEYBOARD, KEY_8);",
+      "profile_count_word": 2,
+      "ordinal": 25,
+      "counter_after": 26,
+      "entry_after": [
+        536870912,
+        1,
+        9
+      ]
+    },
+    {
+      "sequence": 54,
+      "qsc_line": 74,
+      "statement": "GOInRemap(WeaponCategory9, INPUTPORT_DEVICE_KEYBOARD, KEY_9);",
+      "profile_count_word": 2,
+      "ordinal": 26,
+      "counter_after": 27,
+      "entry_after": [
+        1073741824,
+        1,
+        10
+      ]
+    },
+    {
+      "sequence": 55,
+      "qsc_line": 89,
+      "statement": "GOInRemap(MoveLeft, INPUTPORT_DEVICE_KEYBOARD, KEY_A);",
+      "profile_count_word": 3,
+      "ordinal": 0,
+      "counter_after": 1,
+      "entry_after": [
+        1,
+        1,
+        30
+      ]
+    },
+    {
+      "sequence": 56,
+      "qsc_line": 90,
+      "statement": "GOInRemap(MoveRight, INPUTPORT_DEVICE_KEYBOARD, KEY_D);",
+      "profile_count_word": 3,
+      "ordinal": 1,
+      "counter_after": 2,
+      "entry_after": [
+        2,
+        1,
+        32
+      ]
+    },
+    {
+      "sequence": 57,
+      "qsc_line": 91,
+      "statement": "GOInRemap(MoveUp, INPUTPORT_DEVICE_KEYBOARD, KEY_W);",
+      "profile_count_word": 3,
+      "ordinal": 2,
+      "counter_after": 3,
+      "entry_after": [
+        4,
+        1,
+        17
+      ]
+    },
+    {
+      "sequence": 58,
+      "qsc_line": 92,
+      "statement": "GOInRemap(MoveDown, INPUTPORT_DEVICE_KEYBOARD, KEY_S);",
+      "profile_count_word": 3,
+      "ordinal": 3,
+      "counter_after": 4,
+      "entry_after": [
+        8,
+        1,
+        31
+      ]
+    },
+    {
+      "sequence": 59,
+      "qsc_line": 93,
+      "statement": "GOInRemap(Fire, INPUTPORT_DEVICE_MOUSE, MOUSE_BUTTON_1);",
+      "profile_count_word": 3,
+      "ordinal": 4,
+      "counter_after": 5,
+      "entry_after": [
+        256,
+        3,
+        1
+      ]
+    },
+    {
+      "sequence": 60,
+      "qsc_line": 94,
+      "statement": "GOInRemap(Reload, INPUTPORT_DEVICE_KEYBOARD, KEY_R);",
+      "profile_count_word": 3,
+      "ordinal": 5,
+      "counter_after": 6,
+      "entry_after": [
+        512,
+        1,
+        19
+      ]
+    },
+    {
+      "sequence": 61,
+      "qsc_line": 95,
+      "statement": "GOInRemap(Activate, INPUTPORT_DEVICE_KEYBOARD, KEY_Q);",
+      "profile_count_word": 3,
+      "ordinal": 6,
+      "counter_after": 7,
+      "entry_after": [
+        1024,
+        1,
+        16
+      ]
+    },
+    {
+      "sequence": 62,
+      "qsc_line": 96,
+      "statement": "GOInRemap(Crouch, INPUTPORT_DEVICE_KEYBOARD, KEY_C);",
+      "profile_count_word": 3,
+      "ordinal": 7,
+      "counter_after": 8,
+      "entry_after": [
+        2048,
+        1,
+        46
+      ]
+    },
+    {
+      "sequence": 63,
+      "qsc_line": 97,
+      "statement": "GOInRemap(Jump, INPUTPORT_DEVICE_KEYBOARD, KEY_E);",
+      "profile_count_word": 3,
+      "ordinal": 8,
+      "counter_after": 9,
+      "entry_after": [
+        4096,
+        1,
+        18
+      ]
+    },
+    {
+      "sequence": 64,
+      "qsc_line": 98,
+      "statement": "GOInRemap(NextWeapon, INPUTPORT_DEVICE_MOUSE, MOUSE_BUTTON_2);",
+      "profile_count_word": 3,
+      "ordinal": 9,
+      "counter_after": 10,
+      "entry_after": [
+        8192,
+        3,
+        2
+      ]
+    },
+    {
+      "sequence": 65,
+      "qsc_line": 99,
+      "statement": "GOInRemap(PrevWeapon, INPUTPORT_DEVICE_KEYBOARD, KEY_O);",
+      "profile_count_word": 3,
+      "ordinal": 10,
+      "counter_after": 11,
+      "entry_after": [
+        524288,
+        1,
+        24
+      ]
+    },
+    {
+      "sequence": 66,
+      "qsc_line": 100,
+      "statement": "GOInRemap(AlternateFire, INPUTPORT_DEVICE_KEYBOARD, KEY_F);",
+      "profile_count_word": 3,
+      "ordinal": 11,
+      "counter_after": 12,
+      "entry_after": [
+        16384,
+        1,
+        33
+      ]
+    },
+    {
+      "sequence": 67,
+      "qsc_line": 101,
+      "statement": "GOInRemap(Peek, INPUTPORT_DEVICE_KEYBOARD, KEY_NUMPAD1);",
+      "profile_count_word": 3,
+      "ordinal": 12,
+      "counter_after": 13,
+      "entry_after": [
+        32768,
+        1,
+        79
+      ]
+    },
+    {
+      "sequence": 68,
+      "qsc_line": 102,
+      "statement": "GOInRemap(Binoculars, INPUTPORT_DEVICE_KEYBOARD, KEY_SPACE);",
+      "profile_count_word": 3,
+      "ordinal": 13,
+      "counter_after": 14,
+      "entry_after": [
+        65536,
+        1,
+        57
+      ]
+    },
+    {
+      "sequence": 69,
+      "qsc_line": 103,
+      "statement": "GOInRemap(MapComputer, INPUTPORT_DEVICE_KEYBOARD, KEY_K);",
+      "profile_count_word": 3,
+      "ordinal": 14,
+      "counter_after": 15,
+      "entry_after": [
+        131072,
+        1,
+        37
+      ]
+    },
+    {
+      "sequence": 70,
+      "qsc_line": 104,
+      "statement": "GOInRemap(ToggleWalkRun, INPUTPORT_DEVICE_KEYBOARD, KEY_UP);",
+      "profile_count_word": 3,
+      "ordinal": 15,
+      "counter_after": 16,
+      "entry_after": [
+        262144,
+        1,
+        200
+      ]
+    },
+    {
+      "sequence": 71,
+      "qsc_line": 105,
+      "statement": "GOInRemap(ZoomIn, INPUTPORT_DEVICE_KEYBOARD, KEY_PAGEUP);",
+      "profile_count_word": 3,
+      "ordinal": 16,
+      "counter_after": 17,
+      "entry_after": [
+        1048576,
+        1,
+        201
+      ]
+    },
+    {
+      "sequence": 72,
+      "qsc_line": 106,
+      "statement": "GOInRemap(ZoomOut, INPUTPORT_DEVICE_KEYBOARD, KEY_PAGEDOWN);",
+      "profile_count_word": 3,
+      "ordinal": 17,
+      "counter_after": 18,
+      "entry_after": [
+        2097152,
+        1,
+        209
+      ]
+    },
+    {
+      "sequence": 73,
+      "qsc_line": 107,
+      "statement": "GOInRemap(WeaponCategory1, INPUTPORT_DEVICE_KEYBOARD, KEY_1);",
+      "profile_count_word": 3,
+      "ordinal": 18,
+      "counter_after": 19,
+      "entry_after": [
+        4194304,
+        1,
+        2
+      ]
+    },
+    {
+      "sequence": 74,
+      "qsc_line": 108,
+      "statement": "GOInRemap(WeaponCategory2, INPUTPORT_DEVICE_KEYBOARD, KEY_2);",
+      "profile_count_word": 3,
+      "ordinal": 19,
+      "counter_after": 20,
+      "entry_after": [
+        8388608,
+        1,
+        3
+      ]
+    },
+    {
+      "sequence": 75,
+      "qsc_line": 109,
+      "statement": "GOInRemap(WeaponCategory3, INPUTPORT_DEVICE_KEYBOARD, KEY_3);",
+      "profile_count_word": 3,
+      "ordinal": 20,
+      "counter_after": 21,
+      "entry_after": [
+        16777216,
+        1,
+        4
+      ]
+    },
+    {
+      "sequence": 76,
+      "qsc_line": 110,
+      "statement": "GOInRemap(WeaponCategory4, INPUTPORT_DEVICE_KEYBOARD, KEY_4);",
+      "profile_count_word": 3,
+      "ordinal": 21,
+      "counter_after": 22,
+      "entry_after": [
+        33554432,
+        1,
+        5
+      ]
+    },
+    {
+      "sequence": 77,
+      "qsc_line": 111,
+      "statement": "GOInRemap(WeaponCategory5, INPUTPORT_DEVICE_KEYBOARD, KEY_5);",
+      "profile_count_word": 3,
+      "ordinal": 22,
+      "counter_after": 23,
+      "entry_after": [
+        67108864,
+        1,
+        6
+      ]
+    },
+    {
+      "sequence": 78,
+      "qsc_line": 112,
+      "statement": "GOInRemap(WeaponCategory6, INPUTPORT_DEVICE_KEYBOARD, KEY_6);",
+      "profile_count_word": 3,
+      "ordinal": 23,
+      "counter_after": 24,
+      "entry_after": [
+        134217728,
+        1,
+        7
+      ]
+    },
+    {
+      "sequence": 79,
+      "qsc_line": 113,
+      "statement": "GOInRemap(WeaponCategory7, INPUTPORT_DEVICE_KEYBOARD, KEY_7);",
+      "profile_count_word": 3,
+      "ordinal": 24,
+      "counter_after": 25,
+      "entry_after": [
+        268435456,
+        1,
+        8
+      ]
+    },
+    {
+      "sequence": 80,
+      "qsc_line": 114,
+      "statement": "GOInRemap(WeaponCategory8, INPUTPORT_DEVICE_KEYBOARD, KEY_8);",
+      "profile_count_word": 3,
+      "ordinal": 25,
+      "counter_after": 26,
+      "entry_after": [
+        536870912,
+        1,
+        9
+      ]
+    },
+    {
+      "sequence": 81,
+      "qsc_line": 115,
+      "statement": "GOInRemap(WeaponCategory9, INPUTPORT_DEVICE_KEYBOARD, KEY_9);",
+      "profile_count_word": 3,
+      "ordinal": 26,
+      "counter_after": 27,
+      "entry_after": [
+        1073741824,
+        1,
+        10
+      ]
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "docs/fidelity/evidence/current-config-20261025/config.qas",
+      "sha256": "190bd1af783ca142b9c58c639a0be0d62cd438acea2c781421f694e337581161"
+    },
+    {
+      "path": "docs/fidelity/evidence/current-config-20261025/config.qsc",
+      "sha256": "7e0a78a10c3634631e52c6b2a54c9a1aea34e88b6de0858c40e11b674872d806"
+    },
+    {
+      "path": "docs/fidelity/evidence/current-config-20261025/configuration.json",
+      "sha256": "3869cea3baaf333525e258b063040d2b0954cc55f3075cc9584b85c6a88517be"
+    },
+    {
+      "path": "docs/fidelity/evidence/current-config-20261025/frida-service.json",
+      "sha256": "f5d0078aa0b8abe0b30f05cf56ba6803f2062d99990739e476dadc65a2cd38ed"
+    },
+    {
+      "path": "docs/fidelity/evidence/current-config-20261025/humanplayer.qsc",
+      "sha256": "9aed3c099b53f8f53644af25655bf8d9538e4f6271685d3651b985c21ecf0e99"
+    },
+    {
+      "path": "docs/fidelity/evidence/current-config-20261025/remap-static.json",
+      "sha256": "eb905f330dab26b32fc6197a39eba85d9b7be15ddca22bb7fc9d56324d82bf29"
+    },
+    {
+      "path": "docs/fidelity/evidence/current-config-20261025/remap_observation.js",
+      "sha256": "f9bc91be1f9e337a7ebe30d8d18317d9e41dec3f246d5662fa4b164b5b370646"
+    },
+    {
+      "path": "docs/fidelity/evidence/current-config-20261025/retail.json",
+      "sha256": "3e039c3fb2cee2d4d57b218e603a369fb9122c65f6cf0bc62e55dbd5a5b82019"
+    },
+    {
+      "path": "docs/fidelity/evidence/current-config-20261025/retail.jsonl",
+      "sha256": "640a219ea1f1f6736ecf8d5a7c075bf1413f807e788399d8ecb2ae11d0878467"
+    }
+  ],
+  "limitations": [
+    "Retail-only evidence; no candidate parity, no native acceptance.",
+    "Associations use the observed ordered sequence and matching count; they do not identify the active player profile.",
+    "Do not infer last-wins bindings across profiles. Effective input dispatch and movement remain untested.",
+    "Opaque argument words and the caller return block were not captured by this probe."
+  ]
+}

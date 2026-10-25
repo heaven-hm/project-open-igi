@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Typed pre-resume paired Frida replay for retail native 0x0048F0D0."""
 import argparse
+import uuid
 import hashlib
 import json
 import os
@@ -36,6 +37,7 @@ def main():
     parser.add_argument('--implementation-sha256')
     parser.add_argument('--candidate', type=Path, default=None)
     parser.add_argument('--receipt', type=Path, default=None)
+    parser.add_argument('--probe', type=Path, default=ROOT / 'scripts/frida_app_startup_store_5c8bc0_probe.js')
     parser.add_argument('--out', type=Path, default=None)
     args = parser.parse_args()
     # The gate passes the candidate, its receipt and the output path through
@@ -49,7 +51,7 @@ def main():
         args.receipt = pathlib.Path(receipt_from_env) if receipt_from_env \
             else ROOT / 'build/diagnostic-candidate-build.json'
     if args.out is None:
-        args.out = ROOT / 'build/runtime-traces/0x0048F0D0-frida-pair.json'
+        args.out = ROOT / 'build/runtime-traces' / ('store-instance-handle-' + uuid.uuid4().hex + '.json')
     try:
         import frida
     except ImportError:
@@ -72,7 +74,9 @@ def main():
         if not match:
             raise RuntimeError('required candidate symbol is absent: ' + symbol)
         layout[field] = f'0x{int(match.group(1), 16):08X}'
-    probes = [ROOT / 'scripts/frida_app_startup_store_5c8bc0_probe.js']
+    probes = [args.probe.resolve()]
+    if not probes[0].is_relative_to(ROOT / 'scripts') or not probes[0].is_file():
+        raise ValueError('probe must be a recorded script inside this checkout')
     probe = '\n'.join(path.read_text() for path in probes)
     raw_values = [0, 1, 2, 10, 0x7f, 0x80, 0xff, 0x100, 0x7fffffff, -0x80000000, -1]
     fixtures = [{'value': value, 'initial_state': 0x13570000 + index}

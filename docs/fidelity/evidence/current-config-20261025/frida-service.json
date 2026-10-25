@@ -1,0 +1,14 @@
+{
+  "kind": "igi-private-frida-service",
+  "host": "127.0.0.1:52001",
+  "owned_pid": 28513,
+  "server_path": "/private/tmp/igi-frida-server-17.24.0-windows-x86.exe",
+  "server_sha256": "d4b0b8af908b13c673d9e40b805b446182b051a61b4f62f519793ddaaa651d3b",
+  "bottle": "open-igi",
+  "rpc_health_passed": true,
+  "terminated": true,
+  "owned_server_pids": [
+    28567
+  ],
+  "listener_closed": true
+}

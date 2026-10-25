@@ -11,6 +11,28 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - current configuration observation and second startup probe
+
+Decoded the installed configuration rather than reusing the old 27-binding scenario.
+Current `config.qvm` SHA-256 is `4743dd505e4bfce8aa50b0f5d281974daf24d21fe2f771a3faaa86e68ca60e0d`.
+Converter versions 1.10.1 and 1.11.0 produced identical decoded text. A fresh
+retail-only pre-resume Frida run observed all 81 remap calls, with 27 sequential
+table writes for each of three profile-count values. The player QVM is unchanged.
+Raw traces, configuration/tool hashes, selected BN plus r2/angr analysis and owned
+process/server cleanup are retained under `docs/fidelity/evidence/current-config-20261025/`.
+Active-profile dispatch and candidate movement remain unverified. The existing
+engine `GOInRemap` interface/private return block differs from retail and must be
+corrected before it can be accepted.
+
+Added a unified controlled/natural probe for the existing `StoreInstanceHandle`
+native (`0x0048F0D0`), retaining the eleven controlled inputs and requiring the real
+WinMain instance/store/return aliases plus unchanged neighboring bytes. No engine
+implementation changed. Fresh static analysis completed; three full-command
+attempts were invalidated by concurrent compiler/source changes, including
+`native_440fd0.cpp` and `native_4170a0.cpp`. The probe remains provisional and no
+native acceptance was added. The earlier annotation-only source proof is retained;
+historical runtime reports were neither rewritten nor transferred to a new image.
+
 ### 2026-10-25 - retry concurrent edits inside the native verification command
 
 The automatic verifier now checks the input fingerprint inside its bounded attempt

@@ -34,6 +34,7 @@ Rules that apply to every tool below:
 | CrossOver / Wine | CrossWine build | `/Users/haseeb-mir/Documents/Code/CrossWine` | Runs both Windows executables; `winedbg`/`wine*` helpers appear under it |
 | Python | 3.12.x | `/Library/Frameworks/Python.framework/Versions/3.12/bin/python3` | Scripts, gates, manifest tooling |
 | i686 mingw g++ | `i686-w64-mingw32-g++` | via `./build_no_verify.sh` | Cross-builds the 32-bit Windows candidate |
+| IGI1 converter CLI | 1.11.0 | `/Users/haseeb-mir/Documents/Code/project-igi-converter/build-unified/bin/igi1conv` | `qvm decompile INPUT -o OUTPUT.qsc`, `qvm disasm INPUT -o OUTPUT.qas`; reference format decoding, not native verification |
 
 Project-local configuration: `scripts/igi-workflow.json` (retail exe, hashes, angr python, BN MCP URL,
 frida host, reference catalog, candidate/build directory). `scripts/igi-workflow.json` currently has
