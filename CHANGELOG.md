@@ -2018,3 +2018,56 @@ counted it.
   `ConditionalSound` registrar stays in `core/` for the opposite reason: its
   body is core task registration, and the word "Sound" appears only in a string
   literal it writes.
+
+## The coverage denominator was wrong: 154 is a filtered subset, not the guard's callee set
+
+Every coverage figure I reported this session - 124, 126, 129, 130, "of 154" -
+was measured against the wrong denominator.
+
+**Measured independently by two instruments:** a bounded linear disassembly from
+the guard's entry `0x00402930` to its first `ret` at `0x00402FEB` contains
+**314 direct `call` instructions across 308 distinct targets**, plus exactly one
+indirect call (`call ebp`). The evidence file's `0x00402930` section holds 155
+rows / 154 distinct targets. The evidence file's own heading says "155 calls,
+the sequence the candidate stops at" - it is a *filtered* list, and I treated it
+as the complete callee set for the whole session.
+
+So "130 of 154" is not "130 of the guard's callees". It is "130 of a filtered
+subset of unknown selection rule". The number is not recoverable as a percentage
+until the filter is identified. Until then the honest statement is a count, not a
+ratio: **130 of the 154 addresses on the evidence list have their symbol in
+`igi1.exe`.**
+
+This is the twelfth false zero of the session in the same family: a number that
+looked authoritative because it came from a file, used as a denominator without
+anyone asking what it counted.
+
+## The band is a registration/teardown system, not a flat list of 46 registrars
+
+Measured by analyst and confirmed here: of the 314 direct calls, **46 distinct
+targets are in `0x0042xxxx`**, in two phases with opposite address ordering:
+
+- **Registration, `0x00402B79`-`0x00402C32`, DESCENDING** - 24 calls.
+- **Teardown, from `0x00402C40`, ASCENDING** - 22 calls, starting with
+  `call 0x4C1780`.
+
+24 + 22 = 46. Each teardown sits immediately before the next registrar in
+address space and cleans up the previous class.
+
+**The 22 teardowns were guard callees with no implementation and appeared on
+neither the guard list nor the handler list.** They are 22 units of real work
+that no list contained - the same failure mode as the handler-only entry points.
+
+Two measured teardown families, split behaviourally:
+- **9 reset teardowns** call `0x00401A20` and end `mov word [<id>], 0x181`.
+- **13 no-reset teardowns** call `0x00401A20` and do **not** reset the id word.
+
+The sentinel reset **stops after MenuWindow** (`0x0053B90C`). Classes registered
+from `0x00424B90` onward do not restore `0x0181`. Making the band uniform by
+adding resets to the later teardowns would change behaviour retail deliberately
+does not perform.
+
+Also established: `0x00424790` is the MenuWindow teardown, found from its single
+caller `0x00402CA4` rather than from alignment, and its
+`mov word [0x0053B90C], 0x181` is the missing half of the parent-type slot -
+`0x00424850` reads `0x0181` at rest because the teardown puts it there.
