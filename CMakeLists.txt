@@ -590,13 +590,12 @@ add_executable(igi WIN32
     engine/src/retail/sys/native_4f1cb0.cpp
     # Hold-out. Two separate groups, both measured by the linker rather than guessed.
     #
-    # GROUP 1 - four finished files, each blocked by one callee that has no implementation:
+    # GROUP 1 - two files, each blocked by one callee that has no implementation:
     #   core/native_412420.cpp calls 0x0045E060 (858 bytes, 7 blocks, 237 instructions)
-    #   core/native_464260.cpp calls 0x004D9610 and 0x004E6610 (0x004E6610 is now resolved as
-    #     Task_GetCachedEventId_4E6610, a lazy allocator, so only 0x004D9610 still blocks it)
-    #   core/native_465a10.cpp calls 0x00504DB0
-    #   core/native_4f9df0.cpp is intentionally outside until its callee set settles
-    #
+    #   core/native_4f9df0.cpp is outside until its callee set settles
+    # Released since this block was first written: core/native_464260.cpp and core/native_465a10.cpp
+    #   (unblocked by sys/native_4d9610.cpp and sys/native_504db0.cpp), and core/native_467700.cpp,
+    #   core/native_4696b0.cpp, core/native_465bc0.cpp.
     # GROUP 2 - 32 transcribed files held back together because adding them as a set surfaces 23
     # undefined symbols. Measured by temporarily adding all 32 and reading the linker's list:
     #   functions: AIGraph_InitChain_5183D0, Core_Unknown_45E060, Core_Unknown_467F30,
@@ -633,6 +632,12 @@ add_executable(igi WIN32
     engine/src/retail/core/native_467dd0.cpp
     engine/src/retail/core/native_467700.cpp
     engine/src/retail/core/native_465bc0.cpp
+    engine/src/retail/sys/native_4d9610.cpp
+    engine/src/retail/sys/native_504db0.cpp
+    engine/src/retail/sys/native_4f1c70.cpp
+    engine/src/retail/core/native_466e40.cpp
+    engine/src/retail/core/native_464260.cpp
+    engine/src/retail/core/native_465a10.cpp
     engine/platform/windows/retail_native_verification_support.cpp)
 target_include_directories(igi PRIVATE engine/include)
 target_compile_features(igi PRIVATE cxx_std_20)

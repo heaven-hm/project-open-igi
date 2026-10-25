@@ -6,14 +6,16 @@
 //   id slot's image value 0; a stack-pointer simulation over all 83 instructions, which returns esp to its entry value at the ret and accounts
 //   for every cleanup (0x44 = seventeen pushes: the two zeros, the parent-getter result, the size, the name, and the three pushes of each of the
 //   first four links; 0xC six times; 0x18 once for the event-7 link and the one before it). Every callee was re-read at its own VA, which is how
-//   0x004D9610, 0x004CEA20, 0x004CEA10, 0x00416830, 0x00416850, 0x00416880, 0x00489610 and 0x004E6610 were established as argument-less loads
-//   despite being called with pushes. Argument numbers were derived by counting the pushes above each access, not by reading an [esp+N] offset as
+//   0x004D9610, 0x004CEA20, 0x004CEA10, 0x00416830, 0x00416850, 0x00416880 and 0x00489610 were established as argument-less loads despite being
+//   called with pushes. 0x004E6610 is NOT one of them: it is a lazy one-shot event-id allocation that compares 0x00548813 with 0xFF and, only on
+//   0xFF, calls QTask_AllocateEvent(0) - the same body shape as 0x00467D90 but with allocation argument 0 - and it is already implemented in this
+//   tree as Task_GetCachedEventId_4E6610 (core/native_004e6610.cpp), so this file declares that symbol rather than duplicating it. Argument numbers were derived by counting the pushes above each access, not by reading an [esp+N] offset as
 //   an argument number.
 // Behavior/CFG: one straight-line body with NO frame of its own. It registers the "HumanView" task type of size 0x328 with parent
 //   Sys_GetGlobal16_4D9610() -> id at 0x005BDC40, then links TWELVE handlers to that id: e0->0x004643A0 and e4->0x004644A0 through 0x00401400,
 //   e1->0x00488700 and e2->0x00464470 through 0x00401530, 0x004CEA20's event id->0x00464580 and 0x004CEA10's event id->0x004645B0 through
 //   0x00401400, **event 7 with a NULL handler** through 0x00401400, and the event ids from the byte getters 0x00416830, 0x00416850 and 0x00416880
-//   ->0x0045F920 (three times), 0x00489610->0x00465B80 and 0x004E6610->0x004645D0 through 0x00401400. One basic block, no branch, no loop,
+//   ->0x0045F920 (three times), 0x00489610->0x00465B80 and 0x004E6610's event id->0x004645D0 through 0x00401400. One basic block, no branch, no loop,
 //   21 call sites over 11 distinct callees. It allocates no parameter container, appends no records, allocates no event id of its own through
 //   QTask_AllocateEvent, and has NO 0x004B8810 script-name tail.
 // Status/limits: TRANSCRIBED; runtime UNOBSERVED. The id slot 0x005BDC40 holds image value 0 and is written by the 16-bit store at 0x00464281
@@ -45,7 +47,7 @@ extern "C" std::uint8_t Sys_GetSettingByte_416830(void);          // 0x00416830:
 extern "C" std::uint8_t Sys_GetSettingByte_416850(void);          // 0x00416850: `mov al,[0x539548]; ret`
 extern "C" std::uint8_t Sys_GetSettingByte_416880(void);          // 0x00416880: `mov al,[0x53954D]; ret`
 extern "C" std::uint8_t Sys_GetGlobal8_489610(void);              // 0x00489610: `mov al,[0x54127C]; ret`
-extern "C" std::uint8_t Sys_GetGlobal8_4E6610(void);              // 0x004E6610: `mov al,[0x548813]; ret`
+extern "C" std::uint8_t Task_GetCachedEventId_4E6610(void);      // 0x004E6610: lazy event-id allocation (core/native_004e6610.cpp)
 
 extern "C" {
 
@@ -143,7 +145,7 @@ void Task_DefineHumanView()
     // 0x0046437A: push 0x004645D0; 0x0046437F: call 0x4E6610; 0x00464384: mov cx,[0x5BDC40]; 0x0046438B: push eax; 0x0046438C: push ecx;
     // 0x0046438D: call 0x401400; 0x00464392: add esp,0xC; 0x00464395: ret.
     QTask_LinkQTaskEventHandler(static_cast<std::uint16_t>(::g_5bdc40), // 0x00464384: mov cx,[0x5BDC40]
-                                static_cast<std::uint32_t>(Sys_GetGlobal8_4E6610()), // 0x0046438B: push eax (argument 2)
+                                static_cast<std::uint32_t>(Task_GetCachedEventId_4E6610()), // 0x0046438B: push eax (argument 2)
                                 reinterpret_cast<igi::retail::core::FrameHandler>(
                                     static_cast<std::uintptr_t>(0x004645D0U))); // 0x0046437A: push handler
 } // end of Task_DefineHumanView
