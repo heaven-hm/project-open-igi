@@ -24,7 +24,7 @@ std::uint32_t InputRemap_Table[igi::retail::config::remap_table_size] = {};
 // Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 std::uint32_t* NATIVE_DECL GOInRemap(void* qvm_context)
 {
-    NATIVE_LOG_ENTER("GOInRemap", "~0x004037C0");
+    NATIVE_LOG_ENTER("GOInRemap", "0x004037C0");
     const std::uint32_t count = InputRemap_ActionCount;
     std::uint32_t* const action_slot =
         InputRemap_ActionTable + count * igi::retail::config::action_table_stride;

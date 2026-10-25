@@ -32,7 +32,7 @@ extern "C" void* g_943e38;
 
 std::int32_t NATIVE_DECL Resource_Flush(void* resource)
 {
-    NATIVE_LOG_ENTER("Resource_Flush", "~0x004B63D0");
+    NATIVE_LOG_ENTER("Resource_Flush", "0x004B63D0");
     // 0x004B63D0/0x004B63D6: mov 0x00943E38,%ecx; mov 0x4(%esp),%edx - the head and the argument.
     std::uint8_t* node = static_cast<std::uint8_t*>(g_943e38);
 

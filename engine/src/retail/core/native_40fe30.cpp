@@ -48,7 +48,7 @@ void* g_56e09c = nullptr;
 
 void NATIVE_DECL Task_DefineHumanPlayer_40FE30()
 {
-    NATIVE_LOG_ENTER("Task_DefineHumanPlayer_40FE30", "0x0040FE30");
+    NATIVE_LOG_ENTER("Task_DefineHumanPlayer_40FE30", "");
     // 0x0040FE30/0x0040FE32: push 0; push 0 (both inert arguments of the parent getter, the second also the register call's fourth slot).
     // 0x0040FE34: call 0x460BE0; 0x0040FE39: push eax; 0x0040FE3A: push 0xDF0; 0x0040FE3F: push 0x00538EFC; 0x0040FE44: call 0x401900.
     const std::uint16_t human_player_id = TaskType_Register("HumanPlayer",        // 0x0040FE3F: push 0x00538EFC

@@ -25,7 +25,7 @@ std::int32_t NATIVE_DECL Qvm_ReadArgumentValue_4BCAE0(void* destination, std::ui
 
 long double NATIVE_DECL Qvm_ReadIndexedArgument(void* argument_frame, std::int32_t index)
 {
-    NATIVE_LOG_ENTER("Qvm_ReadIndexedArgument", "~0x004BD010");
+    NATIVE_LOG_ENTER("Qvm_ReadIndexedArgument", "0x004BD010");
     float value = 0.0F;                                                            // 0x004BD024: movl $0x0,0x14(%esp) - the 4-byte out slot
     Qvm_ReadArgumentValue_4BCAE0(&value, 4U, argument_frame, index, 2U);            // 0x004BD019-0x004BD02C: push 2; push index; push frame; lea slot; push 4; push slot; call 0x004BCAE0
     return static_cast<long double>(value);                                        // 0x004BD031: flds 0x14(%esp) - real returned in ST0, no conversion

@@ -19,7 +19,7 @@ extern "C" {
 
 void NATIVE_DECL DynObj_UpdateDynTree_11(void* context)
 {
-    NATIVE_LOG_ENTER("DynObj_UpdateDynTree_11", "~0x004CE3D0");
+    NATIVE_LOG_ENTER("DynObj_UpdateDynTree_11", "0x004CE3D0");
     // 0x004CE3D0: `mov eax,[esp+4]` - the context argument; 0x004CE3D4: `mov dword [eax+0xDC8],0` - the only write.
     *reinterpret_cast<std::uint32_t*>(static_cast<std::uint8_t*>(context) + 0xDC8) = 0;
     // 0x004CE3DE: `ret`. The argument word is left in EAX by retail; nothing reads it.

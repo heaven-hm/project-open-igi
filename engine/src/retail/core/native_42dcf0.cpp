@@ -59,7 +59,7 @@ std::uint32_t g_57bd24 = 0x447A0000U;   // retail 0x0057BD24: image bits for 100
 
 std::int32_t NATIVE_DECL Task_DefineCar()
 {
-    NATIVE_LOG_ENTER("Task_DefineCar", "~0x0042DCF0");
+    NATIVE_LOG_ENTER("Task_DefineCar", "0x0042DCF0");
     std::int32_t append_frame_base = 0;
     const std::int32_t append_frame = reinterpret_cast<std::int32_t>(&append_frame_base);
 

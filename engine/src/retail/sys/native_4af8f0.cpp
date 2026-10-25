@@ -25,7 +25,7 @@ extern "C" {
 
 void* NATIVE_DECL Sys_InsertListTail_4AF8F0(void* head, void* node)
 {
-    NATIVE_LOG_ENTER("Sys_InsertListTail_4AF8F0", "0x004AF8F0");
+    NATIVE_LOG_ENTER("Sys_InsertListTail_4AF8F0", "");
     std::uint8_t* const base = static_cast<std::uint8_t*>(head);           // 0x4AF8F0: mov 0x4(%esp),%eax
     std::uint8_t* const item = static_cast<std::uint8_t*>(node);           // 0x4AF8F4: mov 0x8(%esp),%ecx
     std::uint8_t* previous = *reinterpret_cast<std::uint8_t**>(base + 0x08U); // 0x4AF8F8: mov 0x8(%eax),%edx

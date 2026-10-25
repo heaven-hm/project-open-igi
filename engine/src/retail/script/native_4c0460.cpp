@@ -31,7 +31,7 @@ int Debug_Error(char const* format, ...);
 
 void NATIVE_DECL Script_QHashNodeRemove_4C0460(void* const list, char const* const value)
 {
-    NATIVE_LOG_ENTER("Script_QHashNodeRemove_4C0460", "0x004C0460");
+    NATIVE_LOG_ENTER("Script_QHashNodeRemove_4C0460", "");
     // 0x004C0469: `lea eax,[esp+0xc]` is the address of this body's own second argument word, so the lookup writes the
     // found node over the value; `node` models that same single slot.
     void* node = nullptr;

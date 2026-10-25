@@ -184,7 +184,7 @@ std::uint32_t QTask_InputPortCounter = 0U;
 // Status/limits: STRUCTURALLY_VERIFIED; the load, the three pushes and the call are the retail's.
 void NATIVE_DECL InputPort_Process(void* input_port)
 {
-    NATIVE_LOG_ENTER("InputPort_Process", "~0x004ED5C0");
+    NATIVE_LOG_ENTER("InputPort_Process", "0x004ED5C0");
     const std::uint16_t index = InputPort_CurrentIndex;
     QTask_RegisterInputPortHandler(static_cast<std::uint32_t>(
                                        reinterpret_cast<std::uintptr_t>(input_port)),
@@ -199,7 +199,7 @@ void NATIVE_DECL InputPort_Process(void* input_port)
 std::uint32_t NATIVE_DECL QTask_RegisterInputPortHandler(
     std::uint32_t object, std::uint32_t port_index, std::uint32_t context)
 {
-    NATIVE_LOG_ENTER("QTask_RegisterInputPortHandler", "~0x004ED5C0");
+    NATIVE_LOG_ENTER("QTask_RegisterInputPortHandler", "0x004012A0");
     std::uint8_t* const owner = reinterpret_cast<std::uint8_t*>(static_cast<std::uintptr_t>(object)); // 0x004012A6
     auto* const record = QTask_AllocateInputPort(object, port_index);                                  // 0x004012AC
     std::uint8_t* const task = reinterpret_cast<std::uint8_t*>(record);
@@ -226,7 +226,7 @@ std::uint32_t NATIVE_DECL QTask_RegisterInputPortHandler(
 igi::retail::input::InputPortRecord* NATIVE_DECL QTask_AllocateInputPort(
     std::uint32_t owner, std::uint32_t type_id)
 {
-    NATIVE_LOG_ENTER("QTask_AllocateInputPort", "~0x004ED5C0");
+    NATIVE_LOG_ENTER("QTask_AllocateInputPort", "0x004012F0");
     ++QTask_InputPortCounter;                                                                          // 0x004012F9/0x00401307/0x0040130B
     std::uint8_t* const type_record = reinterpret_cast<std::uint8_t*>(
         &::QTask_TypeTable[static_cast<std::size_t>(type_id) & 0xFFFFU]);

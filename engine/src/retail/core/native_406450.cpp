@@ -44,7 +44,7 @@ std::int32_t g_5690c4 = 0;     // retail 0x005690C4
 
 std::int32_t NATIVE_DECL Task_DefineHumanAIConfig()
 {
-    NATIVE_LOG_ENTER("Task_DefineHumanAIConfig", "~0x00406450");
+    NATIVE_LOG_ENTER("Task_DefineHumanAIConfig", "");
     std::int32_t append_frame_base = 0; // retail frame slot at +0x00
     const std::int32_t append_frame = reinterpret_cast<std::int32_t>(&append_frame_base);
 

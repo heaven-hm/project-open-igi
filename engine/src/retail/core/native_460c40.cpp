@@ -19,7 +19,7 @@ extern "C" {
 std::uint8_t g_53f317 = 0xFFU; // retail 0x0053F317: the byte this native reads (image value 0xFF)
 std::uint8_t NATIVE_DECL Core_GetGlobal8_460C40()
 {
-    NATIVE_LOG_ENTER("Core_GetGlobal8_460C40", "0x00460C40");
+    NATIVE_LOG_ENTER("Core_GetGlobal8_460C40", "");
     return ::g_53f317;   // 0x00460C40: `mov al, byte [0x0053F317]`
 }                        // 0x00460C45: ret
 

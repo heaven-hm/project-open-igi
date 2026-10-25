@@ -22,7 +22,7 @@ extern std::uint8_t g_5391ac[7];
 
 std::uint8_t NATIVE_DECL Sys_GetSettingByte_413B50(void)
 {
-    NATIVE_LOG_ENTER("Sys_GetSettingByte_413B50", "0x00413B50");
+    NATIVE_LOG_ENTER("Sys_GetSettingByte_413B50", "");
     return ::g_5391ac[5];   // 0x00413B50: mov al, byte [0x005391B1]
 }                           // 0x00413B55: ret
 

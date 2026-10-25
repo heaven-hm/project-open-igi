@@ -130,11 +130,47 @@ void Writef(const char *fmt, ...) noexcept {
     EmitLocked(body);
     LeaveCriticalSection(&g_lock);
 }
+// One aligned line per native entry, so a run can be read as a call trace rather than as a
+// wall of text. The VA is the native's OWN retail address, resolved from
+// docs/fidelity/native-verification.json when the instrumentation pass ran. Where that lookup
+// found no record the field is empty, and the line says so instead of printing a zero: a
+// fabricated 0x00000000 reads as an address and is not one, and a wrong VA is worse than no VA
+// because it looks like evidence. The name is padded to a fixed width so the VAs line up in a
+// column and a reader can scan them.
 void NativeEnter(const char *name, const char *va) noexcept {
-    Emitf("NATIVE ENTER %s @ %s", (name != nullptr) ? name : "(unnamed)", (va != nullptr) ? va : "0x00000000");
+    const char *const safe_name = (name != nullptr) ? name : "(unnamed)";
+    char padded[56];
+    std::size_t n = std::strlen(safe_name);
+    if (n >= sizeof(padded) - 1U) {
+        n = sizeof(padded) - 1U;
+    }
+    std::memcpy(padded, safe_name, n);
+    for (std::size_t i = n; i < sizeof(padded) - 1U; ++i) {
+        padded[i] = ' ';
+    }
+    padded[sizeof(padded) - 1U] = '\0';
+    if (va != nullptr && va[0] != '\0') {
+        Emitf("ENTER %s  %s", padded, va);
+    } else {
+        Emitf("ENTER %s  (VA not in the manifest - not transcribed or not yet recorded)", padded);
+    }
 }
+// Recorded for symmetry with NativeEnter. It deliberately carries no return value: this logger
+// cannot observe one without reading a register it has no business reading, and inventing a
+// value here would be exactly the kind of plausible-and-wrong record this project is removing.
 void NativeLeave(const char *name) noexcept {
-    Emitf("NATIVE LEAVE %s", (name != nullptr) ? name : "(unnamed)");
+    const char *const safe_name = (name != nullptr) ? name : "(unnamed)";
+    char padded[56];
+    std::size_t n = std::strlen(safe_name);
+    if (n >= sizeof(padded) - 1U) {
+        n = sizeof(padded) - 1U;
+    }
+    std::memcpy(padded, safe_name, n);
+    for (std::size_t i = n; i < sizeof(padded) - 1U; ++i) {
+        padded[i] = ' ';
+    }
+    padded[sizeof(padded) - 1U] = '\0';
+    Emitf("LEAVE %s", padded);
 }
 void Shutdown() noexcept {
     if (g_file == nullptr) {

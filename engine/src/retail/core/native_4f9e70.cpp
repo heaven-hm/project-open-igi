@@ -18,7 +18,7 @@ extern "C" {
 
 std::uint32_t NATIVE_DECL GraphStream_HashName_4F9E70(char const* name)
 {
-    NATIVE_LOG_ENTER("GraphStream_HashName_4F9E70", "0x004F9E70");
+    NATIVE_LOG_ENTER("GraphStream_HashName_4F9E70", "");
     std::uint32_t hash = 0U;                                                  // 0x004F9E75: xor %eax,%eax
     std::uint32_t multiplier = 1U;                                            // 0x004F9E77: mov $0x1,%edx
     signed char character = static_cast<signed char>(*name);                  // 0x004F9E7C: mov (%esi),%cl

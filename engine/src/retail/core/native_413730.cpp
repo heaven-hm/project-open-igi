@@ -22,7 +22,7 @@ void Core_Unknown_467F30(void* argument);
 
 void NATIVE_DECL Task_FillTargetNode_413730(std::uint8_t* source, std::uint8_t* target)
 {
-    NATIVE_LOG_ENTER("Task_FillTargetNode_413730", "0x00413730");
+    NATIVE_LOG_ENTER("Task_FillTargetNode_413730", "");
     *reinterpret_cast<std::uint32_t*>(target + 0x0C) = static_cast<std::uint32_t>(reinterpret_cast<std::uintptr_t>(source + 0x20)); // 0x00413739/0x0041373C: lea edx,[ecx+0x20]; mov [eax+0xc],edx
     *reinterpret_cast<std::uint32_t*>(target + 0x10) = static_cast<std::uint32_t>(reinterpret_cast<std::uintptr_t>(source + 0x78)); // 0x0041373F/0x00413742: lea edx,[ecx+0x78]; mov [eax+0x10],edx
     *reinterpret_cast<std::uint32_t*>(target + 0x14) = *reinterpret_cast<std::uint32_t*>(source + 0xA0);                          // 0x00413745/0x0041374B: mov ecx,[ecx+0xa0]; mov [eax+0x14],ecx

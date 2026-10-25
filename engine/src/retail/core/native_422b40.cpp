@@ -50,7 +50,7 @@ extern std::uint8_t Script_PhaseIdGetE5_4F1A70(void);         // 0x004F1A70
 
 void NATIVE_DECL ModelViewBox_Register_422B40()
 {
-    NATIVE_LOG_ENTER("ModelViewBox_Register_422B40", "0x00422B40");
+    NATIVE_LOG_ENTER("ModelViewBox_Register_422B40", "");
     std::uint8_t append_frame[0xC8]; // 0x00422B40: sub esp,0xC8
 
     const std::uint16_t parent = Sys_GetGlobal16_424850();                    // 0x00422B4A

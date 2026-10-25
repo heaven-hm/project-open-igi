@@ -37,7 +37,7 @@ std::uint32_t g_57bd14 = 0U;   // retail 0x0057BD14: the 0x004978D0 return
 // Status/limits: STRUCTURALLY_VERIFIED. All thirteen links, the registration, the slot-name publication and the hash registration are transcribed from their own pushes, and the six cleanup sums reconcile with zero slack. Limits: no runtime observation of this native in either binary. Four links carry a literal NULL handler and are invisible to a handler-immediate scan; each was located by replaying esp, where the `push 0` that becomes the handler is simultaneously the surplus argument of the argument-less getter in front of it. 0x0051B940 is shared with the CockpitShield, Gear, Hatch and Afterburner registrars. 0x0057BD10 is written at 16-bit width and read once at 32-bit width with `and ecx,0xffff` at 0x0042D421, so it is declared std::uint16_t on the strength of the writer.
 std::int32_t NATIVE_DECL Task_DefineRotor()
 {
-    NATIVE_LOG_ENTER("Task_DefineRotor", "~0x0042D2B0");
+    NATIVE_LOG_ENTER("Task_DefineRotor", "0x0042D2B0");
     g_57bd10 = TaskType_Register("Rotor", 0x140U, Sys_GetGlobal16_4D9FA0(), 0U);       // 0x0042D2C4
     g_57bd14 = Sys_AddSlotName_4978D0("RotorPrimitive");                               // 0x0042D2D4, stored 0x0042D2DF
     Sys_EnumRenderModesPair_4978F0(g_57bd14, 0x0042C630U);                             // 0x0042D2E4

@@ -22,7 +22,7 @@ extern std::uint8_t g_5391ac[7];
 
 std::uint8_t NATIVE_DECL Core_GetFlagByte_413B30()
 {
-    NATIVE_LOG_ENTER("Core_GetFlagByte_413B30", "0x00413B30");
+    NATIVE_LOG_ENTER("Core_GetFlagByte_413B30", "");
     return ::g_5391ac[3];   // 0x00413B30: mov al, byte [0x005391AF]
 }                           // 0x00413B35: ret
 

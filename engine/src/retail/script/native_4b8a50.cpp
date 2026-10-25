@@ -28,7 +28,7 @@ long double NATIVE_DECL Qvm_EvaluateArgumentValue(const void* node);
 
 long double NATIVE_DECL Qvm_GetFloatArg(void* argument_frame, std::int32_t index)
 {
-    NATIVE_LOG_ENTER("Qvm_GetFloatArg", "~0x004B8A50");
+    NATIVE_LOG_ENTER("Qvm_GetFloatArg", "0x004B8A50");
     std::uint8_t* const frame = static_cast<std::uint8_t*>(argument_frame);        // 0x004B8A50: mov 0x4(%esp),%eax
 
     if (*reinterpret_cast<std::uint32_t*>(frame + 0x04) != 0U)                     // 0x004B8A54/0x004B8A57/0x004B8A59: mov 0x4(%eax),%ecx; test; je

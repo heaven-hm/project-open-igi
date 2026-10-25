@@ -23,7 +23,7 @@ void TaskEventTable_ClearSlot(std::uint32_t const index);
 
 void NATIVE_DECL TaskEventTable_ClearSlot_4018E0(std::uint32_t const index)
 {
-    NATIVE_LOG_ENTER("TaskEventTable_ClearSlot_4018E0", "0x004018E0");
+    NATIVE_LOG_ENTER("TaskEventTable_ClearSlot_4018E0", "0x004018C0");
     // 0x004018E5: `call 0x004018C0`, displacement 0xFFFFFFD6 at 0x004018E7; the pop %ecx at 0x004018EA is the cdecl
     // cleanup for the one argument dword pushed at 0x004018E4.
     TaskEventTable_ClearSlot(index);

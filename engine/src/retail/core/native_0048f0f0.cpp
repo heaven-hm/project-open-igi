@@ -20,7 +20,7 @@ std::int32_t Native_005C8BCC = 0;
 // Status/limits: VERIFIED_WITH_DOCUMENTED_SCOPE; the global's semantic name and paired startup runtime comparison remain unresolved. A byte search of the whole retail image finds no other reference to 0x005C8BCC, so the global has no reader the name could be derived from and the address-based identity stands.
 std::int32_t NATIVE_DECL SetConfigFileName(std::int32_t value)
 {
-    NATIVE_LOG_ENTER("SetConfigFileName", "~0x0048F0F0");
+    NATIVE_LOG_ENTER("SetConfigFileName", "0x0048F0F0");
     Native_005C8BCC = value;
     return value;
 }

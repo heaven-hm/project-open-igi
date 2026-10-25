@@ -20,7 +20,7 @@ void* g_window_handle = nullptr;
 // Status/limits: BUILD_VERIFIED; the load, the store and the EAX return match the retail exactly.
 void* NATIVE_DECL SetWindowHandle(void* window)
 {
-    NATIVE_LOG_ENTER("SetWindowHandle", "~0x0048F0E0");
+    NATIVE_LOG_ENTER("SetWindowHandle", "0x0048F0E0");
     g_window_handle = window;
     return window;
 }

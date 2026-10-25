@@ -54,7 +54,7 @@ std::uint32_t DebugKeyFlag = 0U;
 std::intptr_t NATIVE_DECL WindowProcedure(void* window, std::uint32_t message,
                                               std::uintptr_t wparam, std::intptr_t lparam)
 {
-    NATIVE_LOG_ENTER("WindowProcedure", "~0x0048F970");
+    NATIVE_LOG_ENTER("WindowProcedure", "0x0048F970");
     if (Loop_StatusByte != 0U)
     {
         igi::retail::core::WindowHandlerEntry* const chain_head = WindowHandlerChain;

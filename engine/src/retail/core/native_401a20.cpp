@@ -25,7 +25,7 @@ void NATIVE_DECL QFile_ReleaseBlock_4B0B70(void** block);
 
 void NATIVE_DECL TaskType_Clear_401A20(std::uint16_t class_id)
 {
-    NATIVE_LOG_ENTER("TaskType_Clear_401A20", "0x00401A20");
+    NATIVE_LOG_ENTER("TaskType_Clear_401A20", "");
     // 0x00401A20-0x00401A2D: the argument reaches the callee in a dword stack slot and only its low word is used
     // (`and $0xffff,%eax` at 0x00401A25); the 0x30-byte slot is 0x00AF5EE0 + id*0x30 (`lea (%eax,%eax,2),%esi;
     // shl $0x4,%esi`). The retail also pushes %esi here and pops it at 0x00401A50; that is register preservation,

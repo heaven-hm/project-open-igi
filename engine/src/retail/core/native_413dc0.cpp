@@ -22,7 +22,7 @@ extern std::uint8_t g_56e238[0x10];
 
 std::uint32_t NATIVE_DECL Sys_GetGlobalPtr_413DC0(void)
 {
-    NATIVE_LOG_ENTER("Sys_GetGlobalPtr_413DC0", "0x00413DC0");
+    NATIVE_LOG_ENTER("Sys_GetGlobalPtr_413DC0", "");
     return static_cast<std::uint32_t>(reinterpret_cast<std::uintptr_t>(::g_56e238));   // 0x00413DC0: mov $0x0056E238,%eax
 }                                                                                     // 0x00413DC5: ret
 

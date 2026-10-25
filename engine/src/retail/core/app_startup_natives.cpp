@@ -22,7 +22,7 @@ char const* AppTitle = nullptr;
 // Status/limits: STRUCTURALLY_VERIFIED; the retail load/store/return are reproduced. Paired start-up runtime comparison and the live behavioral runner are still required for acceptance.
 char const* NATIVE_DECL StoreCommandLine(char const* command_line)
 {
-    NATIVE_LOG_ENTER("StoreCommandLine", "~0x0048F0C0");
+    NATIVE_LOG_ENTER("StoreCommandLine", "0x0048F0C0");
     CommandLine = command_line;
     return command_line;
 }
@@ -35,7 +35,7 @@ char const* NATIVE_DECL StoreCommandLine(char const* command_line)
 // Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 char const* NATIVE_DECL GameCommandLine()
 {
-    NATIVE_LOG_ENTER("GameCommandLine", "~0x0048F0C0");
+    NATIVE_LOG_ENTER("GameCommandLine", "");
     return CommandLine;
 }
 
@@ -46,7 +46,7 @@ char const* NATIVE_DECL GameCommandLine()
 // Status/limits: STRUCTURALLY_VERIFIED; retail load/store/return reproduced, the translation unit compiles for x86, and the 10-case retail-vs-candidate differential passes. Paired startup runtime comparison is still required for acceptance.
 void* NATIVE_DECL StoreInstanceHandle(void* instance)
 {
-    NATIVE_LOG_ENTER("StoreInstanceHandle", "~0x0048F0C0");
+    NATIVE_LOG_ENTER("StoreInstanceHandle", "0x0048F0D0");
     InstanceHandle = instance;
     return instance;
 }
@@ -58,7 +58,7 @@ void* NATIVE_DECL StoreInstanceHandle(void* instance)
 // Status/limits: STRUCTURALLY_VERIFIED; the candidate now reads a distinct 4-byte global for retail 0x005C8BD4 instead of returning the instance handle. The writer is now linked as SetAppTitle (engine/src/retail/core/app_context_extra.cpp), which also forwards the title to SetWindowTextA when the window handle exists; the candidate does not call it yet because the retail main order is still being wired, so the value remains null until then; paired runtime comparison is still required.
 char const* NATIVE_DECL GetAppTitle()
 {
-    NATIVE_LOG_ENTER("GetAppTitle", "~0x0048F0C0");
+    NATIVE_LOG_ENTER("GetAppTitle", "0x0048F0B0");
     return AppTitle;
 }
 

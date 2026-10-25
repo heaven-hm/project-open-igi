@@ -264,7 +264,7 @@ std::int32_t Display_ApplyFlags_491980(void* argument1, std::int32_t argument2, 
 
 void NATIVE_DECL Config_RegisterGameOptions_402FF0(void)
 {
-    NATIVE_LOG_ENTER("Config_RegisterGameOptions_402FF0", "0x00402FF0");
+    NATIVE_LOG_ENTER("Config_RegisterGameOptions_402FF0", "");
     // 0x00402FF0: sub $0x500,%esp - retail's 1280-byte frame, which 0x00491EA0 fills and the tail loop reads from its
     // base. Kept as twenty 64-byte chunks of scalars rather than a byte array: an address-taken array makes the host
     // compiler emit a __stack_chk_guard/__stack_chk_fail pair that retail never calls.

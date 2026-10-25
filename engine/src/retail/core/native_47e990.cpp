@@ -19,7 +19,7 @@ extern "C" {
 extern std::uint8_t g_540914; // retail 0x00540914: defined in native_0047e700.cpp, which is its only writer; this routine reads it
 std::uint8_t NATIVE_DECL Core_GetGlobal8_47E990()
 {
-    NATIVE_LOG_ENTER("Core_GetGlobal8_47E990", "0x0047E990");
+    NATIVE_LOG_ENTER("Core_GetGlobal8_47E990", "");
     return ::g_540914;   // 0x0047E990: `mov al, byte [0x00540914]`
 }                        // 0x0047E995: ret
 

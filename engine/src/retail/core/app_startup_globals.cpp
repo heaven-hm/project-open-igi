@@ -56,7 +56,7 @@ extern "C"
 // Status/limits: STRUCTURALLY_VERIFIED; retail full-game runtime observed (2 calls, values 1 then 0); candidate runtime unobserved until the retail main/handler order is wired
 std::int32_t NATIVE_DECL Display_SetScreenMode(std::int32_t mode)
 {
-    NATIVE_LOG_ENTER("Display_SetScreenMode", "~0x0048F120");
+    NATIVE_LOG_ENTER("Display_SetScreenMode", "0x0048F120");
     const std::int32_t value = static_cast<std::int8_t>(static_cast<std::uint8_t>(mode));
     g_5c8c00 = value;
     return value;
@@ -69,7 +69,7 @@ std::int32_t NATIVE_DECL Display_SetScreenMode(std::int32_t mode)
 // Status/limits: STRUCTURALLY_VERIFIED; retail full-game runtime observed; candidate runtime unobserved until the retail main/handler order is wired
 std::int32_t NATIVE_DECL Display_GetScreenMode()
 {
-    NATIVE_LOG_ENTER("Display_GetScreenMode", "~0x0048F120");
+    NATIVE_LOG_ENTER("Display_GetScreenMode", "0x0048F130");
     return g_5c8c00;
 }
 
@@ -80,7 +80,7 @@ std::int32_t NATIVE_DECL Display_GetScreenMode()
 // Status/limits: STRUCTURALLY_VERIFIED; retail runtime observed (1 call, arg 0, store 0); candidate runtime unobserved until wiring
 std::int32_t NATIVE_DECL Input_SetUseWin32Input(std::int32_t value)
 {
-    NATIVE_LOG_ENTER("Input_SetUseWin32Input", "~0x0048F120");
+    NATIVE_LOG_ENTER("Input_SetUseWin32Input", "0x0048F280");
     g_5c8be0 = value;
     return value;
 }
@@ -92,7 +92,7 @@ std::int32_t NATIVE_DECL Input_SetUseWin32Input(std::int32_t value)
 // Status/limits: STRUCTURALLY_VERIFIED; retail runtime observed (1 call, arg 0); candidate runtime unobserved until wiring
 std::int32_t NATIVE_DECL AppMain_Set5C8C0C(std::int32_t value)
 {
-    NATIVE_LOG_ENTER("AppMain_Set5C8C0C", "~0x0048F120");
+    NATIVE_LOG_ENTER("AppMain_Set5C8C0C", "0x0048F290");
     g_5c8c0c = value;
     return value;
 }
@@ -104,7 +104,7 @@ std::int32_t NATIVE_DECL AppMain_Set5C8C0C(std::int32_t value)
 // Status/limits: STRUCTURALLY_VERIFIED; retail runtime observed (1 call, arg 0); candidate runtime unobserved until wiring
 std::int32_t NATIVE_DECL AppMain_Set5C8C10(std::int32_t value)
 {
-    NATIVE_LOG_ENTER("AppMain_Set5C8C10", "~0x0048F120");
+    NATIVE_LOG_ENTER("AppMain_Set5C8C10", "0x0048F2A0");
     g_5c8c10 = value;
     return value;
 }
@@ -116,7 +116,7 @@ std::int32_t NATIVE_DECL AppMain_Set5C8C10(std::int32_t value)
 // Status/limits: STRUCTURALLY_VERIFIED; retail runtime observed (2 calls, args 1 then 0, final word 0); candidate runtime unobserved until wiring
 std::int32_t NATIVE_DECL Game_SetStartupMode(std::int32_t value)
 {
-    NATIVE_LOG_ENTER("Game_SetStartupMode", "~0x0048F120");
+    NATIVE_LOG_ENTER("Game_SetStartupMode", "0x0048F210");
     AppContext_StartupMode = value;
     return value;
 }
@@ -128,7 +128,7 @@ std::int32_t NATIVE_DECL Game_SetStartupMode(std::int32_t value)
 // Status/limits: STRUCTURALLY_VERIFIED; retail runtime observed (1 call, arg 0); candidate runtime unobserved until wiring
 std::int32_t NATIVE_DECL AppContext_SetGermanVersion(std::int32_t value)
 {
-    NATIVE_LOG_ENTER("AppContext_SetGermanVersion", "~0x0048F120");
+    NATIVE_LOG_ENTER("AppContext_SetGermanVersion", "0x0048F2B0");
     g_5c8bdc = value;
     return value;
 }
@@ -140,7 +140,7 @@ std::int32_t NATIVE_DECL AppContext_SetGermanVersion(std::int32_t value)
 // Status/limits: STRUCTURALLY_VERIFIED; retail runtime observed (1 call in this scenario, arg 0x00567C74, EAX=1, NUL stored); candidate runtime unobserved until wiring; the retail buffer extent is not evidenced by any reference (port buffer is 0x40 bytes, unbounded retail copy preserved for the evidenced inputs)
 std::int32_t NATIVE_DECL AppContext_SetLanguage(const char* language)
 {
-    NATIVE_LOG_ENTER("AppContext_SetLanguage", "~0x0048F120");
+    NATIVE_LOG_ENTER("AppContext_SetLanguage", "0x0048F300");
     std::int32_t length_with_nul = 0;
     while (language[length_with_nul] != '\0')
     {
@@ -161,7 +161,7 @@ std::int32_t NATIVE_DECL AppContext_SetLanguage(const char* language)
 // Status/limits: STRUCTURALLY_VERIFIED; retail runtime observed (1 call, arg 0); candidate runtime unobserved until wiring
 std::int32_t NATIVE_DECL AppMain_Set5C8C04(std::int32_t value)
 {
-    NATIVE_LOG_ENTER("AppMain_Set5C8C04", "~0x0048F120");
+    NATIVE_LOG_ENTER("AppMain_Set5C8C04", "0x0048F200");
     g_5c8c04 = value;
     return value;
 }

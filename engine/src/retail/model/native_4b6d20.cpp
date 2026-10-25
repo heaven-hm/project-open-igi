@@ -18,7 +18,7 @@ namespace igi::retail::model {
 
 std::int32_t NATIVE_DECL Model_GetBoneWord_4B6D20(void* model)
 {
-    NATIVE_LOG_ENTER("Model_GetBoneWord_4B6D20", "0x004B6D20");
+    NATIVE_LOG_ENTER("Model_GetBoneWord_4B6D20", "");
     const std::uint16_t index = *reinterpret_cast<const std::uint16_t*>(   // 0x4B6D26: mov 0x14(%ecx),%ax
         static_cast<std::uint8_t*>(model) + 0x14U);
     const std::uint8_t* const table = *reinterpret_cast<std::uint8_t* const*>( // 0x4B6D2A: mov 0x8(%ecx),%ecx

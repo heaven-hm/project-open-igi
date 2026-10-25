@@ -18,7 +18,7 @@ extern "C" {
 
 void* NATIVE_DECL Sys_UnlinkListNode_4AF960(void* node)
 {
-    NATIVE_LOG_ENTER("Sys_UnlinkListNode_4AF960", "0x004AF960");
+    NATIVE_LOG_ENTER("Sys_UnlinkListNode_4AF960", "");
     std::uint8_t* const item = static_cast<std::uint8_t*>(node);                       // 0x4AF960: mov 0x4(%esp),%eax
     std::uint8_t* back = *reinterpret_cast<std::uint8_t**>(item + 0x04U);               // 0x4AF964: mov 0x4(%eax),%ecx
     std::uint8_t* forward = *reinterpret_cast<std::uint8_t**>(item);                    // 0x4AF967: mov (%eax),%edx

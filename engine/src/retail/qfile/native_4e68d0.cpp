@@ -21,7 +21,7 @@ extern "C" {
 
 std::int32_t NATIVE_DECL QFile_DispatchDirectory_4E68D0(const char* path)
 {
-    NATIVE_LOG_ENTER("QFile_DispatchDirectory_4E68D0", "0x004E68D0");
+    NATIVE_LOG_ENTER("QFile_DispatchDirectory_4E68D0", "");
     return QFile_DispatchDevicePath_4B1420(
         path,                                                                    // 0x004E68DB: push %eax (the argument read at 0x004E68D0)
         reinterpret_cast<void*>(static_cast<std::uintptr_t>(0x004E68F0U)),      // 0x004E68D6: push $0x004E68F0 (the callback)

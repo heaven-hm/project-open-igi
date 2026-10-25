@@ -19,7 +19,7 @@ extern "C" {
 std::uint16_t g_5bdaf8 = 0U; // retail 0x005BDAF8: the word this native reads (image value 0)
 std::uint16_t NATIVE_DECL Core_GetGlobal16_460BE0()
 {
-    NATIVE_LOG_ENTER("Core_GetGlobal16_460BE0", "0x00460BE0");
+    NATIVE_LOG_ENTER("Core_GetGlobal16_460BE0", "");
     return ::g_5bdaf8;   // 0x00460BE0: `mov ax, word [0x005BDAF8]`
 }                        // 0x00460BE6: ret
 

@@ -22,7 +22,7 @@ std::uint16_t Core_GetGlobal16_460BE0(void);   // 0x00460BE0: argument-less word
 
 void NATIVE_DECL Task_DispatchPhase1_454EE0(void* argument)
 {
-    NATIVE_LOG_ENTER("Task_DispatchPhase1_454EE0", "0x00454EE0");
+    NATIVE_LOG_ENTER("Task_DispatchPhase1_454EE0", "");
     const std::uint16_t type_id = static_cast<std::uint16_t>(Core_GetGlobal16_460BE0()); // 0x00454EE0: call 0x460BE0; 0x00454EE9: and eax,0xffff
     ::QTask_HandlerTable[igi::retail::core::task_phase_stride + type_id](argument);      // 0x00454EEF: mov eax,[0x00A970E0+eax*4]; 0x00454EF6: call eax
 }

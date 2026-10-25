@@ -36,7 +36,7 @@ std::uint16_t g_548618 = 0x0181U;
 
 std::uint16_t NATIVE_DECL Sys_GetGlobal16_4D9610(void)
 {
-    NATIVE_LOG_ENTER("Sys_GetGlobal16_4D9610", "0x004D9610");
+    NATIVE_LOG_ENTER("Sys_GetGlobal16_4D9610", "");
     return g_548618;                                                     // 0x004D9610: mov 0x00548618,%ax; 0x004D9615: ret
 }
 

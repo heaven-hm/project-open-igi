@@ -17,7 +17,7 @@ std::uint32_t g_a5e5fc = 0; // Retail BSS word; meaning unresolved.
 std::uint32_t NATIVE_DECL Native_00495CC0(std::uint32_t);
 std::uint32_t NATIVE_DECL Native_004E6030(std::uint32_t value)
 {
-    NATIVE_LOG_ENTER("Native_004E6030", "~0x004E6030");
+    NATIVE_LOG_ENTER("Native_004E6030", "0x004E6030");
     g_a5e5fc = value;
     return Native_00495CC0(value);
 }

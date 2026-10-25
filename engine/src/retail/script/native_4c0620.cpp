@@ -20,7 +20,7 @@ extern "C" {
 
 std::int32_t NATIVE_DECL Script_QHashSymbolLookupRecord_4C0620(void* table, void** out_node, const char* name)
 {
-    NATIVE_LOG_ENTER("Script_QHashSymbolLookupRecord_4C0620", "0x004C0620");
+    NATIVE_LOG_ENTER("Script_QHashSymbolLookupRecord_4C0620", "");
     void* record = nullptr;
     // 0x004C062C-0x004C062F: Script_QHashNodeLookup(table, &record, name).
     std::int32_t const found = Script_QHashNodeLookup(table, &record, name);
