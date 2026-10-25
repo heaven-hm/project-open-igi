@@ -83,6 +83,13 @@ Record timestamp, active packet, owner/reviewer, source-write token holder, buil
   `docs/fidelity/evidence/current-config-20261025/observation.json`.
 
 <!-- progress log (appended by Lead; not a status promotion) -->
+- 2026-10-25 / Codex / P08–P14 dependency ANALYZED: retail GOInRemap ABI capture
+  completed 81 calls and 243 ordered reader calls, confirming caller-buffer
+  ownership and nonzero copied stack words that the candidate incorrectly zeros.
+  Evidence and concrete correction requirements:
+  `docs/fidelity/evidence/remap-abi-20261025/`. No candidate acceptance or engine
+  write; owned runtime resources released. Next research dependency is the script
+  dispatcher/caller output layout, before correcting the native and decoder ABI.
 - 2026-10-24: P05 flow-closure work is evidenced by build/audit/p05b..p05e packets and the ordered walk in docs/fidelity/main-call-flow.md; retail-vs-candidate evidence lives under build/tester/20261023T220230Z/.
 - Linked + retail-verified, candidate UNOBSERVED: startup globals 0x48F120/130/200/210/280/290/2A0/2B0/300, SetAppTitle 0x48F100, SetDebugCompileState 0x48F1C0, QTaskList 0x4C1790/17C0/1800, parser 0x48F360, tokenizer 0x4A5A0C, CLI handlers 0x48F350/920/930/950/960. Current deployed build: 102fe97ef2a6cc3ad846cdfd7fbf80718308d3e1ae08416349a8fccb0a2e9a72.
 - Next blocking step: P13 main.cpp transcription + entry switch per the 10-step checklist in docs/fidelity/main-call-flow.md, then Tester six-scenario paired runtime comparison. Known divergence: QTask_RegisterClasses throw-stub suppresses the Level handler's second 0x48F210(0) call.

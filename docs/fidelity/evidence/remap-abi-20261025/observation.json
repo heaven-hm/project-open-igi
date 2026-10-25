@@ -1,0 +1,37 @@
+{
+  "kind": "igi-retail-configuration-observation",
+  "verified": false,
+  "before": {
+    "/Users/haseeb-mir/Downloads/IGI/igi.exe": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+    "/Users/haseeb-mir/Downloads/IGI/config.qvm": "4743dd505e4bfce8aa50b0f5d281974daf24d21fe2f771a3faaa86e68ca60e0d",
+    "/Users/haseeb-mir/Downloads/IGI/humanplayer/humanplayer.qvm": "6749062f42121bf66c045aa62cc0d93eaab60f81400a5c687f546d0ab57b15ce"
+  },
+  "probe_sha256": "a4a2631be1a38240cef7b4f9bd48c2ca7eabe5d75c0d6f3a479cd36a9686fee7",
+  "actions_sha256": "995a8e42647c4b5989a6995996664fb3ff55f9dff1d63189371028bd43697dd7",
+  "limitations": [
+    "Retail-only memory observations; no candidate acceptance or claim about effective controls.",
+    "Output buffer, argument-reader calls and remap writes are observed; active-profile input dispatch is not tested."
+  ],
+  "after": {
+    "/Users/haseeb-mir/Downloads/IGI/igi.exe": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+    "/Users/haseeb-mir/Downloads/IGI/config.qvm": "4743dd505e4bfce8aa50b0f5d281974daf24d21fe2f771a3faaa86e68ca60e0d",
+    "/Users/haseeb-mir/Downloads/IGI/humanplayer/humanplayer.qvm": "6749062f42121bf66c045aa62cc0d93eaab60f81400a5c687f546d0ab57b15ce"
+  },
+  "inputs_unchanged": true,
+  "result": "observations_collected",
+  "capture": "retail.json",
+  "candidate_tested": false,
+  "observed_calls": 81,
+  "argument_reader_calls": 243,
+  "observed_checks_passed": true,
+  "candidate_source": {
+    "path": "engine/src/retail/config/input_remap.cpp",
+    "sha256": "af438975fc93ef89f4ce5b80ea45be489e795cf855906261b2c7741162948148"
+  },
+  "artifacts": {
+    "frida-service.json": "25bf9b7af709746b2a08870de3b6698e0028f428b40fa3369dd48fbe76cfdc0d",
+    "remap_observation.js": "a4a2631be1a38240cef7b4f9bd48c2ca7eabe5d75c0d6f3a479cd36a9686fee7",
+    "retail.json": "fb4b65844bd763558f498da072ca28e8442ec65efb07c96b1ba3e2affaf72ed5",
+    "retail.jsonl": "8ef68223db2ab63de7c30f5f1782846f0a37c063f61e5f79835f20df35796529"
+  }
+}

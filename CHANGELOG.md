@@ -11,6 +11,17 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - retail input-remap ABI capture
+
+Recorded 81 retail GOInRemap calls and their 243 ordered argument-reader calls.
+The caller-buffer return, third-argument frame identity, masked table writes and
+counter increments all matched the reviewed instructions. Retail output words
+1 and 5 contained nonzero copied stack residue, confirming another difference
+from the candidate's private zero-filled buffer. Preserved the raw capture,
+probe, hashes, cleanup and correction requirements in
+`docs/fidelity/evidence/remap-abi-20261025/`. Retail-only research: no candidate
+acceptance, native status promotion or movement claim.
+
 ### 2026-10-25 - instance-handle controlled comparison
 
 The single-command verifier rebuilt the candidate and passed the `0x0048F0D0`
