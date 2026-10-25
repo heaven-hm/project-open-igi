@@ -1,4 +1,4 @@
-// Retail QHash slot-table globals 0x00567C38..0x00567C4C.
+// Retail QHash slot-table globals 0x00567C38..0x00567C5C.
 //
 // The table is walked by 0x00401B20 (release) and maintained by the insert counterpart that ends at
 // 0x00401B1C; the retail image holds zeros for all five words (pxw 24 @ 0x00567C38 -> all zero), so
@@ -16,6 +16,7 @@ extern std::uint32_t g_567c3c; // 0x00567C3C: per-slot index table
 extern std::uint32_t g_567c40; // 0x00567C40: live slot count (incremented on insert, decremented on release)
 extern std::uint32_t g_567c48; // 0x00567C48: element stride
 extern std::uint32_t g_567c4c; // 0x00567C4C: slot link table
+extern std::uint32_t g_567c5c; // 0x00567C5C: global flag word (0x00401F60 ORs, 0x00401F80 AND-NOTs)
 
 // 0x00567C74: static empty value object returned by 0x004F1180 when the hash lookup misses.
 // The retail image leaves it zero. 0x20 bytes is NOT a verified extent: the only visible caller 0x004EF7F0
