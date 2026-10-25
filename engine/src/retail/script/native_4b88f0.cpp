@@ -5,7 +5,7 @@
 // Status/limits: TRANSCRIBED; STRUCTURALLY_VERIFIED against the 14-instruction listing and afij (35 B / 1 block / 0 edges); runtime UNOBSERVED. The name is an address-suffixed placeholder: the only retail fact about the 2 is its slot position (the sixth argument of 0x004BAAC0), and no evidence yet says what that slot selects. It exists because 0x00402FF0 registers exactly one entry point through it ("Config_GraphicOptionsSetGamma"); the call site discards the return value.
 #include <cstdint>
 
-extern "C" void Script_QHashNodeCreate(void* arg1, void* arg2, char const* arg3, void* arg4,
+extern "C" void Script_QHashNodeCreate(char const* arg1, void* arg2, void const* arg3, void* arg4,
                                        void* arg5, void* arg6, void* arg7);
 
 extern "C" {
@@ -13,7 +13,7 @@ extern "C" {
 void Script_QHashNodeRegisterMode2_4B88F0(void* const arg0, void* const arg1, char const* const arg2,
                                           void* const arg3)
 {
-    Script_QHashNodeCreate(arg0,                    // 0x004B8909: push eax ([esp+0x14] = arg0)
+    Script_QHashNodeCreate(static_cast<char const*>(arg0),                    // 0x004B8909: push eax ([esp+0x14] = arg0)
                            arg1,                    // 0x004B8908: push edx ([esp+8] = arg1)
                            arg2,                    // 0x004B8907: push ecx ([esp+0xC] = arg2)
                            arg3,                    // 0x004B8902: push eax ([esp+0x10] = arg3)

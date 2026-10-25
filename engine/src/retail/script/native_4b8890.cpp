@@ -5,7 +5,7 @@
 // Status/limits: BUILD_VERIFIED (static only); the tail constants 1/0/0 and the argument order follow the push sequence literally; runtime UNOBSERVED.
 #include <cstdint>
 
-extern "C" void Script_QHashNodeCreate(void* arg1, void* arg2, char const* arg3, void* arg4,
+extern "C" void Script_QHashNodeCreate(char const* arg1, void* arg2, void const* arg3, void* arg4,
                                              void* arg5, void* arg6, void* arg7);
 
 extern "C" {
@@ -13,7 +13,7 @@ extern "C" {
 void Script_QHashNodeRegisterEx(void* const arg0, void* const arg1, char const* const arg2,
                                        void* const arg3)
 {
-    Script_QHashNodeCreate(arg0,                    // 0x004B88A9: push eax ([esp+0x14] = arg0)
+    Script_QHashNodeCreate(static_cast<char const*>(arg0),                    // 0x004B88A9: push eax ([esp+0x14] = arg0)
                                   arg1,                    // 0x004B88A8: push edx ([esp+8] = arg1)
                                   arg2,                    // 0x004B88A7: push ecx ([esp+0xC] = arg2)
                                   arg3,                    // 0x004B88A2: push eax ([esp+0x10] = arg3)

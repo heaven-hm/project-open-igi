@@ -25,6 +25,11 @@ extern "C" {
 // 0x004E7530: the phase getter, transcribed in native_4e7530.cpp with C linkage.
 std::uint32_t NATIVE_DECL Core_GetEventWord_4E7530();
 
+// 0x004B8810 and 0x004B8890: the named-value registrations Flow_Init makes six times, transcribed
+// in script/native_4b8810.cpp and script/native_4b8890.cpp with C linkage.
+void Script_QHashNodeRegister(void* arg1, void* value);
+void Script_QHashNodeRegisterEx(void* arg0, void* arg1, char const* arg2, void* arg3);
+
 } // extern "C"
 
 namespace {
@@ -257,18 +262,44 @@ std::uint8_t AppContext_PausedFlag = 0U;
 
 // Native: Flow_Init; retail VA 0x00401FC0.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
+// Tools/evidence: radare2 6.2.0 pd/afbj over the exact image; VA 0x00401FC0..0x00402065, 166 bytes, 1 block, 45 instructions, 0 edges - the whole body is one straight-line block. Eight calls: 0x004018F0 (2 pushes), 0x00401900 (3), 0x00401400 (3), 0x00401530 twice (3 each), 0x004B8810 five times (2 each) and 0x004B8890 once (4). The single `add esp,0x40` at 0x0040201C is 16 dwords and equals exactly 2+3+3+3+3+2, and the `add esp,0x30` at 0x00402062 is 12 dwords and equals exactly 2+2+2+2+4, so both cleanups close with zero slack: every push belongs to a call in the block and all six callees are cdecl. 0x004018F0 is `mov ax,[0x0054F928]; ret`, seven bytes that read no arguments.
+// Behavior/CFG: reads the current task type through 0x004018F0, registers the Flow class with a 0x54 byte object through 0x00401900 with the pre-pushed zero as its fourth argument, keeps the class id at 0x00567C7C, links the phase 0 handler 0x00402070 through 0x00401400 and the phase 1 handler 0x00402260 and phase 2 handler 0x00402740 through 0x00401530, then registers the five flow events through 0x004B8810 - "FLOW_EVENT_QUIT" with 1, "FLOW_EVENT_INTRO" with 2, "FLOW_EVENT_MAINMENU" with 3, "FLOW_EVENT_GAME" with 4 and "FLOW_EVENT_RESTART_GAME" with 5 - and the request handler through 0x004B8890 as ("Flow_RequestEvent", 0x00402780, 0, 1); a single block with no branches.
+// Status/limits: STRUCTURALLY_VERIFIED; the class registration, the object size, the three phase links and the six event registrations are the retail's. The two ids passed to 0x00401530 are NOT zero-extended class ids: 0x00401FE9 and 0x00401FFC are `mov ax`/`mov cx` loads from 0x00567C7C, so each carries the high half of the preceding call's return value, and that is reproduced with an explicit mask rather than simplified to a 16-bit id. The second of the two zero pushes at 0x00401FC2 has no consumer - 0x004018F0 reads no arguments and 0x00401900 takes four - so it is documented here instead of being reproduced by inventing a fifth parameter. This function previously transcribed four of the eight calls and passed zero-extended ids; the six registrations were absent from the entire tree.
 // Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
-// Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x00401FC0..0x00402010.
-// Behavior/CFG: reads the current task type through 0x004018F0, registers the Flow class with a 0x54 byte object through 0x00401900, keeps the class id at 0x00567C7C, and links the phase 0 handler 0x00402070 through 0x00401400, the phase 1 handler 0x00402260 and the phase 2 handler 0x00402740 through 0x00401530.
-// Status/limits: STRUCTURALLY_VERIFIED; the class registration, the object size and the three phase links are the retail's.
 void NATIVE_DECL Flow_Init()
 {
-    const std::uint16_t parent = QTask_GetCurrentType();
-    const std::uint16_t class_id = TaskType_Register("Flow", 0x54U, parent, 0U);
-    QTask_FlowClassId = class_id;
-    QTask_LinkQTaskEventHandler(class_id, 0U, &Flow_Start);
-    QTask_LinkQTaskEventHandlerNoContextFn(class_id, 1U, &Flow_RunHandler_Handler);
-    QTask_LinkQTaskEventHandlerNoContextFn(class_id, 2U, &Flow_Delete_Handler);
+    // 0x00401FC0/0x00401FC2: two zero pushes. 0x004018F0 is seven bytes, `mov ax,[0x0054F928];
+    // ret`, and reads no arguments, so they are inert for it. Their consumer is the fourth
+    // argument of 0x00401900 below, which the stack still carries when that call is made; the
+    // second zero is surplus and no callee consumes it, which is why it is documented rather
+    // than reproduced by inventing a fifth parameter.
+    const std::uint16_t parent = QTask_GetCurrentType();                                    // 0x00401FC4
+    const std::uint16_t class_id = TaskType_Register("Flow", 0x54U, parent, 0U);             // 0x00401FD1
+    QTask_FlowClassId = class_id;                                                           // 0x00401FDE: mov [0x00567C7C],ax
+    // 0x00401FE9 and 0x00401FFC are `mov ax`/`mov cx` loads from 0x00567C7C, which write only
+    // the low half of the register. Each id handed to 0x00401530 therefore carries the HIGH HALF
+    // of the preceding call's return value and only the low half from the class id, so the two
+    // links are not passed a zero-extended id.
+    std::uint32_t linked = static_cast<std::uint32_t>(
+        QTask_LinkQTaskEventHandler(class_id, 0U, &Flow_Start));                            // 0x00401FE4
+    linked = (linked & 0xFFFF0000U) | static_cast<std::uint32_t>(QTask_FlowClassId);         // 0x00401FE9
+    std::uint32_t linked2 = static_cast<std::uint32_t>(
+        QTask_LinkQTaskEventHandlerNoContextFn(linked, 1U, &Flow_RunHandler_Handler));       // 0x00401FF7
+    linked2 = (linked2 & 0xFFFF0000U) | static_cast<std::uint32_t>(QTask_FlowClassId);       // 0x00401FFC
+    QTask_LinkQTaskEventHandlerNoContextFn(linked2, 2U, &Flow_Delete_Handler);               // 0x0040200B
+    Script_QHashNodeRegister(const_cast<char*>("FLOW_EVENT_QUIT"),
+                             reinterpret_cast<void*>(1U));                                  // 0x00402017
+    Script_QHashNodeRegister(const_cast<char*>("FLOW_EVENT_INTRO"),
+                             reinterpret_cast<void*>(2U));                                  // 0x00402026
+    Script_QHashNodeRegister(const_cast<char*>("FLOW_EVENT_MAINMENU"),
+                             reinterpret_cast<void*>(3U));                                  // 0x00402032
+    Script_QHashNodeRegister(const_cast<char*>("FLOW_EVENT_GAME"),
+                             reinterpret_cast<void*>(4U));                                  // 0x0040203E
+    Script_QHashNodeRegister(const_cast<char*>("FLOW_EVENT_RESTART_GAME"),
+                             reinterpret_cast<void*>(5U));                                  // 0x0040204A
+    Script_QHashNodeRegisterEx(const_cast<char*>("Flow_RequestEvent"),
+                               reinterpret_cast<void*>(0x00402780U), nullptr,
+                               reinterpret_cast<void*>(1U));                                // 0x0040205D
 }
 
 // Native: Flow_Start; retail VA 0x00402070.

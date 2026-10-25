@@ -16,15 +16,15 @@
 extern "C" {
 
 // Defined by script/native_4baac0.cpp; declared here exactly as that file defines it.
-void Script_QHashNodeCreate(void* const arg1, void* const arg2, char const* const arg3,
+void Script_QHashNodeCreate(char const* const arg1, void* const arg2, void const* const arg3,
                             void* const arg4, void* const arg5, void* const arg6,
                             void* const arg7);
 
 void NATIVE_DECL Sys_RegisterNamedWord_4B7F40(char const* name, std::uint16_t* value)
 {
-    Script_QHashNodeCreate(const_cast<void*>(static_cast<void const*>(name)), // 0x004B7F56: push ecx (argument 1)
+    Script_QHashNodeCreate(name,                                               // 0x004B7F56: push ecx (argument 1)
                            reinterpret_cast<void*>(0x004B7F60U),               // 0x004B7F51: push 0x004B7F60, a callback
-                           reinterpret_cast<char const*>(value),               // 0x004B7F50: push eax (argument 2)
+                           value,                                              // 0x004B7F50: push eax (argument 2)
                            reinterpret_cast<void*>(2),                         // 0x004B7F4E: push 2
                            reinterpret_cast<void*>(0),                         // 0x004B7F4C: push 0
                            reinterpret_cast<void*>(1),                         // 0x004B7F4A: push 1

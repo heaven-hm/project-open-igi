@@ -5,16 +5,16 @@
 // Status/limits: BUILD_VERIFIED (static only); the constants and handler address are passed as raw values exactly as retail pushes them; runtime UNOBSERVED.
 #include <cstdint>
 
-extern "C" void Script_QHashNodeCreate(void* arg1, void* arg2, char const* arg3, void* arg4,
+extern "C" void Script_QHashNodeCreate(char const* arg1, void* arg2, void const* arg3, void* arg4,
                                              void* arg5, void* arg6, void* arg7);
 
 extern "C" {
 
 void Script_QHashNodeRegister(void* const arg1, void* const value)
 {
-    Script_QHashNodeCreate(arg1,
+    Script_QHashNodeCreate(static_cast<char const*>(arg1),
                                   reinterpret_cast<void*>(static_cast<std::uintptr_t>(0x004B8830U)), // handler address pushed by retail
-                                  static_cast<char const*>(value),
+                                  value,
                                   reinterpret_cast<void*>(static_cast<std::uintptr_t>(4U)),
                                   reinterpret_cast<void*>(static_cast<std::uintptr_t>(2U)),
                                   reinterpret_cast<void*>(static_cast<std::uintptr_t>(1U)),
