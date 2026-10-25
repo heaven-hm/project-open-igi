@@ -11,6 +11,21 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - GunShot and HumanCamera registrars, plus two self-corrections from the lane
+
+- `igi1.exe` 14,252,981 -> **14,254,193** bytes, green. `0x0047B4B0 Task_DefineGunShot` ("GunShot", 0xC38, id 0x005BE3CE,
+  script name `TASKTYPE_GUNSHOT`) and `0x004825C0 Task_DefineHumanCamera` ("HumanCamera", 0x128, id 0x00540990, plus a do-while
+  clearing 128 eight-byte records at 0x005C1188). Both `BUILD_VERIFIED`, runtime UNOBSERVED.
+- `g_5be3cc` (0x005BE3CC) was already defined in `sys/native_47b100.cpp`, so the new registrar declares it `extern` and adds no second
+  definition - the single-writer rule held without a link error this time.
+- **Tooling correction from the lane**: its batch closure scan parsed `pdfj` JSON, which emits call targets as `fcn.00416930` rather than
+  `0x416930`, so the regex matched nothing and the scan reported "ABSENT: none" unconditionally. Re-checked with the `pd` text form,
+  `0x47E700` and `0x476110` are **blocked**, not closed: they call `0x416930`/`0x4169D0`, which have no transcription anywhere.
+- **Recount correction**: the doc's `0x4825C0` sizing (131 B / 3 blocks / 34 instructions) is right; the earlier 27-instruction count was the
+  stop-at-first-`ret` artifact. Per-block counting (`af` then `afbj`) is now the only accepted method for multi-block bodies.
+- Consequence for scheduling: `0x416930`/`0x4169D0` sit in the `0x00415xxx`-`0x00419xxx` range that has been reserved, so the two blocked
+  registrars queue behind opening that range rather than behind the startup walk.
+
 ### 2026-10-25 - Two more task-type registrars, and a registrar that deliberately has no script name
 
 - `igi1.exe` 14,251,830 -> **14,252,981** bytes, green. `0x0046DD00 Task_DefineGunx2` ("Gunx2", 0x138, id -> 0x0053FE68) and
