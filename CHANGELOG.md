@@ -11,6 +11,14 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - The AIGraph handler that was link-blocked on one dependency is linked
+
+- `0x005093C0` (`AIGraph_Handler_5093C0`) added to the build target: `igi1.exe` 14,269,528 -> **14,269,804** bytes, green. Its whole undefined set
+  (`Graph_Update_4F9180`, `List_FindIndex_4F1050`, `List_FirstFree_4F1240`, `List_Release_4F1090`) is now transcribed, so the block that kept this
+  file out of the target is gone rather than worked around.
+- The AIGraph phase handler still has one open dependency in the same wave (`0x004F9CD0`, which `0x5092A0` calls), so that file stays source-only
+  until it closes. Linking order follows the dependency, not the file's readiness.
+
 ### 2026-10-25 - A partial transcription was sitting in the build target
 
 - `engine/src/retail/script/native_4ee970.cpp` (`0x004EE970`, 3709 bytes) transcribes section 1 only and its provenance said it was "deliberately NOT wired
