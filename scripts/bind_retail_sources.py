@@ -88,17 +88,34 @@ def bound_paths(records: list[dict]) -> set[str]:
 
 
 def provenance_block(path: str) -> list[str]:
-    """The leading run of comment lines. Read as a block, never line-wise."""
-    lines = []
+    """The comment run that carries the native's evidence, wherever it sits in the file.
+
+    Read as a whole block, never line-wise: provenance entries wrap across lines, and a
+    line-wise reader produced 15 false mismatches on the first survey.
+
+    The block is NOT required to be the leading comment run. Files in this tree commonly
+    open with #include and a NATIVE_DECL macro before the provenance block begins, and an
+    earlier version of this function returned [] for all of them -- reporting seven
+    well-formed files as rule 6 violations. Scan for the first contiguous comment run that
+    contains a // Native: line rather than assuming a position.
+    """
     with open(path, errors="replace") as fh:
-        for line in fh:
-            if BLOCK_LINE.match(line):
-                lines.append(line.rstrip("\n"))
-            elif lines:
-                break
-            else:
-                break
-    return lines
+        all_lines = [l.rstrip("\n") for l in fh]
+    run: list[str] = []
+    runs: list[list[str]] = []
+    for line in all_lines:
+        if BLOCK_LINE.match(line):
+            run.append(line)
+        else:
+            if run:
+                runs.append(run)
+            run = []
+    if run:
+        runs.append(run)
+    for candidate in runs:
+        if any(NATIVE_LINE.match(l) for l in candidate):
+            return candidate
+    return []
 
 
 def classify(path: str) -> dict:

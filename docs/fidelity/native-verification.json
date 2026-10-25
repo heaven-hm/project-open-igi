@@ -12262,9 +12262,9 @@
       "name": "HumanPlayer_UpdateMotion",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
-        "path": "scripts/GameNatives/humanplayer/00408320-HumanPlayer_UpdateMotion.cpp",
-        "sha256": "82086d16aaea6f469efb6ad57dabb305e1fa702705f6f6229657f96ca0f1473a",
-        "signature": "int HumanPlayer_UpdateMotion(void)"
+        "path": "engine/src/retail/core/native_408320.cpp",
+        "sha256": "fa78cfc6e8781cde7a7f9e085bf624e1b688a39198e66d656f1a07c67af628b9",
+        "signature": "unknown"
       },
       "game_natives": {
         "path": "scripts/GameNatives/humanplayer/00408320-HumanPlayer_UpdateMotion.cpp",
@@ -12332,9 +12332,9 @@
       "name": "HumanPlayer_CheckGround",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
-        "path": "scripts/GameNatives/humanplayer/00408330-HumanPlayer_CheckGround.cpp",
-        "sha256": "4a096a41933bb44d8b258f2e9b2251c44ba5e5625d5c66dfc4177ed3ff9c33fc",
-        "signature": "int HumanPlayer_CheckGround(void)"
+        "path": "engine/src/retail/core/native_408330.cpp",
+        "sha256": "fa73b1e0fdbd8eb9e99a1380ef3dcd89cae207be971de013ec2be08feb680244",
+        "signature": "unknown"
       },
       "game_natives": {
         "path": "scripts/GameNatives/humanplayer/00408330-HumanPlayer_CheckGround.cpp",
@@ -12402,9 +12402,9 @@
       "name": "HumanPlayer_UpdateStamina",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
-        "path": "scripts/GameNatives/humanplayer/00408340-HumanPlayer_UpdateStamina.cpp",
-        "sha256": "2d211f44a8ea11b0f59d0d19d77377699038235dce3a40516efdfc399ca108ff",
-        "signature": "int HumanPlayer_UpdateStamina(void)"
+        "path": "engine/src/retail/core/native_408340.cpp",
+        "sha256": "a179b2446efd78f6e5d9b36918f17d833d7293f20769ef05a0378374d5c28db2",
+        "signature": "unknown"
       },
       "game_natives": {
         "path": "scripts/GameNatives/humanplayer/00408340-HumanPlayer_UpdateStamina.cpp",
@@ -91533,6 +91533,62 @@
       "implementation": {
         "path": "engine/src/retail/sys/native_504db0.cpp",
         "sha256": "c273bef7dad9132f27ba80c124bb67c28adfc7330f1e5f5a0f2abf979b429405",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x0042d2b0",
+      "name": "Task_DefineRotor",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_42d2b0.cpp",
+        "sha256": "2645b318a4d0ec8e4c98559a8759af3d6461dababa576da3bbaf3777bf3c3933",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x0042ff00",
+      "name": "Task_DefineWheel",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_42ff00.cpp",
+        "sha256": "6225aff6522a0f4c78989e0c40ce3fa2198d6134801c1c7515029461cd0a6325",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x0048f220",
+      "name": "GetStartupMode",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_48f220.cpp",
+        "sha256": "0890b84c3ee48539b5d3f552d90a6f9f7700a55c12c44d85b5c6829b11631184",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x0048f330",
+      "name": "SetForcePrecompiled",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_48f330.cpp",
+        "sha256": "e8b5900d36ec7f1a085d449a299c2bbee30a1f20bf339f80585827cebb20e9d9",
         "signature": "unknown"
       },
       "verification": {

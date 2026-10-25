@@ -11,7 +11,7 @@
 
 // Native: Sys_GetGlobal8_408340; retail VA 0x00408340.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Tools/evidence: Radare2 on retail IGI.EXE; VA 0x00408340..0x004227909 (6 bytes, 1 block, 0 edges), bytes a0 1a 85 53 00 c3. Reads byte 2 of the run at 0x00538518..0x0053851A.
+// Tools/evidence: Radare2 on retail IGI.EXE; VA 0x00408340..0x00408346 (6 bytes, 1 block, 0 edges), bytes a0 1a 85 53 00 c3. Reads byte 2 of the run at 0x00538518..0x0053851A.
 // Behavior/CFG: `mov al,byte [0x000053851a]; ret` -- one block, unconditional load, no branch and no side effect. Returns the byte in AL; the upper 24 bits of EAX are not cleared, which is what retail leaves.
 // Status/limits: STRUCTURALLY_VERIFIED; literal one-block copy. The storage is defined once, in native_408320.cpp, and this file binds to it. No runtime observation in either binary.
 // Retail 0x0053851A: owned by its writer, native 0x00407D60 (render/native_00407d60.cpp).
