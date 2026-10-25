@@ -2071,3 +2071,31 @@ Also established: `0x00424790` is the MenuWindow teardown, found from its single
 caller `0x00402CA4` rather than from alignment, and its
 `mov word [0x0053B90C], 0x181` is the missing half of the parent-type slot -
 `0x00424850` reads `0x0181` at rest because the teardown puts it there.
+
+## True coverage against the real callee set (replaces every earlier figure)
+
+Measured with the guard's own extent, `0x00402930` to its `ret` at `0x00402FEB`:
+
+| | count |
+|---|---|
+| direct `call` instructions | 314 |
+| **distinct callee targets** | **308** |
+| symbol present in `igi1.exe` | **132** |
+| implementation file exists, symbol absent | 16 |
+| no implementation file | 160 |
+
+132 + 16 + 160 = 308. Of the 308, **46 are in `0x0042xxxx`** (24 registrars +
+22 teardowns).
+
+**So the remaining work is 176 callees, not 24.** Every coverage figure I
+reported earlier - 124, 126, 129, 130 "of 154" - measured a filtered evidence
+list, not this set. The near-agreement between 130 and 132 is a coincidence of
+two different denominators and must not be read as confirmation of either.
+
+**Two instrument faults produced this number before it was right.** The first run
+of this very script reported 132 -> 0 and 308 -> 308, i.e. "no callee has a
+symbol", which is impossible when 46 of them are in a band with landed files. The
+cause: `implementation_natives()` returns addresses zero-padded (`00421430`) while
+the `call` regex captures them unpadded (`421430`), so every lookup missed. A
+dictionary keyed on two different spellings of the same address returns zero and
+looks like a measurement. Normalise both sides to 8 hex digits before comparing.
