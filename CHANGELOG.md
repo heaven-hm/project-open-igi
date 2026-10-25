@@ -11,6 +11,40 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - the container argument is a capacity, not the record count
+
+**A correction to a rule stated earlier in this file, made by the agent that proposed
+it and verified here against both callee bodies.** The three-number rule for
+multi-block bodies said the allocation count witnesses the loop trip count. It does
+not, in the form stated.
+
+`Script_TaskContainer_Alloc` (`0x004F1950`) computes `size = count*16 + 12`, allocates,
+then stores `[base+4] = count`, **`[base] = 0`** and `[base+8] = base+12`.
+`Script_TaskContainer_Append` (`0x004F1A80`) reads `esi = [base]`, shifts it by 4, writes
+the 16-byte record at `payload + [base]*16`, and then **increments `[base]`**.
+
+So `[base]` is a live record count starting at zero and `[base+4]` is the capacity. **The
+allocation argument is an upper bound.** The correct check is `records <= capacity`, not
+`records == capacity`.
+
+The evidence that forced it: `0x0043B850` allocates with 13 and appends 12 records in a
+single basic block, with no loop that could reconcile the difference. In
+`0x004397C0` (8), `0x0043AD80` (6), `0x0043A840` (12) and `0x0043B2F0` (5) the two
+numbers happened to meet exactly, which is why the check looked like a witness. In those
+bodies it still was a real check, because a wrong trip count leaves records *below*
+capacity and breaks the equality — but it is a check that can only fail, never one that
+proves a count on its own, and here it does not even hold.
+
+**The honest form: capacity bounds the records, and a loop's trip count is confirmed
+only when the two meet exactly.** A mismatch is not by itself an error, and
+`0x00407290` — 52 appends over two allocations — must not be read as one if it has
+slack.
+
+The mechanism also explains a field recorded as unexplained in several files: the
+capacity at `+4` is written by `Alloc` and never read by `Append`, so the container
+carries its capacity without enforcing it. Nothing in either lane reads it; if a handler
+does, that is where the bound becomes load-bearing.
+
 ### 2026-10-25 - the frame shift is a per-prologue fact: three bodies, three answers
 
 Three consecutive registrar bodies in one lane, one family and one `lea`-into-frame
