@@ -640,6 +640,10 @@ add_executable(igi WIN32
     engine/src/retail/core/native_465a10.cpp
     engine/src/retail/core/native_466f70.cpp
     engine/src/retail/core/native_4310f0.cpp
+    engine/src/retail/core/native_4330f0.cpp
+    engine/src/retail/core/native_4351e0.cpp
+    engine/src/retail/core/native_435870.cpp
+    engine/src/retail/core/native_435d90.cpp
     engine/src/retail/core/native_48f220.cpp
     engine/src/retail/core/native_48f330.cpp
     engine/platform/windows/retail_native_verification_support.cpp)

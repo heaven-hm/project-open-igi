@@ -25,7 +25,10 @@
 //   interleaved arithmetic progressions of stride 0xCC.** The seven single appends use deltas 0x20, 0xE4, 0x1B0, 0x27C, 0x348, 0x414, 0x4E0
 //   (each 0xCC from the next) and the six groups of three use deltas 0x70/0x90/0x94, 0x13C/0x15C/0x160, 0x208/0x228/0x22C, 0x2D4/0x2F4/0x2F8,
 //   0x3A0/0x3C0/0x3C4 and 0x46C/0x48C/0x490, whose first elements are also 0xCC apart and whose members are always +0x00/+0x20/+0x24 relative to
-//   each other. The type argument follows the same split exactly: **every single append takes Sys_GetGlobal32_4F0FC0 and every group of three
+//   each other. The 0xCC stride is recorded here as a HYPOTHESIS about a record layout, not as a decoded layout, and it has since been
+//   falsification-tested once from the registration side: the whole retail image contains ZERO occurrences of `push $0xCC`, so the stride is not
+//   a task-type registration size, a container count or an allocation argument anywhere in the image. The test therefore neither confirms nor
+//   contradicts the stride - it only removes that family of explanations, and the layout question stays open. The type argument follows the same split exactly: **every single append takes Sys_GetGlobal32_4F0FC0 and every group of three
 //   takes Sys_GetGlobal32_4F0FE0, Core_GetRenderWordA_4F0FA0, Sys_GetGlobal32_4F0FC0 in that order**, which is why the image's per-target counts
 //   are 13 / 6 / 6 for those three getters. Arg5 is 7 and arg6 is 0 in all 25 appends. **0x004F0FA0 is implemented in this tree under a
 //   different name than its siblings**: it is `Core_GetRenderWordA_4F0FA0` (core/native_4f0fa0.cpp), not `Sys_GetGlobal32_4F0FA0`, while
