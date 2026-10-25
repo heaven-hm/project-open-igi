@@ -28760,6 +28760,42 @@
       }
     },
     {
+      "address": "0x004199B0",
+      "name": "Task_ClearClassType_4199B0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_4199b0.cpp",
+        "sha256": "639aba65223b7d38f17902f758d14f82dd47a4dfcfbe38971c86b62adc415f29",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/menu/004199B0-Menu_LeaveMenus_6 2.cpp",
+        "sha256": "12f639a31c452b6fed7b7ad5497ad0ae4d48ec5330c3726f5ddad209567476db",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x004199B0",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004199B0-binaryninja.json",
+          "evidence_sha256": "96e4aeaf1e5968cb29b20b5a8666f7bae4e9d7d2887589e724fda4ab19af4b26"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x004199B0",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004199B0-radare2.json",
+          "evidence_sha256": "06659a2960551f763def5c5e93763a99431a09b59ba9dc43d4793ecdfcbd163d"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0
+      }
+    },
+    {
       "address": "0x004199F0",
       "name": "Task_DefineDialogWindow_4199F0",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
@@ -28810,6 +28846,42 @@
         "evidence": [
           "scripts/GameNatives/EU_NATIVES_BN_COPY.md"
         ]
+      }
+    },
+    {
+      "address": "0x0041A1A0",
+      "name": "Task_ClearClassTypeAndDeleteList_41A1A0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_41a1a0.cpp",
+        "sha256": "1e22abd3dd71041cd69828dbacab21172e8d08a7f8b615a8db62d787d83dac8e",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/menu/0041A1A0-Menu_PlayMusic_6 2.cpp",
+        "sha256": "b7d465bc113b71b2f004644ae79bbd7f767f78094af6598808be6383ba55700e",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x0041A1A0",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x0041A1A0-binaryninja.json",
+          "evidence_sha256": "e6f22997257f3e2f101b6c6f1eaef32bb609930b383ba46b0d53d3d56f9d7b99"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x0041A1A0",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x0041A1A0-radare2.json",
+          "evidence_sha256": "fcffbc0db5adb7c828b477a2cf4b111d65a3d5ba62a4990b3e82f789389bded7"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0
       }
     },
     {
@@ -29226,6 +29298,42 @@
       }
     },
     {
+      "address": "0x00420C90",
+      "name": "Task_ClearClassTypeAndDeleteList_420C90",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_420c90.cpp",
+        "sha256": "e75b496cb9110e47b870c9d0017028ca7651c2185f7ac813aadba4d63424808c",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/menu/00420C90-Menu_DrawWidget_10 2.cpp",
+        "sha256": "45dddf66b5c1bff57eb86d1bdf32e4cf7aadb9a7dbaba23966849e19bb084690",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x00420C90",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x00420C90-binaryninja.json",
+          "evidence_sha256": "bb409cf37ad125d0ff93e56f3dbf9c8f13542357317c56fc5bdea7acc921b505"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x00420C90",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x00420C90-radare2.json",
+          "evidence_sha256": "75148f379e83b5faf4d648f188a7ead076cfd5725acd5b2a1e7509e90eb5c088"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0
+      }
+    },
+    {
       "address": "0x00420CC0",
       "name": "MenuText_Register_420CC0",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
@@ -29298,6 +29406,42 @@
       }
     },
     {
+      "address": "0x00421700",
+      "name": "Task_ClearClassTypeAndDeleteList_421700",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_421700.cpp",
+        "sha256": "545659c1f872bb05f4121a423e5fcfdd85c6d9464ba71ac9915c387966d81e6e",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/menu/00421700-Menu_RequestScreen_11 2.cpp",
+        "sha256": "6b68690544ea046b9e52282f0f7a703429145a6e993d9f91bbe9ba8bfa6e939f",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x00421700",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x00421700-binaryninja.json",
+          "evidence_sha256": "cac8f522586849b5ace09c0b63a2e2b6047039c93a54c5934aabd06e8454effe"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x00421700",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x00421700-radare2.json",
+          "evidence_sha256": "cd1cc0f40ee7c425a1699ded1503317e93bd6d8f09593497c9355b83ee668ba2"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0
+      }
+    },
+    {
       "address": "0x00421750",
       "name": "MenuScreen_Register_421750",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
@@ -29334,6 +29478,42 @@
       }
     },
     {
+      "address": "0x004223A0",
+      "name": "Task_ClearClassTypeAndDeleteList_4223A0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_4223a0.cpp",
+        "sha256": "774fbdfdc6c32cc24236c2829f85c42c312160cdcd35d7b1de8718454109407c",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/menu/004223A0-Menu_FormatScreen_11 2.cpp",
+        "sha256": "fb03b85711d0cf58ef15dd4b523bead2d6b14dc754b8eee3ac924087958d2859",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x004223A0",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004223A0-binaryninja.json",
+          "evidence_sha256": "b8491615a281e9d53efba78fce468b55acbf2fe4d840fe29f63d45614aa6b8dd"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x004223A0",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004223A0-radare2.json",
+          "evidence_sha256": "78d7718618c81dc5639dc914897f82d1b0deb4cff7e4be6186a649c4357d0c0f"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0
+      }
+    },
+    {
       "address": "0x004223D0",
       "name": "MenuFrame_Register_4223D0",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
@@ -29360,6 +29540,42 @@
           "signature": "unknown",
           "evidence_path": "docs/fidelity/evidence/0x004223D0-radare2.json",
           "evidence_sha256": "5db11ca8876ef11e22f4bcfbbf547b08b8de70a6ae8926f2bca52a71488ac39a"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0
+      }
+    },
+    {
+      "address": "0x00422B10",
+      "name": "Task_ClearClassTypeAndDeleteList_422B10",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_422b10.cpp",
+        "sha256": "1c0ef1556070f5b0a0bca22624da9b3163924ad9c56d4ba626af69e962da1f97",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/menu/00422B10-Menu_HandleInput_11 2.cpp",
+        "sha256": "dc2725efbf3bb13e83c5140f04b8e299d0f2cadcef424bfabe97f50211cfe289",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x00422B10",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x00422B10-binaryninja.json",
+          "evidence_sha256": "cf2fbd10d98f1d6496b437913356788d9752305186b661526d74bfcdce16c3af"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x00422B10",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x00422B10-radare2.json",
+          "evidence_sha256": "def7e299ac81ba2a8c904e22ec1db9824397d0f06c1044c1541ddcc128d34e94"
         },
         "signature_comparison": {
           "reviewed": true,
@@ -29787,6 +30003,42 @@
           "evidence_path": "docs/fidelity/evidence/0x00423000-behavioral.json",
           "evidence_sha256": "613754e68ec4b507555aa7048441decaeec7e552ac28a1d94b478a7e430514a7"
         }
+      }
+    },
+    {
+      "address": "0x00423050",
+      "name": "Task_ClearClassTypeAndDeleteList_423050",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_423050.cpp",
+        "sha256": "4bbe550e9391982b547bb0354b8d375f63988899a780b16fcb1be277ce873ba9",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/menu/00423050-Menu_RequestScreen_12 2.cpp",
+        "sha256": "2042bda88a63b8bef0d9b77e2ce96086ca4d69a0a1d141ff4caa29ac904f6226",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x00423050",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x00423050-binaryninja.json",
+          "evidence_sha256": "facccfa49385046c1988138ebea284dbba76edb51959cb374f0cf54434bb68a0"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x00423050",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x00423050-radare2.json",
+          "evidence_sha256": "1c898fdc8e8bf3e8de415feeb1ac8fbe4118d1602533f1634871770619f15442"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0
       }
     },
     {
@@ -30269,6 +30521,42 @@
       }
     },
     {
+      "address": "0x00424E10",
+      "name": "Task_ClearClassType_424E10",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_424e10.cpp",
+        "sha256": "6be81740234478d8bf359bed100a47c20c0a38522155866c3fb7494c3c9c9dd4",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/menu/00424E10-Menu_LeaveMenus_15 2.cpp",
+        "sha256": "a581ec709898646ad3c4f3d3e826f0b8a0c41266f9b96ed6fc8b5fa9368ccb4f",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x00424E10",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x00424E10-binaryninja.json",
+          "evidence_sha256": "07757a2de16619d7fcb819b118b5aa419d7ecd32def4caeeb8d90336bca98afb"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x00424E10",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x00424E10-radare2.json",
+          "evidence_sha256": "27e48d935373524c850cb40be5c9c120ab4a59a27e7c22c6b302075f2d999121"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0
+      }
+    },
+    {
       "address": "0x00424E80",
       "name": "ConditionalSound_Register_424E80",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
@@ -30322,6 +30610,42 @@
       }
     },
     {
+      "address": "0x00425580",
+      "name": "Task_ClearClassTypeAndDeleteList_425580",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_425580.cpp",
+        "sha256": "702ad2e0b2497520d4a6144251e95f2e0a5b2c9128de368b36ccf964195faa30",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/menu/00425580-Menu_RequestScreen_16 2.cpp",
+        "sha256": "a24bbf76d97c5f0c7f49e606102b20544a4a27df68dcc3b79bbd50ad692b0c2e",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x00425580",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x00425580-binaryninja.json",
+          "evidence_sha256": "7aea09e0fa48563eccc6191c4fa5eab959dd90c60f74c995acfe5e0b2358e8c9"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x00425580",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x00425580-radare2.json",
+          "evidence_sha256": "b8ebd51a259ec93a725776fa498b015744e181b984d26ec2017dd0b838546c13"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0
+      }
+    },
+    {
       "address": "0x00425C80",
       "name": "CarAI_Register_425C80",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
@@ -30348,6 +30672,42 @@
           "signature": "unknown",
           "evidence_path": "docs/fidelity/evidence/0x00425C80-radare2.json",
           "evidence_sha256": "07bacdad42faf6ccfd7697f768b189350acf3589e0abb71ff1a2c71bc0a0a208"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0
+      }
+    },
+    {
+      "address": "0x00426610",
+      "name": "Task_ClearClassTypeAndDeleteList_426610",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_426610.cpp",
+        "sha256": "66c824f3ce7ad4f4e9551e52053d80bebee3953e39b2ed4dba526016d4899d9a",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/menu/00426610-Menu_FormatScreen_17 2.cpp",
+        "sha256": "21ba1385671daab6beede2ff2ddcd76ad5de4d9521b78f7089038629d8da6056",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x00426610",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x00426610-binaryninja.json",
+          "evidence_sha256": "9ec92a0b4082ec6193fd4e6b56eb438921a53a9026b3751196e1034cb500e067"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x00426610",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x00426610-radare2.json",
+          "evidence_sha256": "a808b643ac4c2f5e7a2ae8d73503a56deadc9b04cb47b145d5cbf80196ba1f9e"
         },
         "signature_comparison": {
           "reviewed": true,
@@ -30394,6 +30754,42 @@
       }
     },
     {
+      "address": "0x00426D60",
+      "name": "Task_ClearClassType_426D60",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_426d60.cpp",
+        "sha256": "d39a9d82f199df8145afd027d6cafa81f87c86c8a047ff2077e09d31300fe76f",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/menu/00426D60-Menu_PlayMusic_17 2.cpp",
+        "sha256": "f856889b7ce2840087bb7e2874b3e5aa314a21e1ea58471f37743e08e66d9692",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x00426D60",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x00426D60-binaryninja.json",
+          "evidence_sha256": "a28af779e1c585c5ef2407548854ec5d7ac21f66f1a5e6b4d695c54c5c7aa864"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x00426D60",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x00426D60-radare2.json",
+          "evidence_sha256": "fc70486e3b173b47c140cd4c86822d84e7daa6e30b6473bb84fcb6fb3cac7fd3"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0
+      }
+    },
+    {
       "address": "0x00426D90",
       "name": "HeliWheel_Register_426D90",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
@@ -30430,6 +30826,42 @@
       }
     },
     {
+      "address": "0x00427280",
+      "name": "Task_ClearClassType_427280",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_427280.cpp",
+        "sha256": "f653ff5516b34d90b77ca7cf28087ac255d5d7acfe1fda121accc3c9671222d5",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/menu/00427280-Menu_RequestScreen_18 2.cpp",
+        "sha256": "659910b741735e4d461a5acfac6de7a0f73fcc5400bafd2b1b3907f586f6128c",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x00427280",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x00427280-binaryninja.json",
+          "evidence_sha256": "cba64bae9147926fb6bc8159213b7abce7724f36f015f7128ec7b19f809220af"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x00427280",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x00427280-radare2.json",
+          "evidence_sha256": "4c38c17f59354cd0eb4a7299357fc52ca29cb4d9e98abfb3c1e7f0a1c10c091c"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0
+      }
+    },
+    {
       "address": "0x004272A0",
       "name": "HeliDoor_Register_4272A0",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
@@ -30456,6 +30888,42 @@
           "signature": "unknown",
           "evidence_path": "docs/fidelity/evidence/0x004272A0-radare2.json",
           "evidence_sha256": "59464bda632d4192bbfc55b60df8172e1fbe1d1d58c3cc57ba122833bb70d285"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0
+      }
+    },
+    {
+      "address": "0x00427810",
+      "name": "Task_ClearClassType_427810",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_427810.cpp",
+        "sha256": "de687edce3a1a758cd707c1a80b0d2db8ceda04fa0bee6e9f7c4b2d9c3fd144f",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/menu/00427810-Menu_UpdateLanguage_18 2.cpp",
+        "sha256": "fddb780698c66a32a5c395ed1fd4fbd3b3433d4e5e4001c4c40fd590f3eae5b6",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x00427810",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x00427810-binaryninja.json",
+          "evidence_sha256": "a59588aa9f54f121a04c870ce4a9c8727c649be070957c8034c103f7f400969a"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x00427810",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x00427810-radare2.json",
+          "evidence_sha256": "0fc5a4179391b27f1baad3badf3604edd5586d3393364de97c0b95e13c97d353"
         },
         "signature_comparison": {
           "reviewed": true,
@@ -30541,6 +31009,42 @@
       }
     },
     {
+      "address": "0x00427D80",
+      "name": "Task_ClearClassType_427D80",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_427d80.cpp",
+        "sha256": "178cb5b44564a0791ab9a824b077504c4dec6b51a5013927ea9c168024c92321",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/menu/00427D80-Menu_PlayMusic_18 2.cpp",
+        "sha256": "8dbbcdabe73e4b5ca4e612d89c7ac7a4434121ce7e0248d785dfab57da784646",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x00427D80",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x00427D80-binaryninja.json",
+          "evidence_sha256": "a4fcfb0f9cf80db807cd41d18cbe6628bf4c0a33f8568308aa6a14f1dd80e821"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x00427D80",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x00427D80-radare2.json",
+          "evidence_sha256": "895051972a119b84c797370e198a86ca012296c89271a7899ef5a5473301312d"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0
+      }
+    },
+    {
       "address": "0x00427D90",
       "name": "HitZone_Register_427D90",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
@@ -30616,6 +31120,42 @@
       }
     },
     {
+      "address": "0x00427FB0",
+      "name": "Task_ClearClassType_427FB0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_427fb0.cpp",
+        "sha256": "dcf0c3a7d238324e703972cdb6ebf45c8864f3ad63251bb6101435ed4ff1c12c",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/menu/00427FB0-Menu_DrawWidget_18 2.cpp",
+        "sha256": "4c7cad1dad9619c5e8d729d5a6ad2e6e66482886ecba9f88503372662ab42eb8",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x00427FB0",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x00427FB0-binaryninja.json",
+          "evidence_sha256": "c31175c21dfe30607221cee42900b3a62fd7e35e8b40061f891548d772738343"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x00427FB0",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x00427FB0-radare2.json",
+          "evidence_sha256": "aac4d5abbfa7dfd2677ac00dae5bb382329478145894451b1e7cdef36eb7b45a"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0
+      }
+    },
+    {
       "address": "0x00427FF0",
       "name": "Missile_Register_427FF0",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
@@ -30642,6 +31182,78 @@
           "signature": "unknown",
           "evidence_path": "docs/fidelity/evidence/0x00427FF0-radare2.json",
           "evidence_sha256": "9035c022a018237556117fd2cc4cd92ec9e4d8e276f32013b364d52c80c5c3f1"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0
+      }
+    },
+    {
+      "address": "0x00429A00",
+      "name": "Task_ClearClassTypeAndDeleteList_429A00",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_429a00.cpp",
+        "sha256": "e5ad5f80aee57956b3482e49f35fda4de2214c6a83cc63e65b5e13686019cb99",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/menu/00429A00-Menu_FormatScreen_20 2.cpp",
+        "sha256": "65636b16ea3adf28b89cd66a189a84e9eb74e6cfd8d10d2a22a474daeb98c2a6",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x00429A00",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x00429A00-binaryninja.json",
+          "evidence_sha256": "151d32263b66663f729635f7bdac0884ca1de3a7590979e9d75404a4d41b9b41"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x00429A00",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x00429A00-radare2.json",
+          "evidence_sha256": "7bff41ac9c88af1640028704ec4fa6c7de924f21706612fb5206048da6ada7e9"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0
+      }
+    },
+    {
+      "address": "0x0042FDA0",
+      "name": "Task_ClearClassTypeAndDeleteList_42FDA0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_42fda0.cpp",
+        "sha256": "7cdb7fe1f77b0fd7c427a1c6591285069837a0e982c2565ca9c72e9e013c89c5",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/menu/0042FDA0-Menu_RequestScreen_23 2.cpp",
+        "sha256": "60c9c78e0539274f16e5e62d1f1351e6ae426250b5ac86187d31a531eea0d418",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x0042FDA0",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x0042FDA0-binaryninja.json",
+          "evidence_sha256": "e2c96d583c9413bce8bca22f761120c113caf9a29f47b686cb8d62a50ab7046c"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x0042FDA0",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x0042FDA0-radare2.json",
+          "evidence_sha256": "b0990aebfe3fa1a4428a8334d1211328781c53d1df1fc814f42b0f05254dc384"
         },
         "signature_comparison": {
           "reviewed": true,
