@@ -1,5 +1,40 @@
 ## Unreleased
 
+### The link checker's math-helper list was one name where it needed a class
+
+chain-worker found that `check_native_linkable.py` reported `sincosl`/`sincosf`/
+`llrintl` as "undefined in tree" for files that link cleanly - GCC emits these
+itself when it fuses or widens floating-point work. **Two committed files were
+affected**: `core/native_4192e0.cpp` (`sincosf`) and `core/native_419630.cpp`
+(`llrintl`, `sincosl`).
+
+My earlier fix added `sincosl` alone, which was a name where the problem was a
+class. Widened to the family - `sincos`/`sincosf`/`sincosl`, the `llrint`/`lrint`/
+`llround`/`round` long-double set, and `sinl`/`cosl`/`powl`/`fmodl`/`atan2l`/
+`floorl`/`ceill`/`truncl`. Both flagged files now report linkable, and a sweep of
+the tree finds **no file still citing a math helper as undefined**.
+
+This is the `___mingw_sprintf` artifact for the third time: a runtime routine
+counted as a missing native, which reads as NOT LINKABLE for code that links. **A
+no-link result is a statement about the checker's symbol list as much as about the
+tree**, and I have now twice fixed one name instead of the class.
+
+### chain-worker: GCC folds decimal float literals with more precision than the float carries
+
+Found while transcribing `0x00449D30`: `static_cast<long double>(0.0011111111380159855F)`
+emits the 80-bit constant `69 00 00 00 00 b4 a2 91 f5 3f` (mantissa
+`0x91A2B40000000069`) instead of the exact widening `00 00 00 00 00 b4 a2 91 f5 3f`
+(`0x91A2B40000000000`). The fix is a hex literal - `0x1.234568p-10L` emits exactly
+`b4 a2 91 3a`.
+
+**Any file feeding an x87 float constant into a long double chain can carry the same
+off-by-last-bit error**, and it is invisible in the source because the decimal
+literal looks like the right value. This is a bit-exactness defect, not a style
+issue, and it belongs in the sweep for the `0x5335xx` constants and the `fcos/fsin`
+precedents.
+
+## Unreleased
+
 ### 18 natives whose CFG claim disagrees with the measured CFG
 
 After correcting `0x00504A30`'s "1 block, 0 edges" against a measured 6 nodes /

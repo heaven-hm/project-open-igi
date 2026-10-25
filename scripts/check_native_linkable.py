@@ -57,8 +57,17 @@ def main():
     # libmingwex/libm long-double and float math routines the compiler emits
     # itself for sincosl/sincosf and friends. They are runtime, not natives.
     MATH_HELPERS = {
-        'sincosl', 'sincosf', 'sincos', '__sincosl', '__sincosf',
-        'sinl', 'cosl', 'tanl', 'sqrtl', 'fabsf', 'fabsl', 'powl',
+        # libmingwex/libm routines GCC emits itself when it fuses or widens
+        # floating-point work: sin/cos fusion and the long-double rounding family.
+        # These are runtime, not natives. The list is a class, not a name: the
+        # first version named only sincosl and two committed files were still
+        # reported NOT LINKABLE for sincosf and llrintl.
+        'sincos', 'sincosf', 'sincosl', '__sincos', '__sincosf', '__sincosl',
+        'llrint', 'llrintf', 'llrintl', 'lrint', 'lrintf', 'lrintl',
+        'llround', 'llroundf', 'llroundl', 'round', 'roundf', 'roundl',
+        'sinl', 'cosl', 'tanl', 'sqrtl', 'powl', 'fmodl', 'atan2l',
+        'fabsf', 'fabsl', 'floorl', 'ceill', 'truncl', 'nearbyintl',
+        'rint', 'rintf', 'rintl', 'copysignl', 'scalbnl', 'ldexpl',
     }
 
     def runtime_helper(n):
