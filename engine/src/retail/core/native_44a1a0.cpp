@@ -1,4 +1,4 @@
-// Native: Task_Handler_44A1A0 (placeholder name for the event 2 handler that Task_DefineGlassShatter_449D30 links at 0x00449E33); retail VA 0x0044A1A0-0x0044A1B1.
+// Native: Task_Handler_44A1A0 (placeholder: the second event handler of the class registered by Task_DefineGlassShatter_449D30); retail VA 0x0044A1A0-0x0044A1B1.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; 18 bytes (0x12), 1 block, 0 edges,
 //   6 instructions, counted with af + afbj over the exact image. The body ends at the `ret` at 0x0044A1B1; fourteen 0x90 pad bytes follow at
 //   0x0044A1B2-0x0044A1BF and the next function starts at 0x0044A1C0.

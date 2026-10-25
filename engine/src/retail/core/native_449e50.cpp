@@ -1,4 +1,4 @@
-// Native: Task_Handler_449E50 (placeholder: the event 1 handler that Task_DefineGlassShatter_449D30 links at 0x00449E2F); retail VA 0x00449E50-0x0044A19A.
+// Native: Task_Handler_449E50 (placeholder: the first event handler of the class registered by Task_DefineGlassShatter_449D30); retail VA 0x00449E50-0x0044A19A.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; 843 bytes (0x34B), 12 blocks, 17 edges,
 //   261 instructions, measured with af + afbj over the exact image. Per-block instruction counts in address order are
 //   21, 1, 13, 4, 4, 3, 196, 6, 2, 4, 3, 4 and sum to the 261 the instruction count reports; the matching per-block byte counts
@@ -13,7 +13,8 @@
 //   both are float operands of x87 chains, so both are written below as the exact hex literals of those floats (-0x1.64CE9Ep+5L,
 //   0x1.111112p-5L) rather than as decimal literals, for the reason recorded in this tree's float-literal finding. 0x00533678 is NOT the
 //   value fixed in core/native_449d30.cpp: that one is 0x005338BC, bytes 3A 91 A2 B4 = 0.001111111138, a different address and value.
-// Behavior/CFG: the event 1 handler of the "GlassShatter" class, ABI void(void* context). It (1) scales context+0xA8/+0xAC/+0xB0 by
+// Behavior/CFG: the event 1 handler of the "GlassShatter" class (Task_DefineGlassShatter_449D30 links it as that class's first event at
+//   0x00449E2F; the second event is 0x0044A1A0), ABI void(void* context). It (1) scales context+0xA8/+0xAC/+0xB0 by
 //   -44.6008873 and context+0xBC (a signed int, `fildl`) by 0.03333333507 into 0x0057C248; (2) writes that shared value into +0x30/+0x34/+0x38
 //   of every 0x50-byte record of the object at context+0x2B040 (record base at object+0x6C, count at object+0x9C); (3) walks context+0xB8
 //   elements, each a 0x60-byte source element at context+0xD8 and a 0x50-byte destination element at context+0x17800, and for every element
