@@ -1,0 +1,246 @@
+0x0042acc0      sub esp, 0x8e0
+0x0042acc6      push 0
+0x0042acc8      push 0
+0x0042acca      call 0x4f45f0
+0x0042accf      push eax
+0x0042acd0      push 0x8e0                                             ; 2272
+0x0042acd5      push str.Train                                         ; 0x53bd1c ; "Train"
+0x0042acda      call 0x401900
+0x0042acdf      push 0x429f80
+0x0042ace4      push 0
+0x0042ace6      push eax
+0x0042ace7      mov word [0x57bcb8], ax                                ; [0x57bcb8:2]=0
+0x0042aced      call 0x401400
+0x0042acf2      mov ax, word [0x57bcb8]                                ; [0x57bcb8:2]=0
+0x0042acf8      push 0x42a100
+0x0042acfd      push 2                                                 ; 2
+0x0042acff      push eax
+0x0042ad00      call 0x401530
+0x0042ad05      add esp, 0x2c
+0x0042ad08      push 0x42a150
+0x0042ad0d      call 0x4f1a70
+0x0042ad12      mov cx, word [0x57bcb8]                                ; [0x57bcb8:2]=0
+0x0042ad19      push eax
+0x0042ad1a      push ecx
+0x0042ad1b      call 0x401400
+0x0042ad20      add esp, 0xc
+0x0042ad23      push 0x42b030
+0x0042ad28      call 0x4f1a60
+0x0042ad2d      mov dx, word [0x57bcb8]                                ; [0x57bcb8:2]=0
+0x0042ad34      push eax
+0x0042ad35      push edx
+0x0042ad36      call 0x401400
+0x0042ad3b      mov ax, word [0x57bcb8]                                ; [0x57bcb8:2]=0
+0x0042ad41      push 0x42b500
+0x0042ad46      push 7                                                 ; 7
+0x0042ad48      push eax
+0x0042ad49      call 0x401400
+0x0042ad4e      mov cx, word [0x57bcb8]                                ; [0x57bcb8:2]=0
+0x0042ad55      push 0x42b700
+0x0042ad5a      push 1                                                 ; 1
+0x0042ad5c      push ecx
+0x0042ad5d      call 0x401530
+0x0042ad62      add esp, 0x24
+0x0042ad65      push 0x42b220
+0x0042ad6a      call 0x4e6610
+0x0042ad6f      mov dx, word [0x57bcb8]                                ; [0x57bcb8:2]=0
+0x0042ad76      push eax
+0x0042ad77      push edx
+0x0042ad78      call 0x401400
+0x0042ad7d      add esp, 0xc
+0x0042ad80      push 0x42b040
+0x0042ad85      call 0x4f40d0
+0x0042ad8a      push eax
+0x0042ad8b      mov ax, word [0x57bcb8]                                ; [0x57bcb8:2]=0
+0x0042ad91      push eax
+0x0042ad92      call 0x401400
+0x0042ad97      add esp, 0xc
+0x0042ad9a      push 0x42b2c0
+0x0042ad9f      call 0x4f40e0
+0x0042ada4      mov cx, word [0x57bcb8]                                ; [0x57bcb8:2]=0
+0x0042adab      push eax
+0x0042adac      push ecx
+0x0042adad      call 0x401400
+0x0042adb2      add esp, 0xc
+0x0042adb5      push 0x4eff20
+0x0042adba      call 0x4f4110
+0x0042adbf      mov dx, word [0x57bcb8]                                ; [0x57bcb8:2]=0
+0x0042adc6      push eax
+0x0042adc7      push edx
+0x0042adc8      call 0x401400
+0x0042adcd      add esp, 0xc
+0x0042add0      push 0x42b240
+0x0042add5      call 0x4f4120
+0x0042adda      push eax
+0x0042addb      mov ax, word [0x57bcb8]                                ; [0x57bcb8:2]=0
+0x0042ade1      push eax
+0x0042ade2      call 0x401400
+0x0042ade7      add esp, 0xc
+0x0042adea      push 0x42b280
+0x0042adef      call 0x4f4130
+0x0042adf4      push eax
+0x0042adf5      mov cx, word [0x57bcb8]                                ; [0x57bcb8:2]=0
+0x0042adfc      push ecx
+0x0042adfd      call 0x401400
+0x0042ae02      add esp, 0xc
+0x0042ae05      push 0x42b2f0
+0x0042ae0a      call 0x4f4140
+0x0042ae0f      mov dx, word [0x57bcb8]                                ; [0x57bcb8:2]=0
+0x0042ae16      push eax
+0x0042ae17      push edx
+0x0042ae18      call 0x401400
+0x0042ae1d      add esp, 0xc
+0x0042ae20      push 0x42b930
+0x0042ae25      call 0x416890
+0x0042ae2a      push eax
+0x0042ae2b      mov ax, word [0x57bcb8]                                ; [0x57bcb8:2]=0
+0x0042ae31      push eax
+0x0042ae32      call 0x401400
+0x0042ae37      add esp, 0xc
+0x0042ae3a      push 0x42ac20
+0x0042ae3f      call 0x4c5800
+0x0042ae44      mov cx, word [0x57bcb8]                                ; [0x57bcb8:2]=0
+0x0042ae4b      push eax
+0x0042ae4c      push ecx
+0x0042ae4d      call 0x401400
+0x0042ae52      add esp, 0xc
+0x0042ae55      push 0x42bba0
+0x0042ae5a      call 0x4cea20
+0x0042ae5f      mov dx, word [0x57bcb8]                                ; [0x57bcb8:2]=0
+0x0042ae66      push eax
+0x0042ae67      push edx
+0x0042ae68      call 0x401400
+0x0042ae6d      add esp, 0xc
+0x0042ae70      push 0x42bb60
+0x0042ae75      call 0x4cea10
+0x0042ae7a      push eax
+0x0042ae7b      mov ax, word [0x57bcb8]                                ; [0x57bcb8:2]=0
+0x0042ae81      push eax
+0x0042ae82      call 0x401400
+0x0042ae87      push 0xa                                               ; 10
+0x0042ae89      call 0x4f1950
+0x0042ae8e      add esp, 0x10
+0x0042ae91      mov dword [0x57bcbc], eax                              ; [0x57bcbc:4]=0
+0x0042ae96      mov dword [0x57bce8], 0xc0a00000                       ; [0x57bce8:4]=0
+0x0042aea0      mov dword [0x57bcec], 0x40a00000                       ; [0x57bcec:4]=0
+0x0042aeaa      push 0
+0x0042aeac      push 7                                                 ; 7
+0x0042aeae      call 0x4f0f50
+0x0042aeb3      lea ecx, [esp + 0x774]
+0x0042aeba      push eax
+0x0042aebb      mov eax, dword [0x57bcbc]                              ; [0x57bcbc:4]=0
+0x0042aec0      lea edx, [esp + 0xc]
+0x0042aec4      push ecx
+0x0042aec5      push edx
+0x0042aec6      push eax
+0x0042aec7      call 0x4f1a80
+0x0042aecc      add esp, 0x18
+0x0042aecf      push 0
+0x0042aed1      push 7                                                 ; 7
+0x0042aed3      call 0x4f0f50
+0x0042aed8      lea ecx, [esp + 0x760]
+0x0042aedf      push eax
+0x0042aee0      mov eax, dword [0x57bcbc]                              ; [0x57bcbc:4]=0
+0x0042aee5      lea edx, [esp + 0xc]
+0x0042aee9      push ecx
+0x0042aeea      push edx
+0x0042aeeb      push eax
+0x0042aeec      call 0x4f1a80
+0x0042aef1      add esp, 0x18
+0x0042aef4      push 0
+0x0042aef6      push 7                                                 ; 7
+0x0042aef8      call 0x4f0fa0
+0x0042aefd      lea ecx, [esp + 0x784]
+0x0042af04      push eax
+0x0042af05      mov eax, dword [0x57bcbc]                              ; [0x57bcbc:4]=0
+0x0042af0a      lea edx, [esp + 0xc]
+0x0042af0e      push ecx
+0x0042af0f      push edx
+0x0042af10      push eax
+0x0042af11      call 0x4f1a80
+0x0042af16      add esp, 0x18
+0x0042af19      push 0
+0x0042af1b      push 7                                                 ; 7
+0x0042af1d      call 0x4f0ff0
+0x0042af22      lea ecx, [esp + 0x788]
+0x0042af29      push eax
+0x0042af2a      mov eax, dword [0x57bcbc]                              ; [0x57bcbc:4]=0
+0x0042af2f      lea edx, [esp + 0xc]
+0x0042af33      push ecx
+0x0042af34      push edx
+0x0042af35      push eax
+0x0042af36      call 0x4f1a80
+0x0042af3b      add esp, 0x18
+0x0042af3e      push 0
+0x0042af40      push 7                                                 ; 7
+0x0042af42      call 0x4f0f50
+0x0042af47      lea ecx, [esp + 0x758]
+0x0042af4e      push eax
+0x0042af4f      mov eax, dword [0x57bcbc]                              ; [0x57bcbc:4]=0
+0x0042af54      lea edx, [esp + 0xc]
+0x0042af58      push ecx
+0x0042af59      push edx
+0x0042af5a      push eax
+0x0042af5b      call 0x4f1a80
+0x0042af60      add esp, 0x18
+0x0042af63      push 0
+0x0042af65      push 7                                                 ; 7
+0x0042af67      call 0x4f0f50
+0x0042af6c      lea ecx, [esp + 0x75c]
+0x0042af73      push eax
+0x0042af74      mov eax, dword [0x57bcbc]                              ; [0x57bcbc:4]=0
+0x0042af79      lea edx, [esp + 0xc]
+0x0042af7d      push ecx
+0x0042af7e      push edx
+0x0042af7f      push eax
+0x0042af80      call 0x4f1a80
+0x0042af85      add esp, 0x18
+0x0042af88      push 0
+0x0042af8a      push 7                                                 ; 7
+0x0042af8c      call 0x4f1000
+0x0042af91      lea ecx, [esp + 0x888]
+0x0042af98      push eax
+0x0042af99      mov eax, dword [0x57bcbc]                              ; [0x57bcbc:4]=0
+0x0042af9e      lea edx, [esp + 0xc]
+0x0042afa2      push ecx
+0x0042afa3      push edx
+0x0042afa4      push eax
+0x0042afa5      call 0x4f1a80
+0x0042afaa      add esp, 0x18
+0x0042afad      push 0x57bce8
+0x0042afb2      push 7                                                 ; 7
+0x0042afb4      call 0x4f0f50
+0x0042afb9      lea ecx, [esp + 0x778]
+0x0042afc0      push eax
+0x0042afc1      mov eax, dword [0x57bcbc]                              ; [0x57bcbc:4]=0
+0x0042afc6      lea edx, [esp + 0xc]
+0x0042afca      push ecx
+0x0042afcb      push edx
+0x0042afcc      push eax
+0x0042afcd      call 0x4f1a80
+0x0042afd2      add esp, 0x18
+0x0042afd5      push 0x57bce8
+0x0042afda      push 7                                                 ; 7
+0x0042afdc      call 0x4f0f50
+0x0042afe1      lea ecx, [esp + 0x77c]
+0x0042afe8      push eax
+0x0042afe9      mov eax, dword [0x57bcbc]                              ; [0x57bcbc:4]=0
+0x0042afee      lea edx, [esp + 0xc]
+0x0042aff2      push ecx
+0x0042aff3      push edx
+0x0042aff4      push eax
+0x0042aff5      call 0x4f1a80
+0x0042affa      add esp, 0x18
+0x0042affd      push 0
+0x0042afff      push 7                                                 ; 7
+0x0042b001      call 0x4f0fc0
+0x0042b006      lea ecx, [esp + 0x898]
+0x0042b00d      push eax
+0x0042b00e      mov eax, dword [0x57bcbc]                              ; [0x57bcbc:4]=0
+0x0042b013      lea edx, [esp + 0xc]
+0x0042b017      push ecx
+0x0042b018      push edx
+0x0042b019      push eax
+0x0042b01a      call 0x4f1a80
+0x0042b01f      add esp, 0x8f8
+0x0042b025      ret
