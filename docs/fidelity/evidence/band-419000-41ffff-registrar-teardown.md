@@ -71,7 +71,7 @@ mismatch and "fix" the wrong thing.
   `0x004192B0 … 0x0041F2A0`, and are immediately followed by **`0x004201B0`** — which is what independently
   identifies `0x004201B0` as the twelfth teardown (SlideBar's), in the other writer's range. The order I was
   asked to write them in and the order the guard calls them are the same list; that is a check on both.
-- **[M]** One intruder: `0x00418AC0` appears after `0x004424E10`-range entries, out of the ascending run.
+- **[M]** One intruder: `0x00418AC0` appears out of the ascending run, between `0x00424E10` and `0x00425580`.
 - **[M]** `0x004C1780` is called **repeatedly inside the teardown phase** (first, then interleaved) and is not
   a teardown of this family. Any port that treats "a call in the teardown phase" as "a teardown" will
   mis-classify it.
@@ -233,8 +233,12 @@ the 0x13FC frame and which does appear in that file's link evidence).
 - **[L]** `ConditionalSound` registers neither `0x004B8810` nor `0x004B8890`. (Both names appear in
   `native_424e80.cpp` and `native_425580.cpp`, outside my band.)
 - **[M]** The handler addresses the registrars pass are **raw code immediates transcribed by nobody** and are
-  passed as cast integers; they create no link dependency and stay recorded gaps in the tree, not stubs. In
-  this band that is ten handler addresses per box registrar.
+  passed as cast integers; they create no link dependency and stay recorded gaps in the tree, not stubs.
+  **[M]** The count is **not constant** and is read per file rather than assumed: across the ten box
+  registrars the recorded handler-address counts are 8 (`0x004199F0`, `0x0041AAF0`, `0x0041B310`), 11
+  (`0x0041A1E0`, `0x0041C700`) and 10 (`0x0041B8E0`, `0x0041D080`, `0x0041DC50`, `0x0041E690`,
+  `0x0041F340`). The two early registrars (`0x004190E0`, `0x00419760`) do not carry such a list in their
+  provenance blocks, so their handler immediates are not counted here rather than assumed to match.
 
 ---
 

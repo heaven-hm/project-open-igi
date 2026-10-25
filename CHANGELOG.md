@@ -2587,3 +2587,45 @@ producing the same `undefined reference` failure that commit a2763130 produced. 
 dependency that is one deep looks like a missing file; a dependency that is three deep
 looks like three missing files, and following it by eye rather than by exit status is
 how a build gets broken three times instead of once.
+
+## THREE OF MY OWN FIGURES ARE WRONG, CONFIRMED BY INDEPENDENT MEASUREMENT
+
+flow-analyst re-measured three claims I had recorded and reported all three as
+disagreements rather than absorbing them. I re-measured each myself before accepting
+its result, and **all three of its corrections are right and all three of my figures
+are wrong.**
+
+**(1) "0x00427FF0 is the only framed registrar and the only one with a container" -
+WRONG.** `0x0042ACC0`, my own unwritten file, is framed with `sub esp,0x8e0` (2272 B,
+larger than `0x898`) and owns a container. Measured in its body: `call 0x004F1950`
+**once** (container create) and `call 0x004F1A80` **ten** times (appends), with the
+second slot at `0x0057BCBC`. It calls the **same** `0x004F45F0` parent getter as
+`0x00427FF0`. So there are **two** framed registrars and **two** with parameter
+containers in this family, and they are exactly the two that share that getter.
+"No frame in the other fifteen" was only a measurement if the fifteen excluded
+`0x0042ACC0` - and it did not.
+
+**(2) "eight null handlers in 0x00427D90" - WRONG.** Measured: **11 `push 0`
+immediates** in 114 instructions, decomposing as 2 registration words, **2**
+handler-position nulls (`0x00427EA0` phase id 9, `0x00427F0C` phase id 4), 1 phase id
+(`0x00427DAE`), and 6 arguments to post-link setup calls. The substantive claim - that
+a registered null is a *registered null*, not a missing transcription - is correct and
+visible at those two sites. **The number 8 is not reproduced by any definition.**
+
+**(3) "nine name registrations across three name families" - NOT SUBSTANTIATED.**
+Confirmed 9 `call 0x004B8810` sites with numeric second arguments
+`{runtime&0xffff, 0, 1, 0, 2, 3, 4, 5, 1}`. **The collisions are 0 twice and 1 twice** -
+two values, not three families. The "three name families" phrasing was mine and
+nothing measures it.
+
+**What these three have in common is that all three were statements about a SET, made
+from a sample.** "The only framed registrar" was generalised from one example. "Eight
+null handlers" was a count of a token (`push 0`) standing in for a count of a
+position (handler argument). "Three name families" was a shape imposed on nine
+measured values. **A claim about a population cannot be established by reading one
+member of it, and every one of these was cheap to check and none was checked.**
+
+**The worker's discipline is the reason they were caught.** It tagged every figure
+[M] measured / [L] quoted / [D] disagreement, refused to re-derive my numbers silently,
+and left all three standing in the document rather than folding them into a narrative.
+**A summary that absorbs its author's disagreements is worth less than no summary.**

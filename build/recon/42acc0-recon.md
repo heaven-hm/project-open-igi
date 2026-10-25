@@ -179,3 +179,20 @@ from a pattern rather than from the instructions one at a time, is precisely how
 invented constant gets in - and this file's whole purpose is to define two globals
 another native depends on. The analysis above is complete and durable; the
 transcription needs a fresh budget.
+
+
+## CORRECTION: this routine IS a container-owning framed registrar
+
+The band summary measured what I had missed. `0x0042ACC0` calls `0x004F1950`
+**once** (container create, at 0x0042AE89) and `0x004F1A80` **ten** times (appends),
+and owns a second slot at `0x0057BCBC`. Its frame `0x8E0` (2272 B) is **larger** than
+`0x00427FF0`'s `0x898`. It calls the same `0x004F45F0` parent getter.
+
+So the claim "0x00427FF0 is the only framed registrar with a container" is wrong:
+there are two, and they are the two that share `0x004F45F0`. My own file is the
+counterexample to my own figure.
+
+I had the raw material - the call census I recorded lists `0x004F1950` once and
+`0x004F1A80` ten times - and read it as ten anonymous event registrations instead of
+one container create plus ten appends. **The numbers were on the page; the structure
+was not.**
