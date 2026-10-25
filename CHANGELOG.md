@@ -2564,3 +2564,26 @@ push esi; call 0x004BAB80; add esp,8; test eax,eax; ...` - a real body with a
 branch. It must be transcribed before `0x004B8920` can be built, which is exactly the
 double gap analyst flagged and I acknowledged in the commit message while committing
 the file anyway.
+
+## The blocking chain is THREE deep, not one
+
+Analyst's three name-unregistering teardowns (0x004213E0, 0x00423F90, 0x00424790) were
+reported as blocked on `0x004B8920`, with `0x004BAB30` flagged as a further gap. That
+flag was right and the chain is longer still. Followed by exit status, one link at a
+time:
+
+  0x004B8920 -> undefined Script_QHashSymbolRemove_4BAB30   (transcribed, not linkable)
+  0x004BAB30 -> undefined Script_QHashNodeRemove_4C0460     (transcribed, not linkable)
+  0x004C0460 -> NOT TRANSCRIBED                             (chain ends: gap)
+
+**Four files, not one.** `0x004C0460` is the true head of this chain and nothing can
+link until it is transcribed. Each intermediate is a small forwarder, so the work is
+four small transcriptions rather than one large one - but the ORDER is forced and
+there is no way to build `0x004B8920` first.
+
+**Why this matters beyond these four files:** every intermediate in the chain was
+"transcribed" and every one of them would have been added to the build in turn, each
+producing the same `undefined reference` failure that commit a2763130 produced. A
+dependency that is one deep looks like a missing file; a dependency that is three deep
+looks like three missing files, and following it by eye rather than by exit status is
+how a build gets broken three times instead of once.
