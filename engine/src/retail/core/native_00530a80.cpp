@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; capture SHA256 f786e2e9796327e4514f9d1ff77809332bcc898f9e09dc8064f084d27b032ade.
 // Tools/evidence: Binary Ninja 6.0.10601 decompile + radare2 6.2.0 disassembly (6a 00 6a 02 e8 67 0e ed ff ...); calls 0x004018F0, 0x00401900, 0x00401530 (x2); string "FlashTask" at 0x0054F7A4; written byte 0x00A845EC.
 // Behavior/CFG: parent = QTask_GetCurrentType(); registers "FlashTask" (0x88 bytes) with task-list argument 2 -> observed id 39, stores the id at 0x0054F7A0, links phase 2 (0x00530C40) then phase 1 (0x00530AD0), sets the byte at 0x00A845EC to 1, returns the last link result. Single block.
-// Status/limits: TRANSCRIBED (static only); the non-zero 4th TaskType_Register argument selects the retail task-list build path at 0x004B0B00 that transcribed in native_401900.cpp, see that file for the evidence; handlers passed as retail-VA literals; runtime UNOBSERVED in the port.
+// Status/limits: BUILD_VERIFIED (static only); the non-zero 4th TaskType_Register argument selects the retail task-list build path at 0x004B0B00 that transcribed in native_401900.cpp, see that file for the evidence; handlers passed as retail-VA literals; runtime UNOBSERVED in the port.
 #include "igi/retail/core/task_types.hpp"
 
 #include <cstdint>

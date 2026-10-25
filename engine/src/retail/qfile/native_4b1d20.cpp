@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x004B1D20-0x004B1D3C (28 bytes, 1 block, 7 instructions).
 // Tools/evidence: radare2 6.2.0 af/pdf; section 22.2 of the evidence sheet (qfile device-driver table).
 // Behavior/CFG: stores the second argument into the 0x8C-stride device record at 0x009436B0, field +0x2C; no branch, no call, no return value.
-// Status/limits: TRANSCRIBED; runtime UNOBSERVED. The table storage is owned by native_4b1180.cpp.
+// Status/limits: STRUCTURALLY_VERIFIED; runtime UNOBSERVED. The table storage is owned by native_4b1180.cpp.
 #include "igi/retail/qfile/driver_table.hpp"
 
 #include <cstdint>

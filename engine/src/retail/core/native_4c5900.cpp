@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: radare2 6.2.0 complete listing (73 instructions, single block); retail-only Frida range probe entered it as a real call from 0x531DB5 (return 0x531DBA) with 0 stack arguments, observed once during level-1 startup; both writers 0x4C5983/0x4C5992 fired inside it.
 // Behavior/CFG: marks event slots 8..0xD with value 0, writes the phase/slot byte pairs (8,3) (9,4) (10,5) (11,6) (13,2) after (4,0) and (5,1), allocates two 0x181 events storing their ids at 0x548176 and 0x548177, links handler 0x004C5A10 to the phase at 0x54875C with the second event id as context, then zeroes the 17 dwords at 0xA44348.
-// Status/limits: TRANSCRIBED (static only); this native OWNS the two state bytes 0x548176/0x548177 and the dword block at 0xA44348 that 0x4CEA10/0x4CEA20 and later readers reference extern; retail's cdecl cleanups (add esp,0x40 and add esp,0x3c) are the caller-side pops of the calls transcribed here; runtime UNOBSERVED.
+// Status/limits: STRUCTURALLY_VERIFIED (static only); this native OWNS the two state bytes 0x548176/0x548177 and the dword block at 0xA44348 that 0x4CEA10/0x4CEA20 and later readers reference extern; retail's cdecl cleanups (add esp,0x40 and add esp,0x3c) are the caller-side pops of the calls transcribed here; runtime UNOBSERVED.
 #include "igi/retail/core/task_types.hpp"
 
 #include <cstdint>

@@ -1,21 +1,8 @@
 // Native: Script_QHashSymbolNodeCreate_4BABB0; retail VA 0x004BABB0 (placeholder name; retail symbol unknown).
-// Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x004BABB0-0x004BAC21 (114 bytes,
-//   7 blocks, 8 edges, 35 instructions), bytes re-read from the image (8b 4c 24 04 8d 44 24 04 50 51 e8 ... 83 c4 08 85 c0 74 ...).
-// Tools/evidence: radare2 6.2.0 af/pd over the exact image; this ret, and the two jumps to it, close at 0x004BAC1E and 0x004BAC1F. Called twice by
-//   0x004B9120 and twice by 0x004B8CE0, so it sits on both expression-evaluator paths.
-// Behavior/CFG: cdecl, one argument (name). Looks the name up through 0x004BAB80(name, &out) - the second argument is the address of the incoming
-//   argument word itself (0x004BABB4 `lea 0x4(%esp),%eax`), so the lookup overwrites the name word with its out value and the caller's original
-//   pointer is consumed. A miss returns 0 (0x004BABC4/0x004BAC1F). On a hit: if the free sentinel list 0x00A43EB0 is empty
-//   ([0x00A43EB0] == 0x00A43EB4, 0x004BABC6/0x004BABD0) it refills it with 1024 entries via 0x004BAC30; it then pops one 12-byte node from that list
-//   through 0x004AF930 (0x004BABE5), stores the lookup out value at node + 8 (0x004BABEA/0x004BABF6 - this is the overwritten argument word, not
-//   the name), inserts the node at the front of the live sentinel list 0x00A43E90 with 0x004AF910 (0x004BABF9), increments the live counter
-//   0x00A43E8C and raises the high-water counter 0x00A43EAC when the new count exceeds it with an unsigned compare (0x004BABFE-0x004BAC16), and
-//   returns the node (0x004BAC1B). The three pushes for 0x004AF930 and 0x004AF910 are cleaned together by the single `add $0xc` at 0x004BAC09.
-// Status/limits: TRANSCRIBED; STRUCTURALLY_VERIFIED against the instruction listing (7 blocks, 8 edges); runtime UNOBSERVED. Link: needs
-//   0x004BAB80 (transcribed), 0x004BAC30 (transcribed), 0x004AF930 (transcribed), 0x004AF910 (transcribed) and globals g_a43eb0 / g_a43e90 /
-//   g_a43e8c / g_a43eac (defined in native_4bacd0.cpp; the SymbolSentinel declaration below repeats that file's type token for token). What the
-//   stored node means - it is a 12-byte record whose +8 dword is the symbol lookup's out value and which is threaded on 0x00A43E90 - is not
-//   interpreted here; the retail states no meaning in this function.
+// Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x004BABB0-0x004BAC21 (114 bytes, 7 blocks, 8 edges, 35 instructions), bytes re-read from the image (8b 4c 24 04 8d 44 24 04 50 51 e8 ... 83 c4 08 85 c0 74 ...).
+// Tools/evidence: radare2 6.2.0 af/pd over the exact image; this ret, and the two jumps to it, close at 0x004BAC1E and 0x004BAC1F. Called twice by 0x004B9120 and twice by 0x004B8CE0, so it sits on both expression-evaluator paths.
+// Behavior/CFG: cdecl, one argument (name). Looks the name up through 0x004BAB80(name, &out) - the second argument is the address of the incoming argument word itself (0x004BABB4 `lea 0x4(%esp),%eax`), so the lookup overwrites the name word with its out value and the caller's original pointer is consumed. A miss returns 0 (0x004BABC4/0x004BAC1F). On a hit: if the free sentinel list 0x00A43EB0 is empty ([0x00A43EB0] == 0x00A43EB4, 0x004BABC6/0x004BABD0) it refills it with 1024 entries via 0x004BAC30; it then pops one 12-byte node from that list through 0x004AF930 (0x004BABE5), stores the lookup out value at node + 8 (0x004BABEA/0x004BABF6 - this is the overwritten argument word, not the name), inserts the node at the front of the live sentinel list 0x00A43E90 with 0x004AF910 (0x004BABF9), increments the live counter 0x00A43E8C and raises the high-water counter 0x00A43EAC when the new count exceeds it with an unsigned compare (0x004BABFE-0x004BAC16), and returns the node (0x004BAC1B). The three pushes for 0x004AF930 and 0x004AF910 are cleaned together by the single `add $0xc` at 0x004BAC09.
+// Status/limits: BUILD_VERIFIED; STRUCTURALLY_VERIFIED against the instruction listing (7 blocks, 8 edges); runtime UNOBSERVED. Link: needs 0x004BAB80 (transcribed), 0x004BAC30 (transcribed), 0x004AF930 (transcribed), 0x004AF910 (transcribed) and globals g_a43eb0 / g_a43e90 / g_a43e8c / g_a43eac (defined in native_4bacd0.cpp; the SymbolSentinel declaration below repeats that file's type token for token). What the stored node means - it is a 12-byte record whose +8 dword is the symbol lookup's out value and which is threaded on 0x00A43E90 - is not interpreted here; the retail states no meaning in this function.
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)

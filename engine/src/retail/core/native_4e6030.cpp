@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: radare2 6.2.0 instruction reads; fresh BN/r2/angr capture pending under build/native-analysis/.
 // Behavior/CFG: 17 bytes; store argument at 0x00A5E5FC, call 0x00495CC0 with same word, return callee EAX.
-// Status/limits: TRANSCRIBED; no paired typed runtime acceptance; no inferred original names.
+// Status/limits: BUILD_VERIFIED; no paired typed runtime acceptance; no inferred original names.
 #include <cstdint>
 #if defined(_MSC_VER) && defined(_M_IX86)
 #define NATIVE_DECL __cdecl

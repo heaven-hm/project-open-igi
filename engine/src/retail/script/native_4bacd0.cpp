@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: radare2 6.2.0 complete listing (68 87130000 e8.. a3883ea400 33c0 83c404 a3ac3ea400 a38c3ea400 c705a03ea4.. c705a83ea4.. a3a43ea400 c705b03ea4.. c705b83ea4.. a3b43ea400 c705903ea4.. c705983ea4.. a3943ea400 c3); owns all six retail globals it writes; callee 0x4C0360 landed.
 // Behavior/CFG: creates the symbol table (4999 buckets via 0x4C0360), stores it at 0x00A43E88, zeroes the counters at 0x00A43EAC/0x00A43E8C, then self-links three embedded sentinel lists (0x00A43EA0/A4/A8, 0x00A43EB0/B4/B8, 0x00A43E90/94/98) with forward=base+4, middle=0, back=base; returns nothing.
-// Status/limits: TRANSCRIBED (static only); the globals are port-owned storage declared here because this native is their retail writer, and the sentinel self-links use port addresses rather than the retail VAs (documented, unavoidable in a non-address-image port); runtime UNOBSERVED.
+// Status/limits: STRUCTURALLY_VERIFIED (static only); the globals are port-owned storage declared here because this native is their retail writer, and the sentinel self-links use port addresses rather than the retail VAs (documented, unavoidable in a non-address-image port); runtime UNOBSERVED.
 #include <cstdint>
 
 extern "C" void* Script_QHashTableCreate(std::int32_t count);

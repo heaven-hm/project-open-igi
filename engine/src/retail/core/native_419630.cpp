@@ -1,27 +1,8 @@
-// Native: BackgroundFX_EmitFan_419630 (placeholder name; retail symbol unknown - the body builds `count` rotated 0x24-byte
-// vertex records around one 0xC-byte circle record and hands the closed fan to the render-backend table at 0x00A94E84).
-// retail VA 0x00419630 (0x00419630-0x00419751, 290 bytes, 7 blocks, 9 edges, 90 instructions).
+// Native: BackgroundFX_EmitFan_419630 (placeholder name; retail symbol unknown - the body builds `count` rotated 0x24-byte vertex records around one 0xC-byte circle record and hands the closed fan to the render-backend table at 0x00A94E84). retail VA 0x00419630 (0x00419630-0x00419751, 290 bytes, 7 blocks, 9 edges, 90 instructions).
 // Artifact: retail igi.exe SHA-256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; image base 0x00400000.
-// Tools/evidence: build/retail-dis.txt (GNU objdump i386 complete byte+instruction listing, all 90 instructions quoted below);
-// radare2 6.2.0 af/afij (size 290, 7 blocks, 9 edges); float constants read from the image: 0x005333EC = 0.0f (bytes
-// 00 00 00 00), 0x005334A8 = 6.2831854820251465f (db 0f c9 40), 0x00533580 = 0.3141592741012573f (7c d9 a0 3e).
-// Behavior/CFG: arguments [esp+4] = 0xC-byte circle record, [esp+8] = transform context. Computes origin from record[0..1]
-// and context[0..5], radius = record[2]*context[6], count = round(radius*pi/10) clamped to at most 0x28 (int64 x87 store,
-// low dword read), then for count > 0 builds one 0x24-byte vertex record per step: record[0] = radius*cos(angle)+origin_x,
-// record[1] = radius*sin(angle)+origin_y, record[2..8] = 1.0f,0,0,0.075f,0,1.0f,0, with angle starting at 0.0f and
-// advancing 2*pi/count per record. It then copies record[0] into record[count] (closing the fan), fills the descriptor
-// {1, 0x00080000, 0, count+1, &record[0]} and calls render_backend[0x00A84A54] once with it. The count is not re-read.
-// Status/limits: TRANSCRIBED (static only); runtime UNOBSERVED and the startup chain cannot reach it yet. Indirect dispatch
-// is counted: one `call *0x00A94E84(,%eax,4)` at 0x0041973D, index from 0x00A84A54. Direct calls: none. Rounding limits:
-// (a) retail keeps the angle and the 2*pi/count step in 80-bit x87 registers, so this body uses `long double` for both and
-// rounds only at the float stores, exactly as `fcos`/`fsin` + `fstps` do - `std::cos`/`std::sin` on long double are not
-// bit-identical to `fcos`/`fsin` in the last bit, so last-bit equality is not claimed; (b) the count uses `llrintl` to model
-// `fistpll` (x87 round-to-nearest) and then keeps the low 32 bits, as the listing reads only 0x14(%esp); (c) when count > 0
-// retail leaves one value on the x87 register stack at return (0x00419719 pops only ST(0) of the two live values), which a
-// C++ transcription cannot reproduce; recorded, and unobservable through memory or the return value.
-//
-// Frame mapping (esp after the four prologue pushes is the frame base F): F+0x10 = radius (rounded copy), F+0x14 = count,
-// F+0x1C = origin_x, F+0x20 = origin_y, F+0x24..F+0x37 descriptor, F+0x38..F+0x5FB = 41 vertex records of 0x24 bytes.
+// Tools/evidence: build/retail-dis.txt (GNU objdump i386 complete byte+instruction listing, all 90 instructions quoted below); radare2 6.2.0 af/afij (size 290, 7 blocks, 9 edges); float constants read from the image: 0x005333EC = 0.0f (bytes 00 00 00 00), 0x005334A8 = 6.2831854820251465f (db 0f c9 40), 0x00533580 = 0.3141592741012573f (7c d9 a0 3e).
+// Behavior/CFG: arguments [esp+4] = 0xC-byte circle record, [esp+8] = transform context. Computes origin from record[0..1] and context[0..5], radius = record[2]*context[6], count = round(radius*pi/10) clamped to at most 0x28 (int64 x87 store, low dword read), then for count > 0 builds one 0x24-byte vertex record per step: record[0] = radius*cos(angle)+origin_x, record[1] = radius*sin(angle)+origin_y, record[2..8] = 1.0f,0,0,0.075f,0,1.0f,0, with angle starting at 0.0f and advancing 2*pi/count per record. It then copies record[0] into record[count] (closing the fan), fills the descriptor {1, 0x00080000, 0, count+1, &record[0]} and calls render_backend[0x00A84A54] once with it. The count is not re-read.
+// Status/limits: BUILD_VERIFIED (static only); runtime UNOBSERVED and the startup chain cannot reach it yet. Indirect dispatch is counted: one `call *0x00A94E84(,%eax,4)` at 0x0041973D, index from 0x00A84A54. Direct calls: none. Rounding limits: (a) retail keeps the angle and the 2*pi/count step in 80-bit x87 registers, so this body uses `long double` for both and rounds only at the float stores, exactly as `fcos`/`fsin` + `fstps` do - `std::cos`/`std::sin` on long double are not bit-identical to `fcos`/`fsin` in the last bit, so last-bit equality is not claimed; (b) the count uses `llrintl` to model `fistpll` (x87 round-to-nearest) and then keeps the low 32 bits, as the listing reads only 0x14(%esp); (c) when count > 0 retail leaves one value on the x87 register stack at return (0x00419719 pops only ST(0) of the two live values), which a C++ transcription cannot reproduce; recorded, and unobservable through memory or the return value. Frame mapping (esp after the four prologue pushes is the frame base F): F+0x10 = radius (rounded copy), F+0x14 = count, F+0x1C = origin_x, F+0x20 = origin_y, F+0x24..F+0x37 descriptor, F+0x38..F+0x5FB = 41 vertex records of 0x24 bytes.
 #include "igi/retail/dynobj/local_models_mef.hpp"
 
 #include <cmath>

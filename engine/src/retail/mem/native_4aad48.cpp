@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: radare2 6.2.0 complete listing (6840010000 6a00 ff352824c300 ff15ac305300 85c0 a3f821c300 7501 c3 8b4c2404 8325f021c3..00 8325f421c3..00 6a01 a3ec21c300 890dfc21c300 c705e421c3..10000000 58 c3); imports KERNEL32 HeapAlloc directly.
 // Behavior/CFG: allocates the 0x140-byte small-block pool with HeapAlloc(g_c32428, 0, 0x140), stores the block at 0x00C321F8 and returns 0 immediately when the allocation fails; otherwise clears 0x00C321F0 and 0x00C321F4, stores the block at 0x00C321EC, stores the argument at 0x00C321FC, stores 0x10 at 0x00C321E4 and returns 1 (retail's trailing push 1 / pop eax).
-// Status/limits: TRANSCRIBED (static only); this native OWNS the pool globals 0x00C321E4/EC/F0/F4/F8 and 0x00C321FC, which it reaches through the memory subsystem's MemGlobals accessors already used by the verified 0x4B0C60 allocation native; runtime UNOBSERVED.
+// Status/limits: STRUCTURALLY_VERIFIED (static only); this native OWNS the pool globals 0x00C321E4/EC/F0/F4/F8 and 0x00C321FC, which it reaches through the memory subsystem's MemGlobals accessors already used by the verified 0x4B0C60 allocation native; runtime UNOBSERVED.
 #include "igi/retail/mem/mem_alloc.hpp"
 
 #include <cstdint>

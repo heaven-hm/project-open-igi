@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x004C0240-0x004C0249 (10 bytes, 1 block, 0 edges, 4 instructions).
 // Tools/evidence: radare2 6.2.0 af/pdf and NASM ndisasm over the raw bytes (8b 44 24 04 8b 08 8b 41 04 c3); nine nop bytes follow.
 // Behavior/CFG: the same shape as 0x004C0230 with a different field: returns the dword at (*(argument))+0x04. No branch, no store, no callee.
-// Status/limits: TRANSCRIBED; runtime UNOBSERVED. Nothing here establishes the struct type, only the offset.
+// Status/limits: STRUCTURALLY_VERIFIED; runtime UNOBSERVED. Nothing here establishes the struct type, only the offset.
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)

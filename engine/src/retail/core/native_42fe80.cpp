@@ -1,20 +1,8 @@
 // Native: QTask_HandlerC_42FE80; retail VA 0x0042FE80 (placeholder name; retail symbol unknown).
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x0042FE80-0x0042FEE3 (100 bytes, 1 block, 0 edges, 36 instructions).
-// Tools/evidence: GNU objdump i386 disassembly build/retail-dis.txt (0x0042FE80-0x0042FEE3), with the byte span and instruction count re-derived from
-//   that listing; the dispatch ABI, the two loader call sites and the sibling class callbacks are in docs/fidelity/evidence/qtask-handler-abi.md.
-// Behavior/CFG: the parse callback of the class whose id word is 0x0057BD30 ("Wheel"), linked at the private phase byte 0x0054DC30 by 0x0042FE40. The
-//   loader 0x004EDD20 allocates the 0x2F0-byte class block at 0x004EDF12, then calls this handler with (0, &context) at 0x004EDF48, where context =
-//   {block, QVM argument frame, next argument index} lives in the loader's frame. The handler reads a 0x10-byte argument block into block+0x2D8, then
-//   two QVM arguments scaled by the float at 0x005333B8 into block+0x2E8 and block+0x2EC. It never reads its first argument and it does not call the
-//   base class callback (retail has no table dispatch here). Every read takes its index from context+0x8 and leaves the cursor incremented before the
-//   reader call. Three calls (0x004B8A80, 0x004B8A50 x2), two fmuls by 0x005333B8, no branch, single block.
-// Status/limits: TRANSCRIBED (static only; no build and no runtime). This class block has no base-class fill: the 0x2D8 bytes before the fields written
-//   here are left as allocated by the retail, and the candidate reproduces that. The reader 0x004B8A80 is not transcribed in engine/ yet, so it is
-//   declared here under an address-suffixed placeholder and must be unified when its own native lands; its return value is ignored here. The retail
-//   leaves the last callee's residue in EAX on return and no caller reads it, so this declaration returns void. The candidate compiles for the x86
-//   target as a single translation unit (i686-w64-mingw32-g++ 16.2.0, -std=c++20 -O2); the compiled body keeps the caller's store order, the three
-//   call sites with their cursor updates, the 0x2D8/0x2E8/0x2EC offsets and the 0x10-byte block size, with a different register allocation; the repo
-//   build target does not list this file yet.
+// Tools/evidence: GNU objdump i386 disassembly build/retail-dis.txt (0x0042FE80-0x0042FEE3), with the byte span and instruction count re-derived from that listing; the dispatch ABI, the two loader call sites and the sibling class callbacks are in docs/fidelity/evidence/qtask-handler-abi.md.
+// Behavior/CFG: the parse callback of the class whose id word is 0x0057BD30 ("Wheel"), linked at the private phase byte 0x0054DC30 by 0x0042FE40. The loader 0x004EDD20 allocates the 0x2F0-byte class block at 0x004EDF12, then calls this handler with (0, &context) at 0x004EDF48, where context = {block, QVM argument frame, next argument index} lives in the loader's frame. The handler reads a 0x10-byte argument block into block+0x2D8, then two QVM arguments scaled by the float at 0x005333B8 into block+0x2E8 and block+0x2EC. It never reads its first argument and it does not call the base class callback (retail has no table dispatch here). Every read takes its index from context+0x8 and leaves the cursor incremented before the reader call. Three calls (0x004B8A80, 0x004B8A50 x2), two fmuls by 0x005333B8, no branch, single block.
+// Status/limits: BUILD_VERIFIED (static only; no build and no runtime). This class block has no base-class fill: the 0x2D8 bytes before the fields written here are left as allocated by the retail, and the candidate reproduces that. The reader 0x004B8A80 is not transcribed in engine/ yet, so it is declared here under an address-suffixed placeholder and must be unified when its own native lands; its return value is ignored here. The retail leaves the last callee's residue in EAX on return and no caller reads it, so this declaration returns void. The candidate compiles for the x86 target as a single translation unit (i686-w64-mingw32-g++ 16.2.0, -std=c++20 -O2); the compiled body keeps the caller's store order, the three call sites with their cursor updates, the 0x2D8/0x2E8/0x2EC offsets and the 0x10-byte block size, with a different register allocation; the repo build target does not list this file yet.
 #include "igi/retail/script/qvm_execute.hpp"
 
 #include <cstdint>

@@ -1,23 +1,8 @@
 // Native: Sys_LookupOrAppendRecord_416930; retail VA 0x00416930-0x004169C3 (placeholder name; retail symbol unknown).
-// Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x00416930-0x004169C3
-//   (148 bytes, 13 blocks, 66 instructions, measured per block with af + afbj over the exact image).
-// Tools/evidence: radare2 6.2.0 af/afbj/pdf plus a pd 12 read of the two blocks af/pdf display out of order (0x00416980-0x0041698D and the
-//   found-return epilogue); the count dword at 0x0057BAB4, the table base 0x0057B5E8 and the 0x3C record stride are the mov/lea immediates
-//   in the body itself, and 0x00416984-0x0041698D is `lea eax,[ebp+ebp*2]; lea ecx,[eax+eax*4]; lea edx,[ecx*4+0x0057B5E8]`, i.e. an
-//   index * 15 * 4 = index * 0x3C destination computation.
-// Behavior/CFG: searches the record table at 0x0057B5E8 for the record whose leading NUL-terminated name matches the argument, walking the
-//   table with the 0x3C stride while the index is below the dword count at 0x0057BAB4 (13 blocks: prologue/count test, table base, loop head,
-//   the two-byte-unrolled MSVC inline strcmp expansion and its five exits, the increment, the append block and the two return epilogues).
-//   On a match it returns the record address; otherwise it appends a record at index = count, copies the argument string INCLUDING its
-//   terminator into it with retail's inline strlen (repne scasb) plus inline memcpy (rep movsd then rep movsb), increments the count, and
-//   returns the new record address. The rest of an appended record is not initialized by this routine - retail copies the name only.
-// Status/limits: TRANSCRIBED; runtime UNOBSERVED. The comparison is transcribed block by block, but its differing-byte result is retail's
-//   `sbb ecx,ecx; sbb ecx,-1` sign trick whose magnitude is never observed (the only consumer is `test ecx,ecx`), so this transcription keeps
-//   Retail's inline strlen (repne scasb) and inline memcpy (rep movsd/rep movsb) are expressed with the CRT routines of the same name, which
-//   are imported rather than re-implemented; the byte count and the terminator handling are retail's (strlen + 1).
-//   the equality outcome and documents that the +1/-1 magnitude is not reproduced. The table's capacity is not established by static evidence,
-//   which is why the table is addressed by its absolute retail address instead of a declared array extent. The name string's width is the
-//   callers' literal (0x0047E700 passes "burn1.tex"); the record fields after the name are untouched here.
+// Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x00416930-0x004169C3 (148 bytes, 13 blocks, 66 instructions, measured per block with af + afbj over the exact image).
+// Tools/evidence: radare2 6.2.0 af/afbj/pdf plus a pd 12 read of the two blocks af/pdf display out of order (0x00416980-0x0041698D and the found-return epilogue); the count dword at 0x0057BAB4, the table base 0x0057B5E8 and the 0x3C record stride are the mov/lea immediates in the body itself, and 0x00416984-0x0041698D is `lea eax,[ebp+ebp*2]; lea ecx,[eax+eax*4]; lea edx,[ecx*4+0x0057B5E8]`, i.e. an index * 15 * 4 = index * 0x3C destination computation.
+// Behavior/CFG: searches the record table at 0x0057B5E8 for the record whose leading NUL-terminated name matches the argument, walking the table with the 0x3C stride while the index is below the dword count at 0x0057BAB4 (13 blocks: prologue/count test, table base, loop head, the two-byte-unrolled MSVC inline strcmp expansion and its five exits, the increment, the append block and the two return epilogues). On a match it returns the record address; otherwise it appends a record at index = count, copies the argument string INCLUDING its terminator into it with retail's inline strlen (repne scasb) plus inline memcpy (rep movsd then rep movsb), increments the count, and returns the new record address. The rest of an appended record is not initialized by this routine - retail copies the name only.
+// Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. The comparison is transcribed block by block, but its differing-byte result is retail's `sbb ecx,ecx; sbb ecx,-1` sign trick whose magnitude is never observed (the only consumer is `test ecx,ecx`), so this transcription keeps Retail's inline strlen (repne scasb) and inline memcpy (rep movsd/rep movsb) are expressed with the CRT routines of the same name, which are imported rather than re-implemented; the byte count and the terminator handling are retail's (strlen + 1). the equality outcome and documents that the +1/-1 magnitude is not reproduced. The table's capacity is not established by static evidence, which is why the table is addressed by its absolute retail address instead of a declared array extent. The name string's width is the callers' literal (0x0047E700 passes "burn1.tex"); the record fields after the name are untouched here.
 #include <cstddef>
 #include <cstdint>
 #include <cstring>

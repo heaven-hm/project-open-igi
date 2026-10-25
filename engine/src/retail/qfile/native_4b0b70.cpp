@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x004B0B70-0x004B0B87 (24 bytes, 1 block, 0 edges, 9 instructions).
 // Tools/evidence: radare2 6.2.0 af/pdf and the raw bytes (56 8b742408 8b06 50 e893010000 83c404 c70600000000 5e c3); 33 direct call sites in .text.
 // Behavior/CFG: reads the block pointer stored at *argument, releases it through Mem_DeAllocFn (0x004B0D10), then stores null back into *argument. No branch; writes only through the caller's pointer.
-// Status/limits: TRANSCRIBED; runtime UNOBSERVED. Mem_DeAllocFn is transcribed in engine/src/retail/mem/native_4b0d10.cpp but has no shared header, so this file declares it the way the other landed callers do.
+// Status/limits: STRUCTURALLY_VERIFIED; runtime UNOBSERVED. Mem_DeAllocFn is transcribed in engine/src/retail/mem/native_4b0d10.cpp but has no shared header, so this file declares it the way the other landed callers do.
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)

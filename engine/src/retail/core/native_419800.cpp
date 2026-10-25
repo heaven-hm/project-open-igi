@@ -2,10 +2,7 @@
 // Artifact: retail igi.exe SHA-256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; image base 0x00400000.
 // Tools/evidence: build/retail-dis.txt (GNU objdump i386 byte+instruction listing, bytes 8b 44 24 04 d9 40 20 d8 05 e0 33 53 00 d9 58 20 c3); radare2 6.2.0 af/afij (size 17, 1 block, 0 edges, 5 instructions); the 1.0f constant at 0x005333E0 is verified by its bytes (00 00 80 3f) and by the existing note in engine/src/retail/terrain/terrain_mipmaps.cpp:108; the caller 0x00419760 pushes this address as event-1 handler (`push $0x419800; push $0x1; push <class id>; call 0x00401530`).
 // Behavior/CFG: one pointer argument, no branches: `mov 0x4(%esp),%eax; flds 0x20(%eax); fadds 0x5333e0; fstps 0x20(%eax)` - load the float at object+0x20, add the float constant 1.0f, store it back as a 32-bit float.
-// Status/limits: TRANSCRIBED (static only); runtime UNOBSERVED. No callees; the only data reference is the read-only 1.0f constant at 0x005333E0, reproduced as the literal 1.0F.
-//
-// Retail statement order preserved: the argument load (0x00419800), the load (0x00419804), the add (0x00419807) and
-// the store (0x0041980D) are the whole body.
+// Status/limits: BUILD_VERIFIED (static only); runtime UNOBSERVED. No callees; the only data reference is the read-only 1.0f constant at 0x005333E0, reproduced as the literal 1.0F. Retail statement order preserved: the argument load (0x00419800), the load (0x00419804), the add (0x00419807) and the store (0x0041980D) are the whole body.
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)

@@ -1,20 +1,8 @@
 // Native: Task_DefineM203 (behavior-derived placeholder name; retail symbol unknown); retail VA 0x00476110-0x004761A5.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; 150 bytes, 1 block, 39 instructions.
-// Tools/evidence: scripts/registrar_sequence.py 0x00476110 (code_flow=no, decoded calls with every push address and immediate,
-//   cleanup=add esp,0x18 at 0x0047619D) cross-checked against radare2 6.2.0 af+afbj (1 block / 39 instructions / 150 bytes); the earlier
-//   `add esp,0x38` at 0x00476163 cleans the first group. 0x004C48C0 is an argument-less getter (`mov ax,[0x54F928]`-class leaf) and
-//   0x00416830 is the leaf setting getter; 0x00401400/0x00401530 read [esp+4]/[esp+8]/[esp+0xC] as (class id, event id, handler), so the
-//   push that precedes the 0x00416830 call is the following link call's pre-pushed handler.
-// Behavior/CFG: registers the "M203" task type as TaskType_Register("M203", 0x128, Sys_GetGlobal16_4C48C0(), 0) and stores the returned
-//   16-bit id at 0x005BE3B0; links the id to handler 0x004761B0 on event 0 through QTask_LinkQTaskEventHandler and to handlers 0x00476340 and
-//   0x00476600 on events 1 and 2 through QTask_LinkQTaskEventHandlerNoContextFn; links the id a third time through QTask_LinkQTaskEventHandler
-//   with the event id taken from the setting byte 0x00416830 and handler 0x00416A90; registers the script name "TASKTYPE_M203" for the id with
-//   Script_QHashNodeRegister; then resolves "smoke1.spr" through the name-keyed registry at 0x004169D0 and keeps the record pointer at
-//   0x005BE3AC.
-// Status/limits: TRANSCRIBED. Both cleanups are accounted for independently: `add esp,0x38` is 14 dwords = 2 register slots + 3
-//   TaskType_Register arguments + 3*3 link arguments, and `add esp,0x18` is 6 dwords = the pre-pushed handler slot + 2 link arguments + 2
-//   script-registration arguments + 1 registry-lookup argument. Handlers 0x004761B0, 0x00476340, 0x00476600 and 0x00416A90 are raw code
-//   immediates in retail and are not transcribed yet (native gaps). Runtime UNOBSERVED.
+// Tools/evidence: scripts/registrar_sequence.py 0x00476110 (code_flow=no, decoded calls with every push address and immediate, cleanup=add esp,0x18 at 0x0047619D) cross-checked against radare2 6.2.0 af+afbj (1 block / 39 instructions / 150 bytes); the earlier `add esp,0x38` at 0x00476163 cleans the first group. 0x004C48C0 is an argument-less getter (`mov ax,[0x54F928]`-class leaf) and 0x00416830 is the leaf setting getter; 0x00401400/0x00401530 read [esp+4]/[esp+8]/[esp+0xC] as (class id, event id, handler), so the push that precedes the 0x00416830 call is the following link call's pre-pushed handler.
+// Behavior/CFG: registers the "M203" task type as TaskType_Register("M203", 0x128, Sys_GetGlobal16_4C48C0(), 0) and stores the returned 16-bit id at 0x005BE3B0; links the id to handler 0x004761B0 on event 0 through QTask_LinkQTaskEventHandler and to handlers 0x00476340 and 0x00476600 on events 1 and 2 through QTask_LinkQTaskEventHandlerNoContextFn; links the id a third time through QTask_LinkQTaskEventHandler with the event id taken from the setting byte 0x00416830 and handler 0x00416A90; registers the script name "TASKTYPE_M203" for the id with Script_QHashNodeRegister; then resolves "smoke1.spr" through the name-keyed registry at 0x004169D0 and keeps the record pointer at 0x005BE3AC.
+// Status/limits: BUILD_VERIFIED. Both cleanups are accounted for independently: `add esp,0x38` is 14 dwords = 2 register slots + 3 TaskType_Register arguments + 3*3 link arguments, and `add esp,0x18` is 6 dwords = the pre-pushed handler slot + 2 link arguments + 2 script-registration arguments + 1 registry-lookup argument. Handlers 0x004761B0, 0x00476340, 0x00476600 and 0x00416A90 are raw code immediates in retail and are not transcribed yet (native gaps). Runtime UNOBSERVED.
 #include "igi/retail/core/task_types.hpp"
 
 #include <cstdint>

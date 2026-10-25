@@ -1,22 +1,8 @@
 // Native: Qvm_PushStringOperand_4BCE40; retail VA 0x004BCE40 (placeholder name; retail symbol unknown).
-// Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x004BCE40-0x004BCEB3 (116 bytes,
-//   1 block, 0 edges, 51 instructions), bytes re-read from the image (53 55 56 8b 74 24 14 57 8b fe 83 c9 ff 33 c0 f2 ae ...).
-// Tools/evidence: radare2 6.2.0 af/pd over the exact image plus the linear disassembly; callers found by scanning every `call` in .text:
-//   0x004BCE03 (0x004BCD90), 0x004BD951, 0x004BDBE3, 0x004BE2A4, 0x004BEA08, 0x004BEA7B - all pass the same three-argument shape.
-// Behavior/CFG: single-block cdecl helper, three stack arguments ([esp+4] interpreter state, [esp+8] NUL-terminated string, [esp+0xC] type tag).
-//   It measures strlen+1 (0x004BCE4F `repnz scas` then `not`), rounds that up to a dword count (0x004BCE61 `add $3`, 0x004BCE64 `and $~3`,
-//   0x004BCE76 `shr $2`), decrements the type index at +0x1C (0x004BCE67/0x004BCE68) and stores the tag at type_stack[new index] (0x004BCE6B),
-//   subtracts the dword count from the value index at +0x18 (0x004BCE79/0x004BCE7D), copies exactly strlen+1 bytes to value_stack + index*4
-//   (0x004BCE99 `rep movsl`, 0x004BCEA0 `rep movsb`), then decrements the value index once more (0x004BCEA8) and stores the dword count at
-//   value_stack[new index] (0x004BCEAE). It returns the final value index in EAX (0x004BCEA2-0x004BCEAA keep it there to the `ret`).
-// Status/limits: TRANSCRIBED; runtime UNOBSERVED; STRUCTURALLY_VERIFIED against the instruction listing only. Link: needs no callees (leaf);
-//   the state layout is the QVM interpreter prefix documented below. The padding bytes between the copied string and the reserved dword
-//   boundary are left untouched by the retail and are left untouched here (memcpy of strlen+1 bytes only).
-// State object layout used by this cluster (read from these bytes; identical offsets to
-// engine/include/igi/retail/script/qvm_native_state.hpp, whose field names were corrected to match these bytes: +0x00 is the byte offset
-// added to the +0x14 pointer (0x004BCFD0 reads both and indexes one by the other): +0x00 byte offset, +0x10 saved instruction pointer
-// (written from +0x14 by 0x004BCD90), +0x14 instruction/node pointer, +0x18 value stack index (dwords), +0x1C type stack index, +0x20 error
-// status, +0x24 value stack pointer, +0x28 type stack pointer, +0x2C stop flag, +0x68 string scratch.
+// Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x004BCE40-0x004BCEB3 (116 bytes, 1 block, 0 edges, 51 instructions), bytes re-read from the image (53 55 56 8b 74 24 14 57 8b fe 83 c9 ff 33 c0 f2 ae ...).
+// Tools/evidence: radare2 6.2.0 af/pd over the exact image plus the linear disassembly; callers found by scanning every `call` in .text: 0x004BCE03 (0x004BCD90), 0x004BD951, 0x004BDBE3, 0x004BE2A4, 0x004BEA08, 0x004BEA7B - all pass the same three-argument shape.
+// Behavior/CFG: single-block cdecl helper, three stack arguments ([esp+4] interpreter state, [esp+8] NUL-terminated string, [esp+0xC] type tag). It measures strlen+1 (0x004BCE4F `repnz scas` then `not`), rounds that up to a dword count (0x004BCE61 `add $3`, 0x004BCE64 `and $~3`, 0x004BCE76 `shr $2`), decrements the type index at +0x1C (0x004BCE67/0x004BCE68) and stores the tag at type_stack[new index] (0x004BCE6B), subtracts the dword count from the value index at +0x18 (0x004BCE79/0x004BCE7D), copies exactly strlen+1 bytes to value_stack + index*4 (0x004BCE99 `rep movsl`, 0x004BCEA0 `rep movsb`), then decrements the value index once more (0x004BCEA8) and stores the dword count at value_stack[new index] (0x004BCEAE). It returns the final value index in EAX (0x004BCEA2-0x004BCEAA keep it there to the `ret`).
+// Status/limits: BUILD_VERIFIED; runtime UNOBSERVED; STRUCTURALLY_VERIFIED against the instruction listing only. Link: needs no callees (leaf); the state layout is the QVM interpreter prefix documented below. The padding bytes between the copied string and the reserved dword boundary are left untouched by the retail and are left untouched here (memcpy of strlen+1 bytes only). State object layout used by this cluster (read from these bytes; identical offsets to engine/include/igi/retail/script/qvm_native_state.hpp, whose field names were corrected to match these bytes: +0x00 is the byte offset added to the +0x14 pointer (0x004BCFD0 reads both and indexes one by the other): +0x00 byte offset, +0x10 saved instruction pointer (written from +0x14 by 0x004BCD90), +0x14 instruction/node pointer, +0x18 value stack index (dwords), +0x1C type stack index, +0x20 error status, +0x24 value stack pointer, +0x28 type stack pointer, +0x2C stop flag, +0x68 string scratch.
 #include <cstddef>
 #include <cstdint>
 #include <cstring>

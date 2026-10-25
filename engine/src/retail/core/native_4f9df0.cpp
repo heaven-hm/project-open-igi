@@ -1,14 +1,8 @@
 // Native: GraphStream_RegisterNode_4F9DF0; retail VA 0x004F9DF0 (placeholder name; retail symbol unknown).
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x004F9DF0-0x004F9E67 (120 bytes, 7 blocks, 40 instructions).
 // Tools/evidence: build/retail-dis.txt (GNU objdump) is desynchronised at this VA by the adjacent jump table, so the body comes from radare2 6.2.0 pd/afij (120 bytes, 7 blocks, 40 instructions); the failure literal at 0x0054E3E8 is "GraphStream - collision in hash for %s"; caller in scope: the AIGraph registrar 0x00508FA0 at 0x0050928E ("RouteTable", 0xA, 0x005092A0).
-// Behavior/CFG: seven blocks (hash, bucket walk, empty-free-list return, fill+insert tail, collision), no loop except the bucket walk. Hashes the
-//                name with 0x004F9E70, walks the bucket list the 0x00A774A0 header points at and reports a collision through 0x004AF810 when a
-//                node already carries the hash; otherwise takes the free node at 0x00A76D18, stores hash/+0xC/+0x10, unlinks it with 0x004AF960,
-//                clears its two link words and inserts it at the tail of the 0x00A774A0 list through 0x004AF8F0.
-// Status/limits: TRANSCRIBED; STRUCTURALLY_VERIFIED against the 40-instruction radare2 listing; runtime UNOBSERVED. Link-blocked on 0x004AF960
-//                alone (see the BLOCKED note below). 0x00A774A0 and 0x00A76D18 sit in .data's zero-fill tail (no file bytes), so they are
-//                defined here zeroed exactly as the loader leaves them; the non-null free-list node is established by the untranscribed
-//                graph-stream initialiser, and retail would fault on a null one because it dereferences the word before testing it.
+// Behavior/CFG: seven blocks (hash, bucket walk, empty-free-list return, fill+insert tail, collision), no loop except the bucket walk. Hashes the name with 0x004F9E70, walks the bucket list the 0x00A774A0 header points at and reports a collision through 0x004AF810 when a node already carries the hash; otherwise takes the free node at 0x00A76D18, stores hash/+0xC/+0x10, unlinks it with 0x004AF960, clears its two link words and inserts it at the tail of the 0x00A774A0 list through 0x004AF8F0.
+// Status/limits: TRANSCRIBED; STRUCTURALLY_VERIFIED against the 40-instruction radare2 listing; runtime UNOBSERVED. Link-blocked on 0x004AF960 alone (see the BLOCKED note below). 0x00A774A0 and 0x00A76D18 sit in .data's zero-fill tail (no file bytes), so they are defined here zeroed exactly as the loader leaves them; the non-null free-list node is established by the untranscribed graph-stream initialiser, and retail would fault on a null one because it dereferences the word before testing it.
 #include <cstdint>
 
 // 0x004AF8F0: the list-tail insert half, transcribed as igi::retail::sys::Sys_InsertListTail_4AF8F0 in

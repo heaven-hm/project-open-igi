@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x004B1180-0x004B119F (32 bytes, 1 block, 8 instructions: a1 6c399400 / 8d0cc5 / 2bc8 / 8d0c89 / 89048d04379400 / 40 / a36c399400 / 48 / c3).
 // Tools/evidence: radare2 6.2.0 af/pdf and the raw bytes; section 22.2 of the evidence sheet.
 // Behavior/CFG: takes the next device index from 0x0094396C, stores it into that record's +0x54 field at 0x00943704 + index*0x8C, increments the counter, decrements the local copy and returns the ORIGINAL index in EAX.
-// Status/limits: TRANSCRIBED; runtime UNOBSERVED. This file owns the 0x009436B0 table storage and the 0x0094396C counter, because no transcribed native before it writes them; 0x004B1200 sets the counter to 1 and is not landed yet, so in this build the counter starts at 0.
+// Status/limits: STRUCTURALLY_VERIFIED; runtime UNOBSERVED. This file owns the 0x009436B0 table storage and the 0x0094396C counter, because no transcribed native before it writes them; 0x004B1200 sets the counter to 1 and is not landed yet, so in this build the counter starts at 0.
 #include "igi/retail/qfile/driver_table.hpp"
 
 #include <cstdint>

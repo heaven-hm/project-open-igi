@@ -1,14 +1,8 @@
 // Native: Task_WalkAndDispatchEvent_424280; retail VA 0x00424280 (placeholder name; retail symbol unknown).
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x00424280-0x004242F4 (117 bytes, 10 blocks, 14 edges, 40 instructions).
 // Tools/evidence: radare2 6.2.0 af/pd over the exact bytes; pushed as the current-event-word handler at 0x004240CD, 0x00469706, 0x00485203 (GameScreen registrar 0x004851B0), 0x004E4E5A and 0x004F5683, and dispatched with one word at 0x00402481 (single-argument site).
-// Behavior/CFG: takes the node linked at arg1+0x08 and walks it: while the node is non-null it pushes the node's child (0, or the child when
-// the child's first word is set) onto the 0x00AFA6E0 dispatch stack at depth 0x00AFA7E0, increments the depth, reads the event word through
-// 0x004E7530, dispatches QTask_HandlerTable[event*0x180 + word[node+0x1C]] with the node when that entry is set, then pops one depth level
-// and continues while the popped node is non-null. 10 blocks / 14 edges with the back edge 0x004242F1 -> 0x00424297.
-// Status/limits: TRANSCRIBED; runtime UNOBSERVED. Same walk as the transcribed phase-1 dispatcher 0x00488700, except that the phase comes
-// from the current event word (0x004E7530) instead of the constant 1 and the handler is tested against zero only; both shapes follow the
-// retail bytes. The 0x00AFA6E0 stack and 0x00AFA7E0 depth are the storage owned by native_4015f0.cpp and declared extern here. The routine
-// is not an r2 function start (it is only referenced as an immediate), so the extent above is the recovered body through its ret and nop pad.
+// Behavior/CFG: takes the node linked at arg1+0x08 and walks it: while the node is non-null it pushes the node's child (0, or the child when the child's first word is set) onto the 0x00AFA6E0 dispatch stack at depth 0x00AFA7E0, increments the depth, reads the event word through 0x004E7530, dispatches QTask_HandlerTable[event*0x180 + word[node+0x1C]] with the node when that entry is set, then pops one depth level and continues while the popped node is non-null. 10 blocks / 14 edges with the back edge 0x004242F1 -> 0x00424297.
+// Status/limits: STRUCTURALLY_VERIFIED; runtime UNOBSERVED. Same walk as the transcribed phase-1 dispatcher 0x00488700, except that the phase comes from the current event word (0x004E7530) instead of the constant 1 and the handler is tested against zero only; both shapes follow the retail bytes. The 0x00AFA6E0 stack and 0x00AFA7E0 depth are the storage owned by native_4015f0.cpp and declared extern here. The routine is not an r2 function start (it is only referenced as an immediate), so the extent above is the recovered body through its ret and nop pad.
 #include "igi/retail/core/task_types.hpp"
 
 #include <cstdint>

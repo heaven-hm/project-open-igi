@@ -1,25 +1,8 @@
 // Native: Qvm_ReadArgumentValue_4BCAE0; retail VA 0x004BCAE0 (placeholder name; retail symbol unknown).
-// Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x004BCAE0-0x004BCBF1 (274 bytes,
-//   15 blocks, 18 edges, 100 instructions), bytes re-read from the image (83 ec 0c 53 55 56 8b 74 24 24 8b 54 24 28 57 8b 46 0c 33 db ...).
-// Tools/evidence: radare2 6.2.0 af/pd over the exact image; callers: 0x004BCACC (0x004BCAB0, selector 1), 0x004BD02C (0x004BD010, selector 0)
-//   and 0x004BD05A (0x004BD040, selector 3) - the three accessors already transcribed in this folder.
-// Behavior/CFG: cdecl accessor with five stack arguments ([esp+4] destination, [esp+8] destination size, [esp+0xC] argument frame,
-//   [esp+0x10] argument index, [esp+0x14] selector). It caches the interpreter pointer at frame +0x0C (0x004BCAEF), saves interpreter +0x14
-//   to the stack and +0x14/+0x1C in registers (0x004BCAF4-0x004BCAFD), loads the argument node from the frame table at frame +0x10 indexed by the
-//   argument index (0x004BCB01-0x004BCB07) into interpreter +0x14 (0x004BCB09) and runs 0x004BCFD0 (0x004BCB0F/0x004BCB10). It then re-reads the
-//   interpreter (0x004BCB15) and only proceeds when the type index at +0x1C is below its saved value (0x004BCB1B) and the status at +0x20 is
-//   zero (0x004BCB27). Selector 1 evaluates through 0x004BCEC0 and stores the integer slot to the destination (0x004BCBBC-0x004BCBCB); selector 2
-//   evaluates and stores the real slot (0x004BCBA0-0x004BCBA8); selector 3 pops a special operand with tag 3 through 0x004BCC00
-//   (0x004BCB58), copies destination size - 1 bytes with the strncpy routine at 0x004A5500 (0x004BCB76) and terminates at
-//   destination[size-1] (0x004BCB82). Any other selector calls Debug_Error with the byte-identical retail string "Unknown data type." at
-//   0x00547AB4 and spins at 0x004BCB49 forever. The epilogue restores interpreter +0x14, +0x1C and +0x18 (0x004BCBD5-0x004BCBEA) and returns the
-//   success flag that was accumulated in EBX (0), 1 on a completed conversion (0x004BCBE7).
-// Status/limits: TRANSCRIBED; runtime UNOBSERVED; STRUCTURALLY_VERIFIED against the instruction listing only. Link: needs 0x004BCFD0
-//   (qvm_stack_natives.cpp), 0x004BCEC0, 0x004BCC00 (this wave), the MSVC strncpy at 0x004A5500 (identified, not hand-implemented - see
-//   docs/fidelity/evidence/qvm-4a5500-strncpy.md) and Debug_Error (0x004AF7B0). The retail reuses its own +0x0C and +0x10 argument words as the
-//   real and integer out slots of 0x004BCEC0 and the string/size out slots of 0x004BCC00; a C++ body cannot address incoming argument words, so
-//   two locals carry those slots. Every path reads the slots only through the callee's writes, so the behaviour is unchanged; the argument
-//   frame fields +0x0C (interpreter) and +0x10 (node table) are used as observed, their wider meaning is not established here.
+// Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x004BCAE0-0x004BCBF1 (274 bytes, 15 blocks, 18 edges, 100 instructions), bytes re-read from the image (83 ec 0c 53 55 56 8b 74 24 24 8b 54 24 28 57 8b 46 0c 33 db ...).
+// Tools/evidence: radare2 6.2.0 af/pd over the exact image; callers: 0x004BCACC (0x004BCAB0, selector 1), 0x004BD02C (0x004BD010, selector 0) and 0x004BD05A (0x004BD040, selector 3) - the three accessors already transcribed in this folder.
+// Behavior/CFG: cdecl accessor with five stack arguments ([esp+4] destination, [esp+8] destination size, [esp+0xC] argument frame, [esp+0x10] argument index, [esp+0x14] selector). It caches the interpreter pointer at frame +0x0C (0x004BCAEF), saves interpreter +0x14 to the stack and +0x14/+0x1C in registers (0x004BCAF4-0x004BCAFD), loads the argument node from the frame table at frame +0x10 indexed by the argument index (0x004BCB01-0x004BCB07) into interpreter +0x14 (0x004BCB09) and runs 0x004BCFD0 (0x004BCB0F/0x004BCB10). It then re-reads the interpreter (0x004BCB15) and only proceeds when the type index at +0x1C is below its saved value (0x004BCB1B) and the status at +0x20 is zero (0x004BCB27). Selector 1 evaluates through 0x004BCEC0 and stores the integer slot to the destination (0x004BCBBC-0x004BCBCB); selector 2 evaluates and stores the real slot (0x004BCBA0-0x004BCBA8); selector 3 pops a special operand with tag 3 through 0x004BCC00 (0x004BCB58), copies destination size - 1 bytes with the strncpy routine at 0x004A5500 (0x004BCB76) and terminates at destination[size-1] (0x004BCB82). Any other selector calls Debug_Error with the byte-identical retail string "Unknown data type." at 0x00547AB4 and spins at 0x004BCB49 forever. The epilogue restores interpreter +0x14, +0x1C and +0x18 (0x004BCBD5-0x004BCBEA) and returns the success flag that was accumulated in EBX (0), 1 on a completed conversion (0x004BCBE7).
+// Status/limits: BUILD_VERIFIED; runtime UNOBSERVED; STRUCTURALLY_VERIFIED against the instruction listing only. Link: needs 0x004BCFD0 (qvm_stack_natives.cpp), 0x004BCEC0, 0x004BCC00 (this wave), the MSVC strncpy at 0x004A5500 (identified, not hand-implemented - see docs/fidelity/evidence/qvm-4a5500-strncpy.md) and Debug_Error (0x004AF7B0). The retail reuses its own +0x0C and +0x10 argument words as the real and integer out slots of 0x004BCEC0 and the string/size out slots of 0x004BCC00; a C++ body cannot address incoming argument words, so two locals carry those slots. Every path reads the slots only through the callee's writes, so the behaviour is unchanged; the argument frame fields +0x0C (interpreter) and +0x10 (node table) are used as observed, their wider meaning is not established here.
 #include <cstddef>
 #include <cstdint>
 #include <cstring>

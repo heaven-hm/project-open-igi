@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x004B6CE0 (see the per-instruction comments; 7 instructions, 1 blocks, 0 edges).
 // Tools/evidence: radare2 6.2.0 af/afij/pdf and NASM ndisasm over the exact bytes; it reads the word at model+0x14, the pointer at model+0x08 and a signed word at that pointer plus index*36 + 0x0C
 // Behavior/CFG: reads a 16-bit index at object+0x14, a table pointer at object+0x08, and returns the sign-extended word at table + index*36 + 0x0C. No branch, no store, no call.
-// Status/limits: TRANSCRIBED; runtime UNOBSERVED. The object's type is not established beyond the offsets this body reads.
+// Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. The object's type is not established beyond the offsets this body reads.
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)

@@ -2,11 +2,7 @@
 // Artifact: retail igi.exe SHA-256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; image base 0x00400000.
 // Tools/evidence: build/retail-dis.txt (GNU objdump i386 byte+instruction listing, bytes 8b 44 24 04 56 25 ff ff 00 00 8d 34 40 c1 e6 04 8a 86 04 5f af 00 84 c0 74 0f 8d 86 ec 5e af 00 50 e8 2a f1 0a 00 83 c4 04 c6 86 05 5f af 00 00 5e c3); radare2 6.2.0 `af/afij` for the CFG numbers; 279 direct call sites in .text, a set disjoint from 0x00401900's 279 sites.
 // Behavior/CFG: masks the class id to its low 16 bits and addresses the 0x30-byte type slot at 0x00AF5EE0 + id*0x30; when the +0x24 class-task-list flag is set it calls 0x004B0B70 with &slot+0x0C (which releases descriptor[0] and stores null back) and then clears the +0x25 in-use byte. The +0x24 flag is not cleared here, and there is no return value.
-// Status/limits: TRANSCRIBED (static only); runtime UNOBSERVED. Depends on QFile_ReleaseBlock_4B0B70 (0x004B0B70, engine/src/retail/qfile/native_4b0b70.cpp), which is already in the igi source list; nothing else is needed.
-//
-// Retail statement order preserved: argument load (0x00401A20), the low-word mask (0x00401A25), the slot scaling
-// (0x00401A2A/0x00401A2D), the +0x24 flag test (0x00401A30-0x00401A38), the release call inside the branch
-// (0x00401A3A-0x00401A46) and the +0x25 in-use clear after the branch (0x00401A49) are at their retail positions.
+// Status/limits: BUILD_VERIFIED (static only); runtime UNOBSERVED. Depends on QFile_ReleaseBlock_4B0B70 (0x004B0B70, engine/src/retail/qfile/native_4b0b70.cpp), which is already in the igi source list; nothing else is needed. Retail statement order preserved: argument load (0x00401A20), the low-word mask (0x00401A25), the slot scaling (0x00401A2A/0x00401A2D), the +0x24 flag test (0x00401A30-0x00401A38), the release call inside the branch (0x00401A3A-0x00401A46) and the +0x25 in-use clear after the branch (0x00401A49) are at their retail positions.
 #include "igi/retail/core/task_types.hpp"
 
 #include <cstdint>

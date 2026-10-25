@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: radare2 6.2.0 complete listing (33c9 b8f800a800 803800 741f 83c008 41 3df801a800 7cf0 8b442404 50 68dcec5400 e8ca70f9ff 83c408 ebfe / 8b442404 56 be01000000 c604cdf800.. d3e6 8904cdfc00.. 56 50 e80301faff 83c408 8bc6 5e c3); failure string "Unable to register NodeCriteria %s" at 0x0054ECDC; callee 0x4B8810 landed.
 // Behavior/CFG: scans the 32 eight-byte slots at 0x00A800F8 for a free slot; if none is free it calls Debug_Error("Unable to register NodeCriteria %s", arg) and spins (0x005186E9). On a free slot it marks the used byte, stores the argument in the slot's dword, builds the mask 1 << index, calls 0x4B8810(arg, mask) and returns the mask.
-// Status/limits: TRANSCRIBED (static only); the 32-slot table is port-owned storage declared here because this native is both its writer and reader, the scan bound 0x00A801F8 is exclusive as retail, and the fail-closed spin is preserved; runtime UNOBSERVED.
+// Status/limits: BUILD_VERIFIED (static only); the 32-slot table is port-owned storage declared here because this native is both its writer and reader, the scan bound 0x00A801F8 is exclusive as retail, and the fail-closed spin is preserved; runtime UNOBSERVED.
 #include "igi/retail/core/retail_error.hpp"
 
 #include <cstdint>

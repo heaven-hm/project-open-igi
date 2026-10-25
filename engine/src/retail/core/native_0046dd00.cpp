@@ -1,21 +1,8 @@
 // Native: Task_DefineGunx2 (behavior-derived placeholder name; retail symbol unknown); retail VA 0x0046DD00-0x0046DDBD.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; 190 bytes, 1 block, 50 instructions.
-// Tools/evidence: radare2 6.2.0 `af` + `pdf` over the exact image (single block, single ret, so the 50-instruction and 190-byte counts agree
-//   exactly); callee bodies re-read at their VAs to fix argument layout - 0x004D9FA0, 0x004F1A70, 0x004C56F0 and 0x00416830 are argument-less
-//   getters (`mov ax/al,[abs]; ret`), while 0x00401400 and 0x00401530 read [esp+4]/[esp+8]/[esp+0xC] as (class id, event id, handler) after
-//   their prologues, so each single push that precedes a getter call is that link call's pre-pushed handler slot, not a getter argument.
-//   Literals 0x0053FE7C "Gunx2" and 0x0053FE6C "TASKTYPE_GUNX2" read as raw .rdata bytes.
-// Behavior/CFG: registers the "Gunx2" task type with TaskType_Register("Gunx2", 0x138, <word getter 0x4D9FA0>, 0) and stores the returned
-//   16-bit id at 0x0053FE68; links the id to handler 0x0046DDC0 on event 0 through QTask_LinkQTaskEventHandler, to handlers 0x0046DE70 and
-//   0x0046DEE0 on events 1 and 2 through QTask_LinkQTaskEventHandlerNoContextFn, then links handlers 0x004D3710, 0x00472880 and 0x0045E3D0
-//   with the byte getters 0x004F1A70, 0x004C56F0 and 0x00416830 supplying the event ids; finally registers the script name
-//   "TASKTYPE_GUNX2" for the id through Script_QHashNodeRegister.
-// Status/limits: TRANSCRIBED. The four `add esp` cleanups independently bound the call set: 0x38 = 14 pushes (2 shared slots + 3 register
-//   arguments + 3*3 link arguments), then 0xC three times (one pre-pushed handler slot + two link arguments each), then 0x14 (handler slot +
-//   two link arguments + two script-registration arguments). Getter results are zero-extended into the 32-bit event-id argument; retail passes
-//   them in EAX with untouched upper bytes, and the callee masks the low byte/word, so the index is identical. Handlers 0x0046DDC0,
-//   0x0046DE70, 0x0046DEE0, 0x00472880 and 0x0045E3D0 are raw code immediates in retail and are not transcribed yet (native gaps); 0x004D3710
-//   does have a transcription in the tree but is still passed as the address constant retail pushes. Runtime UNOBSERVED.
+// Tools/evidence: radare2 6.2.0 `af` + `pdf` over the exact image (single block, single ret, so the 50-instruction and 190-byte counts agree exactly); callee bodies re-read at their VAs to fix argument layout - 0x004D9FA0, 0x004F1A70, 0x004C56F0 and 0x00416830 are argument-less getters (`mov ax/al,[abs]; ret`), while 0x00401400 and 0x00401530 read [esp+4]/[esp+8]/[esp+0xC] as (class id, event id, handler) after their prologues, so each single push that precedes a getter call is that link call's pre-pushed handler slot, not a getter argument. Literals 0x0053FE7C "Gunx2" and 0x0053FE6C "TASKTYPE_GUNX2" read as raw .rdata bytes.
+// Behavior/CFG: registers the "Gunx2" task type with TaskType_Register("Gunx2", 0x138, <word getter 0x4D9FA0>, 0) and stores the returned 16-bit id at 0x0053FE68; links the id to handler 0x0046DDC0 on event 0 through QTask_LinkQTaskEventHandler, to handlers 0x0046DE70 and 0x0046DEE0 on events 1 and 2 through QTask_LinkQTaskEventHandlerNoContextFn, then links handlers 0x004D3710, 0x00472880 and 0x0045E3D0 with the byte getters 0x004F1A70, 0x004C56F0 and 0x00416830 supplying the event ids; finally registers the script name "TASKTYPE_GUNX2" for the id through Script_QHashNodeRegister.
+// Status/limits: BUILD_VERIFIED. The four `add esp` cleanups independently bound the call set: 0x38 = 14 pushes (2 shared slots + 3 register arguments + 3*3 link arguments), then 0xC three times (one pre-pushed handler slot + two link arguments each), then 0x14 (handler slot + two link arguments + two script-registration arguments). Getter results are zero-extended into the 32-bit event-id argument; retail passes them in EAX with untouched upper bytes, and the callee masks the low byte/word, so the index is identical. Handlers 0x0046DDC0, 0x0046DE70, 0x0046DEE0, 0x00472880 and 0x0045E3D0 are raw code immediates in retail and are not transcribed yet (native gaps); 0x004D3710 does have a transcription in the tree but is still passed as the address constant retail pushes. Runtime UNOBSERVED.
 #include "igi/retail/core/task_types.hpp"
 
 #include <cstdint>

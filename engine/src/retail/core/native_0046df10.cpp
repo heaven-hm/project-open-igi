@@ -1,19 +1,8 @@
 // Native: Task_DefineKnifeStab (behavior-derived placeholder name; retail symbol unknown); retail VA 0x0046DF10-0x0046DF60.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; 81 bytes, 1 block, 22 instructions.
-// Tools/evidence: radare2 6.2.0 per-instruction listing of the complete single-block body (one ret, so the 22-instruction count is exact);
-//   callee bodies re-read at the exact VAs to fix the stack-argument layout - 0x004F45F0 is `mov ax,[0x54E200]; ret` (reads no arguments),
-//   0x00413B20 is `mov al,[0x5391AE]; ret` (reads no arguments), and 0x00401400 reads [esp+4]/[esp+8]/[esp+0xC] as (class id, event id,
-//   handler) after its prologue, which is what makes the pre-pushed handler slot at 0x0046DF2F a call argument rather than padding.
-//   Literals 0x0053FE9C "KnifeStab" and 0x0053FE88 "TASKTYPE_KNIFESTAB" read as raw .rdata bytes.
-// Behavior/CFG: registers the "KnifeStab" task type with TaskType_Register("KnifeStab", 0x20, <getter>, 0), stores the returned 16-bit id
-//   at 0x0053FE84, then pre-pushes the handler 0x0046DF70 once and calls the flag getter 0x00413B20 (which ignores the stack slot), and links
-//   the stored id together with that flag and handler through QTask_LinkQTaskEventHandler(id, flag, 0x0046DF70); finally registers the script
-//   name "TASKTYPE_KNIFESTAB" for the id through Script_QHashNodeRegister. Both epilogue cleanups are `add esp,0x14` (5 dwords) and both
-//   push groups measure 5 dwords: the first is 2 shared slots + 3 TaskType_Register arguments, the second is the shared handler slot + 2 link
-//   arguments + 2 script-registration arguments.
-// Status/limits: TRANSCRIBED; the one zero pushed at 0x0046DF10 is an inert stack slot below the arguments (nothing reads it) and the
-//   zero at 0x0046DF12 is TaskType_Register's fourth argument, so the call reproduces the four arguments the callee reads. Handler
-//   0x0046DF70 is a raw code immediate in retail and is not transcribed yet (native gap). Runtime UNOBSERVED.
+// Tools/evidence: radare2 6.2.0 per-instruction listing of the complete single-block body (one ret, so the 22-instruction count is exact); callee bodies re-read at the exact VAs to fix the stack-argument layout - 0x004F45F0 is `mov ax,[0x54E200]; ret` (reads no arguments), 0x00413B20 is `mov al,[0x5391AE]; ret` (reads no arguments), and 0x00401400 reads [esp+4]/[esp+8]/[esp+0xC] as (class id, event id, handler) after its prologue, which is what makes the pre-pushed handler slot at 0x0046DF2F a call argument rather than padding. Literals 0x0053FE9C "KnifeStab" and 0x0053FE88 "TASKTYPE_KNIFESTAB" read as raw .rdata bytes.
+// Behavior/CFG: registers the "KnifeStab" task type with TaskType_Register("KnifeStab", 0x20, <getter>, 0), stores the returned 16-bit id at 0x0053FE84, then pre-pushes the handler 0x0046DF70 once and calls the flag getter 0x00413B20 (which ignores the stack slot), and links the stored id together with that flag and handler through QTask_LinkQTaskEventHandler(id, flag, 0x0046DF70); finally registers the script name "TASKTYPE_KNIFESTAB" for the id through Script_QHashNodeRegister. Both epilogue cleanups are `add esp,0x14` (5 dwords) and both push groups measure 5 dwords: the first is 2 shared slots + 3 TaskType_Register arguments, the second is the shared handler slot + 2 link arguments + 2 script-registration arguments.
+// Status/limits: BUILD_VERIFIED; the one zero pushed at 0x0046DF10 is an inert stack slot below the arguments (nothing reads it) and the zero at 0x0046DF12 is TaskType_Register's fourth argument, so the call reproduces the four arguments the callee reads. Handler 0x0046DF70 is a raw code immediate in retail and is not transcribed yet (native gap). Runtime UNOBSERVED.
 #include "igi/retail/core/task_types.hpp"
 
 #include <cstdint>

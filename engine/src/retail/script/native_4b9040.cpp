@@ -1,20 +1,8 @@
 // Native: Qvm_StoreArgumentValue_4B9040; retail VA 0x004B9040 (placeholder name; retail symbol unknown).
-// Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x004B9040-0x004B9112 (211 bytes,
-//   11 blocks, 70 instructions), bytes re-read from the image (81 ec 00 08 00 00 56 8b b4 24 0c 08 00 00 8b 46 04 48 74 ...).
+// Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x004B9040-0x004B9112 (211 bytes, 11 blocks, 70 instructions), bytes re-read from the image (81 ec 00 08 00 00 56 8b b4 24 0c 08 00 00 8b 46 04 48 74 ...).
 // Tools/evidence: radare2 6.2.0 af/pd over the exact image; callers: 0x004B8F60, 0x004B9556 and 0x004B9ADA - each pushes two arguments.
-// Behavior/CFG: cdecl store helper with two stack arguments ([esp+4] expression node, [esp+8] target descriptor). The target's dword 4 selects
-//   the store: 1 writes an integer read from node through 0x004B9120, sized by target dword 0x0C (1 -> byte store 0x004B9109, 2 -> word store
-//   0x004B90EB, anything else -> dword store 0x004B90D6); 2 evaluates the node as a real through 0x004B9660 and stores eight bytes with
-//   `fstpl` at the target pointer (0x004B90B0); 3 renders the node into a 0x800-byte stack buffer with
-//   0x004B8CE0(node, buffer, 0x800, target dword 0x0C - 1) (0x004B906D-0x004B9075), copies the returned string into the target pointer with the
-//   MSVC strncpy at 0x004A5500 using target dword 0x0C - 1 as the count (0x004B907D-0x004B9082, the count word left on the stack by the first
-//   call's deliberately short 12-byte cleanup) and terminates target[count - 1] (0x004B908A-0x004B9090). Any other dword 4 value returns without
-//   writing (0x004B9058/0x004B910B). The target pointer is read from target +0x18 in every store path.
-// Status/limits: TRANSCRIBED; runtime UNOBSERVED; STRUCTURALLY_VERIFIED against the instruction listing only. Link: needs 0x004B9120 (item 1 of
-//   this wave, not yet transcribed), 0x004B9660 (`Qvm_EvaluateArgumentValue`, declared in qvm_execute.cpp and native_4b8a50.cpp, body not yet
-//   transcribed) and 0x004B8CE0 (item 2 of this wave, not yet transcribed); the strncpy at 0x004A5500 is the linked MSVC CRT routine and is bound
-//   to `std::strncpy` (see docs/fidelity/evidence/qvm-4a5500-strncpy.md). The target descriptor's field meanings beyond the observed type, count
-//   and pointer roles are not established.
+// Behavior/CFG: cdecl store helper with two stack arguments ([esp+4] expression node, [esp+8] target descriptor). The target's dword 4 selects the store: 1 writes an integer read from node through 0x004B9120, sized by target dword 0x0C (1 -> byte store 0x004B9109, 2 -> word store 0x004B90EB, anything else -> dword store 0x004B90D6); 2 evaluates the node as a real through 0x004B9660 and stores eight bytes with `fstpl` at the target pointer (0x004B90B0); 3 renders the node into a 0x800-byte stack buffer with 0x004B8CE0(node, buffer, 0x800, target dword 0x0C - 1) (0x004B906D-0x004B9075), copies the returned string into the target pointer with the MSVC strncpy at 0x004A5500 using target dword 0x0C - 1 as the count (0x004B907D-0x004B9082, the count word left on the stack by the first call's deliberately short 12-byte cleanup) and terminates target[count - 1] (0x004B908A-0x004B9090). Any other dword 4 value returns without writing (0x004B9058/0x004B910B). The target pointer is read from target +0x18 in every store path.
+// Status/limits: BUILD_VERIFIED; runtime UNOBSERVED; STRUCTURALLY_VERIFIED against the instruction listing only. Link: needs 0x004B9120 (item 1 of this wave, not yet transcribed), 0x004B9660 (`Qvm_EvaluateArgumentValue`, declared in qvm_execute.cpp and native_4b8a50.cpp, body not yet transcribed) and 0x004B8CE0 (item 2 of this wave, not yet transcribed); the strncpy at 0x004A5500 is the linked MSVC CRT routine and is bound to `std::strncpy` (see docs/fidelity/evidence/qvm-4a5500-strncpy.md). The target descriptor's field meanings beyond the observed type, count and pointer roles are not established.
 #include <cstddef>
 #include <cstdint>
 #include <cstring>

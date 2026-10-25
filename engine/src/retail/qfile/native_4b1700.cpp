@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x004B1700-0x004B172A (43 bytes, 1 block, 0 edges, 16 instructions).
 // Tools/evidence: radare2 6.2.0 af/afij/pdf; section 22.2 of the evidence sheet. 84 direct call sites in .text (0x00405C7E, 0x0045DED8, 0x004BB981 ...).
 // Behavior/CFG: reads the device index from *context, computes index*0x8C and calls the driver record's +0x14 slot (0x009436C4) with (index, context, argument3, argument4); the stub's own second parameter is pushed by callers but never read. Returns the slot's EAX. No branch.
-// Status/limits: TRANSCRIBED; runtime UNOBSERVED. GCC at the project flags tail-call-optimises this into a register rewrite plus `jmp *slot` where retail pushes four arguments, calls, cleans 0x10 and returns: same slot, same arguments in the same cdecl order, same blocks/edges (1/0), but the return goes straight to the caller. Accepted and recorded rather than defeated with a helper, which rule 9 forbids. The slot's own return type is unproven; table storage is owned by native_4b1180.cpp.
+// Status/limits: STRUCTURALLY_VERIFIED; runtime UNOBSERVED. GCC at the project flags tail-call-optimises this into a register rewrite plus `jmp *slot` where retail pushes four arguments, calls, cleans 0x10 and returns: same slot, same arguments in the same cdecl order, same blocks/edges (1/0), but the return goes straight to the caller. Accepted and recorded rather than defeated with a helper, which rule 9 forbids. The slot's own return type is unproven; table storage is owned by native_4b1180.cpp.
 #include "igi/retail/qfile/driver_table.hpp"
 
 #include <cstdint>

@@ -2,8 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x005093B0-0x005093BB (12 bytes, 1 block, 0 edges, 5 instructions: 8b442404 50 e826ffffff 59 c3).
 // Tools/evidence: build/retail-dis.txt (GNU objdump) 0x005093B0-0x005093BB; radare2 6.2.0 afij; linked by the AIGraph registrar 0x00508FA0 at 0x00509000 (0x00401400 event 0x004F9280()).
 // Behavior/CFG: one block, no branch. Pushes the incoming word and tail-calls the resource release 0x005092E0 on it, then returns.
-// Status/limits: TRANSCRIBED; STRUCTURALLY_VERIFIED against the 5-instruction listing; runtime UNOBSERVED. Link-blocked on 0x005092E0
-//                (not transcribed yet); its prototype here comes from this call site.
+// Status/limits: TRANSCRIBED; STRUCTURALLY_VERIFIED against the 5-instruction listing; runtime UNOBSERVED. Link-blocked on 0x005092E0 (not transcribed yet); its prototype here comes from this call site.
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)

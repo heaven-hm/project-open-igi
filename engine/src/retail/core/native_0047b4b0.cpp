@@ -1,21 +1,8 @@
 // Native: Task_DefineGunShot (behavior-derived placeholder name; retail symbol unknown); retail VA 0x0047B4B0-0x0047B55B.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; 172 bytes, 1 block, 45 instructions.
-// Tools/evidence: radare2 6.2.0 `af` + `pdf` over the exact image (single block, single ret, so the 45-instruction and 172-byte counts agree
-//   exactly); callee bodies re-read at their VAs for argument layout - 0x004018F0 is `mov ax,[0x54F928]; ret` and 0x00413B20 is
-//   `mov al,[0x5391AE]; ret`, both argument-less, while 0x00401400 and 0x00401530 read [esp+4]/[esp+8]/[esp+0xC] as (class id, event id,
-//   handler) after their prologues, so each single push that precedes a getter call is that link call's pre-pushed handler slot. Literals
-//   0x00540890 "GunShot" and 0x0054087C "TASKTYPE_GUNSHOT" read as raw .rdata bytes.
-// Behavior/CFG: registers the "GunShot" task type with TaskType_Register("GunShot", 0xC38, QTask_GetCurrentType(), 0) and stores the returned
-//   16-bit id at 0x005BE3CE; stores the low byte of QTask_AllocateEvent(0) at 0x005BE3CC; links the id to handler 0x0047B560 on event 0 and to
-//   handler 0x0047ABD0 on event 4 through QTask_LinkQTaskEventHandler, and to handlers 0x0047B690 and 0x0047C3D0 on events 1 and 2 through
-//   QTask_LinkQTaskEventHandlerNoContextFn, then links handler 0x0047C420 with the byte getter 0x00413B20 supplying the event id; finally
-//   registers the script name "TASKTYPE_GUNSHOT" for the id through Script_QHashNodeRegister.
-// Status/limits: TRANSCRIBED. The two `add esp` cleanups independently bound the call set: 0x48 = 18 pushes (2 register slots + 3 register
-//   arguments + 1 allocate argument + 4*3 link arguments), then 0x14 = 5 pushes (pre-pushed handler slot + 2 link arguments + 2
-//   script-registration arguments). The byte getter result is zero-extended into the 32-bit event-id argument; retail passes it in EAX with
-//   untouched upper bytes and the callee masks the low byte, so the computed index is identical. Handlers 0x0047B560, 0x0047B690, 0x0047C3D0,
-//   0x0047ABD0 and 0x0047C420 are raw code immediates in retail and are not transcribed yet (native gaps). 0x005BE3CC has its definition in
-//   sys/native_47b100.cpp and is declared extern here; this routine is retail's writer for it. Runtime UNOBSERVED.
+// Tools/evidence: radare2 6.2.0 `af` + `pdf` over the exact image (single block, single ret, so the 45-instruction and 172-byte counts agree exactly); callee bodies re-read at their VAs for argument layout - 0x004018F0 is `mov ax,[0x54F928]; ret` and 0x00413B20 is `mov al,[0x5391AE]; ret`, both argument-less, while 0x00401400 and 0x00401530 read [esp+4]/[esp+8]/[esp+0xC] as (class id, event id, handler) after their prologues, so each single push that precedes a getter call is that link call's pre-pushed handler slot. Literals 0x00540890 "GunShot" and 0x0054087C "TASKTYPE_GUNSHOT" read as raw .rdata bytes.
+// Behavior/CFG: registers the "GunShot" task type with TaskType_Register("GunShot", 0xC38, QTask_GetCurrentType(), 0) and stores the returned 16-bit id at 0x005BE3CE; stores the low byte of QTask_AllocateEvent(0) at 0x005BE3CC; links the id to handler 0x0047B560 on event 0 and to handler 0x0047ABD0 on event 4 through QTask_LinkQTaskEventHandler, and to handlers 0x0047B690 and 0x0047C3D0 on events 1 and 2 through QTask_LinkQTaskEventHandlerNoContextFn, then links handler 0x0047C420 with the byte getter 0x00413B20 supplying the event id; finally registers the script name "TASKTYPE_GUNSHOT" for the id through Script_QHashNodeRegister.
+// Status/limits: BUILD_VERIFIED. The two `add esp` cleanups independently bound the call set: 0x48 = 18 pushes (2 register slots + 3 register arguments + 1 allocate argument + 4*3 link arguments), then 0x14 = 5 pushes (pre-pushed handler slot + 2 link arguments + 2 script-registration arguments). The byte getter result is zero-extended into the 32-bit event-id argument; retail passes it in EAX with untouched upper bytes and the callee masks the low byte, so the computed index is identical. Handlers 0x0047B560, 0x0047B690, 0x0047C3D0, 0x0047ABD0 and 0x0047C420 are raw code immediates in retail and are not transcribed yet (native gaps). 0x005BE3CC has its definition in sys/native_47b100.cpp and is declared extern here; this routine is retail's writer for it. Runtime UNOBSERVED.
 #include "igi/retail/core/task_types.hpp"
 
 #include <cstdint>

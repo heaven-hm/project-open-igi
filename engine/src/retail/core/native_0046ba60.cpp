@@ -1,20 +1,8 @@
 // Native: Task_DefineComputer (behavior-derived placeholder name; retail symbol unknown); retail VA 0x0046BA60-0x0046BB06.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; 167 bytes, 1 block, 45 instructions.
-// Tools/evidence: radare2 6.2.0 `af` + `pdf` over the exact image (single block, single ret, so the 45-instruction and 167-byte counts agree
-//   exactly); callee bodies re-read at their VAs for argument layout - 0x004C48C0, 0x00416830, 0x00416850 and 0x00416880 are argument-less
-//   getters, while 0x00401400 and 0x00401530 read [esp+4]/[esp+8]/[esp+0xC] as (class id, event id, handler) after their prologues, so the
-//   single push that precedes each getter call is that link call's pre-pushed handler slot, not a getter argument. Literal 0x0053FDA0
-//   "Computer" read as raw .rdata bytes.
-// Behavior/CFG: registers the "Computer" task type with TaskType_Register("Computer", 0x198, <word getter 0x4C48C0>, 0) and stores the
-//   returned 16-bit id at 0x005BE2C4; links that id to handler 0x0046BB10 on event 0 through QTask_LinkQTaskEventHandler, to handlers
-//   0x0046BD50 and 0x0046BF80 on events 1 and 2 through QTask_LinkQTaskEventHandlerNoContextFn, and then to handlers 0x0045F920 three more
-//   times, with the byte getters 0x00416830, 0x00416850 and 0x00416880 supplying the three event ids. Unlike the Gunx2 registrar it does not
-//   register a TASKTYPE_ script name - retail's body has no Script_QHashNodeRegister call.
-// Status/limits: TRANSCRIBED. The `add esp` cleanups independently bound the call set: 0x38 = 14 pushes (2 shared slots + 3 register
-//   arguments + 3*3 link arguments), then 0xC three times (one pre-pushed handler slot + two link arguments each). Getter results are
-//   zero-extended into the 32-bit event-id argument; retail passes them in EAX with untouched upper bytes and the callee masks the low
-//   byte/word, so the computed index is identical. Handlers 0x0046BB10, 0x0046BD50, 0x0046BF80 and 0x0045F920 are raw code immediates in
-//   retail and are not transcribed yet (native gaps). Runtime UNOBSERVED.
+// Tools/evidence: radare2 6.2.0 `af` + `pdf` over the exact image (single block, single ret, so the 45-instruction and 167-byte counts agree exactly); callee bodies re-read at their VAs for argument layout - 0x004C48C0, 0x00416830, 0x00416850 and 0x00416880 are argument-less getters, while 0x00401400 and 0x00401530 read [esp+4]/[esp+8]/[esp+0xC] as (class id, event id, handler) after their prologues, so the single push that precedes each getter call is that link call's pre-pushed handler slot, not a getter argument. Literal 0x0053FDA0 "Computer" read as raw .rdata bytes.
+// Behavior/CFG: registers the "Computer" task type with TaskType_Register("Computer", 0x198, <word getter 0x4C48C0>, 0) and stores the returned 16-bit id at 0x005BE2C4; links that id to handler 0x0046BB10 on event 0 through QTask_LinkQTaskEventHandler, to handlers 0x0046BD50 and 0x0046BF80 on events 1 and 2 through QTask_LinkQTaskEventHandlerNoContextFn, and then to handlers 0x0045F920 three more times, with the byte getters 0x00416830, 0x00416850 and 0x00416880 supplying the three event ids. Unlike the Gunx2 registrar it does not register a TASKTYPE_ script name - retail's body has no Script_QHashNodeRegister call.
+// Status/limits: BUILD_VERIFIED. The `add esp` cleanups independently bound the call set: 0x38 = 14 pushes (2 shared slots + 3 register arguments + 3*3 link arguments), then 0xC three times (one pre-pushed handler slot + two link arguments each). Getter results are zero-extended into the 32-bit event-id argument; retail passes them in EAX with untouched upper bytes and the callee masks the low byte/word, so the computed index is identical. Handlers 0x0046BB10, 0x0046BD50, 0x0046BF80 and 0x0045F920 are raw code immediates in retail and are not transcribed yet (native gaps). Runtime UNOBSERVED.
 #include "igi/retail/core/task_types.hpp"
 
 #include <cstdint>

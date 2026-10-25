@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: radare2 6.2.0 listing (8b442404 a3.. c3 90*6); part of the 16-byte-spaced setter family 0x4AF860/0x4AF870/0x4AF880; writer of the callback global used by 0x4AF810.
 // Behavior/CFG: stores its single stack argument into the retail global and returns nothing; no branches.
-// Status/limits: TRANSCRIBED (static only); declares the global it is the retail writer of; runtime UNOBSERVED.
+// Status/limits: STRUCTURALLY_VERIFIED (static only); declares the global it is the retail writer of; runtime UNOBSERVED.
 #include <cstdint>
 
 extern "C" {

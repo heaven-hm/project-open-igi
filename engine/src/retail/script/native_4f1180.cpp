@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: radare2 6.2.0 complete listing (8b442404 50 e816000000 83c404 85c0 7404 83c00c c3 b8747c5600 c3).
 // Behavior/CFG: looks the argument up with 0x4F11A0 and returns node+0x0C when a node is found; on a miss it returns the static empty value object at 0x00567C74 instead of null.
-// Status/limits: TRANSCRIBED (static only); the miss result is the address of the modelled static object, not the retail absolute address, because the candidate image is DYNAMIC_BASE; runtime UNOBSERVED.
+// Status/limits: STRUCTURALLY_VERIFIED (static only); the miss result is the address of the modelled static object, not the retail absolute address, because the candidate image is DYNAMIC_BASE; runtime UNOBSERVED.
 #include "igi/retail/core/qhash_slot_table.hpp"
 
 #include <cstdint>

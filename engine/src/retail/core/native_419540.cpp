@@ -1,24 +1,8 @@
-// Native: BackgroundFX_EmitSegments_419540 (placeholder name; retail symbol unknown - the body transforms 0x10-byte segment
-// records through a 2x3 matrix and hands each pair of vertices to the render-backend table at 0x00A94E84).
-// retail VA 0x00419540 (0x00419540-0x00419625, 230 bytes, 6 blocks, 8 edges, 77 instructions).
+// Native: BackgroundFX_EmitSegments_419540 (placeholder name; retail symbol unknown - the body transforms 0x10-byte segment records through a 2x3 matrix and hands each pair of vertices to the render-backend table at 0x00A94E84). retail VA 0x00419540 (0x00419540-0x00419625, 230 bytes, 6 blocks, 8 edges, 77 instructions).
 // Artifact: retail igi.exe SHA-256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; image base 0x00400000.
-// Tools/evidence: build/retail-dis.txt (GNU objdump i386 complete byte+instruction listing, all 77 instructions quoted below);
-// radare2 6.2.0 af/afij (size 230, 6 blocks, 8 edges); constants 0x005333E0 (1.0f) and 0x005333E8? read from .rdata - the
-// 1.0f/0.075f values are the immediate bit patterns 0x3F800000/0x3D99999A the listing moves with `mov`, not memory loads.
-// Behavior/CFG: two pointer arguments (a segment list and a transform matrix). Fills the seven constant tail floats of two
-// 0x24-byte vertex records (0x3F800000, 0, 0, 0x3D99999A, 0, 0x3F800000, 0), builds a five-dword primitive descriptor
-// {1, 0x00080000, 0, 2, &records[0]}, then for i < list->count transforms source pairs at list+4+i*0x10 into records[0] and
-// records[1] and calls render_backend[0x00A84A54] with the descriptor. The count is re-read from [list] after every call.
-// Status/limits: TRANSCRIBED (static only); runtime UNOBSERVED and the startup chain cannot reach it yet. Indirect dispatch
-// is counted: one `call *0x00A94E84(,%edx,4)` at 0x00419609, index from 0x00A84A54 (defined zero dword in core/
-// native_419330.cpp). Direct calls: none. The vertex records are a 0x24-byte stride (9 floats) in retail and are modelled as
-// records[2][9]; the descriptor->record pointer is the only pointer handed to the backend, so the record base may be a
-// local. Float cos/sin is not used in this body, so no x87 rounding limitation applies here.
-//
-// Frame mapping (esp after the four prologue pushes is the frame base B):
-//   B+0x10..B+0x1F descriptor {1, 0x80000, 0, 2, &B+0x24}; B+0x20 = the record pointer; B+0x24/B+0x48 = the two 0x24-byte
-//   records (tail at +8, coordinates at +0/+4). The two constant blocks the prologue writes at 0x0041955C-0x00419574 are the
-//   record tails, written before the descriptor and before the loop.
+// Tools/evidence: build/retail-dis.txt (GNU objdump i386 complete byte+instruction listing, all 77 instructions quoted below); radare2 6.2.0 af/afij (size 230, 6 blocks, 8 edges); constants 0x005333E0 (1.0f) and 0x005333E8? read from .rdata - the 1.0f/0.075f values are the immediate bit patterns 0x3F800000/0x3D99999A the listing moves with `mov`, not memory loads.
+// Behavior/CFG: two pointer arguments (a segment list and a transform matrix). Fills the seven constant tail floats of two 0x24-byte vertex records (0x3F800000, 0, 0, 0x3D99999A, 0, 0x3F800000, 0), builds a five-dword primitive descriptor {1, 0x00080000, 0, 2, &records[0]}, then for i < list->count transforms source pairs at list+4+i*0x10 into records[0] and records[1] and calls render_backend[0x00A84A54] with the descriptor. The count is re-read from [list] after every call.
+// Status/limits: BUILD_VERIFIED (static only); runtime UNOBSERVED and the startup chain cannot reach it yet. Indirect dispatch is counted: one `call *0x00A94E84(,%edx,4)` at 0x00419609, index from 0x00A84A54 (defined zero dword in core/ native_419330.cpp). Direct calls: none. The vertex records are a 0x24-byte stride (9 floats) in retail and are modelled as records[2][9]; the descriptor->record pointer is the only pointer handed to the backend, so the record base may be a local. Float cos/sin is not used in this body, so no x87 rounding limitation applies here. Frame mapping (esp after the four prologue pushes is the frame base B): B+0x10..B+0x1F descriptor {1, 0x80000, 0, 2, &B+0x24}; B+0x20 = the record pointer; B+0x24/B+0x48 = the two 0x24-byte records (tail at +8, coordinates at +0/+4). The two constant blocks the prologue writes at 0x0041955C-0x00419574 are the record tails, written before the descriptor and before the loop.
 #include "igi/retail/dynobj/local_models_mef.hpp"
 
 #include <cstdint>

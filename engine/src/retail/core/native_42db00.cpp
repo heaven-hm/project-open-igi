@@ -1,23 +1,8 @@
 // Native: QTask_HandlerA_42DB00; retail VA 0x0042DB00 (placeholder name; retail symbol unknown).
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x0042DB00-0x0042DCD0 (465 bytes, 5 blocks, 8 edges, 156 instructions).
-// Tools/evidence: GNU objdump i386 disassembly build/retail-dis.txt (0x0042DB00-0x0042DCD0), with the byte span and instruction count re-derived from that
-//   listing; the dispatch ABI, the two loader call sites and the sibling class callbacks are in docs/fidelity/evidence/qtask-handler-abi.md.
-// Behavior/CFG: the parse callback of the class whose id word is 0x0053BDA8 ("Car"), linked at the private phase byte 0x0054DC30 by 0x0042DAC0. The loader
-//   0x004EDD20 allocates the 0x2C0-byte class block at 0x004EDF12, then calls this handler with (0, &context) at 0x004EDF48, where context =
-//   {block, QVM argument frame, next argument index} lives in the loader's frame. The handler first re-dispatches the handler table at (byte 0x0054DC30,
-//   class word 0x0054E200 = the base class registered at 0x004F4190) with its own two argument words at 0x0042DB2F-0x0042DB36, then reads the Car
-//   arguments out of the frame: a signed count at block+0x118; per count a 0x14-byte record at block+0x11C (byte, byte, float, dword, float*4096.0,
-//   float); then float*4096.0 at block+0x25C, two bytes at block+0x260 and block+0x261, a 0x20-byte argument block at block+0x262, a signed count at
-//   block+0x2AC, that many dwords at block+0x284, and a 0x10-byte argument block at block+0x2B0. Every read takes its index from context+0x8 and leaves
-//   the cursor incremented before the reader call. 17 calls: 0x004EE0E0, 0x004F45F0, the table dispatch, 0x004B8A20 x8, 0x004B8A50 x4, 0x004B8A80 x2;
-//   two fmuls by the float at 0x005333B8.
-// Status/limits: TRANSCRIBED (static only; no build and no runtime). The table call is unconditional in retail (0x0042DB2F-0x0042DB36 has no null
-//   test), so it is unconditional here. The first argument is only forwarded to that table call and is never inspected. The readers 0x004B8A20 and
-//   0x004B8A80 are not transcribed in engine/ yet, so they are declared here under address-suffixed placeholders and must be unified when their own
-//   natives land. The retail leaves the last callee's residue in EAX on return and no caller reads it, so this declaration returns void. The candidate
-//   compiles for the x86 target as a single translation unit (i686-w64-mingw32-g++ 16.2.0, -std=c++20 -O2) and the compiled body keeps the retail
-//   call order, the getter-driven table index, the unconditional table call, the 0x14-byte record walk, every store offset and the fmuls constant;
-//   the register allocation differs and the repo build target does not list this file yet.
+// Tools/evidence: GNU objdump i386 disassembly build/retail-dis.txt (0x0042DB00-0x0042DCD0), with the byte span and instruction count re-derived from that listing; the dispatch ABI, the two loader call sites and the sibling class callbacks are in docs/fidelity/evidence/qtask-handler-abi.md.
+// Behavior/CFG: the parse callback of the class whose id word is 0x0053BDA8 ("Car"), linked at the private phase byte 0x0054DC30 by 0x0042DAC0. The loader 0x004EDD20 allocates the 0x2C0-byte class block at 0x004EDF12, then calls this handler with (0, &context) at 0x004EDF48, where context = {block, QVM argument frame, next argument index} lives in the loader's frame. The handler first re-dispatches the handler table at (byte 0x0054DC30, class word 0x0054E200 = the base class registered at 0x004F4190) with its own two argument words at 0x0042DB2F-0x0042DB36, then reads the Car arguments out of the frame: a signed count at block+0x118; per count a 0x14-byte record at block+0x11C (byte, byte, float, dword, float*4096.0, float); then float*4096.0 at block+0x25C, two bytes at block+0x260 and block+0x261, a 0x20-byte argument block at block+0x262, a signed count at block+0x2AC, that many dwords at block+0x284, and a 0x10-byte argument block at block+0x2B0. Every read takes its index from context+0x8 and leaves the cursor incremented before the reader call. 17 calls: 0x004EE0E0, 0x004F45F0, the table dispatch, 0x004B8A20 x8, 0x004B8A50 x4, 0x004B8A80 x2; two fmuls by the float at 0x005333B8.
+// Status/limits: BUILD_VERIFIED (static only; no build and no runtime). The table call is unconditional in retail (0x0042DB2F-0x0042DB36 has no null test), so it is unconditional here. The first argument is only forwarded to that table call and is never inspected. The readers 0x004B8A20 and 0x004B8A80 are not transcribed in engine/ yet, so they are declared here under address-suffixed placeholders and must be unified when their own natives land. The retail leaves the last callee's residue in EAX on return and no caller reads it, so this declaration returns void. The candidate compiles for the x86 target as a single translation unit (i686-w64-mingw32-g++ 16.2.0, -std=c++20 -O2) and the compiled body keeps the retail call order, the getter-driven table index, the unconditional table call, the 0x14-byte record walk, every store offset and the fmuls constant; the register allocation differs and the repo build target does not list this file yet.
 #include "igi/retail/core/task_types.hpp"
 #include "igi/retail/script/qvm_execute.hpp"
 

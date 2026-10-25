@@ -1,10 +1,8 @@
 // Native: Core_GetGlobal16_460BE0; retail VA 0x00460BE0 (placeholder name; retail symbol unknown).
-// Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x00460BE0-0x00460BE6
-//   (7 bytes, 1 block, 2 instructions: 66 a1 f8 da 5b 00 / c3).
-// Tools/evidence: radare2 6.2.0 af/afbj/pdf over the exact image; afbj reports 1 block / 2 instructions and the raw bytes decode as
-//   `mov ax, word [0x005BDAF8]` then ret. No other translation unit owns 0x005BDAF8; the retail image holds 0.
+// Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x00460BE0-0x00460BE6 (7 bytes, 1 block, 2 instructions: 66 a1 f8 da 5b 00 / c3).
+// Tools/evidence: radare2 6.2.0 af/afbj/pdf over the exact image; afbj reports 1 block / 2 instructions and the raw bytes decode as `mov ax, word [0x005BDAF8]` then ret. No other translation unit owns 0x005BDAF8; the retail image holds 0.
 // Behavior/CFG: returns the word at 0x005BDAF8; no branch, no call, no stack use.
-// Status/limits: TRANSCRIBED; runtime UNOBSERVED. Only AX is written, so EAX bits 16-31 are the caller's; the declared return is word-sized.
+// Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. Only AX is written, so EAX bits 16-31 are the caller's; the declared return is word-sized.
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)

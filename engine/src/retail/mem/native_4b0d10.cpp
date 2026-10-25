@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: radare2 6.2.0 complete listing (8b442404 8b1500239400 83c0fc 4a 24fc 56 891500239400 8b30 56 e831ecffff 56 e81b5dffff 83c408 5e c3); calls landed 0x4AF960 and 0x4A6A50.
 // Behavior/CFG: deallocation entry used by the task-list destructor. It decrements the live-block count 0x00942300, masks pointer-4 down to a 4-byte boundary, loads the block pointer stored there, removes it from the heap list with 0x4AF960 and releases it through 0x4A6A50.
-// Status/limits: TRANSCRIBED (static only); the count store happens before the block pointer is loaded, matching retail's instruction order; runtime UNOBSERVED.
+// Status/limits: STRUCTURALLY_VERIFIED (static only); the count store happens before the block pointer is loaded, matching retail's instruction order; runtime UNOBSERVED.
 #include "igi/retail/mem/heap_list.hpp"
 #include "igi/retail/mem/mem_alloc.hpp"
 

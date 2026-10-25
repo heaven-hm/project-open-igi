@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: radare2 6.2.0 complete listing (56 8b742408 8b4608 50 e8820ef1ff 56 e8bcecfbff 56 e86600fcff 83c40c 5e c3); calls 0x401B20, 0x4AF960 and 0x4B0D10.
 // Behavior/CFG: releases one QHash node: withdraws its slot from the slot table 0x401B20 using the node word at +0x08, unlinks it from the heap list with 0x4AF960, and returns its storage through the deallocation entry 0x4B0D10.
-// Status/limits: TRANSCRIBED (static only); the three calls are in retail's order and the last two receive the node itself; runtime UNOBSERVED.
+// Status/limits: STRUCTURALLY_VERIFIED (static only); the three calls are in retail's order and the last two receive the node itself; runtime UNOBSERVED.
 #include "igi/retail/mem/heap_list.hpp"
 
 #include <cstdint>

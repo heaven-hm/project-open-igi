@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: radare2 6.2.0 full listing (a1e060a900 8a0dfd229400 8a542404 48 a3e060a900 8815fd229400 8888e8229400 c3). Caller 0x004BAAC0 passes 1 via push. No callees.
 // Behavior/CFG: reads the current index at 0x00A960E0 and the live flag at 0x009422FD, decrements the index, installs the caller's byte as the live flag, then stores the previous flag into the 16-entry saved-flag array at 0x009422E8 indexed by the new index; returns.
-// Status/limits: TRANSCRIBED (static only); store order (index, flag, array slot) follows retail instruction order and the array write is not hoisted; runtime UNOBSERVED.
+// Status/limits: STRUCTURALLY_VERIFIED (static only); store order (index, flag, array slot) follows retail instruction order and the array write is not hoisted; runtime UNOBSERVED.
 #include "igi/retail/mem/mem_alloc.hpp"
 
 #include <cstdint>

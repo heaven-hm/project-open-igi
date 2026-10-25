@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: radare2 6.2.0 complete listing captured in 0x00508FA0-disassembly.txt; table 0x00A77228..0x00A77248 (4 slots of 8 bytes: {int16 size, int32 value}); failure string "NO FREE NODESIZE ELEMENTS" at 0x0054E374; Debug_Error = verified 0x004AF7B0.
 // Behavior/CFG: scans 4 table slots from 0x00A77228; remembers the first slot whose size word is 0x181 while none has matched; on an exact size match it overwrites that slot's value and returns; if the scan ends with no remembered slot it calls Debug_Error("NO FREE NODESIZE ELEMENTS") then spins (0x004F94C2 jmp $); otherwise it claims the remembered slot, stores the size word and value, and returns.
-// Status/limits: TRANSCRIBED (static only); loop order, the 0x181 "free slot" sentinel, the exclusive bound 0x00A77248 and the fail-closed spin are retail; runtime UNOBSERVED.
+// Status/limits: STRUCTURALLY_VERIFIED (static only); loop order, the 0x181 "free slot" sentinel, the exclusive bound 0x00A77248 and the fail-closed spin are retail; runtime UNOBSERVED.
 #include "igi/retail/core/retail_error.hpp"
 
 #include <cstdint>

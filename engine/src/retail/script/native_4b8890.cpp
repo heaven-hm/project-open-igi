@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: radare2 6.2.0 complete listing (8b442410 8b4c240c 8b542408 6a00 6a00 6a01 50 8b442414 51 52 50 e811220000 83c41c c3); callee 0x4BAAC0 landed, same push shape as 0x4B8810.
 // Behavior/CFG: forwards four arguments to 0x4BAAC0 as (arg0, arg1, arg2, arg3, 1, 0, 0) - the last three stack slots are the raw constants retail pushes - and returns nothing, discarding the callee's eax exactly as retail does.
-// Status/limits: TRANSCRIBED (static only); the tail constants 1/0/0 and the argument order follow the push sequence literally; runtime UNOBSERVED.
+// Status/limits: STRUCTURALLY_VERIFIED (static only); the tail constants 1/0/0 and the argument order follow the push sequence literally; runtime UNOBSERVED.
 #include <cstdint>
 
 extern "C" void Script_QHashNodeCreate(void* arg1, void* arg2, char const* arg3, void* arg4,

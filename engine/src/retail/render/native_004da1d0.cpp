@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; capture SHA256 82a328c5d6e36ab15015e1b44e3fb02f7277dbde4343885d257b6b739132a1fc.
 // Tools/evidence: Binary Ninja 6.0.10601 decompile + radare2 6.2.0 disassembly (66 a1 38 86 54 00 ...); calls 0x00401900 and 0x00401400 (x4); string "Hazinglayers" at 0x0054866C.
 // Behavior/CFG: registers "Hazinglayers" (0x90 bytes) with the 16-bit parent at 0x00548638 -> observed id 3, stores the id at 0x005AE304, then links four phase handlers (0x11/0x12/4/5 -> 0x004DA240/0x004DA2A0/0x004DA270/0x004DA2C0) through 0x00401400 and returns the last link result. Single block.
-// Status/limits: TRANSCRIBED (static only); the four handlers are not transcribed yet, so their addresses are passed as retail-VA literals (the exact retail push immediates); runtime UNOBSERVED in the port.
+// Status/limits: BUILD_VERIFIED (static only); the four handlers are not transcribed yet, so their addresses are passed as retail-VA literals (the exact retail push immediates); runtime UNOBSERVED in the port.
 #include "igi/retail/core/task_types.hpp"
 
 #include <cstdint>

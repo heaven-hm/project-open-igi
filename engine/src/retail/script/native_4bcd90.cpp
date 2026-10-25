@@ -1,21 +1,8 @@
 // Native: Qvm_ResolveOperand_4BCD90; retail VA 0x004BCD90 (placeholder name; retail symbol unknown).
-// Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x004BCD90-0x004BCE34 (165 bytes,
-//   7 blocks, 69 instructions), bytes re-read from the image (51 56 8b 74 24 0c 8b 46 1c 8b 4e 28 8b 04 81 83 f8 06 75 15 ...).
-// Tools/evidence: radare2 6.2.0 af/pd over the exact image; callers: 0x004BCC58 (0x004BCC00), 0x004BCF34 (0x004BCEC0), 0x004BD895 and
-//   0x004BDAB2 - all four push exactly two arguments.
-// Behavior/CFG: cdecl resolver with two stack arguments ([esp+4] state, [esp+8] node out). It switches on type_stack[type index]:
-//   tag 6 pops the operand through 0x004BCCC0 into the node out and returns 1 (0x004BCD9F-0x004BCDB8, EAX still holds PopOperand's 1);
-//   tag 4 calls 0x004BCC00 to read the operand as a string (0x004BCDC7-0x004BCDD3; the retail does not test that call's flag), passes the
-//   string and the node-out pointer to 0x004BAB80 (0x004BCDD9) and returns 1 when that reports nonzero (0x004BCDE1-0x004BCDEC). Otherwise it
-//   copies state +0x14 into state +0x10 (0x004BCDF1/0x004BCE00), sets state +0x20 to the constant 7 (0x004BCDF9), pushes the string back as a
-//   tag-4 operand through 0x004BCE40 (0x004BCE03) and copies strlen+1 bytes of the string into the state scratch at +0x68 (0x004BCE14-0x004BCE2D),
-//   returning 0 (0x004BCE30). All other tags return 0.
-// Status/limits: TRANSCRIBED; runtime UNOBSERVED; STRUCTURALLY_VERIFIED against the instruction listing only. Link: needs 0x004BCCC0,
-//   0x004BCC00, 0x004BCE40 (transcribed in this wave) and 0x004BAB80 (missing, declared; 0x004BAB80 is itself a three-argument forwarder to
-//   0x004C0620 with the symbol-table global at 0x00A43E88). What 0x004BAB80 reports and why the failure path sets state +0x20 = 7 and copies
-//   state +0x14 to +0x10 are not established here; the constants and stores are reproduced verbatim. The retail writes the string pointer and
-//   the size into its own incoming argument word and a saved register slot; this file uses two locals because a C++ body cannot address those
-//   slots, and no path reads them after the write.
+// Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x004BCD90-0x004BCE34 (165 bytes, 7 blocks, 69 instructions), bytes re-read from the image (51 56 8b 74 24 0c 8b 46 1c 8b 4e 28 8b 04 81 83 f8 06 75 15 ...).
+// Tools/evidence: radare2 6.2.0 af/pd over the exact image; callers: 0x004BCC58 (0x004BCC00), 0x004BCF34 (0x004BCEC0), 0x004BD895 and 0x004BDAB2 - all four push exactly two arguments.
+// Behavior/CFG: cdecl resolver with two stack arguments ([esp+4] state, [esp+8] node out). It switches on type_stack[type index]: tag 6 pops the operand through 0x004BCCC0 into the node out and returns 1 (0x004BCD9F-0x004BCDB8, EAX still holds PopOperand's 1); tag 4 calls 0x004BCC00 to read the operand as a string (0x004BCDC7-0x004BCDD3; the retail does not test that call's flag), passes the string and the node-out pointer to 0x004BAB80 (0x004BCDD9) and returns 1 when that reports nonzero (0x004BCDE1-0x004BCDEC). Otherwise it copies state +0x14 into state +0x10 (0x004BCDF1/0x004BCE00), sets state +0x20 to the constant 7 (0x004BCDF9), pushes the string back as a tag-4 operand through 0x004BCE40 (0x004BCE03) and copies strlen+1 bytes of the string into the state scratch at +0x68 (0x004BCE14-0x004BCE2D), returning 0 (0x004BCE30). All other tags return 0.
+// Status/limits: BUILD_VERIFIED; runtime UNOBSERVED; STRUCTURALLY_VERIFIED against the instruction listing only. Link: needs 0x004BCCC0, 0x004BCC00, 0x004BCE40 (transcribed in this wave) and 0x004BAB80 (missing, declared; 0x004BAB80 is itself a three-argument forwarder to 0x004C0620 with the symbol-table global at 0x00A43E88). What 0x004BAB80 reports and why the failure path sets state +0x20 = 7 and copies state +0x14 to +0x10 are not established here; the constants and stores are reproduced verbatim. The retail writes the string pointer and the size into its own incoming argument word and a saved register slot; this file uses two locals because a C++ body cannot address those slots, and no path reads them after the write.
 #include <cstddef>
 #include <cstdint>
 #include <cstring>

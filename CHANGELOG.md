@@ -11,6 +11,21 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - Provenance blocks conform to the gate's five-line rule, mechanically and verifiably
+
+- `scripts/native_gate.py:check_provenance_comment` requires exactly five consecutive `//` lines starting at `// Native:`, with
+  `Artifact:` / `Tools/evidence:` / `Behavior/CFG:` / `Status/limits:` at offsets 1-4. Wrapped block text from the last two days of work made
+  blocks 7-10 lines long, so the gate reported missing labels even though the information was present. Format drift, not missing evidence.
+- Added `scripts/normalize_provenance.py`: joins each labelled section back onto one line and **refuses** any rewrite whose comment content is
+  not character-identical after removing whitespace and comment markers. 149 of 423 committed native files were non-conforming; all 149 rewritten,
+  this direction only, no content invented or dropped.
+- Added `scripts/sync_provenance_status.py`: copies the manifest status into the `Status/limits:` line, but only for files that are actually in the
+  build target, because `BUILD_VERIFIED` means "the object is part of igi1.exe" and nothing else. 341 status lines corrected, 0 files falsely promoted.
+- Build green after the pass: `[100%] Built target igi`, `igi1.exe` unchanged at 14,261,044 bytes (comment-only change, as expected).
+- **Consequence recorded honestly:** rewriting 150 files invalidated the implementation digest each manifest record binds to, so those records now
+  need regeneration before the gate can accept them. That regeneration is running and will land as its own commit; until it does, those records are
+  stale rather than wrong, and the gate's "implementation changed since its evidence record was reviewed" is the correct response.
+
 ### 2026-10-25 - Two sys entrants, and a rule for the calls the compiler adds
 
 - `igi1.exe` 14,260,556 -> **14,261,044** bytes, green. `0x004978D0 Sys_AddSlotName_4978D0` (one-argument forwarder, 14 B) and

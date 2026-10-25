@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: radare2 6.2.0 disassembly (56 8b742408 8bc6 6a04 c1e004 83c00c 50 e8fbf2fbff 83c408 8d480c 897004 c70000000000 894808 5e c3); callee 0x004B0C60 = Mem_Alloc (VERIFIED, mem/mem_alloc.cpp).
 // Behavior/CFG: size = count*16 + 12; allocates via igi::retail::mem::Mem_Alloc(size, 4); writes header { [0]=0, [4]=count, [8]=base+12 } and returns the block pointer. Single block.
-// Status/limits: TRANSCRIBED (static only); flags argument 4 and the header layout are retail-derived, the allocator itself is already VERIFIED; runtime UNOBSERVED.
+// Status/limits: STRUCTURALLY_VERIFIED (static only); flags argument 4 and the header layout are retail-derived, the allocator itself is already VERIFIED; runtime UNOBSERVED.
 #include "igi/retail/mem/mem_alloc.hpp"
 
 #include <cstdint>

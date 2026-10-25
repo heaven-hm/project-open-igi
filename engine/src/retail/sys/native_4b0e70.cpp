@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x004B0E70-0x004B0EAF (64 bytes, 6 blocks, 7 edges, 18 instructions).
 // Tools/evidence: radare2 6.2.0 af/pd and the raw bytes (33c0 b9844aa900 / 803900 / 83c108 40 81f9844ea900 / 52 68d46e5400 e819e9ffff 83c408 ebfe / 890cc5804a.. c604c5844a..01 / c3); section 22.3 of the evidence sheet.
 // Behavior/CFG: scans the 8-byte-stride flag bytes at 0x00A94A84 for the first zero entry, counting in EAX, until 0x00A94E84. With no free entry it calls Debug_Error("RenderMode: Failed to create new method '%s'", name) and spins at 0x004B0E9A. Otherwise it stores the name pointer at 0x00A94A80 + index*8 and sets the flag byte at 0x00A94A84 + index*8 to 1.
-// Status/limits: TRANSCRIBED; runtime UNOBSERVED. The record table 0x00A94A80 has no external owner, so this file defines it and it starts zeroed. 0x004B0EB0 clears entries of the same table and now refers to this definition. The fields beyond the +0x00 pointer and the +0x04 flag are not established.
+// Status/limits: STRUCTURALLY_VERIFIED; runtime UNOBSERVED. The record table 0x00A94A80 has no external owner, so this file defines it and it starts zeroed. 0x004B0EB0 clears entries of the same table and now refers to this definition. The fields beyond the +0x00 pointer and the +0x04 flag are not established.
 #include "igi/retail/core/retail_error.hpp"
 
 #include <cstdint>

@@ -1,19 +1,8 @@
 // Native: Task_DefineHumanCamera (behavior-derived placeholder name; retail symbol unknown); retail VA 0x004825C0-0x00482642.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; 131 bytes, 3 blocks, 34 instructions.
-// Tools/evidence: radare2 6.2.0 `af` + `afbj` + `pdf` over the exact image, counted per block so the multi-block body is not truncated (block 1
-//   0x004825C0-0x00482626 linear, block 2 0x00482629-0x00482640 the clearing loop with its test at the bottom, block 3 0x00482642 the ret);
-//   0x004018F0 is `mov ax,[0x54F928]; ret` (argument-less), 0x00401400 and 0x00401530 read [esp+4]/[esp+8]/[esp+0xC] as (class id, event id,
-//   handler), so each single push before a getter call is that link call's pre-pushed handler slot. Literal 0x00540994 "HumanCamera" read as
-//   raw .rdata bytes.
-// Behavior/CFG: registers the "HumanCamera" task type with TaskType_Register("HumanCamera", 0x128, QTask_GetCurrentType(), 0), stores the
-//   16-bit id at 0x00540990 and the low byte of QTask_AllocateEvent(0) at 0x00540992; links handler 0x00482650 on event 0 through
-//   QTask_LinkQTaskEventHandler and handlers 0x00482700 and 0x00484CE0 on events 1 and 2 through QTask_LinkQTaskEventHandlerNoContextFn; then
-//   walks 128 records of the 8-byte table at 0x005C1188 clearing the dword at each record's start and the byte at record start + 5.
-// Status/limits: TRANSCRIBED. `add esp,0x3C` bounds the call set independently: 15 pushes = 2 register slots + 3 register arguments + 1
-//   allocate argument + 3*3 link arguments. The clearing loop is retail's own do-while: `mov eax,0x5C118D` then body (dword [eax-5]=0,
-//   byte [eax]=0, eax+=8) and the test `cmp eax,0x5C158D; jl` at the BOTTOM, so the body runs at least once and the last iteration runs with
-//   eax = 0x005C1585 (slots 0x5C118D + 8*n for n = 0..127). Handlers 0x00482650, 0x00482700 and 0x00484CE0 are raw code immediates in
-//   retail and are not transcribed yet (native gaps). Runtime UNOBSERVED.
+// Tools/evidence: radare2 6.2.0 `af` + `afbj` + `pdf` over the exact image, counted per block so the multi-block body is not truncated (block 1 0x004825C0-0x00482626 linear, block 2 0x00482629-0x00482640 the clearing loop with its test at the bottom, block 3 0x00482642 the ret); 0x004018F0 is `mov ax,[0x54F928]; ret` (argument-less), 0x00401400 and 0x00401530 read [esp+4]/[esp+8]/[esp+0xC] as (class id, event id, handler), so each single push before a getter call is that link call's pre-pushed handler slot. Literal 0x00540994 "HumanCamera" read as raw .rdata bytes.
+// Behavior/CFG: registers the "HumanCamera" task type with TaskType_Register("HumanCamera", 0x128, QTask_GetCurrentType(), 0), stores the 16-bit id at 0x00540990 and the low byte of QTask_AllocateEvent(0) at 0x00540992; links handler 0x00482650 on event 0 through QTask_LinkQTaskEventHandler and handlers 0x00482700 and 0x00484CE0 on events 1 and 2 through QTask_LinkQTaskEventHandlerNoContextFn; then walks 128 records of the 8-byte table at 0x005C1188 clearing the dword at each record's start and the byte at record start + 5.
+// Status/limits: BUILD_VERIFIED. `add esp,0x3C` bounds the call set independently: 15 pushes = 2 register slots + 3 register arguments + 1 allocate argument + 3*3 link arguments. The clearing loop is retail's own do-while: `mov eax,0x5C118D` then body (dword [eax-5]=0, byte [eax]=0, eax+=8) and the test `cmp eax,0x5C158D; jl` at the BOTTOM, so the body runs at least once and the last iteration runs with eax = 0x005C1585 (slots 0x5C118D + 8*n for n = 0..127). Handlers 0x00482650, 0x00482700 and 0x00484CE0 are raw code immediates in retail and are not transcribed yet (native gaps). Runtime UNOBSERVED.
 #include "igi/retail/core/task_types.hpp"
 
 #include <cstdint>

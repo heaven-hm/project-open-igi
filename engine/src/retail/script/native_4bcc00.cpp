@@ -1,20 +1,8 @@
 // Native: Qvm_PopStringOperand_4BCC00; retail VA 0x004BCC00 (placeholder name; retail symbol unknown).
-// Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x004BCC00-0x004BCCB1 (178 bytes,
-//   9 blocks, 11 edges, 68 instructions), bytes re-read from the image (56 8b 74 24 08 57 8b 46 1c 8b 4e 28 8b 14 81 8b 44 24 18 3b ...).
-// Tools/evidence: radare2 6.2.0 af/pd over the exact image; callers: 0x004BCB58 (0x004BCAE0), 0x004BCDCA (0x004BCD90), 0x004BDA95, 0x004BE1D9
-//   and 0x004BE1F6 - every site pushes four arguments and compares the fourth against the operand tag.
-// Behavior/CFG: cdecl reader that returns a string out of the current operand; four stack arguments ([esp+4] state, [esp+8] string out,
-//   [esp+0xC] size out, [esp+0x10] expected tag). When type_stack[type index] already equals the expected tag (0x004BCC06-0x004BCC15) it pops the
-//   operand through 0x004BCCC0 with the tag out suppressed (0x004BCC1B-0x004BCC24), reloads the resulting pointer, stores the dword at
-//   value_stack[value index] into its own argument word (0x004BCC29-0x004BCC3A, a store no path reads back) and returns strlen(pointer)+1 through
-//   the size out (0x004BCC40-0x004BCC49). Otherwise it resolves the operand through 0x004BCD90 (0x004BCC52-0x004BCC58) and, only if that
-//   succeeds and the resolved node's dword 0 is 0 or 2 (0x004BCC64-0x004BCC71), exports node dword 0x18 and its strlen+1 when node dword 4 is 3
-//   (0x004BCC73-0x004BCC8F); when node dword 4 is not 3 it still returns 1 with both outs untouched (0x004BCC91). Failure zeroes both outs and
-//   returns 0 (0x004BCC99-0x004BCCB1).
-// Status/limits: TRANSCRIBED; runtime UNOBSERVED; STRUCTURALLY_VERIFIED against the instruction listing only. Link: needs 0x004BCCC0 and
-//   0x004BCD90 (both transcribed in this wave). The resolved node's field meanings are not established; only the observed dword offsets 0, 4 and
-//   0x18 are used. The retail's store into its own [esp+4] argument word at 0x004BCC3A is reproduced through a local because a C++ body cannot
-//   write its own incoming argument slot; no path reads that word back, so the behaviour is unchanged.
+// Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x004BCC00-0x004BCCB1 (178 bytes, 9 blocks, 11 edges, 68 instructions), bytes re-read from the image (56 8b 74 24 08 57 8b 46 1c 8b 4e 28 8b 14 81 8b 44 24 18 3b ...).
+// Tools/evidence: radare2 6.2.0 af/pd over the exact image; callers: 0x004BCB58 (0x004BCAE0), 0x004BCDCA (0x004BCD90), 0x004BDA95, 0x004BE1D9 and 0x004BE1F6 - every site pushes four arguments and compares the fourth against the operand tag.
+// Behavior/CFG: cdecl reader that returns a string out of the current operand; four stack arguments ([esp+4] state, [esp+8] string out, [esp+0xC] size out, [esp+0x10] expected tag). When type_stack[type index] already equals the expected tag (0x004BCC06-0x004BCC15) it pops the operand through 0x004BCCC0 with the tag out suppressed (0x004BCC1B-0x004BCC24), reloads the resulting pointer, stores the dword at value_stack[value index] into its own argument word (0x004BCC29-0x004BCC3A, a store no path reads back) and returns strlen(pointer)+1 through the size out (0x004BCC40-0x004BCC49). Otherwise it resolves the operand through 0x004BCD90 (0x004BCC52-0x004BCC58) and, only if that succeeds and the resolved node's dword 0 is 0 or 2 (0x004BCC64-0x004BCC71), exports node dword 0x18 and its strlen+1 when node dword 4 is 3 (0x004BCC73-0x004BCC8F); when node dword 4 is not 3 it still returns 1 with both outs untouched (0x004BCC91). Failure zeroes both outs and returns 0 (0x004BCC99-0x004BCCB1).
+// Status/limits: BUILD_VERIFIED; runtime UNOBSERVED; STRUCTURALLY_VERIFIED against the instruction listing only. Link: needs 0x004BCCC0 and 0x004BCD90 (both transcribed in this wave). The resolved node's field meanings are not established; only the observed dword offsets 0, 4 and 0x18 are used. The retail's store into its own [esp+4] argument word at 0x004BCC3A is reproduced through a local because a C++ body cannot write its own incoming argument slot; no path reads that word back, so the behaviour is unchanged.
 #include <cstddef>
 #include <cstdint>
 #include <cstring>

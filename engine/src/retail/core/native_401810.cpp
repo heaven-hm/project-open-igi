@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: Binary Ninja MCP disassembly/decompile + radare2 6.2.0 bytes; single callee 0x004AF7B0 Debug_Error; event table image 0x0054F930 all zero.
 // Behavior/CFG: scans the 6-byte event table from the first allocatable id while the in-use flag at record+2 is set; on a free slot stores the 16-bit argument at +0, sets +2=1 and +3=0, returns the event id; table exhaustion calls Debug_Error("Unable to allocate event") and spins.
-// Status/limits: TRANSCRIBED; QTask_AllocateEvent (0x004017C0) has the same table scan and is the reference for the scan bounds; runtime UNOBSERVED.
+// Status/limits: STRUCTURALLY_VERIFIED; QTask_AllocateEvent (0x004017C0) has the same table scan and is the reference for the scan bounds; runtime UNOBSERVED.
 #include "igi/retail/core/retail_error.hpp"
 #include "igi/retail/core/task_types.hpp"
 

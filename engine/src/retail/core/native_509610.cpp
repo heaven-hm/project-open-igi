@@ -1,11 +1,8 @@
 // Native: AIGraph_Handler_509610; retail VA 0x00509610 (placeholder name; retail symbol unknown).
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x00509610-0x0050964A (59 bytes, 3 blocks, 17 instructions).
 // Tools/evidence: build/retail-dis.txt (GNU objdump) 0x00509610-0x0050964A; radare2 6.2.0 afij (59 bytes, 3 blocks, 17 instructions); the table base is 0x00A976E0, which is QTask_HandlerTable + 2 * 0x180 entries (phase 2) per core/task_types.hpp; linked by the AIGraph registrar 0x00508FA0 at 0x00509030 (0x00401530 event 2, the no-context link).
-// Behavior/CFG: three blocks, no loop. Frees the buffer word at object+0xB8 through 0x004B0D10 when it is non-zero and clears the word, then
-//                resolves the object's parent type with the 0x004F9210 getter and calls the phase-2 class handler the table holds for it.
-//                Retail calls the table entry without a null test (0x00509644 `call *%eax`), and that absence is preserved.
-// Status/limits: TRANSCRIBED; STRUCTURALLY_VERIFIED against the 17-instruction listing; runtime UNOBSERVED. 0x004B0D10 and 0x004F9210 are
-//                transcribed in the tree (Mem_DeAllocFn, Graph_Get_4F9210), so this file has no missing callee of its own.
+// Behavior/CFG: three blocks, no loop. Frees the buffer word at object+0xB8 through 0x004B0D10 when it is non-zero and clears the word, then resolves the object's parent type with the 0x004F9210 getter and calls the phase-2 class handler the table holds for it. Retail calls the table entry without a null test (0x00509644 `call *%eax`), and that absence is preserved.
+// Status/limits: TRANSCRIBED; STRUCTURALLY_VERIFIED against the 17-instruction listing; runtime UNOBSERVED. 0x004B0D10 and 0x004F9210 are transcribed in the tree (Mem_DeAllocFn, Graph_Get_4F9210), so this file has no missing callee of its own.
 #include "igi/retail/core/task_types.hpp"
 
 #include <cstdint>

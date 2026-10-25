@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: radare2 6.2.0 complete listing (8b442404 bab0465400 56 8bca 3b4110 7605 3b4114 7208 8b09 3bca 7437 ebee a80f 7531 8bf0 ba00010000 81e6ff0f0000 3bf2 7220 ... 33c0 5e c3); sentinel image bytes read directly from 0x005446B0.
 // Behavior/CFG: walks the circular node list from the sentinel at 0x005446B0 looking for the node whose [node+0x10] < value < [node+0x14]; stops at the sentinel and returns 0. On a hit it returns 0 when the value is not 16-byte aligned or when (value & 0xFFF) < 0x100; otherwise it stores the node pointer through arg2, stores (value & 0xF000) through arg3 and returns (value - (value & 0xF000) - 0x100) / 16 + (value & 0xF000) + 8.
-// Status/limits: TRANSCRIBED (static only); the 0x100 immediate is retail's own operand (r2 renders it as a PE symbol name, it is not a call); the node list lives in mode2_bucket.hpp/mode2_bucket_globals.cpp with candidate-relative pointers; runtime UNOBSERVED.
+// Status/limits: STRUCTURALLY_VERIFIED (static only); the 0x100 immediate is retail's own operand (r2 renders it as a PE symbol name, it is not a call); the node list lives in mode2_bucket.hpp/mode2_bucket_globals.cpp with candidate-relative pointers; runtime UNOBSERVED.
 #include "igi/retail/mem/mode2_bucket.hpp"
 
 #include <cstdint>

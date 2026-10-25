@@ -1,21 +1,8 @@
 // Native: Task_DefineFlashBang (behavior-derived placeholder name; retail symbol unknown); retail VA 0x0047E700-0x0047E780.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; 129 bytes, 1 block, 34 instructions.
-// Tools/evidence: scripts/registrar_sequence.py 0x0047E700 (code_flow=no, 8 decoded calls, cleanup=add esp,0x40 at 0x0047E778, every push
-//   address and immediate reported) cross-checked against radare2 6.2.0 af+afbj (1 block / 34 instructions / 129 bytes) - the script and the
-//   per-block count agree. Callee bodies re-read at the VAs: 0x004018F0 is `mov ax,[0x54F928]; ret` and 0x004013B20-style getters read no
-//   stack arguments, while 0x00401400/0x00401530 read [esp+4]/[esp+8]/[esp+0xC] as (class id, event id, handler), so the push that precedes a
-//   getter call is that link call's pre-pushed handler slot.
-// Behavior/CFG: allocates one event id with QTask_AllocateEvent(0) and keeps its low byte at 0x00540914; registers the "FlashBang" task type as
-//   TaskType_Register("FlashBang", 0x48, QTask_GetCurrentType(), 4) and stores the returned 16-bit id at 0x005C1144; links the id to handler
-//   0x0047E790 on event 0 through QTask_LinkQTaskEventHandler and to handlers 0x0047E820 and 0x004D3710 on events 1 and 2 through
-//   QTask_LinkQTaskEventHandlerNoContextFn; then resolves "burn1.tex" and "smoke1.spr" through the two name-keyed registries at 0x00416930 and
-//   0x004169D0 and keeps the returned record pointers at 0x005C1148 and 0x005C114C. There is no Script_QHashNodeRegister call in this body.
-// Status/limits: TRANSCRIBED. The single cleanup `add esp,0x40` is 16 dwords and accounts for exactly the decoded pushes: 2 register slots +
-//   3 TaskType_Register arguments + 3*3 link arguments + 2 registry-lookup arguments. The fourth TaskType_Register argument is retail's 0x4,
-//   not 0 - the pushed immediates put 0x4 at [esp+0x10] at the 0x00401900 call while the deeper 0 sits at [esp+0x14] beyond the fourth
-//   argument, and 0x00401900 branches on that argument (test/je at 0x00401986) to call 0x004B0B00 when it is non-zero, so passing 0 here would
-//   change behavior. Handlers 0x0047E790, 0x0047E820 and 0x004D3710 are raw code immediates in retail and are not transcribed yet (native
-//   gaps); 0x004D3710 has a separate transcription in the tree but is passed as the address retail pushes. Runtime UNOBSERVED.
+// Tools/evidence: scripts/registrar_sequence.py 0x0047E700 (code_flow=no, 8 decoded calls, cleanup=add esp,0x40 at 0x0047E778, every push address and immediate reported) cross-checked against radare2 6.2.0 af+afbj (1 block / 34 instructions / 129 bytes) - the script and the per-block count agree. Callee bodies re-read at the VAs: 0x004018F0 is `mov ax,[0x54F928]; ret` and 0x004013B20-style getters read no stack arguments, while 0x00401400/0x00401530 read [esp+4]/[esp+8]/[esp+0xC] as (class id, event id, handler), so the push that precedes a getter call is that link call's pre-pushed handler slot.
+// Behavior/CFG: allocates one event id with QTask_AllocateEvent(0) and keeps its low byte at 0x00540914; registers the "FlashBang" task type as TaskType_Register("FlashBang", 0x48, QTask_GetCurrentType(), 4) and stores the returned 16-bit id at 0x005C1144; links the id to handler 0x0047E790 on event 0 through QTask_LinkQTaskEventHandler and to handlers 0x0047E820 and 0x004D3710 on events 1 and 2 through QTask_LinkQTaskEventHandlerNoContextFn; then resolves "burn1.tex" and "smoke1.spr" through the two name-keyed registries at 0x00416930 and 0x004169D0 and keeps the returned record pointers at 0x005C1148 and 0x005C114C. There is no Script_QHashNodeRegister call in this body.
+// Status/limits: BUILD_VERIFIED. The single cleanup `add esp,0x40` is 16 dwords and accounts for exactly the decoded pushes: 2 register slots + 3 TaskType_Register arguments + 3*3 link arguments + 2 registry-lookup arguments. The fourth TaskType_Register argument is retail's 0x4, not 0 - the pushed immediates put 0x4 at [esp+0x10] at the 0x00401900 call while the deeper 0 sits at [esp+0x14] beyond the fourth argument, and 0x00401900 branches on that argument (test/je at 0x00401986) to call 0x004B0B00 when it is non-zero, so passing 0 here would change behavior. Handlers 0x0047E790, 0x0047E820 and 0x004D3710 are raw code immediates in retail and are not transcribed yet (native gaps); 0x004D3710 has a separate transcription in the tree but is passed as the address retail pushes. Runtime UNOBSERVED.
 #include "igi/retail/core/task_types.hpp"
 
 #include <cstdint>

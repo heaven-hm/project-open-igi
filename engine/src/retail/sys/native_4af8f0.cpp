@@ -1,12 +1,8 @@
 // Native: Sys_InsertListTail_4AF8F0; retail VA 0x004AF8F0 (placeholder name; retail symbol unknown).
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x004AF8F0-0x004AF90B (28 bytes, 1 block, 0 edges, 10 instructions).
 // Tools/evidence: radare2 6.2.0 af/pdf and NASM ndisasm over the exact bytes; no call, no global, two arguments.
-// Behavior/CFG: links a node onto the tail of a four-field head. The node's back pointer at +0x04 takes the head's tail pointer from
-// +0x08; the node's forward pointer at +0x00 takes the address of the head's own +0x04 field; the previous tail's forward pointer is
-// rewritten to the node; and the head's tail pointer becomes the node. Straight-line, no branch, no call, no global - it is the
-// insert half of the list pair whose initialiser is 0x004F1D60.
-// Status/limits: TRANSCRIBED; runtime UNOBSERVED. The list layout is what this body and 0x004F1D60 jointly establish: +0x00 forward,
-// +0x04 back, +0x08 tail, +0x0C context; the node type beyond its first two fields is not established.
+// Behavior/CFG: links a node onto the tail of a four-field head. The node's back pointer at +0x04 takes the head's tail pointer from +0x08; the node's forward pointer at +0x00 takes the address of the head's own +0x04 field; the previous tail's forward pointer is rewritten to the node; and the head's tail pointer becomes the node. Straight-line, no branch, no call, no global - it is the insert half of the list pair whose initialiser is 0x004F1D60.
+// Status/limits: TRANSCRIBED; runtime UNOBSERVED. The list layout is what this body and 0x004F1D60 jointly establish: +0x00 forward, +0x04 back, +0x08 tail, +0x0C context; the node type beyond its first two fields is not established.
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)

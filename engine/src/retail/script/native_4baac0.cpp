@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: radare2 6.2.0 complete listing (56 57 6a01 e8.. 6a04 6a1c e8.. 8bf0 b907000000 33c0 8bfe f3ab 8b442418 8b0d883ea400 56 50 51 e8.. 8b542428 8b4c2430 894614 8b44242c 895610 8b542434 894618 8b442438 894e0c 8b4c243c 83c418 8916 894604 894e08 e86b62ffff 5f 5e c3); seven arguments confirmed from the 0x4B7E9C call site (seven pushes, add esp,0x1c); callees 0x4B0D60/0x4B0C60/0x4C0560/0x4B0D90 all landed.
 // Behavior/CFG: pops the flag stack with 1, allocates 28 bytes via Mem_Alloc(0x1C,4), zeroes them with seven dword stores, registers the name through 0x4C0560(g_a43e88, arg3, record) and stores the returned key at +0x14, then fills +0x10=arg2, +0x18=arg3, +0xC=arg4, +0=arg5, +4=arg6, +8=arg7 and pushes the flag stack back; a single block with no branches.
-// Status/limits: TRANSCRIBED (static only); the retail returns whatever eax the final flag-stack push leaves (callers discard it - confirmed at 0x4B7E9C `add esp,0x1c; ret`), so this is transcribed as void and the implicit value is documented rather than invented; the zeroing is seven dword stores instead of rep stosd; runtime UNOBSERVED.
+// Status/limits: STRUCTURALLY_VERIFIED (static only); the retail returns whatever eax the final flag-stack push leaves (callers discard it - confirmed at 0x4B7E9C `add esp,0x1c; ret`), so this is transcribed as void and the implicit value is documented rather than invented; the zeroing is seven dword stores instead of rep stosd; runtime UNOBSERVED.
 #include "igi/retail/mem/mem_alloc.hpp"
 
 #include <cstdint>

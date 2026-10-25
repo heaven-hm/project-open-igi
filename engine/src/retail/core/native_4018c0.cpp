@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: radare2 6.2.0 bytes/disassembly (8b442404 25ff000000 8d0440 c6044532f9 540000 c3).
 // Behavior/CFG: index = (arg & 0xFF) * 6 into QTask_EventTable (retail 0x0054F930) and clears the used byte at +2; void return. Single block, no callees.
-// Status/limits: TRANSCRIBED (static only); the counterpart of 0x401860's used-flag write (there +2 := 1, here +2 := 0); runtime UNOBSERVED.
+// Status/limits: STRUCTURALLY_VERIFIED (static only); the counterpart of 0x401860's used-flag write (there +2 := 1, here +2 := 0); runtime UNOBSERVED.
 #include "igi/retail/core/task_types.hpp"
 
 #include <cstdint>

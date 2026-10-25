@@ -1,10 +1,8 @@
 // Native: AIGraph_Handler_509450; retail VA 0x00509450 (placeholder name; retail symbol unknown).
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x00509450-0x00509476 (39 bytes, 1 block, 0 edges, 14 instructions: 8b4c2404 8b4158 8bd0 0fafd0 8b81b8000000 8b4c2408 c1e203 52 8b11 50 52 e85d15ffff 83c40c c3).
 // Tools/evidence: build/retail-dis.txt (GNU objdump) 0x00509450-0x00509476; radare2 6.2.0 afij (39 bytes, 1 block, 14 instructions); linked by the AIGraph registrar 0x00508FA0 at 0x00509242 (0x00401400 event 0x004F9220()).
-// Behavior/CFG: one block, no branch, no loop. Reads the side word at object+0x58, squares it and shifts left by three (32-bit wrap preserved),
-//                reads the buffer word at object+0xB8 and the caller's value through arg2, and calls 0x004FA9D0(*arg2, buffer, size).
-// Status/limits: TRANSCRIBED; STRUCTURALLY_VERIFIED against the 14-instruction listing; runtime UNOBSERVED. Link-blocked on 0x004FA9D0
-//                (not transcribed); its prototype is inferred from this call site only.
+// Behavior/CFG: one block, no branch, no loop. Reads the side word at object+0x58, squares it and shifts left by three (32-bit wrap preserved), reads the buffer word at object+0xB8 and the caller's value through arg2, and calls 0x004FA9D0(*arg2, buffer, size).
+// Status/limits: TRANSCRIBED; STRUCTURALLY_VERIFIED against the 14-instruction listing; runtime UNOBSERVED. Link-blocked on 0x004FA9D0 (not transcribed); its prototype is inferred from this call site only.
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)

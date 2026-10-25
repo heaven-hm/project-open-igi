@@ -1,27 +1,8 @@
-// Native: BackgroundFX_EmitAxisRuns_419330 (placeholder name; retail symbol unknown - the body emits two runs of 0x24-byte
-// vertex records, one spread along the transform's x axis and one along its y axis, around a centre taken from the 0x18-byte
-// record it receives, and hands each pair of vertices to the render-backend table at 0x00A94E84).
-// retail VA 0x00419330 (0x00419330-0x00419537, 520 bytes, 7 blocks, 11 edges, 144 instructions).
+// Native: BackgroundFX_EmitAxisRuns_419330 (placeholder name; retail symbol unknown - the body emits two runs of 0x24-byte vertex records, one spread along the transform's x axis and one along its y axis, around a centre taken from the 0x18-byte record it receives, and hands each pair of vertices to the render-backend table at 0x00A94E84). retail VA 0x00419330 (0x00419330-0x00419537, 520 bytes, 7 blocks, 11 edges, 144 instructions).
 // Artifact: retail igi.exe SHA-256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; image base 0x00400000.
-// Tools/evidence: build/retail-dis.txt (GNU objdump i386 complete byte+instruction listing, all 144 instructions quoted
-// below); radare2 6.2.0 af/afij (size 520, 7 blocks, 11 edges); float constants read from the image: 0x00533504 = 0.5f
-// (00 00 00 3f) and 0x0053357C = 0.05000000074505806f (cd cc 4c 3d).
-// Behavior/CFG: arguments [esp+4] = 0x18-byte record {count_x, count_y, field_08, field_0C, centre_x, centre_y, [esp+8] =
-// transform context}. Fills the constant tails of two 0x24-byte vertex records, builds the descriptor {1, 0x00080000, 0, 2,
-// &records[0]}, computes the two run offsets from the record/context product, then runs the first run count_x+1 times and the
-// second count_y+1 times (both counts re-read from the record after every dispatch); each dispatch hands the descriptor to
-// render_backend[0x00A84A54]. The run 1 end point adds (centre_x*m[0]) and (centre_x*m[1]); run 2 adds (centre_y*m[2]) and
-// (centre_y*m[3])*0.05.
-// Status/limits: TRANSCRIBED (static only); runtime UNOBSERVED and the startup chain cannot reach it yet. Indirect dispatch
-// is counted: two `call *0x00A94E84(,%eax,4)` sites at 0x0041948E and 0x0041951D, both indexed by 0x00A84A54 (this file owns
-// that zero dword, the lowest retail load being 0x00419458). Direct calls: none. No cos/sin is used, so no x87 library
-// rounding limitation applies; the x87 intermediates are float loads/multiplies/adds whose results are rounded only at the
-// `fstps` stores, which the plain float expressions below reproduce. The 0x18-byte record is read through raw int/float
-// offsets because retail reads it that way; the owning data objects live in core/native_419860.cpp.
-//
-// Frame mapping (esp after the two prologue pushes is the frame base B): B+0x08 = val2, B+0x0C = val1, B+0x10 = run-2 y
-// offset, B+0x14/B+0x18 = run-1/run-2 increments, B+0x1C/B+0x20 = run-2 x increment / centre_y*m[2], B+0x24 = centre_x*m[1],
-// B+0x28 = centre_x*m[0], B+0x2C = val1 save, B+0x30..B+0x43 descriptor, B+0x44/B+0x68 = the two 0x24-byte records.
+// Tools/evidence: build/retail-dis.txt (GNU objdump i386 complete byte+instruction listing, all 144 instructions quoted below); radare2 6.2.0 af/afij (size 520, 7 blocks, 11 edges); float constants read from the image: 0x00533504 = 0.5f (00 00 00 3f) and 0x0053357C = 0.05000000074505806f (cd cc 4c 3d).
+// Behavior/CFG: arguments [esp+4] = 0x18-byte record {count_x, count_y, field_08, field_0C, centre_x, centre_y, [esp+8] = transform context}. Fills the constant tails of two 0x24-byte vertex records, builds the descriptor {1, 0x00080000, 0, 2, &records[0]}, computes the two run offsets from the record/context product, then runs the first run count_x+1 times and the second count_y+1 times (both counts re-read from the record after every dispatch); each dispatch hands the descriptor to render_backend[0x00A84A54]. The run 1 end point adds (centre_x*m[0]) and (centre_x*m[1]); run 2 adds (centre_y*m[2]) and (centre_y*m[3])*0.05.
+// Status/limits: BUILD_VERIFIED (static only); runtime UNOBSERVED and the startup chain cannot reach it yet. Indirect dispatch is counted: two `call *0x00A94E84(,%eax,4)` sites at 0x0041948E and 0x0041951D, both indexed by 0x00A84A54 (this file owns that zero dword, the lowest retail load being 0x00419458). Direct calls: none. No cos/sin is used, so no x87 library rounding limitation applies; the x87 intermediates are float loads/multiplies/adds whose results are rounded only at the `fstps` stores, which the plain float expressions below reproduce. The 0x18-byte record is read through raw int/float offsets because retail reads it that way; the owning data objects live in core/native_419860.cpp. Frame mapping (esp after the two prologue pushes is the frame base B): B+0x08 = val2, B+0x0C = val1, B+0x10 = run-2 y offset, B+0x14/B+0x18 = run-1/run-2 increments, B+0x1C/B+0x20 = run-2 x increment / centre_y*m[2], B+0x24 = centre_x*m[1], B+0x28 = centre_x*m[0], B+0x2C = val1 save, B+0x30..B+0x43 descriptor, B+0x44/B+0x68 = the two 0x24-byte records.
 #include "igi/retail/dynobj/local_models_mef.hpp"
 
 #include <cstdint>

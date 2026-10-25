@@ -1,12 +1,8 @@
 // Native: AIGraph_Handler_509570; retail VA 0x00509570 (placeholder name; retail symbol unknown).
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x00509570-0x00509606 (151 bytes, 1 block, 28 instructions).
 // Tools/evidence: build/retail-dis.txt (GNU objdump) 0x00509570-0x00509606; radare2 6.2.0 afij (151 bytes, 1 block, 28 instructions); linked by the AIGraph registrar 0x00508FA0 at 0x0050900E (0x00401400 event 0).
-// Behavior/CFG: one block, no branch. Calls 0x004F90B0(object, arg2), then initialises the object's parameter block 0x80..0xBC with the retail
-//                dword pairs (each double is stored as two 32-bit immediates, low word first): +0x80 = 1.0, +0xA0 = 1.0, +0x88 = 2.0,
-//                +0x90 = 3.0, +0x98 = 0.3, +0xA8 = 0.05, +0xB0 and +0xB4 = -1, +0xB8 = 0, +0xBC = 0 (byte).
-// Status/limits: TRANSCRIBED; STRUCTURALLY_VERIFIED against the 28-instruction listing; runtime UNOBSERVED. Link-blocked on 0x004F90B0
-//                (not transcribed); its prototype is inferred from this call site. The dword stores are transcribed individually, in retail's
-//                order, because retail writes some halves separately (0x005095B1 writes +0x98 before +0x8C, etc.).
+// Behavior/CFG: one block, no branch. Calls 0x004F90B0(object, arg2), then initialises the object's parameter block 0x80..0xBC with the retail dword pairs (each double is stored as two 32-bit immediates, low word first): +0x80 = 1.0, +0xA0 = 1.0, +0x88 = 2.0, +0x90 = 3.0, +0x98 = 0.3, +0xA8 = 0.05, +0xB0 and +0xB4 = -1, +0xB8 = 0, +0xBC = 0 (byte).
+// Status/limits: TRANSCRIBED; STRUCTURALLY_VERIFIED against the 28-instruction listing; runtime UNOBSERVED. Link-blocked on 0x004F90B0 (not transcribed); its prototype is inferred from this call site. The dword stores are transcribed individually, in retail's order, because retail writes some halves separately (0x005095B1 writes +0x98 before +0x8C, etc.).
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)

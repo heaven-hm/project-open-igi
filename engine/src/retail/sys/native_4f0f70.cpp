@@ -1,11 +1,8 @@
 // Native: Sys_GetGlobal32_4F0F70; retail VA 0x004F0F70 (placeholder name; retail symbol unknown).
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x004F0F70-0x004F0F75 (6 bytes, 1 block, 0 edges, 2 instructions).
-// Tools/evidence: radare2 6.2.0 af/pdf and NASM ndisasm over the raw bytes (a1 6c 0c a7 00 c3); the storage at 0x00A70C6C has
-// measured writers and readers across the image, listed in docs/fidelity/evidence/high-indegree-getters-20261025/.
-// Behavior/CFG: loads 4 byte(s) from the static object at 0x00A70C6C into %eax and returns; no arguments, no branch, no
-// store, no callee. Only %eax is written, so the declared return type is exactly the access width.
-// Status/limits: TRANSCRIBED; runtime UNOBSERVED. The value's meaning is not established by this body; the access width is the
-// only proven fact about the object, and this file is its defining file.
+// Tools/evidence: radare2 6.2.0 af/pdf and NASM ndisasm over the raw bytes (a1 6c 0c a7 00 c3); the storage at 0x00A70C6C has measured writers and readers across the image, listed in docs/fidelity/evidence/high-indegree-getters-20261025/.
+// Behavior/CFG: loads 4 byte(s) from the static object at 0x00A70C6C into %eax and returns; no arguments, no branch, no store, no callee. Only %eax is written, so the declared return type is exactly the access width.
+// Status/limits: TRANSCRIBED; runtime UNOBSERVED. The value's meaning is not established by this body; the access width is the only proven fact about the object, and this file is its defining file.
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)

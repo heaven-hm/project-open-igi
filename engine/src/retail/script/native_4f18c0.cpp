@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: radare2 6.2.0 listing (a0ebe054.. 50 e8.. / a0ebe054.. 50 e8.. x6 for EB/EA/E7/E8/E9/E6, 0cff a2.. x6, a0e4e054.. 50 e88ffff0ff, a0e5e054.. 50 e883fff0ff, b0ff 83c420 a2e4e054.. a2e5e054.. c3); callees 0x4F1B50 and TaskEventTable_ClearSlot both transcribed.
 // Behavior/CFG: releases the six parameter-event slots through 0x4F1B50 in retail order EB, EA, E7, E8, E9, E6, writes 0xFF over all six state bytes, clears the two task-event slots 0x54E0E4/0x54E0E5 through 0x4018C0, then writes 0xFF over those two. Single straight-line block.
-// Status/limits: TRANSCRIBED (static only); the `or al,0xff` constant and the six-store group are reproduced as written rather than folded; runtime UNOBSERVED.
+// Status/limits: STRUCTURALLY_VERIFIED (static only); the `or al,0xff` constant and the six-store group are reproduced as written rather than folded; runtime UNOBSERVED.
 #include <cstdint>
 
 extern "C" {

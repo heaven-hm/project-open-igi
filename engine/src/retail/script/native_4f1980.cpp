@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: radare2 6.2.0 disassembly (8b4c2408 53 8b5c2408 56 57 8b03 03c1 50 e8bbffffff 8b0b 8b7308 8b7808 83c404 c1e104 8bd1 c1e902 f3a5 8bca 83e103 f3a4); callee 0x004F1950.
 // Behavior/CFG: allocates a container sized *base + count (via 0x4F1950), then copies the OLD payload (*base * 16 bytes) from base[8] to the new container's payload pointer with rep movsd (dwords) followed by rep movsb (remaining 1-3 bytes), exactly retail's 4/1 split. Returns the new container pointer. Single block.
-// Status/limits: TRANSCRIBED (static only); the copy length uses the OLD element count read after the allocation, and the new count comes from the allocator argument; runtime UNOBSERVED.
+// Status/limits: STRUCTURALLY_VERIFIED (static only); the copy length uses the OLD element count read after the allocation, and the new count comes from the allocator argument; runtime UNOBSERVED.
 #include <cstdint>
 
 extern "C" {

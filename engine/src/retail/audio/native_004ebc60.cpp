@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; capture SHA256 0b19afa8e3bc59f6740af55af2f060aa44a811ee2e679429f9adfc40e22b64e3.
 // Tools/evidence: Binary Ninja 6.0.10601 decompile + radare2 6.2.0 disassembly (6a 00 6a 00 e8 ...); calls 0x004018F0, 0x00401900, 0x004017C0, 0x00401400, 0x00401530 (x2); string "SoundSysMicrophone" at 0x0054DB6C.
 // Behavior/CFG: parent = QTask_GetCurrentType(); registers "SoundSysMicrophone" (0x68 bytes) -> observed id 23, stores the id at 0x0054DB68, stores QTask_AllocateEvent(0) at 0x0054DB6A, links phase 0 (0x004D3710) through 0x00401400 and phases 1/2 (0x004EBCD0, 0x004D3710) through 0x00401530, returning the last result. Single block.
-// Status/limits: TRANSCRIBED (static only); handler natives 0x004D3710 and 0x004EBCD0 remain untranscribed and are passed as retail-VA literals; runtime UNOBSERVED in the port.
+// Status/limits: BUILD_VERIFIED (static only); handler natives 0x004D3710 and 0x004EBCD0 remain untranscribed and are passed as retail-VA literals; runtime UNOBSERVED in the port.
 #include "igi/retail/core/task_types.hpp"
 
 #include <cstdint>
