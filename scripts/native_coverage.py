@@ -19,8 +19,9 @@ Usage:
 
 Status buckets per distinct callee:
     engine          an engine source implements it (file name or provenance VA)
-    candidate-only  only an external scripts/GameNatives candidate mentions it
+    import          a PE import table slot (indirect call through the IAT, not a game native)
     crt             a known statically linked CRT routine (no implementation unit)
+    candidate-only  only an external scripts/GameNatives candidate mentions it
     absent          nothing in the tree implements it
 """
 
@@ -29,6 +30,7 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import subprocess
 import sys
 from pathlib import Path
 
@@ -76,7 +78,38 @@ def engine_definitions(root: Path) -> dict[int, str]:
         text = path.read_text(errors="replace").lower()
         for hit in re.finditer(r"retail va (0x[0-9a-f]{8})", text):
             out.setdefault(int(hit.group(1), 16), str(path.relative_to(root)))
+        # Files written before the provenance block was standardised head a definition with
+        # "// 0x0048F1E0 Name" instead. Treat that as implementation evidence only when the heading
+        # is immediately followed by code (so an inline "// 0x... call" note cannot match).
+        lines = text.splitlines()
+        for index, line in enumerate(lines):
+            m = re.match(r"// 0x([0-9a-f]{8})\b", line.strip())
+            if not m:
+                continue
+            for follower in lines[index + 1:index + 5]:
+                stripped = follower.strip()
+                if not stripped or stripped.startswith("//"):
+                    continue
+                out.setdefault(int(m.group(1), 16), str(path.relative_to(root)))
+                break
     return out
+
+
+def import_slots(pe_path: Path) -> dict[int, str]:
+    """PE import IAT slots, so an indirect call through the IAT is not read as a missing native."""
+    try:
+        out = subprocess.run(["rabin2", "-i", str(pe_path)], capture_output=True, text=True, timeout=120).stdout
+    except (OSError, subprocess.SubprocessError):
+        return {}
+    slots: dict[int, str] = {}
+    for line in out.splitlines():
+        parts = line.split()
+        if len(parts) >= 6 and parts[1].startswith("0x") and parts[3] == "FUNC":
+            try:
+                slots[int(parts[1], 16)] = f"{parts[4]}!{parts[5]}"
+            except ValueError:
+                continue
+    return slots
 
 
 def candidate_mentions(root: Path) -> dict[int, str]:
@@ -93,13 +126,15 @@ def candidate_mentions(root: Path) -> dict[int, str]:
 
 
 def report(root: Path, listing: list[tuple[int, str, str]], name: str, lo: int, hi: int,
-           engine: dict[int, str], candidates: dict[int, str]) -> dict:
+           engine: dict[int, str], candidates: dict[int, str], imports: dict[int, str]) -> dict:
     sites = calls_in(listing, lo, hi)
     distinct = sorted(set(sites))
     rows = []
     for va in distinct:
         if va in engine:
             status, where = "engine", engine[va]
+        elif va in imports:
+            status, where = "import", imports[va]
         elif va in CRT:
             status, where = "crt", CRT[va]
         elif va in candidates:
@@ -109,7 +144,7 @@ def report(root: Path, listing: list[tuple[int, str, str]], name: str, lo: int, 
         rows.append({"va": f"0x{va:08X}", "status": status, "where": where,
                      "sites": sum(1 for s in sites if s == va)})
     counts = {k: sum(1 for r in rows if r["status"] == k)
-              for k in ("engine", "crt", "candidate-only", "absent")}
+              for k in ("engine", "import", "crt", "candidate-only", "absent")}
     return {"name": name, "lo": f"0x{lo:08X}", "hi": f"0x{hi:08X}",
             "call_sites": len(sites), "distinct_callees": len(distinct),
             "counts": counts, "callees": rows}
@@ -122,6 +157,8 @@ def main() -> int:
     ap.add_argument("--spans", help="file with 'name lo hi' lines, one function per line")
     ap.add_argument("--root", default=str(ROOT))
     ap.add_argument("--listing", default="build/retail-dis.txt")
+    ap.add_argument("--pe", default=str(Path("/Users/haseeb-mir/Downloads/IGI/igi.exe")),
+                    help="retail image, used to classify IAT import slots")
     ap.add_argument("--json", action="store_true")
     args = ap.parse_args()
 
@@ -136,6 +173,7 @@ def main() -> int:
     listing = load_listing(listing_path)
     engine = engine_definitions(root)
     candidates = candidate_mentions(root)
+    imports = import_slots(Path(args.pe)) if Path(args.pe).exists() else {}
 
     spans: list[tuple[str, int, int]] = []
     if args.spans:
@@ -154,7 +192,7 @@ def main() -> int:
     else:
         ap.error("give ADDRESS --size, or --spans FILE")
 
-    results = [report(root, listing, *span, engine, candidates) for span in spans]
+    results = [report(root, listing, *span, engine, candidates, imports) for span in spans]
     if args.json:
         print(json.dumps(results, indent=2))
         return 0
@@ -162,10 +200,11 @@ def main() -> int:
     for r in results:
         c = r["counts"]
         total = r["distinct_callees"]
-        done = c["engine"] + c["crt"]
+        done = c["engine"] + c["crt"] + c["import"]
         print(f"\n{r['name']}  {r['lo']}..{r['hi']}")
         print(f"  {r['call_sites']} call sites, {total} distinct callees")
         print(f"  engine ................. {c['engine']}")
+        print(f"  import (IAT slot) ...... {c['import']}")
         print(f"  crt (no unit needed) ... {c['crt']}")
         print(f"  candidate-only ......... {c['candidate-only']}")
         print(f"  absent ................. {c['absent']}")
