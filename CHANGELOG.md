@@ -1,5 +1,36 @@
 ## Unreleased
 
+### `0x3A91A2B4` is the float `0.0011111111380159855F`, and it appears twice
+
+chain-worker's GCC finding was that a decimal float literal folded into a long
+double emits a mantissa with a non-zero low word. I verified the constant it
+concerns is real and present, and it is in the image **at two addresses**:
+
+```
+0x00533584   b4a2913a   0x3A91A2B4   -> float 0.0011111111380159855
+0x005338BC   b4a2913a   0x3A91A2B4   -> float 0.0011111111380159855
+0x005338C4   4f6732c2   0xC232674F   -> float -44.6008...
+0x00533678   8988083d   0x3D088889   -> float 0.0333333351...
+```
+
+So the constant is not a one-off: **two independent sites hold the identical
+32-bit pattern**, and chain-worker's hex-literal fix (`0x1.234568p-10L`) emits
+exactly `b4 a2 91 3a`. The fix reproduces the image bytes, which is the check that
+matters - a fix that produced a *different* bit pattern would be a behaviour
+change dressed as a correction.
+
+`0x00533678` = `0.0333333351`, which is 1/30 to float precision - consistent with
+the 30-iteration loop in `0x00449D30` and with `0x00449E50`'s use of the same
+table.
+
+### Independently checked: chain-worker's `0x00449E50` numbers
+
+Its block-size list (21, 1, 13, 4, 4, 3, 196, 6, 2, 4, 3, 4) sums to **261** across
+**12** blocks, matching its claimed instruction and block counts. That internal
+consistency is the check that catches a dropped block, and it holds.
+
+## Unreleased
+
 ### The link checker's math-helper list was one name where it needed a class
 
 chain-worker found that `check_native_linkable.py` reported `sincosl`/`sincosf`/
