@@ -2400,3 +2400,29 @@ both compile and link.
 
 The check that catches all three is the same: grep the owner and read how it
 declares the symbol, not merely that it declares it.
+
+## OPEN DEFECT: thirteen `-Wextern-initializer` warnings in three files
+
+The full build emits 13 `warning:` lines that no per-file compile of mine had shown,
+because I had never compiled these three individually:
+
+| file | count |
+|---|---|
+| `core/native_489560.cpp` | 8 |
+| `render/native_00407d60.cpp` | 4 |
+| `core/native_507e70.cpp` | 1 |
+
+All thirteen are the same form: `extern "C" std::uint8_t g_54127c = 0U;` - the
+`extern` keyword with an initializer. Per the twelfth rule, `extern` plus an
+initializer **is** a definition, so the symbols exist and the build links; the
+keyword is merely redundant. Pre-existing, confirmed against `HEAD~1`.
+
+**This is the reason the standing rule says exit status is not the warning test.**
+`exit=0` and `errors=0` were both true while thirteen warning lines were present, and
+I had been reporting `warn=0` from single-file compiles of *other* files.
+
+The fix is mechanical - drop the redundant `extern` keyword, since the initializer
+already makes each line a definition inside `extern "C" { }` - but it edits three
+files outside every current worker's band, so it is recorded here as an open item
+rather than applied blind. It must be applied with a full build, not a per-file
+compile, which is the same instrument failure that hid it.
