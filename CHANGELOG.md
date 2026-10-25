@@ -1926,3 +1926,35 @@ is promoted on the strength of a build.
 - The Windows x86 target now enters at the retail WinMain (`0x0048F530`) and reproduces the retail startup prefix; it still terminates at the documented registrar boundary (`QTask_RegisterClasses 0x402930`) and is therefore not a playable build.
 - Resource, MTP, MEF container, and LOOP texture parsing have focused tests.
 - Level 1 QVM object execution, 3D/terrain rendering, player and AI simulation, combat integration, and sound playback are not yet connected into a playable mission.
+
+## Guard-callee coverage measured against the binary, and the cast-integer ruling
+
+- Guard-callee coverage is **131 of 154**, measured by symbol presence in the
+  linked `igi1.exe` (`i686-w64-mingw32-nm`), never by file existence. Four
+  separate times this session "the file exists" was mistaken for "the symbol is
+  in the binary"; the two differ by five files at one point.
+- **Untranscribed handler entry points must be passed as cast integers**
+  (`reinterpret_cast<igi::retail::core::FrameHandler>(0x00XXXXXX)`), not
+  declared as function prototypes. A prototype makes the linker demand a symbol
+  nobody can supply, which reported a *complete* registrar as `NOT LINKABLE`.
+  The registrar bodies were never incomplete; the status was an artefact of the
+  declaration. Precedent: `engine/src/retail/core/native_42d2b0.cpp`,
+  `engine/src/retail/core/native_40fe30.cpp`.
+- Seven registrar natives reached `igi1.exe` on this change alone, taking
+  guard-callee coverage from 124 to 131: `0x00421430`, `0x00420CC0`,
+  `0x00421750`, `0x00420300`, `0x004223D0`, `0x004230A0`, `0x0041DC50`.
+- **A "surplus" pre-push is not automatically inert.** In `0x004223D0` four of
+  nine appended records carry `arg6 = 0x0057BC18` — the address of a slot the
+  routine itself zeroes — pre-pushed before an argument-less getter. The push is
+  inert *for the getter* but load-bearing for the appended record. The
+  "inert push" reasoning that is correct in the sibling registrars would be a
+  defect here.
+- **The ~7-handler-per-registrar ratio is withdrawn.** Six samples give
+  per-registrar counts of 5, 7, 10, 7, 5, 12 — mean 7.7 but too wide to
+  project from, and the 12 mixes in a second population (script-registration
+  code pointers pushed to `0x004B8890` with a name string) that must be counted
+  separately. The figure was recorded as a hypothesis and is now retracted as
+  one.
+- **A case-sensitive grep against a hex VA is a false-zero generator.** A
+  case-insensitive ownership sweep is the only one that counts; the
+  case-sensitive form reported 0 owners for files that each had exactly one.
