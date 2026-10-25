@@ -2265,3 +2265,36 @@ plausible VA and a plausible constant, and nothing behind it.
 `mov` encodes its target as an absolute disp32. It is NOT legitimate for a `call`,
 whose displacement is relative - the same distinction that produced the phantom
 callee and the false "no caller" zero earlier in this session.
+
+## The guard's callee set is not the project's remaining work set
+
+Established by flow-analyst while closing the `0x00419xxx`-`0x0041Fxxx` band.
+
+`0x004C1830` and `0x00401A20` are **absent** from the guard's 314 direct calls,
+because they are reached *through* the teardowns rather than called by the guard.
+`0x004201B0` (SlideBar's teardown) **is** in the guard's list. So the two sets
+differ in both directions.
+
+The honest statement is therefore: **308 is the guard's direct callee set, not the
+remaining work set.** My 132-of-308 measures a set that structurally cannot
+contain some of the work - the same class of error as the filtered evidence list,
+one level deeper. This is the third distinct denominator correction of the
+session and the reason counts, not ratios, are now the rule.
+
+## 0x004C1830 is a 12-byte native with 164 caller sites
+
+`mov eax,[esp+4]; push eax; call 0x004B0D10; pop ecx; ret` - 12 bytes, 4
+instructions. Its only callee `0x004B0D10` is already a tree native, so it links
+with one undefined symbol and needs nothing else transcribed.
+
+**164 caller sites image-wide**, of which the in-band teardown sites are a
+minority. It is therefore not a teardown helper: 153 other sites wait on it, and
+its absence is why `native_4497d0.cpp` cannot build. Transcribing it is the
+sequenced prerequisite for the eleven in-band teardowns and the 22 out-of-band
+ones, so they can be written as ordinary linkable natives rather than as a second
+batch of deliberately-unbuilt files.
+
+**Self-consistency check that validates two instruments at once:** the 25-byte
+teardown at `0x004199B0` does not appear in `0x004C1830`'s caller list, and it is
+the one teardown with no container to delete. Two lists derived from different
+directions agree with the shapes measured separately.
