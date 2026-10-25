@@ -11,6 +11,34 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - startup guard re-measured: 120 of 154 callees, not 8
+
+`0x00402930` is the boundary this build fails closed at, and it is the only thing
+between the tree and a window. Its coverage had never been measured against the
+tree, only asserted in a comment, and the assertion was badly wrong.
+
+| source | claimed |
+| --- | --- |
+| `class_registration.cpp` provenance | 8 of 154 callees implemented |
+| `startup-402930-call-sequence.md` status column | 22 implemented |
+| **measured against `CMakeLists.txt`** | **120 of 154 in the build, 34 missing** |
+
+The measurement matches the doc's ordered 155-call table (rows before line 186 —
+the doc holds a *second*, 154-call sequence at `0x00402C40` after that) against
+the `native_*.cpp` entries in `CMakeLists.txt`. Distinct callees, not call sites:
+154.
+
+Two attempts at this measurement returned zero before the real one, both by the
+mechanism this project keeps rediscovering. The first matched `native_*.cpp` with
+an eight-hex-digit pattern when the filenames carry six (`native_401d30.cpp`), so
+every lookup missed. The second split the doc's two call tables by row number
+when both number from 1, reading 155 + 154 rows as one 309-row table. A zero from
+a text pattern is a statement about the pattern.
+
+The 34 missing callees are assigned: 29 to the `0x00400000`-`0x0042FFFF` band,
+`0x00449D30` / `0x0044C8D0` / `0x0045E450` to the `0x00430000`+ band, and
+`0x0042ACC0` / `0x00508F80` to the Lead.
+
 ### 2026-10-25 - two registrars integrated, raw-address and initialiser sweep
 
 Added `Task_DefinePatrolPathCommand` (0x004533B0) and `Task_DefinePatrolPath`
