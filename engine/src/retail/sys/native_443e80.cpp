@@ -15,8 +15,14 @@
 
 extern "C" {
 
-// 0x0053C680: the two-byte object this getter reads; nothing else in the tree owns it yet.
-std::uint16_t g_53c680;
+// 0x0053C680: the two-byte object this getter reads. It is WRITTEN by the registrar at
+// 0x004436A7 (native_443680.cpp), so by the writer-owns rule that routine is its owner;
+// this file holds the storage only and the definition should migrate there when that
+// native lands.
+// Retail 0x0053C680 holds 0x0181 in the image -- the unregistered sentinel of a
+// word-sized task-id slot -- not zero. It is overwritten at startup by the registrar
+// at 0x004436A7, but the initial value must still match the bytes.
+std::uint16_t g_53c680 = 0x181U;
 
 std::uint16_t NATIVE_DECL Sys_GetGlobal16_443E80(void)
 {
