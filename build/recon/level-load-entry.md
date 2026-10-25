@@ -134,3 +134,60 @@ hang, not a return.** Preserve it. The guard's own local helper has the same sha
 across a handful of leaves**, in contrast to the 246-instruction `0x0042ACC0` that took a
 fresh worker a full turn. **Recording the sizes so the next writer starts from them rather
 than re-measuring, and so the increment is not mis-sized as large.**
+
+---
+
+## The two named terrain targets, in full - exact bytes, 2026-10-25
+
+### `0x004CE3D0` - 3 instructions, `ret` at `0x004CE3DE`, nop at `0x004CE3DF`
+```
+0x004ce3d0  8b442404        mov eax, dword [esp + 4]        ; arg0
+0x004ce3d4  c780c80d000000000000  mov dword [eax + 0xdc8], 0
+0x004ce3de  c3              ret
+```
+A leaf. It takes one pointer argument and clears the dword at `+0xDC8`. **No callee, no
+branch, no frame** - so it cannot be blocked by anything, and a transcription of it can
+only be wrong in the offset or the width. **The `0xDC8` offset is the whole content of the
+function.**
+
+### `0x004D11C0` - 22 instructions, `ret` at `0x004D121A`, nops `0x004D121B`-`0x004D121C`
+```
+0x004d11c0  b85843b000      mov eax, 0xb04358
+0x004d11c5  83c9ff          or ecx, 0xffffffff              ; ecx = -1, set once outside the loop
+0x004d11c8  8948f8          mov dword [eax - 8], ecx        ; loop top: store -1 at eax-8
+0x004d11cb  c70000000000    mov dword [eax], 0              ; store 0 at eax
+0x004d11d1  83c01c          add eax, 0x1c                   ; stride 28
+0x004d11d4  3d5823b100      cmp eax, 0xb12358
+0x004d11d9  7ced            jl 0x4d11c8
+0x004d11db  6a20            push 0x20
+0x004d11dd  68bc020000      push 0x2bc
+0x004d11e2  6840060000      push 0x640
+0x004d11e7  68602bb100      push 0xb12b60
+0x004d11ec  e80ff9fdff      call 0x4b0b00
+0x004d11f1  6a20            push 0x20
+0x004d11f3  6a32            push 0x32
+0x004d11f5  68800c0000      push 0xc80
+0x004d11fa  68402cb100      push 0xb12c40
+0x004d11ff  e8fcf8fdff      call 0x4b0b00
+0x004d1204  6a20            push 0x20
+0x004d1206  6a00            push 0
+0x004d1208  68401f0000      push 0x1f40
+0x004d120d  68c06cb100      push 0xb16cc0
+0x004d1212  e8e9f8fdff      call 0x4b0b00
+0x004d1217  83c430          add esp, 0x30                   ; 12 pushes = 0x30, reconciles
+0x004d121a  c3              ret
+```
+**Two details a rewrite would lose:**
+- **`or ecx,0xffffffff` is hoisted OUT of the loop** (at `0x004D11C5`, before the loop
+  top at `0x004D11C8`). Moving it inside is the obvious "simplification" and changes
+  nothing observable - but it is a different instruction sequence, and this project is
+  transcribing instructions.
+- **The three `0x004B0B00` calls take four arguments each and the cleanup is `add esp,0x30`
+  = 12 dwords = 3 x 4.** The arithmetic confirms the argument count independently of
+  reading the pushes, which is the cross-check to run on every body here.
+
+The stride `0x1c` and the range `0xB04358` -> `0xB12358` give `(0xB12358-0xB04358)/0x1C` =
+**0x800 = 2048 entries** - a 2048-entry table cleared in place, each entry 28 bytes.
+
+**Both are ready to transcribe from these bytes.** `0x004D11C0` is blocked only on
+`0x004B0B00`; check that by exit status.
