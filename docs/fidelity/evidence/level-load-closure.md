@@ -102,6 +102,24 @@ instructions, 38 call sites, 26 distinct targets, 20 with a transcribed file, 6 
 `0x004CE3D0`, `0x004D11C0` and four reached through them. **Those six are the concrete first increment for the
 terrain path**, and the branch is 77% covered — the best-covered part of the closure measured so far.
 
+> **CORRECTION (added after the terrain increment landed, measured against the integrated tree).** The
+> "26 distinct targets / 20 with a file / 6 without" figures in the paragraph above are **not reproducible**
+> and are withdrawn. Re-measured with the reachability instrument (per-function body bounded by the `ret`,
+> no fallthrough past it, jump-table bodies included), the same definition — `Terrain_Load 0x004C6240`
+> plus its **10 direct call targets**, unioned over each of those 11 functions' **direct** calls — yields
+> **44 distinct targets**: **29 with a file inside `engine/`**, **4 whose manifest implementation path
+> points outside `engine/`** (`0x004B18B0 Resource_PackUnpack`, `0x004B5B90 IsResourceLoaded`,
+> `0x004BB270 QvmAssemble`, `0x004C0200 ScriptBufInit`), and **11 with no manifest entry at all**
+> (`0x004B1AC0`, `0x004B1FC0`, `0x004B6440`, `0x004B6490`, `0x004BBCB0`, `0x004BEFC0`, `0x004BF1C0`,
+> `0x004BF1F0`, `0x004BF8F0`, `0x004BFA80`, `0x004BFC70`). Two independent walkers (one stopping at the
+> indirect jump, one resolving the jump tables) both return 44, so the difference is not walker style: the
+> earlier figure came from a cruder measurement that missed call sites. The dispatched "six" are exactly
+> the six members of this 44-target union that had **no manifest record** at dispatch time — and the
+> dispatch was right to call them the first increment: with the seven files now in the tree, all six are
+> covered. **The wider 11-function closure is nevertheless still open by 15 targets** (the 4 outside-engine
+> paths plus the 11 with no record), which are siblings of the six rather than dependencies of them.
+
+
 For **one object on screen**, the model branch sits at depth 3 and is already transcribed:
 `DynObj_LoadPackageMeshes 0x004CF330`, `DynObj_LoadPackageLovs 0x004CF630`,
 `DynObj_LoadModelTextures 0x004CF790`, `DynObj_LoadPackagePalettes 0x004CF870`,

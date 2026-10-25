@@ -1,7 +1,9 @@
 # The six missing terrain-closure targets: transcription result and link status
 
 Scope of this note: the six targets the Lead dispatched as "the six missing terrain targets" — the
-11-function `Terrain_Load` closure's 26 combined callee targets minus the 20 that had a file — plus
+members of the 11-function `Terrain_Load` closure that had no manifest record at dispatch time (the
+closure's one-level target set is re-measured at 44 in `level-load-closure.md`, whose earlier "26
+combined targets / 20 with a file / 6 without" figures are withdrawn there) — plus
 the two targets that turned out to sit *behind* them, plus the one that is still open behind those.
 Instrument rules are the ones in `docs/fidelity/evidence/level-load-closure.md` §1 and
 `docs/fidelity/evidence/guard-mvp-partition.md` §0: extents are bounded by the `ret` and the alignment
@@ -27,18 +29,36 @@ target, no fallthrough past a `ret`) from the verified entry, and the bound used
 | target | linear-to-first-ret (my earlier figure) | reachable instructions | last instruction | bound used |
 | --- | --- | --- | --- | --- |
 | `0x004BAB30` | 22 | **26** | `0x004BAB7A` (`jmp 0x004BAB7A`) | terminal self-jump `eb fe`, then `0x004BAB7C` is padding |
-| `0x004BD080` | 56 | **38** | `0x004BD1D9` | `ret`, then `8b ff` hot-patch nop at `0x004BD1DA` |
+| `0x004BD080` | 56 | **107** | `0x004BD1D9` | `ret`, then `8b ff` hot-patch nop at `0x004BD1DA` |
 | `0x004BD220` | 34 | **126** | `0x004BD373` | `ret`, then 12 nops |
-| `0x004BC960` | 97 | **41** | `0x004BCA92` | `ret`, then `0x90` padding |
+| `0x004BC960` | 97 | **97** | `0x004BCA92` | `ret`, then `0x90` padding |
 | `0x004BD380` | 27 | **27** | `0x004BD3C1` | `ret`, then 14 nops |
 
 `0x004CE3D0` (3 instructions, `ret` at `0x004CE3DE`, 1 nop) and `0x004D11C0` (24 instructions, `ret` at
 `0x004D121A`, 5 nops) are unchanged from the dispatch and were confirmed exactly.
 
+**The jump table hides instructions the same way a second undefined symbol does.** The first corrected
+figures in this section were still under-counts for the two functions whose dispatch is a jump table:
+a reachability walk that stops at the indirect `jmp` never reaches the case bodies, so it measured
+`0x004BC960` at 41 instructions and `0x004BD080` at 38. Seeding the table's own targets into the walk
+(the entries are all below the table base, because the table follows the code) gives **97** and **107**,
+and each walk's last instruction is then exactly the `ret` at the recorded extent end — so the corrected
+counts fill the measured extents (307 B and 346 B) and the earlier ones did not. My provenance blocks
+said 41 and 38 until this correction; the transcribed source always covered every case body, but the
+*counts I reported* hid them. Per-function figures in §1 are the corrected ones.
+
 **(c) The QVM status dispatch is a jump table, read from the image.** `0x004BD080` dispatches on
 `state+0x20 - 1` through the 15-entry table at `0x004BD1DC`; `0x004BC960` dispatches on
 `type_stack[i] - 1` through the 7-entry table at `0x004BCA94`. Both tables were read out of the image and
 both are recorded entry-by-entry in the two new files' provenance blocks.
+
+**(d) Blocks and edges, measured against the Lead's own captures.** Splitting the reachable listing at
+every branch target and after every branch gives, for the four targets the Lead captured with both
+tools: `0x004BC960` 12 blocks/20 edges, `0x004BD080` 20/32, `0x004BD220` 23/35, `0x004BD380` 5/7. The
+**block counts agree with both radare2 and Binary Ninja on all four** (12, 20, 23, 5), and the edge
+counts agree with Binary Ninja on three of four (`0x004BD080` 32 vs 31). Earlier block/edge figures in
+these provenance blocks (9/12, 17/20, 20/24, 3/3) were estimates and have been replaced by these
+measurements.
 
 ## 1. What was written (seven files, dependency order by exit status)
 
@@ -47,8 +67,8 @@ both are recorded entry-by-entry in the two new files' provenance blocks.
 | 1 | `engine/src/retail/terrain/native_4ce3d0.cpp` | `DynObj_UpdateDynTree_11` | `0x004CE3D0`-`0x004CE3DE` | 15 B | 3 | **linkable (0 undefined)** |
 | 2 | `engine/src/retail/terrain/native_4d11c0.cpp` | `Terrain_InitContourHashAndPools_4D11C0` | `0x004D11C0`-`0x004D121A` | 91 B | 24 | **linkable (5 undefined, all in tree)** |
 | 3 | `engine/src/retail/script/native_4baca0.cpp` | `Script_QHashNodeRelease_4BACA0` | `0x004BACA0`-`0x004BACC5` | 38 B | 13 | **linkable (4 undefined, all in tree)** |
-| 4 | `engine/src/retail/script/native_4bc960.cpp` | `Qvm_FormatOperandText_4BC960` | `0x004BC960`-`0x004BCA92` | 307 B | 41 | **linkable (2 undefined, all in tree)** |
-| 5 | `engine/src/retail/script/native_4bd080.cpp` | `Qvm_RunProgram` | `0x004BD080`-`0x004BD1D9` | 346 B | 38 | **linkable (3 undefined, all in tree)** |
+| 4 | `engine/src/retail/script/native_4bc960.cpp` | `Qvm_FormatOperandText_4BC960` | `0x004BC960`-`0x004BCA92` | 307 B | 97 | **linkable (2 undefined, all in tree)** |
+| 5 | `engine/src/retail/script/native_4bd080.cpp` | `Qvm_RunProgram` | `0x004BD080`-`0x004BD1D9` | 346 B | 107 | **linkable (3 undefined, all in tree)** |
 | 6 | `engine/src/retail/script/native_4bd220.cpp` | `Qvm_LoadCompiledProgram_4BD220` | `0x004BD220`-`0x004BD373` | 340 B | 126 | **linkable (4 undefined, all in tree)** |
 | 7 | `engine/src/retail/script/native_4bd380.cpp` | `Sys_QvmStandaloneRelease_4BD380` | `0x004BD380`-`0x004BD3C1` | 66 B | 27 | **NOT LINKABLE — `Resource_Flush` (see §2)** |
 

@@ -12,7 +12,7 @@
 
 // Native: Game_Init; retail VA 0x00415530.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x00415530..0x00415653.
+// Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x00415530..0x004157CD. The previous claim in this block read "VA 0x00415530..0x00415653", which is wrong: 0x00415653 is push 0x200, the first instruction of the first effect group this transcription omitted. The claim therefore truncated exactly where the implementation stopped, which is why it survived every check - a record wrong about its own size in the same direction it is incomplete contradicts nothing. The real extent is 168 instructions ending at the ret at 0x004157CD; 0x004157CE-0x004157CF are alignment nops and 0x004157D0 starts the next function with sub esp,0x18.
 // Behavior/CFG: retail 0x00415530 begins with AppMain_ParseCmdLineArgs("Level", 0x00415B10).
 //           0x0048F360 is the command-line token matcher: it copies the command line (0x0048F080),
 //           tokenizes it on space/tab (0x004A5A0C), compares each token case-insensitively against
