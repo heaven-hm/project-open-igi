@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.20)
 project(project_open_igi_clean LANGUAGES CXX)
+include(cmake/NativeAutoVerification.cmake)
 
 option(IGI_VERIFICATION_ONLY "Configure host-side native checks without building a Windows executable" OFF)
 include(CTest)
