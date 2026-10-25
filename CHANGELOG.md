@@ -2298,3 +2298,44 @@ batch of deliberately-unbuilt files.
 teardown at `0x004199B0` does not appear in `0x004C1830`'s caller list, and it is
 the one teardown with no container to delete. Two lists derived from different
 directions agree with the shapes measured separately.
+
+## An nm count is only meaningful against a named binary hash
+
+flow-analyst measured all eleven of its predicted nm counts at once and got 11 of
+11, each symbol counted exactly once - the correct resolution of eleven "count 0,
+to be re-measured to 1" predictions. It also watched the binary change under it
+mid-investigation (`91fb5b2d…` size 14474130, then `51fd67ab…` size 14474387, a
+minute apart) and named the hash its table belongs to.
+
+**The rule:** an `nm` count is only meaningful against a named binary hash, and any
+evidence line asserting "this file is not yet in the build target's source list"
+must be corrected in the same change that adds the file. A count of 0 from a binary
+the file was not in is not a measurement of the file - it is a measurement of the
+build.
+
+This is the eighth rule applied to a build artifact instead of a live process: a
+measurement of a moving workspace measures a moment. Ten committed files carry
+stale Build-evidence lines for exactly this reason; they are being corrected as one
+pass, re-measured against the hash they name rather than carrying the old hash
+forward.
+
+## A handler is data; a callee is code
+
+The cast-integer ruling covers addresses retail *stores* and the port *passes* -
+they create no link dependency, so a cast integer is correct and needs no symbol.
+It does not reach an address the port must *call* to compute a value. Those get
+transcribed, or the file stays fail-closed.
+
+**A cast call to a literal address is never the answer**, because it is fail-open:
+it compiles, links, and jumps into a raw retail address inside the port at startup,
+converting a build error into a runtime crash. This was resolved by transcribing
+the two 6-byte getters (0x00413B00, 0x00413B10), which turned a false choice into
+a non-choice and unblocked the largest registrar in the band.
+
+## A self-corrected count is worth more than a count never questioned
+
+flow-analyst reported 0x004C1830 as "4 instructions" in its costing message and
+corrected it to 5 in the next report. The byte, block, edge and call counts were
+all right; the error was only the instruction count, and it volunteered the
+correction before anyone could have found it. Recorded because the behaviour is
+the one that keeps this project honest, not the number.
