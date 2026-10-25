@@ -11,6 +11,31 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - the frame shift is a per-prologue fact: three bodies, three answers
+
+Three consecutive registrar bodies in one lane, one family and one `lea`-into-frame
+idiom, produced **three different saved-register shifts**:
+
+| body | prologue | saved registers | shift |
+|---|---|---|---|
+| `0x004397C0` | `sub esp,0x1F8` then `push esi; push edi` | 2 | **8** |
+| `0x0043AD80` | `sub esp,0x2E8` then `push ebx; push esi; push edi` | 3 | **12** |
+| `0x0043B2F0` | `sub esp,0x2C0`, no saved-register push | 0 | **0** |
+
+Every one of those bodies resolves `lea reg,[esp+K]` into a frame offset, so the shift
+must be applied to all of them and its value differs in each. The wrong shift yields
+displacements that look entirely plausible - `0x004397C0`'s retail 0x104/0x11C/0x1B8
+become frame+0xF0/0x108/0x1A4 with the shift applied, and frame+0x104/0x11C/0x1B8
+without it, and nothing in the file would look wrong either way.
+
+The useful refinement is that the shift is a property of the **prologue alone**, so it
+is cheap to read and expensive to guess. It is now a separate step before any `lea` is
+resolved, and the shift is recorded explicitly in each file so a reader can tell
+whether the author accounted for it.
+
+Recorded because a single instance would have looked like a quirk. Three instances in
+one family make it a rule with a cost attached.
+
 ### 2026-10-25 - two more registrars, and three gap getters that exposed a 0xFF initialiser bug
 
 Integrated `core/native_438390.cpp` (`Task_DefineGunShotEffect`, 163 B, retail 11/8 =
