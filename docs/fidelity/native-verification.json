@@ -41376,7 +41376,7 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/core/app_startup_natives.cpp",
-        "sha256": "0cd758f2ad54db1e376f379e730f907a4c5dfb986d519302642cb948d41fdc08",
+        "sha256": "1880d321546bd9372e5ed72647b562c9fb45a80b8f7feb5389b45d388713aceb",
         "signature": "void* __cdecl StoreInstanceHandle(void*)"
       },
       "game_natives": {
@@ -41420,12 +41420,12 @@
           "evidence_sha256": "4a78fbbf7f5470fbc65cc872b2597bfc9ce0d21be6848c3981986aa713934779"
         },
         "semantic_review": {
-          "evidence_path": "docs/fidelity/evidence/store-instance-20261025-sol/semantic-review.json",
-          "evidence_sha256": "763fe85ebb163e0f694b55dbf86c23a93f18bf9e81482cf937ce516893c2ca69"
+          "evidence_path": "docs/fidelity/evidence/annotation-review-0x0048F0D0-1880d321546bd937/semantic-review.json",
+          "evidence_sha256": "54d2175ec6324e256808a42b18dcf0f43e1a88daf45805a05fbf93c1a4b58483"
         },
         "runtime_contract": {
           "scope": "startup-scalar-store",
-          "probe_sha256": "29ee30170826e40d20517cd58b2d435cd3cab2e087d8849a0fb3b35f8ef2c2e7",
+          "probe_sha256": "f9ecf75262861382321166b9bd3fb196285a3e8d67e45f077be1541855c6f3bb",
           "required_observables": {
             "inputs": [
               "value",
@@ -41436,13 +41436,22 @@
               "state_delta"
             ],
             "sideEffects": [
-              "global_0x005C8BC0_after"
+              "global_0x005C8BC0_after",
+              "return_aliases_argument",
+              "stored_aliases_argument",
+              "adjacent_bytes_unchanged"
             ]
           },
           "no_arguments": false,
           "no_return": false,
           "no_side_effects": false,
-          "note": "Controlled pre-resume word-copy replay only; the natural instance-handle call is a separate required observation. No arbitrary word is dereferenced."
+          "actions_sha256": "995a8e42647c4b5989a6995996664fb3ff55f9dff1d63189371028bd43697dd7",
+          "capture_completion": {
+            "mode": "native-return",
+            "expected_calls": 1,
+            "actions": "none"
+          },
+          "note": "One real WinMain instance-handle call, normalized only after checking the argument equals this image module base and the initial destination is null; exact input/store/EAX aliases and unchanged sampled adjacent bytes. Same probe also runs the existing eleven opaque-word controlled cases and restores the global. No pointer dereference or window/startup/gameplay acceptance."
         },
         "prior_record": {
           "evidence_path": "docs/fidelity/evidence/store-instance-20261025-sol/prior-record.json",
@@ -41463,8 +41472,8 @@
             "{implementation_sha256}",
             "--root",
             "{root}",
-            "--out",
-            "/Users/haseeb-mir/Documents/Code/project-open-igi/build/runtime-traces/store-instance-acceptance-20261025-sol-2/gate-live-pair.json"
+            "--probe",
+            "scripts/probes/store_instance_handle.js"
           ],
           "timeout_seconds": 150
         },
@@ -41485,8 +41494,8 @@
           "evidence_sha256": "15a30eaa6bf8d8957aae5fa053715b5cb7aeb7e93d1200c916b6b150e2df552f"
         },
         "scope": {
-          "path": "docs/fidelity/scopes/store-instance-handle-20261025.md",
-          "sha256": "2bb935a0bcee1307d19faf99ea5a719d892d5cc8d40130353f4edfa817e194c7"
+          "path": "docs/fidelity/scopes/store-instance-handle-unified-20261025.md",
+          "sha256": "cfb6315b521adfe416c54943af8a0214c004832162f89df5699ad801e42f7263"
         },
         "limitations": [
           "Declared native scope only, not universal or whole-game parity.",
@@ -41494,7 +41503,8 @@
           "Author semantic review and independent BN/r2/angr evidence; independent human/agent critic not performed.",
           "The source provenance comment conservatively remains STRUCTURALLY_VERIFIED; the mismatch is a gate warning, retained to keep source identical to the tested build.",
           "No engine code changed or new native added; no deployment or release attestation. CRT/compiler startup and Windows SDK code are outside game-native transcription scope.",
-          "Linked into igi1.exe (14,266,312 bytes); runtime UNOBSERVED."
+          "Linked into igi1.exe (14,266,312 bytes); runtime UNOBSERVED.",
+          "Unified probe/source-annotation review only; fresh exact-image acceptance pending. No engine implementation changed."
         ],
         "acceptance": {
           "evidence_path": "docs/fidelity/evidence/store-instance-20261025-sol/acceptance.json",
@@ -41507,6 +41517,14 @@
         "strict_focus_gate": {
           "evidence_path": "docs/fidelity/evidence/store-instance-20261025-sol/accepted/gate.json",
           "evidence_sha256": "d8748ae425dbf3f55ecfe750e45c83f63980e37c50191f7f219bfd946c4665e2"
+        },
+        "source_identity_proof": {
+          "evidence_path": "docs/fidelity/evidence/annotation-review-0x0048F0D0-1880d321546bd937/proof.json",
+          "evidence_sha256": "9798052e0cbad6dd98a621dc97ddf885f38875c52a744a02defb2da297ccd7c7"
+        },
+        "runtime_probe": {
+          "path": "scripts/probes/store_instance_handle.js",
+          "sha256": "f9ecf75262861382321166b9bd3fb196285a3e8d67e45f077be1541855c6f3bb"
         }
       }
     },
