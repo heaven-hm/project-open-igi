@@ -164,8 +164,7 @@ class RetailImage:
                     break
                 if mnem == "jmp" and imms:
                     target = imms[0]
-                    if target > ins.address:
-                        jmps.append((ins.address, target))
+                    jmps.append((ins.address, target))
                     if ins.address == blocked_jmp:
                         break           # this edge is deliberately not followed
                     if target not in insns:
@@ -332,8 +331,7 @@ class RetailImage:
                     break
                 if mnem == "jmp" and imms:
                     target = imms[0]
-                    if target > ins.address:
-                        jmps.append((ins.address, target))
+                    jmps.append((ins.address, target))
                     if target in tail_targets:
                         break
                     if target not in insns:
