@@ -11,6 +11,29 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - `0x004F1A80` six-argument backfill, and three new natives
+
+- **Backfill complete**: 11 caller files, 52 call sites, all now passing the sixth argument. Nine files were mechanical; the two `%eax`
+  sites were read by hand and both turned out to be **real argument values, not leftovers** - `0x0047819F` passes the constant
+  `0x0056E228` returned by `0x00413DE0`, and `0x00488CEE` passes `0x00A76BE8` returned by `0x004F1CB0`. `native_477e30.cpp` had been
+  discarding the first value with a comment asserting the slot is never read; that comment was my wrong claim propagating into a file,
+  and both the code and the comment are corrected.
+- **Falsifiable shape recorded for the sixth argument**: of 52 sites, 45 pass `0` and 7 pass an address, and in three of four files the
+  same registrar body zeroes that global immediately before the appends. So the sixth word is either NULL or the **address of a static
+  object** - never a type id and never a small integer. A future site passing a small non-address value falsifies one of the readings.
+- **Three natives added to the build**: `core/native_46e370.cpp` (AIStationaryGunHolder, size `0x26A0`, eight-entry container, per-target
+  call table 33/18 against retail's 34/19 with `0x004A54A0` the only difference - the MSVC 6 stack probe, which the C++ frame replaces,
+  following the precedent recorded for `0x00512C30` in `terrain_draw.cpp`), `sys/native_4aff90.cpp` (fills 256 bytes with `0x01`, stores
+  1, **zero undefined symbols**), and `sys/native_4affb0.cpp` (`Sys_TranslateWildcardPattern_4AFFB0`, 576 bytes / 41 blocks / 187 insns,
+  **zero undefined and zero calls**).
+- **`0x004AFFB0` decoded from its tables rather than guessed**: the 86-byte class table at `0x004B0218` assigns class 0 "(", 1 ")", 2 "*",
+  3 "+", 4 "/" and "\", 5 "?", 6 "[", 7 "{", 8 "}", 9 the remaining 76 characters, and the ten-entry jump table at `0x004B01F0` maps those
+  classes to ten targets. Both tables were re-read programmatically by the Lead and match exactly; my own first eyeball read of the class
+  table was wrong, which is why data gets decoded rather than read. The tables are the compiler's lowering of a switch and are recorded in
+  the native's provenance, not claimed as separate data owners.
+- **Build green**, 14,328,796 bytes, sha256 `0d3e21bd...`. `core/native_46db40.cpp` (Task_DefineAddAmmo, 15 calls / 11 distinct) is held
+  out of the build: it calls `Sys_GetGlobalPointer_47CF10`, which has no implementation yet - a new gap, not a transcription error.
+
 ### 2026-10-25 - `0x004F1A80` takes six arguments, not five: a wrong store corrected
 
 - **A worker's re-derivation corrected a claim I had written.** `docs/fidelity/evidence/type-id-slots-and-ordering-20261025.md`

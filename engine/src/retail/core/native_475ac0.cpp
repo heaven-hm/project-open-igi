@@ -44,7 +44,12 @@ extern "C" std::uint8_t Script_PhaseIdGetE4_4F1A60(void);           // 0x004F1A6
 extern "C" std::uint8_t Script_PhaseIdGetE5_4F1A70(void);           // 0x004F1A70: argument-less byte getter (script_state.hpp)
 extern "C" void* Script_TaskContainer_Append(std::int32_t* const container, std::int32_t const arg2,
                                              std::int32_t const arg3, std::int32_t const arg4,
-                                             std::int32_t const arg5); // 0x004F1A80 (script/native_4f1a80.cpp)
+                                             std::int32_t const arg5, std::int32_t const arg6);
+// 0x004F1A80 (script/native_4f1a80.cpp). SIX arguments, corrected: the callee reads arg1..arg4, arg5 as a byte (recorded at record +0x0C)
+// and arg6 as a dword (recorded at record +0x08). The two reads are both `[esp+0x20]` in retail, at different push depths, with a `pop edi`
+// between them (0x004F1AB1 with twelve bytes pushed = arg5, 0x004F1ACA with eight = arg6). Earlier revisions of this file declared five
+// parameters and the tree's implementation wrote arg5 into both fields; both are now corrected. Every append below passes the sixth word that
+// retail pushes for it. // 0x004F1A80 (script/native_4f1a80.cpp)
 extern "C" void Script_QHashNodeRegister(void* arg1, void* value);  // 0x004B8810 (script/native_4b8810.cpp)
 
 extern "C" {
@@ -140,7 +145,7 @@ void Task_DefineMine()
                                 append_frame,                                 // argument 2: retail frame+0x00
                                 append_frame + 0x244,                         // argument 3: retail frame+0x244 (recorded difference 0x244)
                                 static_cast<std::int32_t>(Sys_GetGlobal32_4F0F50()), // argument 4: the type from 0x4F0F50
-                                7);                                           // argument 5: retail's leftover 7
+                                7, 0);                                           // argument 5: retail's leftover 7
 
     // Append 2: 0x00475BCE/0x00475BD0: push 0/7; 0x00475BD2: call 0x4F0F50; 0x00475BD7: push eax; 0x00475BD8: lea eax,[esp+0x24c]
     // (frame+0x240); 0x00475BDF: lea ecx,[esp+0xc] (frame+0x00); 0x00475BE3: push eax; 0x00475BE4: push ecx; 0x00475BE5: mov edx,[0x5BE39C];
@@ -150,7 +155,7 @@ void Task_DefineMine()
                                 append_frame,
                                 append_frame + 0x240,                         // 0x00475BD8: frame+0x240 (recorded difference 0x240)
                                 static_cast<std::int32_t>(Sys_GetGlobal32_4F0F50()),
-                                7);
+                                7, 0);
 
     // 0x00475BF1: mov eax,[0x5BE3A0] (a 32-bit load); 0x00475BF6: and eax,0xFFFF; 0x00475BFB: push eax;
     // 0x00475BFC: push "TASKTYPE_MINE"; 0x00475C01: call 0x4B8810; 0x00475C06: add esp,0x270; 0x00475C0C: ret.

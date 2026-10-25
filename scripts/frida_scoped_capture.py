@@ -41,10 +41,24 @@ def image_base(path):
     return struct.unpack_from('<I',raw,pe+52)[0]
 
 
+def startup_completion(rows):
+    """Only an explicit reviewed contract can stop at a startup-native return."""
+    values=[row.get('captureCompletion') for row in rows.values()]
+    if not any(value is not None for value in values):return None
+    approved={'mode':'native-return','expected_calls':1,'actions':'none'}
+    if not values or any(value!=approved for value in values):
+        raise ValueError('mixed or unsupported startup completion contract')
+    if any(type(value.get('expected_calls')) is not int for value in values):
+        raise ValueError('startup completion count must be an integer')
+    return approved
+
+
 def capture(device, executable, rows, side, primary_probe, action_probe, args, folder, game):
     record=dict(executable=str(executable),executable_sha256=file_digest(executable),result='incomplete',
                 cwd=str(game),arguments=['window',f'level{args.level}'],calls={a:[] for a in rows},hooks=[])
-    pid=None; session=None; script=None; actions=None; failures=[]
+    pid=None; session=None; script=None; actions=None; failures=[];completed=set()
+    completion=startup_completion(rows)
+    record['completion_contract']=completion
     raw=(folder/f'{side}.jsonl').open('w')
     try:
         pid=device.spawn([win_path(executable),'window',f'level{args.level}'],cwd=win_path(game))
@@ -55,6 +69,12 @@ def capture(device, executable, rows, side, primary_probe, action_probe, args, f
             payload=message.get('payload') or {}
             if data is not None: failures.append('unexpected unrecorded binary payload')
             if message.get('type')=='error' or payload.get('type')=='hook_failed': failures.append(message)
+            if payload.get('type')=='capture_complete' and completion:
+                address=payload.get('address')
+                if (address not in rows or payload.get('entries')!=completion['expected_calls']
+                        or payload.get('returns')!=completion['expected_calls']):
+                    failures.append('invalid native completion signal')
+                else:completed.add(address)
             if payload.get('type')=='observed':
                 address=payload.get('address')
                 if address not in record['calls']: failures.append('unexpected observed native address');return
@@ -73,15 +93,23 @@ def capture(device, executable, rows, side, primary_probe, action_probe, args, f
         record['escape']={'sent':False}
         while time.monotonic()<deadline:
             if failures: raise ValueError(f'capture errors: {failures}')
+            if completion and completed==set(rows):
+                if any(len(values)!=completion['expected_calls'] for values in record['calls'].values()):
+                    raise ValueError('completion signal omitted or duplicated required calls')
+                record['completed_at_native_return']=True
+                break
             if pid not in {p.pid for p in device.enumerate_processes()}:
                 raise ValueError('owned game exited during required observation')
             if all(record['calls'].values()) and first is None:
                 first=time.monotonic();deadline=first+args.observe
-            if time.monotonic()-started>=2 and not record['escape']['sent']:
+            if not completion and time.monotonic()-started>=2 and not record['escape']['sent']:
                 if actions is None: actions=session.create_script(action_probe);actions.load()
                 record['escape']=actions.exports_sync.press_escape()
             time.sleep(0.2)
-        if not record['escape'].get('sent'): raise ValueError('requested Escape was not delivered')
+        if completion:
+            if completed!=set(rows): raise ValueError('reviewed startup completion unobserved')
+            record['escape']={'sent':False,'reviewed_action':'none-native-return'}
+        elif not record['escape'].get('sent'): raise ValueError('requested Escape was not delivered')
         if any(not values for values in record['calls'].values()): raise ValueError('required method unobserved')
         if failures: raise ValueError(f'capture errors: {failures}')
         record['result']='captured'
@@ -159,6 +187,9 @@ def main():
         contracts={n['address']:n.get('runtime_contract',{}) for n in gate['checked_natives']}
         if any(c.get('probe_sha256')!=file_digest(args.probe) or c.get('actions_sha256')!=action_hash for c in contracts.values()):
             raise ValueError('reviewed probe/actions contract is missing or stale')
+        for side in layouts:
+            for address in required:
+                layouts[side][address]['captureCompletion']=contracts[address].get('capture_completion')
         identity_files=[retail,candidate,*sources,game/'config.qvm',game/'MISSIONS/location0'/f'LEVEL{args.level}'/'OBJECTS.QVM']
         before={str(p):file_digest(p) for p in identity_files}
         doc.update(binarySha256=file_digest(retail),candidateSha256=file_digest(candidate),staticGateSha256=scope_digest,

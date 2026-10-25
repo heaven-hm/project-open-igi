@@ -82,9 +82,14 @@ extern "C" std::uint8_t Sys_GetGlobal8_47E6F0(void);                // 0x0047E6F
 extern "C" void* Script_TaskContainer_Alloc(std::int32_t const count); // 0x004F1950
 extern "C" std::uint32_t Sys_GetGlobal32_4F1E20(void);              // 0x004F1E20: argument-less dword getter (sys/native_4f1e20.cpp)
 extern "C" std::uint32_t Sys_GetGlobal32_4F0FB0(void);              // 0x004F0FB0: argument-less dword getter (sys/native_4f0fb0.cpp)
+// 0x004F1A80 (script/native_4f1a80.cpp). SIX arguments, corrected: the callee reads arg1..arg4, arg5 as a byte (recorded at record +0x0C)
+// and arg6 as a dword (recorded at record +0x08). The two reads are both `[esp+0x20]` in retail, at different push depths, with a `pop edi`
+// between them (0x004F1AB1 with twelve bytes pushed = arg5, 0x004F1ACA with eight = arg6). Earlier revisions of this file declared five
+// parameters and the tree's implementation wrote arg5 into both fields; both are now corrected. Every append below passes the sixth word that
+// retail pushes for it, so the 0x00413DE0 result at 0x0047819F and the 0x004F1CB0-style values are real arguments rather than discarded ones.
 extern "C" void* Script_TaskContainer_Append(std::int32_t* const container, std::int32_t const arg2,
                                              std::int32_t const arg3, std::int32_t const arg4,
-                                             std::int32_t const arg5); // 0x004F1A80
+                                             std::int32_t const arg5, std::int32_t const arg6); // 0x004F1A80
 extern "C" void Script_QHashNodeRegister(void* arg1, void* value);  // 0x004B8810 (script/native_4b8810.cpp)
 
 // 0x00413B50, 0x00413B60, 0x00413DE0 and 0x00460BF0 have no implementation in the tree. Placeholder names describe the proven shape only.
@@ -363,17 +368,18 @@ void Task_DefineGun()
     // 0x004781A2: call 0x4F1E20; 0x004781A7: mov edx,[0x5BE3C0]; 0x004781AD: push eax; 0x004781AE: lea eax,[esp+0x110] (frame+0x104);
     // 0x004781B5: lea ecx,[esp+0xc] (frame+0x00); 0x004781BC: call 0x4F1A80; 0x004781C1: add esp,0x18.
     //
-    // 0x0047819A is a real call site: 0x413DE0 is an argument-less getter returning the constant address 0x0056E228, and its result is retail's
-    // SIXTH stack slot of the 0x4F1A80 call below (pushed first at 0x0047819F, so it is the last of that call's six arguments). 0x004F1A80 never
-    // reads that slot - its transcription in script/native_4f1a80.cpp takes five parameters and reads arg2..arg5 only - so the call is transcribed
-    // here in its exact retail position with its value discarded, rather than dropped or folded into an invented sixth parameter.
-    static_cast<void>(Sys_GetGlobalPtr_413DE0()); // 0x0047819A: call 0x413DE0 (result is the append's unread sixth stack slot)
+    // 0x0047819A is a real call site whose result is an argument: 0x413DE0 is an argument-less getter returning the constant address
+    // 0x0056E228, and retail pushes that result first at 0x0047819F, which makes it the SIXTH and last argument of the 0x4F1A80 call below.
+    // 0x004F1A80 reads six arguments and stores arg6 at record +0x08, so the value is passed here rather than discarded.
+    const std::uint32_t casing_parameter_address =
+        static_cast<std::uint32_t>(Sys_GetGlobalPtr_413DE0()); // 0x0047819A: call 0x413DE0 (0x0056E228, the append's sixth argument)
 
     Script_TaskContainer_Append(reinterpret_cast<std::int32_t*>(::g_5be3c0), // argument 1: the container
                                 append_frame,                                 // argument 2: retail frame+0x00
                                 append_frame + 0x104,                         // argument 3: retail frame+0x104 (recorded difference 0x104)
                                 static_cast<std::int32_t>(Sys_GetGlobal32_4F1E20()), // argument 4: the type from 0x4F1E20
-                                7);                                           // argument 5: retail's leftover 7
+                                7,                                            // argument 5: retail's leftover 7
+                                static_cast<std::int32_t>(casing_parameter_address)); // argument 6: 0x0056E228
 
     // Append 2: 0x004781C4/0x004781C6: push 0; push 7 (the first is the next getter's inert argument); 0x004781C8: call 0x4F0FB0;
     // 0x004781CD: mov edx,[0x5BE3C0]; 0x004781D4: lea eax,[esp+0x130] (frame+0x124); 0x004781DB: lea ecx,[esp+0xc] (frame+0x00);
@@ -382,7 +388,7 @@ void Task_DefineGun()
                                 append_frame,
                                 append_frame + 0x124,                         // 0x004781D4: frame+0x124 (recorded difference 0x124)
                                 static_cast<std::int32_t>(Sys_GetGlobal32_4F0FB0()),
-                                7);
+                                7, 0);                                        // argument 5/6: retail pushes 0 then 7
 
     // ---- Registration 2: "GunCasing" ---------------------------------------------------------------------------------------------------
     // 0x004781EA/0x004781EC: push 0; push 0x32 (both inert arguments of the getter); 0x004781EE: call 0x4C48C0; 0x004781F3: push eax;

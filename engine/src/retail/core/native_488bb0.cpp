@@ -45,9 +45,14 @@ extern "C" std::uint32_t Sys_GetGlobal32_4F0F50(void);                  // 0x004
 extern "C" std::uint32_t Camera_Get_4F1000(void);                       // 0x004F1000: argument-less dword getter
 extern "C" void* Sys_InitFloatPair_4F1CB0(void);                        // 0x004F1CB0: returns the address of the pair it initialises
 extern "C" void* Script_TaskContainer_Alloc(std::int32_t const count);  // 0x004F1950
+// 0x004F1A80 (script/native_4f1a80.cpp). SIX arguments, corrected: the callee reads arg1..arg4, arg5 as a byte (recorded at record +0x0C)
+// and arg6 as a dword (recorded at record +0x08). The two reads are both `[esp+0x20]` in retail, at different push depths, with a `pop edi`
+// between them (0x004F1AB1 with twelve bytes pushed = arg5, 0x004F1ACA with eight = arg6). Earlier revisions of this file declared five
+// parameters and the tree's implementation wrote arg5 into both fields; both are now corrected. Every append below passes the sixth word that
+// retail pushes for it, so the 0x004F1CB0 result at 0x00488CEE is a real argument rather than a discarded one.
 extern "C" void* Script_TaskContainer_Append(std::int32_t* const container, std::int32_t const arg2,
                                              std::int32_t const arg3, std::int32_t const arg4,
-                                             std::int32_t const arg5);  // 0x004F1A80 (copied from script/native_4f1a80.cpp)
+                                             std::int32_t const arg5, std::int32_t const arg6);  // 0x004F1A80 (copied from script/native_4f1a80.cpp)
 extern "C" void Script_QHashNodeRegister(void* const arg1, void* const value); // 0x004B8810
 extern "C" void Script_QHashNodeRegisterEx(void* const arg0, void* const arg1, char const* const arg2,
                                            void* const arg3); // 0x004B8890 (copied from script/native_4b8890.cpp)
@@ -143,7 +148,7 @@ void Task_DefineLevelFlow()
                                 append_frame,                                 // argument 2: retail frame+0x00
                                 append_frame + 0x20,                          // argument 3: retail frame+0x20 (recorded difference 0x20)
                                 static_cast<std::int32_t>(Sys_GetGlobal32_4F1010()), // argument 4: the type from 0x4F1010
-                                7);                                           // argument 5: retail's leftover 7
+                                7, 0);                                           // argument 5: retail's leftover 7
 
     // 0x00488CC7/0x00488CC9: push 0; push 7 (inert); 0x00488CCB: call 0x4F0F70; 0x00488CD0: push eax; 0x00488CD1: lea ecx,[esp+0x44]
     // (frame+0x38); 0x00488CDA: lea edx,[esp+0xc]; 0x00488CE1: call 0x4F1A80; 0x00488CE6: add esp,0x18.
@@ -151,16 +156,20 @@ void Task_DefineLevelFlow()
                                 append_frame,
                                 append_frame + 0x38,                          // 0x00488CD1: frame+0x38 (recorded difference 0x38)
                                 static_cast<std::int32_t>(Sys_GetGlobal32_4F0F70()),
-                                7);
+                                7, 0);
 
     // 0x00488CE9: call 0x4F1CB0; 0x00488CEE: push eax; 0x00488CEF: push 7; 0x00488CF1: call 0x4F0F50; 0x00488CF6: lea ecx,[esp+0x74]
     // (frame+0x6C); 0x00488D00: lea edx,[esp+0xc]; 0x00488D07: call 0x4F1A80; 0x00488D0C: add esp,0x18.
-    Sys_InitFloatPair_4F1CB0(); // 0x00488CE9: retail pushes this call's result into 0x4F0F50, which ignores its arguments; the side effect is kept
+    // 0x00488CE9 returns the address of the pair it initialises (0x00A76BE8), and retail pushes that result first at 0x00488CEE, which makes
+    // it the SIXTH and last argument of the 0x4F1A80 call below; the side effect of the initialisation is kept as well.
+    const std::uint32_t float_pair_address =
+        static_cast<std::uint32_t>(reinterpret_cast<std::uintptr_t>(Sys_InitFloatPair_4F1CB0())); // 0x00488CE9: call 0x4F1CB0
     Script_TaskContainer_Append(reinterpret_cast<std::int32_t*>(::g_5c8aa4),
                                 append_frame,
                                 append_frame + 0x6C,                          // 0x00488CF6: frame+0x6C (recorded difference 0x6C)
                                 static_cast<std::int32_t>(Sys_GetGlobal32_4F0F50()),
-                                7);
+                                7,                                            // argument 5: retail's leftover 7
+                                static_cast<std::int32_t>(float_pair_address)); // argument 6: 0x00A76BE8
 
     // 0x00488D0F/0x00488D11: push 0; push 7 (inert); 0x00488D13: call 0x4F0FC0; 0x00488D18: lea ecx,[esp+0x84] (frame+0x7C);
     // 0x00488D25: lea edx,[esp+0xc]; 0x00488D2C: call 0x4F1A80; 0x00488D31: add esp,0x18.
@@ -168,7 +177,7 @@ void Task_DefineLevelFlow()
                                 append_frame,
                                 append_frame + 0x7C,                          // 0x00488D18: frame+0x7C (recorded difference 0x7C)
                                 static_cast<std::int32_t>(Sys_GetGlobal32_4F0FC0()),
-                                7);
+                                7, 0);
 
     // 0x00488D34/0x00488D36: push 0; push 7 (inert); 0x00488D38: call 0x4F0FC0; 0x00488D3D: lea ecx,[esp+0xd4] (frame+0xCC);
     // 0x00488D4A: lea edx,[esp+0xc]; 0x00488D51: call 0x4F1A80; 0x00488D56: add esp,0x18.
@@ -176,7 +185,7 @@ void Task_DefineLevelFlow()
                                 append_frame,
                                 append_frame + 0xCC,                          // 0x00488D3D: frame+0xCC (recorded difference 0xCC)
                                 static_cast<std::int32_t>(Sys_GetGlobal32_4F0FC0()), // second use of the same getter, exactly as retail
-                                7);
+                                7, 0);
 
     // 0x00488D59/0x00488D5B: push 0; push 7 (inert); 0x00488D5D: call 0x4F1000; 0x00488D62: lea ecx,[esp+0x78] (frame+0x70);
     // 0x00488D6C: lea edx,[esp+0xc]; 0x00488D73: call 0x4F1A80; 0x00488D78: add esp,0x18.
@@ -184,7 +193,7 @@ void Task_DefineLevelFlow()
                                 append_frame,
                                 append_frame + 0x70,                          // 0x00488D62: frame+0x70 (recorded difference 0x70)
                                 static_cast<std::int32_t>(Camera_Get_4F1000()),
-                                7);
+                                7, 0);
 
     // 0x00488D7B/0x00488D7D: push 0; push 7 (inert); 0x00488D7F: call 0x4F0F50; 0x00488D84: lea ecx,[esp+0x7c] (frame+0x74);
     // 0x00488D8E: lea edx,[esp+0xc]; 0x00488D95: call 0x4F1A80 (no cleanup of its own: 0x00488DD7 cleans this group together with the next two).
@@ -192,7 +201,7 @@ void Task_DefineLevelFlow()
                                 append_frame,
                                 append_frame + 0x74,                          // 0x00488D84: frame+0x74 (recorded difference 0x74)
                                 static_cast<std::int32_t>(Sys_GetGlobal32_4F0F50()), // second use of the same getter, exactly as retail
-                                7);
+                                7, 0);
 
     // 0x00488D9A: mov ecx,[0x5C8AB8]; 0x00488DA0: and ecx,0xffff; 0x00488DA6: push ecx; 0x00488DA7: push "TASKTYPE_LEVELFLOW"; 0x00488DAC: call 0x4B8810.
     Script_QHashNodeRegister(const_cast<char*>("TASKTYPE_LEVELFLOW"), // 0x00488DA7: push 0x00541134

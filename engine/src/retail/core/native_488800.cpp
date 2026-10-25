@@ -43,7 +43,12 @@ extern "C" std::uint32_t Core_GetRenderWordA_4F0FA0(void);              // 0x004
 extern "C" void* Script_TaskContainer_Alloc(std::int32_t const count);  // 0x004F1950
 extern "C" void* Script_TaskContainer_Append(std::int32_t* const container, std::int32_t const arg2,
                                              std::int32_t const arg3, std::int32_t const arg4,
-                                             std::int32_t const arg5);  // 0x004F1A80 (copied from script/native_4f1a80.cpp)
+                                             std::int32_t const arg5, std::int32_t const arg6);
+// 0x004F1A80 (script/native_4f1a80.cpp). SIX arguments, corrected: the callee reads arg1..arg4, arg5 as a byte (recorded at record +0x0C)
+// and arg6 as a dword (recorded at record +0x08). The two reads are both `[esp+0x20]` in retail, at different push depths, with a `pop edi`
+// between them (0x004F1AB1 with twelve bytes pushed = arg5, 0x004F1ACA with eight = arg6). Earlier revisions of this file declared five
+// parameters and the tree's implementation wrote arg5 into both fields; both are now corrected. Every append below passes the sixth word that
+// retail pushes for it.  // 0x004F1A80 (copied from script/native_4f1a80.cpp)
 
 extern "C" {
 
@@ -138,7 +143,7 @@ void Task_DefineEditVariable()
                                 append_frame,                                 // argument 2: retail frame+0x00
                                 append_frame + 0x20,                          // argument 3: retail frame+0x20 (recorded difference 0x20)
                                 static_cast<std::int32_t>(Sys_GetGlobal32_4F1010()), // argument 4: the type from 0x4F1010
-                                7);                                           // argument 5: retail's leftover 7
+                                7, 0);                                           // argument 5: retail's leftover 7
 
     // 0x00488908/0x0048890A: push 0; push 7 (inert); 0x0048890C: call 0x4F0FA0; 0x00488911: lea ecx,[esp+0xe0] (frame+0xD8);
     // 0x00488918: push eax; 0x0048891E: lea edx,[esp+0xc]; 0x00488925: call 0x4F1A80; 0x0048892A: add esp,0x18.
@@ -146,7 +151,7 @@ void Task_DefineEditVariable()
                                 append_frame,
                                 append_frame + 0xD8,                          // 0x00488911: frame+0xD8 (recorded difference 0xD8)
                                 static_cast<std::int32_t>(Core_GetRenderWordA_4F0FA0()),
-                                7);
+                                7, 0);
 
     // 0x0048892D/0x0048892F: push 0; push 7 (inert); 0x00488931: call 0x4F0FC0; 0x00488936: lea ecx,[esp+0x40] (frame+0x38);
     // 0x0048893A: push eax; 0x00488940: lea edx,[esp+0xc]; 0x00488947: call 0x4F1A80; 0x0048894C: add esp,0x18.
@@ -154,7 +159,7 @@ void Task_DefineEditVariable()
                                 append_frame,
                                 append_frame + 0x38,                          // 0x00488936: frame+0x38 (recorded difference 0x38)
                                 static_cast<std::int32_t>(Sys_GetGlobal32_4F0FC0()),
-                                7);
+                                7, 0);
 
     // 0x0048894F/0x00488951: push 0; push 7 (inert); 0x00488953: call 0x4F0FC0; 0x00488958: lea ecx,[esp+0x90] (frame+0x88);
     // 0x0048895F: push eax; 0x00488965: lea edx,[esp+0xc]; 0x0048896C: call 0x4F1A80 (no cleanup of its own);
@@ -163,7 +168,7 @@ void Task_DefineEditVariable()
                                 append_frame,
                                 append_frame + 0x88,                          // 0x00488958: frame+0x88 (recorded difference 0x88)
                                 static_cast<std::int32_t>(Sys_GetGlobal32_4F0FC0()), // second use of the same getter, exactly as retail
-                                7);
+                                7, 0);
 } // end of Task_DefineEditVariable
 
 } // extern "C"

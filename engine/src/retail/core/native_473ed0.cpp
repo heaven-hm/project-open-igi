@@ -57,7 +57,12 @@ extern "C" std::uint8_t Script_PhaseIdGetE5_4F1A70(void);          // 0x004F1A70
 extern "C" void* Script_TaskContainer_Alloc(std::int32_t count);   // 0x004F1950 (script/native_4f1950.cpp)
 extern "C" void* Script_TaskContainer_Append(std::int32_t* const container, std::int32_t const arg2,
                                              std::int32_t const arg3, std::int32_t const arg4,
-                                             std::int32_t const arg5); // 0x004F1A80 (script/native_4f1a80.cpp)
+                                             std::int32_t const arg5, std::int32_t const arg6);
+// 0x004F1A80 (script/native_4f1a80.cpp). SIX arguments, corrected: the callee reads arg1..arg4, arg5 as a byte (recorded at record +0x0C)
+// and arg6 as a dword (recorded at record +0x08). The two reads are both `[esp+0x20]` in retail, at different push depths, with a `pop edi`
+// between them (0x004F1AB1 with twelve bytes pushed = arg5, 0x004F1ACA with eight = arg6). Earlier revisions of this file declared five
+// parameters and the tree's implementation wrote arg5 into both fields; both are now corrected. Every append below passes the sixth word that
+// retail pushes for it. // 0x004F1A80 (script/native_4f1a80.cpp)
 
 extern "C" {
 
@@ -195,7 +200,7 @@ void Task_DefineStationaryGun()
                                 append_frame,                                 // argument 2: retail frame+0x00
                                 append_frame + 0xF0,                          // argument 3: retail frame+0xF0 (recorded difference 0xF0)
                                 static_cast<std::int32_t>(Sys_GetGlobal32_4F1010()), // argument 4: the type from 0x4F1010
-                                7);                                           // argument 5: retail's leftover 7
+                                7, 0);                                           // argument 5: retail's leftover 7
 
     // Append 2: 0x00474076/0x00474078: push 0/7; 0x0047407A: call 0x4F0F70; 0x0047407F: mov edx,[0x5BE38C]; 0x00474085: push eax;
     // 0x00474086: lea eax,[esp+0x114] (frame+0x108); 0x0047408D: lea ecx,[esp+0xC]; 0x00474094: call 0x4F1A80; 0x00474099: add esp,0x18.
@@ -203,7 +208,7 @@ void Task_DefineStationaryGun()
                                 append_frame,
                                 append_frame + 0x108,                         // 0x00474086: frame+0x108
                                 static_cast<std::int32_t>(Sys_GetGlobal32_4F0F70()),
-                                7);
+                                7, 0);
 
     // Append 3: 0x0047409C/0x0047409E: push 0/7; 0x004740A0: call 0x4F0FD0; 0x004740A5: mov edx,[0x5BE38C]; 0x004740AB: push eax;
     // 0x004740AC: lea eax,[esp+0x1BC] (frame+0x1B0); 0x004740B3: lea ecx,[esp+0xC]; 0x004740BA: call 0x4F1A80; 0x004740BF: add esp,0x18.
@@ -211,7 +216,7 @@ void Task_DefineStationaryGun()
                                 append_frame,
                                 append_frame + 0x1B0,                         // 0x004740AC: frame+0x1B0
                                 static_cast<std::int32_t>(Core_GetRenderWordB_4F0FD0()),
-                                7);
+                                7, 0);
 
     // Append 4: 0x004740C2/0x004740C4: push 0/7; 0x004740C6: call 0x4F0FE0; 0x004740CB: mov edx,[0x5BE38C]; 0x004740D1: push eax;
     // 0x004740D2: lea eax,[esp+0x1CC] (frame+0x1C0); 0x004740D9: lea ecx,[esp+0xC]; 0x004740E0: call 0x4F1A80; 0x004740E5: add esp,0x18.
@@ -219,7 +224,7 @@ void Task_DefineStationaryGun()
                                 append_frame,
                                 append_frame + 0x1C0,                         // 0x004740D2: frame+0x1C0
                                 static_cast<std::int32_t>(Sys_GetGlobal32_4F0FE0()),
-                                7);
+                                7, 0);
 
     // Append 5: 0x004740E8/0x004740EA: push 0/7; 0x004740EC: call 0x4F0F30; 0x004740F1: mov edx,[0x5BE38C]; 0x004740F7: push eax;
     // 0x004740F8: lea eax,[esp+0x1EC] (frame+0x1E0); 0x004740FF: lea ecx,[esp+0xC]; 0x00474106: call 0x4F1A80; 0x0047410B: add esp,0x18.
@@ -227,7 +232,7 @@ void Task_DefineStationaryGun()
                                 append_frame,
                                 append_frame + 0x1E0,                         // 0x004740F8: frame+0x1E0
                                 static_cast<std::int32_t>(Sys_GetGlobal32_4F0F30()),
-                                7);
+                                7, 0);
 
     // Append 6: 0x0047410E/0x00474110: push 0/7; 0x00474112: call 0x4F0F30 (the same getter as append 5); 0x00474117: push eax;
     // 0x00474118: lea eax,[esp+0x1F0] (frame+0x1E4); 0x0047411F: mov edx,[0x5BE38C]; 0x00474125: lea ecx,[esp+0xC]; 0x0047412C: call
@@ -236,7 +241,7 @@ void Task_DefineStationaryGun()
                                 append_frame,
                                 append_frame + 0x1E4,                         // 0x00474118: frame+0x1E4
                                 static_cast<std::int32_t>(Sys_GetGlobal32_4F0F30()),
-                                7);
+                                7, 0);
 
     // Append 7: 0x00474134/0x00474136: push 0/7; 0x00474138: call 0x4F0F30 (the same getter again); 0x0047413D: mov edx,[0x5BE38C];
     // 0x00474143: push eax; 0x00474144: lea eax,[esp+0x1F4] (frame+0x1E8); 0x0047414B: lea ecx,[esp+0xC]; 0x00474152: call 0x4F1A80;
@@ -245,7 +250,7 @@ void Task_DefineStationaryGun()
                                 append_frame,
                                 append_frame + 0x1E8,                         // 0x00474144: frame+0x1E8
                                 static_cast<std::int32_t>(Sys_GetGlobal32_4F0F30()),
-                                7);
+                                7, 0);
 
     // Append 8: 0x0047415A: push 0x005BE380 (inert argument of the getter); 0x0047415F: push 7; 0x00474161: call 0x4F0FA0 (which reads
     // neither); 0x00474166: mov edx,[0x5BE38C]; 0x0047416C: push eax; 0x0047416D: lea eax,[esp+0x1F8] (frame+0x1EC); 0x00474174: lea
@@ -255,7 +260,7 @@ void Task_DefineStationaryGun()
                                 append_frame,
                                 append_frame + 0x1EC,                         // 0x0047416D: frame+0x1EC
                                 static_cast<std::int32_t>(Core_GetRenderWordA_4F0FA0()),
-                                7);
+                                7, static_cast<std::int32_t>(static_cast<std::uintptr_t>(0x005BE380U)));
 
     // 0x00474180: add esp,0x238; 0x00474186: ret. No 0x004B8810 script-name tail exists in this body.
 } // end of Task_DefineStationaryGun

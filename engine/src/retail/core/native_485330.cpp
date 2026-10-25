@@ -55,7 +55,12 @@ extern "C" std::uint32_t Camera_Get_4F1000(void);                       // 0x004
 extern "C" void* Script_TaskContainer_Alloc(std::int32_t const count);  // 0x004F1950
 extern "C" void* Script_TaskContainer_Append(std::int32_t* const container, std::int32_t const arg2,
                                              std::int32_t const arg3, std::int32_t const arg4,
-                                             std::int32_t const arg5);  // 0x004F1A80 (copied from script/native_4f1a80.cpp)
+                                             std::int32_t const arg5, std::int32_t const arg6);
+// 0x004F1A80 (script/native_4f1a80.cpp). SIX arguments, corrected: the callee reads arg1..arg4, arg5 as a byte (recorded at record +0x0C)
+// and arg6 as a dword (recorded at record +0x08). The two reads are both `[esp+0x20]` in retail, at different push depths, with a `pop edi`
+// between them (0x004F1AB1 with twelve bytes pushed = arg5, 0x004F1ACA with eight = arg6). Earlier revisions of this file declared five
+// parameters and the tree's implementation wrote arg5 into both fields; both are now corrected. Every append below passes the sixth word that
+// retail pushes for it.  // 0x004F1A80 (copied from script/native_4f1a80.cpp)
 
 extern "C" {
 
@@ -151,49 +156,49 @@ void Task_DefineStatusMessage()
                                 append_frame,                                 // argument 2: retail frame+0x00
                                 append_frame + 0x20,                          // argument 3: retail frame+0x20 (recorded difference 0x20)
                                 static_cast<std::int32_t>(Sys_GetGlobal32_4F1010()), // argument 4: the type from 0x4F1010
-                                7);                                           // argument 5: retail's leftover 7
+                                7, 0);                                           // argument 5: retail's leftover 7
 
     // Append 2: 0x0048543A/0x0048543C push 0/7; 0x0048543E: call 0x4F0F70; 0x0048544A: lea eax,[esp+0x44] (frame+0x38); 0x00485455: call 0x4F1A80.
     Script_TaskContainer_Append(reinterpret_cast<std::int32_t*>(::g_5c8a38),
                                 append_frame,
                                 append_frame + 0x38,                          // 0x0048544A: frame+0x38 (recorded difference 0x38)
                                 static_cast<std::int32_t>(Sys_GetGlobal32_4F0F70()),
-                                7);
+                                7, 0);
 
     // Append 3: 0x0048545D/0x0048545F push 0/7; 0x00485461: call 0x4F0FC0; 0x0048546D: lea eax,[esp+0x6c] (frame+0x60); 0x00485478: call 0x4F1A80.
     Script_TaskContainer_Append(reinterpret_cast<std::int32_t*>(::g_5c8a38),
                                 append_frame,
                                 append_frame + 0x60,                          // 0x0048546D: frame+0x60 (recorded difference 0x60)
                                 static_cast<std::int32_t>(Sys_GetGlobal32_4F0FC0()),
-                                7);
+                                7, 0);
 
     // Append 4: 0x00485480/0x00485482 push 0/7; 0x00485484: call 0x4F0FC0; 0x00485490: lea eax,[esp+0xbc] (frame+0xB0); 0x0048549E: call 0x4F1A80.
     Script_TaskContainer_Append(reinterpret_cast<std::int32_t*>(::g_5c8a38),
                                 append_frame,
                                 append_frame + 0xB0,                          // 0x00485490: frame+0xB0 (recorded difference 0xB0)
                                 static_cast<std::int32_t>(Sys_GetGlobal32_4F0FC0()),
-                                7);
+                                7, 0);
 
     // Append 5: 0x004854A6/0x004854A8 push 0/7; 0x004854AA: call 0x4F0FF0; 0x004854B6: lea eax,[esp+0xc0] (frame+0xB4); 0x004854C4: call 0x4F1A80.
     Script_TaskContainer_Append(reinterpret_cast<std::int32_t*>(::g_5c8a38),
                                 append_frame,
                                 append_frame + 0xB4,                          // 0x004854B6: frame+0xB4 (recorded difference 0xB4)
                                 static_cast<std::int32_t>(Sys_GetGlobal32_4F0FF0()),
-                                7);
+                                7, 0);
 
     // Append 6: 0x004854CC/0x004854CE push 0/7; 0x004854D0: call 0x4F0FD0; 0x004854DC: lea eax,[esp+0x1c0] (frame+0x1B4); 0x004854EA: call 0x4F1A80.
     Script_TaskContainer_Append(reinterpret_cast<std::int32_t*>(::g_5c8a38),
                                 append_frame,
                                 append_frame + 0x1B4,                         // 0x004854DC: frame+0x1B4 (recorded difference 0x1B4)
                                 static_cast<std::int32_t>(Core_GetRenderWordB_4F0FD0()),
-                                7);
+                                7, 0);
 
     // Append 7: 0x004854F2/0x004854F4 push 0/7; 0x004854F6: call 0x4F1000; 0x00485502: lea eax,[esp+0x1d0] (frame+0x1C4); 0x00485510: call 0x4F1A80.
     Script_TaskContainer_Append(reinterpret_cast<std::int32_t*>(::g_5c8a38),
                                 append_frame,
                                 append_frame + 0x1C4,                         // 0x00485502: frame+0x1C4 (recorded difference 0x1C4)
                                 static_cast<std::int32_t>(Camera_Get_4F1000()),
-                                7);
+                                7, 0);
 
     // Append 8: 0x00485518/0x0048551A push 0/7; 0x0048551C: call 0x4F1000 (the same getter as append 7); 0x00485528: lea eax,[esp+0x1d2]
     // (frame+0x1C6); 0x00485536: call 0x4F1A80.
@@ -201,7 +206,7 @@ void Task_DefineStatusMessage()
                                 append_frame,
                                 append_frame + 0x1C6,                         // 0x00485528: frame+0x1C6 (recorded difference 0x1C6)
                                 static_cast<std::int32_t>(Camera_Get_4F1000()),
-                                7);
+                                7, 0);
 
     // Append 9: 0x0048553E: push 0x5C8A30 (the getter's inert argument - the address of a global this body itself writes at 0x00485400);
     // 0x00485543: push 7; 0x00485545: call 0x4F0F50; 0x00485551: lea eax,[esp+0x1e4] (frame+0x1D8); 0x0048555F: call 0x4F1A80;
@@ -210,7 +215,7 @@ void Task_DefineStatusMessage()
                                 append_frame,
                                 append_frame + 0x1D8,                         // 0x00485551: frame+0x1D8 (recorded difference 0x1D8)
                                 static_cast<std::int32_t>(Sys_GetGlobal32_4F0F50()),
-                                7);
+                                7, static_cast<std::int32_t>(static_cast<std::uintptr_t>(0x005C8A30U)));
 } // end of Task_DefineStatusMessage
 
 } // extern "C"

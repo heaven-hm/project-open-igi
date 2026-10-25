@@ -36,7 +36,12 @@ extern "C" std::uint32_t Sys_GetGlobal32_4F0FF0(void);                  // 0x004
 extern "C" void* Script_TaskContainer_Alloc(std::int32_t const count);  // 0x004F1950
 extern "C" void* Script_TaskContainer_Append(std::int32_t* const container, std::int32_t const arg2,
                                              std::int32_t const arg3, std::int32_t const arg4,
-                                             std::int32_t const arg5);  // 0x004F1A80 (copied from script/native_4f1a80.cpp)
+                                             std::int32_t const arg5, std::int32_t const arg6);
+// 0x004F1A80 (script/native_4f1a80.cpp). SIX arguments, corrected: the callee reads arg1..arg4, arg5 as a byte (recorded at record +0x0C)
+// and arg6 as a dword (recorded at record +0x08). The two reads are both `[esp+0x20]` in retail, at different push depths, with a `pop edi`
+// between them (0x004F1AB1 with twelve bytes pushed = arg5, 0x004F1ACA with eight = arg6). Earlier revisions of this file declared five
+// parameters and the tree's implementation wrote arg5 into both fields; both are now corrected. Every append below passes the sixth word that
+// retail pushes for it.  // 0x004F1A80 (copied from script/native_4f1a80.cpp)
 
 extern "C" {
 
@@ -111,7 +116,7 @@ void Task_DefineSubLevel()
                                 append_frame,                                 // argument 2: retail frame+0x00
                                 append_frame + 0x20,                          // argument 3: retail frame+0x20 (recorded difference 0x20)
                                 static_cast<std::int32_t>(Sys_GetGlobal32_4F0FF0()), // argument 4: the type from 0x4F0FF0
-                                7);                                           // argument 5: retail's leftover 7
+                                7, 0);                                           // argument 5: retail's leftover 7
 } // end of Task_DefineSubLevel
 
 } // extern "C"
