@@ -196,3 +196,42 @@ I had the raw material - the call census I recorded lists `0x004F1950` once and
 `0x004F1A80` ten times - and read it as ten anonymous event registrations instead of
 one container create plus ten appends. **The numbers were on the page; the structure
 was not.**
+
+
+---
+
+## CORRECTIONS (analyst, after transcription — all three accepted)
+
+**1. The `0x401530` pairing in this recon is WRONG, and it is a state difference, not a
+style one.** This recon says "`0x42B500` at `0x0042AD41` with `push 7`" is a `0x00401530`
+site. The bytes at the call site `0x0042AD49` are `e8 b2 66 fd ff` = **`0x00401400`**;
+r2 and the raw bytes agree. **`0x0042AD41` is the `push`, not the call.** The body's two
+`0x00401530` sites are **`0x0042AD00`** (handler `0x0042A100`, event 2) and
+**`0x0042AD5D`** (handler `0x0042B700`, event 1).
+**Why it matters:** `0x00401400` increments the context handler count at `0x00567C6C` and
+`0x00401530` the counter at `0x00567C70`. **Transcribing `0x42B500` as a NoContext link
+would have incremented the wrong counter** — a wrong memory effect with no build or link
+signal, and this recon is what a transcriber would have copied it from.
+
+**2. This recon's call table is STALE — seven of its entries do not occur in the body at
+all.** Re-measured from the routine's own call instructions: **53 sites over 24 distinct
+targets.** Absent from the body: `0x004ECDB0`, `0x004FB700`, `0x004F4820`, `0x004F4800`,
+`0x004F4660`, `0x004F4600`, **`0x0042A2C0`**. Missing from the table: `0x004F1950` ×1 and
+`0x004F0F50` ×6.
+**Consequence for the open item about `0x0042A2C0`: it is NOT a callee of this routine**,
+so it is not evidence of anything here. The prose count "24 distinct over 53 sites" was
+right; **the table underneath it was not, and I published both as one measurement.**
+
+**3. Glob trap for existence checks: `0x004E6610` is `core/native_004e6610.cpp`.** The
+filename carries a leading zero, so `native_4e6610.cpp` does not exist and a naive check
+reports a gap that is not one. It is transcribed as `Task_GetCachedEventId_4E6610`.
+**This is the same class of fault as my `// Native:` regex: the check encoded a naming
+assumption the tree does not share.**
+
+**Extent confirmed independently:** `0x0042B025` = `0x0042ACC0` + 870, with the `ret` at
+`0x0042B03C` excluded — the `pd`-prints-two-`ret`s trap recorded in section 1 of this
+recon, now confirmed from the other side.
+
+**Stack accounting reconciles with zero slack:** 117 pushes (468 B) + frame `0x8E0`
+(2272 B) = 2740 B, and the 24 cleanups total exactly 2740 B (111 dwords incremental plus
+574 in the final `add esp,0x8F8`, which is the frame plus the last append's six dwords).
