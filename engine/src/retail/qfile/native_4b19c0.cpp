@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x004B19C0-0x004B1A27 (104 bytes, 1 block, 0 edges, 45 instructions).
 // Tools/evidence: radare2 6.2.0 af/pdf and the raw bytes; section 22.3 of the evidence sheet. Creates the records that 0x004B1A90 walks from the same head word 0x00943970.
 // Behavior/CFG: measures the name (strlen), allocates strlen+0x1C bytes through Mem_Alloc (0x004B0C60) with alignment 4, clears the 0x1C-byte header, splices the record into the list whose head word is 0x00943970 through HeapList_Insert (0x004AF8F0), points the record's +0x08 word at the trailing name area, copies the name there (NUL included), and returns the record. No branch and no conditional error path; retail measures the length twice and repeats two zero stores the header clear already performed - both are kept.
-// Status/limits: STRUCTURALLY_VERIFIED; runtime UNOBSERVED. The record type and head storage are shared with native_4b1a90.cpp through loaded_file_record.hpp. The +0x04 field is written by HeapList_Insert; no native in the tree reads it yet. GCC inlines the 0x1C-byte clear and calls CRT strlen/memcpy where retail inlines rep sequences, so the emitted body is larger in bytes with the same call order.
+// Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. The record type and head storage are shared with native_4b1a90.cpp through loaded_file_record.hpp. The +0x04 field is written by HeapList_Insert; no native in the tree reads it yet. GCC inlines the 0x1C-byte clear and calls CRT strlen/memcpy where retail inlines rep sequences, so the emitted body is larger in bytes with the same call order.
 #include "igi/retail/qfile/loaded_file_record.hpp"
 
 #include "igi/retail/mem/heap_list.hpp"

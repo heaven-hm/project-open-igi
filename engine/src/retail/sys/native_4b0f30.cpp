@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x004B0F30-0x004B0F61 (50 bytes, 3 blocks, 3 edges, 17 instructions).
 // Tools/evidence: radare2 6.2.0 af/pdf and the raw bytes (8b442404 8b0d644aa900 3bc1 7423 8bc8 56 c1e106 03c8 57 bf804ea900 a3644aa900 8d34cda050a900 b982000000 f3a5 5f 5e c3); section 22.3 of the evidence sheet.
 // Behavior/CFG: returns immediately when the requested mode equals the current mode word 0x00A94A64; otherwise records the mode in 0x00A94A64 and copies the 0x208-byte mode block at 0x00A94E80 into the 0x208-stride slot table at 0x00A950A0 + mode*0x208. No calls; no branch other than the equal-mode early return.
-// Status/limits: STRUCTURALLY_VERIFIED; runtime UNOBSERVED. The slot table 0x00A950A0 is owned by sys/native_4b0e00.cpp and the mode word 0x00A94A64 by sys/native_4b0f70.cpp; the 0x208-byte source block 0x00A94E80 has no owner in the tree, so this file defines it - it ends exactly at 0x00A950A0, so the definition does not overlap the slot table. What the source block holds is not established, and nothing writes it yet.
+// Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. The slot table 0x00A950A0 is owned by sys/native_4b0e00.cpp and the mode word 0x00A94A64 by sys/native_4b0f70.cpp; the 0x208-byte source block 0x00A94E80 has no owner in the tree, so this file defines it - it ends exactly at 0x00A950A0, so the definition does not overlap the slot table. What the source block holds is not established, and nothing writes it yet.
 #include <cstdint>
 #include <cstring>
 

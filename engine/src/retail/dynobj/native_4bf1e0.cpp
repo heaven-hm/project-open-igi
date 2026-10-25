@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x004BF1E0-0x004BF1EB (12 bytes, 1 block, 0 edges, 5 instructions).
 // Tools/evidence: radare2 6.2.0 af/pdf and NASM ndisasm over the raw bytes (8b 44 24 04 50 ff 50 18 83 c4 04 c3); nine nop bytes follow, then the next entry.
 // Behavior/CFG: one cdecl argument is passed unchanged as the single argument of a call through the handler pointer stored at object+0x18, then the callee's value is returned. No branch, no store, no global.
-// Status/limits: STRUCTURALLY_VERIFIED; runtime UNOBSERVED. The handler is fetched from the object, so there is no direct callee and the object's type is not established beyond the +0x18 slot. An unset slot would call null, exactly as retail would.
+// Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. The handler is fetched from the object, so there is no direct callee and the object's type is not established beyond the +0x18 slot. An unset slot would call null, exactly as retail would.
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)

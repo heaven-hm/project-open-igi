@@ -16,7 +16,7 @@ void* g_window_handle = nullptr;
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x0048F0E0..0x0048F0EA.
 // Behavior/CFG: one basic block loads the 32-bit argument, stores it at the window handle global 0x005C8BC4, and returns the same bits in EAX. The native at 0x0048F100 reads that global and calls SetWindowTextA with it, so the global is the window handle.
-// Status/limits: STRUCTURALLY_VERIFIED; the load, the store and the EAX return match the retail exactly.
+// Status/limits: BUILD_VERIFIED; the load, the store and the EAX return match the retail exactly.
 void* NATIVE_DECL SetWindowHandle(void* window)
 {
     g_window_handle = window;

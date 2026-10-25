@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x004F1D60 (see the per-instruction comments; 8 instructions, 1 blocks, 0 edges).
 // Tools/evidence: radare2 6.2.0 af/afij/pdf and NASM ndisasm over the exact bytes; it stores twice into the head, once into head+4 and once into head+8
 // Behavior/CFG: initialises a four-field head: context at +0x0C, head+4 at +0x00, the head address at +0x08 and zero at +4. Straight-line, no branch, no call.
-// Status/limits: TRANSCRIBED; runtime UNOBSERVED. The object's type is not established beyond the offsets this body reads.
+// Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. The object's type is not established beyond the offsets this body reads.
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)

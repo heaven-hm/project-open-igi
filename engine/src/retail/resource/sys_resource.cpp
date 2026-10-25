@@ -1,7 +1,11 @@
 #include "igi/retail/resource/sys_resource.hpp"
 
 #include "igi/retail/core/retail_error.hpp"
-#include "igi/retail/mem/heap_list.hpp"
+namespace igi::retail::sys {
+// 0x004AF960: the list unlink half, transcribed in engine/src/retail/sys/native_4af960.cpp (C++ linkage, namespace-scoped).
+void* Sys_UnlinkListNode_4AF960(void* node);
+} // namespace igi::retail::sys
+
 #include "igi/retail/resource/is_resource_loaded.hpp"
 #include "igi/retail/resource/resource_lifecycle.hpp"
 #include "igi/retail/sys/ilff_navigation.hpp"
@@ -215,7 +219,7 @@ void* Resource_CreateNode(const char* context, void* arg2, void* arg3, std::int3
 // Native: Resource_FreeNode; retail VA 0x004B5C90; signature/calling convention unknown.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004B5C90-0x004B5D6A, 218 bytes, digest ff4a8050127977de2b75901a65663b90290f997e9f45732720f5b2c1994cb5b2; CLEAN/sys/004B5C90-Resource_FreeNode.c.
-// Behavior/CFG: switches on `context[9]` (`+0x24` resource kind): - case 0 (container): walks child list at `context[5]`, recursively calling Resource_FreeNode on each child node (`i_1[2]`), unlinks `context` via Camera_ApplyHandiCam_33 (0x004AF910), frees `context[0x0D]` via Sys_OpenFileStream_5 (0x004B1A30), and returns the slot to free-list `g_943e24` / `g_943e28`; - case 1, 4 (sub-resource): unlinks child link `&context[2]` and `context`, then returns slot; - case 2 (standalone raw resource): frees `context[0x0D]`, unlinks `context`, returns slot; - case 3: unlinks `context` and returns slot. radare2 13 blocks/16 edges; Binary Ninja 13 blocks; 100.0% structural agreement.
+// Behavior/CFG: switches on `context[9]` (`+0x24` resource kind): - case 0 (container): walks child list at `context[5]`, recursively calling Resource_FreeNode on each child node (`i_1[2]`), unlinks `context` via Sys_UnlinkListNode_4AF960 (0x004AF960), frees `context[0x0D]` via Sys_OpenFileStream_5 (0x004B1A30), and returns the slot to free-list `g_943e24` / `g_943e28`; - case 1, 4 (sub-resource): unlinks child link `&context[2]` and `context`, then returns slot; - case 2 (standalone raw resource): frees `context[0x0D]`, unlinks `context`, returns slot; - case 3: unlinks `context` and returns slot. radare2 13 blocks/16 edges; Binary Ninja 13 blocks; 100.0% structural agreement.
 // Return value: when the freed node's `pool_active_idx` equals the decremented `g_943e28` (freeing the
 // last active slot) retail returns the new count in EAX; otherwise, after the swap-pop relocates the
 // last active node into the freed position, retail returns that relocated node's address in EAX
@@ -249,7 +253,7 @@ std::int32_t Resource_FreeNode(void* context)
         case 1:
         case 4:
         {
-            Camera_ApplyHandiCam_33(&node->link_08[0]);
+            igi::retail::sys::Sys_UnlinkListNode_4AF960(&node->link_08[0]);
             goto label_4b5ced;
         }
         case 2:

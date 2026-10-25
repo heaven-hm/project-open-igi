@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: radare2 6.2.0 complete listing (8b442408 c7000b000000 c3); one of the 83 handler pointers embedded by the 0x004EE970 catalogue.
 // Behavior/CFG: stores the constant 0xB into the dword pointed to by its second argument and returns; the first argument is not read.
-// Status/limits: STRUCTURALLY_VERIFIED (static only); the constant is 0xB exactly as retail encodes it; runtime UNOBSERVED.
+// Status/limits: BUILD_VERIFIED (static only); the constant is 0xB exactly as retail encodes it; runtime UNOBSERVED.
 #include <cstdint>
 
 extern "C" {

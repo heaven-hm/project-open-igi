@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x004AF890-0x004AF899 (10 bytes, 1 block, 0 edges, 3 instructions).
 // Tools/evidence: radare2 6.2.0 af/pdf and the raw bytes; section 22.3 of the evidence sheet (landability sweep rows).
 // Behavior/CFG: stores its argument into 0x0093625C and returns. No branch.
-// Status/limits: STRUCTURALLY_VERIFIED; runtime UNOBSERVED. Any word it touches and no other translation unit owns is declared here and starts zeroed.
+// Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. Any word it touches and no other translation unit owns is declared here and starts zeroed.
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)

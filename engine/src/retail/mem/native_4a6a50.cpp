@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: radare2 6.2.0 complete listing (55 8bec 51 56 8b7508 85f6 745a a12c24c300 83f803 7516 56 e824430000 59 85c0 56 7436 50 e843430000 59 59 eb3a 83f802 7526 ... 56 6a00 ff352824c300 ff15a4305300 5e c9 c3); imports KERNEL32 HeapFree.
 // Behavior/CFG: the allocator-mode dispatcher for free. A null pointer returns immediately. Mode 3 (0x00C3242C == 3) looks the pointer up in the small-block pool with 0x4AAD90 and frees it through 0x4AADBB when found. Mode 2 looks it up in the bucket heap with 0x4AB7F5 and marks the page through 0x4AB84C when found, passing the node, the masked base and the returned byte address. Every path that does not find the block - including any other mode value - falls through to HeapFree([0x00C32428], 0, pointer).
-// Status/limits: STRUCTURALLY_VERIFIED (static only); both "not found" branches are the same shared HeapFree tail in retail (0x4A6AA7), preserved here; runtime UNOBSERVED.
+// Status/limits: BUILD_VERIFIED (static only); both "not found" branches are the same shared HeapFree tail in retail (0x4A6AA7), preserved here; runtime UNOBSERVED.
 #include "igi/retail/mem/mem_alloc.hpp"
 #include "igi/retail/mem/mode2_bucket.hpp"
 

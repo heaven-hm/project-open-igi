@@ -4,34 +4,9 @@
  "result": "passed",
  "address": "0x004B8A50",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "implementation_sha256": "17d7ef30330e93850f8187f7abb139cef4162d6964cd530536fed0d7a799d5cf",
- "header_sha256": "6f9fe69a3c6e7eb07b38d45ea26b32d08e9ebab5c9c74667867d516f992efea8",
- "object_path": "build/qvm-execute/cmake-build/CMakeFiles/igi_qvm_execute_object.dir/engine/src/retail/script/qvm_execute.cpp.obj",
- "object_sha256": "e99c151a15de28954d1983ba68318c91d315ec52e0489ca7b6a2b5a9af98ab0d",
+ "implementation_sha256": "9e5aa05e75b64c8efe1c1bf293315e40b9874f60a95490299f5e31ae486a051e",
  "executed": true,
- "command": "cmake --build build/qvm-execute/cmake-build --target igi_qvm_execute_object -j4",
- "compiler": "/opt/homebrew/bin/i686-w64-mingw32-g++ (GCC, -O3 -DNDEBUG from CMAKE_BUILD_TYPE=Release)",
- "target": "Windows x86 (Intel 80386 COFF object / pe-i386)",
- "symbol": {
-  "name": "Qvm_GetFloatArg",
-  "offset": "0x1b0",
-  "size_bytes": 47
- },
- "undefined_symbols": [
-  "Qvm_RunProgram_4BD080",
-  "Qvm_SourceBufferInit_4C0200",
-  "Qvm_SourceReaderInit_4BF1C0",
-  "Qvm_ReadNextBlock_4BFC70",
-  "Qvm_ParseBlock_4BF1F0",
-  "Qvm_ReleaseBlockTree_4BFA80",
-  "Qvm_ReleaseBlock_4BF8F0",
-  "Qvm_ReleaseSourceReader_4BEFC0",
-  "Qvm_ReadIndexedArgument_4BD010",
-  "Qvm_EvaluateArgumentValue_4B9660",
-  "igi::retail::script::g_a965a0",
-  "igi::retail::script::g_a96598",
-  "igi::retail::script::g_a965a8",
-  "igi::retail::script::Qvm_ReportError"
- ],
- "note": "The translation unit compiled successfully for x86 and both symbols are present in a pe-i386 object. It is compiled as the separate igi_qvm_execute_object target, not linked into igi: ten retail callees and the three shared QVM state words are still unported. Qvm_ReportError is the exception among the undefined symbols: it is already implemented in qvm_native_loader.cpp and links once that unit is in the igi target. A successful compile is not behavioural equivalence."
+ "command": "i686-w64-mingw32-g++ -std=c++20 -I engine/include -c engine/src/retail/script/qvm_execute.cpp -o /tmp/native-x86.o",
+ "target": "Windows x86 (Intel 80386 COFF object)",
+ "note": "Candidate translation unit compiled successfully for the retail x86 architecture."
 }

@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x004C0170-0x004C01C9 (89 bytes, 13 blocks, 17 edges, 36 instructions).
 // Tools/evidence: radare2 6.2.0 af/afij/pdf and NASM ndisasm over the exact bytes; six exits, no call, one field load (+0x14) and two character-array reads (offset 0 and 1).
 // Behavior/CFG: takes one cdecl argument, loads the character pointer from object+0x14, and classifies the text by its first one or two characters: a leading digit returns 1; a leading '$' (0x24) returns 1 when the next byte is a digit, a-f or A-F; a leading '0' returns 1 when the next byte is 'x' (0x78); and independently of the first byte, a second byte of 'X' (0x58) returns 1. Everything else returns 0. The order of those tests and the fall-through between them follow the bytes exactly.
-// Status/limits: TRANSCRIBED; runtime UNOBSERVED. The argument's object type is not established beyond the +0x14 pointer this body reads; the routine only inspects two characters and returns 0 or 1.
+// Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. The argument's object type is not established beyond the +0x14 pointer this body reads; the routine only inspects two characters and returns 0 or 1.
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)

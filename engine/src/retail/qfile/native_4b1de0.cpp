@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x004B1DE0-0x004B1DF7 (24 bytes, 1 block, 6 instructions: 8b4c2404 / 8d04cd00000000 / 2bc1 / 8d0480 / 8d04852c379400 / c3).
 // Tools/evidence: radare2 6.2.0 af/pdf; section 21 of the evidence sheet records the callers 0x004B1420, 0x004B1510 and 0x004B1AC0.
 // Behavior/CFG: returns 0x0094372C + index * 0x8C, which is record[index].+0x40 - the NUL-terminated device name pointer; no branch, no call, no memory access.
-// Status/limits: STRUCTURALLY_VERIFIED (1 block / 0 edges, emitted instructions identical); runtime UNOBSERVED. Owns the 0x009436EC table storage because no transcribed native writes it yet (the retail registrar 0x004B1B90 is missing).
+// Status/limits: BUILD_VERIFIED (1 block / 0 edges, emitted instructions identical); runtime UNOBSERVED. Owns the 0x009436EC table storage because no transcribed native writes it yet (the retail registrar 0x004B1B90 is missing).
 #include "igi/retail/qfile/device_table.hpp"
 
 #include <cstdint>

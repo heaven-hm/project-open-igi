@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x004CEF30-0x004CEF3A (11 bytes, 1 block, 3 instructions: a1 eceda400 / a3 f0eda400 / c3).
 // Tools/evidence: radare2 6.2.0 pd; target of the tail jump at 0x00402C36 from the startup init sequence 0x00402930 (evidence section 19).
 // Behavior/CFG: copies the dword at 0x00A4EDEC to 0x00A4EDF0 and returns; no branches, no calls, no other memory access.
-// Status/limits: STRUCTURALLY_VERIFIED (1 block / 0 edges matching retail, emitted instructions identical); runtime UNOBSERVED. The caller chain does not read the value left in EAX, so the ABI is declared void while the retail result register keeps the copied dword.
+// Status/limits: BUILD_VERIFIED (1 block / 0 edges matching retail, emitted instructions identical); runtime UNOBSERVED. The caller chain does not read the value left in EAX, so the ABI is declared void while the retail result register keeps the copied dword.
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)

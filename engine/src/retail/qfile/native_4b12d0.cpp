@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x004B12D0-0x004B12E7 (24 bytes, 3 blocks, 3 edges).
 // Tools/evidence: radare2 6.2.0 af/pdf; section 22 of the evidence sheet (qfile init chain).
 // Behavior/CFG: walks from 0x009423C0 in 0x94-byte steps while below 0x00943640, storing zero to the dword at each step; returns void. Nothing else is read or written.
-// Status/limits: STRUCTURALLY_VERIFIED; runtime UNOBSERVED. The 0x94-stride block from 0x009423C0 is BSS and has no owner yet, so it is declared here.
+// Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. The 0x94-stride block from 0x009423C0 is BSS and has no owner yet, so it is declared here.
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)

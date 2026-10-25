@@ -4,7 +4,7 @@
  "result": "passed",
  "address": "0x004B8CE0",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "implementation_sha256": "30c16379b8e9e7ea47294ad0b4e8d014311ca21c4e9488e164dd93f1fbe16ae4",
+ "implementation_sha256": "268ce4589b7ddfeb4342cf5cd841dd5186de41f35b140e61024e6d8403e7bd21",
  "executed": true,
  "command": "i686-w64-mingw32-g++ -std=c++20 -I engine/include -c engine/src/retail/script/native_4b8ce0.cpp -o /tmp/native-x86.o",
  "target": "Windows x86 (Intel 80386 COFF object)",

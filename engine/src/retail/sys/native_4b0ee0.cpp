@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x004B0EE0-0x004B0F2B (76 bytes, 5 blocks, 6 edges, 26 instructions).
 // Tools/evidence: radare2 6.2.0 af/pd and the raw bytes (83ec08 53 8b5c2414 55 8b6c2414 56 57 33ff bea050a900 / 8a8604020000 ... / ffd5 / 81c608020000 47 81fee060a900 / c3); section 22.3 of the evidence sheet.
 // Behavior/CFG: walks the eight 0x208-stride render-mode records at 0x00A950A0 up to 0x00A960E0 and, for each record whose +0x204 flag is non-zero, calls the first argument as a cdecl callback with (pointer to a two-word local {index, record name pointer}, second argument). The locals are filled AFTER the two pushes in retail's own order: index first, then the name pointer. Nothing is returned.
-// Status/limits: STRUCTURALLY_VERIFIED; runtime UNOBSERVED. The record table 0x00A950A0 is defined by native_4b0e00.cpp; this file refers to it. The callback's own contract is unproven beyond the observed two-argument cdecl call shape, and the eight-record count is the 0x1040-byte scanned extent divided by 0x208.
+// Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. The record table 0x00A950A0 is defined by native_4b0e00.cpp; this file refers to it. The callback's own contract is unproven beyond the observed two-argument cdecl call shape, and the eight-record count is the 0x1040-byte scanned extent divided by 0x208.
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)

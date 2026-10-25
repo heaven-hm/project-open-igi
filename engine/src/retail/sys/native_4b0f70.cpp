@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x004B0F70-0x004B0F7A (11 bytes, 1 block, 0 edges, 2 instructions: c705644aa900ffffffff / c3).
 // Tools/evidence: radare2 6.2.0 af/pdf and the raw bytes; section 22.3 of the evidence sheet (landability sweep row 0x004B0F70).
 // Behavior/CFG: stores 0xFFFFFFFF into the dword at 0x00A94A64 and returns; no branch, no call, no argument, no stack use.
-// Status/limits: STRUCTURALLY_VERIFIED; runtime UNOBSERVED. The word 0x00A94A64 already has an owner inside engine/ (the sweep marked it owner), so this file does not define it.
+// Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. The word 0x00A94A64 already has an owner inside engine/ (the sweep marked it owner), so this file does not define it.
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)

@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x004B1BC0-0x004B1BD9 (26 bytes, 1 block, 0 edges, 7 instructions).
 // Tools/evidence: radare2 6.2.0 af/pdf and the raw bytes; section 22.3 of the evidence sheet (landability sweep rows).
 // Behavior/CFG: dispatches the driver record's +0x04 slot (0x009436B4) with the single index argument, then pops the pushed copy; the slot's EAX is returned. No branch.
-// Status/limits: STRUCTURALLY_VERIFIED; runtime UNOBSERVED. Any word it touches and no other translation unit owns is declared here and starts zeroed.
+// Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. Any word it touches and no other translation unit owns is declared here and starts zeroed.
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)

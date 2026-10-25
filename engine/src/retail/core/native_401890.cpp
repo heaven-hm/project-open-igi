@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: radare2 6.2.0 bytes/disassembly (8b442408 668b4c2404 8d0440 d1e0 c68032f954000 1 66898830f9 5400 c68033f9540000 c3).
 // Behavior/CFG: index = arg2 * 6 (NO 0xFF mask, unlike 0x401860); stores used byte 1 at +2, the 16-bit arg1 at +0, then byte 0 at +3; void return. Single block, no callees.
-// Status/limits: STRUCTURALLY_VERIFIED (static only); sibling of 0x401860 with two retail differences preserved deliberately: no index mask and the +3 byte written as 0 instead of 1; runtime UNOBSERVED.
+// Status/limits: BUILD_VERIFIED (static only); sibling of 0x401860 with two retail differences preserved deliberately: no index mask and the +3 byte written as 0 instead of 1; runtime UNOBSERVED.
 #include "igi/retail/core/task_types.hpp"
 
 #include <cstdint>

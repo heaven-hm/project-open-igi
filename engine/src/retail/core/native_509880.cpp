@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x00509880-0x00509885 (6 bytes, 1 block, 0 edges, 2 instructions).
 // Tools/evidence: radare2 6.2.0 af/pdf and the raw bytes; section 22.3 of the evidence sheet.
 // Behavior/CFG: returns the dword at 0x00A7B2D8; no branch, no call, no store, no argument.
-// Status/limits: STRUCTURALLY_VERIFIED; runtime UNOBSERVED. The word at 0x00A7B2D8 has no other owner in the tree, so it is declared here and starts zeroed.
+// Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. The word at 0x00A7B2D8 has no other owner in the tree, so it is declared here and starts zeroed.
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)

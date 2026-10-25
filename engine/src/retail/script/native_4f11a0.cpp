@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: radare2 6.2.0 complete listing (56 57 8b7c240c 57 e8b4d7ffff 8d0440 83c404 8b0485a80ca700 8b30 85f6 7420 8b4808 8b09 85c9 7406 3bcf 7415 eb09 50 e8bcfaffff 83c404 8bc6 8b36 85f6 75e0 33c0 5f 5e c3).
 // Behavior/CFG: finds the hash node whose key matches the argument. It hashes with 0x4EE960 (value % 0xFB), multiplies by 3, loads the bucket pointer from 0x00A70CA8, and walks the singly-linked node list from [bucket]. For each node it loads the key through [node+0x08]; a null key releases that node with 0x4F0C90 and continues, a matching key returns the node itself, and an exhausted list returns null.
-// Status/limits: STRUCTURALLY_VERIFIED (static only); the node list link is the node's first word; a null key means "stale slot" in retail and is released rather than skipped, which is preserved; the bucket table is zero-initialised storage because its insert counterpart is untranscribed; runtime UNOBSERVED.
+// Status/limits: BUILD_VERIFIED (static only); the node list link is the node's first word; a null key means "stale slot" in retail and is released rather than skipped, which is preserved; the bucket table is zero-initialised storage because its insert counterpart is untranscribed; runtime UNOBSERVED.
 #include "igi/retail/script/hash_table.hpp"
 
 #include <cstdint>

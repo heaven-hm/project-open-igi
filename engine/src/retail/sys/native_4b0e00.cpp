@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x004B0E00-0x004B0E4A (75 bytes, 6 blocks, 7 edges, 22 instructions).
 // Tools/evidence: radare2 6.2.0 af/pd and the raw bytes (33c0 b9a452a900 / 803900 / 81c108020000 40 81f9e462a900 / 50 68a06e5400 e886e9ffff 83c408 ebfe / 8991a050a900 c681a452a9..01 / c3); section 22.3 of the evidence sheet.
 // Behavior/CFG: scans the 0x208-stride flag bytes at 0x00A952A4 for the first zero entry, counting in EAX, until 0x00A962E4. With no free entry it calls Debug_Error("RenderMode: Failed to create new rendermode '%s'", name) and spins at 0x004B0E2D. Otherwise it stores the name pointer at 0x00A950A0 + index*0x208 (retail computes index<<6 + index then <<3, i.e. *520) and sets the flag byte at 0x00A952A4 + index*0x208 to 1.
-// Status/limits: STRUCTURALLY_VERIFIED; runtime UNOBSERVED. The record table 0x00A950A0 has no external owner, so this file defines it; it starts zeroed, so every slot reads free exactly as an unwritten table would. The record's fields beyond the +0x00 pointer and the flag at +0x204 that this routine touches are not established, so the table is raw bytes rather than a described structure.
+// Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. The record table 0x00A950A0 has no external owner, so this file defines it; it starts zeroed, so every slot reads free exactly as an unwritten table would. The record's fields beyond the +0x00 pointer and the flag at +0x204 that this routine touches are not established, so the table is raw bytes rather than a described structure.
 #include "igi/retail/core/retail_error.hpp"
 
 #include <cstdint>

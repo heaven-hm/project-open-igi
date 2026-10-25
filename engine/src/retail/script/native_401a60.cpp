@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: radare2 6.2.0 linear decode; docs/fidelity/evidence/0x4EE970-data-extents.md sections 12 and 17.4.
 // Behavior/CFG: loads the dword live-task-count storage at 0x00567C58 and returns it in EAX; no arguments, no callees, single basic block.
-// Status/limits: TRANSCRIBED (static only); runtime UNOBSERVED because the startup boundary throws before this native runs. The storage is now defined by its retail writer, the task allocator 0x004012F0, so this file only declares it.
+// Status/limits: BUILD_VERIFIED (static only); runtime UNOBSERVED because the startup boundary throws before this native runs. The storage is now defined by its retail writer, the task allocator 0x004012F0, so this file only declares it.
 #include <cstdint>
 
 extern "C" {

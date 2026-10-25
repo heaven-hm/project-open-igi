@@ -32,15 +32,77 @@ def digest(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
-def save(path, value):
+def save(path, value, *, sort_keys=True):
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_name(path.name + '.' + uuid.uuid4().hex + '.tmp')
-    temporary.write_text(json.dumps(value, indent=2, sort_keys=True) + '\n')
+    temporary.write_text(json.dumps(value, indent=2, sort_keys=sort_keys) + '\n')
     os.replace(temporary, path)
 
 
 def git(root, *args):
     return subprocess.check_output(['git', *args], cwd=root).decode().split('\0')
+
+
+def intake_candidates(root, paths, addresses):
+    """Register unique provenance-bound definitions, never verification claims."""
+    from native_gate import implementation_natives, normalize_address
+    manifest=root/'docs/fidelity/native-verification.json'
+    original=manifest.read_bytes()
+    document=json.loads(original)
+    records={}
+    for row in document['natives']:
+        records.setdefault(normalize_address(row['address']),[]).append(row)
+    definitions={}
+    for path in sorted((root/'engine/src/retail').rglob('*.cpp')):
+        relative=str(path.relative_to(root))
+        for native in implementation_natives(path,relative):
+            definitions.setdefault(native['address'],[]).append((path,relative,native))
+    added=[]
+    for address, entries in sorted(definitions.items()):
+        # Scan the entire implementation tree for duplicates before scoping.
+        # No guessed names, filenames-as-addresses or conflict overwrites.
+        if len(entries)!=1 or len(records.get(address,[]))>1:
+            continue
+        path,relative,native=entries[0]
+        if addresses:
+            if address not in addresses:continue
+        elif paths is not None and relative not in paths:
+            continue
+        previous=records.get(address,[None])[0]
+        if previous and previous.get('implementation',{}).get('path','').startswith('engine/'):
+            continue
+        identifier=re.match(r'([A-Za-z_]\w*)(?=\s|;|\(|$)',native['name'])
+        if not identifier:continue
+        name=identifier[1]
+        # A comment alone is not an implementation or a resolved ABI.
+        body=path.read_text()
+        code=re.sub(r'/\*.*?\*/|//[^\n]*','',body,flags=re.S)
+        if not re.search(r'\b'+re.escape(name)+r'\s*\([^;{}]*\)\s*(?:noexcept\s*)?\{',code):
+            continue
+        artifact=re.search(r'Artifact:.*?SHA256\s+([0-9a-fA-F]{64})',body)
+        expected=document.get('binary_sha256')
+        if artifact and expected and artifact[1].lower()!=expected.lower():
+            continue
+        row=dict(address=address,name=name,binary_sha256=expected,
+                 implementation=dict(path=relative,sha256=digest(path)),
+                 verification=dict(status='TRANSCRIBED',selected_decompiler='binary_ninja',
+                     candidate_symbol='_'+name,
+                     limitations=['Automatically registered from a unique source provenance VA and definition; ABI, static semantics and paired runtime remain unverified.']))
+        if previous:
+            archive=root/'build/native-auto/intake'/('prior-'+address+'-'+hashlib.sha256(json.dumps(previous,sort_keys=True).encode()).hexdigest()+'.json')
+            save(archive,previous)
+            row['verification']['prior_catalog_record']=dict(path=str(archive.relative_to(root)),sha256=digest(archive))
+            document['natives'][document['natives'].index(previous)]=row
+        else:
+            document['natives'].append(row)
+        added.append(dict(address=address,path=relative,name=name,status='TRANSCRIBED'))
+    if added:
+        if manifest.read_bytes()!=original:
+            raise ValueError('manifest changed during intake; retry without overwriting concurrent edits')
+        save(manifest,document,sort_keys=False)
+        save(root/'build/native-auto/intake/latest.json',dict(kind='igi-native-candidate-intake',
+             verified=False,registered=added))
+    return added
 
 
 def inventory(root):
@@ -282,7 +344,7 @@ def verify(root, job, record, folder, args):
     result=None
     for number in range(1,maximum+1):
         attempt=folder/f'attempt-{number}'
-        print(f"ATTEMPT {number}/{maximum} {job['address']}",flush=True)
+        print(f"ATTEMPT {number}/{maximum} {job['address']}",flush=True,file=sys.stderr)
         result=verify_once(root,job,record,attempt,args)
         policy=repair_policy(result)
         attempts.append(dict(number=number,result=result['status'],error=result.get('error'),
@@ -304,9 +366,13 @@ def refresh_ledger(root):
 def cycle(root, args):
     state_path = args.state or root / 'build/native-auto/state.json'
     prior = json.loads(state_path.read_text()) if state_path.exists() else {}
-    jobs, records, issues, context = inventory(root)
     paths = selected_paths(root, args.scope, args.base, args.head)
+    registrations=[]
+    if args.command != 'scan':
+        registrations=intake_candidates(root,paths,args.address)
+    jobs, records, issues, context = inventory(root)
     required = select(root, jobs, paths, args.address)
+    required.update(row['address'] for row in registrations if row['address'] in jobs)
     if not args.address and paths and 'docs/fidelity/native-verification.json' in paths:
         base = args.base if args.scope == 'range' else 'HEAD'
         previous = subprocess.run(['git', 'show', base + ':docs/fidelity/native-verification.json'],
@@ -373,7 +439,7 @@ def cycle(root, args):
                 continue
             if job['status'] == 'passed' or (job['status'] == 'blocked' and not args.retry):
                 continue
-            print('VERIFY', va, job['name'], flush=True)
+            print('VERIFY', va, job['name'], flush=True, file=sys.stderr)
             result = verify(root, job, records[va], root / 'build/native-auto/runs' / run_id / va, args)
             fresh, fresh_records, _, current = inventory(root)
             if current != context or fresh.get(va, {}).get('fingerprint') != job['fingerprint']:
@@ -387,11 +453,11 @@ def cycle(root, args):
             jobs[va] = result
             save(state_path, {'schema_version': 1, 'kind': 'igi-native-auto-state', 'tasks': jobs})
             refresh_ledger(root)
-            print(result['status'].upper(), va, result.get('error', ''), flush=True)
+            print(result['status'].upper(), va, result.get('error', ''), flush=True,file=sys.stderr)
     passed = [va for va in required if jobs[va]['status'] == 'passed' and jobs[va]['verified']]
     result = {'schema_version': 1, 'kind': 'igi-native-auto-state', 'scope': args.scope,
         'tasks': jobs, 'required': sorted(required), 'issues': relevant_issues,
-        'selected_count': len(required), 'passed_count': len(passed),
+        'selected_count': len(required), 'passed_count': len(passed), 'intake':registrations,
         'result': 'no_native_changes' if not required and not relevant_issues else
                   ('passed' if required and len(passed) == len(required) and not relevant_issues else 'pending'),
         'verified': bool(required) and len(passed) == len(required) and not relevant_issues}
@@ -399,7 +465,7 @@ def cycle(root, args):
     # Derived ledger only; never changes acceptance or native manifest status.
     refresh_ledger(root)
     print(json.dumps({k:result[k] for k in ('scope', 'selected_count', 'passed_count', 'result', 'verified')} |
-                     {'issue_count':len(relevant_issues), 'issues':relevant_issues[:8],
+                     {'issue_count':len(relevant_issues), 'issues':relevant_issues[:8], 'intake':registrations,
                       'state':str(state_path)}), flush=True)
     return 0 if result['result'] in {'passed', 'no_native_changes'} or args.command == 'scan' and not relevant_issues else 1
 

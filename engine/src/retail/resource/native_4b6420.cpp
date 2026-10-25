@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x004B6420-0x004B643D (30 bytes, 1 block, 0 edges, 12 instructions).
 // Tools/evidence: radare2 6.2.0 af/pdf and the raw bytes (8b442408 8b4c240c 8b542404 6a00 6a03 50 51 6a00 52 e8b6f5ffff 83c418 c3); section 22.3 of the evidence sheet.
 // Behavior/CFG: forwards to Resource_CreateNode (0x004B59F0) with the fixed resource kind 3 and null second and sixth arguments: (argument1, null, argument3, argument2, 3, null). Six dwords are pushed in retail's order, 0x18 bytes are cleaned, and the node pointer the callee returns is returned unchanged. No branch, no data reference, no store.
-// Status/limits: STRUCTURALLY_VERIFIED; runtime UNOBSERVED. Resource_CreateNode is transcribed in engine/src/retail/resource/sys_resource.cpp. The meanings of the three wrapper parameters beyond their use as the callee's context/size/data slots are not established.
+// Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. Resource_CreateNode is transcribed in engine/src/retail/resource/sys_resource.cpp. The meanings of the three wrapper parameters beyond their use as the callee's context/size/data slots are not established.
 #include "igi/retail/resource/sys_resource.hpp"
 
 #include <cstdint>

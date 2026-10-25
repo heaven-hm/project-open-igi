@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: radare2 6.2.0 complete listing (prologue 53 8b5c2410 55 56 8b742410 57 8b4604 50 53 e8.. 8b16 8d0c40 83c408 8b2c8a 8b7d00 85ff; tails 8a10 8aca 3a16 751c 84c9 7414 8a5001 8aca 3a5601 750e 83c002 83c602 84c9 75e0 / 33c0 eb05 / 1bc0 83d8ff / 85c0 7419 8bef 8b3f 85ff 75c6 / 8b4c2418 ... c70100000000 32c0 / 8b442418 ... 8928 b001); three call sites confirm 3 args (list, out, value); callee 0x4C0530 landed.
 // Behavior/CFG: hashes value with 0x4C0530 against the bucket count at list+4, selects the 12-byte-stride bucket, takes node = bucket[3*hash], next = node->next, and if next is null reports a miss (*out = null, return 0). Otherwise it compares value against node->key (node+8) with retail's 2-byte unrolled byte compare and sbb sign trick, and on equality stores node into *out and returns 1; on inequality it advances node = next, next = next->next and repeats while next is non-null, else reports a miss.
-// Status/limits: STRUCTURALLY_VERIFIED (static only); retail quirks preserved - the guard tests next before comparing node, and a null next after advancing goes straight to the miss path without comparing the new node; runtime UNOBSERVED.
+// Status/limits: BUILD_VERIFIED (static only); retail quirks preserved - the guard tests next before comparing node, and a null next after advancing goes straight to the miss path without comparing the new node; runtime UNOBSERVED.
 #include <cstdint>
 
 extern "C" std::int32_t Script_Hash32(char const* text, std::int32_t bucket_count);

@@ -256,3 +256,17 @@ observation tooling from the selected decompiler and candidate evidence. They
 cannot change engine files, relax gates or approve a native. Unknown ABI/effects,
 missing calls, unsupported comparisons and rejected proposals remain inconclusive.
 This is not a guarantee of autonomous repair or equivalence for arbitrary natives.
+
+## Automatic registration of new implementations
+
+Before a run/watch verification cycle, the main script discovers unique retail
+VA provenance blocks in the selected engine sources and confirms a matching
+function definition. Missing catalog bindings are registered as `TRANSCRIBED`
+with the current source hash, candidate symbol and no verification claims. Those
+addresses enter the same sequential queue immediately. `scan` remains read-only.
+Duplicate VA definitions, conflicting engine bindings, inconsistent artifact
+hashes, comment-only declarations and unknown addresses are never auto-approved.
+Historical external-catalog labels are archived rather than inherited as proof.
+Intake metadata lives under `build/native-auto/intake/`; it does not populate the
+verified-only SQLite database. Existing staged-input freeze checks still apply.
+Progress goes to stderr; stdout is JSON and can be piped directly to `jq`.

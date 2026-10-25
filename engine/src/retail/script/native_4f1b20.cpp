@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: radare2 6.2.0 complete listing (33c0 8a88c858a700 84c9 7415 40 83f810 7cf0 682ce15400 e874dcfbff 83c404 ebfe / c680c858a7.. 01 c3); string 0x54E12C "Unable to allocate parameter event"; callee 0x4AF7B0 Debug_Error landed.
 // Behavior/CFG: scans the 16-byte slot array at 0x00A758C8 for the first zero byte, marks it 1 and returns the index; when all 16 are taken it calls Debug_Error("Unable to allocate parameter event") and spins (0x004F1B3F).
-// Status/limits: STRUCTURALLY_VERIFIED (static only); declares the 16-slot array at the size proven by the loop bound (cmp eax,0x10) and preserves the fail-closed spin; runtime UNOBSERVED.
+// Status/limits: BUILD_VERIFIED (static only); declares the 16-slot array at the size proven by the loop bound (cmp eax,0x10) and preserves the fail-closed spin; runtime UNOBSERVED.
 #include "igi/retail/core/retail_error.hpp"
 
 #include <cstdint>

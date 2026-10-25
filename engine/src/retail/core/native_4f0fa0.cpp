@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x004F0FA0-0x004F0FA0 + 6 bytes, 1 block, 2 instructions: a1 (absolute load) / c3.
 // Tools/evidence: radare2 6.2.0 pd; ranked as a self-contained leaf of the startup closure in evidence section 20.
 // Behavior/CFG: return the dword at 0x00A70C7C; the retail image holds 0 there; no branch, no call, no stack use.
-// Status/limits: STRUCTURALLY_VERIFIED (1 block / 0 edges, emitted instructions identical); runtime UNOBSERVED. Returns the loaded dword because retail leaves it in EAX.
+// Status/limits: BUILD_VERIFIED (1 block / 0 edges, emitted instructions identical); runtime UNOBSERVED. Returns the loaded dword because retail leaves it in EAX.
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)

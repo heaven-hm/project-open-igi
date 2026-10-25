@@ -20,19 +20,5 @@ void* HeapList_Insert(void* container, void** node)
     return container;
 }
 
-// Native: HeapList_Remove; retail VA 0x004AF960; signature/calling convention unknown.
-// Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004AF960-0x004AF981, 33 bytes, digest 4ada7252239e45e0b5ed56005655c50a7ca29e3c5e3be153590e183ca807eb46; CLEAN/camera/004AF960-Camera_ApplyHandiCam_33.c.
-// Behavior/CFG: unlinks `context` from an intrusive doubly-linked list by writing `*context[1] = *context`, `*(static_cast<void**>(*context) + 1) = context[1]`, clearing `context[1] = nullptr` and `context[0] = nullptr`, and returning `context`. radare2 1 block/0 edges; Binary Ninja 1 block; 100.0% structural agreement.
-// Status/limits: VERIFIED; high for exact pointer unlink steps.
-void** HeapList_Remove(void** node)
-{
-    *static_cast<void**>(node[1]) = node[0];
-    static_cast<void**>(node[0])[1] = node[1];
-    node[1] = nullptr;
-    node[0] = nullptr;
-    return node;
-}
-
 } // namespace igi::retail::mem
 

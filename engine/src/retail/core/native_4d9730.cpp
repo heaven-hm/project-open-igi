@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: radare2 6.2.0 disassembly (6a04 6a00 e82781f2ff ... 66a338865400 c3); GLOBAL-548638 packet (QObj bytes 51 4F 62 6A 00 at 0x0054863C).
 // Behavior/CFG: marks event-table slots for phases 4..7 with value 0 via 0x401860, allocates event 0 (0x4017C0) and stores its byte at 0x0054863A, then registers "QObj" (0x50) with parent QTask_GetCurrentType() and arg4 0, storing the returned id at 0x00548638, and returns it. Single block.
-// Status/limits: STRUCTURALLY_VERIFIED (static only); retail pushes one stray extra cdecl dword at the 0x401900 site (5 pushes, add esp,0x14) that the callee never reads - documented benign stack-traffic divergence, the four meaningful arguments are reproduced. Runtime UNOBSERVED.
+// Status/limits: BUILD_VERIFIED (static only); retail pushes one stray extra cdecl dword at the 0x401900 site (5 pushes, add esp,0x14) that the callee never reads - documented benign stack-traffic divergence, the four meaningful arguments are reproduced. Runtime UNOBSERVED.
 #include "igi/retail/core/task_types.hpp"
 
 #include <cstdint>

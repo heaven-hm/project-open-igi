@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: radare2 6.2.0 full listing (8b542404 33c0 8a0a 84c9 7412 81e1ff000000 42 c1e005 03c1 8a0a 84c9 75ee 33d2 div ...); called from 0x4C04B0 as hash(value, [list+4]); no callees.
 // Behavior/CFG: hash = (hash << 5) + (byte & 0xFF) for each byte up to NUL (entry test then loop tail test, matching retail's two exit checks), then returns hash % bucketCount by the same unsigned divide retail uses with edx cleared.
-// Status/limits: STRUCTURALLY_VERIFIED (static only); shift/and order and the unsigned modulo follow retail; runtime UNOBSERVED.
+// Status/limits: BUILD_VERIFIED (static only); shift/and order and the unsigned modulo follow retail; runtime UNOBSERVED.
 #include <cstdint>
 
 extern "C" {

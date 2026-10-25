@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: radare2 6.2.0 disassembly (full listing in 0x00508FA0-disassembly.txt); 7 call sites in 0x508FA0 all clean add esp,0x18; fifth argument proven to be the leftover first argument of the preceding 0x4F0F80 call (7 at 0x509153, 5 at 0x509178); Debug_Error = 0x004AF7B0 retail_error.hpp.
 // Behavior/CFG: validates arg4 != -1 (else Debug_Error("Undefined parameter type.") then spins forever at 0x4F1AA0), then appends the 16-byte record {arg3-arg2, arg4, arg5, arg5&0xFF} at payload + count*16, reloading the count before every field store exactly as retail does, and increments the count; returns the container pointer.
-// Status/limits: STRUCTURALLY_VERIFIED (static only); the fifth parameter is stack-passed by the retail through stack reuse, so the transcription takes it as an explicit parameter with the same value - a documented ABI-shape difference, not a behavioural one; runtime UNOBSERVED.
+// Status/limits: BUILD_VERIFIED (static only); the fifth parameter is stack-passed by the retail through stack reuse, so the transcription takes it as an explicit parameter with the same value - a documented ABI-shape difference, not a behavioural one; runtime UNOBSERVED.
 #include "igi/retail/core/retail_error.hpp"
 
 #include <cstdint>

@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x004B1DA0-0x004B1DBB (28 bytes, 1 block, 0 edges, 7 instructions).
 // Tools/evidence: radare2 6.2.0 af/afij/pdf; section 22.2 of the evidence sheet (qfile device-driver table).
 // Behavior/CFG: stores the second argument into the 0x8C-stride device-driver record at 0x009436B0, field +0x3C (0x009436EC); no branch, no call, no return value. That word is the device sub-record handler 0x004B1420 tests and calls, so this is the only writer of the dispatcher's handler slot.
-// Status/limits: STRUCTURALLY_VERIFIED; runtime UNOBSERVED. Table storage is owned by native_4b1180.cpp (g_9436b0). GCC strength-reduces the retail (index*8-index)*5*4 chain to `imul $0x8C`; blocks/edges and the store offset match retail.
+// Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. Table storage is owned by native_4b1180.cpp (g_9436b0). GCC strength-reduces the retail (index*8-index)*5*4 chain to `imul $0x8C`; blocks/edges and the store offset match retail.
 #include "igi/retail/qfile/driver_table.hpp"
 
 #include <cstdint>

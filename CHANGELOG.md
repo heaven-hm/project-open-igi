@@ -11,6 +11,38 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - A partial transcription was sitting in the build target
+
+- `engine/src/retail/script/native_4ee970.cpp` (`0x004EE970`, 3709 bytes) transcribes section 1 only and its provenance said it was "deliberately NOT wired
+  into the build", while `CMakeLists.txt:439` lists it. The listing is the fact: the object compiles and links. Its comment now says so, and the manifest
+  status is `TRANSCRIBED` rather than `BUILD_VERIFIED`, because BUILD_VERIFIED would imply a complete native. Recorded as an owner decision: keep the
+  partial object in the target, or remove it until the body is finished.
+- This surfaced from a mass operation and is worth naming as a class of risk: binding every linked native's record to its engine source in one pass is
+  correct for 300+ files but it will happily stamp BUILD_VERIFIED onto a file whose own text says otherwise. The one file that disagreed was found by
+  reading the statuses it wrote, not by trusting the pass.
+
+### 2026-10-25 - 0x004AF960 has one implementation again, and the handler wave closes
+
+- **The duplicate at `0x004AF960` is resolved, and the invented aliases went with it.** `mem/heap_list.cpp`'s `HeapList_Remove` and
+  `mem/heap_list.hpp`'s declaration plus the `Camera_ApplyHandiCam_33` alias are deleted; the only implementation is
+  `engine/src/retail/sys/native_4af960.cpp` (`Sys_UnlinkListNode_4AF960`, 33 bytes, node layout +0x00 forward / +0x04 back).
+- All eight call sites were retargeted in the same change, because they were the reason the duplication stayed silent: the two symbols had
+  different names, so both linked. Files touched: `core/native_48f4f0.cpp`, `core/native_4015d0.cpp`, `core/native_4f9df0.cpp` (whose BLOCKED
+  note this removes), `script/native_4f0c90.cpp`, `mem/native_4b0d10.cpp`, `resource/sys_resource.cpp`, `terrain/terrain_draw.cpp`.
+  Two of those sites only surfaced when the build failed, which is the argument for deleting the definition first and letting the compiler
+  enumerate the callers rather than grepping for them.
+- **Handler wave linked**: `0x004F1050`, `0x004FA850`, `0x004F90B0`, `0x005092E0`, `0x00509340`, `0x00509390`, `0x00401AE0`, `0x00401CF0`,
+  `0x004F1030`, `0x004F1240`, `0x004F1090`, `0x004F9180`, `0x004F92E0`, `0x004F93B0`; `0x004FA850`'s host stack-protector defect fixed in source
+  (array local replaced), `0x004B0C60` correctly routed to the existing `Mem_Alloc` instead of being transcribed twice.
+- **Chain lane linked**: `0x004CEBA0` (model/MTP domain), `0x0047CAB0`, `0x00484F30`, `0x00402F50`. The last is not a registrar: it is the
+  `YMBE.AFP`/CD presence check, and it carries two retail quirks reproduced rather than tidied - the A-to-Z loop never varies the relative path
+  (26 identical retries, not a drive scan) and the `GetDriveTypeA` result is compared then discarded before any branch uses it.
+- **Verification infrastructure**: the lane found it had been syntax-checking with host clang while the tree cross-compiles with
+  `i686-w64-mingw32-g++`; all its files were re-checked under the cross-compiler, where `windows.h` and the real `__imp__GetDriveTypeA@4`
+  import resolve. Records were regenerated for 89 linked natives so the implementation digests match the normalised sources again, and my
+  per-native limitation notes were merged back rather than lost to the regeneration.
+- `igi1.exe` 14,261,044 -> **14,269,528** bytes, green.
+
 ### 2026-10-25 - Provenance blocks conform to the gate's five-line rule, mechanically and verifiably
 
 - `scripts/native_gate.py:check_provenance_comment` requires exactly five consecutive `//` lines starting at `// Native:`, with

@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: radare2 6.2.0 complete listing (0fbe442404 c680c858a7.. 00 c3 90); the byte index is a signed char ([esp+4]) and the array is the same 16-slot table declared by 0x4F1B20.
 // Behavior/CFG: clears the indexed slot of the 16-byte parameter-event table to zero and returns nothing.
-// Status/limits: STRUCTURALLY_VERIFIED (static only); the signed-char index is preserved as retail sign-extends it, so a negative index addresses before the table exactly as retail does; the array itself is owned by 0x4F1B20, not redefined here; runtime UNOBSERVED.
+// Status/limits: BUILD_VERIFIED (static only); the signed-char index is preserved as retail sign-extends it, so a negative index addresses before the table exactly as retail does; the array itself is owned by 0x4F1B20, not redefined here; runtime UNOBSERVED.
 #include <cstdint>
 
 extern "C" {

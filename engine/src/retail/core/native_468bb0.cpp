@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x00468BB0-0x00468BBA (11 bytes, 1 block, 2 instructions: c7 05 68dd5b00 00000000 / c3).
 // Tools/evidence: radare2 6.2.0 pd; section 21 of the evidence sheet (installed as a phase-2 handler by 0x004688B0).
 // Behavior/CFG: stores zero to the dword at 0x005BDD68 and returns; no branch, no call, no stack use, no argument read.
-// Status/limits: STRUCTURALLY_VERIFIED (1 block / 0 edges, emitted instructions identical); runtime UNOBSERVED.
+// Status/limits: BUILD_VERIFIED (1 block / 0 edges, emitted instructions identical); runtime UNOBSERVED.
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)

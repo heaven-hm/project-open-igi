@@ -93,6 +93,69 @@ class AutomaticNativeVerification(unittest.TestCase):
             self.assertEqual(auto.cycle(self.root,args),1)
         self.assertEqual(visited,['0x0048F0C0','0x0048F0D0'])
 
+    def new_candidate(self, name='NewCandidate', address='0x00460C30', basename='new.cpp'):
+        path=self.root/'engine/src/retail/core'/basename
+        path.write_text(f'// Native: {name}; retail VA {address}.\nvoid {name}() {{}}\n')
+        return path
+
+    def test_intake_registers_and_changed_run_executes_new_native(self):
+        from unittest.mock import patch
+        path=self.new_candidate()
+        args=argparse.Namespace(state=None,scope='changed',base=None,head='HEAD',address=[],
+            command='run',level=1,timeout=1,retry=True)
+        visited=[]
+        def verify(root,job,record,folder,args):
+            visited.append(job['address'])
+            self.assertEqual(record['verification']['status'],'TRANSCRIBED')
+            self.assertEqual(record['implementation']['sha256'],auto.digest(path))
+            return dict(job,status='blocked',verified=False,error='fixture runtime failure')
+        output=io.StringIO()
+        with patch.object(auto,'verify',side_effect=verify),patch.object(auto,'refresh_ledger'),contextlib.redirect_stdout(output):
+            self.assertEqual(auto.cycle(self.root,args),1)
+        report=json.loads(output.getvalue())
+        self.assertEqual(visited,['0x00460C30'])
+        self.assertEqual(report['selected_count'],1)
+        self.assertEqual(report['issue_count'],0)
+        self.assertFalse(report['verified'])
+        self.assertEqual(report['intake'][0]['address'],'0x00460C30')
+
+    def test_intake_is_idempotent_and_preserves_other_records(self):
+        path=self.new_candidate();paths={str(path.relative_to(self.root))}
+        self.assertEqual(len(auto.intake_candidates(self.root,paths,[])),1)
+        first=self.manifest.read_bytes()
+        self.assertEqual(auto.intake_candidates(self.root,paths,[]),[])
+        self.assertEqual(first,self.manifest.read_bytes())
+        self.assertEqual(json.loads(first)['natives'][0],self.record)
+
+    def test_intake_cannot_bind_duplicate_va_definitions(self):
+        self.new_candidate(basename='one.cpp');self.new_candidate(basename='two.cpp')
+        self.assertEqual(auto.intake_candidates(self.root,None,[]),[])
+        self.assertNotIn('0x00460C30',auto.inventory(self.root)[0])
+
+    def test_intake_preserves_conflicting_existing_engine_binding(self):
+        self.new_candidate(name='Conflicting',address='0x0048F0C0')
+        before=self.manifest.read_bytes()
+        self.assertEqual(auto.intake_candidates(self.root,None,[]),[])
+        self.assertEqual(self.manifest.read_bytes(),before)
+        self.assertTrue(any(i.get('address')=='0x0048F0C0' for i in auto.inventory(self.root)[2]))
+
+    def test_intake_downgrades_legacy_catalog_label_and_retains_reference(self):
+        path=self.new_candidate()
+        old=dict(address='0x00460C30',name='OldCatalog',implementation={'path':'scripts/GameNatives/old.cpp'},
+                 verification={'status':'VERIFIED'})
+        self.manifest.write_text(json.dumps({'natives':[self.record,old]}))
+        added=auto.intake_candidates(self.root,None,[])
+        self.assertEqual(len(added),1)
+        row=json.loads(self.manifest.read_text())['natives'][1]
+        self.assertEqual(row['verification']['status'],'TRANSCRIBED')
+        prior=row['verification']['prior_catalog_record']
+        self.assertEqual(json.loads((self.root/prior['path']).read_text()),old)
+
+    def test_intake_does_not_register_a_comment_or_prototype(self):
+        path=self.new_candidate()
+        path.write_text('// Native: NewCandidate; retail VA 0x00460C30.\n// void NewCandidate() {}\nvoid NewCandidate();\n')
+        self.assertEqual(auto.intake_candidates(self.root,None,[]),[])
+
     def test_partial_staging_is_blocked(self):
         self.source.write_text(self.source.read_text()+'// staged\n')
         subprocess.run(['git','add','.'],cwd=self.root,check=True)

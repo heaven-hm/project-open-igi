@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679914a01.
 // Tools/evidence: radare2 6.2.0 complete listing (8b442404 8b4c2408 2b4810 c1f90c 8d44c818 8b4c240c 0fb611 0110 802100 8138f0000000 c74004f100000000 7517 ff0500629300 833d006293..20 7508 6a10 e8a4feffff 59 c3); storage owned by 0x4AB733/mode2_bucket_globals.
 // Behavior/CFG: computes the page entry from the pointer (offset = value - [node+0x10], page = offset >> 12, entry at node+0x18+8*page), adds the byte flag through arg3 to the entry's first dword, clears the flag byte, always writes 0xF1 to the entry's second dword, and when the first dword reaches 0xF0 increments the committed-page count 0x00936200 and, once that count reaches 0x20, calls the purge 0x4AB733 with 0x10.
-// Status/limits: STRUCTURALLY_VERIFIED (static only); the 0xF1 store at entry+4 happens before the 0xF0 comparison branches, so it is unconditional and is preserved that way; runtime UNOBSERVED and unreachable while the heap mode is not 2.
+// Status/limits: BUILD_VERIFIED (static only); the 0xF1 store at entry+4 happens before the 0xF0 comparison branches, so it is unconditional and is preserved that way; runtime UNOBSERVED and unreachable while the heap mode is not 2.
 #include "igi/retail/mem/mode2_bucket.hpp"
 
 #include <cstdint>

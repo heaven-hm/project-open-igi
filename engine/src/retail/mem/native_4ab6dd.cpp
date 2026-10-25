@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: radare2 6.2.0 complete listing (56 8b742408 6800800000 6a00 ff7610 ff15bc305300 3935d0665400 7508 8b4604 a3d0665400 81feb0465400 7420 8b4604 8b0e 56 6a00 8908 8b06 8b4e04 894804 ff352824c300 ff15a4305300 5e c3 830dc04654..ff 5e); imports KERNEL32 VirtualFree and HeapFree.
 // Behavior/CFG: VirtualFree([node+0x10], 0, MEM_RELEASE) releases the node's reservation; if the remembered node 0x005466D0 is this node it remembers [node+0x04] instead; for a real node it unlinks it from the circular list ([next]=prev and [prev+4]=next) and HeapFree([0xC32428], 0, node); for the 0x005446B0 sentinel it only writes -1 to the sentinel's +0x10 bound word.
-// Status/limits: STRUCTURALLY_VERIFIED (static only); the sentinel branch writes 0x005446C0, which is sentinel + 0x10 (the bound word), not a separate global; the KERNEL32 calls are retail's own imports reached through ::VirtualFree/::HeapFree; runtime UNOBSERVED and unreachable while the heap mode is not 2.
+// Status/limits: BUILD_VERIFIED (static only); the sentinel branch writes 0x005446C0, which is sentinel + 0x10 (the bound word), not a separate global; the KERNEL32 calls are retail's own imports reached through ::VirtualFree/::HeapFree; runtime UNOBSERVED and unreachable while the heap mode is not 2.
 #include "igi/retail/mem/mem_alloc.hpp"
 #include "igi/retail/mem/mode2_bucket.hpp"
 

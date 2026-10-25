@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x004B0EC0-0x004B0EDD (30 bytes, 1 block, 0 edges, 9 instructions).
 // Tools/evidence: radare2 6.2.0 af/pdf and the raw bytes; section 22.3 of the evidence sheet (landability sweep row).
 // Behavior/CFG: computes (first<<6 + first)*2 + second, i.e. first*0x82 + second, and stores the third argument into the dword table at 0x00A950A4 indexed by that value; no branch, no call.
-// Status/limits: STRUCTURALLY_VERIFIED; runtime UNOBSERVED. The 0x00A950A4 table has no other owner in the tree, so this file defines it.
+// Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. The 0x00A950A4 table has no other owner in the tree, so this file defines it.
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)

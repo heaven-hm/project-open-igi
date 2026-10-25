@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x0048F490-0x0048F4EA.
 // Tools/evidence: Binary Ninja MCP disassembly/decompile + radare2 bytes; 6 basic blocks; spec build/audit/main-0x48F530/level1-closure/20261024T022900Z/TRANSCRIPTION-SPECS.md §1.5.
 // Behavior/CFG: scans the 16-node pool for a node whose handler (+0x08) is null, fills handler/prev_link/next and appends it to the WinProc chain via HeapList_Insert(container=0x005C8DF0, node); pool-full path calls Debug_Error("Failed to register WinProc callback.") and jumps forever (0x48F4B4).
-// Status/limits: STRUCTURALLY_VERIFIED; depends on HeapList_Insert 0x004AF8F0; pool scan counts 16 iterations instead of retail's address bound (pool not adjacent to the container in the candidate).
+// Status/limits: BUILD_VERIFIED; depends on HeapList_Insert 0x004AF8F0; pool scan counts 16 iterations instead of retail's address bound (pool not adjacent to the container in the candidate).
 #include "igi/retail/core/native_0048f970.hpp"
 #include "igi/retail/core/retail_error.hpp"
 #include "igi/retail/mem/heap_list.hpp"

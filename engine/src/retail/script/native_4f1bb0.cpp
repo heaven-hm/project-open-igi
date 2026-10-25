@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: radare2 6.2.0 complete listing a0e8e05400 c3 (mov al, byte [0x54E0E8]; ret); the byte is part of the parameter-event state block g_54e0e4[8] at 0x0054E0E4, owned by 0x4F1A60, index 4 from that base.
 // Behavior/CFG: returns the parameter-event state byte 0x54E0E8 and nothing else; single straight-line block.
-// Status/limits: STRUCTURALLY_VERIFIED (static only); storage owned by 0x4F1A60 and referenced here extern; runtime UNOBSERVED.
+// Status/limits: BUILD_VERIFIED (static only); storage owned by 0x4F1A60 and referenced here extern; runtime UNOBSERVED.
 #include <cstdint>
 
 extern "C" {

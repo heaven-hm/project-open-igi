@@ -13,11 +13,17 @@ import pathlib
 from candidate_build_receipt import validate_receipt
 from frida_capture_lease import capture_lease
 from verification_scope import stage_candidate
-from frida_dynobj_link_dynamic_cube_pair import run_one, process_names, sha256
+from frida_dynobj_link_dynamic_cube_pair import run_one, sha256
 
 ROOT = Path(__file__).resolve().parents[1]
 RETAIL = {'entry': '0x0048F0F0', 'state': '0x005C8BCC'}
-SYMBOLS = {'entry': '_Native_0048F0F0', 'state': '_Native_005C8BCC'}
+SYMBOLS = {'entry': '_SetConfigFileName', 'state': '_Native_005C8BCC'}
+
+
+def process_names(device):
+    return [p.name for p in device.enumerate_processes()
+            if p.name.lower() in ('igi.exe', 'igi1.exe', 'open-igi.exe') or
+            p.name.lower().startswith('open-igi-probe-')]
 
 
 def main():
@@ -66,8 +72,7 @@ def main():
         if not match:
             raise RuntimeError('required candidate symbol is absent: ' + symbol)
         layout[field] = f'0x{int(match.group(1), 16):08X}'
-    probes = [ROOT / 'scripts/frida_dynobj_link_dynamic_cube_probe.js',
-              ROOT / 'scripts/frida_app_startup_store_5c8bcc_probe.js']
+    probes = [ROOT / 'scripts/frida_app_startup_store_5c8bcc_probe.js']
     probe = '\n'.join(path.read_text() for path in probes)
     raw_values = [0, 1, 2, 10, 0x7f, 0x80, 0xff, 0x100, 0x7fffffff, -0x80000000, -1]
     fixtures = [{'value': value, 'initial_state': 0x13570000 + index}
@@ -89,11 +94,11 @@ def main():
         args.out.parent.mkdir(parents=True, exist_ok=True)
         try:
             report['retail'] = run_one(device, retail, 'retail', 'igi.exe', json.dumps(RETAIL),
-                                       probe, fixtures, 8, probe_before_resume=True)
+                                       probe, fixtures, 0, probe_before_resume=True, stop_after_probe=True)
             with stage_candidate(candidate, retail.parent) as staged:
                 validate_receipt(args.receipt, ROOT, staged, [source])
                 report['candidate'] = run_one(device, staged, 'candidate', staged.name, json.dumps(layout),
-                                              probe, fixtures, 8, probe_before_resume=True)
+                                              probe, fixtures, 0, probe_before_resume=True, stop_after_probe=True)
             expected, actual = (report[key]['probe']['calls'] for key in ('retail', 'candidate'))
             if len(expected) != len(fixtures) or len(actual) != len(fixtures):
                 raise RuntimeError('incomplete ordered probe sequence')
@@ -109,6 +114,9 @@ def main():
             failed = sum(case['result'] != 'passed' for case in cases)
             report.update(cases=cases, executed=True, result='failed' if failed else 'passed',
                           tests_total=len(cases), tests_failed=failed, tests_passed=len(cases)-failed)
+            validate_receipt(args.receipt, ROOT, candidate, [source])
+            if args.implementation_sha256 and sha256(source) != args.implementation_sha256:
+                raise ValueError('source changed during the paired test')
         except Exception as error:
             report.update(result='failed', error=repr(error), failed_capture=getattr(error, 'record', None))
             raise

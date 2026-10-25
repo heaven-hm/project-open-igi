@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x00413B20-0x00413B25 (6 bytes, 1 block, 2 instructions: a0 ae915300 / c3).
 // Tools/evidence: radare2 6.2.0 pd; ranked as a self-contained leaf of the startup closure in evidence section 20.
 // Behavior/CFG: returns the byte at 0x005391AE; no branch, no call, no stack use.
-// Status/limits: STRUCTURALLY_VERIFIED (1 block / 0 edges); runtime UNOBSERVED. Codegen deviation recorded: retail writes only AL (mov al, byte [0x005391AE]) and leaves EAX bits 8-31 as the caller left them, while the C++ byte return makes the compiler zero-extend into EAX. The byte-level result is identical for every caller that consumes AL or a uint8_t.
+// Status/limits: BUILD_VERIFIED (1 block / 0 edges); runtime UNOBSERVED. Codegen deviation recorded: retail writes only AL (mov al, byte [0x005391AE]) and leaves EAX bits 8-31 as the caller left them, while the C++ byte return makes the compiler zero-extend into EAX. The byte-level result is identical for every caller that consumes AL or a uint8_t.
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)

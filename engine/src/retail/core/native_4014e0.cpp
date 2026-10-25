@@ -2,7 +2,7 @@
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x004014E0-0x0040152A (75 bytes).
 // Tools/evidence: Binary Ninja MCP disassembly/decompile + radare2 6.2.0 bytes; 0 callees; reads g_54ff24[16] and QTask_HandlerTable.
 // Behavior/CFG: for i=0..15, phase=g_54ff24[i]; when phase != 0xFF set bit i if QTask_HandlerTable[phase*0x180 + (type_id&0xFFFF)] != null; then set bit 15 (or ah,0x80) and return the mask in eax.
-// Status/limits: STRUCTURALLY_VERIFIED; mask values are not retail-equitable until the 0x0054FF24 writers 0x00401400/0x00401530 are transcribed (zero placeholder makes every mask 0x8000).
+// Status/limits: BUILD_VERIFIED; mask values are not retail-equitable until the 0x0054FF24 writers 0x00401400/0x00401530 are transcribed (zero placeholder makes every mask 0x8000).
 #include "igi/retail/core/task_types.hpp"
 #include <cstdint>
 
