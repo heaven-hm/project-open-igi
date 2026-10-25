@@ -15,10 +15,13 @@ namespace {
 // Port-owned storage for global path buffer 0x00A4EC6C (66-byte limit in sprintf).
 char g_a4ec6c[0x100]{};
 
-// Port-owned storage for backend table 0x00A94E84.
-ModelBackendInitFn g_a94e84[0x10]{};
-
 } // namespace
+
+extern "C" {
+// Retail global 0x00A94E84 - the 16-entry render-backend init callback table. It is defined here rather than in the anonymous namespace so a
+// transcribed native can index it exactly as retail does (call *0x00A94E84(,%reg,4)), which an internal-linkage object cannot support.
+ModelBackendInitFn g_a94e84[0x10]{};
+}
 
 // Native: DynObj_LoadModelMesh; retail VA 0x004CF390; signature/calling convention unknown.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.

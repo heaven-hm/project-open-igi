@@ -31,6 +31,11 @@ void* DynObj_LoadModelMesh(const char* model_name);
 // Receives a 2-pointer pair `{ mesh_payload, model_container }`.
 using ModelBackendInitFn = void (*)(void** mesh_and_container);
 
+extern "C" {
+// Retail global 0x00A94E84 - 16-entry render-backend init table indexed by the active backend id.
+extern ModelBackendInitFn g_a94e84[0x10];
+}
+
 [[nodiscard]] const char* DynObj_GetModelPathBuffer();
 void Model_SetBackendInit(std::int32_t backend_id, ModelBackendInitFn callback);
 

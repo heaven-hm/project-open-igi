@@ -11,6 +11,15 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - Render-backend table 0x00A94E84 gains external C linkage
+
+- `engine/src/retail/dynobj/local_models_mef.cpp` defined the 16-entry backend init table as internal-linkage storage in an anonymous namespace, so a
+  transcribed core native could not index it the way retail does (`call *0x00A94E84(,%reg,4)`). The definition keeps its single object and now has
+  `extern "C"` linkage; `engine/include/igi/retail/dynobj/local_models_mef.hpp` declares it. No getter and no wrapper were added - the table is data
+  retail itself exposes, and a helper would have been a non-retail abstraction.
+- Build green; `igi1.exe` 14,222,891 -> 14,222,853 bytes (linkage/COMDAT difference only, no code change), and `nm` shows `B _g_a94e84` external.
+  A same-named internal object in `texture/` remains internal and unaffected.
+
 ### 2026-10-25 - QVM evaluator cluster and its transcription set link into the candidate (27 natives, internal build)
 
 - **27 natives listed in one batch** and linked: `igi1.exe` grows 14,206,798 -> 14,222,891 bytes, build green. This closes the QVM closure that had
