@@ -11,6 +11,38 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - two more registrars, and three gap getters that exposed a 0xFF initialiser bug
+
+Integrated `core/native_438390.cpp` (`Task_DefineGunShotEffect`, 163 B, retail 11/8 =
+port 11/8) and `core/native_4388b0.cpp` (`Task_DefinePlaceExplosiveTBA`, 234 B, retail
+15/11 = port 15/11).
+
+**The first build of these failed**, and the reason is a cross-lane dependency rather
+than an error in either file: `native_438390.cpp` calls the byte getters
+`0x00408320`/`0x00408330`/`0x00408340`, which are in the 0x0040xxxx gap band assigned
+to the other lane and did not exist. They are three six-byte natives,
+`mov al,byte [0x00538518/19/1A]; ret`, and are now transcribed with their own
+provenance in `core/native_408320.cpp`, `native_408330.cpp`, `native_408340.cpp`.
+
+Transcribing them exposed a **fidelity bug in an existing file**.
+`render/native_00407d60.cpp` is the writer of all three bytes and declared each
+`= 0U`. Their **image values are all `0xFF`**. The initialiser decides what a reader
+sees before the writer runs, so a getter read before `0x00407D60` executed returned 0
+in the port and 0xFF in retail. All three are now `0xFFU`. The three new getters only
+`extern` the storage, because the ownership rule puts it with the writer.
+
+Also recorded, from chain-worker's report and verified here against the PE section
+table: **an address alone cannot classify a global.** `.rdata` is bounded by
+VirtualSize `0x28F6`, ending at `0x005358F6`, while its raw size is `0x3000` and
+file-aligned tooling (including Radare2's `iS`) reports the larger figure. Most of the
+`0x0053xxxx` range -- including the `"IGI"` title string at `0x00536144` and every
+`0x005690xx` global -- is `.data`, not `.rdata`. There is also **no `.bss` section in
+this image**; `.data`'s tail is zero-filled, so a zero-initialised global is `.data`
+with a zero initialiser and `B`/`D` is a naming convention rather than a section fact.
+See `docs/fidelity/evidence/pe-section-table-20261025.md`.
+
+Green at 14,369,089 bytes.
+
 ### 2026-10-25 - 0x00406450 lands, and the handler-ABI lane closes at 15/15
 
 `core/native_406450.cpp` transcribes retail `0x00406450` (`Task_DefineHumanAIConfig`,
