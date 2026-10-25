@@ -51,7 +51,6 @@
 `AIGraph_InitStep_52B6C0
 `AIGraph_InitStep_52C6B0
 `AIGraph_InitStep_52C820
-`DiscardTerrain_Init
 `GraphStream_RegisterNode_4F9DF0
 `Sub_4675B0
 `Sub_498040
@@ -60,6 +59,7 @@
 `Sub_4B9BE0
 `Sub_4C6CE0
 `Sub_4C75F0
+`Sub_4E5360
 `Sub_4EBE70
 `Sub_4EC160
 `Sub_4ED000
