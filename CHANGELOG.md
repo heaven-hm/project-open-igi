@@ -2483,3 +2483,51 @@ A wrong measurement did not merely fail to find the defect; **it let a commit
 message assert the opposite of the truth.** The lesson is not "count carefully" but
 that an instrument which returns a uniform zero has failed, not measured - the same
 signature as the six-unit `ends-in-ret=False` sweep earlier in this session.
+
+## A STANDING CHECK: committed but not built
+
+The `native_41b310.cpp` / `native_41a1a0.cpp` defect has now happened twice, so it is
+checked rather than remembered. The check is two lines and compares the tracked file
+set against the source list:
+
+  tracked = git ls-files engine/src/retail | *.cpp
+  unbuilt = [f for f in tracked if basename(f) not in CMakeLists.txt]
+
+**First run: 18 tracked native files are mentioned nowhere in `CMakeLists.txt`.** Of
+those, the ones that are LINKABLE are defects and the rest are blocked on
+untranscribed symbols.
+
+**An important instrument note on the first version of this check:** it matched
+`'    ' + path` - the exact indentation - and reported 22 files, of which four
+(`native_412420`, `native_413730`, `native_449330`, `script/qvm_execute`) were
+false positives from indentation differences. Matching the **basename** anywhere in
+the file is the version that is right, and it found 18. The four false positives are
+the same failure as every other one this session: a pattern that encoded an
+assumption about formatting rather than about the thing being measured.
+
+## Two native data files were unblocking seven input natives
+
+`input/dinput_globals.cpp` and `input/dinput_image_data.cpp` are **native data**
+("the retail DirectInput runtime block" and "retail DirectInput image constants"),
+both linkable with **0 undefined symbols**, both committed, neither in the build.
+
+Adding them made **seven input natives linkable in one change**:
+
+| file | symbol | was | now |
+|---|---|---|---|
+| `input/native_48fd90.cpp` | `Input_MouseGetCaps` | not linkable | linkable (4 undefined) |
+| `input/native_48fed0.cpp` | `Mouse_WinProc` | not linkable | linkable (4 undefined) |
+| `input/native_490120.cpp` | `Keyboard_WinProc` | not linkable | linkable (2 undefined) |
+| `input/native_490230.cpp` | `Keyboard_Update` | not linkable | linkable (7 undefined) |
+| `input/native_509cc0.cpp` | `Joypad_IsAcquired` | not linkable | linkable (2 undefined) |
+| `input/native_509e90.cpp` | `Joypad_ReleaseAll` | not linkable | linkable (3 undefined) |
+| `input/native_509f00.cpp` | `Joypad_InitActionFlags` | not linkable | linkable (3 undefined) |
+
+All seven are now built and each counts exactly once in `igi1.exe`.
+
+**This is the third instance of the same pattern**, and it is now a standing
+question rather than a discovery: `0x004C1830` unblocked 34 teardowns, the two
+`0x00413B00`/`0x00413B10` getters unblocked the largest registrar in the band, and
+these two data files unblocked seven input natives. **A small file that many others
+name is worth finding before writing the files that name it** - and the way to find
+it is to ask which committed, linkable files are not being built.
