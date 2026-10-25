@@ -1,5 +1,60 @@
 ## Unreleased
 
+### Tool output contradicts prose: believe the tool, and never record the prose
+
+chain-worker claimed `0x449220`'s two callees were at `core/native_4b8a80.cpp` and
+`core/native_4b8a50.cpp`. They are in `script/`. **Its own link check had already
+printed `linkable (2 undefined, all defined in tree)`** - which is only possible if
+both symbols exist - so a path claim it never verified was sitting alongside a tool
+result that contradicted it.
+
+I nearly recorded "the callees do not exist" from the path being wrong. Its own
+formulation is the rule:
+
+> the link check had already proved the symbols existed, so a path claim I never
+> verified should never have been allowed to sit alongside a link result that
+> contradicted it. Had you recorded "the callees do not exist," you would have been
+> trusting my prose over your own tool output - the wrong direction.
+
+**A path is a claim about the tree; a symbol is a claim about the binary. Only the
+second one decides whether a file links.** Keep them separate, and when a tool
+result and a narrative disagree, the tool result is the measurement and the
+narrative is the hypothesis.
+
+### The extent rule: walk to the `ret`, then check the byte after it
+
+`0x449260`'s provenance claimed 16 bytes through `0x0044926F`; that byte is a `0x90`
+NOP. The `ret` is at `0x0044926E`, so the routine is **15 bytes**. The file
+contradicted itself - its own next line said the body ends at the `ret` - and the
+instruction count of 3 was right all along, because the NOP was never an instruction
+of this routine. Only the byte extent absorbed it.
+
+**The gap to the next function start is not the extent.** chain-worker applied that
+reasoning correctly at the near end (a `jmp` target can be interior, so an address
+list built from immediates is an over-estimate) and not at the far end.
+
+Independently re-swept by both of us: **281 files, 0 extents wrong** by the
+corrected rule, and chain-worker's own 14 band files re-verified at 0.
+
+**My first sweep of this reported 32 failures and was entirely wrong.** It tested
+whether the last byte is a `ret`/`jmp` opcode - but **the last byte of a `jmp rel32`
+is a displacement byte, not an opcode**, so it flags every tail-jump routine. The
+correct test is whether the last *instruction* ends exactly at the extent end.
+
+### I made the wrapped-`// Native:` error while warning a worker about it
+
+My first draft of `449220` wrapped the `// Native:` line across three lines, putting
+`retail VA 0x00449220-0x0044925F` on line 3. **The extractor returned `NONE`** - the
+file was invisible to the manifest, the same defect that hid 31 natives earlier in
+the day. Caught only because the extractor was run before reporting rather than
+after, which is chain-worker's habit and not mine.
+
+By this point in the session I had made every error I had asked a worker to avoid:
+an assumed symbol name, a grep pattern that could not match, a reversed comparison,
+a sweep against a field that does not exist, and now a wrapped provenance line.
+
+## Unreleased
+
 ### Two confirmed bit-exactness defects in a committed file, found via chain-worker's class sweep
 
 `core/native_419630.cpp` carried two decimal floating-point literals feeding x87
