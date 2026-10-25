@@ -342,6 +342,14 @@ std::uint8_t QTask_FirstLinkFlag[igi::retail::core::task_type_slot_count *
 std::uint32_t QTask_LinkedHandlerCounter = 0xFFFFFFFFU;
 std::uint32_t QTask_ContextHandlerCount = 0U;
 std::uint32_t QTask_NoContextHandlerCount = 0U;
+// 0x00A969E0: byte-indexed table, filled with -1 by QTask_Init at 0x00401105-0x0040112E
+// (`mov edi,0xa969e0` / `or eax,-1` / `rep stosd` with ecx=0x3F / `stosw word es:[edi],ax`),
+// so 0x3F dwords then one word: 254 bytes are written. The readers index it as a BYTE and
+// sign-extend - 0x004C788D and 0x004C8523 are both `movsx ecx, byte [ecx + 0xa969e0]` followed
+// by `cmp ecx,-1` - and native_401d30 stores a byte at 0x00401D43. A byte index admits 0..255,
+// so the extent is declared 0x100. Measured: the 254 bytes the fill writes. The last two bytes
+// are left as the image leaves them, which is what retail does too.
+std::uint8_t g_a969e0[0x100] = {};
 
 
 // Port-side startup replay bound to the live 0x00401900 registration capture;
@@ -571,6 +579,10 @@ void TaskEventTable_MarkSlotNoMask(std::uint16_t value, std::uint32_t index);
 //           fills the 0x3F dwords at 0x00A969E0 with -1, registers the
 //           "QTask" class with a 0x20 byte object and the parent 0x0181, keeps
 //           the class id at 0x0054F928, and links the phase handlers.
+//           CORRECTION (measured from the disassembly, not from this note's earlier wording): the
+//           -1 fill of 0x00A969E0 sits at 0x00401105-0x0040112E, which is BEFORE the registration
+//           at 0x00401130 and before the 0x17D00 clear at 0x0040117B-0x00401190. An earlier
+//           version of this block placed it after the clear, which the bytes do not show.
 // Status/limits: STRUCTURALLY_VERIFIED; the clears, the class registration
 //           and the current type write are the retail's. The retail's
 //           handler links for the QTask class run through the natives at
@@ -583,6 +595,15 @@ void NATIVE_DECL QTask_Init()
 {
     QTask_ClearEventTable();
     QTask_ClearTaskTypes();
+    // 0x00401105 mov edi,0xa969e0 / 0x0040111d or eax,-1 / 0x00401120 rep stosd with ecx=0x3F /
+    // 0x0040112e stosw word es:[edi],ax. The table is filled with -1 BEFORE the registration at
+    // 0x00401130 and before the 0x17D00 clear at 0x0040117B-0x00401190 - not after it, which is
+    // what this file's provenance block previously said and what the disassembly does not show.
+    // 0x3F dwords then one word, so 254 bytes, and the dword/word split is retail's, not tidied.
+    for (std::size_t table_slot = 0U; table_slot < 0x3FU; ++table_slot) {
+        *reinterpret_cast<std::uint32_t*>(&g_a969e0[table_slot * 4U]) = 0xFFFFFFFFU;
+    }
+    *reinterpret_cast<std::uint16_t*>(&g_a969e0[0x3FU * 4U]) = 0xFFFFU;
     QTask_CurrentType = TaskType_Register("QTask", 0x20U, 0x0181U, 0U);
     // 0x0040113E-0x0040114B: push 0 / call 0x004018F0 / push eax / call 0x00401860 / add esp,8.
     // The phase dword pushed first is the link call's second argument, not padding: 0x004018F0 takes no

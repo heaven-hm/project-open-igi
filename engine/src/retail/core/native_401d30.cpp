@@ -13,6 +13,11 @@ extern "C" {
 // native_4014b0.cpp: one file per retail address, so no provenance block for that VA is repeated here.
 void TaskType_RefreshHandlerMask();
 
+// Defined in task_types.cpp, which owns 0x00A969E0 because its QTask_Init fills it at
+// 0x00401105-0x0040112E. Declared here rather than written as the raw retail address: the port's
+// copy lives at the linker's address, so the literal would target unmapped memory.
+extern std::uint8_t g_a969e0[];
+
 void TaskType_SetPhaseHandlerByte(std::int32_t const value, std::int32_t const slot)
 {
     // 0x00401D38: mov byte [ecx + 0x54ff24], al (ecx = arg2). The port already defines this table
@@ -21,9 +26,11 @@ void TaskType_SetPhaseHandlerByte(std::int32_t const value, std::int32_t const s
     // not at 0x0054FF24.
     ::g_54ff24[static_cast<std::uint32_t>(slot)] =
         static_cast<std::uint8_t>(value);
-    *reinterpret_cast<std::uint8_t*>(static_cast<std::uintptr_t>(0x00A969E0U) +
-                                     static_cast<std::uint32_t>(value & 0xFF)) =
-        static_cast<std::uint8_t>(slot); // 0x00401D43: mov byte [eax + 0xa969e0], cl - the CL register, i.e. the low byte of arg2, not of arg1
+    // 0x00401D43: mov byte [eax + 0xa969e0], cl - the CL register, i.e. the low byte of arg2, not
+    // of arg1. Retail masks the index with `and eax,0xFF` at 0x00401D3D, so the index is 0..255 and
+    // the table has 0x100 entries; this is the instruction that fixes the extent, not the fill alone.
+    ::g_a969e0[static_cast<std::uint32_t>(value) & 0xFFU] =
+        static_cast<std::uint8_t>(slot);
     TaskType_RefreshHandlerMask();        // 0x00401D49: jmp 0x4014B0 (tail call)
 }
 
