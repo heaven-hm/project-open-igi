@@ -1,5 +1,43 @@
 ## Unreleased
 
+### The startup guard is the retail body; the invented registration table is gone
+
+`engine/src/retail/core/class_registration.cpp` was not a transcription. It was a partial
+reimplementation that replaced retail's first six calls - the sixth being `Game_Init` at
+`0x00402949` - with invented substitutes (`RegisterGameClasses`, `AnimSound_LoadParameters`,
+`RegisterFlowClass`) and a `ReportNotTranscribed` call for each registrar it did not implement.
+
+That file was the reason nothing rendered. The runtime log proved it before it was read: 76
+entries, 22 distinct natives, and `QTask_RegisterClasses` the LAST native entered, with
+`Game_Init` appearing ZERO times. The break was not in the window, the message loop or the
+renderer; it was that the guard never called `Game_Init`.
+
+**Replaced** by `engine/src/retail/core/native_402930.cpp`: the retail body, 155 call sites in
+retail order, the six opening calls first and the tail jump to `0x004CEF30` last, with targets
+that have no transcription left fail-closed so the sequence cannot silently shorten and shift the
+class ids the handler table is indexed by.
+
+**Also removed in the same change**, per section 10.15 rule 16 (no dead code): the invented
+`class_registrars[]` table in `engine/include/igi/retail/core/class_registration.hpp`, which was
+substitute machinery for the file that no longer exists. The `QTask_RegisterClasses` declaration
+stays and its comment now describes the retail body and its true status.
+
+**The build does not link, and this is deliberate and correct.** It fails on exactly two symbols:
+
+```
+undefined reference to `AIGraph_Init_508F80'
+undefined reference to `Task_DefineHumanAI'
+```
+
+Both are real missing transcriptions, not build errors. `AIGraph_Init_508F80` is retail
+`0x00508F80`, the guard's **call #1**; the file exists (`core/native_508f80.cpp`, compiles clean)
+but is not in the target, and it in turn needs `AIGraph_InitChain_5183D0` (`0x005183D0`, a 73-call
+chain whose 61 remaining targets have neither a file nor a manifest record).
+
+The previous build was green only because the guard was fake. A green build produced by invented
+logic is worse than a red build produced by a real one, because it looks like progress. The honest
+ceiling for this change is BUILD_VERIFIED *up to the link*, and the link is the true frontier.
+
 ### igi.log now carries levels, wall-clock timestamps and per-method detail
 
 The owner's request was that the log say what happened to each method, with levels, and with a

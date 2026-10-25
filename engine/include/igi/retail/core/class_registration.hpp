@@ -24,43 +24,18 @@
 #define NATIVE_DECL
 #endif
 
-namespace igi::retail::core {
-
-// One entry of the retail's registration sequence, the registrar it calls
-// and the address the retail has.
-struct ClassRegistrar
-{
-    std::uint32_t address;
-    const char* name;
-};
-
-// The retail's sequence, in the retail's order.
-inline constexpr ClassRegistrar class_registrars[] = {
-    {0x00508F80U, "AI graph"},
-    {0x00489560U, "AI detection"},
-    {0x00407D60U, "material defines"},
-    {0x00488BB0U, "level flow"},
-    {0x00402FF0U, "game options"},
-    {0x00415530U, "Level and Game classes"},
-    {0x004C1780U, "task list"},
-    {0x00401FC0U, "Flow class"},
-    {0x00488800U, "edit variable"},
-    {0x00488620U, "sub level"},
-    {0x00487BE0U, "guard generator"},
-    {0x004872C0U, "conditional container"},
-};
-
-} // namespace igi::retail::core
-
 extern "C" {
 
-// Native: QTask_RegisterClasses() - VA 0x00402930 - complete port.
-// Behavior: the retail's class registration sequence. It calls each class
-//           registrar in order, so the class ids the handler table is indexed
-//           by follow the order. The port runs the same sequence: the
-//           registrars the MVP demo needs register their classes, and the
-//           ones outside the MVP scope report that they are not transcribed
-//           rather than shifting the ids silently.
+// Native: QTask_RegisterClasses() - VA 0x00402930.
+// Behavior: the retail's class registration sequence - 155 call sites in retail
+//           order, beginning with the six that open the function (0x00508F80,
+//           0x00489560, 0x00407D60, 0x00488BB0, 0x00402FF0, 0x00415530) and
+//           ending in the tail jump to 0x004CEF30. The body is transcribed in
+//           engine/src/retail/core/native_402930.cpp.
+// Status/limits: TRANSCRIBED. The registration order is the retail order and no
+//           registrar is substituted or skipped; targets with no transcription
+//           are fail-closed placeholders, so the sequence cannot silently
+//           shorten and shift the class ids the handler table is indexed by.
 void NATIVE_DECL QTask_RegisterClasses();
 
 } // extern "C"

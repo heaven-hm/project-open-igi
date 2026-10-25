@@ -553,7 +553,6 @@ add_executable(igi WIN32
     engine/src/retail/mem/native_4ab7f5.cpp
     engine/src/retail/core/app_startup_globals.cpp
     engine/src/retail/core/app_startup_natives.cpp
-    engine/src/retail/core/class_registration.cpp
     engine/src/retail/core/debug_command_line.cpp
     engine/src/retail/core/flow.cpp
     engine/src/retail/core/fpu_state.cpp
@@ -848,6 +847,7 @@ add_executable(igi WIN32
     engine/src/retail/core/native_435d90.cpp
     engine/src/retail/core/native_48f220.cpp
     engine/src/retail/core/native_48f330.cpp
+    engine/src/retail/core/native_402930.cpp
     engine/src/retail/script/native_4b8870.cpp
     engine/src/retail/sys/native_4f4870.cpp
     engine/src/retail/render/native_4a28b0.cpp
