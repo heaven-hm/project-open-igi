@@ -6,6 +6,18 @@
 
 #include <cstdint>
 
+// No project header is included here, so NATIVE_DECL is established locally.
+// Guarded so that a project header included above would not be redefined.
+#ifndef NATIVE_DECL
+#if defined(_MSC_VER) && defined(_M_IX86)
+#define NATIVE_DECL __cdecl
+#elif defined(__i386__) && (defined(__GNUC__) || defined(__clang__))
+#define NATIVE_DECL __attribute__((cdecl))
+#else
+#define NATIVE_DECL
+#endif
+#endif
+
 #if defined(_MSC_VER) && defined(_M_IX86)
 #define NATIVE_DECL __cdecl
 #elif defined(__i386__) && (defined(__GNUC__) || defined(__clang__))
