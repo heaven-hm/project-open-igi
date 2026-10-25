@@ -22,14 +22,29 @@
 extern "C" {
 
 extern std::uint32_t Sub_4168D0(void* object);                      // 0x004168D0: untranscribed
-extern std::uint32_t Sub_4C17C0(std::uint32_t value);               // 0x004C17C0: untranscribed; its result is discarded here
+// 0x004C17C0: implemented in core/qtask_list.cpp as QTaskList_Remove(void*, void*). It takes
+// TWO arguments, and this call site supplies both - see the note below on where arg2 comes from.
+extern std::int32_t QTaskList_Remove(void* task_list, void* task);
 extern void Sub_4C7560(std::uint32_t field, void* object);          // 0x004C7560: untranscribed
 
 void NATIVE_DECL Task_ReleaseThree_449950(void* const object)
 {
     NATIVE_LOG_ENTER("Task_ReleaseThree_449950", "0x00449950");
-    // 0x00449955-0x0044995C: call 0x4168D0(object), then 0x4C17C0 with that call's result.
-    Sub_4C17C0(Sub_4168D0(object));
+    // 0x00449955-0x0044995C: call 0x4168D0(object), then 0x4C17C0(result, object).
+    //
+    // Only ONE dword is pushed immediately before `call 0x4C17C0` (push eax at 0x0044995B), yet
+    // the callee reads two arguments. The second is the `push esi` at 0x00449955: the single
+    // `add esp,0x10` at 0x0044996B defers ALL cleanup to the end of the routine, so that push is
+    // still on the stack and becomes arg2.
+    //
+    // Entering 0x004C17C0 esp is E-16 (E = esp on entry to this routine): push esi -> E-20 so
+    // [esp+8] = E-12 = eax = arg1; push edi -> E-24 so [esp+0x10] = E-8 = the object = arg2.
+    //
+    // Push-counting at this site cannot see arg2. Counting the RUNNING esp delta can, and the
+    // delta must be restored after each `call` returns - carrying a callee's esp forward past its
+    // return is the error that first made this look like a one-argument call.
+    QTaskList_Remove(reinterpret_cast<void*>(static_cast<std::uintptr_t>(Sub_4168D0(object))),
+                     object);
 
     // 0x00449961-0x00449966: call 0x4C7560(object[0x68], object) - the field first, the object second.
     Sub_4C7560(*reinterpret_cast<std::uint32_t*>(static_cast<char*>(object) + 0x68), object);

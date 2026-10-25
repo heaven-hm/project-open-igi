@@ -1,77 +1,50 @@
-# `0x00449950` passes one argument to a two-argument callee
+# `0x00449950` passes TWO arguments to `0x004C17C0` - RESOLVED
 
-**Status: recorded gap. Not resolved, not guessed.**
+**Status: resolved. This file previously recorded a gap that was not a gap.**
 
-## Measured
+## The resolution
 
-Retail `0x00449950`:
+`0x004C17C0` takes two arguments, and this call site supplies both. Arg2 is the `push esi` at
+`0x00449955`, which is still on the stack because the single `add esp,0x10` at `0x0044996B`
+**defers all cleanup to the end of the routine**. Push-counting immediately before the call sees
+only `push eax` and therefore cannot see arg2 at all.
 
-```
-0x00449950  56            push esi
-0x00449951  8b742408      mov esi, [esp+8]        ; object
-0x00449955  56            push esi                ; arg for 0x4168D0
-0x00449956  e875cffcff    call 0x4168d0
-0x0044995b  50            push eax                ; THE ONLY arg for 0x4c17c0
-0x0044995c  e85f7e0700    call 0x4c17c0
-0x00449961  8b4668        mov eax, [esi+0x68]
-0x00449964  56            push esi
-0x00449965  50            push eax
-0x00449966  e8f5db0700    call 0x4c7560
-0x0044996b  83c410        add esp, 0x10           ; 4 dwords cleaned
-```
+Entering `0x004C17C0`, esp is **E-16** (E = esp on entry to `0x00449950`):
 
-Callee `0x004C17C0`:
-
-```
-0x004c17c0  56            push esi
-0x004c17c1  8b742408      mov esi, [esp+8]        ; arg1 = the list
-0x004c17c7  57            push edi
-0x004c17ce  8b7c2410      mov edi, [esp+0x10]     ; arg2 = the value to match
-0x004c17d5  393a          cmp [edx], edi
-```
-
-After `push esi`, `[esp+8]` = arg1. After the additional `push edi`, `[esp+0x10]` = arg2. So
-**the callee takes two arguments and reads both.**
-
-## The contradiction
-
-At `0x0044995C` only **one** push precedes the call. Stack arithmetic at the callee entry
-(0x00449950 frame base `E`):
-
-| step | esp | slot |
+| step | esp | note |
 |---|---|---|
-| entry of `0x00449950` | E | [E+4] = object |
-| `push esi` | E-4 | [E-4] = esi |
-| `push esi` | E-8 | [E-8] = object |
-| `call 0x4168d0` | E-12 | [E-12] = retaddr1 |
-| `push eax` | E-16 | [E-16] = eax |
-| `call 0x4c17c0` | E-20 | [E-20] = retaddr2 |
+| entry `0x00449950` | E | [E+4] = arg1 |
+| `push esi` | E-4 | `[esp+8]` = E+4 = arg1 -> esi = object |
+| `push esi` @`0x00449955` | E-8 | pushes object |
+| `call 0x4168d0` | E-12 | retaddr; **on return esp is back to E-8** |
+| `push eax` @`0x0044995B` | E-12 | pushes the result |
+| `call 0x4c17c0` | **E-16** | callee entry |
 
-Inside `0x004C17C0`, `push esi` -> E-24, so `[esp+8]` = [E-16] = **eax** (arg1, correct).
-Then `push edi` -> E-28, so `[esp+0x10]` = [E-12] = **retaddr1**, the return address of the
-`call 0x4168d0`.
+Inside `0x004C17C0`: `push esi` -> E-20 so `[esp+8]` = [E-12] = **eax** = arg1 (the list);
+`push edi` -> E-24 so `[esp+0x10]` = [E-8] = **object** = arg2 (the value).
 
-So the value the callee reads as arg2 at this call site is a **return address**, not an argument.
+So the call is `QTaskList_Remove(Sub_4168D0(object), object)` - get a list from the object, then
+remove the object from it. The callee's body confirms the shape: `mov esi,[esp+8]` is the list
+(`mov ecx,[esi]` = count, `lea edx,[esi+8]` = elements) and `mov edi,[esp+0x10]` is the value
+compared against each element.
 
-## Why this is left open
+Fixed in `native_449950.cpp`, declared from the callee's own definition in `qtask_list.cpp`
+(`_QTaskList_Remove`, unmangled, so the C linkage matches).
 
-Two readings exist and the bytes do not choose between them:
+## How the earlier gap claim was wrong
 
-1. Retail genuinely reads stale stack here (a latent retail bug), and the faithful transcription
-   must reproduce a garbage comparison.
-2. `0x00449950` calls a different routine than the one at `0x004C17C0`, which the address
-   disproves - the call target is `0x004c17c0` byte for byte.
+The first pass carried esp = **E-12** forward *past the return of `call 0x4168d0`*, instead of
+restoring it to E-8. That put the second argument slot at [E-12] and made it look like the return
+address of that call - i.e. like stale stack, and therefore like a retail quirk that could not be
+resolved without guessing.
 
-flow-analyst reports that the callee's other 36 call sites push twice (e.g. `0x0042E968`:
-`mov eax,[0x56E210]; push esi; push eax`). If that holds, this call site is the outlier.
+**It was fully decidable. The arithmetic was simply wrong.** A wrong answer that is recorded as
+"undecidable, deliberately left open" is worse than a plainly wrong answer, because the framing of
+diligence discourages anyone from re-deriving it. flow-analyst re-derived it and was right.
 
-**What is not permitted is choosing an argument value.** Writing `0` or a cast would invent a
-comparison retail does not perform. The declaration therefore stays one-argument and the
-undefined symbol stays in the frontier until the call-site census is complete and the outlier is
-understood.
+## The rule
 
-## To close it
-
-Census every `E8` to `0x004C17C0` and record, per site, the number of pushes before the call.
-If exactly this one site passes fewer arguments, the finding is a retail quirk to be reproduced
-deliberately and documented at the site, not silently normalised.
+**The running esp delta is the thing to trust, and it must be restored after each `call` returns.**
+Push-counting at a single site is not sufficient when a routine defers its cleanup to one
+`add esp,N` at the end - the arguments of earlier calls are still live on the stack and can be
+read as later arguments.
