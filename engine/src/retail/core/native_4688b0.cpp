@@ -12,7 +12,7 @@
 //   16-bit id at 0x005BDC98; links the id to handler 0x00468920 on event 0 through 0x00401400, then to handler 0x00488700 on event 1 and handler
 //   0x00468BB0 on event 2 through 0x00401530, then to handler 0x00468BC0 on the event id returned by 0x004E7530 through 0x00401530 again. This
 //   registrar does NOT call 0x004B8810: like the FlashBang registrar, it registers no "TASKTYPE_..." script name. Straight-line, no branch, no loop.
-// Status/limits: TRANSCRIBED; runtime UNOBSERVED. Handlers 0x00468920, 0x00488700, 0x00468BB0 and 0x00468BC0 are raw code immediates in retail and
+// Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. Handlers 0x00468920, 0x00488700, 0x00468BB0 and 0x00468BC0 are raw code immediates in retail and
 //   are not transcribed yet (native gaps). 0x005BDC98 has no other owner and image value 0, so this file defines it. The class id pushed at
 //   0x004688CD is TaskType_Register's return value in EAX, whose meaningful part is the 16-bit id; the port passes the zero-extended word, matching
 //   what every later read of 0x005BDC98 sees. Domain: core/, because it is one of the 0x00402930 startup registrars.
@@ -20,7 +20,7 @@
 
 #include <cstdint>
 
-extern "C" std::uint32_t NATIVE_DECL Core_GetEventWord_4E7530(); // 0x004E7530: argument-less event-word getter
+extern "C" std::uint32_t Core_GetEventWord_4E7530(); // 0x004E7530: argument-less event-word getter (cdecl is the i386 default, as in core/native_00476110.cpp)
 
 extern "C" {
 

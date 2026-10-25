@@ -1,0 +1,12 @@
+{
+ "schema_version": 1,
+ "kind": "build-report",
+ "result": "passed",
+ "address": "0x00468E20",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "implementation_sha256": "2adad9c21c213c43d08d31a19a9b196157df193531cdb075ad6ddf62ad877506",
+ "executed": true,
+ "command": "i686-w64-mingw32-g++ -std=c++20 -I engine/include -c engine/src/retail/core/native_468e20.cpp -o /tmp/native-x86.o",
+ "target": "Windows x86 (Intel 80386 COFF object)",
+ "note": "Candidate translation unit compiled successfully for the retail x86 architecture."
+}

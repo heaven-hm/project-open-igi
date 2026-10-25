@@ -12,7 +12,7 @@
 //   16-bit id at 0x005BE350; links the id to handler 0x00472AE0 on the event id returned by 0x00460C10 and to handler 0x00472CA0 on event 0, both
 //   through 0x00401400 (QTask_LinkQTaskEventHandler); then registers the script name "TASKTYPE_GUNSPAS12" for the id through 0x004B8810. Straight-line,
 //   no branch, no loop.
-// Status/limits: TRANSCRIBED; runtime UNOBSERVED. Handlers 0x00472AE0 and 0x00472CA0 are raw code immediates in retail and are not transcribed yet
+// Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. Handlers 0x00472AE0 and 0x00472CA0 are raw code immediates in retail and are not transcribed yet
 //   (native gaps). 0x005BE350 has no other owner and image value 0, so this file defines it; the retail dword read at 0x00472ABD is modelled as the
 //   zero-extended word, which is what `and edx,0xffff` produces. Both links use 0x00401400 (the full-context variant): unlike the M203 registrar,
 //   this one never calls 0x00401530. The event-id argument is the byte returned by 0x00460C10; retail pushes the full EAX, whose upper bits are

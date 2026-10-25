@@ -11,6 +11,25 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - Six task-class registrars linked, and the playable block observed at runtime
+
+- Linked: `0x00472A70` (GunSPAS12), `0x004688B0` (ComputerLog), `0x00468E20` (ComputerObjectives), `0x004851B0` (GameScreen), `0x00446AB60`-family
+  `0x0046AB60` (ComputerMenu, also registers the `COMPUTER:` -> `LOCAL:computer/` alias) and `0x00485A40` (StatusMessageScreen, object size 0x18440,
+  the largest in the batch). `igi1.exe` 14,269,804 -> **14,273,177** bytes, green.
+- **The "register-plus-LOCAL:" pattern was wrong as stated and is retracted by its author**: it had two witnesses, both script-command registrars, and
+  `0x00472A70` broke it immediately (no `LOCAL:` dispatch, no `0x4B1420` call, no dword zeroing). The startup chain contains at least two registrar
+  shapes, and the honest statement is only that `0x4B1420`-plus-`LOCAL:` identifies the script-command/alias registrars while `TaskType_Register`
+  identifies the task classes. Handler addresses are shared by some task classes and not others, so nothing about them can be inferred from shape.
+- **`0x004688B0` confirms in bytes** what was previously a structural negative: the Computer registrar links four handlers and calls no
+  `Script_QHashNodeRegister`, so there is no `TASKTYPE_` name for it.
+- **First runtime observation of the current candidate** (`docs/fidelity/evidence/candidate-startup-guard-20261025.md`): under CrossOver/Wine with
+  `igi1.exe window level1` the candidate reaches the startup init sequence and terminates with the fail-closed `std::logic_error` for `0x00402930`.
+  No window is created, so there is nothing to screenshot, and the 154 callees stay `BUILD_VERIFIED` with runtime unobserved - none of them was reached.
+- Runner detail worth keeping: the candidate must be launched by absolute path under this CrossOver wrapper; a relative `igi1.exe` fails with
+  `winewrapper.exe:error: cannot execute L"igi1.exe window level1"`.
+- Recorded hazard: the guard's message hardcodes "155 ordered ... calls" and "146 of its 154 distinct callees", numbers that drift as registrars land.
+  A stale count inside a diagnostic string is a claim that has become false, so the guard should derive or refresh them.
+
 ### 2026-10-25 - The AIGraph handler that was link-blocked on one dependency is linked
 
 - `0x005093C0` (`AIGraph_Handler_5093C0`) added to the build target: `igi1.exe` 14,269,528 -> **14,269,804** bytes, green. Its whole undefined set
