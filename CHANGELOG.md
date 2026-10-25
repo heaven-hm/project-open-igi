@@ -3154,3 +3154,70 @@ three are correctly absent from `CMakeLists.txt`, so the build is unaffected and
 a commit's added-file list against the files its message names. Amended to name all three.
 **This is the second time in this session a broad `git add -f` swept unmentioned files into a
 commit; the first was `e6773008`.**
+
+## THE BREAK IN VISIBILITY, FOUND BY RUNNING THE BINARY (2026-10-25)
+
+This is the finding the whole session was converging on, and it took 90 seconds of runtime
+plus one disassembly to establish. It is recorded first and prominently because every other
+entry in this file is downstream of it.
+
+**`core/class_registration.cpp`'s `QTask_RegisterClasses` is a PARTIAL REIMPLEMENTATION of
+retail `0x00402930`, not a transcription of it.**
+
+Retail's body opens with six consecutive calls:
+
+```
+0x00402930  call 0x00508F80
+0x00402935  call 0x00489560
+0x0040293a  call 0x00407D60        Material_DefineScriptNatives
+0x0040293f  call 0x00488BB0
+0x00402944  call 0x00402FF0
+0x00402949  call 0x00415530        Game_Init   <- the sixth call
+```
+
+The port's body calls, in order: `ReportNotTranscribed("AI graph")`, `AI_Detection_Init()`,
+`ReportNotTranscribed("material defines")`, `ReportNotTranscribed("level flow")`,
+`ReportNotTranscribed("game options")`, `RegisterGameClasses()`, `AnimSound_LoadParameters()`,
+`RegisterFlowClass()`.
+
+**`0x00508F80` is absent. Three of retail's calls are replaced by a helper that announces they
+were not transcribed. `Game_Init 0x00415530` is replaced by `RegisterGameClasses()`, a host
+substitute.** So `Game_Init` is never called, and therefore `Level_Start`, `Terrain_Load`, the
+object opener and everything else downstream never run either.
+
+**Evidence that this is the actual cause, not a correlate.** The runtime log under Wine shows
+`QTask_RegisterClasses @ ~0x00402930` as the LAST native entered, with `Game_Init` appearing
+zero times. The port creates and titles its window and pumps its message loop first
+(`SetWindowHandle` and `SetAppTitle` entered through `WindowProcedure`, which repeats), so
+startup succeeds and registration is where it stops. **A static check could not have found
+this: the file compiles, the CFG scores pass, the symbol resolves, and the provenance block
+describes the omission.**
+
+**Three owner rules broken at once:**
+- **10.13 rule 1** - byte-faithful flow. The body is an approximation of retail's flow, and it
+  is presented under a `// Native: ...; retail VA 0x00402930` provenance block as though it
+  were the transcription.
+- **10.13 rule 2 / 10.14 rule 9** - no invented helpers in `engine/`. `ReportNotTranscribed` is
+  exactly such a helper, and rule 9 names "logging plumbing" among the things forbidden.
+- **10.15 rule 16** - no dead code. The superseded shell was left in place beside the work that
+  should replace it.
+
+**Why it survived every check, which is the part worth keeping.** `ReportNotTranscribed("...")`
+is a **comment executed as code**: it states in the running program what the provenance block
+states in the file. **A record that announces its own incompleteness in the output stream reads
+as diligence rather than as a missing body.** That is the same fault as the two extent claims
+and the `config_bytes.hpp` count fixed earlier today - a record wrong about itself - with one
+difference that made it invisible for longer: this one is honest in the file and dishonest in
+the binary, and the binary is the artifact under test.
+
+**Consequence for everything else in this file.** The `Game_Init` extension, the five gap
+natives, the `Level_Start` provenance correction, `DynObj_OpenModelTexturePackage 0x004CEFA0`,
+`Resource_Flush 0x004B63D0` and the `0x00A4EC60`/`0x00A4ED6C` linkage fix are all correct and
+all currently UNREACHABLE. None of them is wasted; none of them can run until `0x00402930` is
+transcribed as retail.
+
+**Next, in order:** transcribe `0x00402930`'s real body - 402 instructions, 314 call sites,
+three regions (registration sweep `0x00402930`-`0x00402C37`, teardown sweep
+`0x00402C40`-`0x00402F42`, local helper `0x00402F50`-`0x00402FEB`) - beginning with the six
+opening calls; and **delete `ReportNotTranscribed` from `engine/` rather than leave it beside
+its replacement** (10.15 rule 16).
