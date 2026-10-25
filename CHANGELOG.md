@@ -11,6 +11,18 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - Audit: 52 engine sources are not in the build
+
+- `docs/fidelity/evidence/unbuilt-engine-sources.md`: 52 of 466 engine `.cpp` files are neither compiled nor linked (414 listed). An unbuilt native is not a
+  transcription - it cannot be runtime-checked, it violates the no-dead-code rule, and it shrinks every "remaining work" count silently.
+- **0 duplicate-VA files**, so no rule-13 violation: each unlisted file either carries a VA no linked file covers (49 files) or has no retail VA at all (3 port
+  scaffolding files in `input/`).
+- Integration test on 42 of them (all but the ten `native_419xxx` files the BackgroundFX wave is still writing): compiles clean, fails only at link with **10
+  unresolved symbols** - `InputPort::Run`/`SetKeyDown`/`SetMouseButtonDown`/`AddMouseDelta`/`Remap`/`ActionPressed`/`ActionDown` plus `g_54875c`,
+  `g_548638`. The backlog is close to linkable; the input subsystem is missing the other half of its own class, not an unknown dependency.
+- Trigger for the audit: a worker reported `0x00498460` as "transcribed but unlinked". Checking the whole tree beat trusting one file's claim - the real number
+  was 52, not one.
+
 ### 2026-10-25 - Startup sequence sized: 154 callees, 67,560 bytes in retail call order
 
 - Added `docs/fidelity/evidence/startup-402930-callee-sizes.md`: every distinct callee of `0x00402930` in retail call order with its radare2 extent,
