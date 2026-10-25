@@ -1,5 +1,32 @@
 ## Unreleased
 
+### The 30 partial ports are honestly blocked - the gate is what is wrong
+
+Triaged all 30 natives whose `Status/limits` admits an untranscribed part:
+
+- **30 of 30 name at least one specific retail VA** they are blocked on.
+- **0 have a vague gap.**
+
+So the files are not hiding anything. Each records the exact address it cannot
+complete, which is precisely what 10.13 rule 1 requires - "if the evidence does not
+establish something, leave it blocked and record the gap; never guess, simplify,
+substitute, or invent." **The partial ports are doing the right thing.**
+
+**That moves the defect entirely onto the gate.** A partial port is the correct
+state for a routine blocked on an untranscribed dependency; what is wrong is that
+the gate cannot distinguish it from a complete one, so "implemented" means "a file
+exists" and every progress figure computed from file counts inherits that. The fix
+belongs in the checker - surface the blocked set as a distinct population - not in
+the 30 files, which should be left exactly as they are until their dependencies
+land.
+
+**This is the correction to how I framed it earlier.** I listed the 30 under "false
+green signals", which implied the files were at fault. They are not; they are the
+most honest artifacts in the tree. The false signal is the gate reading them as
+done.
+
+## Unreleased
+
 ### I reported Task_RegisterAIEvents_44EEB0 as integrated when it was never compiled
 
 I reported in the `ca245bf9` tick that `Task_RegisterAIEvents_44EEB0` was
