@@ -2964,3 +2964,58 @@ not terrain logic** - and my own first description of it said otherwise.
 **I also mis-counted its body: I reported 22 instructions and the correct figure is 24.** I
 dropped `add esp,0x30` and the `ret` when counting my own dump. **The `pd`-window fault and
 this are one fault: I read a body I had dumped myself and still did not count it.**
+
+## `Level_Start` is a hook that claims STRUCTURALLY_VERIFIED, and its provenance documents the omission (2026-10-25)
+
+**This is the most serious status defect found so far, because the record is honest and the
+status is not.**
+
+`core/game_flow.cpp:80` says, in its own provenance prose:
+
+> "...the terrain textures and lightmaps through 0x004C5F00 and the terrain through
+> 0x004C6240 at 0x00415C31 and 0x00415C44, the level package through 0x004CFBD0 at
+> 0x00415C88, the common package through 0x004CFC00 at 0x00415C92, and the common forms
+> through 0x004CEFA0 at 0x00415C9E. The calls for the mission scripts, the sound and the
+> camera sit around them and are outside the MVP scope, **so this transcription skips them
+> and the port runs the content through the phase 0 hook.**"
+
+**And the body is five lines:**
+```cpp
+NATIVE_DECL void Level_Start(void* game)
+{
+    if (igi::retail::core::g_level_start_hook != nullptr)
+    {
+        igi::retail::core::g_level_start_hook(game);
+    }
+}
+```
+
+**Four defects in one record:**
+1. **The body is a hook, not a transcription.** Section 10.13 rule 1 forbids substitution.
+   This substitutes a host callback for retail's calls, and **the comment says so** - so
+   this was a deliberate decision, not an oversight.
+2. **`// Status/limits: STRUCTURALLY_VERIFIED`** on a body that performs **none** of the
+   retail work. A build check cannot see this, a CFG check cannot see this, and the
+   provenance *describes the real flow correctly*, so a reader checking the comment against
+   the binary finds agreement.
+3. **The extent claim `VA 0x00415B30..0x00415D40`** is a second instance of the same class
+   as `Game_Init`: a range claimed for a body that does not reach it.
+4. **`// Verified: 100% manually verified by HeavenHM` appears TWICE**, verbatim, two lines
+   apart - so the line is duplicated text, not two independent confirmations.
+
+**Why this is the visibility break, stated exactly:** `0x00415B30` is the level-load entry
+and `Terrain_Load 0x004C6240` / `Terrain_LoadTexturesAndLightmaps 0x004C5F00` are the
+routines that produce the scene. **The port reaches `Level_Start` and calls a hook instead.**
+So the terrain natives can be transcribed, integrated, linked and built - **and never
+execute.** Every measurement we have taken today is consistent with that, and none of them
+could have found it: **the record is not wrong about retail; it is wrong about itself.**
+
+**The rule this adds: a status line and a body are two claims, and a status check that reads
+the body for compilability does not read it for content.** The only instrument that finds
+this is reading the body against the provenance prose and asking whether the body does what
+the prose says retail does.
+
+**And the honest position:** the port's terrain path is not blocked on transcription. It is
+blocked on a deliberate substitution. That is a decision for the owner, not a defect to
+patch silently - replacing the hook with retail's calls changes what runs, and it must be
+the owner's call whether the hook was a scaffold or the intended design.
