@@ -31,7 +31,10 @@
 //   only the two addresses whose difference 0x004F1A80 records are, via one addressable dword plus the retail offsets, because that difference is
 //   the only thing the callee reads from them; (4) retail pushes the container's entry count (`push 0xd`) BEFORE the four dword stores and only
 //   then calls 0x004F1950; the port stores first and passes 13 at the call, because nothing reads that stack slot in between, so the pushed
-//   argument is dead until the call and no observable order changes. The frame size equals the object size registered here (0x238), consistent
+//   argument is dead until the call and no observable order changes; (5) the seven appends whose sixth argument is retail's address 0x005C1170
+//   (five of them) or 0x005C1178 (two) pass the port address of the global that mirrors it (`&::g_5c1170`, `&::g_5c1178`) instead of the retail
+//   constant, because 0x004F1A80 stores that argument as a value in the parameter record and a retail address there would leave a pointer into
+//   unmapped retail .data inside the record. The frame size equals the object size registered here (0x238), consistent
 //   with the six-registrar pattern recorded in docs/fidelity/evidence/registrar-frame-is-task-object-20261025.md, so the recorded differences are
 //   field offsets inside the task object. 0x0054097C is owned by sys/native_481340.cpp as a 16-bit slot and 0x005C1184 by sys/native_481350.cpp as
 //   a 32-bit slot, so this file declares them extern with those types and defines only what nobody owns: 0x005C1170, 0x005C1174, 0x005C1178 and
@@ -244,7 +247,7 @@ void Task_DefineExplodeObject()
                                 append_frame,
                                 append_frame + 0x1F0,                         // 0x0048161F: frame+0x1F0 (recorded difference 0x1F0)
                                 static_cast<std::int32_t>(Sys_GetGlobal32_4F0F50()),
-                                7, static_cast<std::int32_t>(static_cast<std::uintptr_t>(0x005C1170U)));
+                                7, static_cast<std::int32_t>(reinterpret_cast<std::uintptr_t>(&::g_5c1170)));
 
     // Append 6: 0x00481635: push 0x5C1170; 0x0048163A: push 7; 0x0048163C: call 0x4F0F50; 0x00481648: lea eax,[esp+0x204] (frame+0x1F8);
     // call at 0x00481656.
@@ -252,7 +255,7 @@ void Task_DefineExplodeObject()
                                 append_frame,
                                 append_frame + 0x1F8,                         // 0x00481648: frame+0x1F8 (recorded difference 0x1F8)
                                 static_cast<std::int32_t>(Sys_GetGlobal32_4F0F50()),
-                                7, static_cast<std::int32_t>(static_cast<std::uintptr_t>(0x005C1170U)));
+                                7, static_cast<std::int32_t>(reinterpret_cast<std::uintptr_t>(&::g_5c1170)));
 
     // Append 7: 0x0048165E: push 0x5C1170; 0x00481663: push 7; 0x00481665: call 0x4F0F50; 0x00481671: lea eax,[esp+0x208] (frame+0x1FC);
     // call at 0x0048167F.
@@ -260,7 +263,7 @@ void Task_DefineExplodeObject()
                                 append_frame,
                                 append_frame + 0x1FC,                         // 0x00481671: frame+0x1FC (recorded difference 0x1FC)
                                 static_cast<std::int32_t>(Sys_GetGlobal32_4F0F50()),
-                                7, static_cast<std::int32_t>(static_cast<std::uintptr_t>(0x005C1170U)));
+                                7, static_cast<std::int32_t>(reinterpret_cast<std::uintptr_t>(&::g_5c1170)));
 
     // Append 8: 0x00481687: push 0x5C1170; 0x0048168C: push 7; 0x0048168E: call 0x4F0F50; 0x0048169A: lea eax,[esp+0x210] (frame+0x204);
     // call at 0x004816A8.
@@ -268,7 +271,7 @@ void Task_DefineExplodeObject()
                                 append_frame,
                                 append_frame + 0x204,                         // 0x0048169A: frame+0x204 (recorded difference 0x204)
                                 static_cast<std::int32_t>(Sys_GetGlobal32_4F0F50()),
-                                7, static_cast<std::int32_t>(static_cast<std::uintptr_t>(0x005C1170U)));
+                                7, static_cast<std::int32_t>(reinterpret_cast<std::uintptr_t>(&::g_5c1170)));
 
     // Append 9: 0x004816B0: push 0x5C1170; 0x004816B5: push 7; 0x004816B7: call 0x4F0F50; 0x004816C3: lea eax,[esp+0x214] (frame+0x208);
     // call at 0x004816D1.
@@ -276,7 +279,7 @@ void Task_DefineExplodeObject()
                                 append_frame,
                                 append_frame + 0x208,                         // 0x004816C3: frame+0x208 (recorded difference 0x208)
                                 static_cast<std::int32_t>(Sys_GetGlobal32_4F0F50()),
-                                7, static_cast<std::int32_t>(static_cast<std::uintptr_t>(0x005C1170U)));
+                                7, static_cast<std::int32_t>(reinterpret_cast<std::uintptr_t>(&::g_5c1170)));
 
     // Append 10: 0x004816D9: push 0x5C1178 (the getter's inert argument - the address of a global this body writes at 0x00481553);
     // 0x004816DE: push 7; 0x004816E0: call 0x4F0FA0; 0x004816EC: lea eax,[esp+0x218] (frame+0x20C); call at 0x004816FA.
@@ -284,7 +287,7 @@ void Task_DefineExplodeObject()
                                 append_frame,
                                 append_frame + 0x20C,                         // 0x004816EC: frame+0x20C (recorded difference 0x20C)
                                 static_cast<std::int32_t>(Core_GetRenderWordA_4F0FA0()),
-                                7, static_cast<std::int32_t>(static_cast<std::uintptr_t>(0x005C1178U)));
+                                7, static_cast<std::int32_t>(reinterpret_cast<std::uintptr_t>(&::g_5c1178)));
 
     // Append 11: 0x00481702: push 0x5C1178; 0x00481707: push 7; 0x00481709: call 0x4F0FA0; 0x00481715: lea eax,[esp+0x21c] (frame+0x210);
     // call at 0x00481723.
@@ -292,7 +295,7 @@ void Task_DefineExplodeObject()
                                 append_frame,
                                 append_frame + 0x210,                         // 0x00481715: frame+0x210 (recorded difference 0x210)
                                 static_cast<std::int32_t>(Core_GetRenderWordA_4F0FA0()),
-                                7, static_cast<std::int32_t>(static_cast<std::uintptr_t>(0x005C1178U)));
+                                7, static_cast<std::int32_t>(reinterpret_cast<std::uintptr_t>(&::g_5c1178)));
 
     // Append 12: 0x0048172B/0x0048172D push 0/7; 0x0048172F: call 0x4F0FC0; 0x0048173B: lea eax,[esp+0x1a0] (frame+0x194); call at 0x00481749.
     // This entry's offset is out of ascending order in retail and is kept in retail's position.

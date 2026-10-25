@@ -26,7 +26,10 @@
 //   pushes are not reproduced - for the seven link getters the inert argument is simultaneously the next 0x00401400 link's pre-pushed handler,
 //   which the port keeps as the handler value in the same order, and for the eighth append's 0x004F0FA0 call the two inert pushes are
 //   `push 0x005BE380` and `push 7`; (3) byte-valued event ids are zero-extended in the port, which cannot change behaviour because every link
-//   fed by a byte getter here goes through 0x00401400, which masks the event word to its low byte for the phase index. The id slot 0x005BE388
+//   fed by a byte getter here goes through 0x00401400, which masks the event word to its low byte for the phase index; (4) the eighth append's
+//   sixth argument is retail's address 0x005BE380, which the port passes as the port address of the global that mirrors it (`&::g_5be380`)
+//   instead of the retail constant, because 0x004F1A80 stores that argument as a value in the parameter record and a retail address there would
+//   leave a pointer into unmapped retail .data inside the record. The id slot 0x005BE388
 //   holds image value 0, is written with a 16-bit store and is read back as a word; the two bytes at 0x005BE389-0x005BE38B are referenced
 //   nowhere in build/retail-dis.txt and are NOT modelled here. 0x005BE380, 0x005BE384 and 0x005BE38C are written and read as dwords, so they
 //   are declared as std::uint32_t. The order of the 0x005BE380/0x005BE384 stores relative to the 0x004F1950 call is retail's
@@ -260,7 +263,7 @@ void Task_DefineStationaryGun()
                                 append_frame,
                                 append_frame + 0x1EC,                         // 0x0047416D: frame+0x1EC
                                 static_cast<std::int32_t>(Core_GetRenderWordA_4F0FA0()),
-                                7, static_cast<std::int32_t>(static_cast<std::uintptr_t>(0x005BE380U)));
+                                7, static_cast<std::int32_t>(reinterpret_cast<std::uintptr_t>(&::g_5be380))); // port address of retail 0x005BE380
 
     // 0x00474180: add esp,0x238; 0x00474186: ret. No 0x004B8810 script-name tail exists in this body.
 } // end of Task_DefineStationaryGun

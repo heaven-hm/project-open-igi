@@ -9,8 +9,8 @@
 
 extern "C" {
 extern std::uint16_t g_548638;  // retail 0x00548638: QObj class id, owned by 0x4D9730 (native_4d9730.cpp)
-std::uint16_t g_54875c;  // retail 0x0054875C: DynCubeObj class id, written here
-std::uint8_t g_54875e;   // retail 0x0054875E: QTask_AllocateEvent result, written here
+std::uint16_t g_54875c = 0x181U;  // retail 0x0054875C: DynCubeObj class id, written here; image bytes 81 01, so the unregistered sentinel 0x0181, not zero
+std::uint8_t g_54875e = 0xFFU;   // retail 0x0054875E: QTask_AllocateEvent result, written here; image byte is FF, so the unallocated sentinel 0xFF, not zero
 
 std::int32_t DynCubeObj_Init()
 {

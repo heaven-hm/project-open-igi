@@ -38,7 +38,10 @@
 //   zero-extended in the port, which cannot change behaviour because every link fed by a byte getter here goes through 0x00401400 or
 //   0x00401530, which mask the event word for the phase index; (3) retail's 0x26A0-byte frame is reproduced as a single local slot whose address
 //   stands in for the frame base, which is the same convention the accepted 0x004813E0 file uses - only the two addresses passed to 0x004F1A80
-//   matter and the callee stores their difference, and nothing in this body reads the intervening bytes. Handlers 0x0046E210, 0x0046E5B0,
+//   matter and the callee stores their difference, and nothing in this body reads the intervening bytes; (4) the one append whose sixth argument
+//   is retail's address 0x005BE320 passes the port address of the global that mirrors it (`&::g_5be320`) instead of the retail constant, because
+//   0x004F1A80 stores that argument as a value in the parameter record and a retail address there would leave a pointer into unmapped retail
+//   .data inside the record. Handlers 0x0046E210, 0x0046E5B0,
 //   0x0046E7A0, 0x0046E7F0, 0x0046E9D0, 0x0046E9E0 and 0x0046E9F0 are raw code immediates in retail and are not transcribed yet (native gaps in
 //   0x0046xxxx-0x0048xxxx); handler 0x0042FC50 is BELOW 0x00460000 and belongs to the 0x00400000-0x0045FFFF owner. Domain: core/, because it
 //   is one of the 0x00402930 startup registrars.
@@ -203,7 +206,7 @@ void Task_DefineAIStationaryGunHolder()
     Script_TaskContainer_Append(reinterpret_cast<std::int32_t*>(static_cast<std::uintptr_t>(::g_5be328)),
                                 append_frame, append_frame + 0x25F0,
                                 static_cast<std::int32_t>(Sys_GetGlobal32_4F0F50()), 7,
-                                static_cast<std::int32_t>(static_cast<std::uintptr_t>(0x005BE320U)));
+                                static_cast<std::int32_t>(reinterpret_cast<std::uintptr_t>(&::g_5be320))); // port address of retail 0x005BE320
 
     // 0x0046E556/0x0046E558: push 0/7; 0x0046E55A: call 0x4F0FC0; 0x0046E55F: lea ecx,[esp+0x25FC] -> frame+0x25F4;
     // 0x0046E56C: lea edx,[esp+0xC] -> frame+0x00; 0x0046E573: call 0x4F1A80; 0x0046E578: add esp,0x18.

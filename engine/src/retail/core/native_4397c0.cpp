@@ -58,10 +58,10 @@ extern "C" std::uint16_t Sys_GetGlobal16_4D9FA0(void);            // 0x004D9FA0:
 extern "C" std::uint8_t Sys_GetSettingByte_416840(void);          // 0x00416840: `mov al,[0x539549]; ret` (config/native_416840.cpp)
 extern "C" std::uint8_t Sys_GetSettingByte_416860(void);          // 0x00416860: `mov al,[0x53954B]; ret` (image 255)
 extern "C" void* Sys_LookupOrAppendRecord_4169D0(char const* name);   // 0x004169D0 (config/native_4169d0.cpp)
-extern "C" std::uint32_t Sys_GetGlobal32_4F0F70(void);            // 0x004F0F70: `mov eax,[0xA718D0]; ret`
+extern "C" std::uint32_t Sys_GetGlobal32_4F0F70(void);            // 0x004F0F70: `mov eax,[0xA70C6C]; ret`
 extern "C" std::uint32_t Sys_GetGlobal32_4F0FC0(void);            // 0x004F0FC0: `mov eax,[0xA70C9C]; ret`
 extern "C" std::uint32_t Core_GetRenderWordB_4F0FD0(void);        // 0x004F0FD0: `mov eax,[0xA71884]; ret` (core/native_4f0fd0.cpp)
-extern "C" std::uint32_t Sys_GetGlobal32_4F1010(void);            // 0x004F1010: `mov eax,[0xA70D10]; ret`
+extern "C" std::uint32_t Sys_GetGlobal32_4F1010(void);            // 0x004F1010: `mov eax,[0xA70C88]; ret`
 extern "C" std::uint32_t Sys_GetGlobal32_4F1210(void);            // 0x004F1210: `mov eax,[0x54DDA8]; ret` (image 255)
 extern "C" std::uint32_t Sys_GetGlobal32_4F1220(void);            // 0x004F1220: `mov eax,[0x54DDAC]; ret` (image 255)
 extern "C" void* Script_TaskContainer_Alloc(std::int32_t count);  // 0x004F1950 (script/native_4f1950.cpp)

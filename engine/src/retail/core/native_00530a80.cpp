@@ -8,7 +8,7 @@
 #include <cstdint>
 
 extern "C" {
-std::uint16_t g_54f7a0;  // retail 0x0054F7A0: FlashTask class id, written here
+std::uint16_t g_54f7a0 = 0x181U;  // retail 0x0054F7A0: FlashTask class id, written here; image bytes 81 01 00 00, so the unregistered sentinel 0x0181, not zero
 std::uint8_t  g_a845ec;  // retail 0x00A845EC: flag byte set to 1 here
 
 std::int32_t FlashTask_Init()

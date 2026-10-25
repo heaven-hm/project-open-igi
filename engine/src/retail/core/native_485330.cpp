@@ -28,7 +28,10 @@
 //   only the two addresses whose difference 0x004F1A80 records are, via one addressable dword plus the retail offsets, because that difference is
 //   the only thing the callee reads from them; (4) retail pushes the container's entry count (`push 9`) BEFORE the two dword stores and only then
 //   calls 0x004F1950; the port stores first and passes 9 at the call, because nothing reads that stack slot between the push and the call, so the
-//   pushed argument is dead until the call and no observable order changes. The id slot 0x00540A8C is declared as the two 16-bit words it holds
+//   pushed argument is dead until the call and no observable order changes; (5) the ninth append's sixth argument is retail's address 0x005C8A30,
+//   which the port passes as the port address of the global that mirrors it (`&::g_5c8a30`) instead of the retail constant, because 0x004F1A80
+//   stores that argument as a value in the parameter record and a retail address there would leave a pointer into unmapped retail .data inside
+//   the record. The id slot 0x00540A8C is declared as the two 16-bit words it holds
 //   (image dword 0x00000181), so retail's 16-bit store at 0x00485357 and its seven 16-bit re-loads are plain 16-bit accesses with no type
 //   punning. 0x005C8A30 and 0x005C8A34 are written as dwords and are declared as raw 32-bit values, not floats: 0x42C80000 is the image-adjacent
 //   bit pattern retail stores and its meaning as a float is NOT established here (the earlier native 0x004F1CB0 writes the same two values 0 and
@@ -215,7 +218,7 @@ void Task_DefineStatusMessage()
                                 append_frame,
                                 append_frame + 0x1D8,                         // 0x00485551: frame+0x1D8 (recorded difference 0x1D8)
                                 static_cast<std::int32_t>(Sys_GetGlobal32_4F0F50()),
-                                7, static_cast<std::int32_t>(static_cast<std::uintptr_t>(0x005C8A30U)));
+                                7, static_cast<std::int32_t>(reinterpret_cast<std::uintptr_t>(&::g_5c8a30))); // port address of retail 0x005C8A30
 } // end of Task_DefineStatusMessage
 
 } // extern "C"

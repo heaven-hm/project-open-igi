@@ -10,7 +10,7 @@
 
 extern "C" {
 extern std::uint16_t g_54875c;  // retail 0x0054875C: DynCubeObj class id, written by DynCubeObj_Init 0x004E5370 (native_004e5370.cpp); read-only here
-std::uint16_t g_54ed4e;  // retail 0x0054ED4E: SplinePathDynCubeObj class id, written here
+std::uint16_t g_54ed4e = 0x181U;  // retail 0x0054ED4E: SplinePathDynCubeObj class id, written here; image dword at 0x0054ED4E is 81 01 81 01, so the uint16 is the unregistered sentinel 0x0181, not zero
 
 std::int32_t SplinePathDynCubeObj_Init()
 {

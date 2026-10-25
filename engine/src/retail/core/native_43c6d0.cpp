@@ -45,10 +45,10 @@ extern "C" std::uint16_t Sys_GetGlobal16_4C48C0(void);            // 0x004C48C0:
 extern "C" std::uint8_t Sys_GetSettingByte_416840(void);          // 0x00416840: argument-less byte getter (config/native_416840.cpp)
 extern "C" std::uint8_t Sys_GetGlobal8_47E6F0(void);              // 0x0047E6F0: argument-less byte getter (sys/native_47e6f0.cpp)
 extern "C" std::uint8_t DynObj_GetByte_4C5800(void);              // 0x004C5800: argument-less byte getter (dynobj/native_4c5800.cpp)
-extern "C" std::uint32_t Sys_GetGlobal32_4F0F70(void);            // 0x004F0F70: `mov eax,[0xA71878]; ret`
+extern "C" std::uint32_t Sys_GetGlobal32_4F0F70(void);            // 0x004F0F70: `mov eax,[0xA70C6C]; ret`
 extern "C" std::uint32_t Sys_GetGlobal32_4F0FC0(void);            // 0x004F0FC0: `mov eax,[0xA70C9C]; ret`
 extern "C" std::uint32_t Core_GetRenderWordB_4F0FD0(void);        // 0x004F0FD0: `mov eax,[0xA71884]; ret` (core/native_4f0fd0.cpp)
-extern "C" std::uint32_t Sys_GetGlobal32_4F1010(void);            // 0x004F1010: `mov eax,[0xA70D10]; ret`
+extern "C" std::uint32_t Sys_GetGlobal32_4F1010(void);            // 0x004F1010: `mov eax,[0xA70C88]; ret`
 extern "C" void* Script_TaskContainer_Alloc(std::int32_t count);  // 0x004F1950 (script/native_4f1950.cpp)
 extern "C" std::uint8_t Script_PhaseIdGetE4_4F1A60(void);         // 0x004F1A60: argument-less byte getter (script/native_4f1a60.cpp)
 extern "C" std::uint8_t Script_PhaseIdGetE5_4F1A70(void);         // 0x004F1A70: argument-less byte getter (script/native_4f1a70.cpp)
