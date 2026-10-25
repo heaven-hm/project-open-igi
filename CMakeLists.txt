@@ -847,8 +847,10 @@ add_executable(igi WIN32
     engine/src/retail/render/native_4a28b0.cpp
     engine/src/retail/render/native_4a29c0.cpp
     engine/src/retail/render/native_4a29e0.cpp
-    engine/platform/windows/retail_native_verification_support.cpp)
+    engine/platform/windows/retail_native_verification_support.cpp
+    engine/platform/windows/dev_log.cpp)
 target_include_directories(igi PRIVATE engine/include)
+target_include_directories(igi PRIVATE engine/platform/windows)
 target_compile_features(igi PRIVATE cxx_std_20)
 set_target_properties(igi PROPERTIES OUTPUT_NAME "igi1")
 if(MINGW)

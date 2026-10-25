@@ -55,6 +55,8 @@
 #if defined(_WIN32)
 #include <windows.h>
 
+#include "dev_log.hpp"
+
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -73,6 +75,11 @@ int NATIVE_DECL QTask_CreateTask();
 int WINAPI WinMain(HINSTANCE const h_instance, HINSTANCE const h_previous_instance,
                    LPSTR const command_line, int const show_command)
 {
+    // Infrastructure: open igi.log before any retail native runs, so the first native
+    // entered is recorded. Permitted by section 10.13 rule 3(a): this changes no retail
+    // value and no retail ordering - it only appends to a file.
+    ::igi::devlog::Init("igi.log");
+    DEVLOG("WinMain entered (retail VA 0x0048F530)");
 #if defined(_WIN32)
     // 0x0048F544 CreateMutexA(NULL, TRUE, "IGIMUTEX"), name pointer 0x00541ECC.
     // Build-time testing divergence only: the verification build must be able to

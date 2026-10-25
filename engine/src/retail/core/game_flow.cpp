@@ -1,3 +1,4 @@
+#include "dev_log.hpp"
 #include "igi/retail/core/game_flow.hpp"
 
 #include "igi/retail/core/app_main_commands.hpp"
@@ -133,6 +134,7 @@ extern void NATIVE_DECL Render_StoreArgs935C04_4A28B0(void* arg1, void* arg2, vo
 
 NATIVE_DECL void Game_Init()
 {
+    NATIVE_LOG_ENTER("Game_Init", "0x00415530");
     // Group A, retail 0x00415530-0x0041553F: the "Level <n>" command-line switch. The
     // literal is the option name; 0x00415B10 is the switch handler, which retail passes as
     // a raw code immediate and which is not transcribed, so it is a cast integer and
@@ -297,6 +299,7 @@ NATIVE_DECL void Game_Init()
 //   not evidence for the body below.
 NATIVE_DECL void Level_Start(void* game)
 {
+    NATIVE_LOG_ENTER("Level_Start", "0x00415B30");
     if (igi::retail::core::g_level_start_hook != nullptr)
     {
         igi::retail::core::g_level_start_hook(game);
@@ -305,6 +308,7 @@ NATIVE_DECL void Level_Start(void* game)
 
 NATIVE_DECL void Game_Setup(void* game)
 {
+    NATIVE_LOG_ENTER("Game_Setup", "0x00416260");
     if (igi::retail::core::g_per_frame_hook != nullptr)
     {
         igi::retail::core::g_per_frame_hook(game);
@@ -313,6 +317,7 @@ NATIVE_DECL void Game_Setup(void* game)
 
 NATIVE_DECL void Game_DeleteHandler(void* game)
 {
+    NATIVE_LOG_ENTER("Game_DeleteHandler", "0x00416620");
     if (igi::retail::core::g_shutdown_hook != nullptr)
     {
         igi::retail::core::g_shutdown_hook(game);
