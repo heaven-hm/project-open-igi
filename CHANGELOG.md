@@ -1,5 +1,52 @@
 ## Unreleased
 
+### Two confirmed bit-exactness defects in a committed file, found via chain-worker's class sweep
+
+`core/native_419630.cpp` carried two decimal floating-point literals feeding x87
+long-double chains. **Both emitted the wrong 80-bit mantissa.** Confirmed by
+disassembling the object, not by reading the source, which looks correct either way:
+
+| source | emitted mantissa | exact widening | bytes in retail |
+| --- | --- | --- | --- |
+| `0.3141592741012573L` | `0xA0D97BFFFFFFFC82` | `0xA0D97C0000000000` | `0x00533580` = `0x3EA0D97C` |
+| `static_cast<long double>(6.2831855F)` | `0xC90FDB09A671EF31` | `0xC90FDB0000000000` | `0x005334A8` = `0x40C90FDB` |
+
+Both fixed to hex literals, `0x1.41b2f8p-2L` and `0x1.921fb6p+2L`, which GCC emits
+as `flds` of retail's exact float - a widening, not a rounding. Verified: zero
+wrong-mantissa hits in the object, retail's bytes (`7cd9a03e`, `db0fc940`) present,
+build 0 errors.
+
+**The second row is the subtle one.** `0.3141592741012573L` compares *equal* to the
+float when both are widened to `double`, because the difference is below double
+precision. Only `long double`'s 64-bit mantissa can see it. So the literal looked
+right in every check short of disassembling the constant.
+
+**This is chain-worker's finding, applied to a file it does not own.** It swept its
+own scope, found zero non-exact literals, and then scanned the tree read-only for
+the coexistence signature rather than declaring the class closed. Three of its four
+candidates were false positives; one was real.
+
+### r2's function header number is BYTES, not the instruction count
+
+handler-abi-worker's two censuses reported 139 and 173 "instructions" from r2's
+`/ 450: fcn...` header. **That number is the function size in bytes.** Corrected by
+reading the disassembly: `0x00422B40` is 89 instructions / 335 bytes,
+`0x00420CC0` 128 / 450, `0x00421750` 173 / 596, `0x004190E0` 78 / 269.
+
+This is the **tenth** derived-field error in this lane and it caused a wasted
+tick: I told it to take the "small" bodies, which were in fact larger than the one
+it had just written. It caught my premise by measuring; I had accepted its earlier
+numbers without checking them.
+
+### Handler-only entry points are larger than assumed
+
+`DialogWindow` carries seven, `ModelViewBox` carries eight - **two registrars, one
+band, fifteen entry points with no implementation.** The "invisible gap" class is
+not a scattering of ones and twos, and a single registrar can be the parent of
+eight.
+
+## Unreleased
+
 ### My one-file-per-VA check was broken twice and reported a confident zero
 
 The check is supposed to catch §10.15 rule 13 violations. It reported **`owners=0`**

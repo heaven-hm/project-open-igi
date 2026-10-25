@@ -42,7 +42,7 @@ void NATIVE_DECL BackgroundFX_EmitFan_419630(void* circle, void* context)
     const float radius = static_cast<float>(v_extended);
     // 0x00419685: `fistpll 0x14(%esp)` (round to nearest) then 0x00419689 `mov 0x14(%esp),%ebx` (low dword only).
     std::int32_t count = static_cast<std::int32_t>(static_cast<std::uint32_t>(
-        static_cast<std::uint64_t>(std::llrintl(v_extended * 0.3141592741012573L))));
+        static_cast<std::uint64_t>(std::llrintl(v_extended * 0x1.41b2f8p-2L))));
     // 0x0041968D-0x00419692: `cmp $0x28,%ebx; jl ...; mov $0x28,%ebx` - only the upper bound is clamped.
     if (count >= 0x28)
     {
@@ -53,7 +53,12 @@ void NATIVE_DECL BackgroundFX_EmitFan_419630(void* circle, void* context)
     if (count > 0)
     {
         // 0x004196A3: `fildl 0x14(%esp)` (count); 0x004196B4: `fdivrs 0x005334A8` - step = 2*pi/count, kept in extended precision.
-        const long double step = static_cast<long double>(6.2831855F) / static_cast<long double>(count);
+        // The numerator is retail's 32-bit float at 0x005334A8 (bytes db 0f c9 40 = 0x40C90FDB) widened
+        // exactly by the x87 divide. Written as a hex long-double literal on purpose: a decimal literal
+        // such as 6.2831855F lets GCC fold the source decimal at higher precision than the float carries,
+        // emitting mantissa 0xC90FDB09A671EF31 instead of the exact 0xC90FDB0000000000. Confirmed by
+        // disassembling the object: the hex form emits flds 0x40C90FDB, an exact widening.
+        const long double step = 0x1.921fb6p+2L / static_cast<long double>(count);
         long double angle = 0.0L;      // 0x00419644 already pushed the 0.0f starting angle
 
         // 0x004196BF is the loop head; 0x004196F9 `jne 0x004196BF` is the back edge (count iterations).
