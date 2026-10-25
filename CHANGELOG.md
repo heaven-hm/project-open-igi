@@ -11,6 +11,57 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - 0x00406450 lands, and the handler-ABI lane closes at 15/15
+
+`core/native_406450.cpp` transcribes retail `0x00406450` (`Task_DefineHumanAIConfig`,
+placeholder name), the function the handler-ABI lane has been decoding all session.
+It is the last piece of the guard's first call group that was blocked on analysis
+rather than on missing work.
+
+Its 35 `call 0x4F1A80` appends, two registrations, nine handler links, two container
+allocations and four config stores were derived **mechanically** rather than from the
+hand-built table: `pd` over the exact image with esp simulated from `sub esp,0x428`,
+replaying every `push`, `lea reg,[esp+K]` and `mov reg,[global]` and taking the last
+six pushes at each append. The independent derivation reconciles with the retail call
+census on all fifteen targets:
+
+    0x4F1A80 x35  0x4F0F50 x31  0x4F1C70 x13  0x401400 x6   0x4F1C90 x6
+    0x4F1CB0 x5   0x401530 x3   0x4018F0 x2   0x401900 x2   0x4F1A60 x2
+    0x4F1A70 x2   0x4F1950 x2   0x4F0FF0 x2   0x4F0EF0 x1   0x4F0FA0 x1
+
+and on the arg6 distribution -- 0x4F1C70's return x13, 0x4F1C90's x6, 0x4F1CB0's x5,
+the literal 0x5690C0 x7, the literal 0x5690B8 x1, zero x3 -- which is the same
+13/6/5/7/1/3 the lane had already reconciled by hand.
+
+**Three corrections to the hand-built table, all found by the independent derivation.**
+
+The table's first group spans two appends, and its aggregate row gives `arg5=7` for
+both. `0x004065ED` is actually `arg5=3`, `arg3=frame+0x128`, `arg2=frame+0x00` -- it
+is the first of the `0x4F0FF0`-producer pair, not a sibling of `0x00406522`. That is
+the second time this session a group boundary has hidden a per-site difference, after
+the 35-vs-34 split and the `0x4F1C90` 5-vs-6 correction.
+
+The lane's stated split of the nine links was `0x00401400` x5 + `0x00401530` x4. The
+image says **6 + 3**. The total of nine was right and the arithmetic argument built on
+it still holds; only the split was wrong, and the split is what identifies which link
+is the context variant.
+
+`0x00406522`'s six pushes are not cleaned by a local `add esp,0x18` -- they are cleared
+by the `add esp,0x3C` at `0x00406564`, together with the three links that follow it.
+The site is still an append, but its cleanup is shared, exactly as `0x00406B48`'s is
+shared with the `add esp,0x440` epilogue.
+
+Green at 14,367,160 bytes with the symbol at 0x00476800. Status is
+STRUCTURALLY_VERIFIED, not higher: the static reconciliation is exact, but no runtime
+observation of this native exists in either binary.
+
+Also integrated: `core/native_437510.cpp`, chain-worker's `Task_DefineSmoke`
+(1,471 B / 370 instructions / 65 calls, retail 65/22 = port 65/22), landed in one turn.
+It carries a finding worth keeping: one of its nine links registers a **NULL handler**
+(`0x0043771F`, event 4), which no handler-immediate scan can see. What located it was
+arithmetic -- the container's `add esp,0x1C` closes only if two links plus the count
+push are outstanding.
+
 ### 2026-10-25 - the entry function's retail callees become natives instead of local stand-ins
 
 Three rule-9/13 violations on the MVP's first real function, found while mapping
