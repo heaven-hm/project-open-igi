@@ -83528,6 +83528,148 @@
           "evidence_sha256": "77e581a6a3bf54bbf1b763d54b708beb8298de4de98ddd60647c26cff828bcec"
         }
       }
+    },
+    {
+      "address": "0x0046BA60",
+      "name": "Task_DefineComputer",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_0046ba60.cpp",
+        "sha256": "8f49f4a274515d9f984ed231b43d45a1e66ed272ac8eff06fb98187448a555ca",
+        "signature": "unresolved"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/computer/0046BA60-Computer_Init 2.cpp",
+        "sha256": "d0b15546cc0608e12a6667dc7c41d6f77f20d26491356c37696df6b8735f7d78",
+        "signature": "unresolved"
+      },
+      "verification": {
+        "status": "BUILD_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
+          "Linked into igi1.exe (14,252,981 bytes); runtime UNOBSERVED."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x0046BA60-radare2.json",
+          "evidence_sha256": "a4d8c4de021183a1fae0eccc74f65635a35dd843545a5d6a60e44f24c5cbac77",
+          "evidence_id": "r2:live:0x0046BA60",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x0046BA60-binaryninja.json",
+          "evidence_sha256": "4133db7a0b11c4046462b77e91921cf5710067df1b6399121043fc8c8c25792b",
+          "evidence_id": "bn:live:0x0046BA60",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x0046BA60-semantic-review.json",
+          "evidence_sha256": "0324bacc5d7e96b0f0a442145f390eb69fbf2a6cf5f22963eb40525c4d9d79bc"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x0046BA60-build.json",
+          "evidence_sha256": "52df7b179f503771e645b81a805168ea61cd5a6478868ceeaf943f0bcf486d49"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x0046BA60-behavioral.json",
+          "evidence_sha256": "9c98c7987e647844561deeabebec58d474a350908fc79a2610be1bc0e5cd207e"
+        }
+      }
+    },
+    {
+      "address": "0x0046DD00",
+      "name": "Task_DefineGunx2",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_0046dd00.cpp",
+        "sha256": "d8c5f1ad1a8c64a6a471949e12133617a997b7b8cf095495bb1e3df472d85e10",
+        "signature": "unresolved"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/0046DD00-Gunx2_Init 2.cpp",
+        "sha256": "2c59067abbaf073f7377312beaba9d492ea18e419b44f101f8cddc40d64223c5",
+        "signature": "unresolved"
+      },
+      "verification": {
+        "status": "BUILD_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
+          "Linked into igi1.exe (14,252,981 bytes); runtime UNOBSERVED."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x0046DD00-radare2.json",
+          "evidence_sha256": "4101e027021b6c60fa3cd8b7388378a386bfe90e3001e8af33ec2e93141f1239",
+          "evidence_id": "r2:live:0x0046DD00",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x0046DD00-binaryninja.json",
+          "evidence_sha256": "5f88c5b2d180b343be840aa21d4c9c4f69214fc38701dbe2d62ce19bb81b6eb3",
+          "evidence_id": "bn:live:0x0046DD00",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x0046DD00-semantic-review.json",
+          "evidence_sha256": "6f3ecf58327f1c478559d760e8e4e8b629203fd4580a17faac18c9dd70b45a23"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x0046DD00-build.json",
+          "evidence_sha256": "2a9569aa636f12297b28e04a400a72edb51e94f55a9776c4e0bf217ae2c39f19"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x0046DD00-behavioral.json",
+          "evidence_sha256": "131d650f6f74855d70fa409b6843fe8fef285c772e59b7cdeaf4e8923cf99e2e"
+        }
+      }
     }
   ],
   "integration": {

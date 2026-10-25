@@ -11,6 +11,18 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - Two more task-type registrars, and a registrar that deliberately has no script name
+
+- `igi1.exe` 14,251,830 -> **14,252,981** bytes, green. `0x0046DD00 Task_DefineGunx2` ("Gunx2", 0x138, id -> 0x0053FE68) and
+  `0x0046BA60 Task_DefineComputer` ("Computer", 0x198, id -> 0x005BE2C4) are linked, both `BUILD_VERIFIED`, runtime UNOBSERVED.
+- Both bodies are single-block and their `add esp` cleanups were used as an independent check on the call set: 0x38 = 14 pushes
+  (2 shared + 3 register args + 3*3 link args), then 0xC three times (pre-pushed handler slot + 2 link args), then 0x14
+  (handler slot + 2 link args + 2 script-registration args).
+- **Structural finding, recorded so nobody "fixes" it later**: `0x0046BA60` has no `Script_QHashNodeRegister` call at all - "Computer" never
+  receives a `TASKTYPE_` script name from this routine. `0x0046DD00` does register `"TASKTYPE_GUNX2"`. Symmetry is not evidence.
+- The linkage lesson from `0x0046DF10` held on the next two files: their registrar declarations now copy the `extern "C"` linkage from the
+  definitions, and `nm` shows `_Script_QHashNodeRegister`, not a mangled name.
+
 ### 2026-10-25 - Second startup wave: five registered natives and the knife-stab task type
 
 - `igi1.exe` 14,249,775 -> **14,251,830** bytes, green. Six natives added to the link: the other lane's `0x00402820`, `0x00402870`,
