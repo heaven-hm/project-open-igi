@@ -130,8 +130,9 @@ std::int32_t NATIVE_DECL Task_DefineCar()
     Script_TaskContainer_Append(reinterpret_cast<std::int32_t*>(static_cast<std::uintptr_t>(::g_57bd28)), append_frame, append_frame + 0x9C8, static_cast<std::int32_t>(Sys_GetGlobal32_4F0FC0()), 7, 0);  // 0x0042E0C4
     Script_TaskContainer_Append(reinterpret_cast<std::int32_t*>(static_cast<std::uintptr_t>(::g_57bd28)), append_frame, append_frame + 0x2EC0, static_cast<std::int32_t>(Sys_GetGlobal32_4F0F30()), 7, 0);  // 0x0042E0EA
     Script_TaskContainer_Append(reinterpret_cast<std::int32_t*>(static_cast<std::uintptr_t>(::g_57bd28)), append_frame, append_frame + 0x2EC4, static_cast<std::int32_t>(Sys_GetGlobal32_4F0F30()), 7, 0);  // 0x0042E110
-    // 0x0042E118: this append's sixth argument is the ADDRESS 0x0057BD20, not a literal zero.
-    Script_TaskContainer_Append(reinterpret_cast<std::int32_t*>(static_cast<std::uintptr_t>(::g_57bd28)), append_frame, append_frame + 0x2EC8, static_cast<std::int32_t>(Sys_GetGlobal32_4F0F50()), 7, static_cast<std::int32_t>(static_cast<std::uintptr_t>(0x0057BD20U)));  // 0x0042E139
+    // 0x0042E118: this append's sixth argument is the ADDRESS 0x0057BD20, not a literal zero -
+    // this file's own g_57bd20, so it is passed as &::g_57bd20 rather than the raw retail address.
+    Script_TaskContainer_Append(reinterpret_cast<std::int32_t*>(static_cast<std::uintptr_t>(::g_57bd28)), append_frame, append_frame + 0x2EC8, static_cast<std::int32_t>(Sys_GetGlobal32_4F0F50()), 7, static_cast<std::int32_t>(reinterpret_cast<std::uintptr_t>(&::g_57bd20)));  // 0x0042E139
 
     // 0x0042E13E: reload the id at 32-bit width and mask it, rather than reusing the local.
     Script_QHashNodeRegister(const_cast<char*>("TASKTYPE_CAR"),

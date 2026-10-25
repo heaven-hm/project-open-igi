@@ -5,6 +5,8 @@
 // Status/limits: BUILD_VERIFIED (static only); the jmp is modelled as a normal call plus return, so this native pops its own two arguments where retail defers that to the only caller - reviewer attention requested; runtime UNOBSERVED.
 #include <cstdint>
 
+#include "igi/retail/core/task_types.hpp"
+
 extern "C" {
 
 // Declares the retail native 0x004014B0, which this caller tail-jumps into. Its implementation lives in
@@ -13,8 +15,12 @@ void TaskType_RefreshHandlerMask();
 
 void TaskType_SetPhaseHandlerByte(std::int32_t const value, std::int32_t const slot)
 {
-    *reinterpret_cast<std::uint8_t*>(static_cast<std::uintptr_t>(0x0054FF24U) + static_cast<std::uint32_t>(slot)) =
-        static_cast<std::uint8_t>(value); // 0x00401D38: mov byte [ecx + 0x54ff24], al (ecx = arg2)
+    // 0x00401D38: mov byte [ecx + 0x54ff24], al (ecx = arg2). The port already defines this table
+    // as g_54ff24 in task_types.cpp, so the store goes through the symbol. Writing the raw retail
+    // address instead would target unmapped memory: the port's copy lives at the linker's address,
+    // not at 0x0054FF24.
+    ::g_54ff24[static_cast<std::uint32_t>(slot)] =
+        static_cast<std::uint8_t>(value);
     *reinterpret_cast<std::uint8_t*>(static_cast<std::uintptr_t>(0x00A969E0U) +
                                      static_cast<std::uint32_t>(value & 0xFF)) =
         static_cast<std::uint8_t>(slot); // 0x00401D43: mov byte [eax + 0xa969e0], cl - the CL register, i.e. the low byte of arg2, not of arg1
