@@ -11,9 +11,31 @@ filename.
 
 ## Result
 
-- **155 call sites, 154 distinct targets** (one target is called twice), **15 present, 139 missing.**
-- The 15 present include `0x00407D60`, `0x0040FE30`, `0x00413DF0`, `0x00402FF0`, `0x00406450`, `0x00407290` and the other
-  already-transcribed positions.
+- **155 call sites, 154 distinct targets.**
+- **88 targets are not transcribed anywhere** in `engine/src/retail`.
+- **6 are transcribed but not in the build target**: `0x464260`, `0x467700`, `0x4682F0`, `0x4696B0`, `0x46F2B0`, `0x508F80`.
+- **60 are transcribed and in the build.**
+
+So the critical path is **94 remaining**, of which 88 have no implementation at all.
+
+### Correction to the first version of this measurement
+
+The first run of this file reported "15 present, 139 missing". That was **wrong by 45** and `chain-worker` caught it. Two defects in the
+matcher, both mine:
+
+1. **It was case-sensitive.** It searched for `retail VA 0x0*<lowercase hex>`, but a large part of the tree writes the VA in uppercase
+   (`0x0046DD00`). Every uppercase-provenance file counted as missing. `0x0046DD00` and `0x0046DF10` are both implemented and both in
+   `CMakeLists.txt`, and the matcher called them missing.
+2. **It required one exact phrasing.** `core/native_402ff0.cpp` exists but does not carry the literal string `retail VA 0x...` at all, so
+   content matching by that phrase missed it too.
+
+The fix was to stop matching prose: the index is now built from the **filename** (`native_<va>.cpp`) and from any `0x00XXXXXX` in the
+file's **first line**, compared **numerically** rather than as strings. `0x467DB0` and `0x467DD0`, which have no implementation, were
+re-checked by hand and are genuinely absent.
+
+**The rule this is an instance of**: a coverage number computed by matching a comment format is only as good as that format. Match
+addresses numerically, from filenames and structured records, and treat any prose-based match as a lower bound. The number in this file
+was a lower bound that was then quoted as if it were exact, which is worse than no number.
 
 ## The gap by address band
 
