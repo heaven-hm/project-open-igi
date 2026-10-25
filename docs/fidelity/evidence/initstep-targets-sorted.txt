@@ -1,4 +1,8 @@
-0x530270 9
+# 56 AIGraph_InitStep_* targets, size-sorted, regenerated with scripts/native_fidelity_audit.py
+# after the backward-tail-call fix. Counts are capstone instruction counts, cross-checked
+# against ndisasm. The first version of this list was generated BEFORE that fix and carried
+# 9 for 0x530270 where the true count is 7 - a stale input producing a confident wrong number.
+0x530270 7
 0x4EDCE0 16
 0x52CA70 24
 0x4F1E30 27

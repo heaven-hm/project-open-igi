@@ -887,3 +887,42 @@ def main():
 
 if __name__ == "__main__":
     sys.exit(main())
+
+
+def crosscheck_ndisasm(va, obj_bytes=None):
+    """Independent linear-sweep count over the same extent, via ndisasm.
+
+    WHY THIS EXISTS: radare2's `pd` silently DROPPED two instructions from
+    0x00503D60 (`mov cx,[0x54e66c]` at 0x00503DAC and `mov dx,[0x54e66c]` at
+    0x00503DBA), reporting 34 instructions over 121 of 135 bytes. The byte
+    accounting not closing was the only signal. A listing that looks complete
+    and is not is the most dangerous output this project reads.
+
+    capstone (this module) was verified correct on that case - 36 ins, 135
+    bytes, both dropped instructions present. This function exists so the
+    count is cross-checked rather than trusted, and so a disagreement is
+    reported as a disagreement rather than silently resolved.
+
+    Returns (capstone_count, ndisasm_count, agree, note).
+    """
+    import subprocess, shutil, tempfile, os
+    img = RetailImage()
+    shape = img.recover(va)
+    cs_count = len(shape.insns)
+    if shutil.which('ndisasm') is None:
+        return cs_count, None, None, 'ndisasm not on PATH'
+    total = sum(i.size for i in shape.insns)
+    raw = img.read(va, total)
+    fd, path = tempfile.mkstemp(suffix='.bin')
+    try:
+        os.write(fd, raw); os.close(fd)
+        out = subprocess.run(['ndisasm', '-b', '32', path],
+                             capture_output=True, text=True).stdout
+    finally:
+        os.unlink(path)
+    nd = sum(1 for ln in out.splitlines() if ln.strip())
+    if nd == cs_count:
+        return cs_count, nd, True, 'agree'
+    return cs_count, nd, False, ('DISAGREE - capstone %d vs ndisasm %d over %d bytes; '
+                                 'check byte accounting before trusting either'
+                                 % (cs_count, nd, total))
