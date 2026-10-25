@@ -18,6 +18,7 @@
 //   while the port's compiled object emits `mov %eax,0x4(%esp); jmp 0x4015F0` - GCC's tail-call form. The argument and the callee are the same,
 //   the callee returns straight to this handler's caller, and ecx is caller-saved scratch, so the difference is not observable through the
 //   stack, the callee or the return value.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -34,6 +35,7 @@ extern "C" void QTask_DestroyTask_4015F0(void* task); // 0x004015F0: the task de
 
 void NATIVE_DECL Task_Handler_44A1A0(void* const context)
 {
+    NATIVE_LOG_ENTER("Task_Handler_44A1A0", "0x0044A1A0");
     // 0x0044A1A0: mov 0x4(%esp),%eax (the context argument); 0x0044A1A4: mov 0x2b040(%eax),%ecx.
     void* const object = *reinterpret_cast<void**>(static_cast<char*>(context) + 0x2B040);
 

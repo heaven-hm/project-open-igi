@@ -22,6 +22,7 @@
 //   the flags before any conditional use, so no branch depends on it. Neither is "fixed" here. The IAT load into EBP is a register-caching detail;
 //   the call is written as a direct GetDriveTypeA call. CRT stdio is imported (std::fopen/fseek/fgetc/fclose), not re-implemented. Domain: core/,
 //   because 0x00402930 calls it as part of startup; it is a drive/filesystem probe, so sys/ or qfile/ would be the alternative.
+#include "dev_log.hpp"
 #include <windows.h>
 
 #include <cstdint>
@@ -43,6 +44,7 @@ std::int32_t NATIVE_DECL Debug_Error(const char* format, ...);
 
 void NATIVE_DECL Core_CheckCdPresent_402F50(void)
 {
+    NATIVE_LOG_ENTER("Core_CheckCdPresent_402F50", "0x00402F50");
     char root[4] = ".\\";                                 // 0x00402F51/0x00402F60: mov eax,[0x00536408] (".\\"); mov [esp+0x10],eax
     std::uint8_t drive = 'A';                             // 0x00402F64: mov bl,0x41
     do

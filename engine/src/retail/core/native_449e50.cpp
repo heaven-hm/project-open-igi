@@ -37,6 +37,7 @@
 //   three floats are interleaved with the last computation; the port computes all three before storing, which is the same result because the
 //   three slots do not alias. (g) The two `push %ebx` / `push %ebp` at 0x00449EF1/0x00449EF2 and their pops are register saves the compiler
 //   places itself, and the destroy call is a plain call here as in retail.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -59,6 +60,7 @@ extern float g_57c280[30 * 10];
 
 void NATIVE_DECL Task_Handler_449E50(void* const context)
 {
+    NATIVE_LOG_ENTER("Task_Handler_449E50", "0x00449E50");
     char* const ctx = static_cast<char*>(context);
 
     // 0x00449E5B-0x00449E97: three scaled offsets and the shared life fraction; each is computed in extended precision and rounded by its

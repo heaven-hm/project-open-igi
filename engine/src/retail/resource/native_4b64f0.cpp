@@ -3,6 +3,7 @@
 // Tools/evidence: radare2 6.2.0 af/afij/pdf and the raw bytes (8b44240c 8b4c2424 8b542420 50 8b442420 51 8b4c2420 52 8b542420 50 8b442420 51 8b4c2418 52 50 8b442424 8b11 8b4904 8d04c0 52 8d1481 52 e883beffff 83c424 c3); section 22.3 of the evidence sheet.
 // Behavior/CFG: forwards nine values to Texture_UploadMipmapPacket (0x004B23B0). Argument1 is a pair of dwords: its first dword is passed as the callee's second argument and its second dword is the base of a 0x24-stride record selected by argument2, passed as the callee's first argument; the rest are forwarded with argument3 moved to the ninth slot, because retail pushes argument3 first. No branch, no store, no data reference of its own.
 // Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. The volatile sink is the only non-retail construct in this body: at -O3 GCC otherwise tail-jumps into the callee (2 blocks/1 edge) where retail calls, cleans 0x24 argument bytes and returns, so the sink preserves the retail call/return shape at the cost of one stack store. It carries no logic and does not reorder anything. Texture_UploadMipmapPacket is transcribed in engine/src/retail/texture/texture_loaders.cpp. The three middle arguments are passed through without interpretation, so their types stay unestablished.
+#include "dev_log.hpp"
 #include "igi/retail/texture/texture_loaders.hpp"
 
 #include <cstdint>
@@ -22,6 +23,7 @@ std::int32_t NATIVE_DECL Resource_UploadMipmapPacket_4B64F0(void* context, std::
                                                            std::int32_t argument6, std::int32_t argument7,
                                                            std::int32_t argument8, std::int32_t argument9)
 {
+    NATIVE_LOG_ENTER("Resource_UploadMipmapPacket_4B64F0", "0x004B64F0");
     const std::uint8_t* const fields = static_cast<const std::uint8_t*>(context);
     const std::uint32_t first =                                        // 0x004B651B: mov edx,[ecx]
         *reinterpret_cast<const std::uint32_t*>(fields);

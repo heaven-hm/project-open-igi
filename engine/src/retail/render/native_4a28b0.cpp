@@ -22,6 +22,7 @@
 //   image value 0 (they are above the file-backed end of .data at 0x00550000) and this routine is their only writer. The meaning of the slots is not
 //   established by this body; all five readers sit inside untranscribed functions, so nothing here proves what the values configure. Domain: render/,
 //   the camera module that 0x004A2A00 and the sibling setters 0x004A29C0 and 0x004A29E0 belong to.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -45,6 +46,7 @@ std::uint32_t g_936048;
 void NATIVE_DECL Render_StoreArgs935C04_4A28B0(std::uint32_t arg1, std::uint32_t arg2, std::uint32_t arg3,
                                                std::uint32_t arg4, std::uint32_t arg5)
 {
+    NATIVE_LOG_ENTER("Render_StoreArgs935C04_4A28B0", "0x004A28B0");
     ::g_935c04 = arg1;                               // 0x004A28BC: mov [0x00935C04],eax
     ::g_93603c = arg2;                               // 0x004A28C5: mov [0x0093603C],ecx
     ::g_936040 = arg3;                               // 0x004A28CF: mov [0x00936040],edx

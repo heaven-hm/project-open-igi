@@ -7,6 +7,7 @@
 // Behavior/CFG: loads the one-byte event id at 0x005407BB into al and returns it; no argument, no branch, no store, no call.
 // Status/limits: TRANSCRIBED; runtime UNOBSERVED. One byte is the width this load proves; the value's meaning is not established. This getter is the
 //   event source of a link in core/native_45e450.cpp.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -24,6 +25,7 @@ extern std::uint8_t g_5407bb;
 
 std::uint8_t NATIVE_DECL Task_GetCachedEventId_477C30(void)
 {
+    NATIVE_LOG_ENTER("Task_GetCachedEventId_477C30", "0x00477C30");
     return ::g_5407bb;                                                       // 0x00477C30: mov 0x005407bb,%al; 0x00477C35: ret
 }
 

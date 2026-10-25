@@ -3,6 +3,7 @@
 // Tools/evidence: radare2 6.2.0 af/pd and the raw bytes (5355 56 8b35046f5400 33ed 57 85f6 / ... / 8b04ad704a..); section 22.3 of the evidence sheet (landability sweep row 0x004B1620).
 // Behavior/CFG: walks the device-name pointer table at 0x00546F04 (32-bit string pointers, 4-byte stride, null-terminated) and compares each name against the argument with an inlined strcmp that consumes TWO bytes per iteration: first byte compare, end-of-string test, second byte compare, advance by two, end-of-string test. On a match it returns the paired word from 0x00534A70 indexed by the match position; if the table is empty or exhausted it returns 0. The two-byte unrolling, the end-of-string tests after each of the two byte comparisons, and the per-iteration reload of the next table slot are retail's shape and are reproduced as written rather than collapsed into strcmp.
 // Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. Neither 0x00546F04 nor 0x00534A70 has an external owner in the tree, so this file defines both and they start zeroed. What the paired word in 0x00534A70 means is unproven; only its address and 4-byte stride are established.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -23,6 +24,7 @@ std::uint32_t g_534a70[16];
 
 std::uint32_t NATIVE_DECL QFile_LookupDeviceByName_4B1620(const char* name)
 {
+    NATIVE_LOG_ENTER("QFile_LookupDeviceByName_4B1620", "0x004B1620");
     const char* const* slot = &::g_546f04[0];            // 0x004B1634: edi = 0x00546F04
     const char* candidate = *slot;                       // 0x004B1623: esi = [0x00546F04]
 

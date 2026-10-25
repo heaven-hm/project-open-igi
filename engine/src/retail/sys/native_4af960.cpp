@@ -3,6 +3,7 @@
 // Tools/evidence: radare2 6.2.0 af/afbj/pdf with bin.relocs.apply over the exact image; no call, no global, one argument. The two-store pairs at 0x004AF969/0x004AF970 are the two neighbours' cross-links, and the pair at 0x004AF973/0x004AF97A is the unlinked node's own links cleared.
 // Behavior/CFG: unlinks one node from the doubly-linked list whose node layout is +0x00 forward and +0x04 back (the layout 0x004AF8F0 and its initialiser 0x004F1D60 jointly establish). The node's back neighbour at +0x04 gets its forward pointer from the node's +0x00; the node's forward neighbour at +0x00 gets its back pointer from the node's +0x04; then both of the node's own pointers are zeroed. Straight-line, no branch, no call, no global; the head is not touched, and there is no list count here.
 // Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. This is the remove half of the list pair whose insert half is 0x004AF8F0. The legacy `igi::retail::mem::HeapList_Remove` copy in mem/heap_list.cpp was deleted on 2026-10-25, so this file is the VA's only implementation. C linkage at file scope since 2026-10-25: the wrapper was `namespace igi::retail::sys`, which made the exported symbol `__ZN3igi6retail3sys25Sys_UnlinkListNode_4AF960EPv` while one caller (core/native_4f9df0.cpp) already referenced the unqualified name, so all seven files were moved to C linkage together and definition and callers now agree. Return: the body only writes ECX/EDX and memory, so EAX on return is still the argument, and an existing transcribed caller (core/native_48f4f0.cpp) uses that value as the remove result; the declaration says `void*` and returns the node so that observable survives without inventing an instruction. No field beyond the node's first two pointers is established by this body, so the node stays a byte pointer. The sentinel/head geometry is only what 0x004AF8F0 and 0x004F1D60 establish.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -17,6 +18,7 @@ extern "C" {
 
 void* NATIVE_DECL Sys_UnlinkListNode_4AF960(void* node)
 {
+    NATIVE_LOG_ENTER("Sys_UnlinkListNode_4AF960", "0x004AF960");
     std::uint8_t* const item = static_cast<std::uint8_t*>(node);                       // 0x4AF960: mov 0x4(%esp),%eax
     std::uint8_t* back = *reinterpret_cast<std::uint8_t**>(item + 0x04U);               // 0x4AF964: mov 0x4(%eax),%ecx
     std::uint8_t* forward = *reinterpret_cast<std::uint8_t**>(item);                    // 0x4AF967: mov (%eax),%edx

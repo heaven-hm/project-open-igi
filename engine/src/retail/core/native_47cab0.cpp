@@ -13,6 +13,7 @@
 //   routine is the only writer, so the file defines it. Domain: core/, because it is one of the 0x00402930 startup registrars; the strings name an
 //   ammo script command and a "LOCAL:ammo" path, so qfile/ would be the alternative reading of its subject matter. The store to 0x005C10E4 happens
 //   after retail's three argument pushes and before the call; the pushes are not observable, so the store is placed before the call statement.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -36,6 +37,7 @@ std::uint32_t g_5c10e4 = 0U;
 
 void NATIVE_DECL Core_RegisterAmmoType_47CAB0(void)
 {
+    NATIVE_LOG_ENTER("Core_RegisterAmmoType_47CAB0", "0x0047CAB0");
     Script_QHashNodeRegisterEx(                                     // 0x0047CABE: call 0x004B8890
         const_cast<char*>("DefineAmmoType"),                        // 0x0047CAB9: push 0x005408D0
         reinterpret_cast<void*>(static_cast<std::uintptr_t>(0x0047CAD0U)), // 0x0047CAB4: push 0x0047CAD0 (handler)

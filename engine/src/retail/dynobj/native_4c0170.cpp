@@ -3,6 +3,7 @@
 // Tools/evidence: radare2 6.2.0 af/afij/pdf and NASM ndisasm over the exact bytes; six exits, no call, one field load (+0x14) and two character-array reads (offset 0 and 1).
 // Behavior/CFG: takes one cdecl argument, loads the character pointer from object+0x14, and classifies the text by its first one or two characters: a leading digit returns 1; a leading '$' (0x24) returns 1 when the next byte is a digit, a-f or A-F; a leading '0' returns 1 when the next byte is 'x' (0x78); and independently of the first byte, a second byte of 'X' (0x58) returns 1. Everything else returns 0. The order of those tests and the fall-through between them follow the bytes exactly.
 // Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. The argument's object type is not established beyond the +0x14 pointer this body reads; the routine only inspects two characters and returns 0 or 1.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -17,6 +18,7 @@ namespace igi::retail::dynobj {
 
 std::int32_t NATIVE_DECL DynObj_IsNumericToken_4C0170(void* object)
 {
+    NATIVE_LOG_ENTER("DynObj_IsNumericToken_4C0170", "0x004C0170");
     const char* const text = *reinterpret_cast<const char* const*>(        // 0x4C0174: mov 0x14(%eax),%edx
         static_cast<std::uint8_t*>(object) + 0x14U);
     const char first = text[0];                                            // 0x4C0177: mov (%edx),%cl

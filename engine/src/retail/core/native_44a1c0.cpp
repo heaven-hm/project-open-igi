@@ -18,6 +18,7 @@
 //   (the registrar that registers "GlassShatter") and four readers, so no other class stores its id there in this image. (c) What 0x00401A20
 //   does beyond releasing the type's slot is that file's declared scope (core/native_401a20.cpp). (d) The single caller 0x00402DBC is not
 //   transcribed yet, so whether it leaves an argument dword pending across this call is not established here; this body reads none.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -37,6 +38,7 @@ extern "C" std::uint16_t g_57c240;
 
 void NATIVE_DECL Task_ClearGlassShatterType_44A1C0()
 {
+    NATIVE_LOG_ENTER("Task_ClearGlassShatterType_44A1C0", "0x0044A1C0");
     // 0x0044A1C0: mov 0x57c240,%ax; 0x0044A1C6: push %eax; 0x0044A1C7: call 0x401a20; 0x0044A1CC: pop %ecx; 0x0044A1CD: ret.
     TaskType_Clear_401A20(::g_57c240);
 }

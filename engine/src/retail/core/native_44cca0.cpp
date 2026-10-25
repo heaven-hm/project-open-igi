@@ -15,6 +15,7 @@
 //   the tree's handler ABI (void NATIVE_DECL <name>(void* context), the convention core/native_508fa0.cpp uses for AIGraph_Handler_5092A0) and
 //   are NOT stubbed. Each keeps the placeholder form Task_Handler_<VA> until its own body is read: the name literal in a registration pair names
 //   the EVENT being registered, not the handler's behaviour, so it is deliberately not used as the handler's name.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -93,6 +94,7 @@ void NATIVE_DECL Task_Handler_44EE40(void* context);   // 0x0x44EE40: the handle
 
 void NATIVE_DECL Task_RegisterAIActions_44CCA0(void)
 {
+    NATIVE_LOG_ENTER("Task_RegisterAIActions_44CCA0", "0x0044CCA0");
     // 0x0044CCAE: push 3; push 0; push 0x44D0E0; push 0x53D9DC; call 0x4B8890.
     Script_QHashNodeRegisterEx(const_cast<char*>("AIAction_Patrol"),
         reinterpret_cast<void*>(reinterpret_cast<std::uintptr_t>(&Task_Handler_44D0E0)),

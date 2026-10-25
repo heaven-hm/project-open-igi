@@ -12,6 +12,7 @@
 // The BN catalog aliases (FX_ExplosionSpawn_23 / FX_FireBallUpdate_24) are wrong
 // for both addresses; the record names below are evidence-derived.
 
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_WIN32)
@@ -52,6 +53,7 @@ extern "C"
 // Status/limits: STRUCTURALLY_VERIFIED; retail full-game runtime observed from main 0x48F60E and from QTask_CreateTask; candidate runtime unobserved until main wiring
 std::int32_t NATIVE_DECL SetAppTitle(char const* title)
 {
+    NATIVE_LOG_ENTER("SetAppTitle", "0x0048F100");
     AppTitle = title;
 #if defined(_WIN32)
     if (g_window_handle != nullptr)
@@ -70,6 +72,7 @@ std::int32_t NATIVE_DECL SetAppTitle(char const* title)
 // Status/limits: STRUCTURALLY_VERIFIED; retail full-game runtime observed (main 0x48F629, arg 1); candidate runtime unobserved until main wiring; the flag global is currently also written by the QVM native loader, which is a port binding to confirm during wiring
 std::int32_t NATIVE_DECL SetDebugCompileState(std::int32_t value)
 {
+    NATIVE_LOG_ENTER("SetDebugCompileState", "0x0048F100");
     const std::int32_t narrowed = static_cast<std::int8_t>(static_cast<std::uint8_t>(value));
     g_5c8bec = narrowed;
     return narrowed;

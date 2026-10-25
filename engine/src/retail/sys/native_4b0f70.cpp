@@ -3,6 +3,7 @@
 // Tools/evidence: radare2 6.2.0 af/pdf and the raw bytes; section 22.3 of the evidence sheet (landability sweep row 0x004B0F70).
 // Behavior/CFG: stores 0xFFFFFFFF into the dword at 0x00A94A64 and returns; no branch, no call, no argument, no stack use.
 // Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. The word 0x00A94A64 already has an owner inside engine/ (the sweep marked it owner), so this file does not define it.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -21,6 +22,7 @@ std::int32_t g_a94a64;
 
 void NATIVE_DECL Sys_ResetSlotWord_4B0F70(void)
 {
+    NATIVE_LOG_ENTER("Sys_ResetSlotWord_4B0F70", "0x004B0F70");
     ::g_a94a64 = -1;   // 0x004B0F70: mov dword [0x00A94A64], 0xFFFFFFFF
 }   // 0x004B0F7A: ret
 

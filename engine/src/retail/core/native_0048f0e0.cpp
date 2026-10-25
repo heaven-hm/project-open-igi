@@ -1,3 +1,4 @@
+#include "dev_log.hpp"
 #include "igi/retail/core/native_0048f0e0.hpp"
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -19,6 +20,7 @@ void* g_window_handle = nullptr;
 // Status/limits: BUILD_VERIFIED; the load, the store and the EAX return match the retail exactly.
 void* NATIVE_DECL SetWindowHandle(void* window)
 {
+    NATIVE_LOG_ENTER("SetWindowHandle", "0x0048F0E0");
     g_window_handle = window;
     return window;
 }

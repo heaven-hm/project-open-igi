@@ -3,6 +3,7 @@
 // Tools/evidence: build/retail-dis.txt (GNU objdump) 0x00509520-0x00509562; radare2 6.2.0 afij (67 bytes, 3 blocks, 24 instructions); the literal at 0x0054E840 is "RouteTable"; linked by the AIGraph registrar 0x00508FA0 at 0x0050921E (0x00401400 event 0x004F9230()).
 // Behavior/CFG: three blocks, no loop. Releases the object's buffer word (calls 0x005092E0) when the word at object+0xB8 is zero, then registers the object's buffer with the graph-stream table: 0x004F9EB0(*arg2, "RouteTable", 0xA, buffer, 8 * side * side) with side the dword at object+0x58.
 // Status/limits: TRANSCRIBED; STRUCTURALLY_VERIFIED against the 24-instruction listing; runtime UNOBSERVED. Link-blocked on 0x005092E0 and 0x004F9EB0 (neither transcribed); their prototypes are inferred from these call sites.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -25,6 +26,7 @@ void NATIVE_DECL GraphStream_AddNode_4F9EB0(std::uint32_t value, char const* nam
 
 void NATIVE_DECL AIGraph_Handler_509520(void* object, std::uint32_t const* arg2)
 {
+    NATIVE_LOG_ENTER("AIGraph_Handler_509520", "0x00509520");
     // 0x00509525/0x0050952B: mov 0xb8(%esi),%eax; test %eax,%eax; jne 0x509538 - only a zero buffer triggers the release.
     if (*reinterpret_cast<std::uint32_t*>(static_cast<std::uint8_t*>(object) + 0xB8U) == 0)
     {

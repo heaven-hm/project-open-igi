@@ -4,6 +4,7 @@
 // Behavior/CFG: one straight-line block, no branch, no frame and no saved register. It forwards its single dword argument to 0x004018C0 (TaskEventTable_ClearSlot, core/native_4018c0.cpp) and returns nothing; retail leaves EAX holding the callee's return value, and the callee is declared void. The callee masks the argument to its low 8 bits, so this entry point is behaviorally identical to 0x004018C0 - it is a distinct retail VA and both are transcribed as separate natives, because rule 13 gives one implementation per VA and rule 2 forbids folding a retail routine into its caller.
 // Status/limits: TRANSCRIBED; LINKABLE (its only undefined symbol, 0x004018C0, is a tree native, so it adds no new dependency); STRUCTURALLY_VERIFIED for the CFG only (1 block, 0 edges, no branch structure to disagree about); BUILD_VERIFIED (i686-w64-mingw32-g++ -std=c++20 -O2 -Wall -Wextra single-file compile with zero warning lines); runtime UNOBSERVED. The call is a real symbol reference rather than a cast: 0x004018C0 is a transcribed callee, and the cast-integer ruling covers handler data, not code the port must call. It is declared with exactly the linkage and parameter type its definition carries (extern "C", std::uint32_t by value) so the two translation units agree on the ABI. Domain: core/, because it is the event-table slot clearer next to 0x004018C0 and it is called by the guard teardown family.
 
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -22,6 +23,7 @@ void TaskEventTable_ClearSlot(std::uint32_t const index);
 
 void NATIVE_DECL TaskEventTable_ClearSlot_4018E0(std::uint32_t const index)
 {
+    NATIVE_LOG_ENTER("TaskEventTable_ClearSlot_4018E0", "0x004018E0");
     // 0x004018E5: `call 0x004018C0`, displacement 0xFFFFFFD6 at 0x004018E7; the pop %ecx at 0x004018EA is the cdecl
     // cleanup for the one argument dword pushed at 0x004018E4.
     TaskEventTable_ClearSlot(index);

@@ -3,6 +3,7 @@
 // Tools/evidence: radare2 6.2.0 `pd` at 0x00426610 plus capstone 5.0.7 aligned from the verified entry; both agree on 8 instructions. Exact bytes a1 74 bc 57 00 50 e8 15 b2 09 00 66 8b 0d 50 ba 53 00 51 e8 f8 b3 fd ff 83 c4 08 c3. The ret is at 0x0042662B, the 4 bytes after it are 0x90 alignment nops (not part of the routine), and the extent is 28 bytes. Callees in retail order: 0x401a20, 0x4c1830. Stack replay returns esp to its entry value at the ret with zero slack. Caller: this body is reached from the startup guard 0x00402930's ASCENDING teardown block that begins at 0x00402C40, and it sits immediately before the next registrar in that block, which is why it tears down the class registered by the PREVIOUS one.
 // Behavior/CFG: one straight-line block, no branch, no frame and no saved register. It is the teardown counterpart of the CarAI registrar core/native_425c80.cpp: it clears the registered class type through 0x00401A20 and deletes the task-parameter container through 0x004C1830, in that retail order: the container slot first, then the id slot. The callee cleanup at the end is the cdecl cleanup for the argument dwords this body pushed and is emitted by the compiler rather than written by hand.
 // Status/limits: TRANSCRIBED; LINKABLE (every undefined symbol it names is already a tree native, so it adds no new dependency); STRUCTURALLY_VERIFIED for the CFG only (1 block, 0 edges, no branch structure to disagree about); BUILD_VERIFIED (i686-w64-mingw32-g++ -std=c++20 -O2 -Wall -Wextra single-file compile with zero warning lines); runtime UNOBSERVED. PAIRING EVIDENCE, NOT AN ASSUMPTION: 0x0057BC74 (the container handle) and 0x0053BA50 (the 16-bit class id) - the registrar's own provenance records the same addresses, and the two globals match that registrar exactly. This file only reads and rewrites them, so they are declared extern and defined nowhere: exactly one definition per retail address. LINKAGE IS PART OF THAT EVIDENCE: the owning file defines these slots inside a namespace block, and they are declared here with the same linkage, because declaring them under the other linkage would silently create a second, distinct symbol with no link error (the two-variable trap). MEASURED ABSENCE OF THE RESET: retail does NOT write 0x0181 back into the id slot here, and this is the one shape in the family whose two operations are ordered against the reset family's order. Adding the reset would be behaviour retail does not perform. container-first Domain: core/, because it is the teardown half of the guard 0x00402930 registrar family.
+#include "dev_log.hpp"
 #include "igi/retail/core/task_types.hpp"
 
 #include <cstdint>
@@ -33,6 +34,7 @@ extern void NATIVE_DECL TaskType_Clear_401A20(std::uint16_t class_id);
 
 void NATIVE_DECL Task_ClearClassTypeAndDeleteList_426610()
 {
+    NATIVE_LOG_ENTER("Task_ClearClassTypeAndDeleteList_426610", "0x00426610");
     // 0x00426610: `mov eax, dword ptr [0x57bc74]`
     // 0x00426615: `push eax`
     // 0x00426616: `call 0x4c1830`

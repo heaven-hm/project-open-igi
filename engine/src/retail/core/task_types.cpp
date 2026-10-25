@@ -1,3 +1,4 @@
+#include "dev_log.hpp"
 #include "igi/retail/core/task_types.hpp"
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -394,6 +395,7 @@ void TaskTypes_RegisterRetailClasses(std::uint16_t first_id, std::uint16_t last_
 std::uint32_t NATIVE_DECL QTask_LinkQTaskEventHandlerNoContextFn(
     std::uint16_t class_id, std::uint32_t event_id, igi::retail::core::FrameHandler handler)
 {
+    NATIVE_LOG_ENTER("QTask_LinkQTaskEventHandlerNoContextFn", "0x00401530");
     const std::uint32_t count = ++QTask_NoContextHandlerCount;              // 0x00401530/0x00401542/0x0040155C
     ++QTask_LinkedHandlerCounter;                                          // 0x00401538/0x00401543/0x00401545
     // 0x0040153E: eax = the FIRST argument, 0x00401553 masks its LOW WORD. 0x00401558/0x00401562 build the product from the
@@ -445,6 +447,7 @@ std::uint32_t NATIVE_DECL QTask_LinkQTaskEventHandlerNoContextFn(
 std::uint32_t NATIVE_DECL QTask_LinkQTaskEventHandler(
     std::uint16_t class_id, std::uint32_t event_id, igi::retail::core::FrameHandler handler)
 {
+    NATIVE_LOG_ENTER("QTask_LinkQTaskEventHandler", "0x00401530");
     const std::uint32_t count = ++QTask_ContextHandlerCount;                // 0x00401400/0x00401415/0x00401435
     ++QTask_LinkedHandlerCounter;                                          // 0x0040140D/0x00401416/0x0040141C
     // 0x00401408: ebp = [esp+0x10], the SECOND argument; 0x00401413/0x00401417 take the phase from its LOW BYTE.
@@ -492,6 +495,7 @@ std::uint32_t NATIVE_DECL QTask_LinkQTaskEventHandler(
 // Status/limits: STRUCTURALLY_VERIFIED; the load and the AX return match the retail exactly.
 std::uint16_t NATIVE_DECL QTask_GetCurrentType()
 {
+    NATIVE_LOG_ENTER("QTask_GetCurrentType", "0x00401530");
     return QTask_CurrentType;
 }
 
@@ -502,6 +506,7 @@ std::uint16_t NATIVE_DECL QTask_GetCurrentType()
 // Status/limits: STRUCTURALLY_VERIFIED; scan bounds, store order (+2, one 16-bit +0, +3), the dword id return and the exhaustion spin match retail; runtime unobserved for the allocation path because the startup boundary precedes it.
 std::uint32_t NATIVE_DECL QTask_AllocateEvent(std::uint16_t value)
 {
+    NATIVE_LOG_ENTER("QTask_AllocateEvent", "0x00401530");
     std::uint32_t event_id = igi::retail::core::first_event_id;
     while (event_id < igi::retail::core::event_table_entry_count &&
            QTask_EventTable[event_id * 6U + 2U] != 0U)
@@ -540,6 +545,7 @@ std::uint32_t NATIVE_DECL QTask_AllocateEvent(std::uint16_t value)
 //           the retail's.
 void NATIVE_DECL QTask_ClearEventTable()
 {
+    NATIVE_LOG_ENTER("QTask_ClearEventTable", "0x00401530");
     for (std::size_t entry = 0U; entry < igi::retail::core::event_table_entry_count; ++entry)
     {
         QTask_EventTable[entry * 6U + 2U] = 0U;
@@ -556,6 +562,7 @@ void NATIVE_DECL QTask_ClearEventTable()
 //           the two cleared fields are the retail's.
 void NATIVE_DECL QTask_ClearTaskTypes()
 {
+    NATIVE_LOG_ENTER("QTask_ClearTaskTypes", "0x00401530");
     for (std::size_t slot = 0U; slot < igi::retail::core::task_type_slot_count; ++slot)
     {
         QTask_TypeTable[slot].name = 0U;
@@ -593,6 +600,7 @@ void TaskEventTable_MarkSlotNoMask(std::uint16_t value, std::uint32_t index);
 //           0x0054F930 + phase*6 are not yet runtime-observed.
 void NATIVE_DECL QTask_Init()
 {
+    NATIVE_LOG_ENTER("QTask_Init", "0x00401530");
     QTask_ClearEventTable();
     QTask_ClearTaskTypes();
     // 0x00401105 mov edi,0xa969e0 / 0x0040111d or eax,-1 / 0x00401120 rep stosd with ecx=0x3F /

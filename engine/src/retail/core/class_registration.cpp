@@ -1,3 +1,4 @@
+#include "dev_log.hpp"
 #include "igi/retail/core/class_registration.hpp"
 
 #include "igi/retail/core/flow.hpp"
@@ -71,6 +72,7 @@ extern "C" {
 
 void NATIVE_DECL QTask_RegisterClasses()
 {
+    NATIVE_LOG_ENTER("QTask_RegisterClasses", "0x00402930");
     ReportNotTranscribed("AI graph");
     // 0x489560: transcribed body (position 2); registers no classes in the retail capture.
     (void)AI_Detection_Init();

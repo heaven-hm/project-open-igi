@@ -3,6 +3,7 @@
 // Tools/evidence: build/retail-dis.txt (GNU objdump) 0x004F93B0-0x004F945D; radare2 6.2.0 pdfj (174 bytes, 3 blocks, 61 instructions, 2 edges); called only from 0x004F91D9 (0x004F9180) with (object, scratch).
 // Behavior/CFG: three blocks. When the object's +0x64 flag is clear it copies the input 24-byte block straight into object+0x20; when the flag is set it subtracts the double translation at [[object+0x14]+0x20,+0x28,+0x30] from the input block, multiplies by the transposed 3x3 float matrix at [[object+0x14]+0x70..0x90] (row 0 = +0x88,+0x7c,+0x70; row 1 = +0x8c,+0x80,+0x74; row 2 = +0x90,+0x84,+0x78) and stores the result through the scratch into object+0x20.
 // Status/limits: BUILD_VERIFIED; STRUCTURALLY_VERIFIED against the 61-instruction listing; runtime UNOBSERVED. Leaf: no calls. The three fstp %st(0) at 0x004F943E-0x004F9442 only clear the x87 stack (the differences stay live across the products); a C++ port has no stack to clear. Evaluation order per row is (m2*v2 + m1*v1) + m0*v0, matching the flds/fmul/faddp sequence.
+#include "dev_log.hpp"
 #include <cstdint>
 #include <cstring>
 
@@ -18,6 +19,7 @@ extern "C" {
 
 void NATIVE_DECL Graph_UnapplyParentTransform_4F93B0(void* object, void* in)
 {
+    NATIVE_LOG_ENTER("Graph_UnapplyParentTransform_4F93B0", "0x004F93B0");
     std::uint8_t* const fields = static_cast<std::uint8_t*>(object);
 
     if (*reinterpret_cast<std::uint8_t*>(fields + 0x64U) == 0U)                          // 0x004F93B7/0x004F93BB/0x004F93BE: mov 0x64(%edx),%al; test %al,%al; je 0x4f944a

@@ -4,6 +4,7 @@
 // Behavior/CFG: one cdecl pointer argument (the node at [esp+8] after `push %esi`), no frame, one block, no branch. Unlinks the node from its current list (0x004AF960), re-inserts it at the tail of the free list 0x00A43EB0 (0x004AF910 - the FIRST argument is the LAST push, so the head is &g_a43eb0 and the node is the second argument), then decrements the live count g_a43e8c with an explicit load/decrement/store (`mov eax,[..]` / `dec eax` / `mov [..],eax`) rather than a read-modify-write instruction, and returns nothing. 0x004BACBB `add $0xc,%esp` is the cdecl cleanup for the three argument dwords this body pushed.
 // Status/limits: TRANSCRIBED; LINKABLE (its two callees 0x004AF960 Sys_UnlinkListNode_4AF960 and 0x004AF910 Script_QHashListInsert and its two globals g_a43eb0 / g_a43e8c are all tree natives, so it adds no new dependency); STRUCTURALLY_VERIFIED against the 13-instruction listing (1 block, 0 edges); runtime UNOBSERVED. THE NAME IS A PLACEHOLDER derived from the measured callee behavior (a node is unlinked, returned to the free list and the live count drops) and it must be revisited when the symbol table is understood as a whole. The node's interior layout is not interpreted here: retail only moves the 12-byte record and touches no field of it, so no field is named. Domain: script/, because both callees and both globals belong to the script symbol table at 0x00A43E88/0x00A43EB0 and its owner native_4bacd0.cpp.
 
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -32,6 +33,7 @@ void NATIVE_DECL Script_QHashListInsert(void* head, void* node);
 
 void NATIVE_DECL Script_QHashNodeRelease_4BACA0(void* node)
 {
+    NATIVE_LOG_ENTER("Script_QHashNodeRelease_4BACA0", "0x004BACA0");
     // 0x004BACA5: `push esi` (the node) / 0x004BACA6: `call 0x004AF960` - one argument, so the call is (node).
     (void)Sys_UnlinkListNode_4AF960(node);
     // 0x004BACAB: `push esi` (the node, second argument) / 0x004BACAC: `push 0x00A43EB0` (the head, FIRST argument,

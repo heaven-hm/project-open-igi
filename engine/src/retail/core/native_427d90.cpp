@@ -9,6 +9,7 @@
 // ABI NOTE, and this file adds a fourth sample to the population: 0x0045F920 is `mov eax,[esp+8]; mov byte [eax],0; ret` - the same two-argument script-setter shape as the `Script_SetConstant_*` family, and it is NOT transcribed. It is recorded as a cast integer, so no signature is asserted for it. The `Script_SetConstant_427F80` reference keeps the symbol edge through the two-step `void (*)()` cast, zero warning lines; the dispatcher's argument count remains UNRESOLVED.
 // Ownership note (per the Lead's two-variable trap): 0x0053BB6C is owned by this file and emitted with C++ linkage inside `namespace igi::retail::core`. No other file in the tree references it, and the image value is the sentinel word 0x0181, not zero.
 // Domain: core/, per the Lead's ruling that these files are task-type registrars of the guard 0x00402930 family. This file is one of the 24 registrars the guard calls in descending address order at 0x00402B79-0x00402C32; its teardown is 0x00427FB0.
+#include "dev_log.hpp"
 #include "igi/retail/core/task_types.hpp"
 
 #include <cstdint>
@@ -50,6 +51,7 @@ extern void Script_QHashNodeRegister(void* arg1, void* value);    // 0x004B8810 
 
 void NATIVE_DECL HitZone_Register_427D90()
 {
+    NATIVE_LOG_ENTER("HitZone_Register_427D90", "0x00427D90");
     // 0x00427D90/0x00427D92: the two zeros are surplus for the argument-less parent getter and supply
     // 0x00401900's fourth argument. The parent getter is 0x004D9FA0, not 0x004018F0 and not 0x00424850.
     const std::uint16_t parent = Sys_GetGlobal16_4D9FA0();                    // 0x00427D94

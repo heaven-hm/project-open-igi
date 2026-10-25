@@ -3,6 +3,7 @@
 // Tools/evidence: radare2 6.2.0 af/afij/pdf and the raw bytes (53 55 8b6c2410 57 55 e8a3feffff 8bd8 83c404 85db 0f8491000000 8b7c2410 57 e88c000000 83c404 33c0 b9c0239400 833900 7413 81c194000000 40 81f940369400 7cec); section 22.3 of the evidence sheet.
 // Behavior/CFG: resolves the device index of the target path with 0x004B11A0 (returns 0 for an unknown device, and then this routine returns without touching the tables); clears any record whose key equals argument1 with 0x004B13A0; finds the first of the 32 free 0x94-byte records by testing the handle word at 0x009423C0 + index*0x94 for zero (bound 0x00943640); copies argument1 into record+0x00 and argument2 into record+0x10 with strlen+1 sized copies; stores the device index at the handle word. Returns without writing when all 32 records are taken.
 // Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. 0x00942330 (32 records of 0x94 bytes, ending at 0x009435B0) is owned by native_4b13a0.cpp and 0x009423C0 by native_4b12d0.cpp; both are referred to extern here. The record's name areas are copied into without a length bound like retail, so a key or target longer than the following fields allows retail's own overrun - no guard was added. The eax value at return is a leftover of the copy loop in retail, so no return value is declared. Callers reach this with argument1 = the alias key names observed at runtime (INTROSCREEN:, STATUSSCREEN:, COMPUTER:, MENUSYS:, LANGUAGE:, MISSION:) and argument2 = the device-prefixed target path.
+#include "dev_log.hpp"
 #include <cstdint>
 #include <cstring>
 
@@ -28,6 +29,7 @@ void NATIVE_DECL QFile_ClearEntryByName_4B13A0(const char* name);
 
 void NATIVE_DECL QFile_RegisterAlias_4B12F0(const char* key, const char* target)
 {
+    NATIVE_LOG_ENTER("QFile_RegisterAlias_4B12F0", "0x004B12F0");
     const std::int32_t device =                                        // 0x004B12F6-0x004B12FD: push ebp; call 0x004B11A0; mov ebx,eax
         QFile_DeviceIndex_4B11A0(target);
     if (device == 0)                                                   // 0x004B1302-0x004B1304: test ebx,ebx; jz 0x004B139B

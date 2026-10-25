@@ -3,6 +3,7 @@
 // Tools/evidence: radare2 6.2.0 pd; target of the tail jump at 0x00402C36 from the startup init sequence 0x00402930 (evidence section 19).
 // Behavior/CFG: copies the dword at 0x00A4EDEC to 0x00A4EDF0 and returns; no branches, no calls, no other memory access.
 // Status/limits: BUILD_VERIFIED (1 block / 0 edges matching retail, emitted instructions identical); runtime UNOBSERVED. The caller chain does not read the value left in EAX, so the ABI is declared void while the retail result register keeps the copied dword.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -25,6 +26,7 @@ static_assert(sizeof(g_a4edec_pair) == 8, "the retail pair at 0x00A4EDEC spans t
 
 void NATIVE_DECL Core_CopyState_4CEF30()
 {
+    NATIVE_LOG_ENTER("Core_CopyState_4CEF30", "0x004CEF30");
     std::uint32_t const source = ::g_a4edec_pair[0];   // 0x004CEF30: mov eax, dword [0xA4EDEC]
     ::g_a4edec_pair[1] = source;                       // 0x004CEF35: mov dword [0xA4EDF0], eax
 }                                              // 0x004CEF3A: ret

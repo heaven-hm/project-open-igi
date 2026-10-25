@@ -4,6 +4,7 @@
 // Behavior/CFG: one straight-line block, no branch, no frame and no saved register. It is the teardown counterpart of the SlideBar registrar core/native_41f340.cpp: it deletes the task-parameter container whose handle that registrar stored at 0x0057BBE4 through 0x004C1830 (QTaskList_Delete, core/native_4c1830.cpp), then clears the registered class type whose 16-bit id that registrar stored at 0x0053B6BC through 0x00401A20 (TaskType_Clear, core/native_401a20.cpp), and finally writes the 0x0181 "not registered" sentinel back into the id slot. The `add $0x8,%esp` is the cdecl cleanup for the two arguments this body pushed and is emitted by the compiler for the two calls below rather than written by hand.
 // MEASURED ABSENCE, NOT AN OMISSION: retail does NOT clear the container slot 0x0057BBE4 here. Only the id slot is reset. Zeroing the container handle would be a behaviour retail does not perform, so this file does not do it.
 // Status/limits: TRANSCRIBED; LINKABLE (two undefined symbols, 0x004C1830 and 0x00401A20, both already tree natives, so this file adds no new dependency); STRUCTURALLY_VERIFIED for the CFG only (1 block, 0 edges, no branch structure to disagree about); BUILD_VERIFIED (i686-w64-mingw32-g++ -std=c++20 -O2 -Wall -Wextra single-file compile with zero warning lines); runtime UNOBSERVED. PAIRING EVIDENCE, NOT AN ASSUMPTION: the two slots this body touches are exactly the two slots core/native_41f340.cpp writes - it defines g_53b6bc (0x0053B6BC, std::uint16_t, image word 0x0181 at the file bytes immediately before the "SlideBar" literal at 0x0053B6C0) and g_57bbe4 (0x0057BBE4, std::uint32_t, above the file-backed end of .data, image value 0) - and its provenance records the same two addresses. This file only reads and rewrites them, so they are declared extern and defined nowhere: exactly one definition per retail address. LINKAGE IS PART OF THAT EVIDENCE: native_41f340.cpp defines both globals INSIDE its `extern "C"` block, so they are C-linkage symbols and they are declared here inside `extern "C"` as well; declaring them inside a namespace would silently create a second, distinct symbol (the two-variable trap). THE `mov word [..],0x0181` IS LOAD-BEARING: without it the class would stay marked registered after its container was deleted, and no build or link check can catch that. Domain: core/, because it is the teardown half of the guard 0x00402930 registrar family, and it is the first of the guard's 0x0042xxxx teardowns.
+#include "dev_log.hpp"
 #include "igi/retail/core/task_types.hpp"
 
 #include <cstdint>
@@ -33,6 +34,7 @@ extern void NATIVE_DECL TaskType_Clear_401A20(std::uint16_t class_id);
 
 void NATIVE_DECL Task_ClearClassTypeAndDeleteList_4201B0()
 {
+    NATIVE_LOG_ENTER("Task_ClearClassTypeAndDeleteList_4201B0", "0x004201B0");
     // 0x004201B0: `mov eax,[0x0057BBE4]`; 0x004201B5: `push %eax`; 0x004201B6: `call 0x004C1830`.
     QTaskList_Delete_4C1830(g_57bbe4);
 

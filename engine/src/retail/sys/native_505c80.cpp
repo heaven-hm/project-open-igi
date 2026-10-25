@@ -3,6 +3,7 @@
 // Tools/evidence: radare2 6.2.0 af/pdf and NASM ndisasm over the raw bytes (66 a1 20 e7 54 00 c3).
 // Behavior/CFG: loads the two-byte value at 0x0054E720 into ax and returns it; no argument, no branch, no store, no call.
 // Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. Two-byte is the width this load proves; the value's meaning is not established.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -20,6 +21,7 @@ std::uint16_t g_54e720;
 
 std::uint16_t NATIVE_DECL Sys_GetGlobal16_505C80(void)
 {
+    NATIVE_LOG_ENTER("Sys_GetGlobal16_505C80", "0x00505C80");
     return ::g_54e720;                                                       // 0x00505C80: mov 0x0054e720,%ax; 0x00505C86: ret
 }
 

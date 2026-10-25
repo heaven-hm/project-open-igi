@@ -5,6 +5,7 @@
 // Status/limits: BUILD_VERIFIED; STRUCTURALLY_VERIFIED against the 16-instruction listing; runtime UNOBSERVED. Only AX of the first argument and CX
 //                of the second are read (0x00401CF9/0x00401D10/0x00401D16), so the caller's dirty high halves are unobservable; the address is
 //                expressed through QTask_TypeTable (task_types.hpp) rather than the 0x00AF5EE8 immediate so the port keeps working off 32-bit.
+#include "dev_log.hpp"
 #include "igi/retail/core/task_types.hpp"
 
 #include <cstdint>
@@ -21,6 +22,7 @@ extern "C" {
 
 std::uint8_t NATIVE_DECL TaskType_Inherits_401CF0(std::uint32_t type, std::uint16_t ancestor)
 {
+    NATIVE_LOG_ENTER("TaskType_Inherits_401CF0", "0x00401CF0");
     std::uint8_t const* const type_table =
         reinterpret_cast<std::uint8_t const*>(&::QTask_TypeTable[0]);                // 0x00401D09: mov 0xaf5ee8(%eax),%ax (0x00AF5EE0 + 0x08)
     std::uint32_t current = type;                                                    // 0x00401CF0: mov 0x4(%esp),%eax

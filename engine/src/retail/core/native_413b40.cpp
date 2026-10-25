@@ -3,6 +3,7 @@
 // Tools/evidence: radare2 6.2.0 af/afbj/pdf over the exact image; afbj reports 1 block / 2 instructions and the raw bytes decode as `mov al, byte [0x005391B0]` then `ret`. Third byte of the same three-byte flag block as 0x00413B20 (0x005391AE) and 0x00413B30 (0x005391AF), each a separate routine at its own VA.
 // Behavior/CFG: returns the byte at 0x005391B0; no branch, no call, no stack use.
 // Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. Same codegen deviation as 0x00413B20: retail writes only AL and leaves EAX bits 8-31 as the caller left them, while a C++ byte return makes the compiler zero-extend into EAX; the byte-level result is identical for every caller that consumes AL or a uint8_t. The byte's meaning is not established by this body; the image holds 255 at 0x005391B0. Single-owner read since 2026-10-25: this file used to define a private `g_5391b0 = 0xFFU`, which the registrar 0x00413DF0 never writes, so the native returned the image value forever instead of the event id stored at 0x005391B0. The byte now comes from its one owner g_5391ac (index 4) declared in engine/src/retail/core/native_413df0.cpp, which is also what 0x00413DF0 writes (see docs/fidelity/evidence/data-slot-ownership-20261025.md).
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -21,6 +22,7 @@ extern std::uint8_t g_5391ac[7];
 
 std::uint8_t NATIVE_DECL Core_GetFlagByte_413B40()
 {
+    NATIVE_LOG_ENTER("Core_GetFlagByte_413B40", "0x00413B40");
     return ::g_5391ac[4];   // 0x00413B40: mov al, byte [0x005391B0]
 }                           // 0x00413B45: ret
 

@@ -3,6 +3,7 @@
 // Tools/evidence: radare2 6.2.0 af/pdf and the raw bytes; section 22.2 of the evidence sheet (qfile device-driver table, name field at record+0x7C).
 // Behavior/CFG: copies the NUL-terminated third argument into the 0x8C-stride device record's name buffer at 0x009436B0 + index*0x8C + 0x7C; the second argument is pushed by callers but never read. No branch, no call, no return value.
 // Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. Table storage is owned by native_4b1180.cpp (g_9436b0). Retail inlines strlen and the dword/byte copy (repne scasb, rep movsd, rep movsb); the transcription calls std::strlen/std::memcpy, so the emitted body ends in CRT calls instead of inline loops - recorded, not smoothed. Like retail there is no length bound on the destination.
+#include "dev_log.hpp"
 #include "igi/retail/qfile/driver_table.hpp"
 
 #include <cstdint>
@@ -20,6 +21,7 @@ extern "C" {
 
 void NATIVE_DECL QFile_SetDeviceName_4B1290(std::int32_t index, std::int32_t argument2, const char* source)
 {
+    NATIVE_LOG_ENTER("QFile_SetDeviceName_4B1290", "0x004B1290");
     (void)argument2;                                                        // 0x004B1290/0x004B1296: only [esp+4] and [esp+0xC] are read
     // 0x004B129A-0x004B12A9: lea eax,[ecx*8]; sub eax,ecx; lea eax,[eax+eax*4]; lea edx,[eax*4+0x0094372C]
     std::uint8_t* const name = &::g_9436b0[0] + 0x8C * static_cast<std::uintptr_t>(index) + 0x7CU;

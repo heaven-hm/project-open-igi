@@ -4,6 +4,7 @@
 // Behavior/CFG: one straight-line block, no branch. Reads the parent type through 0x00424850, registers "ModelViewBox" with a 0xC8-byte object through 0x00401900, stores the 16-bit id at 0x0053B854, makes one 0x00401530 link to 0x00422F10 event 1, one to 0x00422F30 with 0x004E7530's return, one to 0x00422DF0 event 2, one 0x00401400 link to 0x00422C90 event 0, two 0x00401400 links to 0x00422FB0 and 0x00422E40 against the phase ids from 0x004F1A60/0x004F1A70, two 0x00401530 links to 0x00422FC0 and 0x00423000 with 0x004F1210/0x004F1220 returns, allocates a count-2 container through 0x004F1950 into 0x0057BC28, and makes two six-argument appends through 0x004F1A80. NOTE: frame size 0xC8 and registered object size 0xC8 COINCIDE - this is the fourth registrar where they do (Flow, MenuLoader, AIGraph, DialogWindow were the others). They are different quantities and one does not imply the other.
 // Status/limits: TRANSCRIBED; BUILD_VERIFIED; runtime UNOBSERVED. STRUCTURALLY_VERIFIED for the CFG only, which is one block with no edges - there is no branch structure to disagree about. THE APPEND FRAME OFFSETS ARE NOT VERIFIED: r2 reports `lea` offsets relative to the `esp` at each instruction and arguments are pushed in between, so var_ch/var_30h/var_38h map to frame+0x00/frame+0x18/frame+0x2C by subtracting the bytes pushed at each point. Raw `lea` offsets are recorded beside each argument so the arithmetic can be rechecked. This file OWNS four globals that had no owner: 0x0053B854, 0x0057BC28, 0x0057BC30, 0x0057BC34.
 // Blocked: eight handler-only entry points are pushed as arguments and are transcribed by nobody - 0x00422C90, 0x00422DF0, 0x00422E40, 0x00422F10, 0x00422F30, 0x00422FB0, 0x00422FC0, 0x00423000. Declared here as placeholders, NOT stubbed.
+#include "dev_log.hpp"
 #include "igi/retail/core/task_types.hpp"
 
 #include <cstdint>
@@ -49,6 +50,7 @@ extern std::uint8_t Script_PhaseIdGetE5_4F1A70(void);         // 0x004F1A70
 
 void NATIVE_DECL ModelViewBox_Register_422B40()
 {
+    NATIVE_LOG_ENTER("ModelViewBox_Register_422B40", "0x00422B40");
     std::uint8_t append_frame[0xC8]; // 0x00422B40: sub esp,0xC8
 
     const std::uint16_t parent = Sys_GetGlobal16_424850();                    // 0x00422B4A

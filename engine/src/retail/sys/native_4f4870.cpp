@@ -14,6 +14,7 @@
 //   routine computes, and no caller in the image reads it. The value's meaning is not established by this body; both readers (0x004F4560 and
 //   0x004F457F) sit inside untranscribed functions, so nothing here proves what the slot is for. Domain: sys/, the same folder as the sibling
 //   single-slot accessors 0x004F45F0 and 0x004F4850.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -31,6 +32,7 @@ std::uint32_t g_a76c40;
 
 void NATIVE_DECL Sys_SetGlobalA76C40_4F4870(std::uint32_t value)
 {
+    NATIVE_LOG_ENTER("Sys_SetGlobalA76C40_4F4870", "0x004F4870");
     ::g_a76c40 = value;                              // 0x004F4874: mov [0x00A76C40],eax; 0x004F4879: ret
 }
 

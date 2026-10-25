@@ -13,6 +13,7 @@
 // Status/limits: TRANSCRIBED; BUILD_VERIFIED (compiles and links). The self-jump halt is reproduced as an empty
 //   infinite loop, which is the same non-terminating behaviour. Runtime UNOBSERVED. Domain: script/, because it
 //   registers through Script_QHashNodeRegister and the table it fills is the criteria registry.
+#include "dev_log.hpp"
 #include <cstdint>
 
 extern "C" void Script_QHashNodeRegister(void* const arg1, void* const value);
@@ -35,6 +36,7 @@ std::uint8_t g_a7a640[31U * 12U] = {};
 
 std::int32_t NATIVE_DECL Script_RegisterCriteria_504A30(void* const arg1, void* const arg2)
 {
+    NATIVE_LOG_ENTER("Script_RegisterCriteria_504A30", "0x00504A30");
     std::uint32_t index = 0U;
     std::uint32_t cursor = 0U;
 

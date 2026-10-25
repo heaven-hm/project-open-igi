@@ -3,6 +3,7 @@
 // Tools/evidence: radare2 6.2.0 af/pdf and NASM ndisasm over the raw bytes (33 c0 c3); reached from the 0x00402930 chain as a callback.
 // Behavior/CFG: clears eax and returns; no arguments, no stores, no callee.
 // Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. The next entry at 0x004AD371 starts a different routine's prologue, so this body is exactly the two instructions.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -17,6 +18,7 @@ extern "C" {
 
 std::int32_t NATIVE_DECL Sys_ReturnZero_4AD36E(void)
 {
+    NATIVE_LOG_ENTER("Sys_ReturnZero_4AD36E", "0x004AD36E");
     return 0;                                                          // 0x004AD36E: xor eax,eax; 0x004AD370: ret
 }
 

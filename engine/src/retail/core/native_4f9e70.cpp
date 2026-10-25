@@ -3,6 +3,7 @@
 // Tools/evidence: build/retail-dis.txt (GNU objdump) 0x004F9E70-0x004F9EAC; radare2 6.2.0 afij (60 bytes, 6 blocks, 23 instructions); called by 0x004F9DF0 at 0x004F9DF6.
 // Behavior/CFG: six blocks, one loop. Folds a NUL-terminated name into a 32-bit hash: ASCII 'a'..'z' (signed compare, so bytes >= 0x80 are not folded) are shifted by +0xE0 first, each character is sign-extended and multiplied by a 16-bit multiplier that starts at 1 and grows by 0x13D (masked to 16 bits) per character, and the products are summed with 32-bit wrap.
 // Status/limits: TRANSCRIBED; STRUCTURALLY_VERIFIED against the 23-instruction listing; runtime UNOBSERVED. No call, no global, no store; the only argument is the name pointer and the return value is the hash.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -17,6 +18,7 @@ extern "C" {
 
 std::uint32_t NATIVE_DECL GraphStream_HashName_4F9E70(char const* name)
 {
+    NATIVE_LOG_ENTER("GraphStream_HashName_4F9E70", "0x004F9E70");
     std::uint32_t hash = 0U;                                                  // 0x004F9E75: xor %eax,%eax
     std::uint32_t multiplier = 1U;                                            // 0x004F9E77: mov $0x1,%edx
     signed char character = static_cast<signed char>(*name);                  // 0x004F9E7C: mov (%esi),%cl

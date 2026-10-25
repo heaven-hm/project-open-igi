@@ -56,3 +56,6 @@ scripts/__pycache__/verify_v4_catalog.cpython-312.pyc
 *.pyc
 # Per-run build evidence artifacts (timestamped, regenerated each run).
 docs/fidelity/evidence/executed-build-*.json
+
+# Development log written by engine/platform/windows/dev_log.cpp at runtime
+igi.log

@@ -3,6 +3,7 @@
 // Tools/evidence: build/retail-dis.txt (GNU objdump i386 byte+instruction listing) for every instruction below; radare2 6.2.0 `aaa; afij` for the CFG numbers; level-1 registration capture docs/fidelity/evidence/0x00401900-retail-registration-order.json (279 records, ids 0..278).
 // Behavior/CFG: scans the 0x30-byte type slots from 0x00AF5F05 in_use byte upward (bound 0x00AFA705 = 384 slots) and spins forever after Debug_Error("Unable to allocate task type") when full; on a slot writes in_use=1 (+0x25), object size (+0x04), name dword (+0x00), parent word (+0x08), inherited flags (+0x2C, 0x20000000 for parent 0x0181 else the parent slot's +0x2C); when the fourth stack slot is non-zero calls 0x004B0B00(&slot+0x0C, object_size, task_list_count, 0) and sets +0x24=1 else +0x24=0; then copies the parent's 0xFE handler-table entries (0x600-byte row stride) or zeroes them for 0x0181, calls 0x004014B0 in each arm, and returns the type id in AX (`mov %bp,%ax`).
 // Status/limits: BUILD_VERIFIED TARGET - the same definition is committed in engine/src/retail/core/task_types.cpp, which the manifest record for 0x00401900 still names as the implementation; the owner must delete that definition, list this file in CMakeLists.txt and repoint the manifest record in the same change (rule 10.15 no-duplication). 32-bit target only: the name is stored as a 32-bit dword, exactly as 0x00401949 does. Retail statement order preserved: the slot scan, the error spin, the +0x25/+0x04/+0x00 stores, the +0x08 word, the +0x2C branch, the fourth-slot branch at 0x00401982, the 0x0181 re-test at 0x004019AD, the two separate row loops (0x004019B4-0x004019DD copy, 0x004019EB-0x00401A03 zero) and the two separate 0x004014B0 calls (0x004019DF, 0x00401A05) are all at their retail positions.
+#include "dev_log.hpp"
 #include "igi/retail/core/task_types.hpp"
 
 #include <cstdint>
@@ -30,6 +31,7 @@ std::uint16_t NATIVE_DECL TaskType_Register(const char* name, std::uint32_t obje
                                             std::uint16_t parent_type,
                                             std::uint32_t task_list_count)
 {
+    NATIVE_LOG_ENTER("TaskType_Register", "0x00401900");
     // 0x00401903-0x00401916: eax starts at the in_use byte of type 0 and advances 0x30 per slot; the loop keeps
     // going while the in_use byte is set and the slot address stays below 0x00AFA705.
     std::uint32_t type_id = 0U;

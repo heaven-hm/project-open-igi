@@ -7,6 +7,7 @@
 // ABI NOTE, carried from 0x00426630 and re-checked here: `Script_SetConstant_427F80` is declared `std::uint32_t (void* const, std::uint32_t* const)` and its body reads its SECOND argument (`mov eax,[esp+8]; mov dword [eax],8`), so it is not a `FrameHandler` = `void(*)(void*)`. A single-step `reinterpret_cast` to FrameHandler emits `-Wcast-function-type`; the symbol reference is kept by casting through `void (*)()` first, which GCC treats as matching everything. Whether retail's dispatcher passes one argument or two is a property of 0x00401400 and the event walker, not of this routine, and it remains UNRESOLVED.
 // Ownership note (per the Lead's two-variable trap): 0x0057BC7C is owned by this file and emitted with C++ linkage inside `namespace igi::retail::core`. No other file in the tree references it, and it is past the file-backed end of .data, so the image value is zero.
 // Domain: core/, per the Lead's ruling that these files are task-type registrars of the guard 0x00402930 family. This file is one of the 24 registrars the guard calls in descending address order at 0x00402B79-0x00402C32; its teardown is 0x00427280.
+#include "dev_log.hpp"
 #include "igi/retail/core/task_types.hpp"
 
 #include <cstdint>
@@ -42,6 +43,7 @@ extern void Script_QHashNodeRegister(void* arg1, void* value);    // 0x004B8810 
 
 void NATIVE_DECL HeliWheel_Register_426D90()
 {
+    NATIVE_LOG_ENTER("HeliWheel_Register_426D90", "0x00426D90");
     // 0x00426D90/0x00426D92: the two zeros are surplus for the argument-less parent getter and supply
     // 0x00401900's fourth argument. The parent getter is 0x004D9FA0, not 0x004018F0 and not 0x00424850.
     const std::uint16_t parent = Sys_GetGlobal16_4D9FA0();                    // 0x00426D94

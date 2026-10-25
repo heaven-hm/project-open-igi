@@ -3,6 +3,7 @@
 // Tools/evidence: radare2 6.2.0 af/afij/pdf and NASM ndisasm; the 45-entry table at 0x005466D8-0x00546840 is read from the retail image, and its bounds are both stated by the body (base mov $0x5466D8 and cmp $0x546840).
 // Behavior/CFG: stores the argument at 0x00936068, scans the 45 eight-byte entries of 0x005466D8 comparing the entry code with the argument; on a hit it stores the entry's second dword at 0x00936064 and returns. With no hit, codes 0x13..0x24 map to 0x0D, codes 0xBC..0xCA store 0x08 and then 0x16 when above 0xCA, and anything else gets 0x16. The 0x08 store happens before the range test exactly as the bytes order it, so out-of-range values pass through 0x08 first.
 // Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. The table, 0x00936068 and 0x00936064 have no other owner in the tree, so this file defines them; the meaning of the codes and of the mapped values is not established by this body.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -76,6 +77,7 @@ std::uint32_t g_936064;
 
 void NATIVE_DECL Sys_MapCode_4ABC46(std::int32_t code)
 {
+    NATIVE_LOG_ENTER("Sys_MapCode_4ABC46", "0x004ABC46");
     ::g_936068 = static_cast<std::uint32_t>(code);                      // 0x4ABC4C: mov ecx,0x00936068
     const CodeMapEntry* entry = &::g_5466d8[0];                        // 0x4ABC52: mov $0x005466D8,%eax
     for (;;)

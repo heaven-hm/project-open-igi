@@ -5,6 +5,7 @@
 // Status/limits: BUILD_VERIFIED; STRUCTURALLY_VERIFIED against the 16-instruction listing; runtime UNOBSERVED. Leaf: no call, and the only global
 //                it touches (0x00A71890) is already defined by engine/src/retail/script/script_state_globals_4ee970.cpp, so this file has no missing
 //                callee. 0x004F1090 is the matching release half and stays untranscribed.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -21,6 +22,7 @@ extern std::uint32_t g_a71890[0x1000];   // 0x00A71890, defined in engine/src/re
 
 std::int32_t NATIVE_DECL List_FindIndex_4F1050(void* object)
 {
+    NATIVE_LOG_ENTER("List_FindIndex_4F1050", "0x004F1050");
     std::int32_t index = 0;                                                   // 0x004F1055: xor %eax,%eax
     std::uint32_t const* slot = g_a71890;                                     // 0x004F1057: mov $0xa71890,%ecx
     do

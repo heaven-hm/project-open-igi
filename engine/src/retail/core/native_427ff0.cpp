@@ -7,6 +7,7 @@
 // Status/limits: TRANSCRIBED; NOT LINKABLE YET, and the reason is a CALLEE gap, not a handler gap. Two of the fourteen event getters are not transcribed anywhere in the tree - 0x00413B00 (`mov al,[0x005391AC]; ret`) and 0x00413B10 (`mov al,[0x005391AD]; ret`) - and unlike handlers, which retail stores as data and the port passes as cast integers, these must actually be CALLED to produce the event id, so they are declared as NATIVE GAPs and this file cannot link until they land. They are the first two bytes of the seven-byte event-id block 0x005391AC..0x005391B2 owned by the registrar 0x00413DF0, whose sibling 0x00413B20 is transcribed as Core_GetFlagByte_413B20 in core/native_413b20.cpp; the gap names here follow that sibling's shape and are explicitly placeholders, not retail symbols (docs/DISCOVERED_NATIVES_RECORD.md lists 0x00413B00 as HumanPlayer_CheckGround_10, which is a candidate name from another project and is NOT used here). The twelve remaining handler addresses are raw code immediates with no implementation in the tree and are passed as cast integers, creating no link dependency: 0x00428270, 0x00428390, 0x00428CA0, 0x00429890, 0x00429540, 0x00429730, 0x00429720, 0x004298A0, 0x004298E0, 0x00429910, 0x00427FC0, 0x00429920. STRUCTURALLY_VERIFIED for the CFG only, which is one block with no edges. BUILD_VERIFIED (i686-w64-mingw32-g++ -std=c++20 -O2 -Wall -Wextra single-file compile, zero warning lines). Runtime UNOBSERVED in both binaries.
 // Ownership notes (per the Lead's two-variable trap, and the mirror rule about naming): 0x0053BB8C, 0x0057BC88 and 0x0057BC94 are owned by this file and emitted with C++ linkage inside `namespace igi::retail::core`; no other file in the tree references any of the three. The id holds the sentinel word 0x0181, not zero. Every other callee is referenced by the name the tree already defines for it, checked by grepping each address before use.
 // Domain: core/, per the Lead's ruling that these files are task-type registrars of the guard 0x00402930 family. This file is one of the 24 registrars the guard calls in descending address order at 0x00402B79-0x00402C32, and it is the FIRST call of that sequence; its teardown is 0x00427FB0.
+#include "dev_log.hpp"
 #include "igi/retail/core/task_types.hpp"
 
 #include <cstdint>
@@ -65,6 +66,7 @@ extern void Script_QHashNodeRegister(void* arg1, void* value);  // 0x004B8810 (d
 
 void NATIVE_DECL Missile_Register_427FF0()
 {
+    NATIVE_LOG_ENTER("Missile_Register_427FF0", "0x00427FF0");
     // 0x00427FF0: sub esp,0x898 - the only framed registrar in this band. The frame exists to hold the
     // three parameter records appended at the end; its size and the registered object size are equal by
     // coincidence, not identity.

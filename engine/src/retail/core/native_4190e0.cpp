@@ -4,6 +4,7 @@
 // Behavior/CFG: one straight-line block, no branch of any kind. Reads the current task type through 0x004018F0, registers the "MenuLoader" class with a 0x124-byte object through 0x00401900, stores the 16-bit id at 0x00539ADC, links phase 0 handler 0x004191F0 through 0x00401400, links phase 2 of 0x004D3710 (QTask_NoOpHandler) through 0x00401530, then links 0x004192A0 and 0x00419210 against the phase ids returned by 0x004F1A60/0x004F1A70 through 0x00401400, links phase 1 of 0x004D3710 through 0x00401530, allocates a count-3 container through 0x004F1950 storing it at 0x0057BAF4, and makes three six-argument appends through 0x004F1A80.
 // Status/limits: TRANSCRIBED; STRUCTURALLY_VERIFIED (static only) - single block, no edges, so the CFG is trivial. Runtime UNOBSERVED. THE FRAME OFFSETS ARE NOT VERIFIED: the three appends pass two frame-relative pointers whose retail `lea` offsets are 0x0C/0x28, 0x0C/0x128 and 0x0C/0x129, but r2 reports those relative to the `esp` current at each instruction, and arguments are pushed between the frame setup and the `lea`s. The comment beside each argument records the raw `lea` offset only. The exact frame-relative derivation must be established before this file is trusted for the append bounds.
 // Blocked: three handler-only entry points are pushed as arguments and are transcribed by nobody - 0x004191F0, 0x00419210, 0x004192A0. They are declared here as placeholders, not stubbed.
+#include "dev_log.hpp"
 #include "igi/retail/core/task_types.hpp"
 #include "igi/retail/script/script_state.hpp"
 
@@ -50,6 +51,7 @@ extern std::uint8_t Script_PhaseIdGetE5_4F1A70(void);        // 0x004F1A70
 
 void NATIVE_DECL MenuLoader_Register_4190E0()
 {
+    NATIVE_LOG_ENTER("MenuLoader_Register_4190E0", "0x004190E0");
     std::uint8_t append_frame[0x124]; // 0x004190E0: sub esp,0x124
 
     // 0x004190E6: two zero pushes. 0x004018F0 reads no arguments, so the second zero is consumed

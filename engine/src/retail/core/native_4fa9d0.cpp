@@ -13,6 +13,7 @@
 #define NATIVE_DECL
 #endif
 
+#include "dev_log.hpp"
 #include <cstdint>
 extern "C" {
 std::int32_t NATIVE_DECL QFile_InvokeDriverSlot_4B17C0(std::int32_t* context);
@@ -33,6 +34,7 @@ std::uint8_t NATIVE_DECL GraphStream_ReadTag0Byte_4FA7E0(void* stream, std::uint
 
 std::uint8_t NATIVE_DECL GraphList_Insert_4FA9D0(void* list, void* value, std::uint32_t size)
 {
+    NATIVE_LOG_ENTER("GraphList_Insert_4FA9D0", "0x004FA9D0");
     struct
     {
         std::uint32_t slot;                                                     // retail reads the two-byte header into the address of its own argument slot

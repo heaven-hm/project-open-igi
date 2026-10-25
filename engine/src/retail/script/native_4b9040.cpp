@@ -3,6 +3,7 @@
 // Tools/evidence: radare2 6.2.0 af/pd over the exact image; callers: 0x004B8F60, 0x004B9556 and 0x004B9ADA - each pushes two arguments.
 // Behavior/CFG: cdecl store helper with two stack arguments ([esp+4] expression node, [esp+8] target descriptor). The target's dword 4 selects the store: 1 writes an integer read from node through 0x004B9120, sized by target dword 0x0C (1 -> byte store 0x004B9109, 2 -> word store 0x004B90EB, anything else -> dword store 0x004B90D6); 2 evaluates the node as a real through 0x004B9660 and stores eight bytes with `fstpl` at the target pointer (0x004B90B0); 3 renders the node into a 0x800-byte stack buffer with 0x004B8CE0(node, buffer, 0x800, target dword 0x0C - 1) (0x004B906D-0x004B9075), copies the returned string into the target pointer with the MSVC strncpy at 0x004A5500 using target dword 0x0C - 1 as the count (0x004B907D-0x004B9082, the count word left on the stack by the first call's deliberately short 12-byte cleanup) and terminates target[count - 1] (0x004B908A-0x004B9090). Any other dword 4 value returns without writing (0x004B9058/0x004B910B). The target pointer is read from target +0x18 in every store path.
 // Status/limits: BUILD_VERIFIED; runtime UNOBSERVED; STRUCTURALLY_VERIFIED against the instruction listing only. Link: needs 0x004B9120 (item 1 of this wave, not yet transcribed), 0x004B9660 (`Qvm_EvaluateArgumentValue`, declared in qvm_execute.cpp and native_4b8a50.cpp, body not yet transcribed) and 0x004B8CE0 (item 2 of this wave, not yet transcribed); the strncpy at 0x004A5500 is the linked MSVC CRT routine and is bound to `std::strncpy` (see docs/fidelity/evidence/qvm-4a5500-strncpy.md). The target descriptor's field meanings beyond the observed type, count and pointer roles are not established.
+#include "dev_log.hpp"
 #include <cstddef>
 #include <cstdint>
 #include <cstring>
@@ -26,6 +27,7 @@ char* NATIVE_DECL Qvm_RenderNodeText_4B8CE0(const void* node, char* buffer, std:
 
 void NATIVE_DECL Qvm_StoreArgumentValue_4B9040(const void* node, void* target_object)
 {
+    NATIVE_LOG_ENTER("Qvm_StoreArgumentValue_4B9040", "0x004B9040");
     std::uint8_t* const target = static_cast<std::uint8_t*>(target_object);
     std::int32_t const stored_type = *reinterpret_cast<std::int32_t*>(target + 4);      // 0x004B904E
 

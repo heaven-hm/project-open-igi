@@ -18,6 +18,7 @@
 //   file-backed end of .data at 0x00550000) and this routine is their only writer. The meaning of the slots is not established by this body; the two
 //   `fiadd` readers sit inside untranscribed functions. Domain: render/, the camera module that 0x004A2A00 and the sibling setters 0x004A29E0 and
 //   0x004A28B0 belong to.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -38,6 +39,7 @@ std::uint32_t g_93602c;
 
 void NATIVE_DECL Render_StoreArgs936020_4A29C0(std::uint32_t arg1, std::uint32_t arg2, std::uint32_t arg3)
 {
+    NATIVE_LOG_ENTER("Render_StoreArgs936020_4A29C0", "0x004A29C0");
     ::g_936020 = arg1;                               // 0x004A29CC: mov [0x00936020],eax
     ::g_936028 = arg2;                               // 0x004A29D1: mov [0x00936028],ecx
     ::g_93602c = arg3;                               // 0x004A29D7: mov [0x0093602C],edx; 0x004A29DD: ret

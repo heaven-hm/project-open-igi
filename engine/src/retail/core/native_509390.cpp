@@ -4,6 +4,7 @@
 // Behavior/CFG: one block, no branch. Returns the address of the 8-byte element at (row + side * column) inside the buffer word at object+0xB8, with the side word at object+0x58: `imul` of the side by the third argument, `add` of the second argument, then `lea (base,index*8)`.
 // Status/limits: BUILD_VERIFIED; STRUCTURALLY_VERIFIED against the 8-instruction listing; runtime UNOBSERVED. Leaf: no call, no global beyond the
 //                object itself. Argument order is retail's: arg1 object, arg2 row, arg3 column.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -18,6 +19,7 @@ extern "C" {
 
 void* NATIVE_DECL AIGraph_ElementPointer_509390(void* object, std::int32_t row, std::int32_t column)
 {
+    NATIVE_LOG_ENTER("AIGraph_ElementPointer_509390", "0x00509390");
     std::uint8_t* const fields = static_cast<std::uint8_t*>(object);
     std::uint32_t index = static_cast<std::uint32_t>(*reinterpret_cast<std::int32_t*>(fields + 0x58U))
                         * static_cast<std::uint32_t>(column);                       // 0x00509398/0x0050939B: mov 0x58(%eax),%ecx; imul 0xc(%esp),%ecx

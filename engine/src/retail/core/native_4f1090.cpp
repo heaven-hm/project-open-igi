@@ -6,6 +6,7 @@
 //                already-transcribed Debug_Error (core/retail_error.cpp), 0x00401B20 is QHashSlotTable_Release (core/native_401b20.cpp) and
 //                0x00401AE0 is transcribed in native_401ae0.cpp. The two-argument shape is retail's: the index arrives in the 0x005093D9 push and
 //                the object in the 0x005093D3 push pushed before the 0x004F1240 call. The string literal is byte-identical to 0x0054E0A0.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -31,6 +32,7 @@ void* QHashSlotTable_Insert_401AE0(void* object);
 
 void NATIVE_DECL List_Release_4F1090(std::int32_t index, void* object)
 {
+    NATIVE_LOG_ENTER("List_Release_4F1090", "0x004F1090");
     void* const entry = reinterpret_cast<void*>(static_cast<std::uintptr_t>(g_a71890[index]));  // 0x004F1095: mov 0xa71890(,%esi,4),%eax
     if (entry != nullptr)                                                             // 0x004F109C/0x004F109E: test %eax,%eax; je 0x4f10be
     {

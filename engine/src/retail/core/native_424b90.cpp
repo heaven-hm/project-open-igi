@@ -3,6 +3,7 @@
 // Tools/evidence: radare2 6.2.0 af/pd over the exact bytes; called with no arguments from the startup sequence at 0x00402BC9 (return address 0x00402BCE).
 // Behavior/CFG: parent = QTask_GetCurrentType(); registers "Cursor" with object size 0x40 and task-list argument 0, stores the returned class id at 0x0057BC60, links phase 0 -> 0x00424C10 through 0x00401400 and phases 1 -> 0x00424CE0 and 2 -> 0x004D3710 through 0x00401530; the `add esp,0x38` at 0x00424BE0 clears the fourteen deferred argument words pushed so far. It then pushes the handler word 0x00424C40, reads the event word through 0x004E7530 (the already-pushed word is only the following link's third argument; the getter reads no stack argument) and links phase = event word -> 0x00424C40, registers the window-procedure handler 0x00424CA0 through 0x0048F490 and clears the remaining 0x10 bytes, returning whatever 0x0048F490 leaves in EAX. Single block, no branch.
 // Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. The five handler words are pushed as retail-VA literals, matching the precedent of native_005310e0.cpp: two of them have no transcribed engine native yet (0x00424C40 is blocked on the untranscribed leaf 0x004B4E00 and 0x00424CE0 exists only as the scripts/GameNatives reference candidate Cursor_RunHandler), so the two literals cannot be replaced by symbols. 0x00424C10 and 0x00424CA0 are transcribed in native_424c10.cpp and native_424ca0.cpp and can replace their literals once they join the build. The class-id word 0x0057BC60 lies beyond the .data raw bytes (raw .data ends at VA 0x00552000) and is zero-initialised.
+#include "dev_log.hpp"
 #include "igi/retail/core/task_types.hpp"
 
 #include <cstdint>
@@ -28,6 +29,7 @@ std::int32_t* NATIVE_DECL WinProc_RegisterHandler(std::int32_t* handler);
 
 std::int32_t* NATIVE_DECL Cursor_Init_424B90()
 {
+    NATIVE_LOG_ENTER("Cursor_Init_424B90", "0x00424B90");
     std::uint16_t const parent = QTask_GetCurrentType();                       // 0x00424B94: call 0x004018F0
     g_57bc60 = TaskType_Register("Cursor", 0x40U, parent, 0U);                 // 0x00424BA1: call 0x00401900
     QTask_LinkQTaskEventHandler(g_57bc60, 0U,                                  // 0x00424BB4: call 0x00401400

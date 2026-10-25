@@ -3,6 +3,7 @@
 // Tools/evidence: radare2 6.2.0 af/afbj/pdf plus a pd 12 read of the append block (0x00416A20-0x00416A62), which af/pdf split across its block listing; the count dword at 0x0057BAB8, the table base 0x0057B1A8 and the 0x30 record stride are the mov/lea/shl immediates in the body itself - 0x00416A24-0x00416A30 is `lea edx,[ebp+ebp*2]; shl edx,4; add edx,0x0057B1A8`, i.e. an index * 3 * 16 = index * 0x30 destination computation.
 // Behavior/CFG: same shape as the sibling lookup at 0x00416930 but over a different table: it searches the records at 0x0057B1A8, stride 0x30, count dword at 0x0057BAB8, comparing each record's leading NUL-terminated name with the argument using retail's two-byte-unrolled MSVC inline strcmp (13 blocks: prologue/count test, table base, loop head, the unrolled compare and its exits, the increment, the append block and the two return epilogues). On a match it returns the record address; otherwise it appends at index = count, copies the argument string including its terminator with retail's inline strlen (repne scasb) and inline memcpy (rep movsd then rep movsb), increments the count and returns the new record address. The rest of an appended record is not initialized here.
 // Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. The comparison's differing-byte magnitude is retail's `sbb ecx,ecx; sbb ecx,-1` sign trick and is never observed (only `test ecx,ecx` consumes it), so this transcription keeps the equality outcome and documents that the +1/-1 Retail's inline strlen (repne scasb) and inline memcpy (rep movsd/rep movsb) are expressed with the CRT routines of the same name, which are imported rather than re-implemented; the byte count and the terminator handling are retail's (strlen + 1). magnitude is not reproduced. The table capacity is not established by static evidence, so the table is addressed by its absolute retail address instead of a declared array extent. What the record holds after its name is not established by this body (callers store the returned pointer in a dword, e.g. 0x0047E700 keeps it at 0x005C114C).
+#include "dev_log.hpp"
 #include <cstddef>
 #include <cstdint>
 #include <cstring>
@@ -23,6 +24,7 @@ std::int32_t g_57bab8 = 0;
 
 void* NATIVE_DECL Sys_LookupOrAppendRecord_4169D0(char const* name)
 {
+    NATIVE_LOG_ENTER("Sys_LookupOrAppendRecord_4169D0", "0x004169D0");
     std::int32_t const count = ::g_57bab8;                                                   // 0x004169D1: mov ebx,dword [0x57BAB8]
     std::uint8_t* record = reinterpret_cast<std::uint8_t*>(static_cast<std::uintptr_t>(0x0057B1A8U)); // 0x004169E0: mov edi,0x57B1A8
     std::int32_t index = 0;                                                                  // 0x004169D8: xor ebp,ebp

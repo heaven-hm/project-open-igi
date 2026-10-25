@@ -16,6 +16,12 @@ endif()
 # Target is the retail binary name. The source list is the retail main startup
 # flow being certified; other ported units are added only when their headers
 # and link dependencies exist on this branch.
+# Infrastructure: the igi.log logger lives outside engine/include because it is not a
+# retail native. Every target that compiles a retail native needs to see its header, so the
+# path is global rather than per-target - the per-target form missed the humanplayer_defines
+# object library and broke the build.
+include_directories(engine/platform/windows)
+
 add_executable(igi WIN32
     engine/src/retail/audio/sound_adpcm_decoder.cpp
     engine/src/retail/audio/sound_attenuation_table.cpp
@@ -850,7 +856,6 @@ add_executable(igi WIN32
     engine/platform/windows/retail_native_verification_support.cpp
     engine/platform/windows/dev_log.cpp)
 target_include_directories(igi PRIVATE engine/include)
-target_include_directories(igi PRIVATE engine/platform/windows)
 target_compile_features(igi PRIVATE cxx_std_20)
 set_target_properties(igi PROPERTIES OUTPUT_NAME "igi1")
 if(MINGW)

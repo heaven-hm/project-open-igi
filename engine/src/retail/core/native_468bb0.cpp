@@ -3,6 +3,7 @@
 // Tools/evidence: radare2 6.2.0 pd; section 21 of the evidence sheet (installed as a phase-2 handler by 0x004688B0).
 // Behavior/CFG: stores zero to the dword at 0x005BDD68 and returns; no branch, no call, no stack use, no argument read.
 // Status/limits: BUILD_VERIFIED (1 block / 0 edges, emitted instructions identical); runtime UNOBSERVED.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -20,6 +21,7 @@ std::uint32_t g_5bdd68;
 
 void NATIVE_DECL Task_ClearPendingWord_468BB0(void* /*task*/)
 {
+    NATIVE_LOG_ENTER("Task_ClearPendingWord_468BB0", "0x00468BB0");
     ::g_5bdd68 = 0U;   // 0x00468BB0: mov dword [0x005BDD68], 0
 }                      // 0x00468BBA: ret
 

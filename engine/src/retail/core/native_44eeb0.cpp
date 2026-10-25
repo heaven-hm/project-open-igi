@@ -13,6 +13,7 @@
 // Status/limits: TRANSCRIBED; runtime UNOBSERVED. The table at 0x0053C9C0 holds image pointers to `.data` strings; the port holds its own pointers to
 //   byte-identical literals, which is the same substitution core/native_45e450.cpp makes for 0x0053F348. The meaning of each id is NOT established -
 //   the ids are transcribed as the literals retail pushes (including 0x1E000 and 0x1000 for the two detection ranges).
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -65,6 +66,7 @@ char const* g_53c9c0[29] = {
 
 void NATIVE_DECL Task_RegisterAIEvents_44EEB0(void)
 {
+    NATIVE_LOG_ENTER("Task_RegisterAIEvents_44EEB0", "0x0044EEB0");
     // 0x0044EEB2-0x0044EEB9: ids 0x00-0x07, one registration per (value, name) push pair; 0x0044EF12: add esp,0x40.
     Script_QHashNodeRegister(const_cast<char*>("AIEVENT_CREATE"),                             reinterpret_cast<void*>(static_cast<std::uintptr_t>(0x0U)));
     Script_QHashNodeRegister(const_cast<char*>("AIEVENT_DELETE"),                             reinterpret_cast<void*>(static_cast<std::uintptr_t>(0x1U)));

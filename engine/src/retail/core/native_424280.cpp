@@ -3,6 +3,7 @@
 // Tools/evidence: radare2 6.2.0 af/pd over the exact bytes; pushed as the current-event-word handler at 0x004240CD, 0x00469706, 0x00485203 (GameScreen registrar 0x004851B0), 0x004E4E5A and 0x004F5683, and dispatched with one word at 0x00402481 (single-argument site).
 // Behavior/CFG: takes the node linked at arg1+0x08 and walks it: while the node is non-null it pushes the node's child (0, or the child when the child's first word is set) onto the 0x00AFA6E0 dispatch stack at depth 0x00AFA7E0, increments the depth, reads the event word through 0x004E7530, dispatches QTask_HandlerTable[event*0x180 + word[node+0x1C]] with the node when that entry is set, then pops one depth level and continues while the popped node is non-null. 10 blocks / 14 edges with the back edge 0x004242F1 -> 0x00424297.
 // Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. Same walk as the transcribed phase-1 dispatcher 0x00488700, except that the phase comes from the current event word (0x004E7530) instead of the constant 1 and the handler is tested against zero only; both shapes follow the retail bytes. The 0x00AFA6E0 stack and 0x00AFA7E0 depth are the storage owned by native_4015f0.cpp and declared extern here. The routine is not an r2 function start (it is only referenced as an immediate), so the extent above is the recovered body through its ret and nop pad.
+#include "dev_log.hpp"
 #include "igi/retail/core/task_types.hpp"
 
 #include <cstdint>
@@ -26,6 +27,7 @@ std::uint32_t NATIVE_DECL Core_GetEventWord_4E7530();
 
 void NATIVE_DECL Task_WalkAndDispatchEvent_424280(void* task)
 {
+    NATIVE_LOG_ENTER("Task_WalkAndDispatchEvent_424280", "0x00424280");
     std::uint8_t* const self = static_cast<std::uint8_t*>(task);
     std::uint8_t* node = *reinterpret_cast<std::uint8_t**>(self + 0x08);   // 0x00424285: mov 0x8(%eax),%esi
     if (*reinterpret_cast<std::uint32_t*>(node) == 0U)                    // 0x00424288/0x0042428B: cmpl $0,(%esi); je

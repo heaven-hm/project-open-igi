@@ -4,6 +4,7 @@
 // Behavior/CFG: one straight-line block, no branch, no frame and no saved register. It is the teardown counterpart of the MenuText registrar core/native_420cc0.cpp: it deletes the task-parameter container whose handle that registrar stored at 0x0057BBF4 through 0x004C1830 (QTaskList_Delete, core/native_4c1830.cpp), then removes the four script symbols the registrar published - "TEXT_BLACK" (string at 0x0053B7D8), "TEXT_WHITE" (0x0053B7CC), "TEXT_GREEN" (0x0053B7C0) and "TEXT_ORANGE" (0x0053B7B4) - through 0x004B8920 (Script_QHashSymbolRemove_4B8920, script/native_4b8920.cpp), then clears the registered class type whose 16-bit id the registrar stored at 0x0053B770 through 0x00401A20 (TaskType_Clear, core/native_401a20.cpp), and finally writes the 0x0181 "not registered" sentinel back into the id slot. THE FOUR NAMES ARE THE PAIRING PROOF AND THEY ARE EXACT: the registrar registered exactly these four strings in this order (its provenance records the same four addresses), so this teardown cannot belong to a different class. THE `mov word [..],0x0181` IS LOAD-BEARING: without it the class would stay marked registered after its container was deleted, and no build or link check can catch that.
 // Status/limits: TRANSCRIBED; the link check reports every symbol it names as defined in tree, but the final program link still needs the 0x004BAB30 chain behind 0x004B8920 (see that file); STRUCTURALLY_VERIFIED for the CFG only (1 block, 0 edges, no branch structure to disagree about); BUILD_VERIFIED (i686-w64-mingw32-g++ -std=c++20 -O2 -Wall -Wextra single-file compile with zero warning lines); runtime UNOBSERVED. The string addresses are retail pointers into .data and are written here as byte-identical literals, which is the only permitted substitution (rule 10). The two slots this body touches are declared extern and defined nowhere: exactly one definition per retail address, and both owners define them at namespace scope in igi::retail::core, so they are declared inside that namespace here rather than in extern "C" (the two-variable trap has a linkage axis as well as a namespace axis). Domain: core/, because it is the teardown half of the guard 0x00402930 registrar family.
 
+#include "dev_log.hpp"
 #include "igi/retail/core/task_types.hpp"
 
 #include <cstdint>
@@ -37,6 +38,7 @@ extern void NATIVE_DECL TaskType_Clear_401A20(std::uint16_t class_id);
 
 void NATIVE_DECL Task_ClearClassTypeAndDeleteList_4213E0()
 {
+    NATIVE_LOG_ENTER("Task_ClearClassTypeAndDeleteList_4213E0", "0x004213E0");
     // 0x004213E0: `mov eax,[0x57bbf4]` / 0x004213E5: `push eax` / 0x004213E6: `call 0x004C1830`
     QTaskList_Delete_4C1830(igi::retail::core::g_57bbf4);
     // 0x004213EB: `push 0x53b7d8` ("TEXT_BLACK") / 0x004213F0: `call 0x004B8920`

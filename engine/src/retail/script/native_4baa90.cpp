@@ -4,6 +4,7 @@
 // Behavior/CFG: one argument (a value pointer), cdecl, no frame, and the only loop in the chain. It walks the live symbol-node list whose header 0x00A43E90 is owned by 0x004BACD0 (native_4bacd0.cpp) and clears the +8 dword of every node that holds the argument. The node shape is not invented here: native_4babb0.cpp records the 12-byte node records threaded on 0x00A43E90 with the symbol lookup's out value stored at node+8, and this body's `cmp [ecx+8],esi` / `mov [ecx+8],edx` touches exactly that field. THE WALK IS ASYMMETRIC AND THE ASYMMETRY IS PRESERVED: the guard is `eax = [first]; if (eax == 0) return;` - it tests the FIRST NODE'S OWN FORWARD LINK BEFORE examining that node - so the head is examined only when a second node exists, the LAST node of the list is never examined at all, and a single-node list is skipped entirely. A conventional `for (node = head; node; node = node->next)` loop would examine both the head and the tail and would therefore be a behavior change, not a cleanup. `xor edx,edx` is the null written into the matching field, and the loop's back edge is 0x004BAAB1 -> 0x004BAAA3. The `push %esi`/`pop %esi` pair is retail saving the argument across the loop and is handled by the compiler here.
 // Status/limits: TRANSCRIBED; LINKABLE (no callees; its only reference is the tree global g_a43e90 defined by 0x004BACD0); STRUCTURALLY_VERIFIED against the 16-instruction listing (2 blocks, 3 edges: the `je` exit, the fallthrough, and the loop back edge); BUILD_VERIFIED (i686-w64-mingw32-g++ -std=c++20 -O2 -Wall -Wextra single-file compile with zero warning lines); runtime UNOBSERVED. The SymbolSentinel declaration below repeats native_4babb0.cpp's type token for token rather than inventing a second shape for the same header. THE NAME IS A PLACEHOLDER derived from measured behavior (it clears a stored reference, it does not unlink a node - the unlink is 0x004AF960 elsewhere); what the +8 value means semantically is not interpreted here. Domain: script/, because the list it walks is the script symbol table's live node list.
 
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -27,6 +28,7 @@ extern "C" SymbolSentinel g_a43e90;                              // 0x00A43E90/9
 
 void NATIVE_DECL Script_QHashNodeClearRef_4BAA90(void* const value)
 {
+    NATIVE_LOG_ENTER("Script_QHashNodeClearRef_4BAA90", "0x004BAA90");
     // 0x004BAA90: `mov ecx,[0x00A43E90]` - the first node of the live list.
     std::uint8_t* current = g_a43e90.field_first;
     // 0x004BAA96: `xor edx,edx` (the null written below) / 0x004BAA98: `mov eax,[ecx]` - the first node's own forward

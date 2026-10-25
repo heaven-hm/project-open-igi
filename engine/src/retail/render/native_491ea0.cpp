@@ -3,6 +3,7 @@
 // Tools/evidence: build/retail-dis.txt (GNU objdump) bytes 83ec10 8b4c2414 8d542400 894c2404 8b4c2418 89542408 8b1534235400 894c240c 33c0 8b0c95844ea900 89442400 85c9 740e 8d442404 50 ffd1 8b442404 83c404 83c410 c3; radare2 6.2.0 af/afij (68 B, 3 blocks, 20 instructions, 3 edges) and afbj (block 0x00491EA0 50 B/13 i -> 0x00491EE0 taken / 0x00491ED2 fall-through, block 0x00491ED2 14 B/5 i, block 0x00491EE0 2 i); the image dword at 0x00542334 is 0xFFFFFFFF.
 // Behavior/CFG: builds a three-dword descriptor {argument1, address of a zeroed dword, argument2} on its own frame, loads the active backend id from 0x00542334, reads the render-backend init pointer from 0x00A94E84 + id*4, returns 0 without calling when that pointer is null, and otherwise calls it with the descriptor address and returns the descriptor's first dword, which the callee may have replaced.
 // Status/limits: TRANSCRIBED; STRUCTURALLY_VERIFIED against the 20-instruction listing and the per-block counts; runtime UNOBSERVED. The dispatch table 0x00A94E84 is data - sixteen function pointers, all zero in the image - and is already declared by the tree as igi::retail::dynobj::g_a94e84[0x10], so this file declares no table and synthesizes no dispatch helper. The id slot 0x00542334 is declared here as g_542334 with its image value -1 because retail also writes it at 0x004917AB and reads it at 0x00491E60; note that render/native_00491e60.cpp reads the same slot through a raw address literal instead of this object. Retail bounds-checks nothing, so the image value -1 makes the load read 0x00A94E80, the dword before the table; the port keeps the same index arithmetic and adds no guard.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #include "igi/retail/dynobj/local_models_mef.hpp"
@@ -22,6 +23,7 @@ std::int32_t g_542334 = -1;
 
 std::int32_t NATIVE_DECL Display_DriverDispatch_491EA0(void* const argument1, std::int32_t const argument2)
 {
+    NATIVE_LOG_ENTER("Display_DriverDispatch_491EA0", "0x00491EA0");
     struct DriverDescriptor
     {
         void* argument1;                // retail frame +0x04

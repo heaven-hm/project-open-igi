@@ -20,6 +20,7 @@
 // (Camera_UpdateTransform_9, a ten-block heap-free routine) that is not yet
 // reconstructed, so Delete cannot be offered as a native without that chain.
 
+#include "dev_log.hpp"
 #include "igi/retail/core/qtask_list.hpp"
 
 #include "igi/retail/core/retail_error.hpp"
@@ -61,6 +62,7 @@ extern "C" {
 // Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 void* NATIVE_DECL QTaskList_New(std::int32_t capacity)
 {
+    NATIVE_LOG_ENTER("QTaskList_New", "0x004C1800");
     void* const task_list =
         igi::retail::mem::Mem_Alloc((capacity * 4) + 8, 4);
     std::uint32_t* const words = list_words(task_list);
@@ -77,6 +79,7 @@ void* NATIVE_DECL QTaskList_New(std::int32_t capacity)
 // Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 void* NATIVE_DECL QTaskList_Register(void* task_list, void* task)
 {
+    NATIVE_LOG_ENTER("QTaskList_Register", "0x004C1800");
     std::uint32_t* const words = list_words(task_list);
     const std::int32_t count = static_cast<std::int32_t>(words[0]);
     const std::int32_t capacity = static_cast<std::int32_t>(words[1]);
@@ -100,6 +103,7 @@ void* NATIVE_DECL QTaskList_Register(void* task_list, void* task)
 // Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 std::int32_t NATIVE_DECL QTaskList_Remove(void* task_list, void* task)
 {
+    NATIVE_LOG_ENTER("QTaskList_Remove", "0x004C1800");
     std::uint32_t* const words = list_words(task_list);
     std::int32_t index = 0;
     const std::int32_t count = static_cast<std::int32_t>(words[0]);

@@ -3,6 +3,7 @@
 // Tools/evidence: build/retail-dis.txt (GNU objdump) 0x004F92E0-0x004F93A3; radare2 6.2.0 pdfj (196 bytes, 3 blocks, 70 instructions, 2 edges); called only from 0x004F91AF/0x004F91C9 (0x004F9180) with (scratch, object).
 // Behavior/CFG: three blocks. Always copies the object's 24 orientation bytes from object+0x20 into the scratch through the object's +0x64 flag test; when that flag is set it also treats the copied block as three doubles, multiplies them by the 3x3 float matrix at [[object+0x14]+0x70..0x90] (row 0 = +0x70,+0x74,+0x78, row 1 = +0x7c,+0x80,+0x84, row 2 = +0x88,+0x8c,+0x90), stores the product back into the scratch, and adds the double translation at [[object+0x14]+0x20,+0x28,+0x30].
 // Status/limits: BUILD_VERIFIED; STRUCTURALLY_VERIFIED against the 70-instruction listing; runtime UNOBSERVED. Leaf: no calls. The two rep movsl $0x6 copies are 24-byte memcpys. Products stay in x87 extended precision until the final fstpl, matching the retail evaluation order (row = m2*vz + m1*vy then + m0*vx). The +0x14 pointer is treated as the transform owner, not the object itself.
+#include "dev_log.hpp"
 #include <cstdint>
 #include <cstring>
 
@@ -18,6 +19,7 @@ extern "C" {
 
 void NATIVE_DECL Graph_ApplyParentTransform_4F92E0(void* out, void* object)
 {
+    NATIVE_LOG_ENTER("Graph_ApplyParentTransform_4F92E0", "0x004F92E0");
     std::uint8_t* const fields = static_cast<std::uint8_t*>(object);
 
     if (*reinterpret_cast<std::uint8_t*>(fields + 0x64U) == 0U)                          // 0x004F92EE/0x004F92F1/0x004F92F3: mov 0x64(%eax),%cl; test %cl,%cl; je 0x4f9391

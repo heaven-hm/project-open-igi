@@ -3,6 +3,7 @@
 // Tools/evidence: radare2 6.2.0 af/afbj/pdf over the exact image; the cached byte is 0x0053F315 (image value 0xFF), the comparison value is 0xFF and the allocation call is 0x004017C0 with a single pushed 0. Same body shape as the sibling lazy allocators at 0x00467D90 and 0x00460BF0 (whose cache 0x0053F314 sits one byte below this one); each is a separate routine at its own VA.
 // Behavior/CFG: lazy one-shot event allocation. Block 1 (`mov al,[0x53F315]; cmp al,0xFF; jne`) skips allocation when the cache is already set; block 2 (`push 0; call 0x4017C0; add esp,4; mov [0x53F315],al`) allocates event id 0 and stores its low byte; block 3 ret. The value returned in al is that cache byte whether it was already set or just written.
 // Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. QTask_AllocateEvent returns the full id in EAX and retail keeps only AL, so the return type is byte-sized. The single branch condition translated is `cached == 0xFF` (0x00460C15/0x00460C17); the 0xFF sentinel is retail's image value, and this routine is the only writer of the cache it owns.
+#include "dev_log.hpp"
 #include "igi/retail/core/task_types.hpp"
 
 #include <cstdint>
@@ -21,6 +22,7 @@ std::uint8_t g_53f315 = 0xFFU; // retail 0x0053F315: cached event id byte; image
 
 std::uint8_t NATIVE_DECL Task_GetCachedEventId_460C10(void)
 {
+    NATIVE_LOG_ENTER("Task_GetCachedEventId_460C10", "0x00460C10");
     if (::g_53f315 == 0xFFU)                                                 // 0x00460C10/0x00460C15/0x00460C17: mov al,[0x53F315]; cmp al,0xFF; jne
     {
         ::g_53f315 = static_cast<std::uint8_t>(QTask_AllocateEvent(0));      // 0x00460C19/0x00460C1B/0x00460C20/0x00460C23: push 0; call; add esp,4; mov [0x53F315],al

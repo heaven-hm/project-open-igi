@@ -8,6 +8,7 @@
 // Status/limits: TRANSCRIBED; STRUCTURALLY_VERIFIED against the 13-instruction listing; runtime UNOBSERVED. Recorded limits: (a) placeholder name with the address kept as its suffix. (b) All three callees
 //   (0x004168D0, 0x004C17C0, 0x004C7560) are untranscribed, so this file reports them undefined in the tree - that is the true state. (c) Their signatures are carried as (void*) -> std::uint32_t because each
 //   is called with one 32-bit stack argument; the first one's return value is passed on as the second call's argument, and the third takes two. No type beyond that width is claimed.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -26,6 +27,7 @@ extern void Sub_4C7560(std::uint32_t field, void* object);          // 0x004C756
 
 void NATIVE_DECL Task_ReleaseThree_449950(void* const object)
 {
+    NATIVE_LOG_ENTER("Task_ReleaseThree_449950", "0x00449950");
     // 0x00449955-0x0044995C: call 0x4168D0(object), then 0x4C17C0 with that call's result.
     Sub_4C17C0(Sub_4168D0(object));
 

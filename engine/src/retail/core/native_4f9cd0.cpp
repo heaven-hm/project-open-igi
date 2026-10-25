@@ -12,6 +12,7 @@
 #define NATIVE_DECL
 #endif
 
+#include "dev_log.hpp"
 #include <cstdint>
 #include <cstring>
 
@@ -46,6 +47,7 @@ std::uint8_t NATIVE_DECL GraphList_Insert_4FA9D0(void* list, void* value, std::u
 
 std::uint8_t NATIVE_DECL GraphNode_Process_4F9CD0(void* node, void* arg2, std::uint32_t size)
 {
+    NATIVE_LOG_ENTER("GraphNode_Process_4F9CD0", "0x004F9CD0");
     std::uint8_t* const fields = static_cast<std::uint8_t*>(node);
 
     // 0x004F9CD5: mov (%esi),%eax; 0x004F9CD7: push %eax; 0x004F9CD8: call 0x4faa10.

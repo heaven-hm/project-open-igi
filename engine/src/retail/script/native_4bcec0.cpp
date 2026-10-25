@@ -3,6 +3,7 @@
 // Tools/evidence: radare2 6.2.0 af/pd over the exact image; callers: 0x004BCB94 and 0x004BCBB7 (0x004BCAE0), 0x004BD781, 0x004BD7E5, 0x004BDA7A, 0x004BE633, 0x004BE659, 0x004BE6B7 - all push three arguments.
 // Behavior/CFG: cdecl evaluator with three stack arguments ([esp+4] state, [esp+8] integer out, [esp+0xC] real out). It switches on type_stack[type index]: tag 1 pops the operand into the integer out through 0x004BCCC0 and stores (float)*(int*)integer out into the real out (0x004BCED4-0x004BCEFB, `fildl`/`fstps` at 0x004BCEE6/0x004BCEEF, returns 1); tag 2 pops into the real out and stores the round-to-nearest 64-bit conversion truncated to 32 bits into the integer out (0x004BCEFC-0x004BCF2D, `flds`/`fistpll` at 0x004BCF10/0x004BCF19, returns 2). Every other tag resolves the operand through 0x004BCD90 (0x004BCF2E-0x004BCF3E) and requires the resolved node's dword 0 to be 0 or 2 (0x004BCF44-0x004BCF4D); it then calls the function pointer at node +0x10 with (local 24-byte buffer, node dword 0x18, 0) (0x004BCF4F-0x004BCF5B, caller cleans 12 bytes), copies 6 dwords of the returned pointer into the local buffer (0x004BCF62-0x004BCF73, `mov $6,%ecx; rep movsl`), and dispatches on the node's dword 4: 1 stores the buffer dword 0 as an integer and as a real (0x004BCF75-0x004BCF94, returns the node dword value 1), 2 converts the double at buffer +8 to the integer out and the double at buffer +0 to the real out (0x004BCF95-0x004BCFBB, `fistpll`/`fstps`, returns 2). Any other combination returns 0 (0x004BCFBC-0x004BCFC3).
 // Status/limits: BUILD_VERIFIED; runtime UNOBSERVED; STRUCTURALLY_VERIFIED against the instruction listing only. Link: needs 0x004BCCC0 and 0x004BCD90 (transcribed in this wave); the indirect call target is runtime data, not a fixed retail VA. The x87 conversions are reproduced with `llrintf`/`static_cast<float>` because 0x004BCF19 and 0x004BCFA3 use `fistpll`, which rounds per the x87 control word (default round-to-nearest) and keeps the low 32 bits. The return values 1/2 are the retail EAX values and are reproduced; their meaning is unestablished.
+#include "dev_log.hpp"
 #include <cmath>
 #include <cstddef>
 #include <cstdint>
@@ -26,6 +27,7 @@ std::int32_t NATIVE_DECL Qvm_ResolveOperand_4BCD90(void* state_object, void** ou
 
 std::int32_t NATIVE_DECL Qvm_EvaluateOperandPair_4BCEC0(void* state_object, void* out_integer, void* out_real)
 {
+    NATIVE_LOG_ENTER("Qvm_EvaluateOperandPair_4BCEC0", "0x004BCEC0");
     std::uint8_t* const state = static_cast<std::uint8_t*>(state_object);
 
     // 0x004BCEC7-0x004BCED4: tag of the current operand.

@@ -17,6 +17,7 @@
 //   inlined strcpy is imported as std::strlen + std::memcpy (CRT declared, not re-implemented) - a declared behavioural-equivalent limitation,
 //   not an instruction-equivalent copy. 0x00A4EDEC is not owned here: core/native_4cef30.cpp defines it as the one zero-initialised pair
 //   g_a4edec_pair[2] covering 0x00A4EDEC and 0x00A4EDF0, and this file refers to element 0. The table 0x00A443A0 has no other owner.
+#include "dev_log.hpp"
 #include <cstdint>
 #include <cstring>
 
@@ -42,6 +43,7 @@ std::uint8_t g_a443a0[600U * 0x48U];
 
 std::uint8_t* NATIVE_DECL MTP_AddLODVirModel_4CEBA0(const char* name)
 {
+    NATIVE_LOG_ENTER("MTP_AddLODVirModel_4CEBA0", "0x004CEBA0");
     if (name == nullptr)                                    // 0x004CEBA1/0x004CEBA5: mov edi,[esp+8]; test edi,edi
     {
         return nullptr;                                     // 0x004CEBA7/0x004CEBA9: jne 0x004CEBAD; xor eax,eax

@@ -3,6 +3,7 @@
 // Tools/evidence: radare2 6.2.0 af/pdf; section 22 of the evidence sheet (qfile init chain).
 // Behavior/CFG: walks from 0x009423C0 in 0x94-byte steps while below 0x00943640, storing zero to the dword at each step; returns void. Nothing else is read or written.
 // Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. The 0x94-stride block from 0x009423C0 is BSS and has no owner yet, so it is declared here.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -21,6 +22,7 @@ std::uint8_t g_9423c0[0x1280];
 
 void NATIVE_DECL QFile_ClearTable_4B12D0(void)
 {
+    NATIVE_LOG_ENTER("QFile_ClearTable_4B12D0", "0x004B12D0");
     std::uint8_t* entry = &::g_9423c0[0];                            // 0x004B12D0: mov eax, 0x009423C0
     do
     {

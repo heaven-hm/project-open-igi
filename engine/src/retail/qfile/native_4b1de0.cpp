@@ -3,6 +3,7 @@
 // Tools/evidence: radare2 6.2.0 af/pdf; section 21 of the evidence sheet records the callers 0x004B1420, 0x004B1510 and 0x004B1AC0.
 // Behavior/CFG: returns 0x0094372C + index * 0x8C, which is record[index].+0x40 - the NUL-terminated device name pointer; no branch, no call, no memory access.
 // Status/limits: BUILD_VERIFIED (1 block / 0 edges, emitted instructions identical); runtime UNOBSERVED. Owns the 0x009436EC table storage because no transcribed native writes it yet (the retail registrar 0x004B1B90 is missing).
+#include "dev_log.hpp"
 #include "igi/retail/qfile/device_table.hpp"
 
 #include <cstdint>
@@ -23,6 +24,7 @@ DeviceRecord g_9436ec[5];
 
 char* NATIVE_DECL QFile_GetDeviceName_4B1DE0(std::int32_t index)
 {
+    NATIVE_LOG_ENTER("QFile_GetDeviceName_4B1DE0", "0x004B1DE0");
     // 0x004B1DE0: ecx = index; 0x004B1DE4: eax = ecx*8; 0x004B1DEB: eax -= ecx (7*index);
     // 0x004B1DED: eax += eax*4 (35*index); 0x004B1DF0: eax = eax*4 + 0x0094372C (0x8C*index + record+0x40).
     return &::g_9436ec[index].name[0];

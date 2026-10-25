@@ -4,6 +4,7 @@
 // Behavior/CFG: one straight-line block, no branch, no frame and no saved register. It clears the registered class type whose 16-bit id the Train registrar stored at 0x0057BCB8 through 0x00401A20, then deletes the task-parameter container whose handle that registrar stored at 0x0057BCBC through 0x004C1830 (QTaskList_Delete, core/native_4c1830.cpp), and it WRITES NO 0x0181 RESET - this body sits above 0x00424790, the last teardown in the band that writes the sentinel, so its absent reset is a second independent confirmation of the reset law. THE TWO SLOTS ARE THE REGISTRAR OWNER'S, NOT THIS FILE'S: 0x0057BCB8 is a std::uint16_t written once at 0x0042ACE7 with `mov word [0x57bcb8],ax` and every one of its 17 accesses is `66`-prefixed, and 0x0057BCBC is a std::uint32_t written at 0x0042AE91 with `mov dword [0x57bcbc],eax` across its 11 accesses; both are defined by native_42acc0.cpp WITH C LINKAGE by its owner's explicit decision, so both are declared inside extern "C" here.
 // Status/limits: TRANSCRIBED; NOT LINKABLE YET, AND FOR A MEASURED REASON: both of its globals are defined by core/native_42acc0.cpp, which its owner has not written yet, so this file stays fail-closed until that file lands - the declarations here are the linkage its owner fixed, not a guess. STRUCTURALLY_VERIFIED for the CFG only (1 block, 0 edges, no branch structure to disagree about); BUILD_VERIFIED (i686-w64-mingw32-g++ -std=c++20 -O2 -Wall -Wextra single-file compile with zero warning lines); runtime UNOBSERVED. The declaration shape matters here in the same way it does in the rest of the band: the two-variable trap has a linkage axis as well as a namespace axis, and the owner's file decides the linkage - this file reads the owner's decision rather than copying a sibling's. Domain: core/, because it is the teardown half of the guard 0x00402930 registrar family.
 
+#include "dev_log.hpp"
 #include "igi/retail/core/task_types.hpp"
 
 #include <cstdint>
@@ -29,6 +30,7 @@ extern void QTaskList_Delete_4C1830(std::uint32_t list);
 
 void NATIVE_DECL Task_ClearClassTypeAndDeleteList_42BC00()
 {
+    NATIVE_LOG_ENTER("Task_ClearClassTypeAndDeleteList_42BC00", "0x0042BC00");
     // 0x0042BC00: `mov ax,[0x57bcb8]` / 0x0042BC06: `push eax` / 0x0042BC07: `call 0x00401A20`
     TaskType_Clear_401A20(g_57bcb8);
     // 0x0042BC0C: `mov ecx,[0x57bcbc]` / 0x0042BC12: `push ecx` / 0x0042BC13: `call 0x004C1830`

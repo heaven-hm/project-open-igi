@@ -13,6 +13,7 @@
 #define NATIVE_DECL
 #endif
 
+#include "dev_log.hpp"
 #include <cstdint>
 extern "C" {
 std::int32_t NATIVE_DECL QFile_InvokeDriverSlot_4B17C0(std::int32_t* context);
@@ -34,6 +35,7 @@ std::uint8_t NATIVE_DECL GraphStream_WriteTag5Dword_4FA620(void* stream, std::in
 
 std::uint8_t NATIVE_DECL GraphStream_WriteTagABlob_4FA7A0(void* stream, void const* data, std::int32_t size)
 {
+    NATIVE_LOG_ENTER("GraphStream_WriteTagABlob_4FA7A0", "0x004FA7A0");
     GraphStream_WriteTag0Byte_4FA4E0(stream, 0xA);                              // 0x004FA7A6/0x004FA7A9: push $0xa; push %esi; call 0x4fa4e0
     GraphStream_WriteTag5Dword_4FA620(stream, size);                            // 0x004FA7AE..0x004FA7B4: mov 0x1c(%esp),%edi; push %edi; push %esi; call 0x4fa620
 

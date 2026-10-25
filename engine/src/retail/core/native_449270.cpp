@@ -13,6 +13,7 @@
 //   established by this body: it is loaded as a 32-bit dword from base+0x178 and stored as one, so it is carried as std::uint32_t - it may
 //   equally be a pointer, and the port makes no claim either way. (c) Nothing here establishes what the regions at base+0x20 and base+0x70
 //   are; they are only addresses this routine hands out.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -27,6 +28,7 @@ extern "C" {
 
 void NATIVE_DECL Task_GetInteriorPointers_449270(void* const base, void* const out)
 {
+    NATIVE_LOG_ENTER("Task_GetInteriorPointers_449270", "0x00449270");
     char* const object = static_cast<char*>(base);
     std::uint32_t* const fields = static_cast<std::uint32_t*>(out);
 

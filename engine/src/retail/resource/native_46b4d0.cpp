@@ -3,6 +3,7 @@
 // Tools/evidence: radare2 6.2.0 af/pdf and NASM ndisasm over the raw bytes (b8 b0 dd 5b 00 c3). The block 0x005BDDB0 is the only reference to that address in the image; its extent comes from the writer in the next routine, 0x0046B4E9 (mov %ecx,0x38(%eax)), which stores a four-byte value at offset 0x38, so the block is at least 0x3C bytes.
 // Behavior/CFG: returns the address of the 0x005BDDB0 block in eax; no argument, no branch, no memory access, no call.
 // Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. This routine only publishes the block address; the block's meaning is not established, and its extent is the proven lower bound 0x3C bytes rather than a claim about the full object.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -20,6 +21,7 @@ std::uint8_t g_5bddb0[0x3C];
 
 std::uint8_t* NATIVE_DECL Sys_GetBlock5BDDB0_46B4D0(void)
 {
+    NATIVE_LOG_ENTER("Sys_GetBlock5BDDB0_46B4D0", "0x0046B4D0");
     return ::g_5bddb0;                                                  // 0x46B4D0: mov $0x005BDDB0,%eax; 0x46B4D5: ret
 }
 

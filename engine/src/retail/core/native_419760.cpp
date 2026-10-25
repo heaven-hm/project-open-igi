@@ -3,6 +3,7 @@
 // Tools/evidence: build/retail-dis.txt (GNU objdump i386 complete byte+instruction listing 0x00419760-0x004197E8: 6a 00 6a 00 e8 87 81 fe ff 50 6a 24 68 18 9c 53 00 e8 ... 66 a3 f0 9a 53 00 ... 83 c4 20 ... 83 c4 24 ... 83 c4 0c c3); radare2 6.2.0 af/afij (size 137, 1 block, 0 edges, 38 instructions); called from the 0x00402C40 startup sequence (table entry #153 in docs/fidelity/evidence/startup-402930-call-sequence.md); the class name bytes are the image bytes at 0x00539C18 ("BackgroundFX\0").
 // Behavior/CFG: parent = QTask_GetCurrentType(); registers "BackgroundFX" with object size 0x24 and task-list argument 0, stores the returned 16-bit class id at 0x00539AF0; links event 1 -> 0x00419800 through 0x00401530; links event = 0x004E7530() -> 0x00419820 through 0x00401530; links event 2 -> 0x004D3710 (QTask_NoOpHandler) through 0x00401530; links phase 0 -> 0x004197F0 through 0x00401400; links phase = 0x004F1A70() -> 0x004D3710 through 0x00401400. The deferred `add esp` amounts (0x20 at 0x00419789, 0x24 at 0x004197CB, 0xC at 0x004197E5) clear the fourteen pushed words, exactly as in the sibling registrar 0x00424B90. Single block, no branch.
 // Status/limits: BUILD_VERIFIED (static only); runtime UNOBSERVED. 0x00539AF0 is defined here with the retail image value 0x0181 (file bytes 81 01 at 0x00539AF0); this is the lowest retail write address for that word (0x0041977E), the teardown wrapper 0x004199B0 rewrites it later. The 0x004F1A70 getter returns only AL; its upper bits in retail are stale, and the pushed word therefore carries garbage above bit 7 - that is unobservable because 0x00401400 masks the event word to its low byte (recorded in task_types.hpp), so this transcription zero-extends the byte. Two link targets are transcribed and referenced by symbol (0x00419800, 0x00419820, 0x004197F0); 0x004D3710 is the one-byte QTask_NoOpHandler. The class name string is the retail bytes at 0x00539C18.
+#include "dev_log.hpp"
 #include "igi/retail/core/task_types.hpp"
 #include "igi/retail/script/script_state.hpp"
 
@@ -38,6 +39,7 @@ void NATIVE_DECL BackgroundFX_ZeroField20_4197F0(void* object);
 // 0x00402C40 calls this registrar with no arguments; it returns nothing.
 void NATIVE_DECL BackgroundFX_Init_419760()
 {
+    NATIVE_LOG_ENTER("BackgroundFX_Init_419760", "0x00419760");
     // 0x00419760-0x00419764: `push $0x0; push $0x0; call 0x004018F0` - the two zero words are deferred argument words
     // for the calls below; the getter itself takes no argument.
     const std::uint16_t parent = QTask_GetCurrentType();

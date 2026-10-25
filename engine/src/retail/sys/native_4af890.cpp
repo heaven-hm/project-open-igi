@@ -3,6 +3,7 @@
 // Tools/evidence: radare2 6.2.0 af/pdf and the raw bytes; section 22.3 of the evidence sheet (landability sweep rows).
 // Behavior/CFG: stores its argument into 0x0093625C and returns. No branch.
 // Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. Any word it touches and no other translation unit owns is declared here and starts zeroed.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -20,6 +21,7 @@ std::uint32_t g_93625c;
 
 void NATIVE_DECL Sys_StoreWord_4AF890(std::uint32_t value)
 {
+    NATIVE_LOG_ENTER("Sys_StoreWord_4AF890", "0x004AF890");
     ::g_93625c = value;   // 0x004AF890: mov eax,[esp+4]; mov dword [0x0093625C], eax
 }   // 0x004AF899: ret
 

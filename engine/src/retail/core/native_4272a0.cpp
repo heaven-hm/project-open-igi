@@ -9,6 +9,7 @@
 // ABI NOTE, carried: `Script_SetConstant_51BAA0` is `std::uint32_t (void* const, std::uint32_t* const)` and reads its SECOND argument, so it is not a `FrameHandler`. The symbol reference is kept by casting through `void (*)()` first, which compiles with zero warnings and preserves the link edge; the dispatcher's argument count remains UNRESOLVED (see the Lead's ruling).
 // Ownership note (per the Lead's two-variable trap): 0x0053BB18 is owned by this file and emitted with C++ linkage inside `namespace igi::retail::core`. No other file in the tree references it, and the image value is the sentinel word 0x0181, not zero.
 // Domain: core/, per the Lead's ruling that these files are task-type registrars of the guard 0x00402930 family. This file is one of the 24 registrars the guard calls in descending address order at 0x00402B79-0x00402C32; its teardown is 0x00427810.
+#include "dev_log.hpp"
 #include "igi/retail/core/task_types.hpp"
 
 #include <cstdint>
@@ -45,6 +46,7 @@ extern void Script_QHashNodeRegister(void* arg1, void* value);    // 0x004B8810 
 
 void NATIVE_DECL HeliDoor_Register_4272A0()
 {
+    NATIVE_LOG_ENTER("HeliDoor_Register_4272A0", "0x004272A0");
     // 0x004272A0/0x004272A2: the two zeros are surplus for the argument-less parent getter and supply
     // 0x00401900's fourth argument. The parent getter is 0x004D9FA0, not 0x004018F0 and not 0x00424850.
     const std::uint16_t parent = Sys_GetGlobal16_4D9FA0();                    // 0x004272A4

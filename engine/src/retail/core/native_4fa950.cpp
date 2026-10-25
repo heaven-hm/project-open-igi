@@ -13,6 +13,7 @@
 #define NATIVE_DECL
 #endif
 
+#include "dev_log.hpp"
 #include <cstdint>
 extern "C" {
 std::int32_t NATIVE_DECL QFile_InvokeDriverSlot_4B17C0(std::int32_t* context);
@@ -27,6 +28,7 @@ std::int32_t NATIVE_DECL QFile_DeviceSlot10Call_4B16D0(void* context, std::int32
 extern "C" {
 std::uint8_t NATIVE_DECL GraphStream_ReadTag9String_4FA950(void* stream, void* out, std::int32_t unused_size)
 {
+    NATIVE_LOG_ENTER("GraphStream_ReadTag9String_4FA950", "0x004FA950");
     (void)unused_size;                                                          // pushed by 0x004F9CD0 at 0x004F9DA1, never read by this body
 
     struct Chunk                                                                // 64 bytes, scalars only: retail's frame is 0x104 bytes

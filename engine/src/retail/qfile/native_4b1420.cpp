@@ -3,6 +3,7 @@
 // Tools/evidence: radare2 6.2.0 af/afij/pdf, listing committed at docs/fidelity/evidence/0x004B1420-retail-listing.txt; cross-decoded with NASM ndisasm over the exact 229-byte extent; evidence sheet section 21.
 // Behavior/CFG: resolves the path with 0x004B1020, enumerates a device index with 0x004B11A0, then dispatches through the five 0x8C-byte records at 0x009436EC: a record whose +0x1C word is non-zero has its +0x00 handler called with (index, text after ':' or after the NUL, arg2, arg3); while the resolver reports a further depth the path is resolved again and re-dispatched. Both error paths call Debug_Error and then run retail's `jmp $` (0x004B14E2, 0x004B14F8).
 // Status/limits: BUILD_VERIFIED; the candidate's ':' scan emits 16 blocks / 23 edges where retail has 14/21 (GCC -O3 rotates the scan; four alternative spellings were tried, see section 21). Runtime UNOBSERVED. The device table has no transcribed registrar yet (retail 0x004B1B90 is missing), so every dispatch currently takes the "Device not present" path.
+#include "dev_log.hpp"
 #include "igi/retail/core/retail_error.hpp"
 #include "igi/retail/qfile/alias_resolve.hpp"
 #include "igi/retail/qfile/device_table.hpp"
@@ -25,6 +26,7 @@ char* NATIVE_DECL QFile_GetDeviceName_4B1DE0(std::int32_t index);
 
 std::int32_t NATIVE_DECL QFile_DispatchDevicePath_4B1420(const char* path, void* callback, std::int32_t context)
 {
+    NATIVE_LOG_ENTER("QFile_DispatchDevicePath_4B1420", "0x004B1420");
     char buffer[0x80];                                                          // 0x004B1424: sub esp,0x80
     std::int32_t depth = igi::retail::qfile::QFile_AliasResolve_4B1020(buffer, path, 0); // 0x004B1436
     std::int32_t index = QFile_DeviceIndex_4B11A0(buffer);                      // 0x004B1442

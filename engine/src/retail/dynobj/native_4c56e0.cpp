@@ -3,6 +3,7 @@
 // Tools/evidence: radare2 6.2.0 af/pdf and the raw bytes; section 22.3 of the evidence sheet (landability sweep row).
 // Behavior/CFG: returns the byte at 0x00547F3D; no branch, no call, no store, no argument.
 // Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. The word at 0x00547F3D has no other owner in the tree, so it is declared here and starts zeroed. Codegen note: retail writes only AL, leaving EAX's upper bytes as they were; a std::uint8_t return zero-extends EAX. Recorded as a documented deviation, the same one as 0x00413B20.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -20,6 +21,7 @@ std::uint8_t g_547f3d;
 
 std::uint8_t NATIVE_DECL DynObj_GetByte_4C56E0(void)
 {
+    NATIVE_LOG_ENTER("DynObj_GetByte_4C56E0", "0x004C56E0");
     return ::g_547f3d;   // 0x004C56E0: mov al, byte [0x00547F3D]
 }   // 0x004C56E5: ret
 

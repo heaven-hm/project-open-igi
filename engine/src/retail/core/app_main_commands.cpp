@@ -20,6 +20,7 @@
 // runtime is unobserved until main wiring (P13); no status above
 // STRUCTURALLY_VERIFIED is claimed.
 
+#include "dev_log.hpp"
 #include "igi/retail/core/app_startup_globals.hpp"
 
 #include <cstddef>
@@ -52,6 +53,7 @@ extern "C"
 // Status/limits: STRUCTURALLY_VERIFIED; retail full-game runtime observed (21 calls in the startup window: start with the parser stack copy and delimiter literal 0x541D6C, continuation with a null first argument, terminating null); candidate runtime unobserved until main wiring; the retail continuation pointer 0x00936060 is a file-scope pointer in the port
 char* NATIVE_DECL AppMain_TokenizeDelimited(char* text, char const* delimiters)
 {
+    NATIVE_LOG_ENTER("AppMain_TokenizeDelimited", "0x004A5A0C");
     unsigned char delimiter_bitmap[0x20] = {};
     for (char const* current = delimiters;; ++current)
     {
@@ -104,6 +106,7 @@ char* NATIVE_DECL AppMain_TokenizeDelimited(char* text, char const* delimiters)
 // Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 void* NATIVE_DECL AppMain_ParseCmdLineArgs(char* option_name, AppMain_CmdLineHandler handler)
 {
+    NATIVE_LOG_ENTER("AppMain_ParseCmdLineArgs", "0x004A5A0C");
     char copy[0x200];
     char const* command_line = GameCommandLine();
 
@@ -186,6 +189,7 @@ void* NATIVE_DECL AppMain_ParseCmdLineArgs(char* option_name, AppMain_CmdLineHan
 // Status/limits: STRUCTURALLY_VERIFIED; retail full-game runtime observed (1 call in `window level1` at caller 0x48F455 with empty suffix, EAX 0, then SetScreenMode(0) with the 0x5C8C00 1->0 transition); candidate runtime unobserved until main wiring
 std::int32_t NATIVE_DECL AppMain_WindowCommand(char* suffix)
 {
+    NATIVE_LOG_ENTER("AppMain_WindowCommand", "0x004A5A0C");
     (void)suffix;
     return Display_SetScreenMode(0);
 }
@@ -197,6 +201,7 @@ std::int32_t NATIVE_DECL AppMain_WindowCommand(char* suffix)
 // Status/limits: STRUCTURALLY_VERIFIED; retail full-game runtime observed (1 call in `window level1 WinInput` at caller 0x48F455 with empty suffix, EAX 1, then F280(1) -> [0x5C8BE0]=1); registration alone never dispatches this handler; candidate runtime unobserved until main wiring; BN catalog alias is wrong
 std::int32_t NATIVE_DECL AppMain_WinInputCommand(char* suffix)
 {
+    NATIVE_LOG_ENTER("AppMain_WinInputCommand", "0x004A5A0C");
     (void)suffix;
     return Input_SetUseWin32Input(1);
 }
@@ -208,6 +213,7 @@ std::int32_t NATIVE_DECL AppMain_WinInputCommand(char* suffix)
 // Status/limits: STRUCTURALLY_VERIFIED; retail full-game runtime observed (1 call in `window level1 Germany` at caller 0x48F455 with empty suffix, EAX 1, then F300("Germany") EAX 8 and F2B0(1) -> [0x5C8C20]="Germany", [0x5C8BDC]=1); registration alone never dispatches this handler; candidate runtime unobserved until main wiring; BN catalog alias is wrong
 std::int32_t NATIVE_DECL AppMain_GermanyCommand(char* suffix)
 {
+    NATIVE_LOG_ENTER("AppMain_GermanyCommand", "0x004A5A0C");
     (void)suffix;
     (void)AppContext_SetLanguage("Germany");
     return AppContext_SetGermanVersion(1);
@@ -220,6 +226,7 @@ std::int32_t NATIVE_DECL AppMain_GermanyCommand(char* suffix)
 // Status/limits: STRUCTURALLY_VERIFIED; retail full-game runtime observed (1 call in `window level1 USA` at caller 0x48F455 with empty suffix, EAX 4, then F300("USA") EAX 4 -> [0x5C8C20]="USA"); registration alone never dispatches this handler; candidate runtime unobserved until main wiring; BN catalog alias is wrong
 std::int32_t NATIVE_DECL AppMain_USACommand(char* suffix)
 {
+    NATIVE_LOG_ENTER("AppMain_USACommand", "0x004A5A0C");
     (void)suffix;
     return AppContext_SetLanguage("USA");
 }
@@ -231,6 +238,7 @@ std::int32_t NATIVE_DECL AppMain_USACommand(char* suffix)
 // Status/limits: STRUCTURALLY_VERIFIED; retail full-game runtime observed (1 call in `window level1 HardcoreGerman` at caller 0x48F455 with empty suffix, EAX 0, then F2B0(0) write observed with no delta because the flag was already 0; plain `window level1` calls the parser at 0x48F7BE but never dispatches this handler without the token); candidate runtime unobserved until main wiring
 std::int32_t NATIVE_DECL AppMain_HardcoreGermanCommand(char* suffix)
 {
+    NATIVE_LOG_ENTER("AppMain_HardcoreGermanCommand", "0x004A5A0C");
     (void)suffix;
     return AppContext_SetGermanVersion(0);
 }

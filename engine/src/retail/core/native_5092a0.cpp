@@ -3,6 +3,7 @@
 // Tools/evidence: build/retail-dis.txt (GNU objdump) 0x005092A0-0x005092D4; radare2 6.2.0 afij (53 bytes, 3 blocks, 22 instructions); linked by the AIGraph registrar 0x00508FA0 at 0x00509282 as the fifth word of the 0x004F9DF0 "RouteTable" registration.
 // Behavior/CFG: three blocks, no loop. Reads the object pointer from context+0x04, calls the resource release 0x005092E0 on it, then, when the buffer word at object+0xB8 is non-zero, calls 0x004F9CD0(context, buffer, 8 * side * side) where side is the signed dword at object+0x58 (retail computes ecx = esi * esi with imul, then shl 3; the 32-bit wrap is part of the transcription).
 // Status/limits: TRANSCRIBED; STRUCTURALLY_VERIFIED against the 22-instruction listing; runtime UNOBSERVED. Link-blocked on 0x005092E0 and 0x004F9CD0, neither of which is transcribed yet; their prototypes here are inferred from this call site only.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -25,6 +26,7 @@ void NATIVE_DECL GraphNode_Process_4F9CD0(void* context, void* buffer, std::uint
 
 void NATIVE_DECL AIGraph_Handler_5092A0(void* context)
 {
+    NATIVE_LOG_ENTER("AIGraph_Handler_5092A0", "0x005092A0");
     // 0x005092A6: mov 0x4(%edi),%esi - the object lives one word into the context the dispatcher hands over.
     std::uint8_t* const object = *reinterpret_cast<std::uint8_t**>(static_cast<std::uint8_t*>(context) + 0x04U);
 

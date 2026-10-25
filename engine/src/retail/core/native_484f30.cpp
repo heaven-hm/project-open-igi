@@ -14,6 +14,7 @@
 //   because it is one of the 0x00402930 startup registrars; its subject matter is mission script names, so script/ would be the alternative.
 //   The store to 0x005C89FC sits after retail's three argument pushes and before the call; pushes are not observable, so the store precedes the
 //   call statement here.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -40,6 +41,7 @@ std::uint32_t g_5c89fc = 0U;
 
 void NATIVE_DECL Core_RegisterMission_484F30(void)
 {
+    NATIVE_LOG_ENTER("Core_RegisterMission_484F30", "0x00484F30");
     Script_QHashNodeRegisterEx(                                      // 0x00484F3E: call 0x004B8890
         const_cast<char*>("DefineMission"),                          // 0x00484F39: push 0x00540A44
         reinterpret_cast<void*>(static_cast<std::uintptr_t>(0x00484F60U)), // 0x00484F34: push 0x00484F60 (handler)

@@ -3,6 +3,7 @@
 // Tools/evidence: radare2 6.2.0 af/pdf and the raw bytes (8b442404 8b0d644aa900 3bc1 7423 8bc8 56 c1e106 03c8 57 bf804ea900 a3644aa900 8d34cda050a900 b982000000 f3a5 5f 5e c3); section 22.3 of the evidence sheet.
 // Behavior/CFG: returns immediately when the requested mode equals the current mode word 0x00A94A64; otherwise records the mode in 0x00A94A64 and copies the 0x208-byte mode block at 0x00A94E80 into the 0x208-stride slot table at 0x00A950A0 + mode*0x208. No calls; no branch other than the equal-mode early return.
 // Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. The slot table 0x00A950A0 is owned by sys/native_4b0e00.cpp and the mode word 0x00A94A64 by sys/native_4b0f70.cpp; the 0x208-byte source block 0x00A94E80 has no owner in the tree, so this file defines it - it ends exactly at 0x00A950A0, so the definition does not overlap the slot table. What the source block holds is not established, and nothing writes it yet.
+#include "dev_log.hpp"
 #include <cstdint>
 #include <cstring>
 
@@ -25,6 +26,7 @@ std::uint8_t g_a94e80[0x208];
 
 void NATIVE_DECL Sys_SelectRenderMode_4B0F30(std::int32_t mode)
 {
+    NATIVE_LOG_ENTER("Sys_SelectRenderMode_4B0F30", "0x004B0F30");
     if (mode == ::g_a94a64)                                         // 0x004B0F34-0x004B0F3C: mov ecx,[0x00A94A64]; cmp eax,ecx; jz 0x004B0F61
     {
         return;

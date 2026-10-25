@@ -12,6 +12,7 @@
 //   behavior-derived placeholder with the address kept as its suffix; the retail symbol is not established. (b) 0x0057C21C is declared here
 //   but not defined: its writer is an untranscribed class registrar, so this file reports it undefined until that registrar lands. (c) The
 //   first argument's type is not established, because nothing in this body reads it.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -29,6 +30,7 @@ extern std::uint32_t g_57c21c;
 
 void NATIVE_DECL Task_GetClassId_449600(void* const unused_context, void* const out)
 {
+    NATIVE_LOG_ENTER("Task_GetClassId_449600", "0x00449600");
     (void)unused_context; // 0x00449600 loads only the second argument; the first is never read by this body
 
     // 0x00449604: mov 0x57c21c,%ecx; 0x0044960A: mov %ecx,(%eax); 0x0044960C: ret.

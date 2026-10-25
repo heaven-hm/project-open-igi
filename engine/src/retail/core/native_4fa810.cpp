@@ -13,6 +13,7 @@
 #define NATIVE_DECL
 #endif
 
+#include "dev_log.hpp"
 #include <cstdint>
 extern "C" {
 std::int32_t NATIVE_DECL QFile_InvokeDriverSlot_4B17C0(std::int32_t* context);
@@ -27,6 +28,7 @@ std::int32_t NATIVE_DECL QFile_DeviceSlot10Call_4B16D0(void* context, std::int32
 extern "C" {
 std::uint8_t NATIVE_DECL GraphStream_ReadTag2Word_4FA810(void* stream, std::uint16_t* out)
 {
+    NATIVE_LOG_ENTER("GraphStream_ReadTag2Word_4FA810", "0x004FA810");
     struct
     {
         std::uint32_t slot;                                                     // the three-byte record in retail's four-byte argument slot

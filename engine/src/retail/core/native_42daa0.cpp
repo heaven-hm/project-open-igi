@@ -4,6 +4,7 @@
 // Behavior/CFG: one straight-line block, no branch, no frame and no saved register, and it is the byte-for-byte twin of 0x0042C4E0 apart from its two slots: it clears the registered class type whose 16-bit id the Rotor registrar stored at 0x0057BD10 through 0x00401A20, then releases the task-parameter container whose handle that registrar stored at 0x0057BD14 through 0x004978E0 (sys/native_4978e0.cpp), and it WRITES NO 0x0181 RESET. THE TWIN PAIR IS RECORDED RATHER THAN DEDUPLICATED: these two bodies differ in nothing but their slot addresses, yet they are two retail routines at two retail addresses and are transcribed as two natives (rule 13); what they share is a shape, not an identity, and the two slots must not be conflated - 0x0042C4E0's container handle lives in the BSS region at 0x00BC2364 while this one's lives at 0x0057BD14 in .data, which is why the same instruction text loads them with different addressing forms. The container is released through 0x004978E0, not through 0x004C1830, and the type is cleared BEFORE the container is released - both measured, both preserved.
 // Status/limits: TRANSCRIBED; LINKABLE (both callees 0x00401A20 and 0x004978E0 and both globals are tree natives); STRUCTURALLY_VERIFIED for the CFG only (1 block, 0 edges, no branch structure to disagree about); BUILD_VERIFIED (i686-w64-mingw32-g++ -std=c++20 -O2 -Wall -Wextra single-file compile with zero warning lines); runtime UNOBSERVED. The two slots this body touches are declared extern and defined nowhere here: exactly one definition per retail address, and both are defined with C linkage by core/native_42d2b0.cpp, so they are declared inside extern "C" here rather than in a namespace. Domain: core/, because it is the teardown half of the guard 0x00402930 registrar family.
 
+#include "dev_log.hpp"
 #include "igi/retail/core/task_types.hpp"
 
 #include <cstdint>
@@ -29,6 +30,7 @@ extern void NATIVE_DECL Sys_ClearSlotByte_4978E0(std::int32_t index);
 
 void NATIVE_DECL Task_ClearClassTypeAndDeleteList_42DAA0()
 {
+    NATIVE_LOG_ENTER("Task_ClearClassTypeAndDeleteList_42DAA0", "0x0042DAA0");
     // 0x0042DAA0: `mov ax,[0x57bd10]` / 0x0042DAA6: `push eax` / 0x0042DAA7: `call 0x00401A20`
     TaskType_Clear_401A20(g_57bd10);
     // 0x0042DAAC: `mov ecx,[0x57bd14]` / 0x0042DAB2: `push ecx` / 0x0042DAB3: `call 0x004978E0`. The container handle is

@@ -3,6 +3,7 @@
 // Tools/evidence: Radare2 6.2.0 `pd` over the exact image; VA 0x0042DCF0..0x0042E15B, 1132 bytes, 1 block, 318 instructions, 0 branches. Every push and cleanup was replayed with esp simulated, and the cleanups reconcile with zero slack: `add esp,0x38` at 0x0042DD4D closes 14 pending dwords, `add esp,0xC` closes 3 at each of the nineteen single-link sites, `add esp,0x10` at 0x0042DF34 closes the last link's three plus the allocation's one, `add esp,0x18` at each of the twelve append sites closes 6, and the epilogue `add esp,0x2EF8` at 0x0042E155 closes the 0x2ED8 frame plus the final append's six and the hash registration's two. Link counts were taken from the 0x00401400/0x00401530 census -- 17 and 4 -- not from handler immediates.
 // Behavior/CFG: one basic block. The prologue is a compiler-emitted stack probe, not a retail call: `mov eax,0x2ED8; call 0x004A54A0` lowers esp by the amount in eax itself and returns through `push eax; ret`, so the frame base is set inside the probe and this body contains no `sub esp`. Registers "Car" (size 0x2ED8) through 0x00401900, storing the 16-bit id at 0x0053BDA8, then makes twenty-one handler links on it: three carry fixed event ids (0x00401400 to 0x0042E160 on event 0, 0x00401530 to 0x0042E320 on phase 1 and 0x00401530 to 0x0042E940 on phase 2) and eighteen take their event id from an argument-less getter with a fixed handler. It then allocates one container of capacity 13 through 0x004F1950 at 0x0057BD28, initialises 0x0057BD20 to 0 and 0x0057BD24 to the float bits 0x447A0000 (1000.0f), and performs thirteen 0x004F1A80 appends into it. It ends by reloading the id, masking it to 16 bits and registering "TASKTYPE_CAR" through 0x004B8810, returning at 0x0042E15B.
 // Status/limits: STRUCTURALLY_VERIFIED. All twenty-one links, the thirteen appends, the registration and the hash registration are transcribed from their own pushes, and every cleanup sum reconciles with zero slack. Limits: no runtime observation of this native in either binary. The stack probe 0x004A54A0 is the MSVC __alloca_probe, classified CRT in scripts/native_coverage.py and never hand-transcribed; the port states the allocation and does not reproduce it. 0x0053BDA8 is owned by its writer in engine/src/retail/sys/native_42fdc0.cpp and is bound extern here rather than redefined. The thirteenth append pushes the address 0x0057BD20 as its sixth argument rather than a literal zero, so the two literals in this body must not be generalised. The two appends at frame+0x6D8 and frame+0x6D9 differ by one byte deliberately: they are adjacent bytes of the same buffer, not a transcription slip.
+#include "dev_log.hpp"
 #include "igi/retail/core/task_types.hpp"
 
 #include <cstdint>
@@ -58,6 +59,7 @@ std::uint32_t g_57bd24 = 0x447A0000U;   // retail 0x0057BD24: image bits for 100
 
 std::int32_t NATIVE_DECL Task_DefineCar()
 {
+    NATIVE_LOG_ENTER("Task_DefineCar", "0x0042DCF0");
     std::int32_t append_frame_base = 0;
     const std::int32_t append_frame = reinterpret_cast<std::int32_t>(&append_frame_base);
 

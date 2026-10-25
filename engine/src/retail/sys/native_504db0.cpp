@@ -17,6 +17,7 @@
 //   state object whose semantics are unestablished. Scope note: this address is above 0x0048FFFF and outside this file's author's
 //   0x0046xxxx-0x0048xxxx band; it was written under an explicit one-off scope extension from the team lead, because core/native_465a10.cpp is
 //   blocked on exactly this symbol.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -35,6 +36,7 @@ std::uint16_t g_ba8084;
 
 std::uint16_t NATIVE_DECL Sys_GetGlobal16_504DB0(void)
 {
+    NATIVE_LOG_ENTER("Sys_GetGlobal16_504DB0", "0x00504DB0");
     return g_ba8084;                                                     // 0x00504DB0: mov 0x00BA8084,%ax; 0x00504DB5: ret
 }
 

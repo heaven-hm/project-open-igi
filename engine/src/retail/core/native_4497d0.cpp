@@ -16,6 +16,7 @@
 //   with those exact types. (c) QTaskList_Delete is not reconstructed yet, so this file reports it as undefined in the tree; that is the true
 //   state, not a defect in this file. (d) The type of the value passed to QTaskList_Delete is not established by this body - it is loaded and
 //   pushed as one 32-bit dword, so it is carried as a 32-bit value and no pointer claim is made.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -37,6 +38,7 @@ extern std::uint32_t g_57c21c;
 
 void NATIVE_DECL Task_ClearClassTypeAndDeleteList_4497D0()
 {
+    NATIVE_LOG_ENTER("Task_ClearClassTypeAndDeleteList_4497D0", "0x004497D0");
     // 0x004497D0: mov 0x57c214,%ax; 0x004497D6: push %eax; 0x004497D7: call 0x401a20.
     TaskType_Clear_401A20(::g_57c214);
 

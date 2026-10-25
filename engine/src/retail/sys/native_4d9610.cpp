@@ -17,6 +17,7 @@
 //   0x0181 cluster (the value both the pre-registration id slots and the event allocator argument use), recorded as an observation and not as a
 //   claim about what 0x0181 means. Scope note: this address is above 0x0048FFFF and outside this file's author's 0x0046xxxx-0x0048xxxx band; it
 //   was written under an explicit one-off scope extension from the team lead, because core/native_464260.cpp is blocked on exactly this symbol.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -35,6 +36,7 @@ std::uint16_t g_548618 = 0x0181U;
 
 std::uint16_t NATIVE_DECL Sys_GetGlobal16_4D9610(void)
 {
+    NATIVE_LOG_ENTER("Sys_GetGlobal16_4D9610", "0x004D9610");
     return g_548618;                                                     // 0x004D9610: mov 0x00548618,%ax; 0x004D9615: ret
 }
 

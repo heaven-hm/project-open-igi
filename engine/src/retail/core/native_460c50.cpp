@@ -3,6 +3,7 @@
 // Tools/evidence: radare2 6.2.0 af/afbj/pdf over the exact image; afbj reports 1 block / 2 instructions and the raw bytes decode as `mov eax, dword [0x005BDC18]` then ret. No other translation unit owns 0x005BDC18; the retail image holds 0.
 // Behavior/CFG: returns the dword at 0x005BDC18; no branch, no call, no stack use.
 // Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. The whole EAX is written, so the full 32-bit value is returned.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -18,6 +19,7 @@ extern "C" {
 std::uint32_t g_5bdc18 = 0U; // retail 0x005BDC18: the dword this native reads (image value 0)
 std::uint32_t NATIVE_DECL Core_GetGlobal32_460C50()
 {
+    NATIVE_LOG_ENTER("Core_GetGlobal32_460C50", "0x00460C50");
     return ::g_5bdc18;   // 0x00460C50: `mov eax, dword [0x005BDC18]`
 }                        // 0x00460C55: ret
 

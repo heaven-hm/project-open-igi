@@ -3,6 +3,7 @@
 // Tools/evidence: build/retail-dis.txt (GNU objdump) instruction listing 0x00491980-0x00491A22 (51 a18403c100 55 33c9 33ed 85c0 894c2404 0f8e87000000 ... 891d 8403c100 in the builder 0x00492670); radare2 6.2.0 af/afij (163 B, 21 blocks, 68 instructions, 32 edges) and afbj for the per-block counts; the table shape is read from its only writer, the untranscribed builder 0x00492670 (`lea 0x0(%ebp,%ebp,8),%edx; shl $0x3,%edx; sub %ebp,%edx; shl $0x2,%edx` = index*0x11C, `mov $0x47,%ecx; rep stos` = 284 zeroed bytes, `cmp $0x3e8,%ebp; jge` = the 1000-record bound, and the stores at 0x00BCAE24/28/30/38); the second call site 0x004909BC pushes three arguments.
 // Behavior/CFG: walks the count at 0x00C10384 records of the table at 0x00BCAE20 (the cursor 0x00BCAE28 is eight bytes into the record, so the compared dwords are the record's +0x04/+0x08/+0x10/+0x18), and for each record compares those fields against the key in argument1 under the flag byte of argument2 (bit 1 -> +0x04, 2 -> +0x08, 4 -> +0x10, 8 -> +0x18; a null key matches every record). Every matching record invokes argument3 with the record address and increments the return counter; the count at 0x00C10384 is re-read on every iteration, so a callback that changes it changes the loop bound.
 // Status/limits: TRANSCRIBED; STRUCTURALLY_VERIFIED against the 68-instruction listing and the 21-block/32-edge CFG; runtime UNOBSERVED. The third argument is read at 0x004919EC as `mov 0x20(%esp),%eax` - with the three register saves on the stack that operand is the third argument word [E+0x0C], and the raw offset 0x20 is what the image encodes: the call site 0x004909BC pushes it, but the 0x00402FF0 call site pushes only two arguments, so retail's third argument there is a stale stack word - that routine's saved EDI slot from 0x00402FF7, a value not knowable statically; the callee's own null check at 0x004919F2 skips it, and the port call site passes null and records the difference there. The table and count are declared here with their image values (count 0) because the image's only writer is the untranscribed 0x00492670, which must reuse these definitions when it lands (one definition per VA). Retail's own layout overlaps them: the 1000-record bound spans 0x00BCAE20-0x00C103E0, so the count dword 0x00C10384 sits inside the last records; the port declares two separate objects, which does not affect this body, whose only use of the count is the loop bound.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -24,6 +25,7 @@ std::uint8_t g_bcae20[0x3E8 * 0x11C] = {};
 std::int32_t NATIVE_DECL Display_ApplyFlags_491980(void* const argument1, std::int32_t const argument2,
                                                     void* const argument3)
 {
+    NATIVE_LOG_ENTER("Display_ApplyFlags_491980", "0x00491980");
     std::int32_t matches = 0;                          // 0x00491987: xor %ecx,%ecx (retail keeps it in the pushed ecx slot at frame -0x04)
     if (g_c10384 <= 0)                                 // 0x00491981/0x0049198B/0x00491991: mov 0xc10384,%eax; test %eax,%eax; jle 0x00491A1E
     {

@@ -3,6 +3,7 @@
 // Tools/evidence: radare2 6.2.0 af/pdf and NASM ndisasm over the raw bytes (8b 44 24 04 50 ff 50 18 83 c4 04 c3); nine nop bytes follow, then the next entry.
 // Behavior/CFG: one cdecl argument is passed unchanged as the single argument of a call through the handler pointer stored at object+0x18, then the callee's value is returned. No branch, no store, no global.
 // Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. The handler is fetched from the object, so there is no direct callee and the object's type is not established beyond the +0x18 slot. An unset slot would call null, exactly as retail would.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -19,6 +20,7 @@ using DynObjField18Handler = std::int32_t(NATIVE_DECL*)(void* object);
 
 std::int32_t NATIVE_DECL DynObj_InvokeField18_4BF1E0(void* object)
 {
+    NATIVE_LOG_ENTER("DynObj_InvokeField18_4BF1E0", "0x004BF1E0");
     void* const handler = *reinterpret_cast<void* const*>(           // 0x004BF1E5: call *0x18(%eax)
         static_cast<std::uint8_t*>(object) + 0x18U);
     return reinterpret_cast<DynObjField18Handler>(handler)(object);  // 0x004BF1E4: push eax; 0x004BF1E8: add esp,4

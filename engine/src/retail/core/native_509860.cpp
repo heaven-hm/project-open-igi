@@ -3,6 +3,7 @@
 // Tools/evidence: radare2 6.2.0 af/pdf and the raw bytes; section 22.3 of the evidence sheet (landability sweep row).
 // Behavior/CFG: returns the dword at 0x00A7B2D0; no branch, no call, no store, no argument.
 // Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. The word at 0x00A7B2D0 has no other owner in the tree, so it is declared here and starts zeroed.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -20,6 +21,7 @@ std::uint32_t g_a7b2d0;
 
 std::uint32_t NATIVE_DECL Sys_GetWord_509860(void)
 {
+    NATIVE_LOG_ENTER("Sys_GetWord_509860", "0x00509860");
     return ::g_a7b2d0;   // 0x00509860: mov eax, dword [0x00A7B2D0]
 }   // 0x00509865: ret
 

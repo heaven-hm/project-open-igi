@@ -3,6 +3,7 @@
 // Tools/evidence: radare2 6.2.0 af/pdf and NASM ndisasm over the raw bytes (a1 6c 0c a7 00 c3); the storage at 0x00A70C6C has measured writers and readers across the image, listed in docs/fidelity/evidence/high-indegree-getters-20261025/.
 // Behavior/CFG: loads 4 byte(s) from the static object at 0x00A70C6C into %eax and returns; no arguments, no branch, no store, no callee. Only %eax is written, so the declared return type is exactly the access width.
 // Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. The value's meaning is not established by this body; the access width is the only proven fact about the object, and this file is its defining file.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -21,6 +22,7 @@ std::uint32_t g_a70c6c;
 
 std::uint32_t NATIVE_DECL Sys_GetGlobal32_4F0F70(void)
 {
+    NATIVE_LOG_ENTER("Sys_GetGlobal32_4F0F70", "0x004F0F70");
     return g_a70c6c;                                                     // 0x004F0F70: mov 0x00a70c6c,%eax; 0x004F0F75: ret
 }
 

@@ -4,6 +4,7 @@
 // Behavior/CFG: two arguments (list, value), cdecl, no frame. Three blocks: the entry block calls the node lookup at 0x004C04B0(list, &value, value) - the out slot being the ADDRESS OF THIS BODY'S OWN SECOND ARGUMENT WORD (0x004C0469 `lea eax,[esp+0xc]`), so the found node is written over the value word - then branches on the LOW BYTE of the result (0x004C0478 `test al,al`, 0x004C047A `je 0x004C0495`); the success block unlinks the node from its list with 0x004AF960 and frees it with 0x004B0D10 (Mem_DeAllocFn), and the fatal block reports and spins. RETAIL TESTS ONLY `al`, NOT THE WHOLE RETURN WORD: the local check below therefore casts to std::uint8_t rather than comparing the std::int32_t result with zero, because the two differ for any return whose low byte is zero while higher bytes are not. BOTH 0x004C047C AND 0x004C0486 READ THE SAME ARGUMENT WORD (the offsets 0x004C047C `[esp+0xc]` and 0x004C0486 `[esp+0x10]` differ only by the push at 0x004C0480), so the unlink and the free receive the identical node pointer the lookup wrote back, and the local `node` models that one slot. 0x004C04A3 `jmp 0x004C04A3` is retail's terminal spin and is preserved as an empty `for (;;)`. The two failure strings in this chain ("Unable to remove symbol ... not registered" here, "Undefined symbol: '%s'" in 0x004BAB30) are what establish that the chain removes symbols rather than looking them up.
 // Status/limits: TRANSCRIBED; LINKABLE (all four of its callees 0x004C04B0, 0x004AF960, 0x004B0D10 and 0x004AF7B0 are tree natives); STRUCTURALLY_VERIFIED against the 25-instruction listing (3 blocks, 3 edges); BUILD_VERIFIED (i686-w64-mingw32-g++ -std=c++20 -O2 -Wall -Wextra single-file compile with zero warning lines); runtime UNOBSERVED. THE NAME IS A PLACEHOLDER derived from measured callee behavior and the fatal string; it must be revisited when the script symbol table is understood as a whole. Domain: script/, because its arguments are a symbol-table pointer and a script symbol name.
 
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -30,6 +31,7 @@ int Debug_Error(char const* format, ...);
 
 void NATIVE_DECL Script_QHashNodeRemove_4C0460(void* const list, char const* const value)
 {
+    NATIVE_LOG_ENTER("Script_QHashNodeRemove_4C0460", "0x004C0460");
     // 0x004C0469: `lea eax,[esp+0xc]` is the address of this body's own second argument word, so the lookup writes the
     // found node over the value; `node` models that same single slot.
     void* node = nullptr;

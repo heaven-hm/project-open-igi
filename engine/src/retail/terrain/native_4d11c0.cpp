@@ -4,6 +4,7 @@
 // Behavior/CFG: no arguments, cdecl, no frame. One loop over all 0x800 records of 0x00B04340 writing the dword -1 at record+0x10 and the dword 0 at record+0x18 (retail walks a cursor at 0x00B04358 = &g_b04340[0] + 0x18 with stride 0x1C, so `[eax-8]` is +0x10 and `[eax]` is +0x18 of the same record, and the two writes stay in that order per record). Then three indexed-block allocations whose FIRST argument is the LAST push: Mem_AllocIndexedBlock(&0x00B12B60, 0x640, 0x2BC, 0x20), Mem_AllocIndexedBlock(&0x00B12C40, 0xC80, 0x32, 0x20) and Mem_AllocIndexedBlock(&0x00B16CC0, 0x1F40, 0, 0x20) - argument order per engine/include/igi/retail/mem/task_list.hpp (descriptor, element size, count, alignment), matching the tree's own reading of the same native in core/native_47cf70.cpp. The third call has count 0, so it allocates the descriptor/index table only; that is retail's value and is not corrected. 0x004D1219 `add $0x30,%esp` is the cdecl cleanup for the twelve pushed argument dwords, emitted by the compiler.
 // Status/limits: TRANSCRIBED; LINKABLE (its single callee 0x004B0B00 Mem_AllocIndexedBlock and the four globals g_b04340 / g_b12b60 / g_b12c40 / g_b16cc0 are all tree natives, so it adds no new dependency); STRUCTURALLY_VERIFIED against the 24-instruction listing (3 blocks, 3 edges; radare2 and Binary Ninja independently report 3 nodes/3 edges for this VA, and both agree with this source exactly). BLOCK/EDGE CORRECTION: this file's earlier provenance line said "4 blocks, 1 edge" - an estimate, not a measurement. The measured structure is three blocks: the loop test, the loop body that stores the two fields of each of the 0x800 records and branches back, and the tail that makes the three Mem_AllocIndexedBlock calls and returns, with the conditional test branching to the body and to the tail (3 edges); runtime UNOBSERVED. The retail return value is left in EAX by the last allocation and no caller consumes it, so the port declares void. Domain: terrain/, because the hash table it initializes is the previous-frame contour hash cache owned by terrain_storage.cpp and the three descriptors are the quadtree free-list pools owned by terrain_loaders.cpp; it is reached only from Terrain_Load (0x004C6240).
 
+#include "dev_log.hpp"
 #include <cstdint>
 
 #include "igi/retail/mem/task_list.hpp"
@@ -21,6 +22,7 @@ extern "C" {
 
 void NATIVE_DECL Terrain_InitContourHashAndPools_4D11C0()
 {
+    NATIVE_LOG_ENTER("Terrain_InitContourHashAndPools_4D11C0", "0x004D11C0");
     // 0x004D11C0: `mov eax,0x00B04358` (= &g_b04340[0] + 0x18); 0x004D11C5: `or ecx,-1`; 0x004D11C8-0x004D11D5: the loop
     // body `mov [eax-8],ecx` (record+0x10, stamp) then `mov dword [eax],0` (record+0x18, data), `add eax,0x1C`,
     // `cmp eax,0x00B12358`, `jl`. The bound is the end of the 0x800-record table, so this is every entry.

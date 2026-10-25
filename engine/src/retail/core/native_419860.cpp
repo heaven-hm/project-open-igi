@@ -3,6 +3,7 @@
 // Tools/evidence: build/retail-dis.txt (GNU objdump i386 byte+instruction listing, complete body with the three x87 blocks and the three 0x00419950 calls); radare2 6.2.0 af/afij (size 238, 1 block, 0 edges, 64 instructions); the float constants are read from the image at the addresses named below and their exact values are reproduced as literals.
 // Behavior/CFG: two cdecl arguments (an object pointer the body never reads, and a float angle). Straight-line, no branches: three times it computes one cosine/sine-scaled value and one angle-scaled value into a 0x1C-byte local transform record via 0x004192E0, then calls 0x00419950 with one of the three static records at 0x00539BE8 / 0x00539BF8 / 0x00539C08 and the same local record as context. Block 1 uses cos, block 2 uses cos, block 3 uses sin.
 // Status/limits: BUILD_VERIFIED (static only); runtime UNOBSERVED. Two recorded notes: (1) the retail computes cos/sin with x87 `fcos`/`fsin` on a float and rounds to 32-bit on store, while the candidate uses float `cosf`/`sinf`, so last-bit equality is not claimed for any of the three blocks; (2) the three static records at 0x00539BE8/0x00539BF8/0x00539C08 and every object their pointers name are now defined in this file as typed objects with real pointers (data increment: contents read from the image at 0x00539AF0-0x00539C14, the records ending at 0x00539C17), so no data symbol of this body stays undefined; 0x00539AF0 belongs to core/native_419760.cpp. Local record layout written by 0x004192E0: +0x00 cos*scale, +0x04 sin*scale, +0x08 -sin*scale, +0x0C cos*scale, +0x10 arg4, +0x14 arg5, +0x18 arg3 bits (0x1C bytes total, exactly the frame this function allocates). Retail statement order preserved per block: the angle*constant load, the fcos/fsin, the two pushed argument dwords, the second angle*constant load, the two computes, then 0x004192E0(out, angle-scaled, trig-scaled, arg4, arg5) and 0x00419950(static record, out).
+#include "dev_log.hpp"
 #include <cmath>
 #include <cstdint>
 
@@ -116,6 +117,7 @@ void NATIVE_DECL BackgroundFX_EmitRecord_419950(void* record, void* context);
 // Stack arguments: [esp+4] object (never read by this body), [esp+8] angle.
 void NATIVE_DECL BackgroundFX_BuildAxes_419860(void* /*unused_object*/, float angle)
 {
+    NATIVE_LOG_ENTER("BackgroundFX_BuildAxes_419860", "0x00419860");
     // The 0x1C-byte transform record 0x004192E0 fills in place; the same buffer is reused for all three blocks.
     std::uint32_t transform[0x1C / 4];
 

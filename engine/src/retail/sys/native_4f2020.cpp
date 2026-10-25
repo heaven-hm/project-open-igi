@@ -3,6 +3,7 @@
 // Tools/evidence: radare2 6.2.0 af/pdf and NASM ndisasm over the raw bytes (a1 fc 6b a7 00 c3).
 // Behavior/CFG: loads the four-byte value at 0x00A76BFC into eax and returns it; no argument, no branch, no store, no call.
 // Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. Four bytes is the width this load proves; the value's meaning is not established.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -22,6 +23,7 @@ extern std::uint32_t g_a76bfc;
 
 std::uint32_t NATIVE_DECL Sys_GetGlobal32_4F2020(void)
 {
+    NATIVE_LOG_ENTER("Sys_GetGlobal32_4F2020", "0x004F2020");
     return ::g_a76bfc;                                                       // 0x004F2020: mov 0x00a76bfc,%eax; 0x004F2025: ret
 }
 

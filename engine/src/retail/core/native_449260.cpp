@@ -11,6 +11,7 @@
 // Status/limits: TRANSCRIBED; STRUCTURALLY_VERIFIED against the 3-instruction listing; runtime UNOBSERVED. Recorded limits: (a) the name is a
 //   behavior-derived placeholder with the address kept as its suffix; the retail symbol is not established. (b) Nothing in this body
 //   establishes what argument+0x13C is, so it is handled as a byte offset that receives a zero, never as an invented field of an invented type.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -25,6 +26,7 @@ extern "C" {
 
 void NATIVE_DECL Task_ClearFlag_449260(void* const target)
 {
+    NATIVE_LOG_ENTER("Task_ClearFlag_449260", "0x00449260");
     // 0x00449260: mov 0x4(%esp),%eax; 0x00449264: movl $0x0,0x13c(%eax); 0x0044926E: ret.
     *reinterpret_cast<std::uint32_t*>(static_cast<char*>(target) + 0x13C) = 0U;
 }

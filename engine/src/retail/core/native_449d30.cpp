@@ -29,6 +29,7 @@
 //   so the argument it is pushed is inert. (d) The two linked handlers 0x00449E50 and 0x0044A1A0 are NOT transcribed yet, so this file declares
 //   them and is not linkable until they exist; their bodies are a recorded gap. (e) What the 0x2B048-byte object or the thirty 0x28-byte records
 //   mean is not established by this body beyond the rotation composition it performs on them.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #include "igi/retail/core/task_types.hpp"
@@ -69,6 +70,7 @@ float g_57c280[30 * 10] = {};
 
 void NATIVE_DECL Task_DefineGlassShatter_449D30()
 {
+    NATIVE_LOG_ENTER("Task_DefineGlassShatter_449D30", "0x00449D30");
     // 0x00449D30: sub $0x14,%esp (the frame, which holds the counter at frame+0x04); 0x00449D33: push %esi; 0x00449D34: push $0x57C230;
     // 0x00449D39: call 0x4B4720; 0x00449D3E: add $0x4,%esp.
     Sys_StoreThreeWords_4B4720(::g_57c230);

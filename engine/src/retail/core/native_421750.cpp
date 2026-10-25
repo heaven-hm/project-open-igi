@@ -4,6 +4,7 @@
 // Behavior/CFG: one straight-line block, no branch, no loop. Reads the parent type through 0x00424850, registers "MenuScreen" with a 0x1A4-byte object through 0x00401900 and stores the 16-bit id at 0x0053B800 (image word 0x0181, the not-registered sentinel). Then makes ten handler links on that id, in retail order: 0x00401530 to 0x00422110 on event 1; 0x00401530 to 0x00421C20 on the event word from 0x004E7530; 0x00401400 to 0x004219B0 on event 0; 0x00401530 to 0x00421A10 on event 2; 0x00401400 to 0x00422180 on the phase id from 0x004F1A60; 0x00401400 to 0x00421A70 on the phase id from 0x004F1A70; 0x00401530 to 0x00422190 on the word from 0x004F1210; 0x00401530 to 0x00422200 on the word from 0x004F1220; 0x00401530 to 0x00422260 on the word from 0x00424870; 0x00401530 to 0x00422300 on the word from 0x00424880. Then allocates a count-8 container through 0x004F1950 into 0x0057BC04 and makes eight six-argument appends through 0x004F1A80, all with arg2 = frame+0x00, arg5 = 7, arg6 = 0, and arg3 = frame+0x54, 0x9C, 0xA4, 0xA0, 0xA8, 0xAC, 0xFC, 0x14C for the getters 0x004F0FE0, 0x004F0FA0, 0x004F0FA0, 0x004F0FA0, 0x004F0FA0, 0x004F0FC0, 0x004F0FC0, 0x004F0FC0. NOTE: the arg3 offsets 0x9C/0xA4/0xA0/0xA8 are NOT in ascending order in call order - that is the retail order and must not be sorted. NOTE: the frame size 0x1A4 and the registered object size 0x1A4 COINCIDE. They are different quantities and one does not imply the other.
 // Status/limits: TRANSCRIBED; LINKABLE (the handler entry points this routine registers are raw code immediates in retail and are transcribed by nobody, so they are passed as cast integers and create no link dependency; they stay recorded gaps in the tree, not stubs). STRUCTURALLY_VERIFIED for the CFG only, which is one block with no edges. Runtime UNOBSERVED in both binaries. THE APPEND FRAME OFFSETS ARE DERIVED, NOT MEASURED BY A DEBUGGER: each `lea` is relative to the esp at that instruction and 12 bytes (two surplus pushes and the getter result push) had been pushed by then, so each raw offset minus 0x0C is the frame offset, and the raw 0xC is frame+0x00. Raw `lea` offsets are recorded beside each argument so the arithmetic can be rechecked.
 // Linkage note (per the Lead's trap): the two globals this file OWNS are emitted with C++ linkage because they sit in `namespace igi::retail::core`. A future file that declares 0x0053B800 or 0x0057BC04 as `extern "C"` would get a SECOND, distinct variable with NO link error. Declare them with the same namespace, or the ownership must move here.
+#include "dev_log.hpp"
 #include "igi/retail/core/task_types.hpp"
 
 #include <cstdint>
@@ -49,6 +50,7 @@ extern void* Script_TaskContainer_Append(std::int32_t* const container, std::int
 
 void NATIVE_DECL MenuScreen_Register_421750()
 {
+    NATIVE_LOG_ENTER("MenuScreen_Register_421750", "0x00421750");
     std::uint8_t append_frame[0x1A4]; // 0x00421750: sub esp,0x1A4
 
     // 0x00421756/0x00421758: the two zeros are surplus for the argument-less getter and are consumed as

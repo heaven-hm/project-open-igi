@@ -13,6 +13,7 @@
 //   std::cos on long double are not guaranteed bit-identical to fsin/fcos in the last bit, so last-bit equality is not claimed. The immediate
 //   0x3f800000 is exactly 1.0f and retail's zero stores write the four bytes 00 00 00 00, so both are transcribed as float values with identical
 //   bits. The destination's type is a float[10] because ten dwords are written; what the tenth dword belongs to is NOT established here.
+#include "dev_log.hpp"
 #include <cmath>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -27,6 +28,7 @@ extern "C" {
 
 void NATIVE_DECL Sys_BuildRotationX_4B3B60(float* const arg0, float const arg1)
 {
+    NATIVE_LOG_ENTER("Sys_BuildRotationX_4B3B60", "0x004B3B60");
     float* const out = arg0;
 
     // 0x004B3B60/0x004B3B64: fld dword [esp+8]; fsin - the sine is computed before any store.

@@ -3,6 +3,7 @@
 // Tools/evidence: radare2 6.2.0 af/pdf and the raw bytes; section 22.3 of the evidence sheet.
 // Behavior/CFG: returns the 16-bit word at 0x0054E83C; no branch, no call, no store, no argument.
 // Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. Deviation recorded: retail loads AX only and leaves EAX's upper half untouched, while a std::uint16_t return zero-extends EAX; equal for a 16-bit consumer, different for a reader of the upper half. The word at 0x0054E83C is defined here with its retail image value 0x0181 (file bytes 81 01); its only retail writer is the "AIGraph" registrar 0x00508FC7 at 0x00508FA0 (core/native_508fa0.cpp), which declares this definition extern.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -21,6 +22,7 @@ std::uint16_t g_54e83c = 0x0181U;
 
 std::uint16_t NATIVE_DECL Sys_GetWord16_5098A0(void)
 {
+    NATIVE_LOG_ENTER("Sys_GetWord16_5098A0", "0x005098A0");
     return ::g_54e83c;   // 0x005098A0: mov ax, word [0x0054E83C]
 }   // 0x005098A6: ret
 

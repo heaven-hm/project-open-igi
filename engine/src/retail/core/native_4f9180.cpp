@@ -3,6 +3,7 @@
 // Tools/evidence: build/retail-dis.txt (GNU objdump) 0x004F9180-0x004F91F2; radare2 6.2.0 pdfj (115 bytes, 7 blocks, 44 instructions, 6 edges); called only from 0x00509432 (0x005093C0 handler) with two arguments, of which the second is never read.
 // Behavior/CFG: reads the type word at [[object+0x14]+0x1C] and the global word from 0x004C48C0, asks 0x00401CF0 whether the type inherits that global, and compares the answer with the byte state flag at object+0x64. When the two disagree it converts the object's 24-byte orientation block through the pair 0x004F92E0/0x004F93B0 and writes the new flag value, then stores the 0x004F1050 list index at object+0x50.
 // Status/limits: BUILD_VERIFIED; STRUCTURALLY_VERIFIED against the 44-instruction listing; runtime UNOBSERVED. Link-closed: 0x004C48C0, 0x00401CF0, 0x004F1050 and the 0x004F92E0/0x004F93B0 pair are all transcribed. The second argument is unread in retail (no stack read past the first argument) and is kept only because the call site passes it. The 24-byte scratch is zero-initialised to keep indeterminate reads out of the port; 0x004F92E0 overwrites all 24 bytes first, so nothing observable depends on it.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -32,6 +33,7 @@ std::int32_t NATIVE_DECL List_FindIndex_4F1050(void* object);
 
 void NATIVE_DECL Graph_Update_4F9180(void* object, void* arg2)
 {
+    NATIVE_LOG_ENTER("Graph_Update_4F9180", "0x004F9180");
     (void)arg2;                                                                        // retail never reads its second argument
 
     std::uint8_t* const fields = static_cast<std::uint8_t*>(object);

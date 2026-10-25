@@ -4,6 +4,7 @@
 // Behavior/CFG: one straight-line block, no branch, no frame and no saved register. It is the teardown counterpart of the ControlsMenu registrar core/native_4230a0.cpp: it removes the two script symbols that registrar published - "ControlsMenu_ConvertFloatFromOffset" (string at 0x0053B89C) and "ControlsMenu_ConvertOffsetFromFloat" (0x0053B878) - through 0x004B8920 (Script_QHashSymbolRemove_4B8920, script/native_4b8920.cpp), then clears the registered class type whose 16-bit id the registrar stored at 0x0053B874 through 0x00401A20 (TaskType_Clear, core/native_401a20.cpp), and finally writes the 0x0181 "not registered" sentinel back into the id slot. THE TWO NAMES ARE THE PAIRING PROOF AND THEY ARE EXACT: the registrar registered exactly these two strings in this order through 0x004B8890 (its provenance records the same two addresses), so this teardown cannot belong to a different class. THE ABSENT CONTAINER DELETE IS STRUCTURAL, NOT AN OMISSION: the registrar allocates no parameter container (no 0x004F1950, no 0x004F1A80), so there is no handle to delete, and the container-delete law of this band (a container delete is present if and only if the registrar allocated a container) holds on both sides. THE `mov word [..],0x0181` IS LOAD-BEARING: without it the class would stay marked registered, and no build or link check can catch that.
 // Status/limits: TRANSCRIBED; the link check reports every symbol it names as defined in tree, but the final program link still needs the 0x004BAB30 chain behind 0x004B8920 (see that file); STRUCTURALLY_VERIFIED for the CFG only (1 block, 0 edges, no branch structure to disagree about); BUILD_VERIFIED (i686-w64-mingw32-g++ -std=c++20 -O2 -Wall -Wextra single-file compile with zero warning lines); runtime UNOBSERVED. The string addresses are retail pointers into .data and are written here as byte-identical literals, which is the only permitted substitution (rule 10). The one slot this body touches is declared extern and defined nowhere: exactly one definition per retail address, and its owner defines it at namespace scope in igi::retail::core, so it is declared inside that namespace here rather than in extern "C" (the two-variable trap has a linkage axis as well as a namespace axis). Domain: core/, because it is the teardown half of the guard 0x00402930 registrar family.
 
+#include "dev_log.hpp"
 #include "igi/retail/core/task_types.hpp"
 
 #include <cstdint>
@@ -33,6 +34,7 @@ extern void NATIVE_DECL TaskType_Clear_401A20(std::uint16_t class_id);
 
 void NATIVE_DECL Task_ClearClassType_423F90()
 {
+    NATIVE_LOG_ENTER("Task_ClearClassType_423F90", "0x00423F90");
     // 0x00423F90: `push 0x53b89c` ("ControlsMenu_ConvertFloatFromOffset") / 0x00423F95: `call 0x004B8920`
     Script_QHashSymbolRemove_4B8920("ControlsMenu_ConvertFloatFromOffset");
     // 0x00423F9A: `push 0x53b878` ("ControlsMenu_ConvertOffsetFromFloat") / 0x00423F9F: `call 0x004B8920`

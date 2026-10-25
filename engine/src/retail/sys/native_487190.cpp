@@ -3,6 +3,7 @@
 // Tools/evidence: radare2 6.2.0 af/pdf and NASM ndisasm over the raw bytes (a0 5c 0b 54 00 c3).
 // Behavior/CFG: loads the one-byte value at 0x00540B5C into al and returns it; no argument, no branch, no store, no call.
 // Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. One-byte is the width this load proves; the value's meaning is not established.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -20,6 +21,7 @@ std::uint8_t g_540b5c;
 
 std::uint8_t NATIVE_DECL Sys_GetGlobal8_487190(void)
 {
+    NATIVE_LOG_ENTER("Sys_GetGlobal8_487190", "0x00487190");
     return ::g_540b5c;                                                       // 0x00487190: mov 0x00540b5c,%al; 0x00487195: ret
 }
 

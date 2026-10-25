@@ -9,6 +9,7 @@
 // ABI NOTE, third sample of the same population: `Script_SetConstant_427D70` is `std::uint32_t (void* const, std::uint32_t* const)`, reads its SECOND argument and stores 0x4 through it. Its own provenance records that it is "one of the 84 handler pointers registered by 0x004EE970", i.e. this family is BUILT to take a second argument from a two-argument dispatcher. Its appearance here as a `FrameHandler` link is therefore a genuine signature mismatch between two dispatch conventions, NOT evidence that frame handlers generally take two arguments. The symbol reference is kept by casting through `void (*)()` first, which compiles with zero warning lines and preserves the link edge; the dispatcher's argument count remains UNRESOLVED.
 // Ownership note (per the Lead's two-variable trap): 0x0053BB3C is owned by this file and emitted with C++ linkage inside `namespace igi::retail::core`. No other file in the tree references it, and the image value is the sentinel word 0x0181, not zero.
 // Domain: core/, per the Lead's ruling that these files are task-type registrars of the guard 0x00402930 family. This file is one of the 24 registrars the guard calls in descending address order at 0x00402B79-0x00402C32; its teardown is 0x00427D80.
+#include "dev_log.hpp"
 #include "igi/retail/core/task_types.hpp"
 
 #include <cstdint>
@@ -45,6 +46,7 @@ extern void Script_QHashNodeRegister(void* arg1, void* value);    // 0x004B8810 
 
 void NATIVE_DECL RocketPod_Register_427830()
 {
+    NATIVE_LOG_ENTER("RocketPod_Register_427830", "0x00427830");
     // 0x00427830/0x00427832: the two zeros are surplus for the argument-less parent getter and supply
     // 0x00401900's fourth argument. The parent getter is 0x004D9FA0, not 0x004018F0 and not 0x00424850.
     const std::uint16_t parent = Sys_GetGlobal16_4D9FA0();                    // 0x00427834

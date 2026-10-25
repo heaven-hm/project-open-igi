@@ -5,6 +5,7 @@
 // Status/limits: TRANSCRIBED; LINKABLE (no callee, no handler, no undefined symbol of its own beyond the slot it reads). STRUCTURALLY_VERIFIED for the CFG only, which is one block with no edges. BUILD_VERIFIED (i686-w64-mingw32-g++ -std=c++20 -O2 -Wall -Wextra single-file compile clean). Runtime UNOBSERVED in both binaries. The value's meaning is not established by this body; the access width is the only proven fact about the object, and this file is not its defining file.
 // Ownership note (per the Lead's two-variable trap): 0x0053B910 is DEFINED by engine/src/retail/core/native_423fc0.cpp, which writes it at 0x00423FD7 and is its only writer in .text. This file therefore DECLARES it as a C-linkage extern and must never define it: a second definition here would give the tree two distinct objects with no link error, and this getter would keep reading the copy nothing writes. If the definition ever moves out of native_423fc0.cpp, it must move as one change together with this declaration, or the slot goes silent. The image value is 0x000000FF.
 // Domain: sys/, not core/. Rule 15 assigns the folder by subsystem, and this routine is the argument-less global getter of the same 0x0053B9xx block as 0x00424850, 0x00424870, 0x00424880, 0x00424890 and 0x00424B80 - all five of which already live in engine/src/retail/sys/ with this exact shape (`mov <reg>,[abs]; ret`, no arguments, no frame). Its band owner is core/ because the band is address-based; its own shape and its five siblings put it in sys/. Flagged for the Lead rather than left implicit.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -23,6 +24,7 @@ extern std::uint32_t g_53b910;
 
 std::uint32_t NATIVE_DECL Sys_GetGlobal32_424860(void)
 {
+    NATIVE_LOG_ENTER("Sys_GetGlobal32_424860", "0x00424860");
     return ::g_53b910;                                                       // 0x00424860: mov 0x0053b910,%eax; 0x00424865: ret
 }
 

@@ -4,6 +4,7 @@
 // Behavior/CFG: one straight-line block, no branch, no frame and no saved register. It forwards its single argument to 0x004BAB30 and returns nothing; retail leaves EAX holding the callee's return value. WHAT THE CALLEE DOES IS MEASURED, NOT ASSUMED, because it is not transcribed: 0x004BAB30 takes the same one argument, calls Script_QHashSymbolLookup_4BAB80(name, &name_slot) with the address of its own argument slot, and on a failed lookup reports the string at 0x005476FC - "Undefined symbol: '%s'" - through 0x004AF7B0 and halts in a self-jump; on a successful lookup it removes the found node with 0x004C0460(table at 0x00A43E88, node), 0x004BAA90(node) and Mem_DeAllocFn(node). The node reaches those three calls because the lookup overwrites the argument slot with the node pointer. That is why the name records a removal and not a lookup, and it is why every guard teardown calls it with exactly the name string its registrar registered: a lookup whose result the caller discards would do nothing. The three call sites in this band push the name and never read EAX.
 // Status/limits: TRANSCRIBED; NOT LINKABLE YET - 0x004BAB30 is a NATIVE GAP declared here (76 bytes to its self-jump at 0x004BAB7A, 3 blocks, 3 edges, 27 instructions) and has no implementation file, so this file cannot link until it lands. It is not a handler, so the cast-integer ruling does not reach it, and a cast call is never the answer here: it would convert a build error into a runtime crash. 0x004BAB30 is itself a DOUBLE GAP: three of its own callees, 0x004C0460, 0x004BAA90 and 0x004AF7B0, also have no implementation file (its other two, 0x004BAB80 and 0x004B0D10, are tree natives), so the removal path cannot be transcribed cleanly until those three land. STRUCTURALLY_VERIFIED for the CFG only (1 block, 0 edges); BUILD_VERIFIED (i686-w64-mingw32-g++ -std=c++20 -O2 -Wall -Wextra single-file compile with zero warning lines); runtime UNOBSERVED. THE NAME IS A PLACEHOLDER: it is derived from the measured callee behavior and from the tree's existing name for 0x004BAB80, not from a retail symbol, and it must be revisited when 0x004BAB30 is transcribed. Domain: script/, because the callee chain is the script symbol table at 0x00A43E88 and the arguments are script symbol names.
 
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -25,6 +26,7 @@ void NATIVE_DECL Script_QHashSymbolRemove_4BAB30(char const* name);
 
 void NATIVE_DECL Script_QHashSymbolRemove_4B8920(char const* name)
 {
+    NATIVE_LOG_ENTER("Script_QHashSymbolRemove_4B8920", "0x004B8920");
     // 0x004B8925: `call 0x004BAB30`, displacement 0x00002206 at 0x004B8927; the pop %ecx at 0x004B892A is the cdecl
     // cleanup for the one argument dword pushed at 0x004B8924. The callee writes the found node pointer back into
     // this argument slot (0x004BAB35: `lea 0x8(%esp),%eax`), and the slot is discarded on return, exactly as retail does.

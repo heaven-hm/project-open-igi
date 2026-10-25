@@ -10,6 +10,7 @@
 //   a caller reading eax from a void function would have received an unspecified value. This is also the single definition of
 //   0x004AF8F0: the duplicate igi::retail::mem::HeapList_Insert pair (mem/heap_list.cpp and its header) was deleted in the
 //   same change, because a retail VA has exactly one implementation.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -24,6 +25,7 @@ extern "C" {
 
 void* NATIVE_DECL Sys_InsertListTail_4AF8F0(void* head, void* node)
 {
+    NATIVE_LOG_ENTER("Sys_InsertListTail_4AF8F0", "0x004AF8F0");
     std::uint8_t* const base = static_cast<std::uint8_t*>(head);           // 0x4AF8F0: mov 0x4(%esp),%eax
     std::uint8_t* const item = static_cast<std::uint8_t*>(node);           // 0x4AF8F4: mov 0x8(%esp),%ecx
     std::uint8_t* previous = *reinterpret_cast<std::uint8_t**>(base + 0x08U); // 0x4AF8F8: mov 0x8(%eax),%edx

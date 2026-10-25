@@ -5,6 +5,7 @@
 // Behavior/CFG: loads the four-byte value at 0x00A70C8C into eax and returns it; no argument, no branch, no store, no call.
 // Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. Four bytes is the width this load proves; the value's meaning is not established. This getter is
 //   one of the two argument-4 sources of the four 0x004F1A80 appends in core/native_45e450.cpp (frame offset 0xF8) and is read by 0x0044C8D0.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -22,6 +23,7 @@ std::uint32_t g_a70c8c;
 
 std::uint32_t NATIVE_DECL Sys_GetGlobal32_4F0F10(void)
 {
+    NATIVE_LOG_ENTER("Sys_GetGlobal32_4F0F10", "0x004F0F10");
     return ::g_a70c8c;                                                       // 0x004F0F10: mov 0x00a70c8c,%eax; 0x004F0F15: ret
 }
 

@@ -4,6 +4,7 @@
 // Behavior/CFG: one cdecl pointer argument (the context at [esp+4]); stores the dword 0 at context+0xDC8 and returns nothing - retail leaves EAX holding the argument word and no caller consumes it, so the port declares void. One block, no branch, no callee.
 // Status/limits: TRANSCRIBED; LINKABLE (no callee and no global, so it adds no new dependency); STRUCTURALLY_VERIFIED against the 3-instruction listing (1 block, 0 edges); runtime UNOBSERVED. The field at +0xDC8 is not interpreted: retail states no meaning for it in this function and the surrounding context layout is only partially established, so the offset is written literally rather than through a named field.
 
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -18,6 +19,7 @@ extern "C" {
 
 void NATIVE_DECL DynObj_UpdateDynTree_11(void* context)
 {
+    NATIVE_LOG_ENTER("DynObj_UpdateDynTree_11", "0x004CE3D0");
     // 0x004CE3D0: `mov eax,[esp+4]` - the context argument; 0x004CE3D4: `mov dword [eax+0xDC8],0` - the only write.
     *reinterpret_cast<std::uint32_t*>(static_cast<std::uint8_t*>(context) + 0xDC8) = 0;
     // 0x004CE3DE: `ret`. The argument word is left in EAX by retail; nothing reads it.

@@ -16,6 +16,7 @@
 //   of the ZERO argument is NOT established: 0x00467D90 passes 0x0181 to the same callee, so the argument is load-bearing somewhere and is
 //   transcribed as the literal retail pushes rather than interpreted. This getter is the event source of the thirty-eighth link in
 //   core/native_45e450.cpp and is also read by 0x0044C8D0.
+#include "dev_log.hpp"
 #include "igi/retail/core/task_types.hpp"
 
 #include <cstdint>
@@ -36,6 +37,7 @@ std::uint8_t g_53c924 = 0xFFU;
 
 std::uint8_t NATIVE_DECL Task_GetCachedEventId_450CC0(void)
 {
+    NATIVE_LOG_ENTER("Task_GetCachedEventId_450CC0", "0x00450CC0");
     if (::g_53c924 == 0xFFU)                                                      // 0x00450CC0/0x00450CC5/0x00450CC7: mov al,[0x53C924]; cmp al,0xFF; jne
     {
         // 0x00450CC9: push 0 (the allocation argument); 0x00450CCB: call 0x4017C0; 0x00450CD0: add esp,4; 0x00450CD3: mov [0x53C924],al

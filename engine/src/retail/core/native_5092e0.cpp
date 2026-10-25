@@ -5,6 +5,7 @@
 // Status/limits: BUILD_VERIFIED; STRUCTURALLY_VERIFIED against the 27-instruction listing; runtime UNOBSERVED. Link-blocked on 0x00509340 only
 //                (69 bytes, 7 blocks, 33 instructions; transcribed in native_509340.cpp together with its leaf callee 0x00509390). 0x004B0D60,
 //                0x004B0D10, 0x004B0D90 and 0x004B0C60 (mem::Mem_Alloc) are all already transcribed in the tree.
+#include "dev_log.hpp"
 #include "igi/retail/mem/mem_alloc.hpp"
 
 #include <cstdint>
@@ -35,6 +36,7 @@ void NATIVE_DECL AIGraph_PopulateBuffer_509340(void* object);
 
 void NATIVE_DECL AIGraph_ResetState_5092E0(void* object)
 {
+    NATIVE_LOG_ENTER("AIGraph_ResetState_5092E0", "0x005092E0");
     std::uint8_t* const fields = static_cast<std::uint8_t*>(object);
 
     Mem_FlagStackPop(1);                                                      // 0x005092E1: push $0x1; 0x005092E3: call 0x4b0d60

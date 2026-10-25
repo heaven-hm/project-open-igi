@@ -3,6 +3,7 @@
 // Tools/evidence: radare2 6.2.0 af/pd over the exact image; callers: 0x004BCC24 (0x004BCC00), 0x004BCDAE (0x004BCD90), 0x004BCEE1 and 0x004BCF0B (0x004BCEC0), 0x004BD86C - every site pushes four arguments.
 // Behavior/CFG: cdecl pop of one interpreter operand; four stack arguments ([esp+4] state, [esp+8] value out, [esp+0xC] size out, [esp+0x10] tag out). It reads the tag at type_stack[type index] (0x004BCCD9), stores it through the optional tag out (0x004BCCCA/0x004BCCD7), then switches: tags 1/2/5/6 copy the dword at value_stack[index] to the value out and advance both indexes (0x004BCD14-0x004BCD37, size 4); tags 3/4/7 store value_stack+index*4+4 (the first byte past the length dword) to the value out, read the dword length at value_stack[index], report size length+1 and set value index = index + 1 + length (0x004BCD3E-0x004BCD6C). Any other tag calls Debug_Error with the byte-identical retail string "Unknown data type." at 0x00547AB4 and then spins at 0x004BCD8E forever (0x004BCD81-0x004BCD8E). Returns 1, leaving it in EAX.
 // Status/limits: BUILD_VERIFIED; runtime UNOBSERVED; STRUCTURALLY_VERIFIED against the instruction listing only. Link: needs Debug_Error (0x004AF7B0, engine/src/retail/core/retail_error.cpp). Tag meanings beyond the observed 1/2/5/6 dword versus 3/4/7 length-and-bytes split are not established here; the constants are copied from the retail compares, not interpreted.
+#include "dev_log.hpp"
 #include <cstddef>
 #include <cstdint>
 
@@ -21,6 +22,7 @@ std::int32_t NATIVE_DECL Debug_Error(const char* format, ...);
 std::int32_t NATIVE_DECL Qvm_PopOperand_4BCCC0(void* state_object, void* out_value, std::uint32_t* out_size,
                                                std::uint32_t* out_tag)
 {
+    NATIVE_LOG_ENTER("Qvm_PopOperand_4BCCC0", "0x004BCCC0");
     std::uint8_t* const state = static_cast<std::uint8_t*>(state_object);
 
     // 0x004BCCC0-0x004BCCD7: the tag at type_stack[type index] is read first and exported when the caller asks for it.

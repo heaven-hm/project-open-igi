@@ -5,6 +5,7 @@
 // Status/limits: BUILD_VERIFIED; STRUCTURALLY_VERIFIED against the 33-instruction listing; runtime UNOBSERVED. Link-closed: its only callee 0x00509390
 //                is transcribed in native_509390.cpp and is a leaf. The negative side word skips both loops (`test %eax,%eax; jle` at 0x0050934B and
 //                0x0050935A), so the buffer stays untouched in that case.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -22,6 +23,7 @@ void* NATIVE_DECL AIGraph_ElementPointer_509390(void* object, std::int32_t row, 
 
 void NATIVE_DECL AIGraph_PopulateBuffer_509340(void* object)
 {
+    NATIVE_LOG_ENTER("AIGraph_PopulateBuffer_509340", "0x00509340");
     std::uint8_t* const fields = static_cast<std::uint8_t*>(object);
 
     if (*reinterpret_cast<std::int32_t*>(fields + 0x58U) > 0)                        // 0x00509348/0x0050934B/0x0050934D: test %eax,%eax; jle 0x509382

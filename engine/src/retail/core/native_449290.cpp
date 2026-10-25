@@ -11,6 +11,7 @@
 //   behavior-derived placeholder with the address kept as its suffix; the retail symbol is not established. (b) 0x0057C20C is declared here
 //   but not defined: its writer is a class registrar that is not transcribed yet, so this file correctly reports that global as undefined
 //   until that registrar lands. (c) What 0x00401A20 does beyond releasing the type's slot is that file's scope.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -30,6 +31,7 @@ extern std::uint16_t g_57c20c;
 
 void NATIVE_DECL Task_ClearClassType_449290()
 {
+    NATIVE_LOG_ENTER("Task_ClearClassType_449290", "0x00449290");
     // 0x00449290: mov 0x57c20c,%ax; 0x00449296: push %eax; 0x00449297: call 0x401a20; 0x0044929C: pop %ecx; 0x0044929D: ret.
     TaskType_Clear_401A20(g_57c20c);
 }

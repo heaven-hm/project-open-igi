@@ -4,6 +4,7 @@
 // Behavior/CFG: one straight-line block, no branch, no frame and no saved register. It forwards its single dword argument to 0x004B0EB0 (Sys_ClearSlotByte_4B0EB0, sys/native_4b0eb0.cpp) and returns nothing; retail leaves EAX holding the callee's return value, and the callee is declared void. The callee clears the byte at 0x00A94A84 + index*8, so this body is the second entry point to that slot-clearing operation at a distinct retail VA. THE TWO GUARD TEARDOWNS THAT CALL IT ARE THE MEASURED DISTINCTION THAT MADE THIS FILE NECESSARY: 0x0042C4E0 and 0x0042DAA0 free their containers through 0x004978E0 instead of 0x004C1830, which is a real difference between teardowns and is recorded rather than normalised away.
 // Status/limits: TRANSCRIBED; LINKABLE (its only undefined symbol, 0x004B0EB0, is a tree native, so it adds no new dependency); STRUCTURALLY_VERIFIED for the CFG only (1 block, 0 edges, no branch structure to disagree about); BUILD_VERIFIED (i686-w64-mingw32-g++ -std=c++20 -O2 -Wall -Wextra single-file compile with zero warning lines); runtime UNOBSERVED. The call is a real symbol reference rather than a cast: 0x004B0EB0 is a transcribed callee, and the cast-integer ruling covers handler data, not code the port must call. It is declared with exactly the linkage and parameter type its definition carries (extern "C", std::int32_t by value) so the two translation units agree on the ABI. Domain: sys/, because 0x004978E0 sits in the slot-name subsystem next to 0x004978D0 and forwards into the sys slot table at 0x00A94A84.
 
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -22,6 +23,7 @@ void NATIVE_DECL Sys_ClearSlotByte_4B0EB0(std::int32_t index);
 
 void NATIVE_DECL Sys_ClearSlotByte_4978E0(std::int32_t index)
 {
+    NATIVE_LOG_ENTER("Sys_ClearSlotByte_4978E0", "0x004978E0");
     // 0x004978E5: `call 0x004B0EB0`, displacement 0x000195C6 at 0x004978E7; the pop %ecx at 0x004978EA is the cdecl
     // cleanup for the one argument dword pushed at 0x004978E4.
     Sys_ClearSlotByte_4B0EB0(index);

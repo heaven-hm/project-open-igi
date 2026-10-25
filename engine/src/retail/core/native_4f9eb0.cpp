@@ -13,6 +13,7 @@
 #define NATIVE_DECL
 #endif
 
+#include "dev_log.hpp"
 #include <cstdint>
 extern "C" {
 std::uint32_t NATIVE_DECL GraphStream_HashName_4F9E70(char const* name);
@@ -58,6 +59,7 @@ std::uint8_t NATIVE_DECL GraphStream_WriteTagABlob_4FA7A0(void* stream, void con
 std::uint8_t NATIVE_DECL GraphStream_AddNode_4F9EB0(void* stream, char const* name, std::int32_t selector,
                                                    void const* value, std::int32_t size)
 {
+    NATIVE_LOG_ENTER("GraphStream_AddNode_4F9EB0", "0x004F9EB0");
     // 0x004F9EB0: mov 0x8(%esp),%eax (arg2); 0x004F9EB6: push %eax; 0x004F9EB7: call 0x4f9e70.
     std::uint32_t const hash = GraphStream_HashName_4F9E70(name);
 

@@ -3,6 +3,7 @@
 // Tools/evidence: radare2 6.2.0 pd/p8/afij over the exact image. 28 call sites, 17 distinct targets: 0x00401530 x5 and 0x00401400 x3, five appends through 0x004F1A80, one 0x004F1950 allocation with count 5. The five append sites are the only five records the container ever receives, so records and capacity meet exactly; totals, partition and capacities are one number here rather than three, unlike the 52-site body where they were independent. The body's boundary is NOP padding at 0x0041725D-0x0041725F with a different prologue at 0x00417260, and that address is also the handler the first link registers - the next function starts immediately after the padding because it is the link's target, which is a positive confirmation of the boundary rather than an absence of code.
 // Behavior/CFG: one straight-line body. Allocates a 0x2898-byte frame at 0x004170A0 with `mov eax,0x2898; call 0x004A54A0` - the MSVC 6 4KB stack probe, which lowers esp itself and returns via `push eax; ret`, so the frame base is set inside the probe and there is no `sub esp` here. That call is a compiler-emitted CRT helper, classified in scripts/native_coverage.py as "MSVC __chkstk 4KB stack probe (compiler-emitted, never hand-transcribed)" - as with core/native_4310f0.cpp, the C++ frame replaces the allocation and no native is ever transcribed for it. Because this prologue pushes no callee-saved register, there is no displacement shift: every `lea reg,[esp+N]` resolves directly against the probe-set base. Registers the "MENUSYS:"/"LOCAL:menusystem_" alias through 0x004B12F0, then "MenuManager" of size 0x2898 via 0x00401900 with id at 0x00539824, links three context handlers (0x00401400: 0x00417260 event 0, 0x00418070 event e4, 0x00417CF0 event e5) and five no-context handlers (0x00401530: 0x00417A20 phase 2, 0x00418080 phase 1, 0x00418970 e, 0x00418A80, 0x00418AA0), then appends five records into a container of capacity 5 at 0x0057BAE0.
 // Status/limits: TRANSCRIBED; STRUCTURALLY_VERIFIED against the 128-instruction listing; compile status recorded below. Runtime UNOBSERVED. The three handler immediates that are pushed before the argument-less phase-id getters (0x00418070, 0x00417CF0, 0x00418970) are consumed as the following link's third argument - the deferred-push shape recorded for this lane, transcribed as genuine three-argument calls, never as an invented parameter on the getter. Both defined globals 0x00539824 and 0x0057BAE0 were swept whole-file first and have no other owner. The capacity check is exact here but has no slack to exercise, so it confirms rather than proves the count.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -42,6 +43,7 @@ std::uint32_t g_57bae0 = 0U;
 
 void NATIVE_DECL Task_DefineMenuManager_4170A0(void)
 {
+    NATIVE_LOG_ENTER("Task_DefineMenuManager_4170A0", "0x004170A0");
     // 0x004170A0: mov eax,0x2898; 0x004170A5: call 0x004A54A0 - the compiler-emitted MSVC 6 stack
     // probe (CRT, never hand-transcribed). This array is the frame it allocates; the probe's esp
     // drop is what sets the frame base, and every offset below is relative to that base.

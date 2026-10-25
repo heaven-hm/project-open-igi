@@ -3,6 +3,7 @@
 // Tools/evidence: build/retail-dis.txt (GNU objdump i386 byte+instruction listing, full body 0x00419950-0x004199A8); radare2 6.2.0 af/afij (size 89, 3 blocks, 4 edges, 42 instructions); called twice by 0x00419860 with the two global records 0x00539BF8 and 0x00539C08 and the same context argument.
 // Behavior/CFG: two pointer arguments (a record and a context). In retail order: if record+0x00 is non-null, call 0x00419540(record+0x00, context); then loop over record+0x04 entries, calling 0x00419630(record+0x08 + i*0xC, context) and re-reading the count from record+0x04 after every call; then if record+0x0C is non-null, call 0x00419330(record+0x0C, context). No data references; the three callees are the BackgroundFX renderer entries.
 // Status/limits: BUILD_VERIFIED (static only); runtime UNOBSERVED. The three callees are transcribed in this wave: 0x00419540 in core/native_419540.cpp, 0x00419630 in core/native_419630.cpp, 0x00419330 in core/native_419330.cpp (I updated the names used here to match those definitions, one implementation per VA). This body itself therefore leaves no undefined symbol; the undefined set of the wave is the renderer backend table 0x00A94E84, the engine-resident QTask/type registrars, and libm float trig used by the callees. The record layout (+0x00 pointer, +0x04 count, +0x08 array of 0xC-byte entries, +0x0C pointer) is read directly from these instructions. Retail statement order preserved: the first `test/je` (0x0041995A-0x00419960) guards the 0x00419540 call; the second count test (0x00419970-0x00419972) guards the loop; the loop reloads the count at 0x00419985 after each 0x00419630 call; the final pointer test (0x00419998) guards the 0x00419330 call.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -24,6 +25,7 @@ void NATIVE_DECL BackgroundFX_EmitAxisRuns_419330(void* quad, void* context);
 // Stack arguments: [esp+4] record, [esp+8] context (after `push %ebp; push %esi` the body reads them at 0xC(%esp) each).
 void NATIVE_DECL BackgroundFX_EmitRecord_419950(void* record, void* context)
 {
+    NATIVE_LOG_ENTER("BackgroundFX_EmitRecord_419950", "0x00419950");
     std::uint8_t* const record_bytes = reinterpret_cast<std::uint8_t*>(record);
 
     // 0x0041995A-0x00419967: `mov (%esi),%eax; test %eax,%eax; je 0x0041996A; push %ebp; push %eax; call 0x00419540; add $0x8,%esp`.

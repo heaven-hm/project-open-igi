@@ -3,6 +3,7 @@
 // Tools/evidence: radare2 6.2.0 af/pdf and the raw bytes; section 22.2 of the evidence sheet.
 // Behavior/CFG: takes the next device index from 0x0094396C, stores it into that record's +0x54 field at 0x00943704 + index*0x8C, increments the counter, decrements the local copy and returns the ORIGINAL index in EAX.
 // Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. This file owns the 0x009436B0 table storage and the 0x0094396C counter, because no transcribed native before it writes them; 0x004B1200 sets the counter to 1 and is not landed yet, so in this build the counter starts at 0.
+#include "dev_log.hpp"
 #include "igi/retail/qfile/driver_table.hpp"
 
 #include <cstdint>
@@ -25,6 +26,7 @@ std::int32_t g_94396c;
 
 std::int32_t NATIVE_DECL QFile_AllocateDevice_4B1180(void)
 {
+    NATIVE_LOG_ENTER("QFile_AllocateDevice_4B1180", "0x004B1180");
     std::int32_t index = ::g_94396c;                                        // 0x004B1180: mov eax,[0x0094396C]
     *reinterpret_cast<std::int32_t*>(                                       // 0x004B1185-0x004B1191: (index*8-index)*5*4 = index*0x8C
         reinterpret_cast<std::uint8_t*>(&::g_9436b0[0]) + 0x8C * index + 0x54U) = index;

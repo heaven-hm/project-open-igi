@@ -10,6 +10,7 @@
 // Status/limits: STRUCTURALLY_VERIFIED (static only); runtime UNOBSERVED. The global 0x00567C5C had
 //   no definition anywhere in this tree before this change; it is defined in
 //   engine/src/retail/core/qhash_slot_table_globals.cpp, which owns the contiguous 0x00567Cxx block.
+#include "dev_log.hpp"
 #include "igi/retail/core/qhash_slot_table.hpp"
 
 #include <cstdint>
@@ -25,6 +26,7 @@
 extern "C" {
 void NATIVE_DECL Core_OrGlobalFlags_401F60(std::uint32_t flags)
 {
+    NATIVE_LOG_ENTER("Core_OrGlobalFlags_401F60", "0x00401F60");
     igi::retail::core::g_567c5c |= flags; // 0x00401F6A: or ecx,eax; 0x00401F6C: mov [0x567c5c],ecx
 }
 

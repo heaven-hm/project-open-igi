@@ -3,6 +3,7 @@
 // Tools/evidence: radare2 6.2.0 af/pdf and NASM ndisasm over the raw bytes (a0 4b 95 53 00 c3); the byte at 0x0053954B has three references in the image (writer 0x004155F1, readers here and one other).
 // Behavior/CFG: loads byte 0x0B of the 0x00539540 setting block into al and returns; no arguments, no branch, no store.
 // Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. The extent of the block is the measured 0x0F bytes covering 0x00539540..0x0053954E; the setting's meaning is not established by this body.
+#include "dev_log.hpp"
 #include "igi/retail/config/config_bytes.hpp"
 
 #include <cstdint>
@@ -19,6 +20,7 @@ extern "C" {
 
 std::uint8_t NATIVE_DECL Sys_GetSettingByte_416860(void)
 {
+    NATIVE_LOG_ENTER("Sys_GetSettingByte_416860", "0x00416860");
     return ::g_539540[0x0BU];                                     // 0x00416860: mov 0x53954b,%al; 0x00416865: ret
 }
 

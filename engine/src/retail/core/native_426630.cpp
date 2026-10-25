@@ -8,6 +8,7 @@
 // ABI NOTE (the limit the Lead recorded): `Script_SetConstant_51BAA0` is declared `std::uint32_t (void* const, std::uint32_t* const)` in its own file, which is NOT `FrameHandler` = `void(*)(void*)` - its body reads its SECOND argument (`mov eax,[esp+8]`), so a frame handler called with one argument would have it dereference whatever sits below the return address. A single-step `reinterpret_cast` to `FrameHandler` therefore produced a real `-Wcast-function-type` warning on the first compile of this file; the warning is the evidence, not noise. The symbol reference is kept by casting through `void (*)()` first, which GCC treats as matching everything, so the link edge survives with zero warnings, and the ABI disagreement is recorded here instead of being hidden by a wrapper (rule 2 forbids a wrapper). Whether retail's dispatcher passes one argument or two is a property of 0x00401400 and the event walker, not of this routine, and it is UNRESOLVED: `FrameHandler` may be an under-specified typedef for this link.
 // Ownership note (per the Lead's two-variable trap): 0x0053BABC is owned by this file and emitted with C++ linkage inside `namespace igi::retail::core`. No other file in the tree references it, and the image value is the sentinel word 0x0181, not zero. A future `extern "C"` definition of the same address would create a second, silent copy.
 // Domain: core/, per the Lead's ruling that these files are task-type registrars of the guard 0x00402930 family and belong in one folder whatever subsystem the class they register serves. This file is one of the 24 registrars the guard calls in descending address order at 0x00402B79-0x00402C32; its teardown is 0x00426D60.
+#include "dev_log.hpp"
 #include "igi/retail/core/task_types.hpp"
 
 #include <cstdint>
@@ -44,6 +45,7 @@ extern void Script_QHashNodeRegister(void* arg1, void* value);    // 0x004B8810 
 
 void NATIVE_DECL CarDoor_Register_426630()
 {
+    NATIVE_LOG_ENTER("CarDoor_Register_426630", "0x00426630");
     // 0x00426630/0x00426632: the two zeros are surplus for the argument-less parent getter and supply
     // 0x00401900's fourth argument. The parent getter is 0x004D9FA0, not 0x004018F0 and not 0x00424850.
     const std::uint16_t parent = Sys_GetGlobal16_4D9FA0();                    // 0x00426634

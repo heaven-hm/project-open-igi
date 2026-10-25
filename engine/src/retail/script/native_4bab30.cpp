@@ -4,6 +4,7 @@
 // Behavior/CFG: one argument (name), cdecl, no frame. 0x004BAB35 `lea eax,[esp+8]` takes the address of THIS BODY'S OWN ARGUMENT WORD, so the lookup at 0x004BAB80(name, &argument_word) overwrites the name with its out value; the local `node` below models that one slot. Three blocks: the entry block tests the lookup result (0x004BAB43 `test eax,eax`, 0x004BAB46 `je 0x004BAB6D` - the branch is taken when the lookup FAILS), the success block removes the symbol, and the fatal block reports and spins. THE `push %esi` AT 0x004BAB45 IS THE FATAL PATH'S VARARG, NOT DEAD CODE: it is pushed before the branch, so on the fatal path the stack is [format at 0x004BAB6D's push][name from 0x004BAB45] and 0x004AF7B0 receives (format, name) - which is what binds the `%s`; on the success path the same pushed word is the second argument of 0x004C0460. That is why the fatal path's `add $0x8,%esp` at 0x004BAB77 cleans exactly two words. The success path calls 0x004C0460(g_a43e88, name) with the symbol-table pointer loaded from 0x00A43E88, then 0x004BAA90(node) and 0x004B0D10(node) - and `node` is the value the lookup wrote into the argument slot (0x004BAB54 and 0x004BAB5E both read the slot at [esp+0x10]/[esp+0x14] after the push offsets, which is the entry-time argument word). 0x004BAB7A `jmp 0x004BAB7A` is retail's terminal spin and is preserved as an empty `for (;;)`.
 // Status/limits: TRANSCRIBED; LINKABLE (its five callees 0x004BAB80, 0x004C0460, 0x004BAA90, 0x004B0D10 and 0x004AF7B0 and its global g_a43e88 are all tree natives, so it adds no new dependency); STRUCTURALLY_VERIFIED against the 26-instruction listing (3 blocks, 3 edges); BUILD_VERIFIED (i686-w64-mingw32-g++ -std=c++20 -O2 -Wall -Wextra single-file compile with zero warning lines); runtime UNOBSERVED. THE NAME IS A PLACEHOLDER: it is derived from the measured callee behavior (a symbol-table removal whose two failure strings are "Undefined symbol: '%s'" here and "Unable to remove symbol \"%s\" (not registered)" in 0x004C0460) and it must be revisited when the symbol table is understood as a whole. The call to 0x004AF7B0 is a real symbol reference to the already-transcribed varargs Debug_Error (core/retail_error.cpp), not a cast. Domain: script/, because the chain is the script symbol table at 0x00A43E88 and the argument is a script symbol name.
 
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -36,6 +37,7 @@ int Debug_Error(char const* format, ...);
 
 void NATIVE_DECL Script_QHashSymbolRemove_4BAB30(char const* name)
 {
+    NATIVE_LOG_ENTER("Script_QHashSymbolRemove_4BAB30", "0x004BAB30");
     // 0x004BAB31: `mov esi,[esp+8]` - the name. 0x004BAB35: `lea eax,[esp+8]` is the address of retail's own argument
     // word, so the lookup writes the found node over the name in that slot; `node` models the same single slot.
     void* node = nullptr;

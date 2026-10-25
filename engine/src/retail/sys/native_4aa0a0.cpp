@@ -3,6 +3,7 @@
 // Tools/evidence: radare2 6.2.0 af/afij/pdf and the raw bytes (33c0 8a442408 ... 8d42ff 5b c3), cross-decoded with NASM ndisasm; catalog record 0x004AA0A6 in docs/fidelity/native-verification.json plus docs/fidelity/evidence/0x004AA0A6-*.json.
 // Behavior/CFG: strchr-shaped CRT helper, x86 cdecl (const char* text, int32_t character) -> const char*. Zero-extends the character byte, walks the unaligned prefix byte by byte, then scans whole dwords with the 0x7efefeff / 0x81010100 null-byte and repeated-character trick and tests the four bytes of each suspected dword in order. Returns the address of the first matching byte or null. No global, no callee.
 // Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. The trailing block at 0x004AA15C (push 4; push 0; push [esp+0xc]; call 0x004AA16D) is not reachable from this code and starts the next routine, so it is outside the extent. The catalog's 0x004AA0A6 candidate covers only the inner entry and not the 0x004AA0A0 adaptor or the 0x004AA090 tail, so it cannot be reused as-is. radare2 reports 25 blocks / 35 edges for the region entered at 0x004AA0A0.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -17,6 +18,7 @@ extern "C" {
 
 const char* NATIVE_DECL String_FindCharacter_4AA0A0(const char* text, std::int32_t character)
 {
+    NATIVE_LOG_ENTER("String_FindCharacter_4AA0A0", "0x004AA0A0");
     const std::uint32_t value = static_cast<std::uint8_t>(character);  // 0x004AA0A0-0x004AA0A2: xor eax,eax; mov al,[esp+8]
     const std::uint8_t byte_value = static_cast<std::uint8_t>(value);  // 0x004AA0A7: mov ebx,eax (bl = the searched byte)
     const std::uint8_t* cursor = reinterpret_cast<const std::uint8_t*>(text); // 0x004AA0AC: mov edx,[esp+8]

@@ -20,6 +20,7 @@
 //   group's terms are placed immediately before that group; their operands do not overlap the group, so the order is unobservable. (d) The port
 //   uses a 20-float frame because the 0x50-byte frame is twenty dwords and all accesses fall inside it. (e) What the tenth dword of the matrix
 //   is used for is NOT established by this body beyond the +1 accumulation and the final clearing.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -39,6 +40,7 @@ extern void NATIVE_DECL Sys_BuildRotationZ_4B3BE0(float* matrix, float angle);  
 
 void NATIVE_DECL Sys_ComposeRotation_4B38E0(float* const out, float const angle_x, float const angle_y, float const angle_z)
 {
+    NATIVE_LOG_ENTER("Sys_ComposeRotation_4B38E0", "0x004B38E0");
     // F = entry_esp-0x50: the whole 0x50-byte frame. frame[0..9] is the matrix the builder writes, frame[10..19] the product being assembled.
     float frame[20];
     std::uint32_t* const frame_bits = reinterpret_cast<std::uint32_t*>(frame);

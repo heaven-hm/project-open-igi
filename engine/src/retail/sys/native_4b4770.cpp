@@ -17,6 +17,7 @@
 //   The argument is a bare pointer here because nothing in the body establishes a record type; the three fields are dwords at +0x00/+0x04/+0x08.
 //   The name records the behaviour the instructions show (a generator step returning a scaled value) and keeps its address suffix; it is not a
 //   retail symbol name and no distribution or seeding property is claimed.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -35,6 +36,7 @@ double const g_534aa8 = 1.52587890625e-05;
 
 double NATIVE_DECL Sys_RandomNext_4B4770(void* const arg0)
 {
+    NATIVE_LOG_ENTER("Sys_RandomNext_4B4770", "0x004B4770");
     std::uint32_t* const state = static_cast<std::uint32_t*>(arg0);
 
     // 0x004B4777: mov dword [esp+4],0 - the high half of the 8-byte scratch that fild qword reads at 0x004B47A9. Represented by the integer

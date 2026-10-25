@@ -3,6 +3,7 @@
 // Tools/evidence: build/retail-dis.txt (GNU objdump) bytes 6a00 6a00 e877c8feff 50 6a38 68cc945300 e87ac8feff 68e0504100 6a00 50 66a398b15700 e867c3feff 66a198b15700 6880534100 6a01 50 e884c4feff 668b0d98b15700 6850544100 6a02 51 e870c4feff 68b4945300 68a4945300 e821c20900 83c440 68b4945300 e8f4170d00 59 c3; radare2 6.2.0 af/afij (110 B, 1 block, 30 instructions, 0 edges); the three literals read byte-for-byte at 0x005394CC ("IntroScreen"), 0x005394A4 ("INTROSCREEN:") and 0x005394B4 ("LOCAL:screens/intro/"); the guard's call site 0x0040296C calls it with no arguments.
 // Behavior/CFG: one basic block, no branch of its own. Registers the "IntroScreen" task type through 0x00401900 (object size 0x38, parent from the 0x004018F0 getter, task-list argument 0), stores the returned 16-bit id at 0x0057B198, links handler 0x004150E0 to event 0 through the context variant 0x00401400 and handlers 0x00415380 and 0x00415450 to events 1 and 2 through the no-context variant 0x00401530, registers the file alias "INTROSCREEN:" -> "LOCAL:screens/intro/" through 0x004B12F0, and returns the result of the directory dispatch 0x004E68D0 on that same path.
 // Status/limits: TRANSCRIBED; STRUCTURALLY_VERIFIED against the 30-instruction listing and afij (110 B / 1 block / 0 edges); runtime UNOBSERVED. 0x004E68D0 is a NATIVE GAP declared here, not transcribed: it is a thin wrapper whose body is `QFile_DispatchDevicePath_4B1420(path, 0x004E68F0, 0)` (its own callback 0x004E68F0 and a zero context), so this file cannot link until that native lands. The id slot 0x0057B198 is declared here with its image value 0 because no other file defines it; retail re-loads the word from memory for each of the three link calls. The three handler addresses 0x004150E0, 0x00415380 and 0x00415450 are raw code immediates in retail and are not transcribed yet. Retail never cleans the individual calls: the single `add $0x40,%esp` at 0x004150CF covers all sixteen dwords this routine pushes (2 + 3 + 3 + 3 + 3 + 2), and the compiler's own argument cleanups replace that one late add.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #include "igi/retail/core/task_types.hpp"
@@ -30,6 +31,7 @@ std::uint16_t g_57b198 = 0;
 
 std::int32_t NATIVE_DECL Task_DefineIntroScreen_415070()
 {
+    NATIVE_LOG_ENTER("Task_DefineIntroScreen_415070", "0x00415070");
     // 0x00415070/0x00415072: push $0x0; push $0x0. The getter 0x004018F0 takes no arguments, so these two zeros are the getter's
     // inert arguments and, at the 0x00401900 call below, its third and fourth slots: retail never cleans them here.
     const std::uint16_t class_id = TaskType_Register("IntroScreen",       // 0x0041507C: push 0x005394CC

@@ -3,6 +3,7 @@
 // Tools/evidence: build/retail-dis.txt (GNU objdump) 0x00509480-0x00509514; radare2 6.2.0 pd/afij (149 bytes, 5 blocks, 58 instructions); linked by the AIGraph registrar 0x00508FA0 at 0x0050922E (0x00401400 event 0x004F9240()).
 // Behavior/CFG: five blocks, two counted loops. Drains two lists through 0x004FA850: first it asks the callee for a count (arg1 = the word at object+0x04), then pops that many entries two at a time from the same list, then repeats the same pair of loops once more. The popped values are written to stack words the body never reads - only the calls and the list mutation have an effect.
 // Status/limits: TRANSCRIBED; STRUCTURALLY_VERIFIED against the 58-instruction listing; runtime UNOBSERVED. Link-blocked on 0x004FA850 (not transcribed); its prototype is inferred from these call sites. Retail reuses its OWN arg2 stack slot as the first out word (0x00509483 `lea 0x10(%esp),%eax` = &arg2) and re-reads that slot as the loop count (0x00509497), so the caller's argument word is overwritten; this file reproduces that literally by passing &object and by re-reading it in the loop condition, with the object pointer cached first exactly as retail caches it in ESI (0x00509488) before the callee rewrites the slot.
+#include "dev_log.hpp"
 #include <cstdint>
 #include <cstring>
 
@@ -22,6 +23,7 @@ void NATIVE_DECL GraphList_PopHead_4FA850(void* list, std::int32_t* out);
 
 void NATIVE_DECL AIGraph_Handler_509480(void* task, void* object)
 {
+    NATIVE_LOG_ENTER("AIGraph_Handler_509480", "0x00509480");
     (void)task;                                                               // arg1 unread: retail's first load targets the word at [esp+8]
 
     // 0x00509483: lea 0x10(%esp),%eax (&arg2); 0x00509488: mov 0x14(%esp),%esi (the object, read before the callee rewrites the slot);

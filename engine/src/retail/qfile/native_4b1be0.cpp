@@ -3,6 +3,7 @@
 // Tools/evidence: radare2 6.2.0 af/pdf; section 22.2 of the evidence sheet (qfile device-driver table).
 // Behavior/CFG: stores the second argument into the 0x8C-stride device record at 0x009436B0, field +0x00; no branch, no call, no return value.
 // Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. The table storage is owned by native_4b1180.cpp.
+#include "dev_log.hpp"
 #include "igi/retail/qfile/driver_table.hpp"
 
 #include <cstdint>
@@ -19,6 +20,7 @@ extern "C" {
 
 void NATIVE_DECL QFile_SetDriverField_4B1BE0(std::int32_t index, void* value)
 {
+    NATIVE_LOG_ENTER("QFile_SetDriverField_4B1BE0", "0x004B1BE0");
     // 0x004B1BE0: ecx = index; lea eax,[ecx*8]; sub eax,ecx; lea eax,[eax+eax*4] -> index*0x8C
     // then ecx = value and the store `mov dword [eax*4 + 0x009436B0+field], ecx` places it
     *reinterpret_cast<void**>(reinterpret_cast<std::uint8_t*>(&::g_9436b0[0]) + 0x8C * index + 0x00U) = value;

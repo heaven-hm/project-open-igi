@@ -3,6 +3,7 @@
 // Tools/evidence: radare2 6.2.0 af/afbj/pdf plus a pd 12 read of the two blocks af/pdf display out of order (0x00416980-0x0041698D and the found-return epilogue); the count dword at 0x0057BAB4, the table base 0x0057B5E8 and the 0x3C record stride are the mov/lea immediates in the body itself, and 0x00416984-0x0041698D is `lea eax,[ebp+ebp*2]; lea ecx,[eax+eax*4]; lea edx,[ecx*4+0x0057B5E8]`, i.e. an index * 15 * 4 = index * 0x3C destination computation.
 // Behavior/CFG: searches the record table at 0x0057B5E8 for the record whose leading NUL-terminated name matches the argument, walking the table with the 0x3C stride while the index is below the dword count at 0x0057BAB4 (13 blocks: prologue/count test, table base, loop head, the two-byte-unrolled MSVC inline strcmp expansion and its five exits, the increment, the append block and the two return epilogues). On a match it returns the record address; otherwise it appends a record at index = count, copies the argument string INCLUDING its terminator into it with retail's inline strlen (repne scasb) plus inline memcpy (rep movsd then rep movsb), increments the count, and returns the new record address. The rest of an appended record is not initialized by this routine - retail copies the name only.
 // Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. The comparison is transcribed block by block, but its differing-byte result is retail's `sbb ecx,ecx; sbb ecx,-1` sign trick whose magnitude is never observed (the only consumer is `test ecx,ecx`), so this transcription keeps Retail's inline strlen (repne scasb) and inline memcpy (rep movsd/rep movsb) are expressed with the CRT routines of the same name, which are imported rather than re-implemented; the byte count and the terminator handling are retail's (strlen + 1). the equality outcome and documents that the +1/-1 magnitude is not reproduced. The table's capacity is not established by static evidence, which is why the table is addressed by its absolute retail address instead of a declared array extent. The name string's width is the callers' literal (0x0047E700 passes "burn1.tex"); the record fields after the name are untouched here.
+#include "dev_log.hpp"
 #include <cstddef>
 #include <cstdint>
 #include <cstring>
@@ -23,6 +24,7 @@ std::int32_t g_57bab4 = 0;
 
 void* NATIVE_DECL Sys_LookupOrAppendRecord_416930(char const* name)
 {
+    NATIVE_LOG_ENTER("Sys_LookupOrAppendRecord_416930", "0x00416930");
     std::int32_t const count = ::g_57bab4;                                                   // 0x00416931: mov ebx,dword [0x57BAB4]
     std::uint8_t* record = reinterpret_cast<std::uint8_t*>(static_cast<std::uintptr_t>(0x0057B5E8U)); // 0x00416940: mov edi,0x57B5E8
     std::int32_t index = 0;                                                                  // 0x00416938: xor ebp,ebp

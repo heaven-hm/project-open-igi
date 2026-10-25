@@ -3,6 +3,7 @@
 // Tools/evidence: radare2 6.2.0 pd; triaged as the highest-leverage leaf of the startup sequence 0x00402930 in evidence section 20 (34 dependent rows, 88 call sites).
 // Behavior/CFG: returns the dword at 0x005488C8; no branch, no call, no other memory access, no stack use.
 // Status/limits: BUILD_VERIFIED (1 block / 0 edges, emitted instructions identical); runtime UNOBSERVED. Returns the loaded dword because retail leaves it in EAX and callers may read it.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -21,6 +22,7 @@ std::uint32_t g_5488c8 = 0xFFU;
 
 std::uint32_t NATIVE_DECL Core_GetEventWord_4E7530()
 {
+    NATIVE_LOG_ENTER("Core_GetEventWord_4E7530", "0x004E7530");
     return ::g_5488c8;   // 0x004E7530: mov eax, dword [0x005488C8]
 }                       // 0x004E7535: ret
 

@@ -10,6 +10,7 @@
 //   complement of 0x00401F60 and shares its global; it is NOT a 0x00402930 guard callee (zero
 //   mentions in startup-402930-call-sequence.md) - it was identified by adjacency, four bytes of NOP
 //   padding after a body that is on the critical path, the same adjacency that produced 0x00402070.
+#include "dev_log.hpp"
 #include "igi/retail/core/qhash_slot_table.hpp"
 
 #include <cstdint>
@@ -25,6 +26,7 @@
 extern "C" {
 void NATIVE_DECL Core_AndNotGlobalFlags_401F80(std::uint32_t flags)
 {
+    NATIVE_LOG_ENTER("Core_AndNotGlobalFlags_401F80", "0x00401F80");
     igi::retail::core::g_567c5c &= ~flags; // 0x00401F8A: not eax; 0x00401F8C: and ecx,eax
 }
 

@@ -6,6 +6,7 @@
 //                0x005093D3 belongs to the following 0x004F1090 call (it is that call's second argument, pushed early and cleared by the shared
 //                `add $0x8,%esp` at 0x005093DF); this body pushes its own index 0 at 0x004F1243 (`xor %esi,%esi; push %esi`). Link-closed: its
 //                only callee 0x004F1030 is transcribed in native_4f1030.cpp.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -23,6 +24,7 @@ void* NATIVE_DECL List_GetObject_4F1030(std::int32_t index);
 
 std::int32_t NATIVE_DECL List_FirstFree_4F1240(void)
 {
+    NATIVE_LOG_ENTER("List_FirstFree_4F1240", "0x004F1240");
     std::int32_t index = 0;                                                           // 0x004F1241: xor %esi,%esi
     while (List_GetObject_4F1030(index) != nullptr)                                   // 0x004F1243/0x004F1244 and 0x004F124C/0x004F125C
     {

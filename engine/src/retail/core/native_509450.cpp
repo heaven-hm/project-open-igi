@@ -3,6 +3,7 @@
 // Tools/evidence: build/retail-dis.txt (GNU objdump) 0x00509450-0x00509476; radare2 6.2.0 afij (39 bytes, 1 block, 14 instructions); linked by the AIGraph registrar 0x00508FA0 at 0x00509242 (0x00401400 event 0x004F9220()).
 // Behavior/CFG: one block, no branch, no loop. Reads the side word at object+0x58, squares it and shifts left by three (32-bit wrap preserved), reads the buffer word at object+0xB8 and the caller's value through arg2, and calls 0x004FA9D0(*arg2, buffer, size).
 // Status/limits: TRANSCRIBED; STRUCTURALLY_VERIFIED against the 14-instruction listing; runtime UNOBSERVED. Link-blocked on 0x004FA9D0 (not transcribed); its prototype is inferred from this call site only.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -22,6 +23,7 @@ void NATIVE_DECL GraphList_Insert_4FA9D0(void* list, void* value, std::uint32_t 
 
 void NATIVE_DECL AIGraph_Handler_509450(void* object, std::uint32_t const* arg2)
 {
+    NATIVE_LOG_ENTER("AIGraph_Handler_509450", "0x00509450");
     // 0x00509454: mov 0x58(%ecx),%eax; 0x00509457: mov %eax,%edx; 0x00509459: imul %eax,%edx; 0x00509466: shl $0x3,%edx.
     std::uint32_t const side = *reinterpret_cast<std::uint32_t*>(static_cast<std::uint8_t*>(object) + 0x58U);
     std::uint32_t const size = (side * side) << 3U;

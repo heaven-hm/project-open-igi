@@ -3,6 +3,7 @@
 // Tools/evidence: Radare2 6.2.0 `pd` over the exact image with esp simulated from `sub esp,0x428`; the 35 `call 0x4F1A80` sites were derived by replaying every push, `lea reg,[esp+K]` and `mov reg,[global]` instead of by pattern, and the derived per-site arguments reproduce the retail call census exactly -- 0x4F1C70 x13, 0x4F1C90 x6, 0x4F1CB0 x5, constant 0x5690C0 x7, constant 0x5690B8 x1, zero x3, with arg4 producers 0x4F0F50 x31 / 0x4F0FF0 x2 / 0x4F0EF0 x1 / 0x4F0FA0 x1: the 15-target reconciliation for this function. Frame offsets are relative to the post-prologue esp and all lie inside the 0x428 frame.
 // Behavior/CFG: one basic block, no branch of its own. `sub esp,0x428`; registers "HumanAIConfig" (size 0x180) and "HumanAIConfigItem" (size 0x2A8) through 0x00401900, storing the 16-bit ids at 0x005383D8 and 0x005383DA; makes nine handler links on those ids through 0x00401400 and 0x00401530 (0x004886F0 event 0, 0x004D3710 phase 2, 0x00406B60, 0x004D3710, 0x00406B70 event 0, 0x004D3710 phase 1, 0x004D3710 phase 2, 0x00406D00, 0x00406D10); allocates two containers through 0x004F1950 (count 1 -> 0x005690B0, count 0x22 -> 0x005690C8); writes 0x005690B8=1, 0x005690BC=0x3C, 0x005690C0=0, 0x005690C4=0x41200000 (5.0f) between the second allocation's push and its call; then makes 35 `call 0x004F1A80` appends in retail order. Epilogue `add esp,0x440` (0x428 frame plus 0x18 of pending arguments) and `ret`.
 // Status/limits: STRUCTURALLY_VERIFIED. All 35 append sites, both registrations, all nine links, both allocations and the four config stores come from their own pushes; the per-site arguments were derived mechanically and independently of the earlier hand-built table, and the two agree except where that table aggregated the two appends inside its first group (0x004065ED is arg5=3, arg3=frame+0x128, arg2=frame+0x00, not the group's arg5=7). Limits: no runtime observation of this native in either binary; the two surplus zero dwords retail pushes before each argument-less 0x004018F0 call cannot be expressed as C++ arguments and are recorded rather than silently dropped; and the deferred-push pattern is written as one nested call, which preserves every argument value and the call order but not the literal instruction order.
+#include "dev_log.hpp"
 #include "igi/retail/core/task_types.hpp"
 
 #include <cstdint>
@@ -43,6 +44,7 @@ std::int32_t g_5690c4 = 0;     // retail 0x005690C4
 
 std::int32_t NATIVE_DECL Task_DefineHumanAIConfig()
 {
+    NATIVE_LOG_ENTER("Task_DefineHumanAIConfig", "0x00406450");
     std::int32_t append_frame_base = 0; // retail frame slot at +0x00
     const std::int32_t append_frame = reinterpret_cast<std::int32_t>(&append_frame_base);
 

@@ -3,6 +3,7 @@
 // Tools/evidence: radare2 6.2.0 af/pd over the exact bytes; pushed as the phase-0 handler at 0x00424BA6 by the Cursor registrar 0x00424B90.
 // Behavior/CFG: two stack arguments read at entry ([esp+4], [esp+8]) with no prologue and a plain ret; the phase-0 table slot is dispatched with two words by 0x004012A0 (site 0x004012DE: push context, push record, clean 8), not by the one-word site 0x00402481. Straight-line stores in retail order: *[arg1+0x20]=arg2, *[arg1+0x34]=0, *[arg1+0x24]=0x140, *[arg1+0x28]=0xF0, *[arg1+0x2C]=0xFFFFFFFE, *[arg1+0x30]=0, *[arg1+0x38]=0, *[arg1+0x3C]=0; no call, no branch.
 // Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. +0x24/+0x28 are the cursor position fields the reference candidate for 0x00424CE0 reads, so the two 0x140/0xF0 defaults are the initial 320x240 position; the meanings of +0x20 (the dispatch context word), +0x2C (0xFFFFFFFE) and +0x30..+0x3C are not established by any reader in the image and stay uninterpreted. EAX still holds arg1 at the ret (the first load is never overwritten), but the dispatch ignores the return, so the routine is declared void.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -17,6 +18,7 @@ extern "C" {
 
 void NATIVE_DECL Cursor_InitState_424C10(void* cursor_record, std::uint32_t context)
 {
+    NATIVE_LOG_ENTER("Cursor_InitState_424C10", "0x00424C10");
     std::uint8_t* const record = static_cast<std::uint8_t*>(cursor_record);
 
     *reinterpret_cast<std::uint32_t*>(record + 0x20) = context;      // 0x00424C14/0x00424C18: mov ecx,[esp+8]; mov [eax+0x20],ecx

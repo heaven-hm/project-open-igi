@@ -3,6 +3,7 @@
 // Tools/evidence: radare2 6.2.0 af/afij and the raw bytes decode as `mov al, byte [0x005391B1]` then `ret`. 0x005391B1 is index 5 of the seven-byte event-id block 0x005391AC..0x005391B2; its only writer in the whole image is the registrar 0x00413DF0 (stores at 0x00413DF9/0x413E05/0x413E11/0x413E1D/0x413E29/0x413E35/0x413E4D) and its readers are 0x00413B00-0x00413B60, 0x00413C87, 0x00413D5D, 0x0041464F, 0x004146BE, 0x00414722 and 0x00414789. Same shape as the accepted siblings 0x00413B20/0x00413B30/0x00413B40, one VA each.
 // Behavior/CFG: returns the byte at 0x005391B1; no argument, no branch, no call, no stack use.
 // Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. Retail writes only AL and leaves EAX bits 8-31 as the caller left them, while a C++ byte return zero-extends into EAX; the byte-level result is identical for every caller that consumes AL or a std::uint8_t. The byte is read through its single owner g_5391ac (index 5) declared in engine/src/retail/core/native_413df0.cpp, because the registrar 0x00413DF0 writes that same storage: a private copy in this file would always return the image value and never the event id the registrar stores. The byte's meaning is not established by this body.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -21,6 +22,7 @@ extern std::uint8_t g_5391ac[7];
 
 std::uint8_t NATIVE_DECL Sys_GetSettingByte_413B50(void)
 {
+    NATIVE_LOG_ENTER("Sys_GetSettingByte_413B50", "0x00413B50");
     return ::g_5391ac[5];   // 0x00413B50: mov al, byte [0x005391B1]
 }                           // 0x00413B55: ret
 

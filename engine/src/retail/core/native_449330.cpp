@@ -13,6 +13,7 @@
 // Status/limits: TRANSCRIBED; STRUCTURALLY_VERIFIED against the 13-instruction listing; runtime UNOBSERVED. Recorded limits: (a) placeholder name with the address kept as its suffix. (b) 0x004F1340 is
 //   untranscribed and is reported undefined in the tree; that is the true state. (c) The table's element count is NOT established by this body, so it is declared as an array of unknown bound - no size is claimed.
 //   (d) The indexed callee is carried as void(*)(void*) because exactly one 32-bit argument is pushed before `call *%eax`; the table may in principle hold other entry kinds, and this body cannot tell.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -33,6 +34,7 @@ extern void (*g_a976e0[])(void*);
 
 void NATIVE_DECL Task_DispatchAndRelease_449330(void* const object)
 {
+    NATIVE_LOG_ENTER("Task_DispatchAndRelease_449330", "0x00449330");
     // 0x00449331-0x00449347: index = 0x481340() & 0xFFFF; g_a976e0[index](object).
     g_a976e0[Sys_GetGlobal16_481340() & 0xFFFFU](object);
 

@@ -3,6 +3,7 @@
 // Tools/evidence: build/retail-dis.txt (GNU objdump) 0x005093C0-0x0050943B; radare2 6.2.0 afij (124 bytes, 7 blocks, 35 instructions); image doubles at 0x00533998 (100.0) and 0x005334B0 (1/4096 = 0.000244140625); linked by the AIGraph registrar 0x00508FA0 at 0x00509216 (0x00401400 event 0x004F1A70()).
 // Behavior/CFG: seven blocks, no loop. When the object is not found in the list that 0x004F1050 scans, it releases the first free index the pair 0x004F1240/0x004F1090 produces. It then clamps the two doubles at object+0x80 and object+0x88 with the retail rule `value >= 100.0` (fcom against the double at 0x00533998, fnstsw/test $0x41 - C0 or C2 set skips, so unordered also skips) by scaling them by the double at 0x005334B0, and finally calls 0x004F9180(object, arg2).
 // Status/limits: BUILD_VERIFIED; STRUCTURALLY_VERIFIED against the 35-instruction listing; runtime UNOBSERVED. Link-closed: 0x004F1050 (native_4f1050.cpp), 0x004F1240 (native_4f1240.cpp), 0x004F1090 (native_4f1090.cpp) and 0x004F9180 (native_4f9180.cpp) are all transcribed. The scaling is exact because 1/4096 is a power of two, so the x87 extended-precision multiply and a C++ double multiply agree.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -34,6 +35,7 @@ void NATIVE_DECL Graph_Update_4F9180(void* object, void* arg2);
 
 void NATIVE_DECL AIGraph_Handler_5093C0(void* object, void* arg2)
 {
+    NATIVE_LOG_ENTER("AIGraph_Handler_5093C0", "0x005093C0");
     // 0x005093C6: call 0x4F1050; 0x005093CE: cmp $0xffffffff,%eax; 0x005093D1: jne 0x5093E2 - not found means "allocate a slot".
     if (List_FindIndex_4F1050(object) == -1)
     {

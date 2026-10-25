@@ -3,6 +3,7 @@
 // Tools/evidence: radare2 6.2.0 af/pdf and the raw bytes; section 22.3 of the evidence sheet (landability sweep row).
 // Behavior/CFG: computes first*0x82 + second like 0x004B0EC0, then calls the dword at 0x00A950A4 indexed by that value with the third argument; the pushed argument is removed with pop ecx after the call. Returns the callee's EAX; no branch.
 // Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. The table entry is written by 0x004B0EC0 and starts zeroed, so an unset slot is a null call in this build, exactly as retail's empty table implies. The callee's return type is unproven.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -19,6 +20,7 @@ extern std::uint32_t g_a950a4[0x2000];
 
 std::uint32_t NATIVE_DECL Sys_InvokeSlotWord_4B1000(std::int32_t first, std::int32_t second, std::int32_t argument)
 {
+    NATIVE_LOG_ENTER("Sys_InvokeSlotWord_4B1000", "0x004B1000");
     using SlotOperation = std::uint32_t (NATIVE_DECL*)(std::int32_t argument);
 
     const std::uint32_t index = static_cast<std::uint32_t>(second) +

@@ -3,6 +3,7 @@
 // Tools/evidence: radare2 6.2.0 af/pdf and NASM ndisasm over the raw bytes (8b 44 24 04 8b 08 8b 41 04 c3); nine nop bytes follow.
 // Behavior/CFG: the same shape as 0x004C0230 with a different field: returns the dword at (*(argument))+0x04. No branch, no store, no callee.
 // Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. Nothing here establishes the struct type, only the offset.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -17,6 +18,7 @@ extern "C" {
 
 std::int32_t NATIVE_DECL DynObj_GetField04_4C0240(void* holder)
 {
+    NATIVE_LOG_ENTER("DynObj_GetField04_4C0240", "0x004C0240");
     void* const inner = *reinterpret_cast<void* const*>(holder);        // 0x004C0244: mov ecx,[eax]
     return *reinterpret_cast<const std::int32_t*>(                   // 0x004C0246: mov eax,[ecx+0x4]
         static_cast<std::uint8_t*>(inner) + 0x04U);

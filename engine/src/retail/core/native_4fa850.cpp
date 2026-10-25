@@ -6,6 +6,7 @@
 //                engine/src/retail/qfile/ (QFile_InvokeDriverSlot_4B17C0, QFile_DeviceSlot10Call_4B16D0), so this file has no missing callee.
 //                The out word is retail's deliberately unaligned read of frame+1 (0x004FA875 `mov 0x15(%esp),%ecx`, four bytes at offset one),
 //                preserved here as an unaligned load. Retail leaves the upper EAX bits as the arg2 pointer and only AL carries the 1.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -26,6 +27,7 @@ std::int32_t QFile_DeviceSlot10Call_4B16D0(void* context, std::int32_t argument2
 
 std::uint8_t NATIVE_DECL GraphList_PopHead_4FA850(void* list, std::int32_t* out)
 {
+    NATIVE_LOG_ENTER("GraphList_PopHead_4FA850", "0x004FA850");
     // 0x004FA850: sub $0x8,%esp - retail's 8-byte frame, of which 0x004B16D0 fills the first five bytes and the out word is the dword at
     // frame+1. Kept as two scalars rather than a byte array: an address-taken array makes the host compiler emit a
     // __stack_chk_guard/__stack_chk_fail pair that retail never calls, and the two scalars reproduce the same eight bytes.

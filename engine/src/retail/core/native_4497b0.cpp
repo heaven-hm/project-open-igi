@@ -12,6 +12,7 @@
 //   behavior-derived placeholder with the address kept as its suffix; the retail symbol is not established. (b) Nothing here establishes what
 //   the regions at base+0x20 and base+0x70 are; they are only addresses this routine hands out. (c) The literal zero's meaning at out[2] is
 //   not established - only that a 32-bit zero is stored there.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -26,6 +27,7 @@ extern "C" {
 
 void NATIVE_DECL Task_GetInteriorPointersZeroed_4497B0(void* const base, void* const out)
 {
+    NATIVE_LOG_ENTER("Task_GetInteriorPointersZeroed_4497B0", "0x004497B0");
     char* const object = static_cast<char*>(base);
     std::uint32_t* const fields = static_cast<std::uint32_t*>(out);
 

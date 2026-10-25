@@ -3,6 +3,7 @@
 // Tools/evidence: radare2 6.2.0 af/pd and the raw bytes (8b542404 53 55 56 57 33ed bf30239400 / 8b8790000000 / ... / c7048dc023... / c3); section 22.3 of the evidence sheet.
 // Behavior/CFG: walks 32 records of 0x94 bytes from 0x00942330 up to 0x009435B0, skipping any record whose +0x90 word is zero, and compares the record's name at +0x00 against the argument with the same TWO-byte unrolled inlined strcmp that 0x004B1620 uses. On a match it clears the word at 0x009423C0 + index*0x94 and returns; otherwise it advances and ends with no value. The skip-then-compare order, the stride, the end address and the two-byte lattice are retail's.
 // Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. 0x009423C0 is owned by native_4b12d0.cpp (g_9423c0); the record table 0x00942330 has no external owner, so this file defines it and it starts zeroed. The record's fields beyond the name at +0x00 and the +0x90 word are not established.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -23,6 +24,7 @@ extern std::uint8_t g_9423c0[0x1280];
 
 void NATIVE_DECL QFile_ClearEntryByName_4B13A0(const char* name)
 {
+    NATIVE_LOG_ENTER("QFile_ClearEntryByName_4B13A0", "0x004B13A0");
     std::uint32_t index = 0;                              // 0x004B13A8: ebp = 0
     std::uint8_t* record = &::g_942330[0];                // 0x004B13AA: edi = 0x00942330
 

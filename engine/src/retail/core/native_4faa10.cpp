@@ -13,6 +13,7 @@
 #define NATIVE_DECL
 #endif
 
+#include "dev_log.hpp"
 #include <cstdint>
 extern "C" {
 std::int32_t NATIVE_DECL QFile_InvokeDriverSlot_4B17C0(std::int32_t* context);
@@ -31,6 +32,7 @@ std::int32_t NATIVE_DECL QFile_InvokeDriverSlot_4B1730(std::int32_t* context, st
 extern "C" {
 std::uint8_t NATIVE_DECL GraphStream_PeekByte_4FAA10(void* stream)
 {
+    NATIVE_LOG_ENTER("GraphStream_PeekByte_4FAA10", "0x004FAA10");
     struct
     {
         std::uint32_t slot;                                                     // the single byte retail reads into its own argument slot

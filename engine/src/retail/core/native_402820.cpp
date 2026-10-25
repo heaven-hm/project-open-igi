@@ -3,6 +3,7 @@
 // Tools/evidence: radare2 6.2.0 instruction reads; fresh BN/r2/angr capture pending under build/native-analysis/.
 // Behavior/CFG: 74 bytes; two calls, repeated context loads, stores at +0x30,+0x50,+0x34,+0x38,+0x3C,+0x44, returns final callee EAX.
 // Status/limits: BUILD_VERIFIED; no paired typed runtime acceptance; no inferred original names.
+#include "dev_log.hpp"
 #include <cstdint>
 #include "igi/retail/core/frame_natives.hpp"
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -17,6 +18,7 @@ std::uint32_t NATIVE_DECL Native_00490370();
 std::uint32_t NATIVE_DECL Native_004E6030(std::uint32_t);
 std::uint32_t NATIVE_DECL Native_00402820(std::uint32_t value)
 {
+    NATIVE_LOG_ENTER("Native_00402820", "0x00402820");
     Game_FrameDispatchRecord->base_low = Native_00490370();
     Game_FrameDispatchRecord->base_high = 0;
     Game_FrameDispatchRecord->counter = 0;

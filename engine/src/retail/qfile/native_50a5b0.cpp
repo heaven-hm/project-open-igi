@@ -3,6 +3,7 @@
 // Tools/evidence: radare2 6.2.0 af/afij/pdf and the raw bytes; section 22.2 of the evidence sheet (one of the code immediates 0x00509F50 installs into a driver record).
 // Behavior/CFG: returns the 32-bit word at context+0x156; the first argument (the driver index) is never read. No branch, no call, no store.
 // Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. The second-slot context convention is inferred from the 0x004B1690-0x004B17F0 gate family, which push (index, context, ...); the field meaning at +0x156 is unproven.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -17,6 +18,7 @@ extern "C" {
 
 std::int32_t NATIVE_DECL QFile_DeviceCallback_9C_50A5B0(std::int32_t index, std::int32_t* context)
 {
+    NATIVE_LOG_ENTER("QFile_DeviceCallback_9C_50A5B0", "0x0050A5B0");
     (void)index;                                                       // 0x0050A5B0: only [esp+0x8] is read, never [esp+0x4]
     return *reinterpret_cast<const std::int32_t*>(                      // 0x0050A5B4: mov eax,[eax+0x156]
         reinterpret_cast<const std::uint8_t*>(context) + 0x156U);

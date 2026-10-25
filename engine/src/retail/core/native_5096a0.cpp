@@ -14,6 +14,7 @@
 //   byte-sized. The 0xFF sentinel is retail's image value, not an assumption, and this routine is the only writer of the cache it owns. The meaning of
 //   the ZERO argument is NOT established: 0x00467D90 passes 0x0181 to the same callee, so the argument is load-bearing somewhere and is transcribed
 //   as the literal retail pushes rather than interpreted.
+#include "dev_log.hpp"
 #include "igi/retail/core/task_types.hpp"
 
 #include <cstdint>
@@ -34,6 +35,7 @@ std::uint8_t g_54e83e = 0xFFU;
 
 std::uint8_t NATIVE_DECL Task_GetCachedEventId_5096A0(void)
 {
+    NATIVE_LOG_ENTER("Task_GetCachedEventId_5096A0", "0x005096A0");
     if (::g_54e83e == 0xFFU)                                                      // 0x005096A0/0x005096A5/0x005096A7: mov al,[0x54E83E]; cmp al,0xFF; jne
     {
         // 0x005096A9: push 0 (the allocation argument); 0x005096AB: call 0x4017C0; 0x005096B0: add esp,4; 0x005096B3: mov [0x54E83E],al

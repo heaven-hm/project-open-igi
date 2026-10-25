@@ -3,6 +3,7 @@
 // Tools/evidence: radare2 6.2.0 pd; ranked as a self-contained leaf of the startup closure in evidence section 20.
 // Behavior/CFG: return the dword at 0x00A70C7C; the retail image holds 0 there; no branch, no call, no stack use.
 // Status/limits: BUILD_VERIFIED (1 block / 0 edges, emitted instructions identical); runtime UNOBSERVED. Returns the loaded dword because retail leaves it in EAX.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -20,6 +21,7 @@ std::uint32_t g_4f0fa0 = 0x0U;
 
 std::uint32_t NATIVE_DECL Core_GetRenderWordA_4F0FA0()
 {
+    NATIVE_LOG_ENTER("Core_GetRenderWordA_4F0FA0", "0x004F0FA0");
     return ::g_4f0fa0;   // load from 0xA70C7C
 }
 

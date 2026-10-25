@@ -11,6 +11,7 @@
 //   0x42C80000 is 100.0f, but the routine itself only performs stores). The returned pointer is the address of the first dword. 0x00A76BE8 and
 //   0x00A76BEC have no other owner in the tree, so this file defines them, zeroed as the loader leaves them. Domain: sys/, because the pair is a
 //   sys-level static initialised by its own routine and the neighbouring 0x004F1C90 lives there too.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #define NATIVE_DECL __attribute__((cdecl))
@@ -22,6 +23,7 @@ std::uint32_t g_a76bec = 0U; // retail 0x00A76BEC: second dword of the pair (ima
 
 void* NATIVE_DECL Sys_InitFloatPair_4F1CB0(void)
 {
+    NATIVE_LOG_ENTER("Sys_InitFloatPair_4F1CB0", "0x004F1CB0");
     ::g_a76be8 = 0U;          // 0x004F1CB0: mov dword [0x00A76BE8],0
     ::g_a76bec = 0x42C80000U; // 0x004F1CBA: mov dword [0x00A76BEC],0x42C80000 (100.0f as stored)
     return &::g_a76be8;       // 0x004F1CC4: mov eax,0x00A76BE8; 0x004F1CC9: ret

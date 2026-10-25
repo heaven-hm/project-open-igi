@@ -3,6 +3,7 @@
 // Tools/evidence: radare2 6.2.0 af/pdf; section 21 of the evidence sheet; nine call sites (0x004B12F8, 0x004B1442, 0x004B14C1, 0x004B1538, 0x004B15AF, 0x004B184C, 0x004B1ADB, 0x004B1B4F, 0x005098D5).
 // Behavior/CFG: walks the five device records from 0x009437B8 (record 1's name) to 0x009439E8 stride 0x8C with a 1-based index; for each record whose +0x1C present word is non-zero it measures the record name with a byte scan and calls 0x004AAD10 Resource_MatchPrefix(record name, input, length); returns the 1-based index on the first zero result, otherwise 0. One argument (the resolved path), cdecl, caller cleans.
 // Status/limits: BUILD_VERIFIED (6 blocks / 7 edges); runtime UNOBSERVED. The name length is computed with the same byte scan retail performs inline at 0x004B11BB-0x004B11C4.
+#include "dev_log.hpp"
 #include "igi/retail/qfile/device_table.hpp"
 #include "igi/retail/resource/sys_resource.hpp"
 
@@ -20,6 +21,7 @@ extern "C" {
 
 std::int32_t NATIVE_DECL QFile_DeviceIndex_4B11A0(const char* resolved_path)
 {
+    NATIVE_LOG_ENTER("QFile_DeviceIndex_4B11A0", "0x004B11A0");
     std::int32_t index = 1;                                              // 0x004B11A8: ebx = 1
     DeviceRecord* record = &::g_9436ec[1];                               // 0x004B11AD: esi = 0x009437B8
     do

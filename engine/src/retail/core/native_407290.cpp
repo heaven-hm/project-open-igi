@@ -3,6 +3,7 @@
 // Tools/evidence: radare2 6.2.0 pd/p8/afij over the exact image. 128 call sites, 21 distinct targets. Links: 0x00401400 x6 and 0x00401530 x0 - the context variant only, the no-context linker is absent, so the family's usual count does not apply here. Appends: 52 through 0x004F1A80, partitioned by container as 0x569208 -> 50 and 0x569204 -> 2, matching the two 0x004F1950 capacities (50 at 0x004073FA, 2 at 0x0040739E) exactly; totals, partition and capacities are three independent numbers that agree. 0x004F1CD0/0x004F1DB0 run once per container over 0x5690E0 and 0x5691F0, the same list-head/new-record pair the registrar engine/src/retail/core/native_413df0.cpp runs four times over 0x0056E248/238/218/228 - corroboration from an unrelated file.
 // Behavior/CFG: straight-line, no branch of any kind. Allocates one event through 0x004017C0 (QTask_AllocateEvent, declared engine/include/igi/retail/core/task_types.hpp:200, defined engine/src/retail/core/task_types.cpp:490 - it is NOT a native_ file, the hazard that has caused three duplicate/undercount defects this session), registers "WeaponConfigContainer" (0x124, id at 0x005384C0) and "WeaponConfig" (0x708, id at 0x005384C2), links six context handlers, then appends 52 records. arg5 is 7 at 42 sites, 3 at two, 6 and 2 at one each, and six sites take an accessor's returned pointer; arg6 is 0 at the 46 literal sites. The zero must not be generalised across all 52.
 // Status/limits: TRANSCRIBED; STRUCTURALLY_VERIFIED against the 703-instruction listing; compile status recorded below. Runtime UNOBSERVED. All 21 callees resolve to a definition file (checked whole-file by provenance line, not by declaration pattern) - a clean negative, no consumer-only hole. The five globals 0x5690D8, 0x5690E0, 0x5691F0, 0x569204, 0x569208 have no other owner. Relocations in the compiled object report one symbol per callee, not one per call site - the link target appears once, not six times - so the 6-link count and the 50/2 partition are provable only from this census and the source and can never be re-derived from the object.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -56,6 +57,7 @@ std::uint16_t g_5384c2 = 0U;
 
 void NATIVE_DECL Task_DefineWeaponConfig_407290(void)
 {
+    NATIVE_LOG_ENTER("Task_DefineWeaponConfig_407290", "0x00407290");
     std::uint8_t frame_storage[0x82c];
     std::uint8_t* const append_frame = frame_storage;
 

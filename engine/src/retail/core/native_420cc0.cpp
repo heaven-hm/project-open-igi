@@ -4,6 +4,7 @@
 // Behavior/CFG: one straight-line block, no branch, no loop. Reads the parent type through 0x00424850, registers "MenuText" with a 0x170-byte object through 0x00401900 and stores the 16-bit id at 0x0053B770 (image word 0x0181, the not-registered sentinel). Then makes seven handler links on that id: 0x00401530 to 0x00421070 on event 1; 0x00401530 to 0x00421130 on the event word from 0x004E7530; 0x00401530 to 0x00420F00 on event 2; 0x00401400 to 0x00420E90 on event 0; 0x00401400 to 0x004213D0 on the phase id from 0x004F1A60; 0x00401400 to 0x00420F40 on the phase id from 0x004F1A70; 0x00401530 to 0x00420BC0 on the word from 0x00424890. Then allocates a count-5 container through 0x004F1950 into 0x0057BBF4 and makes five six-argument appends through 0x004F1A80, all with arg2 = frame+0x00, arg5 = 7, arg6 = 0, and arg3 = frame+0x54 / frame+0x94 / frame+0x118 / frame+0x11C / frame+0xD4 for the getters 0x004F0FE0, 0x004F0FE0, 0x004F0FA0, 0x004F0FC0 and 0x004F0FE0. Finally registers four script names against the literal ids 0, 1, 2 and 3 through 0x004B8810: "TEXT_BLACK" @0x0053B7D8, "TEXT_WHITE" @0x0053B7CC, "TEXT_GREEN" @0x0053B7C0 and "TEXT_ORANGE" @0x0053B7B4. NOTE: the frame size 0x170 and the registered object size 0x170 COINCIDE. They are different quantities and one does not imply the other.
 // Status/limits: TRANSCRIBED; LINKABLE (the handler entry points this routine registers are raw code immediates in retail and are transcribed by nobody, so they are passed as cast integers and create no link dependency; they stay recorded gaps in the tree, not stubs). STRUCTURALLY_VERIFIED for the CFG only, which is one block with no edges. Runtime UNOBSERVED in both binaries. THE APPEND FRAME OFFSETS ARE DERIVED, NOT MEASURED BY A DEBUGGER: each `lea` is relative to the esp at that instruction and 12 bytes (two surplus pushes and the getter result push) had been pushed by then, so the raw offsets 0x60/0xA0/0x124/0x128/0xE0 minus 0x0C map to frame+0x54/0x94/0x118/0x11C/0xD4, and 0xC maps to frame+0x00. Raw `lea` offsets are recorded beside each argument so the arithmetic can be rechecked.
 // Linkage note (per the Lead's trap): the two globals this file OWNS are emitted with C++ linkage because they sit in `namespace igi::retail::core` - the dominant tree convention (431 plain definitions against 44 extern "C"). A future file that declares 0x0053B770 or 0x0057BBF4 as `extern "C"` would therefore get a SECOND, distinct variable with NO link error, and the sentinel would be written by one file and read by another. Declare them with the same namespace, or the ownership must move here.
+#include "dev_log.hpp"
 #include "igi/retail/core/task_types.hpp"
 
 #include <cstdint>
@@ -48,6 +49,7 @@ extern void Script_QHashNodeRegister(void* arg1, void* value); // 0x004B8810
 
 void NATIVE_DECL MenuText_Register_420CC0()
 {
+    NATIVE_LOG_ENTER("MenuText_Register_420CC0", "0x00420CC0");
     std::uint8_t append_frame[0x170]; // 0x00420CC0: sub esp,0x170
 
     // 0x00420CC6/0x00420CC8: the two zeros are surplus for the argument-less getter and are consumed as

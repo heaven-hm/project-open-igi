@@ -3,6 +3,7 @@
 // Tools/evidence: build/retail-dis.txt (GNU objdump) 0x00402FF0-0x00403657; radare2 6.2.0 af/afbj per block (block 0x00402FF0 1375B/367i, then 0x0040354F 24B/8i, 0x00403567 5B/1i, 0x0040356C 24B/8i, 0x00403584 5B/1i, 0x00403589 24B/8i, 0x004035A1 7B/2i, 0x004035A8 22B/8i, 0x004035BE 7B/2i, 0x004035C5 22B/8i, 0x004035DB 35B/11i, 0x004035FE 10B/3i, 0x00403608 36B/9i, 0x0040362C 1B/1i, 0x0040362D 42B/12i); all 69 name literals and the five table images read as raw bytes from the image at their retail VAs; esp simulated instruction by instruction to the ret, which is how the shared 8 push at 0x00403632 and the late 0x004035F2 cleanup were resolved.
 // Behavior/CFG: registers 69 script entry points through 0x004B8890 (and 0x004B88F0 for one of them) with the tuple (name, handler, 0, type) - 68 name/handler pairs plus "DefineGameOptions" with a null handler - in 18 cleanup groups (17 x 0x40 and one 0x10), then walks five retail tables of {name, id} records and registers each through 0x004B8810: 27 records at 0x00536558, 3 at 0x00536928, 127 at 0x00536998, then 6 records at 0x0053331C and 3 at 0x0053337C whose second argument is the loop counter rather than a table field. It then leaves the render mode with 0x004950E0/0x004B0FD0, dispatches 0x00491EA0(frame, 5) and stores its result at 0x00567C90, copies that many 0x100-byte records from the frame into the 0x00567C98 table (stride 0x404, zeroing the dword at +0x400 of each), calls 0x00491CF0 then 0x00491980, enters the render mode with 0x004B0F90 and clears the first byte of the 0x00BC79C8 password buffer.
 // Status/limits: TRANSCRIBED; STRUCTURALLY_VERIFIED against the 449-instruction listing and the per-block afbj counts; runtime UNOBSERVED. Four callees are native gaps outside this lane's range and are declared here, not transcribed: 0x004B88F0 (used for exactly one registration, "Config_GraphicOptionsSetGamma"), 0x00491EA0, 0x00491CF0 and 0x00491980, so this file cannot link until they land. Retail never cleans the single argument it pushes for 0x004B0FD0 and reuses it as the second argument of 0x00491980; the port passes 8 to both calls, which is the same stack, and the compiler's own cleanup replaces the late 0x004035F2 add. The destination table at 0x00567C98 is declared with five 0x404-byte records because the copy source is this routine's 0x500-byte frame and 0x00491EA0 is handed 5 as its second argument, so no run can copy more than five records without reading past the frame; retail itself has no bound check here.
+#include "dev_log.hpp"
 #include <cstdint>
 #include <cstring>
 
@@ -263,6 +264,7 @@ std::int32_t Display_ApplyFlags_491980(void* argument1, std::int32_t argument2, 
 
 void NATIVE_DECL Config_RegisterGameOptions_402FF0(void)
 {
+    NATIVE_LOG_ENTER("Config_RegisterGameOptions_402FF0", "0x00402FF0");
     // 0x00402FF0: sub $0x500,%esp - retail's 1280-byte frame, which 0x00491EA0 fills and the tail loop reads from its
     // base. Kept as twenty 64-byte chunks of scalars rather than a byte array: an address-taken array makes the host
     // compiler emit a __stack_chk_guard/__stack_chk_fail pair that retail never calls.

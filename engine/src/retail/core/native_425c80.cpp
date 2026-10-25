@@ -5,6 +5,7 @@
 // Status/limits: TRANSCRIBED; LINKABLE (of the five handler-link addresses, four are raw code immediates in retail that nobody has transcribed - 0x00425D90, 0x00425DE0, 0x00426590, 0x004265A0 - so they are passed as cast integers and create no link dependency; they stay recorded gaps in the tree, not stubs. 0x004D3710 IS transcribed and is referenced as a symbol, so it is a real link edge). STRUCTURALLY_VERIFIED for the CFG only, which is one block with no edges. BUILD_VERIFIED (i686-w64-mingw32-g++ -std=c++20 -O2 -Wall -Wextra single-file compile clean). Runtime UNOBSERVED in both binaries. THE APPEND FRAME OFFSETS ARE DERIVED, NOT MEASURED BY A DEBUGGER: an esp simulation over the full instruction stream computes `esp_at_lea + disp - frame_base` for every `lea reg,[esp+X]` and yields frame+0x28/0x00, 0x20/0x00 and 0x24/0x00 from the raw offsets 0x30/0xC, 0x28/0xC and 0x2C/0xC. The high pointer is computed before the container handle is pushed in all three appends, as in files 4, 5 and 6.
 // Ownership note (per the Lead's two-variable trap): the two globals this file OWNS are emitted with C++ linkage because they sit in `namespace igi::retail::core`. A future file that declares 0x0053BA50 or 0x0057BC74 as `extern "C"` would get a SECOND, distinct variable with NO link error. Neither address has any other owner in the tree (checked before writing); 0x0057BC74 is past the file-backed end of .data, so its image value is zero.
 // Domain: core/, per the Lead's ruling that these files are task-type registrars of the guard 0x00402930 family and belong in one folder, whatever subsystem the class they register will later serve. The class name says "CarAI"; the body is core task registration.
+#include "dev_log.hpp"
 #include "igi/retail/core/task_types.hpp"
 
 #include <cstdint>
@@ -42,6 +43,7 @@ extern void* Script_TaskContainer_Append(std::int32_t* const container, std::int
 
 void NATIVE_DECL CarAI_Register_425C80()
 {
+    NATIVE_LOG_ENTER("CarAI_Register_425C80", "0x00425C80");
     std::uint8_t append_frame[0x84]; // 0x00425C80: sub esp,0x84
 
     // 0x00425C86/0x00425C88: the two zeros are surplus for the argument-less getter and are consumed as

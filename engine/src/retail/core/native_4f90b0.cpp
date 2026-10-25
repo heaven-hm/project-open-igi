@@ -6,6 +6,7 @@
 //                (61 bytes; transcribed in native_401ae0.cpp) and 0x00401CF0 (49 bytes; transcribed in native_401cf0.cpp). 0x004B0C60 is
 //                already transcribed as igi::retail::mem::Mem_Alloc. Two retail quirks are preserved: 0x004F9117 `mov %di,[eax+0x1c]` keeps EDI's high half (the node pointer) instead of
 //                zero-extending the type word, and 0x004F9107 stores the slot address as a 32-bit dword at node+0x08.
+#include "dev_log.hpp"
 #include "igi/retail/mem/mem_alloc.hpp"
 
 #include <cstdint>
@@ -45,6 +46,7 @@ void* g_a77248[3] = {nullptr, nullptr, nullptr};
 
 void NATIVE_DECL GraphNode_Init_4F90B0(void* object, void* arg2)
 {
+    NATIVE_LOG_ENTER("GraphNode_Init_4F90B0", "0x004F90B0");
     (void)arg2;                                                               // retail never reads its second argument
     std::uint8_t* const fields = static_cast<std::uint8_t*>(object);
 

@@ -19,6 +19,7 @@
 //   unchanged. The constants 8, 0, 2 and 0 are pushed as void* to match the callee's declared parameter types; retail pushes them as immediates
 //   and the byte values are identical. Declared void because eax is not touched between the call and the ret, so the value is the callee's own.
 //   Domain: script/, with 0x004BAAC0, 0x004B8810, 0x004B8890 and 0x004B88F0 in the same named-value registry family.
+#include "dev_log.hpp"
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -38,6 +39,7 @@ void Script_QHashNodeCreate(char const* const arg1, void* const arg2, void const
 
 void NATIVE_DECL Script_QHashNodeRegisterData_4B8870(char const* name, std::uint64_t* value)
 {
+    NATIVE_LOG_ENTER("Script_QHashNodeRegisterData_4B8870", "0x004B8870");
     Script_QHashNodeCreate(name,                                             // 0x004B8886: push ecx (argument 1)
                            reinterpret_cast<void*>(0x004B7FE0U),             // 0x004B8881: push 0x004B7FE0, a callback
                            value,                                            // 0x004B8880: push eax (argument 2)
