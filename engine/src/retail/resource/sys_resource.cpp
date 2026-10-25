@@ -1,10 +1,11 @@
 #include "igi/retail/resource/sys_resource.hpp"
 
 #include "igi/retail/core/retail_error.hpp"
-namespace igi::retail::sys {
-// 0x004AF960: the list unlink half, transcribed in engine/src/retail/sys/native_4af960.cpp (C++ linkage, namespace-scoped).
+// 0x004AF960: the list unlink half, transcribed in engine/src/retail/sys/native_4af960.cpp; C linkage since 2026-10-25. This unit keeps
+// its own namespace, so the native is declared here with an explicit extern "C" block.
+extern "C" {
 void* Sys_UnlinkListNode_4AF960(void* node);
-} // namespace igi::retail::sys
+}
 
 #include "igi/retail/resource/is_resource_loaded.hpp"
 #include "igi/retail/resource/resource_lifecycle.hpp"
@@ -253,7 +254,7 @@ std::int32_t Resource_FreeNode(void* context)
         case 1:
         case 4:
         {
-            igi::retail::sys::Sys_UnlinkListNode_4AF960(&node->link_08[0]);
+            Sys_UnlinkListNode_4AF960(&node->link_08[0]);
             goto label_4b5ced;
         }
         case 2:

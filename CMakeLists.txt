@@ -555,6 +555,52 @@ add_executable(igi WIN32
     engine/platform/windows/player_controller.cpp
     engine/platform/windows/retail_animation.cpp
     engine/platform/windows/direct_input_mouse.cpp
+    engine/src/retail/core/native_402ff0.cpp
+    engine/src/retail/core/native_40fe30.cpp
+    engine/src/retail/core/native_410360.cpp
+    engine/src/retail/core/native_4108b0.cpp
+    engine/src/retail/core/native_415070.cpp
+    engine/src/retail/core/native_454ee0.cpp
+    engine/src/retail/core/native_470410.cpp
+    engine/src/retail/core/native_470610.cpp
+    engine/src/retail/core/native_470fa0.cpp
+    engine/src/retail/core/native_472670.cpp
+    engine/src/retail/core/native_472d00.cpp
+    engine/src/retail/core/native_4733f0.cpp
+    engine/src/retail/core/native_4739d0.cpp
+    engine/src/retail/core/native_473ed0.cpp
+    engine/src/retail/core/native_475380.cpp
+    engine/src/retail/core/native_475ac0.cpp
+    engine/src/retail/core/native_476730.cpp
+    engine/src/retail/core/native_477220.cpp
+    engine/src/retail/core/native_47cf70.cpp
+    engine/src/retail/core/native_4801b0.cpp
+    engine/src/retail/core/native_4813e0.cpp
+    engine/src/retail/core/native_485330.cpp
+    engine/src/retail/core/native_486900.cpp
+    engine/src/retail/core/native_4872c0.cpp
+    engine/src/retail/core/native_487be0.cpp
+    engine/src/retail/core/native_488620.cpp
+    engine/src/retail/core/native_488800.cpp
+    engine/src/retail/core/native_488bb0.cpp
+    engine/src/retail/qfile/native_4e68d0.cpp
+    engine/src/retail/render/native_491980.cpp
+    engine/src/retail/render/native_491cf0.cpp
+    engine/src/retail/render/native_491ea0.cpp
+    engine/src/retail/script/native_4b88f0.cpp
+    engine/src/retail/sys/native_4f1cb0.cpp
+    # Held out of the build until retail 0x004AF9D0 and 0x0045E060 are transcribed.
+    # Each file below is a finished transcription; they are excluded only because a callee
+    # they call by name has no implementation, so including them breaks the link:
+    #   0x004AF9D0 (1190 bytes, untranscribed) -> sys/native_4f1db0.cpp
+    #     -> core/native_413df0.cpp, core/native_47cf20.cpp (call Sys_NewListRecord_4F1DB0)
+    #     -> core/native_413b50/413b60/413de0.cpp (read g_5391ac / g_56e228 owned by 413df0)
+    #     -> core/native_477e30.cpp (calls Sys_GetSettingByte_413B60, Sys_GetGlobalPtr_413DE0)
+    # The set below is the exact link closure computed from nm on every new file, not a guess.
+    #   0x0045E060 (858 bytes, untranscribed) -> core/native_412420.cpp
+    # 413b20/413b30/413b40 stay in the build only because their fix (reading g_5391ac
+    # instead of a private byte) is not committable until 413df0 links. Remove this block
+    # in the commit that lands 0x004AF9D0 and 0x0045E060.
     engine/platform/windows/retail_native_verification_support.cpp)
 target_include_directories(igi PRIVATE engine/include)
 target_compile_features(igi PRIVATE cxx_std_20)

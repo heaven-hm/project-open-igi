@@ -11,6 +11,35 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - 35 more natives in the build, and a link closure that was measured rather than guessed
+
+- **Intake: 35 new native files added to the build target**, taking the candidate from 14,283,882 to **14,324,250** bytes with a green link
+  (`build-win32-no-verify-gate/igi1.exe`, sha256 `93be1011d1e915f4...`). All 42 untracked natives were first syntax-checked together
+  (42/42 clean under `-Wall -Wextra`), checked for one-VA-per-file (clean), and checked for duplicate global definitions (121 defined globals
+  across 39 files, **zero** collisions) before any of them was added.
+- **The held-out set is an exact link closure, not a judgement call.** `nm` on every new file was used to compute the transitive closure of files
+  that call an untranscribed callee: 8 files, blocked on exactly two retail addresses - `0x004AF9D0` (1190 bytes) and `0x0045E060` (858 bytes).
+  They are excluded from the target with the reason recorded in `CMakeLists.txt`. Everything else links.
+- **The dependency graph is deeper than it first looked**: `0x004AF9D0` -> `sys/native_4f1db0.cpp` -> `core/native_413df0.cpp`, which owns
+  `g_5391ac[7]` and `g_56e228`, which six further files read. The recon that followed found `0x004AF9D0` is itself three functions
+  (`0x004AFF90` 9 instructions -> `0x004AFFB0` 187 -> `0x004AF9D0` 329), so the keystone is a three-native chain, not one file.
+- **A pattern became a test.** Id slots holding image value `0x0181` cannot live in `.bss`; they are `.data`. Verified on both sides: the image
+  holds `0x0181` at `0x005402FC`/`0x005402FE`/`0x005401F8`/`0x0053FEC0`, and the candidate reports `D` for those slots against `B` for
+  image-zero slots - including both classes in a single translation unit. The prediction is falsifiable in both directions and has held on
+  three independent units across four clusters (`0x005402xx`, `0x005401xx`, `0x0053FExx`, `0x005385xx`).
+- **An ABI question answered by measurement, not by widening a typedef.** `0x004108B0` reads its second argument at `[esp+8]` while the phase-1
+  dispatcher pushes only one. Reading both dispatchers settled it: phase 0 (`0x004012C9`, table base `0xa96ae0`) pushes **two** arguments and
+  null-checks the slot; phase 1 (`0x0040106E`, base `0xa970e0`) pushes **one** and does not. So `0x00401400`-linked handlers take two arguments
+  and `0x00401530`-linked handlers take one, and the tree's `FrameHandler` typedef describes only the no-context path.
+- **Method rule recorded**: an address-byte search finds absolute immediates only and is structurally blind to `call`/`jmp` sites, which are
+  encoded as relative displacements. The `0x4D3710` population is 150 absolute references plus 13 relative calls; the two numbers answer
+  different questions.
+- **Manifest gap, recorded rather than papered over**: `scripts/build_native_records.py` requires a per-native Binary Ninja evidence JSON
+  (`docs/fidelity/evidence/0x...-binaryninja.json`) and none exists for the r2-based natives, so the new files have **no manifest records yet**.
+  The generator was not worked around and no records were hand-authored. The existing manifest change (the `_`-prefixed `candidate_symbol`
+  correction for 23 records) is included.
+- Nothing here advances a native past `BUILD_VERIFIED`; startup still fails closed at the `0x00402930` registrar guard.
+
 ### 2026-10-25 - Three more task classes, one with no event-0 link at all
 
 - Linked: `0x0046B510` (ComputerButtonItem), `0x0046B7F0` (ComputerTextItem) and `0x0043E4F0` (GenericPhysicsMagicObj, filed under `dynobj/` because it

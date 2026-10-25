@@ -5,15 +5,14 @@
 // Status/limits: BUILD_VERIFIED; depends on Sys_UnlinkListNode_4AF960 0x004AF960; not yet called by any transcribed caller (the 5 retail callers are untranscribed).
 #include "igi/retail/core/native_0048f970.hpp"
 #include "igi/retail/core/retail_error.hpp"
-namespace igi::retail::sys {
-// 0x004AF960: the list unlink half, transcribed in engine/src/retail/sys/native_4af960.cpp. C++ linkage, namespace-scoped.
-void* Sys_UnlinkListNode_4AF960(void* node);
-} // namespace igi::retail::sys
 #include <cstdint>
 
 using igi::retail::core::WindowHandlerEntry;
 
 extern "C" {
+
+// 0x004AF960: the list unlink half, transcribed in engine/src/retail/sys/native_4af960.cpp; C linkage since 2026-10-25.
+void* Sys_UnlinkListNode_4AF960(void* node);
 
 std::int32_t* WinProc_RemoveHandler(std::int32_t* handler)
 {
@@ -33,7 +32,7 @@ std::int32_t* WinProc_RemoveHandler(std::int32_t* handler)
         if (node->handler == reinterpret_cast<std::intptr_t (*)(void*, std::uint32_t, std::uintptr_t, std::intptr_t)>(handler))
         {
             // 0x0048F51E: HeapList_Remove(node); 0x0048F526: [node+0x08]=0; returns eax.
-            void* const removed = igi::retail::sys::Sys_UnlinkListNode_4AF960(static_cast<void*>(node));
+            void* const removed = Sys_UnlinkListNode_4AF960(static_cast<void*>(node));
             node->handler = nullptr;
             return static_cast<std::int32_t*>(removed);
         }

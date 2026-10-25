@@ -13,18 +13,16 @@
 #define NATIVE_DECL
 #endif
 
-namespace igi::retail::sys {
-// 0x004AF960: the list unlink half, transcribed in engine/src/retail/sys/native_4af960.cpp. C++ linkage, namespace-scoped.
-void* Sys_UnlinkListNode_4AF960(void* node);
-} // namespace igi::retail::sys
-
 extern "C" {
+
+// 0x004AF960: the list unlink half, transcribed in engine/src/retail/sys/native_4af960.cpp; C linkage since 2026-10-25.
+void* Sys_UnlinkListNode_4AF960(void* node);
 
 void NATIVE_DECL QTask_UnlinkTask_4015D0(void* task)
 {
     if (*reinterpret_cast<std::uint32_t*>(static_cast<std::uint8_t*>(task) + 0x14) != 0U) // 0x004015D4/0x004015D7
     {
-        igi::retail::sys::Sys_UnlinkListNode_4AF960(static_cast<void*>(task));                     // 0x004015DC -> 0x004AF960
+        Sys_UnlinkListNode_4AF960(static_cast<void*>(task));                     // 0x004015DC -> 0x004AF960
     }
 }
 

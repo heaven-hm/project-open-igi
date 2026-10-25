@@ -6,13 +6,11 @@
 
 #include <cstdint>
 
-namespace igi::retail::sys {
-// 0x004AF960: the list unlink half, transcribed in engine/src/retail/sys/native_4af960.cpp. C++ linkage, namespace-scoped;
-// the retail body writes only memory, so the returned pointer is the argument itself.
-void* Sys_UnlinkListNode_4AF960(void* node);
-} // namespace igi::retail::sys
-
 extern "C" {
+
+// 0x004AF960: the list unlink half, transcribed in engine/src/retail/sys/native_4af960.cpp; C linkage since 2026-10-25. The retail body
+// writes only memory, so the returned pointer is the argument itself.
+void* Sys_UnlinkListNode_4AF960(void* node);
 
 void QHashSlotTable_Release(void* context); // 0x004F0C99: call 0x401b20
 void Mem_DeAllocFn(void* pointer);          // 0x004F0CA5: call 0x4b0d10
@@ -20,7 +18,7 @@ void Mem_DeAllocFn(void* pointer);          // 0x004F0CA5: call 0x4b0d10
 void QHashNode_Release(void* const node)
 {
     QHashSlotTable_Release(*reinterpret_cast<void**>(static_cast<std::uint8_t*>(node) + 0x08)); // 0x004F0C95/0x004F0C98/0x004F0C99: mov eax,[esi+8]; push eax; call
-    igi::retail::sys::Sys_UnlinkListNode_4AF960(static_cast<void*>(node));                                      // 0x004F0C9E/0x004F0C9F: push esi; call 0x4af960
+    Sys_UnlinkListNode_4AF960(static_cast<void*>(node));                                      // 0x004F0C9E/0x004F0C9F: push esi; call 0x4af960
     Mem_DeAllocFn(node);                                                                        // 0x004F0CA4/0x004F0CA5: push esi; call 0x4b0d10
 }
 

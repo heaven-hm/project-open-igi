@@ -13,7 +13,7 @@
 #define NATIVE_DECL
 #endif
 
-namespace igi::retail::sys {
+extern "C" {
 
 void NATIVE_DECL Sys_InsertListTail_4AF8F0(void* head, void* node)
 {
@@ -28,6 +28,6 @@ void NATIVE_DECL Sys_InsertListTail_4AF8F0(void* head, void* node)
     *reinterpret_cast<std::uint8_t**>(base + 0x08U) = item;                // 0x4AF908: mov %ecx,0x8(%eax)
 }                                                                         // 0x4AF90B: ret
 
-} // namespace igi::retail::sys
+} // extern "C"
 
 #undef NATIVE_DECL

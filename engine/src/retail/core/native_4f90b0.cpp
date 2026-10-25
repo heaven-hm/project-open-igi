@@ -10,11 +10,9 @@
 
 #include <cstdint>
 
-// 0x004AF8F0: the list-tail insert half, namespace-scoped C++ linkage in engine/src/retail/sys/native_4af8f0.cpp; declared outside the
-// extern "C" block below so the symbol matches that transcription.
-namespace igi::retail::sys {
-void Sys_InsertListTail_4AF8F0(void* head, void* node);
-}
+// 0x004AF8F0: the list-tail insert half, transcribed as Sys_InsertListTail_4AF8F0 in engine/src/retail/sys/native_4af8f0.cpp. It is
+// declared inside the extern "C" block below because that transcription now exports C linkage; the namespace wrapper it used to carry
+// was removed on 2026-10-25 so that every retail VA has one linkage convention.
 
 #if defined(_MSC_VER) && defined(_M_IX86)
 #define NATIVE_DECL __cdecl
@@ -25,6 +23,8 @@ void Sys_InsertListTail_4AF8F0(void* head, void* node);
 #endif
 
 extern "C" {
+
+void Sys_InsertListTail_4AF8F0(void* head, void* node);   // 0x004AF8F0, engine/src/retail/sys/native_4af8f0.cpp
 
 // 0x004B0C60: the engine allocator, already transcribed as igi::retail::mem::Mem_Alloc (engine/src/retail/mem/mem_alloc.cpp).
 
@@ -78,7 +78,7 @@ void NATIVE_DECL GraphNode_Init_4F90B0(void* object, void* arg2)
     *reinterpret_cast<std::uint32_t*>(node) = 0U;                             // 0x004F910D: mov %ebx,(%edi)
 
     // 0x004F9101/0x004F9102/0x004F910F: push %edi; push $0xa77248; call 0x4af8f0 - insert the node at the tail of the 0x00A77248 list.
-    igi::retail::sys::Sys_InsertListTail_4AF8F0(static_cast<void*>(g_a77248), node);
+    Sys_InsertListTail_4AF8F0(static_cast<void*>(g_a77248), node);
 
     // 0x004F9114: mov 0x14(%esi),%eax; 0x004F9117: mov %di,0x1c(%eax) - the low half of EDI (the node pointer) is replaced by the type word
     // and the high half survives, so the value handed to 0x00401CF0 mixes both. 0x00401CF0 reads only AX, but retail's value is reproduced.

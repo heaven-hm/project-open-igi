@@ -8,13 +8,11 @@
 #include <cstdint>
 
 using igi::retail::mem::g_942300;
-namespace igi::retail::sys {
-// 0x004AF960: the list unlink half, transcribed in engine/src/retail/sys/native_4af960.cpp. C++ linkage, namespace-scoped;
-// the retail body writes only memory, so the returned pointer is the argument itself.
-void* Sys_UnlinkListNode_4AF960(void* node);
-} // namespace igi::retail::sys
-
 extern "C" {
+
+// 0x004AF960: the list unlink half, transcribed in engine/src/retail/sys/native_4af960.cpp; C linkage since 2026-10-25. The retail body
+// writes only memory, so the returned pointer is the argument itself.
+void* Sys_UnlinkListNode_4AF960(void* node);
 
 void Mem_FreeBlock(void* pointer);                  // 0x004B0D30: call 0x4a6a50
 
@@ -23,7 +21,7 @@ void Mem_DeAllocFn(void* const pointer)
     const std::uintptr_t masked = (reinterpret_cast<std::uintptr_t>(pointer) - 4U) & ~static_cast<std::uintptr_t>(3U); // 0x004B0D10/0x004B0D1A/0x004B0D1E: add eax,-4; and al,0xfc
     --g_942300;                                                                              // 0x004B0D14/0x004B0D1D/0x004B0D21: mov edx,[0x942300]; dec edx; mov [0x942300],edx
     void** const node = reinterpret_cast<void**>(*reinterpret_cast<std::uint32_t*>(masked)); // 0x004B0D27: mov esi,[eax]
-    igi::retail::sys::Sys_UnlinkListNode_4AF960(static_cast<void*>(node));                                                                   // 0x004B0D2A
+    Sys_UnlinkListNode_4AF960(static_cast<void*>(node));                                     // 0x004B0D2A
     Mem_FreeBlock(node);                                                              // 0x004B0D30
 }
 

@@ -5,12 +5,9 @@
 // Status/limits: TRANSCRIBED; STRUCTURALLY_VERIFIED against the 40-instruction radare2 listing; runtime UNOBSERVED. 0x00A774A0 and 0x00A76D18 sit in .data's zero-fill tail (no file bytes), so they are defined here zeroed exactly as the loader leaves them; the non-null free-list node is established by the untranscribed graph-stream initialiser, and retail would fault on a null one because it dereferences the word before testing it.
 #include <cstdint>
 
-// 0x004AF8F0: the list-tail insert half, transcribed as igi::retail::sys::Sys_InsertListTail_4AF8F0 in
-// engine/src/retail/sys/native_4af8f0.cpp. No header declares it yet, so the C++-linkage declaration lives here - it must stay
-// outside the extern "C" block below, because that transcription is namespace-scoped C++ linkage, not C linkage.
-namespace igi::retail::sys {
-void Sys_InsertListTail_4AF8F0(void* head, void* node);
-}
+// 0x004AF8F0: the list-tail insert half, transcribed as Sys_InsertListTail_4AF8F0 in engine/src/retail/sys/native_4af8f0.cpp. It is
+// declared inside the extern "C" block below because that transcription now exports C linkage; the namespace wrapper it used to carry
+// was removed on 2026-10-25. 0x004AF960 is a different case and stays qualified: its transcription still exports C++ linkage.
 
 #if defined(_MSC_VER) && defined(_M_IX86)
 #define NATIVE_DECL __cdecl
@@ -22,6 +19,8 @@ void Sys_InsertListTail_4AF8F0(void* head, void* node);
 
 extern "C" {
 
+void Sys_InsertListTail_4AF8F0(void* head, void* node);   // 0x004AF8F0, engine/src/retail/sys/native_4af8f0.cpp
+
 std::uint32_t NATIVE_DECL GraphStream_HashName_4F9E70(char const* name);   // 0x004F9E70, engine/src/retail/core/native_4f9e70.cpp
 
 // 0x004AF810: Script_WarningLog, transcribed in engine/src/retail/error/native_4af810.cpp (no header declares it yet).
@@ -29,11 +28,9 @@ void Script_WarningLog(char const* format, ...);
 
 
 
-namespace igi::retail::sys {
-// 0x004AF960: the list unlink half, transcribed in engine/src/retail/sys/native_4af960.cpp (C++ linkage, namespace-scoped). This call was
-// link-blocked until that transcription landed; the legacy HeapList_Remove copy it used to rely on has been deleted.
+// 0x004AF960: the list unlink half, transcribed in engine/src/retail/sys/native_4af960.cpp; C linkage since 2026-10-25, so the
+// declaration is unqualified here like the other native callees. The legacy HeapList_Remove copy is deleted.
 void* Sys_UnlinkListNode_4AF960(void* node);
-} // namespace igi::retail::sys
 
 // 0x00A774A0: the graph-stream node list header. Only +0x00 (head), +0x04 (back-link field) and +0x08 (tail) are touched by the transcribed
 // code - the full extent is not established. Zero-fill in the retail image.
@@ -68,10 +65,10 @@ void NATIVE_DECL GraphStream_RegisterNode_4F9DF0(char const* name, std::uint32_t
     *reinterpret_cast<std::uint32_t*>(fresh + 0x08U) = hash;                  // 0x004F9E28: mov %eax,0x8(%esi)
     *reinterpret_cast<std::uint32_t*>(fresh + 0x0CU) = value;                 // 0x004F9E30: mov %eax,0xc(%ecx)  (eax = [esp+0xc] = arg2)
     *reinterpret_cast<std::uint32_t*>(fresh + 0x10U) = arg3;                  // 0x004F9E33: mov %edx,0x10(%ecx)  (edx = [esp+0x10] = arg3)
-    igi::retail::sys::Sys_UnlinkListNode_4AF960(static_cast<void*>(fresh)); // 0x004F9E36: push %esi; call 0x4af960
+    Sys_UnlinkListNode_4AF960(static_cast<void*>(fresh)); // 0x004F9E36: push %esi; call 0x4af960
     *reinterpret_cast<void**>(fresh + 0x04U) = nullptr;                       // 0x004F9E41: movl $0x0,0x4(%esi)
     *reinterpret_cast<void**>(fresh) = nullptr;                               // 0x004F9E48: movl $0x0,(%esi)
-    igi::retail::sys::Sys_InsertListTail_4AF8F0(static_cast<void*>(g_a774a0), fresh); // 0x004F9E3B..0x004F9E4E: push %esi; push $0xa774a0; call 0x4af8f0
+    Sys_InsertListTail_4AF8F0(static_cast<void*>(g_a774a0), fresh); // 0x004F9E3B..0x004F9E4E: push %esi; push $0xa774a0; call 0x4af8f0
     // 0x004F9E53: add $0xc,%esp; 0x004F9E56/0x004F9E57: pop %esi; ret.
 }
 } // extern "C"

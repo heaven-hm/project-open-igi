@@ -94,10 +94,11 @@
 #include <cstring>
 #include <stdexcept>
 
-namespace igi::retail::sys {
-// 0x004AF960: the list unlink half, transcribed in engine/src/retail/sys/native_4af960.cpp (C++ linkage, namespace-scoped).
+// 0x004AF960: the list unlink half, transcribed in engine/src/retail/sys/native_4af960.cpp; C linkage since 2026-10-25. This unit keeps
+// its own namespace, so the native is declared here with an explicit extern "C" block.
+extern "C" {
 void* Sys_UnlinkListNode_4AF960(void* node);
-} // namespace igi::retail::sys
+}
 
 #include "igi/retail/render/view_block.hpp"
 #include "igi/retail/terrain/terrain_mipmaps.hpp"
@@ -423,7 +424,7 @@ void store_minus_one(std::uint8_t* slab)
         // 0x005144C1: HeapList_Remove(element). The retail call is `push esi; call 0x004AF960;
         // add esp, 4` and discards the result; the port reuses the transcribed native.
         static_cast<void>(
-            igi::retail::sys::Sys_UnlinkListNode_4AF960(reinterpret_cast<void*>(element)));
+            Sys_UnlinkListNode_4AF960(reinterpret_cast<void*>(element)));
 
         remaining = g_a7f880; // 0x005144C6
         if (remaining == 0)

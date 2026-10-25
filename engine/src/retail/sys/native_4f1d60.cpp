@@ -13,7 +13,7 @@
 #define NATIVE_DECL
 #endif
 
-namespace igi::retail::sys {
+extern "C" {
 
 void NATIVE_DECL Sys_InitListHead_4F1D60(void* head, std::int32_t context)
 {
@@ -25,6 +25,6 @@ void NATIVE_DECL Sys_InitListHead_4F1D60(void* head, std::int32_t context)
     *reinterpret_cast<std::uint32_t*>(self_next) = 0U;                   // 0x4F1D73: movl $0x0,(%ecx)
 }
 
-} // namespace igi::retail::sys
+} // extern "C"
 
 #undef NATIVE_DECL

@@ -13,18 +13,18 @@
 #define NATIVE_DECL
 #endif
 
-namespace igi::retail::sys {
+extern "C" {
 
 // 0x004F1CF0: context object, referenced only by address (0x004F1CD4). Contents are never read or written in retail.
-extern "C" std::uint8_t g_4f1cf0 = 0U;
+std::uint8_t g_4f1cf0 = 0U;
 
 void NATIVE_DECL Sys_InitListHead_4F1D60(void* head, std::int32_t context);
 
 void NATIVE_DECL Sys_InitGlobalListHead_4F1CD0(void* head)
 {
-    Sys_InitListHead_4F1D60(head, reinterpret_cast<std::int32_t>(&g_4f1cf0));   // 0x4F1CD4: push $0x004F1CF0; 0x4F1CDA: call 0x004F1D60
+    Sys_InitListHead_4F1D60(head, static_cast<std::int32_t>(reinterpret_cast<std::uintptr_t>(&g_4f1cf0)));   // 0x4F1CD4: push $0x004F1CF0; 0x4F1CDA: call 0x004F1D60
 }                                              // 0x4F1CE2: ret
 
-} // namespace igi::retail::sys
+} // extern "C"
 
 #undef NATIVE_DECL
