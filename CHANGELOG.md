@@ -1,5 +1,35 @@
 ## Unreleased
 
+### My guard figure was wrong: 28 missing, not 32 - and "claimed" is not "built"
+
+I have reported "122 of 154 in build, 32 missing" for several ticks. Re-measured
+with the strict test - a provenance block carrying `retail VA 0x...`, or a
+`native_<hex>.cpp` filename - the answer is **126 claimed, 28 missing**:
+
+`0x4190E0 0x4199F0 0x41A1E0 0x41AAF0 0x41B310 0x41B8E0 0x41C700 0x41D080
+0x41DC50 0x41E690 0x41F340 0x420300 0x420CC0 0x421430 0x421750 0x4223D0
+0x422B40 0x4230A0 0x423FC0 0x424E80 0x425C80 0x426630 0x426D90 0x4272A0
+0x427830 0x427D90 0x427FF0 0x42ACC0`
+
+That is handler-abi-worker's census, address for address - 27 in its band plus
+`0x0042ACC0`. It derived the same set independently and flagged its own number as
+a floor because its test ("mentioned on any line") was looser than a provenance
+claim. The stricter test returns the same 28, so 28 is the figure and my 32 was
+wrong.
+
+**And the 126 is not a build figure.** Sweeping tracked files against
+`CMakeLists.txt` finds **36 tracked natives absent from the build** - committed, on
+disk, never compiled. So "claimed" splits into built and unbuilt, and the guard's
+126 includes files the compiler has never seen. The honest statement is:
+**28 addresses have no implementation anywhere; of the remaining 126, some are not
+in the build.**
+
+Three different questions were being answered by one number - does a file exist,
+is it compiled, is it complete - and I had been reporting the first as though it
+answered all three.
+
+## Unreleased
+
 ### The guard's blocker is one missing address, not two - and my note was wrong
 
 I told the lane that `0x00508F80` "calls `0x005183D0` and `0x00508FA0`, both
