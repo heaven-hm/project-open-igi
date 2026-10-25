@@ -13,8 +13,10 @@
 //   QTask_GetCurrentType() -> id at 0x005BE30C, links e0->0x0046DC20 (0x00401400), e1->0x0046DC40 and e2->0x004D3710 (0x00401530), then links
 //   0x004F1A60->0x0046DCA0 and 0x004F1A70->0x0046DCB0 (0x00401400). It allocates a TWO-entry parameter container through 0x004F1950 into
 //   0x005BE310 and appends two 16-byte records through 0x004F1A80. The first record's type is NOT a constant getter: it is
-//   0x004F1E20(0x0047CF10(), 7), i.e. the value of the global 0x0054E158 selected by the address 0x005C10F0 that 0x0047CF10 returns, and the
-//   address 0x005C10F0 is also the record's sixth argument. The second record's type is the plain argument-less load 0x004F0FB0 and its sixth
+//   0x004F1E20(0x0047CF10(), 7), i.e. the global 0x0054E158 that 0x004F1E20 loads without reference to its own arguments at all (its whole body
+//   is `mov eax,[0x54E158]; ret`), plus the address 0x005C10F0 that 0x0047CF10 returns, which is the record's sixth argument. The address is NOT
+//   a selector for that load: it is carried by the two argument pushes of 0x004F1E20, which ignores them. The second record's type is the plain
+//   argument-less load 0x004F0FB0 and its sixth
 //   argument is 0. Recorded deltas 0x24 and 0x44. One basic block, no branch, no loop, 15 call sites over 11 distinct callees. There is NO
 //   0x004B8810 script-name tail in this body.
 // Status/limits: TRANSCRIBED; runtime UNOBSERVED. The id slot 0x005BE30C holds image value 0 and is one of the image-zero slots in the
@@ -24,10 +26,11 @@
 //   which is why the image value is only the pre-initialisation state and not the value seen here. The same shape (0x004F1E20 fed by an
 //   address-returning getter and followed by 7) already appears in this lane's accepted 0x00477E30, where the getter is 0x00413DE0 and the
 //   address is 0x0056E228. The sixth argument of 0x004F1A80 is transcribed here: retail's callee reads SIX stack arguments and stores arg6 at
-//   record +0x08 and byte(arg5) at record +0x0C, while the tree's current implementation of 0x004F1A80 declares five and writes arg5 into both
-//   fields. That implementation is above 0x0048FFFF and is not in this lane's scope; this file passes the correct sixth argument (0x005C10F0
-//   for the first record, 0 for the second) and the field will stay wrong until the implementation is corrected. Because the symbol has C
-//   linkage, the extra argument links against the five-parameter definition and is ignored, so nothing here breaks the link. The two deltas
+//   record +0x08 and byte(arg5) at record +0x0C. The tree's implementation of 0x004F1A80 (script/native_4f1a80.cpp, above 0x0048FFFF and outside
+//   this lane's scope) was corrected to that six-argument shape and now stores the two fields separately, so this file passes the sixth argument
+//   (the port address of 0x005C10F0 for the first record, 0 for the second) into an implementation that uses it. Both callers and callee are now
+//   consistent, and because the symbol has C linkage the arity must stay in step across files: an extra argument would silently link against a
+//   shorter definition, which is why the correction had to be made at the callee first. The two deltas
 //   were resolved rather than read: the frame is 0x48 and at each `lea` the two inert pushes plus the getter result are on the stack (12 bytes
 //   for the second, 20 for the first because its type comes from a two-argument 0x004F1E20 call), so raw 0x2C and raw 0x4C are not offsets and
 //   only the resolved values 0x24 and 0x44 are. Documented shape differences, all value-preserving: (1) every getter callee is an argument-less

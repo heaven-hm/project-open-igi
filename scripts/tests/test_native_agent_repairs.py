@@ -33,6 +33,15 @@ class NativeRepairController(unittest.TestCase):
             self.assertEqual(once.call_count,1)
             self.assertFalse(result['verified'])
 
+    def test_startup_completion_requires_explicit_uniform_contract(self):
+        from frida_scoped_capture import startup_completion
+        self.assertIsNone(startup_completion({'0x0048F0C0':{}}))
+        approved=dict(mode='native-return',expected_calls=1,actions='none')
+        self.assertEqual(startup_completion({'0x0048F0C0':{'captureCompletion':approved}}),approved)
+        for value in [dict(approved,expected_calls=True),dict(approved,expected_calls=2),dict(approved,actions='escape')]:
+            with self.assertRaises(ValueError):startup_completion({'0x0048F0C0':{'captureCompletion':value}})
+        with self.assertRaises(ValueError):startup_completion({'a':{'captureCompletion':approved},'b':{}})
+
     def test_typed_generator_requires_exact_opcode_rule_in_both_images(self):
         retail=bytes.fromhex('a18c7c56008b403cc3')
         candidate=bytes.fromhex('a1000050008b403cc3')

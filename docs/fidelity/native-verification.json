@@ -41264,12 +41264,12 @@
           "evidence_sha256": "359fec132d0c41f7f83a553f97b5226d52f170a1ee22a5d4a92eaacdc0db02ec"
         },
         "semantic_review": {
-          "evidence_path": "docs/fidelity/evidence/main-first-native-20261025-sol/semantic-review.json",
-          "evidence_sha256": "096f33bf4257c56a74c40426df6eb3cfb39889cf5a921a5bc14c467d8a4cf738"
+          "evidence_path": "docs/fidelity/evidence/store-command-line-unified-20261025/semantic-review.json",
+          "evidence_sha256": "4eb72d7ee8025568e728f147db8870a2e546358a4538135d482e7561c6838d9d"
         },
         "runtime_contract": {
           "scope": "startup-scalar-store",
-          "probe_sha256": "c761680b5c5883e3b26b2ef791466914353e5b0c9e758f960d95398dad95fea9",
+          "probe_sha256": "d693078ffd742d9bbc8459e2b3aa708ba6a11d10d42e54966f2b8b5b5b24f3f6",
           "required_observables": {
             "inputs": [
               "value",
@@ -41286,7 +41286,13 @@
           "no_arguments": false,
           "no_return": false,
           "no_side_effects": false,
-          "note": "Controlled pre-resume ABI calls only. Arbitrary values are opaque 32-bit words, not claimed valid command-line pointers. Natural WinMain call is separately observed with a different reviewed probe."
+          "note": "One natural WinMain invocation per game is normalized by command-line bytes plus exact argument/store/EAX alias checks and unchanged input/adjacent bytes. The same probe also executes the existing eleven controlled word-copy cases before resume; no new game inputs invented. Capture completes at this native return, not full startup/gameplay.",
+          "actions_sha256": "995a8e42647c4b5989a6995996664fb3ff55f9dff1d63189371028bd43697dd7",
+          "capture_completion": {
+            "mode": "native-return",
+            "expected_calls": 1,
+            "actions": "none"
+          }
         },
         "runtime_tests": {
           "evidence_path": "docs/fidelity/evidence/main-first-native-20261025-sol/controlled-final.json",
@@ -41311,8 +41317,8 @@
             "{implementation_sha256}",
             "--root",
             "{root}",
-            "--out",
-            "/Users/haseeb-mir/Documents/Code/project-open-igi/build/runtime-traces/store-command-line-acceptance-20261025-sol-1/gate-live-pair.json"
+            "--probe",
+            "{root}/scripts/probes/store_command_line.js"
           ],
           "timeout_seconds": 150
         },
@@ -41330,15 +41336,16 @@
           "Author semantic review and independent BN/r2/angr evidence; no independent human/agent critic was available.",
           "The conservative source provenance comment still says STRUCTURALLY_VERIFIED; this is a gate warning. Source bytes were kept identical to the tested build.",
           "No engine source changed, no new game native added, no release attestation or deployment.",
-          "Linked into igi1.exe (14,266,312 bytes); runtime UNOBSERVED."
+          "Linked into igi1.exe (14,266,312 bytes); runtime UNOBSERVED.",
+          "Unified probe validation is pending; historical acceptance below remains bound to its original tested image and probe."
         ],
         "frida_runtime": {
           "evidence_path": "docs/fidelity/evidence/main-first-native-20261025-sol/frida-final.json",
           "evidence_sha256": "67fa19253af86aa4ab2b08d723677fda9174f7785cee892105394fdf687facc3"
         },
         "scope": {
-          "path": "docs/fidelity/scopes/store-command-line-20261025.md",
-          "sha256": "2a5c3dd5ab719cb4e78d353e3148244dca9516670c23557e0b0daf5f23088881"
+          "path": "docs/fidelity/evidence/store-command-line-unified-20261025/scope.md",
+          "sha256": "a8bb452786bc6643f914298e4c8fc4cc652ac14dbddf1341c3b1a91a9ba9cca3"
         },
         "acceptance": {
           "evidence_path": "docs/fidelity/evidence/main-first-native-20261025-sol/acceptance.json",
@@ -41351,6 +41358,10 @@
         "strict_focus_gate": {
           "evidence_path": "docs/fidelity/evidence/main-first-native-20261025-sol/accepted/gate.json",
           "evidence_sha256": "3f6b2b8a27d1291eb924fe6e54aac29962b0f1479f65214b8b6b99dce28a6993"
+        },
+        "runtime_probe": {
+          "path": "scripts/probes/store_command_line.js",
+          "sha256": "d693078ffd742d9bbc8459e2b3aa708ba6a11d10d42e54966f2b8b5b5b24f3f6"
         }
       }
     },

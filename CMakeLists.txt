@@ -589,8 +589,11 @@ add_executable(igi WIN32
     engine/src/retail/render/native_491ea0.cpp
     engine/src/retail/script/native_4b88f0.cpp
     engine/src/retail/sys/native_4f1cb0.cpp
-    # Held out of the build until retail 0x004AF9D0, 0x0045E060 and 0x0047CF10 are transcribed.
-    # core/native_46db40.cpp calls Sys_GetGlobalPointer_47CF10, which has no implementation yet.
+    # Held out of the build until retail 0x004AF9D0 and 0x0045E060 are transcribed. The full chain, measured:
+    #   native_46db40.cpp -> Sys_GetGlobalPointer_47CF10 (core/native_47cf10.cpp, transcribed)
+    #   core/native_47cf10.cpp -> g_5c10f0, whose single definition is in core/native_47cf20.cpp (held below)
+    #   core/native_47cf20.cpp -> Sys_NewListRecord_4F1DB0 -> 0x004AF9D0 (in progress)
+    # native_46d420.cpp and core/native_47cf10.cpp sit on the same chain and are not in the build target yet.
     # Each file below is a finished transcription; they are excluded only because a callee
     # they call by name has no implementation, so including them breaks the link:
     #   0x004AF9D0 (1190 bytes, untranscribed) -> sys/native_4f1db0.cpp
@@ -601,7 +604,7 @@ add_executable(igi WIN32
     #   0x0045E060 (858 bytes, untranscribed) -> core/native_412420.cpp
     # 413b20/413b30/413b40 stay in the build only because their fix (reading g_5391ac
     # instead of a private byte) is not committable until 413df0 links. Remove this block
-    # in the commit that lands 0x004AF9D0 and 0x0045E060.
+    # in the commit that lands 0x004AF9D0 and 0x0045E060, which releases this entire chain.
     engine/src/retail/core/native_46e370.cpp
     engine/src/retail/sys/native_4aff90.cpp
     engine/src/retail/sys/native_4affb0.cpp
