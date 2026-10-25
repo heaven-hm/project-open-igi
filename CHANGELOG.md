@@ -2146,3 +2146,48 @@ without asserting a calling convention. **Not resolved.** The settling evidence
 is a census of transcribed handler bodies that read a second argument - if
 `0x0051BAA0` is the only one, it is a single mismatched link; if many, the
 typedef is wrong. Do not widen `FrameHandler` on one sample.
+
+## A byte-level E8 scan can invent a call, not only miss one
+
+Established by flow-analyst on `0x0041E690`. At `0x0041E6F9` the instruction is
+`68 C0 E8 41 00` = `push 0x0041E8C0`, the event-0 handler. The **second byte of
+the immediate is 0xE8**, so a byte-level scanner reads it as a call opcode and
+manufactures a callee at `0x0041E6F9 + 5 + rel32` = `0x00ABE73F` - above the
+image, non-existent.
+
+The contamination is **systematic and self-inflicted by this family of natives**:
+a registrar's body is full of `push $0x0042xxxx` / `push $0x0041xxxx` handler
+immediates, so every handler address whose second byte is `0xE8` manufactures a
+call that does not exist. Any byte-scan callee census over a registrar
+over-counts, and the over-count is proportional to how many handler addresses
+contain `0xE8`.
+
+This is the mirror of the standing rule: an absolute-byte scan can never *find* a
+call (the displacement is relative), and it can also *invent* one. Both failures
+come from treating bytes as instructions. **Decode at instruction boundaries.**
+
+Verified that the guard's own coverage figures are unaffected: `pd` from
+`0x00402930` to its `ret` gives 314 calls / 308 distinct targets with **zero
+targets above the end of `.text`**, so the 132-of-308 figure stands. The
+contamination is a property of byte scans, not of the measurement I used.
+
+## The stack-probe threshold is bracketed between 3384 and 5116 bytes
+
+Six probed-or-not outcomes now track frame size monotonically:
+0xF8 no, 0x1A4 no, 0x1A8 no, 0xD38 (3384) no, 0x13FC (5116) yes, 0x2244 yes.
+The two nearest observations sit either side of 4096, the page size the helper
+tests with `cmp eax,0x1000`. Four negatives against two positives is what makes
+this a relation rather than a coincidence.
+
+## A pattern-derived callee name is a guess
+
+analyst declared `Sys_GetGlobal8_4D14D0` for `0x004D14D0` because its siblings
+were named that way. The routine was already transcribed as
+`Render_GetByte_4D14D0` in `render/native_4d14d0.cpp`, so the invented name
+resolved to nothing and the file came back NOT LINKABLE.
+
+This is the mirror of the two-variable trap. The known one is **defining** an
+address someone else owns, which creates a silent second copy. This one is
+**declaring** an address someone else owns under a name you invented. Both are
+caught by the same discipline: grep the address in the tree before naming a
+callee, exactly as you grep before defining a global.

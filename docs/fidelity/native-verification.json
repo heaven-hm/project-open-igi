@@ -28993,6 +28993,42 @@
       }
     },
     {
+      "address": "0x0041E690",
+      "name": "Task_DefineListBox_41E690",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_41e690.cpp",
+        "sha256": "abda814ffcbb1530f5742e6fa8fc76573a8a1d9eaca65c676bc966952aae41ce",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/0041E690-ListBox_Init 2.cpp",
+        "sha256": "3349560fff37f8203c7256bdaf9873a9d92a1850ef166457716ae6d21cfd93a8",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x0041E690",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x0041E690-binaryninja.json",
+          "evidence_sha256": "5f8958c595aefa64735b01f2d69ae12f25a67d61a84f395b8ee6f1334b20d4d7"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x0041E690",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x0041E690-radare2.json",
+          "evidence_sha256": "eb3443f6c42a0c5e8ef98ae44fb8d3ba95df02f5bac61df80d9c3d04630f8151"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0
+      }
+    },
+    {
       "address": "0x0041f2d0",
       "name": "ListBox_AddItem",
       "implementation": {
