@@ -1,5 +1,59 @@
 ## Unreleased
 
+### The trampoline family: `0x00508FA0` is a separate entry, and the pair is byte-justified
+
+handler-abi-worker resolved the duplicate question from the provenance blocks, and I
+confirmed it from the raw bytes:
+
+```
+0x00508F80  e84bf40000  call 0x5183d0
+0x00508F85  e916000000  jmp  0x508fa0     <- 10 bytes total, then NOP padding
+0x00508F90  e8bb060000  call 0x509650
+0x00508F95  e9b6f50000  jmp  0x518550     <- a SECOND trampoline, same shape
+```
+
+`native_508f80.cpp` claims `0x00508F80`-`0x00508F89`, **10 bytes, 2 instructions** -
+byte-accurate. `native_508fa0.cpp` claims `0x00508FA0`-`0x00509292`, 755 bytes.
+`afi`'s 787 for `0x00508F80` is the **merge of the two plus padding**, not
+containment: 10 + 755 + 22 = 787. **Neither file is a duplicate. Do not withdraw
+either.** My containment reading was wrong and the extent field was the wrong
+instrument, as suspected.
+
+**This is a family, not an isolated case.** `0x00508F90` is a second two-instruction
+trampoline (`call` then `jmp` into a body elsewhere), which is consistent with the
+unbuilt `5092a0`/`509440`/`509520`/`509610` files. **Every member needs the guard's
+treatment: resolve each `jmp` target rather than reading an extent field.** A count
+of "missing" for this family is not a count of missing routines until each `jmp` is
+resolved.
+
+### The guard is blocked at depth 2, not merely unbuilt
+
+Both trampoline files are on disk and neither can enter the build:
+
+- `native_508f80.cpp`: undefined `AIGraph_InitChain_5183D0` (`0x005183D0`, no file)
+  and `AIGraph_Register_508FA0` (the sibling, itself unbuilt).
+- `native_508fa0.cpp`: undefined `AIGraph_Handler_509570`, `AIGraph_Handler_509610`,
+  `GraphStream_RegisterNode_4F9DF0`.
+
+So the corrected chain is: `0x00402930` (guard) -> `0x00508F80` (file exists, **cannot
+be built**) -> `0x005183D0` (**no implementation anywhere**). "Unbuilt rather than
+missing" is right about the file and still leaves the guard blocked, because the file
+it needs is itself blocked. `0x005183D0` remains the one real hole and stays
+unassigned, recorded as blocked with its callee list.
+
+### A zero from a pattern that cannot match, third instance - this time in tooling
+
+handler-abi-worker searched for a `TaskType_Register` site pushing `0x00508FA0` by
+grepping the image for the absolute immediate `a0 8f 50 00`, and found nothing.
+**The search could not have succeeded**: `jmp 0x508fa0` is encoded `e9` + a relative
+displacement, so no absolute literal exists anywhere in `.text`. The target is
+established by resolving the relative branch, not by finding the address as data.
+
+Reported as a wrong search rather than a null result, which is the distinction that
+matters - the same shape as a count of zero from an unverified pattern.
+
+## Unreleased
+
 ### My guard figure was wrong: 28 missing, not 32 - and "claimed" is not "built"
 
 I have reported "122 of 154 in build, 32 missing" for several ticks. Re-measured
