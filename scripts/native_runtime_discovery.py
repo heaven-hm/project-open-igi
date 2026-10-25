@@ -157,6 +157,16 @@ rpc.exports={hook(address,layout){
         symbols = subprocess.check_output(['i686-w64-mingw32-nm','--defined-only',str(candidate)],text=True,timeout=30)
         symbols = {v[2]:int(v[0],16) for line in symbols.splitlines() if len(v:=line.split())==3}
         symbol = record.get('verification',{}).get('candidate_symbol','_'+record['name'])
+        if symbol not in symbols:
+            # The candidate is i386 with the retail calling convention, so a __stdcall native is
+            # emitted decorated (`_WinMain@16`) while the manifest name is undecorated. Accept only
+            # the decorated form of the same base name - an exact-base match, never a fuzzy or
+            # nearest-name search - so a genuinely missing symbol still blocks.
+            base = symbol[1:] if symbol.startswith('_') else symbol
+            decorated = sorted(name for name in symbols
+                               if name.startswith('_' + base + '@') and name[len(base) + 2:].isdigit())
+            if len(decorated) == 1:
+                symbol = decorated[0]
         if symbol not in symbols: raise ValueError('candidate native symbol missing: '+symbol)
         generated=getter_probe(retail,candidate,int(va,16),symbols[symbol])
         if not generated:
