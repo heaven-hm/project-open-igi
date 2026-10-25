@@ -133,6 +133,10 @@ void NATIVE_DECL BackgroundFX_EmitAxisRuns_419330(void* runs, void* matrix)
 
             // 0x00419458: `mov 0x00A84A54,%eax`; 0x0041945D: `lea 0x30(%esp),%edx`; 0x00419471: `push %edx`;
             // 0x0041948E: `call *0x00A94E84(,%eax,4)`.
+            // Namespace note: retail's flat global 0x00A94E84 is declared inside `namespace igi::retail::dynobj` as an
+            // extern "C" object (include/igi/retail/dynobj/local_models_mef.hpp), so in C++ it has to be written
+            // `igi::retail::dynobj::g_a94e84`; `::g_a94e84` does not name that object and does not compile. The flat
+            // retail symbol and the namespace-scoped C++ declaration are the same object - do not drop the qualification.
             const std::uint32_t backend = ::g_a84a54;
             reinterpret_cast<igi::retail::dynobj::ModelBackendInitFn>(igi::retail::dynobj::g_a94e84[backend])(
                 reinterpret_cast<void**>(&primitive));
@@ -172,6 +176,7 @@ void NATIVE_DECL BackgroundFX_EmitAxisRuns_419330(void* runs, void* matrix)
 
             // 0x004194E7: `mov 0x00A84A54,%eax`; 0x004194EC: `lea 0x30(%esp),%edx`; 0x00419500: `push %edx`;
             // 0x0041951D: `call *0x00A94E84(,%eax,4)`.
+            // Same namespace qualification as the 0x0041948E dispatch above: `igi::retail::dynobj::g_a94e84`, never `::g_a94e84`.
             const std::uint32_t backend = ::g_a84a54;
             reinterpret_cast<igi::retail::dynobj::ModelBackendInitFn>(igi::retail::dynobj::g_a94e84[backend])(
                 reinterpret_cast<void**>(&primitive));

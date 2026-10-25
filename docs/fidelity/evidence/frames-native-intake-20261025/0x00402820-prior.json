@@ -1,0 +1,19 @@
+{
+  "address": "0x00402820",
+  "name": "FramesSet",
+  "implementation": {
+    "path": "scripts/GameNatives/00402820-Frames_Set.cpp",
+    "sha256": "9bb4f136f8c8ec19347d9ef243ac56205f149d03a8362b8511c92cc42247da68"
+  },
+  "verification": {
+    "status": "VERIFIED",
+    "evidence": [
+      "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
+      "scripts/GameNatives"
+    ],
+    "limitations": [
+      "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
+      "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
+    ]
+  }
+}

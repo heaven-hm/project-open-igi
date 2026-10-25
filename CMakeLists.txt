@@ -80,6 +80,7 @@ add_executable(igi WIN32
     engine/src/retail/core/native_419860.cpp
     engine/src/retail/core/native_419950.cpp
     engine/src/retail/core/native_00498480.cpp
+    engine/src/retail/core/native_0046df10.cpp
     engine/src/retail/render/native_00407d60.cpp
     engine/src/retail/audio/native_004ebc60.cpp
     engine/src/retail/core/native_00530a80.cpp
@@ -346,6 +347,11 @@ add_executable(igi WIN32
     engine/src/retail/core/flow.cpp
     engine/src/retail/core/fpu_state.cpp
     engine/src/retail/core/frame_natives.cpp
+    engine/src/retail/core/native_402820.cpp
+    engine/src/retail/core/native_402870.cpp
+    engine/src/retail/sys/native_490370.cpp
+    engine/src/retail/core/native_4e6030.cpp
+    engine/src/retail/render/native_495cc0.cpp
     engine/src/retail/core/game_flow.cpp
     engine/src/retail/core/native_0048f0e0.cpp
     engine/src/retail/core/native_0048f0f0.cpp

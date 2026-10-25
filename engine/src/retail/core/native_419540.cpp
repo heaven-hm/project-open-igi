@@ -102,6 +102,10 @@ void NATIVE_DECL BackgroundFX_EmitSegments_419540(void* list, void* matrix)
 
             // 0x004195B8: `mov 0x00A84A54,%edx`; 0x004195BE: `lea 0x10(%esp),%ecx`; 0x004195C2: `push %ecx`;
             // 0x00419609: `call *0x00A94E84(,%edx,4)` - the render-backend call, argument = the descriptor.
+            // Namespace note: retail's flat global 0x00A94E84 is declared inside `namespace igi::retail::dynobj` as an
+            // extern "C" object (include/igi/retail/dynobj/local_models_mef.hpp), so the C++ spelling is
+            // `igi::retail::dynobj::g_a94e84`; `::g_a94e84` does not name that object and does not compile - do not
+            // "fix" the qualification back to the flat name.
             const std::uint32_t backend = ::g_a84a54;
             reinterpret_cast<igi::retail::dynobj::ModelBackendInitFn>(igi::retail::dynobj::g_a94e84[backend])(
                 reinterpret_cast<void**>(&primitive));

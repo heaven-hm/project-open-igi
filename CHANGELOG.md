@@ -11,6 +11,18 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - Second startup wave: five registered natives and the knife-stab task type
+
+- `igi1.exe` 14,249,775 -> **14,251,830** bytes, green. Six natives added to the link: the other lane's `0x00402820`, `0x00402870`,
+  `0x00490370`, `0x004E6030`, `0x00495CC0` (stable across two checks before integration, one VA per file, provenance present, no duplicate VAs),
+  and `0x0046DF10 Task_DefineKnifeStab` from the startup-chain worker.
+- Integration fix worth recording: `0x0046DF10` declared `Script_QHashNodeRegister` without `extern "C"` while the transcription defines it
+  `extern "C"`, so the link failed with `undefined reference to Script_QHashNodeRegister(void*, void*)`. Fixed at the declaration; the
+  definition was correct. A companion-signature check at write time would have caught this before the shared build.
+- `0x0046DF10` also shows why callee bodies beat call-site shapes: the `push 0x0046DF70` before a getter that ignores its stack is the
+  pre-pushed third argument of the later `QTask_LinkQTaskEventHandler`, and both `add esp,0x14` cleanups independently measure five dwords.
+- All six are `BUILD_VERIFIED` with `runtime UNOBSERVED` recorded; none of them is reachable from startup yet because `0x00402930` still aborts.
+
 ### 2026-10-25 - The DX gate is real now, and a paired runtime check caught a GUID bug static reading missed
 
 - `0x00498480 Display_ProbeDirectXVersion` is wired into WinMain at its retail site (`0x0048F6E2`) with the retail `< 0x700` requirement path
