@@ -2664,3 +2664,40 @@ is the chain's only loop and its walk is **asymmetric** - it tests the head's fo
 link before examining the head, so the tail is never examined and a one-node list is
 skipped entirely. A conventional `for (node = head; node; node = node->next)` would
 examine both and be a **behaviour change, not a cleanup.**
+
+## THE CRITICAL PATH TO VISIBILITY, MEASURED: TWO REGISTRATION SEQUENCES, ~300 CALLS
+
+The goal is a playable Level 1. Everything visible - window, terrain, objects, player,
+camera, movement - is behind the startup guard `0x00402930`, which is a fail-closed stub
+at `class_registration.cpp:42`. Its dependency closure was never sized. It is now.
+
+**`0x005183D0` is not a function.** `afi` returns nothing for it, and that is correct:
+its first instruction is `call 0x00530270` with no prologue, and it is a **sequence of
+calls ending in a tail `jmp 0x00519710`**, exactly the shape of the guard itself.
+
+Measured over its extent `0x005183D0`-`0x0051853D`:
+- **164 instructions: 163 `call`s and one tail `jmp`.**
+- **148 distinct call targets.**
+
+And it is the symbol `native_508f80.cpp` is blocked on - `AIGraph_InitChain_5183D0`.
+So the path is:
+
+    guard 0x00402930 (155 calls, 1 tail jmp)
+      -> 0x00508F80  (blocked on AIGraph_InitChain_5183D0 AND AIGraph_Register_508FA0)
+        -> 0x005183D0  (163 calls, 148 distinct targets, not transcribed)
+
+**This is the honest size of the remaining distance to anything on screen.** The
+earlier framing - "one real hole at `0x005183D0`" - described the *address* correctly
+and the *work* wrongly: it is not one function, it is a second registration sequence of
+148 distinct targets, most of which have no implementation file. The 150-of-308 guard
+targets without a file are the same population seen from the other end.
+
+**What this does not change:** every native landed today is real, linkable and counted,
+and the transcription method is sound. **What it does change:** the MVP cannot be
+reached by finishing the current band. The next increment must be chosen by dependency
+closure from the guard, not by adjacency in the address space.
+
+**A caution recorded with it:** `0x005183D0`'s extent must be bounded by the `jmp` at
+`0x0051853D` and the nops after it, not by "the first `ret`" - an unbounded `pd` walks
+into `0x00518869`'s `ret` and silently absorbs another routine, which is the trap
+already recorded in the `0x0042ACC0` recon.
