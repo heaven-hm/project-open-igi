@@ -11,6 +11,18 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - Startup guard's own gap figure corrected: 146 absent callees, not 134
+
+- Re-measured `0x00402930`'s callee closure against the tree rather than against the manifest's candidate paths: of **154 distinct callees, 8 have
+  an engine implementation** (`0x00401FC0`, `0x00415530`, `0x00419760`, `0x00424B90`, `0x0042DAC0`, `0x0042FE40`, `0x00489560`, `0x004C1780`) and
+  **146 do not**. The fail-closed guard text and the provenance block said 134, which understated the remaining work by a dozen natives; both now
+  carry the measured figure and the old one is marked retracted.
+- The same provenance line gave the function extent as `0x00402930..0x00402A40`. The real extent is `0x00402930..0x00402C3C` (780 bytes, 156
+  five-byte instructions: 155 calls plus the tail `jmp 0x004CEF30` at `0x00402C37`), matching the ordered inventory in
+  `docs/fidelity/evidence/startup-402930-call-sequence.md`.
+- Why the numbers drifted: earlier counts used the manifest's `implementation.path`, which for many records points at an external `scripts/GameNatives`
+  candidate rather than engine code. A candidate file is not a transcription. Measured here as "does an engine source implement this VA".
+
 ### 2026-10-25 - Render-backend table 0x00A94E84 gains external C linkage
 
 - `engine/src/retail/dynobj/local_models_mef.cpp` defined the 16-entry backend init table as internal-linkage storage in an anonymous namespace, so a
