@@ -2735,3 +2735,46 @@ one tail `jmp`), so 155 call sites is consistent with the body. I cannot current
 reproduce 308 from the guard's own bytes, and I am not going to assert which figure is
 right. What is certain is that the guard's direct callees number in the low hundreds,
 not the thousands, and that 143 of them already have files.
+
+## MY GUARD COVERAGE FIGURE WAS MEASURED OVER A TRUNCATED DUMP
+
+I reported the startup guard `0x00402930` as 156 instructions, 155 call sites and
+**154 distinct direct targets**, with **143 of 154 having a file** and 11 missing. I
+concluded "the guard's first level is 11 files away, not 150".
+
+**Every one of those numbers was wrong, and they were wrong because I chose the bound
+myself.** I ran `pd 156 @ 0x00402930` - a 156-line dump whose length I picked - and then
+reported the call census of that window as the routine's call census. The guard's real
+extent is **1724 bytes, 402 instructions to the `ret` at `0x00402FEB`.**
+
+Measured over the true extent:
+
+| | truncated (`pd 156`) | true extent (`pd 402`) |
+|---|---|---|
+| instructions | 156 | **402** |
+| call sites | 155 | **314** |
+| distinct direct targets | 154 | **308** |
+| HAVE a file | 143 | **179** |
+| NO file | 11 | **129** |
+
+**So "308" - the figure I had explicitly said I could not reproduce and would not
+assert - was correct all along, and the measurement I offered in its place was an
+artifact of my own dump length.** I recorded the discrepancy honestly rather than
+smoothing it, which is the only reason it was resolvable: I had written "I cannot
+reproduce 308 from the guard's own bytes" when in fact I could not reproduce it from
+*156 lines* of the guard's bytes. **The negative was about my window, not about the
+routine.**
+
+**The corrected picture is the pessimistic one.** 129 of the guard's 308 direct callees
+have no implementation file, and the missing set now spans `0x0040xxxx` through
+`0x004Axxxx` - an entirely different scale from the eleven I listed. **"The guard's
+first level is 11 files away" was wrong and I stated it to the user; it is 129 files
+away, before counting `0x005183D0`'s 148 transitive targets.**
+
+**This is the fifth time today a bound I chose became a "measurement".** The others:
+`head -12` read as exhaustive; `tail -1` + last-hex-run read as the whole symbol list;
+a regex over a comment read as evidence about the file; a `pd` window read as an
+extent. **In every case the output was true and the boundary was mine.** The guard
+against it is to derive the extent from the routine (`afi` size, or the `ret` plus its
+padding) and never from a number chosen for convenience - and then to say which one was
+used.
