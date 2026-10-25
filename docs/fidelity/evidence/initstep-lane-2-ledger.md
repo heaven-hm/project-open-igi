@@ -59,3 +59,88 @@ UNOBSERVED.** Nothing here has runtime evidence.
 ### Open frontier from this unit
 
 0x004E0890, 0x004879E0, 0x00487E20, 0x00487D90 are untranscribed handler bodies (address-taken only).
+
+---
+
+## ⚠ NEW TRAP — `call_index()` is NOT a sound called-vs-address-taken oracle
+
+Found while measuring **0x51B400**. `scripts/native_fidelity_audit.py` `call_index()` decodes the
+whole `.text` in **one linear capstone sweep**. That sweep **desyncs**, and addresses inside real
+code stop being instruction boundaries in it.
+
+Measured on the 0x51B400 body:
+
+| site | retail instruction | boundary in the `call_index()` sweep? |
+|---|---|---|
+| 0x0051B444 | `call 0x004EC060` | **no** |
+| 0x0051B45F | `call 0x004EC050` | **no** |
+| 0x0051B47A | `call 0x004EC040` | **no** |
+| 0x0051B452 | `call 0x00401400` | **no** (site missed; target found from other sites) |
+
+Consequence: `call_index()` reports **0x004EC040 / 0x004EC050 / 0x004EC060 as address-taken-only
+when they are in fact called**. That is a **false negative** — the dangerous direction, because a
+real call edge misread as "address-taken only" gets a cast integer and the link edge is silently
+hidden. The method note's trap #2 says "use `call_index()`, never a raw `E8` scan"; that is still
+right about *false positives*, but `call_index()` alone is not sufficient.
+
+### The sound procedure
+
+1. **`raw_e8_hits(A) == 0` is CONCLUSIVE that A is address-taken only.** A real call is an `E8`
+   byte, so if no `E8` byte anywhere computes target A, A is never called. (A raw scan over-reports
+   *targets*, but over-reporting cannot hide a real call.)
+2. **`raw_e8_hits(A) > 0`** means "possibly called"; confirm by decoding at real boundaries.
+
+For step 2 a **resync-capable sweep** was used (`/tmp/is2.py`, analysis-only, nothing added to the
+tree): candidate entries = every raw `E8`/`E9` target plus every VA named by a provenance line; the
+linear sweep **discards any instruction that spans a candidate entry and resumes at that entry**.
+This yields **3251 distinct call targets vs 1729 from `call_index()`** — 1522 targets the old index
+misses.
+
+**Validation:** the resyncing index reproduces all eleven previously-landed called/address-taken
+conclusions exactly — 0x00508E00/0x00508E30/0x00508E40/0x0052CAD0/0x0052CAF0/0x00503DF0/
+0x00503F20/0x00504250/0x004D9970/0x004EDD20 address-taken only (**0 raw E8 hits each**), and
+0x004D3710 called (13 raw hits). So the six landed units are unaffected; only units measured with
+the old index alone are at risk.
+
+**Recommendation to the Lead:** `initstep-transcription-method.md` §2 should be amended — the
+`raw_e8_hits == 0` test is the conclusive one, and `call_index()` is a fast positive filter, not a
+decision procedure.
+
+---
+
+## 0x51B400 — `AnimSound_Open` (candidate name) — 45 instructions
+
+- **File:** `engine/src/retail/core/native_51b400.cpp`
+- **Extent:** 0x0051B400-0x0051B4A6, 167 bytes (0xA7). ndisasm **45** instructions, capstone 45,
+  byte accounting **closes** (45 over all 167 bytes). List says 45 — agrees. `ret` at 0x0051B4A6.
+- **Compile:** exit **0**, **0 warnings**.
+- **Object shape:** 11 `E8` calls + 1 `ret`, 0 `jmp` — matches retail's 11 calls + 1 `ret`.
+- **Linkable:** **NOT LINKABLE** — 3 undefined in tree: `Sub_4EC040`, `Sub_4EC050`, `Sub_4EC060`.
+  Measured against `build-win32-no-verify-gate/CMakeFiles/igi.dir/objects.a`.
+- **Undefined-symbol names (9):** `AnimSound_LoadParameters`, `QTask_GetCurrentType`,
+  `QTask_LinkQTaskEventHandler`, `QTask_LinkQTaskEventHandlerNoContextFn`, `Script_QHashNodeRegister`,
+  `Sub_4EC040`, `Sub_4EC050`, `Sub_4EC060`, `TaskType_Register`. Only the three `Sub_4EC0xx` are
+  undefined *in the tree*; the other six are defined in the archive.
+- **Manifest extractor:** `provenance_va` → `0x51b400`; `candidate_symbols` → `['AIGraph_InitStep_51B400']`.
+
+### Findings worth keeping
+
+1. **Stack accounting closes at 22 pushes / 22 released.** `add esp,0x2C` (0x51B43C) = 11;
+   `add esp,0xC` at 0x51B457 and 0x51B472 = 3 each; the final `add esp,0x14` (0x51B4A3) = 5, and it
+   **folds the third link's three pushes together with the two pushes of 0x004B8810** — there is no
+   separate cleanup after the third 0x00401400 call. 11+3+3+5 = 22.
+2. **0x004C1780 (`AnimSound_LoadParameters`) is both a handler and a real call edge.** It is pushed
+   as a handler at 0x51B416 and 0x51B42F *and* called from 162 sites, so it is **declared and
+   referenced as a symbol**, not a cast integer — same treatment as `QTask_NoOpHandler` 0x004D3710
+   in `core/native_508d70.cpp`.
+3. **The 0x0051B4B0 / 0x0051B4E0 / 0x0051B4F0 handlers have zero raw `E8` hits** → conclusively
+   address-taken only → cast integers, deliberately undeclared.
+4. **The three `0x004EC0xx` are called and NOT transcribed**, so they are declared and reported
+   undefined. They are trivial 6-byte `mov al,[global]; ret` getters (0x004EC060 → 0x0054DB82,
+   0x004EC050 → 0x0054DB81, 0x004EC040 → 0x0054DB80). **Transcribing those three 6-byte natives
+   would make this unit linkable** — flagged to the Lead, not done because they are outside my 50.
+
+### Open frontier from this unit
+
+0x0051B4B0, 0x0051B4E0, 0x0051B4F0 (address-taken only, untranscribed);
+0x004EC040, 0x004EC050, 0x004EC060 (called, untranscribed, 6 bytes each).
