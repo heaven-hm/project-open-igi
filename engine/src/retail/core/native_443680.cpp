@@ -1,5 +1,4 @@
-// Native: Task_DefineTerminal (behavior-derived placeholder name from the byte-identical name literal this body registers; retail symbol unknown);
-//   retail VA 0x00443680-0x00443830.
+// Native: Task_DefineTerminal (behavior-derived placeholder name from the byte-identical name literal this body registers; retail symbol unknown); retail VA 0x00443680-0x00443830.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; 433 bytes, 1 block, 118 instructions.
 // Tools/evidence: radare2 6.2.0 af/afbj/pdf with bin.relocs.apply over the exact image - 1 block, 118 instructions, 433 bytes, 0 edges, i.e. the body
 //   is straight-line with no branch of any kind (established before the body was written). The objdump listing build/retail-dis.txt was read for the

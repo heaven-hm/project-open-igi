@@ -1,5 +1,4 @@
-// Native: Sys_GetGlobalPointer_47CF10 (address-suffixed placeholder name; the retail symbol is unknown and the name is the one the two existing
-//   callers in this tree already declare, so the C symbol matches theirs); retail VA 0x0047CF10-0x0047CF15.
+// Native: Sys_GetGlobalPointer_47CF10 (address-suffixed placeholder name; the retail symbol is unknown and the name is the one the two existing callers in this tree already declare, so the C symbol matches theirs); retail VA 0x0047CF10-0x0047CF15.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; 6 bytes, 1 block, 2 instructions.
 // Tools/evidence: radare2 6.2.0 `af`/`afbj` at 0x0047CF10 with bin.relocs.apply over the exact image reports one function of size 6 with 2
 //   instructions (0x0047CF10 and 0x0047CF15) and no edges, and `pd 8 @ 0x0047CF10` prints exactly `mov eax,0x5C10F0` / `ret` followed by ten

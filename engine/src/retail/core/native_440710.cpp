@@ -1,5 +1,4 @@
-// Native: Task_DefineAlarmControl (behavior-derived placeholder name from the byte-identical name literal; retail symbol unknown); retail VA
-//   0x00440710-0x0044083B.
+// Native: Task_DefineAlarmControl (behavior-derived placeholder name from the byte-identical name literal; retail symbol unknown); retail VA 0x00440710-0x0044083B.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; 300 bytes, 1 block, 83 instructions.
 // Tools/evidence: radare2 6.2.0 af/afbj/pdf with bin.relocs.apply over the exact image (1 block / 83 instructions / 300 bytes / 0 edges) plus the
 //   objdump listing build/retail-dis.txt for the same extent, instruction by instruction (the ret is at 0x0044083B and 0x00440840 is the next

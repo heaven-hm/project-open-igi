@@ -1,5 +1,4 @@
-// Native: Task_DefineHumanPlayerInput (behavior-derived placeholder name from the byte-identical name literal this body registers; retail symbol unknown);
-//   retail VA 0x0045DB70-0x0045DCA4.
+// Native: Task_DefineHumanPlayerInput (behavior-derived placeholder name from the byte-identical name literal this body registers; retail symbol unknown); retail VA 0x0045DB70-0x0045DCA4.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; 309 bytes (0x135), 1 block, 0 edges, 90
 //   instructions, no branch and no loop; the extent is closed by the `ret` at 0x0045DCA4, followed by the eleven-byte nop pad 0x0045DCA5-0x0045DCAF
 //   and the next function (the event-0 handler 0x0045DCB0).

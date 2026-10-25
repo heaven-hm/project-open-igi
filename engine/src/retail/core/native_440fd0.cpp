@@ -1,5 +1,4 @@
-// Native: Task_DefineSCameraTypes (behavior-derived placeholder name from the three task-type name literals this body registers; retail symbol
-//   unknown); retail VA 0x00440FD0-0x004415BA.
+// Native: Task_DefineSCameraTypes (behavior-derived placeholder name from the three task-type name literals this body registers; retail symbol unknown); retail VA 0x00440FD0-0x004415BA.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; 1515 bytes, 1 block, 437 instructions.
 // Tools/evidence: radare2 6.2.0 af/afbj/pdf with bin.relocs.apply over the exact image - 1 block, 437 instructions, 1515 bytes, 0 edges, i.e. the
 //   body is straight-line and contains NO branch of any kind (this was established before the body was written, and it is why the transcription is a

@@ -1,5 +1,4 @@
-// Native: AiDetection_RegisterTaskMask_489640 (behavior-derived placeholder name from the error string this routine can raise; retail symbol unknown);
-//   retail VA 0x00489640-0x0048967D.
+// Native: AiDetection_RegisterTaskMask_489640 (behavior-derived placeholder name from the error string this routine can raise; retail symbol unknown); retail VA 0x00489640-0x0048967D.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; 62 bytes, 5 blocks, 16 instructions.
 // Tools/evidence: radare2 6.2.0 af/afbj/pdf with bin.relocs.apply over the exact image (5 blocks / 16 instructions / 62 bytes) plus the objdump listing
 //   build/retail-dis.txt for the same extent. `px 64` at 0x005C8AC4 shows the image bytes there are ZERO - the 0x0181 sentinels this routine searches

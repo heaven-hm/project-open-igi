@@ -1,5 +1,4 @@
-// Native: Task_DefinePatrolPath (behavior-derived placeholder name from the byte-identical name literal this body registers; retail symbol unknown);
-//   retail VA 0x00453550-0x00453626.
+// Native: Task_DefinePatrolPath (behavior-derived placeholder name from the byte-identical name literal this body registers; retail symbol unknown); retail VA 0x00453550-0x00453626.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; 215 bytes (0xD7), 4 blocks, 4 edges, 68
 //   listing instructions of which 14 are the alignment nop pad 0x004535F2-0x004535FF between the prologue and the loop label (54 real).
 // Tools/evidence: radare2 6.2.0 af/afbj with bin.relocs.apply over the exact image - block 0x00453550 (162 B, 37 instrs) -> 0x00453600, block

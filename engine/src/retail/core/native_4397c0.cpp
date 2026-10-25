@@ -1,5 +1,4 @@
-// Native: Task_DefineAlarmLightAndReflector (behavior-derived placeholder name: this ONE body registers BOTH the "AlarmLight" and the
-//   "AlarmLightReflector" task types, and the retail symbol is unknown); retail VA 0x004397C0-0x00439A4C.
+// Native: Task_DefineAlarmLightAndReflector (behavior-derived placeholder name: this ONE body registers BOTH the "AlarmLight" and the "AlarmLightReflector" task types, and the retail symbol is unknown); retail VA 0x004397C0-0x00439A4C.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; 653 bytes, 5 basic blocks, 185 instructions.
 // Tools/evidence: radare2 6.2.0 af/afbj/pdf with bin.relocs.apply over the exact image - 5 blocks: 0x004397C0-0x0043995B (114 instrs, falls through
 //   to the first loop), 0x0043995C-0x00439980 (14 instrs, jumps back to itself, exits to 0x00439981), 0x00439981-0x0043998C (2 instrs), then

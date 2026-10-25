@@ -1,5 +1,4 @@
-// Native: Task_DefineAmbientArea (behavior-derived placeholder name from the byte-identical name literal this body registers; retail symbol unknown);
-//   retail VA 0x0044C130-0x0044C2B7.
+// Native: Task_DefineAmbientArea (behavior-derived placeholder name from the byte-identical name literal this body registers; retail symbol unknown); retail VA 0x0044C130-0x0044C2B7.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; 392 bytes (0x188), 1 block,
 //   118 instructions.
 // Tools/evidence: radare2 6.2.0 af/afbj/pdf with bin.relocs.apply over the exact image - 1 block, 118 instructions, 0 edges (straight-line; the

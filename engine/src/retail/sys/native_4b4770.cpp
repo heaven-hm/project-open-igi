@@ -1,5 +1,4 @@
-// Native: Sys_RandomNext_4B4770 (behavior-derived placeholder name: it advances a three-dword generator state and returns the next scaled value;
-//   retail symbol unknown); retail VA 0x004B4770-0x004B47B6.
+// Native: Sys_RandomNext_4B4770 (behavior-derived placeholder name: it advances a three-dword generator state and returns the next scaled value; retail symbol unknown); retail VA 0x004B4770-0x004B47B6.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; 71 bytes (0x47), 1 block, 0 edges,
 //   23 instructions, counted with af + afbj over the exact image; the 0x90 at 0x004B47B7 is alignment padding before the next function.
 // Tools/evidence: radare2 6.2.0 af/afbj/pdf and the objdump listing build/retail-dis.txt over the same extent; both agree instruction for

@@ -1,5 +1,4 @@
-// Native: Task_DefineSiren (behavior-derived placeholder name from the byte-identical name literal this body registers; retail symbol unknown);
-//   retail VA 0x00449360-0x004494C8.
+// Native: Task_DefineSiren (behavior-derived placeholder name from the byte-identical name literal this body registers; retail symbol unknown); retail VA 0x00449360-0x004494C8.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; 361 bytes (0x169), 1 block,
 //   102 instructions.
 // Tools/evidence: radare2 6.2.0 af/afbj/pdf with bin.relocs.apply over the exact image - 1 block, 102 instructions, 0 edges (straight-line; the

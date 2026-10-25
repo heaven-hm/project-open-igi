@@ -1,5 +1,4 @@
-// Native: Task_DefineHumanSoldierFemale (behavior-derived placeholder name from the byte-identical name literal this body registers; retail symbol unknown);
-//   retail VA 0x00454970-0x00454B01.
+// Native: Task_DefineHumanSoldierFemale (behavior-derived placeholder name from the byte-identical name literal this body registers; retail symbol unknown); retail VA 0x00454970-0x00454B01.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; 402 bytes (0x192), 1 block, 0 edges, 109
 //   instructions, no branch and no loop; the extent is closed by the `ret` at 0x00454B01, followed by the fourteen-byte nop pad 0x00454B02-0x00454B0F
 //   and the next function at 0x00454B10.

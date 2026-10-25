@@ -1,5 +1,4 @@
-// Native: Task_DefineSCameraControl (behavior-derived placeholder name from the byte-identical name literal; retail symbol unknown); retail VA
-//   0x00440C20-0x00440D25.
+// Native: Task_DefineSCameraControl (behavior-derived placeholder name from the byte-identical name literal; retail symbol unknown); retail VA 0x00440C20-0x00440D25.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; 262 bytes, 1 block, 71 instructions.
 // Tools/evidence: radare2 6.2.0 af/afbj/pdf with bin.relocs.apply over the exact image (1 block / 71 instructions / 262 bytes / 0 edges) plus the
 //   objdump listing build/retail-dis.txt for the same extent, instruction by instruction (the ret is at 0x00440D25 and 0x00440D30 is the next

@@ -1,5 +1,4 @@
-// Native: Task_DefineDoor (behavior-derived placeholder name from the byte-identical name literal this body registers; retail symbol unknown);
-//   retail VA 0x004464C0-0x004468EF.
+// Native: Task_DefineDoor (behavior-derived placeholder name from the byte-identical name literal this body registers; retail symbol unknown); retail VA 0x004464C0-0x004468EF.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; 1072 bytes (0x430), 3 blocks,
 //   297 instructions.
 // Tools/evidence: radare2 6.2.0 af/afbj/pdf with bin.relocs.apply over the exact image - THREE blocks, and unlike every other target in this lane the

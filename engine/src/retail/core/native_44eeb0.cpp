@@ -1,5 +1,4 @@
-// Native: Task_RegisterAIEvents_44EEB0 (behavior-derived placeholder name: it registers the AI event, action-flag, detection-range and AI-type names
-//   into the script registry; retail symbol unknown); retail VA 0x0044EEB0-0x0044F050.
+// Native: Task_RegisterAIEvents_44EEB0 (behavior-derived placeholder name: it registers the AI event, action-flag, detection-range and AI-type names into the script registry; retail symbol unknown); retail VA 0x0044EEB0-0x0044F050.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; 417 bytes (0x1A1), 3 blocks, 3 edges, 111 instructions, 31 call sites, counted per block with
 //   af + afbj over the exact image; the twelve 0x90 bytes at 0x0044F051-0x0044F05C are alignment padding before the next function at 0x0044F060.
 // Tools/evidence: radare2 6.2.0 af/afbj/pdf and the objdump listing build/retail-dis.txt over the same extent. `psz` at all 59 name addresses and at

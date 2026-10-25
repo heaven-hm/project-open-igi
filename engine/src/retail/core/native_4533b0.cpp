@@ -1,5 +1,4 @@
-// Native: Task_DefinePatrolPathCommand (behavior-derived placeholder name from the byte-identical name literal this body registers; retail symbol
-//   unknown); retail VA 0x004533B0-0x00453366.
+// Native: Task_DefinePatrolPathCommand (behavior-derived placeholder name from the byte-identical name literal this body registers; retail symbol unknown); retail VA 0x004533B0-0x00453366.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; 183 bytes (0xB7), 1 block, 56 instructions.
 // Tools/evidence: radare2 6.2.0 af/afbj with bin.relocs.apply over the exact image - 1 block, 56 instructions, 0 edges, straight-line; the objdump
 //   listing build/retail-dis.txt was read over the whole extent 0x004533B0-0x00453366 (the ret at 0x00453366 is followed by the nop pad

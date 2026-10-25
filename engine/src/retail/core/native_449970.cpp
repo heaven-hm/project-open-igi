@@ -1,5 +1,4 @@
-// Native: Task_DefineGlass (behavior-derived placeholder name from the byte-identical name literal this body registers; retail symbol unknown);
-//   retail VA 0x00449970-0x00449A7D.
+// Native: Task_DefineGlass (behavior-derived placeholder name from the byte-identical name literal this body registers; retail symbol unknown); retail VA 0x00449970-0x00449A7D.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; 270 bytes (0x10E), 1 block,
 //   71 instructions.
 // Tools/evidence: radare2 6.2.0 af/afbj/pdf with bin.relocs.apply over the exact image - 1 block, 71 instructions, 0 edges (straight-line; the
