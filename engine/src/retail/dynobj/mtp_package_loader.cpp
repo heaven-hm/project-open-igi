@@ -11,14 +11,28 @@
 
 extern "C" void* Sys_InsertListTail_4AF8F0(void* head, void* node);   // 0x004AF8F0, engine/src/retail/sys/native_4af8f0.cpp
 
+// 0x00A4EC60 and 0x00A4ED6C, given C linkage because retail has exactly one of each.
+//
+// These were defined inside the anonymous namespace below, which gave them internal linkage
+// and made them unreachable from any other transcription. That was a port artifact, not a
+// retail fact: 0x00A4EC60 is a single image-wide list head and 0x00A4ED6C a single
+// image-wide path prefix, and retail has one object at each address, not one per translation
+// unit. dynobj/native_4cefa0.cpp (DynObj_OpenModelTexturePackage 0x004CEFA0) appends to the
+// list and formats the prefix, so it declares both extern "C"; the internal-linkage
+// definitions could not bind to those declarations, which is what kept 0x004CEFA0
+// fail-closed. Proven with nm: g_a4ed6c mangled as
+// __ZN3igi6retail6dynobj12_GLOBAL__N_1L8g_a4ed6cE with type d (local) against
+// DynObj_LoadModelTexturePackage as T (external); the L and _GLOBAL__N_1 are the unnamed
+// namespace. The bodies are unchanged - only the linkage is.
+extern "C" {
+void* g_a4ec60 = nullptr;
+char g_a4ed6c[0x8C] = "LOCAL:";
+}
+
 namespace igi::retail::dynobj {
 namespace {
 
-// Port-owned storage for shared package pointer `0x00A4EC60`.
-void* g_a4ec60 = nullptr;
-
-// Port-owned storage for package path prefix `0x00A4ED6C` and anim override prefix `0x00A4EDF8`.
-char g_a4ed6c[0x8C] = "LOCAL:";
+// Port-owned storage for anim override prefix `0x00A4EDF8`.
 char g_a4edf8[0x8C]{};
 
 // Port-owned storage for global formatting buffer `0x00A4EC6C`.
