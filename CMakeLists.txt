@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
 project(project_open_igi_clean LANGUAGES CXX)
-include(cmake/NativeAutoVerification.cmake)
 
 option(IGI_VERIFICATION_ONLY "Configure host-side native checks without building a Windows executable" OFF)
 include(CTest)
@@ -40,6 +39,7 @@ add_executable(igi WIN32
     engine/src/retail/core/native_4f0fa0.cpp
     engine/src/retail/core/native_4f0fd0.cpp
     engine/src/retail/core/native_413b20.cpp
+    engine/src/retail/core/native_401a20.cpp
     engine/src/retail/core/native_401900.cpp
     engine/src/retail/core/native_424280.cpp
     engine/src/retail/core/native_424b90.cpp

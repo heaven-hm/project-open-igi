@@ -4519,12 +4519,14 @@
       "address": "0x00401a20",
       "name": "QTask_DeleteQTaskType",
       "implementation": {
-        "path": "scripts/GameNatives/00401a20-QTask_DeleteQTaskType.cpp",
-        "sha256": "a24e1845234c1bbdd32d85eb4beb123e7f8a224dc91d12b55510032cbe5c26f8"
+        "path": "engine/src/retail/core/native_401a20.cpp",
+        "sha256": "e77f986f388a70095b9a921d848e4c934f7efb18d65eaef9eaa50f543401cad0"
       },
       "verification": {
-        "status": "VERIFIED",
+        "status": "BUILD_VERIFIED",
         "limitations": [
+        "Transcribed from the retail bytes into the engine tree and linked into igi1.exe; runtime UNOBSERVED.",
+        "The prior catalog record claimed 100% human verification for the external EU candidate - that claim applies to that candidate, not to this transcription.",
           "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md)."
         ],
         "evidence": [

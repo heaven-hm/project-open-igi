@@ -11,6 +11,17 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - QTask_DeleteQTaskType (0x00401A20) transcribed and linked (internal build, no release)
+
+- `engine/src/retail/core/native_401a20.cpp` (50 B, 15 instructions, 3 blocks, 3 edges) is listed in `CMakeLists.txt` and links into the candidate;
+  `igi1.exe` grows 14,206,047 -> 14,206,798 bytes with the build green. It is `TaskType_Register`'s counterpart: masks the id, tests slot+0x24,
+  frees through `0x004B0B70` when set, then clears slot+0x25 on both paths without clearing +0x24.
+- Its two dependencies were already in the build - `QFile_ReleaseBlock_4B0B70` (`qfile/native_4b0b70.cpp`) and `QTask_TypeTable` - so the only new
+  file in this chain is this one. No duplicate was created for the two callees that already existed.
+- The manifest record `0x00401a20` previously pointed at the external `scripts/GameNatives` candidate and carried a `VERIFIED` status inherited from
+  that catalog's "100% human-verified" claim. The record now names the engine transcription with its SHA-256 and status `BUILD_VERIFIED`; the old
+  claim is preserved as a limitation that explicitly applies to that candidate, not to this transcription. Runtime remains UNOBSERVED.
+
 ### 2026-10-25 - automatic native intake and verification, repository cleanup (internal tooling, no release)
 
 - Added one entry point, `scripts/native_autoverify.py`: changed/all/staged/commit-range discovery, a persistent sequential watch queue, source/build/probe/evidence invalidation, static BN/r2/angr capture, and the existing strict semantic/behavioral/paired-runtime checker. It never assigns native verification statuses or invents probes.
