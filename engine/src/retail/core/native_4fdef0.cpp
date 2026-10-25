@@ -6,6 +6,8 @@
 // Behavior/CFG: loads the one-byte event id at 0x0054E56A into al and returns it; no argument, no branch, no store, no call.
 // Status/limits: TRANSCRIBED; runtime UNOBSERVED. One byte is the width this load proves; the value's meaning is not established. This getter is the
 //   event source of a link in core/native_45e450.cpp.
+//   PLACEMENT FLAG (owner-ruled, not a defect): this file sits in core/ while the 0x4F1FD0 family and sys/native_4f0f10.cpp are in sys/. The owner
+//   ruled on 2026-10-25 to leave it where it is and record the question here rather than move tracked files, so the bytes and the path are unchanged.
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)

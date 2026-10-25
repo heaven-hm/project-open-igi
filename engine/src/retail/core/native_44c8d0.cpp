@@ -75,12 +75,9 @@
 //   what 0x0044CCA0's 0x004B8890 arguments mean; the record layouts behind the nine regions beyond the fields this body writes; and what consumes
 //   the nine loaded script objects at 0x0058A9F4.
 #include "igi/retail/core/task_types.hpp"
+#include "igi/retail/script/qvm_native_loader.hpp" // declares 0x004B80B0 as igi::retail::script::Qvm_Load(const char*), its own linkage and namespace
 
 #include <cstdint>
-
-// 0x004B80B0 is declared with C++ linkage in script/qvm_native_loader.hpp (`void* Qvm_Load(const char* qvm_path)`), so it is declared here
-// outside the extern "C" block to keep the same linkage.
-void* Qvm_Load(char const* qvm_path);
 
 extern "C" {
 
@@ -295,7 +292,7 @@ void Task_DefineHumanAI()
         char const* const* path = &::g_53c928[0];
         std::uint32_t* loaded = &::g_58a9f4[0];
         do {
-            *loaded = static_cast<std::uint32_t>(reinterpret_cast<std::uintptr_t>(Qvm_Load(*path))); // 0x0044CAB8/0x0044CABF/0x0044CAC4
+            *loaded = static_cast<std::uint32_t>(reinterpret_cast<std::uintptr_t>(igi::retail::script::Qvm_Load(*path))); // 0x0044CAB8/0x0044CABF/0x0044CAC4
             path = path + 1;                     // 0x0044CACA: add $0x4,%esi (the table stride)
             loaded = loaded + 1;                 // (the same offset into the second table)
         } while (loaded < &::g_58a9f4[9]);       // 0x0044CAD0/0x0044CAD3: retail bound 0x24 bytes

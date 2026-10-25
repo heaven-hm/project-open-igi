@@ -1,5 +1,38 @@
 ## Unreleased
 
+### I reported Task_RegisterAIEvents_44EEB0 as integrated when it was never compiled
+
+I reported in the `ca245bf9` tick that `Task_RegisterAIEvents_44EEB0` was
+"Integrated". It was **not**. The commit contains `engine/src/retail/core/native_44eeb0.cpp`
+(120 lines) and touches `CMakeLists.txt` - but the file was never added to the
+build target, so the compiler never saw it:
+
+```
+$ grep -n "native_44eeb0" CMakeLists.txt
+  (no match)
+$ i686-w64-mingw32-nm .../igi1.exe | grep Task_RegisterAIEvents_44EEB0
+  (no match)
+$ i686-w64-mingw32-nm .../objects.a | grep -c 44EEB0
+  0
+```
+
+Found by chasing why `native_44c8d0.cpp` still reported
+`Task_RegisterAIEvents_44EEB0` as undefined after I had told chain-worker that
+file was landed. **The worker's report was right and mine was wrong**: the
+undefined symbol was the evidence, and I had a claim from my own tick standing in
+front of it.
+
+Now added to `CMakeLists.txt`; symbol present in `igi1.exe`; build 0 errors.
+`native_44c8d0.cpp` consequently drops to a single undefined,
+`Task_RegisterAIActions_44CCA0`.
+
+**A commit that contains a file is not a commit that compiles it.** That is the
+fourth distinct question this session has found hiding behind "landed": does a file
+exist, is it compiled, is it complete, and is the symbol in the binary. I answered
+the first and reported the fourth.
+
+## Unreleased
+
 ### `0x3A91A2B4` is the float `0.0011111111380159855F`, and it appears twice
 
 chain-worker's GCC finding was that a decimal float literal folded into a long
