@@ -782,6 +782,10 @@ add_executable(igi WIN32
     engine/src/retail/core/native_4682f0.cpp
     engine/src/retail/core/native_46f2b0.cpp
     engine/src/retail/script/native_4b7f40.cpp
+  engine/src/retail/script/native_4baca0.cpp
+  engine/src/retail/script/native_4bc960.cpp
+  engine/src/retail/script/native_4bd080.cpp
+  engine/src/retail/script/native_4bd220.cpp
     engine/src/retail/core/native_4696b0.cpp
     engine/src/retail/core/native_467db0.cpp
     engine/src/retail/core/native_467dd0.cpp

@@ -3019,3 +3019,42 @@ the prose says retail does.
 blocked on a deliberate substitution. That is a decision for the owner, not a defect to
 patch silently - replacing the hook with retail's calls changes what runs, and it must be
 the owner's call whether the hook was a scaffold or the intended design.
+
+## I broke the build twice in one tick, both times with a placement I did not verify (2026-10-25)
+
+Integrating five script natives from flow-analyst, I put their `CMakeLists.txt` entries in
+the wrong place. **The anchor I chose was `add_library(igi_humanplayer_defines_object
+OBJECT ...)` at line 882** - a *complete* statement - so the five paths landed after it as
+bare arguments outside any command, and CMake failed with:
+
+```
+CMake Error at CMakeLists.txt:883:
+  Parse error.  Expected a command name, got unquoted argument with text
+```
+
+**My anchor search was `grep -n 'retail/script/' CMakeLists.txt | tail -1`.** That finds the
+last *mention* of a path, which is not the last entry of the list I meant. **Same fault as
+`tail -1` on the checker output, twice in one tick, in two different commands.**
+
+Then, with the entries moved into `add_executable(igi ...)`, the link failed honestly:
+
+```
+native_4bd380.cpp:(.text+0x37): undefined reference to `Resource_Flush'
+```
+
+**And that one is my fault in a way I had already written down:** my pre-integration check
+printed `check_native_linkable.py <file> | tail -1`, so for `native_4bd380.cpp` I saw only
+`Script_QHashNodeRelease_4BACA0` and concluded it was the sole blocker. **It has three
+undefined symbols, and `Resource_Flush` is the one that actually stops the link.** Rule
+seventeenth - a single-value extraction from a multi-value output silently discards the
+rest - and I had recorded that rule from this exact command earlier in the session.
+
+**A third instrument was also wrong and I discarded it rather than reporting it:** I then
+compared `nm -u` symbol names against `.cpp` file stems, which cannot map a symbol to its
+file, so it called `_Qvm_FormatOperandText_4BC960` "not in tree" when `native_4bc960.cpp`
+defines it. **The linker is the authority for linkability; the checker answers a narrower
+question about a possibly-stale archive.**
+
+**Final state: four of five integrated** (`native_4baca0`, `native_4bc960`, `native_4bd080`,
+`native_4bd220`), **`native_4bd380.cpp` deliberately not in the build**, fail-closed on
+`Resource_Flush` and `Mem_DeAllocFn`. Build `exit=0 errors=0 warning_lines=0`.
