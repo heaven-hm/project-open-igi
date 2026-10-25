@@ -1,5 +1,40 @@
 ## Unreleased
 
+### The guard figure I have been reporting is wrong: 123, not 128
+
+I have been reporting guard coverage as "128 of 154 claimed, 26 missing". That
+counts **files**. Measured against the **binary**, the number is different:
+
+```
+guard callees (0x00402930)                    154
+have an implementation file                   128
+SYMBOL DEFINED in igi1.exe                    123   <- the one that matters
+file exists but symbol absent from binary       5
+no implementation file at all                  26
+```
+
+The five claimed-but-absent:
+
+| VA | symbol | why absent |
+| --- | --- | --- |
+| `0x004190E0` | `MenuLoader_Register_4190E0` | NOT LINKABLE - 3 handler placeholders |
+| `0x00422B40` | `ModelViewBox_Register_422B40` | NOT LINKABLE - 8 handler placeholders |
+| `0x0044C8D0` | `Task_DefineHumanAI` | NOT LINKABLE - `Task_RegisterAIActions_44CCA0` |
+| `0x0045E450` | `Task_DefineHuman` | linkable but never added to `CMakeLists.txt` |
+| `0x00508F80` | `AIGraph_Init_508F80` | NOT LINKABLE - `0x005183D0`, `0x00508FA0` |
+
+**This is the fourth time this session that "a file exists" and "the symbol is in
+the binary" have given different answers** - after the 36 unbuilt natives, the 9
+missing manifest records, and `Task_RegisterAIEvents_44EEB0`, which I reported as
+integrated when it had never been compiled. Each time the file count was the
+comfortable number and the binary was the true one.
+
+**The honest headline for this branch is therefore 123 of 154 guard callees present
+in `igi1.exe`, not 128.** I am reporting the corrected figure from here, and the
+26+5=31 outstanding addresses are the real remaining work.
+
+## Unreleased
+
 ### Tool output contradicts prose: believe the tool, and never record the prose
 
 chain-worker claimed `0x449220`'s two callees were at `core/native_4b8a80.cpp` and
