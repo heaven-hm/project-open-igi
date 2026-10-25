@@ -1,5 +1,53 @@
 ## Unreleased
 
+### The guard's blocker is one missing address, not two - and my note was wrong
+
+I told the lane that `0x00508F80` "calls `0x005183D0` and `0x00508FA0`, both
+absent". handler-abi-worker checked the body instead of the note and half of that
+was wrong:
+
+```
+0x00508F80  call fcn.005183d0
+0x00508F85  jmp  0x508fa0
+0x00508FA0  sub esp,0xc0        <- the jump's TARGET, reached from the same body
+```
+
+`0x00508FA0` is reached by a `jmp`, not a `call`. **A missing symbol and a missing
+routine are different claims** - the `Flow_Start` lesson, second instance.
+
+I then verified it: `pdf @ 0x508f80` shows exactly one reference to `0x508fa0`,
+the `jmp` at `0x00508f85`. And `afi` gives `0x00508F80` an extent of 787 bytes,
+ending at `0x00509293`, which would place `0x00508FA0` inside it.
+
+**But `afi`'s `size` is a derived field** - the same field that reported `837131`
+for the 780-byte guard and 64 for a body with no `sub esp` at all. It cannot settle
+whether these are one function or two registered entries sharing a tail, and the
+difference decides whether `native_508fa0.cpp` is a rule-13 duplicate.
+
+**Recorded as unresolved, with both readings.** If `0x00508FA0` is a block of
+`0x00508F80`, the existing `native_508fa0.cpp` is a second implementation of the
+same retail code and must be withdrawn. If it is a separate registered entry that
+`0x00508F80` tail-jumps into, both files are legitimate and the `jmp` is the
+dispatch. The deciding evidence is whether the registrar tables register
+`0x00508FA0` as its own entry - not the extent field.
+
+### Corrected blocker chain for the guard
+
+`0x00402930` -> `0x00508F80` (file exists, untracked, not in CMake) ->
+`0x005183D0` (**no implementation anywhere in the tree**).
+
+One missing address at the end, not two. So the guard is not blocked on two
+absent routines; it is blocked on `0x005183D0`, and `0x00508F80` is merely
+unbuilt. Those are different reports and they imply different next actions.
+
+Also from that body: `0x00508FA0` is the `AIGraph` registrar - `sub esp,0xc0`
+with `TaskType_Register` given object size `0xc0`. Frame and registered size
+coincide here; they are different quantities. 192 bytes is under the page
+threshold, so no `0x004A54A0` probe site, checked against the actual `sub esp`
+rather than `afi`.
+
+## Unreleased
+
 ### 30 natives are partial ports the gate counts as implemented
 
 `Flow_Start` is not one file with a self-contradicting comment. A sweep for
