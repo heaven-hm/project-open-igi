@@ -3058,3 +3058,34 @@ question about a possibly-stale archive.**
 **Final state: four of five integrated** (`native_4baca0`, `native_4bc960`, `native_4bd080`,
 `native_4bd220`), **`native_4bd380.cpp` deliberately not in the build**, fail-closed on
 `Resource_Flush` and `Mem_DeAllocFn`. Build `exit=0 errors=0 warning_lines=0`.
+
+## The five `Game_Init` gaps, measured (2026-10-25)
+
+The five callees that keep `Game_Init` fail-closed are small. Measured to the `ret`, loose
+line pattern (counts branch-marked lines the strict pattern drops):
+
+| VA | instructions | `ret` at | owner |
+| --- | --- | --- | --- |
+| `0x004B8870` | 12 | `0x004B888F` | `script/` |
+| `0x004F4870` | 3 | `0x004F4879` | `sys/` |
+| `0x004A29E0` | 7 | `0x004A29FD` | `render/` |
+| `0x004A29C0` | 7 | `0x004A29DD` | `render/` |
+| `0x004A28B0` | 11 | `0x004A28E0` | `render/` |
+
+**40 instructions across five files** - the whole of what stands between a verified
+eleven-group `Game_Init` and a complete link.
+
+`0x004F4870` reconciles exactly with the body analyst read: `mov eax,[esp+4]` /
+`mov [0x00A76C40],eax` / `ret` is **3 instructions**, and the measured count is 3. That is
+the cross-check I will run on all five when the files arrive - **instruction count against
+the measured `ret`, not the file's own provenance claim**, because two extent claims in this
+tree were already wrong in the same direction as their incompleteness and neither was
+contradicted by any check.
+
+**The other three of the five are `render/`, not `script/`** - `0x004A29E0`, `0x004A29C0`
+and `0x004A28B0` all write globals in the `0x00935Cxx`/`0x009360xx` band and sit in the
+module where `0x004A2A00` registers `"CAMERAFILTER_TYPE_NONE"`. **They are assigned to
+`render/` by section 10.15 rule 15, and their names stay shape-only
+(`Render_StoreArgs<first-global>_<VA>`) because the values `Game_Init` passes them are a font
+path and a sprite path, which is not a camera filter - so the module and the call site
+disagree and the name must not paper over it.**
