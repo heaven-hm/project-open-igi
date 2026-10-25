@@ -2877,3 +2877,30 @@ this population; both are hangs, both are behaviour to preserve.
 re-measured 27 - and I am recording that as an **open disagreement** rather than picking
 one, because I have already been wrong twice today by trusting the instrument that
 produced the first number.
+
+## THE 22nd TEARDOWN CLOSES: `0x0042ACC0` AND `0x0042BC00` BOTH LAND
+
+analyst delivered `native_42acc0.cpp` - the file I released to it because my context
+could not carry a 246-instruction transcription - and with it `native_42bc00.cpp`, the
+last teardown, went from `link_exit=1` to `link_exit=0`.
+
+  native_42acc0.cpp  Train_Register_42ACC0                  compile_rc=0 warn=0 LINKABLE counted 1
+  native_42bc00.cpp  Task_ClearClassTypeAndDeleteList_42BC00 compile_rc=0 warn=0 LINKABLE counted 1
+
+Build `exit=0 errors=0 warning_lines=0`. **Both globals are defined exactly once
+image-wide** - `g_57bcb8` and `g_57bcbc` appear as definitions only in
+`native_42acc0.cpp` - and both files declare them under `extern "C"`, which is the
+linkage the ruling required and the axis that fails silently at both compile and link.
+
+**So the teardown population is complete: 22 of 22, every one counted once by name in
+`igi1.exe`, none fail-closed.** The file that was blocked the longest was blocked on a
+global another native owned, and it went green the moment that owner entered the build -
+not when it was written. **A file can be correct, linkable and committed and still be
+unbuilt; that is the defect this project has now hit three times.**
+
+**And the `0x00407D60` disagreement is resolved, in favour of the number I published.**
+The `ret` sits at **line 31** of the r2 dump, so the routine is 31 instructions and my
+re-measurement's 27 was the artifact. **The lesson is not that my first number was right
+- it is that my SECOND instrument was wrong in the same way as my first**, because it
+also failed to count the branch-marked loop lines. Two independent measurements agreeing
+is only evidence when they do not share a fault, and these two shared one.
