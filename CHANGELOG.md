@@ -1,5 +1,37 @@
 ## Unreleased
 
+### The real remaining work is larger than the guard figure: 71 handler-only entry points
+
+analyst flagged that the five handler entry points registered by `0x00421430` are
+**not on the guard's missing list**, because the guard never calls them directly - it
+only pushes their addresses as immediates. It was right, and the population is much
+larger than those five.
+
+Measured across the tree - handler-style VAs referenced by name, with no
+implementation file anywhere:
+
+```
+handler-style VAs referenced in the tree:  90
+of those, no implementation file:          71
+```
+
+The 71 fall in three groups: the 15 registrar handlers already known
+(`MenuLoader` 3, `DialogWindow` 7, `ModelViewBox` 8 - counting the five new
+`MenuButton` ones), and two large contiguous runs at `0x0044D0E0`-`0x0044EE40` that
+no previous census had counted at all.
+
+**So the outstanding work is at least 30 guard addresses + 71 handler entry points,
+and the two sets are disjoint.** Every queue I dispatched today was derived from the
+guard and therefore could not see the second set. This is the same defect class as
+the band-vs-guard mistake: a real number answering a question adjacent to the one I
+asked.
+
+**The general rule, which has now cost three separate errors:** a list built from
+one population's evidence cannot enumerate a second population, however similar the
+two sound. The guard's call list is not the image's function list.
+
+## Unreleased
+
 ### The guard figure I have been reporting is wrong: 123, not 128
 
 I have been reporting guard coverage as "128 of 154 claimed, 26 missing". That
