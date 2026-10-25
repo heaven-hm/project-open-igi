@@ -54,10 +54,17 @@ def main():
     # in symbols() turns that into `mingw_sprintf`, which then escapes BOTH the `__` prefix
     # filter below and a bare `sprintf` entry. So normalise the prefix here rather than
     # assuming the strip left a name that matches the ignore set.
+    # libmingwex/libm long-double and float math routines the compiler emits
+    # itself for sincosl/sincosf and friends. They are runtime, not natives.
+    MATH_HELPERS = {
+        'sincosl', 'sincosf', 'sincos', '__sincosl', '__sincosf',
+        'sinl', 'cosl', 'tanl', 'sqrtl', 'fabsf', 'fabsl', 'powl',
+    }
+
     def runtime_helper(n):
         return n in {'memcpy', 'memset', 'memmove', 'memcmp', 'strlen', 'sprintf', 'printf',
                      'snprintf', 'vsnprintf', 'vprintf', 'fprintf', 'abort', 'exit'} \
-            or n.startswith('mingw_')
+            or n.startswith('mingw_') or n in MATH_HELPERS
 
     missing = sorted(n for n in need - have
                      if not n.startswith(('__', '___')) and not runtime_helper(n))
