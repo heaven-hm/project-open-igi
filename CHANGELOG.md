@@ -11,6 +11,44 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - the 34 was wrong too: I dispatched two natives that were already built
+
+The 34-callee list I gave `handler-abi-worker` contained `0x00401FC0` and
+`0x00415530`. **Both were already implemented, tracked, in CMake and built** —
+`core/flow.cpp` defines `Flow_Init` for `0x00401FC0` and `core/game_flow.cpp`
+defines `Game_Init` for `0x00415530`, and `nm` on the built archive shows
+`T _Flow_Init` and `T _Game_Init` already present. The worker wrote a second
+`Flow_Init` in `native_401fc0.cpp` before I caught it. Adding it is a duplicate
+symbol and a §10.15 rule-13 violation, so it is on disk, unintegrated.
+
+**Cause of my error:** I matched the guard's call table against filenames of the
+form `native_<hex>.cpp`. A callee implemented in a *named* file — `flow.cpp`,
+`game_flow.cpp`, `game_flow.cpp` — therefore read as missing while being
+implemented and built. The pattern described the naming convention, not the
+world.
+
+Re-measured against `retail VA 0x...` provenance blocks in *every* source file:
+
+| measure | figure |
+| --- | --- |
+| distinct guard callees | 154 |
+| have a provenance claim in some file | 121 |
+| **no file claims the VA** | **33** |
+
+Of the four I had flagged that did have a file: `0x00401FC0` and `0x00415530` are
+tracked and built; `0x0044C8D0` is untracked; `0x00508F80` is tracked but its
+`native_508f80.cpp` is **not in CMakeLists.txt** and so is not in the build.
+
+**Third bad count from me this session**, after the eight-hex-digit filename
+pattern and the two-tables-numbered-from-one split. All three are the same
+failure: I reported a number produced by a pattern whose match I had not
+verified, and the number was confident enough to dispatch work off.
+
+`native_401fc0.cpp` versus `flow.cpp` is now a real question — two transcriptions
+of one VA, 80 lines against 537. One of them is wrong or they cover different
+scopes, and that needs deciding from the bytes rather than by deleting the
+newer one.
+
 ### 2026-10-25 - a third class of entry point: handler-only, and the 34 was not the whole gap
 
 `handler-abi-worker` found that `0x00401FC0` pushes four code addresses as handler
