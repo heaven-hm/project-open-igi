@@ -133,8 +133,20 @@ parent getter `0x004F45F0` (called at 0x0042ACCA), class-alloc `0x00401900` at
 | `0x004E6610 0x004CEA20 0x004CEA10 0x004C5800` | 1 each | |
 | `0x00416890` | 1 | |
 | `0x00401900` | 1 | class allocation |
-**30 distinct targets.** `0x0042A2C0` is NOT among them (the earlier recon note said it
-was; the decoded census shows it is not - correct the earlier line).
+**24 distinct targets over 53 call sites** - counted, not copied. `0x0042A2C0` is NOT
+among them: 0 hits in the decoded disassembly.
+
+**TWO CORRECTIONS, both mine, both in the recon note above.**
+1. The earlier section of this note says "Distinct targets: 30". The decoded census
+   gives **24**. The 30 was written from a glance, not a count.
+2. That same section says `0x0042A2C0` "is a call inside the same band as this routine
+   and is itself untranscribed". **It is not called by this routine at all** - 0 hits.
+   I carried an unverified line forward into this analysis, and the only reason it did
+   not become a phantom dependency is that the second pass counted.
+
+Both are the same failure: a number and a name written from the shape of the earlier
+note rather than measured from the bytes. The first pass was the guess; the second pass
+was the count.
 
 ### The 17 handler immediates pushed (`push 0x4xxxxx`)
 ```
