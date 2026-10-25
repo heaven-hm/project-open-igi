@@ -298,6 +298,40 @@ Second, its own helpers are CRT idioms: 0x004AFF90 is a 0x40-dword fill with 0x0
 class-table initialiser - and 0x004AFFB0 sets up a 0x414-byte frame and walks the same structures. Combined with 0x004AF9D0's
 bracket/escape compiler, the region is the C runtime's pattern and list support, supplied by the toolchain rather than transcribed.
 
+### UPDATE 2026-10-25: the three functions are decoded, and two claims here are corrected
+
+The paragraph above was a hypothesis from call shapes. It has since been decoded from the tables and the bodies, and two things in it
+are wrong.
+
+**0x004AFF90 is not a class-table initialiser.** Its whole body is `push edi; mov edi,[esp+8]; mov ecx,0x40; mov eax,0x01010101;
+rep stosd; mov eax,[esp+0xc]; pop edi; mov dword [eax],1; ret` - it fills 256 bytes at argument 1 with 0x01 and then stores 1 at
+argument 2. Nine instructions, one block, **zero calls and zero undefined symbols**. The `movl $1` is a store through the *second
+argument*, not part of the fill, which is why the earlier reading took it for a table initialiser. Transcribed as
+`sys/native_4aff90.cpp`.
+
+**0x004AFFB0 is a wildcard-pattern translator, not a generic structure walker.** It dispatches on a class table at 0x004B0218
+(86 bytes over 0x28-0x7D: class 0 "(", 1 ")", 2 "*", 3 "+", 4 "/" and "\", 5 "?", 6 "[", 7 "{", 8 "}", 9 everything else in range)
+through a ten-entry jump table at 0x004B01F0. 576 bytes, 41 blocks, 187 instructions, **zero calls**. Transcribed as
+`sys/native_4affb0.cpp`. The two tables are the compiler's lowering of its switch and are recorded in that native's provenance rather
+than claimed as separate data owners.
+
+**0x004AF9D0 takes three arguments and uses all three.** An earlier note in this session said "three arguments, the first never read".
+That was an off-by-one: the four register pushes are 0x10 bytes, not 0xC, so with `sub esp,0xB30` the arguments sit at body
+offsets +0xB44/+0xB48/+0xB4C and **+0xB40 is the return address**. Argument 3 is consumed at entry by `mov eax,[esp+0xc]` before any
+frame exists, which is why the body never re-reads it - and that is what the wrong note mistook for "unused". Argument 1 is the output
+structure pointer (written as [edx] through [edx+0x14]), argument 2 the flag pointer passed to 0x004AFF90, argument 3 the pattern
+string passed to 0x004AFFB0.
+
+**What the region actually is.** Two switches: metacharacters ^ $ . * ? [ ] ( ) { } / \ in the first, and a backslash-escape handler
+in the second whose one-byte flags are set by N/n, R/r and T/t. Together with 0x004AFFB0's translator this is a **pattern /
+regular-expression compiler**, which is exactly what the file-mask use traced through `Sys_NewListRecord_4F1DB0` requires. So the
+"supplied by the toolchain rather than transcribed" conclusion above is **wrong**: these are game natives and they are being
+transcribed. The one thing that stands from that paragraph is the 0x004AF8F0 correction below.
+
+**Generalised lesson, now applied to every slot map:** a local whose address is taken *before* the register pushes appears 0x10 lower in
+body coordinates. `lea 0x130(%esp)` before the pushes is therefore the buffer parsed at `[esp+0x140+ebx]` after them. Getting this
+wrong is what produced the off-by-one above.
+
 ### Correction to an earlier landing
 
 0x004AF8F0 - which was landed as `Sys_InsertListTail_4AF8F0` and reviewed as game code - is called from 0x004012BF, inside the CRT
