@@ -91,10 +91,12 @@ add_executable(igi WIN32
     engine/src/retail/core/native_4199f0.cpp
     engine/src/retail/core/native_41aaf0.cpp
     engine/src/retail/core/native_41c700.cpp
+    engine/src/retail/core/native_41b8e0.cpp
     engine/src/retail/core/native_423fc0.cpp
     engine/src/retail/core/native_424e80.cpp
     engine/src/retail/core/native_425c80.cpp
     engine/src/retail/core/native_426630.cpp
+    engine/src/retail/core/native_426d90.cpp
     engine/src/retail/sys/native_424860.cpp
     engine/src/retail/core/native_422b40.cpp
     engine/src/retail/core/native_4190e0.cpp
