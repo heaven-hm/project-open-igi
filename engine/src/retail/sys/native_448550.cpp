@@ -16,7 +16,10 @@
 extern "C" {
 
 // 0x0053C7DC: the two-byte object this getter reads; nothing else in the tree owns it yet.
-std::uint16_t g_53c7dc;
+// Retail 0x0053C7DC holds 0x0181 in the image -- the unregistered sentinel of a
+// word-sized task-id slot -- not zero. Overwritten by the registrar before any reader
+// runs, but the initial value must still match the bytes.
+std::uint16_t g_53c7dc = 0x181U;
 
 std::uint16_t NATIVE_DECL Sys_GetGlobal16_448550(void)
 {
