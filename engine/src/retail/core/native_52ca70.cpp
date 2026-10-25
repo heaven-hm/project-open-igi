@@ -40,8 +40,12 @@
 #define NATIVE_DECL
 #endif
 
-// 0x0054F718: the 16-bit task type id registered by this routine and read by three other sites. Declared, not defined: its owner is not established.
-extern std::uint16_t g_54f718;
+// 0x0054F718: the 16-bit task type id registered by this routine and read at 0x0052CA9A and
+// 0x0052CAB3. THIS FILE IS ITS OWNER: it writes the slot at 0x0052CA89 (`mov word [0x54f718],ax`
+// with the result of TaskType_Register), so it is a definition, not an extern declaration.
+// The image holds 0x0181 (385) at that address - file-backed .data, read as bytes `81 01` - so the
+// definition carries that value. It is overwritten by the registration on the first call.
+std::uint16_t g_54f718 = 0x0181U;
 
 extern "C" {
 
