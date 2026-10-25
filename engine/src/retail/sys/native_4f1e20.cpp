@@ -17,7 +17,10 @@
 extern "C" {
 
 // 0x0054E158: the four-byte object this getter reads; nothing else in the tree owns it yet.
-std::uint32_t g_54e158;
+// 0x0054E158: the image holds 0xFFFFFFFF here (bytes ff ff ff ff, file-backed .data).
+// Defined with that value: the getter below returns this slot, so a zero initializer would
+// return 0 where retail returns 0xFFFFFFFF.
+std::uint32_t g_54e158 = 0xFFFFFFFFU;
 
 std::uint32_t NATIVE_DECL Sys_GetGlobal32_4F1E20(void)
 {
