@@ -19,7 +19,10 @@
 //   0x005C1108 is 0x18 bytes and the last 8 of them (0x005C1100-0x005C1107) are never referenced anywhere in build/retail-dis.txt, so they are
 //   NOT modelled here and their owner is unestablished; whoever needs them must reconcile with this file. 0x005C10E8 is a byte in retail
 //   (0x0047CF43 stores AL) and sys/native_47cdc0.cpp is a separate unimplemented getter that reads the same byte as AL, so it is declared as
-//   std::uint8_t here. Neither 0x005C10F0 nor 0x005C10E8 is referenced by any file in the tree yet, and both have image value 0. The pattern
+//   std::uint8_t here. Both have image value 0. CORRECTED 2026-10-25: the earlier sentence here said neither 0x005C10F0 nor 0x005C10E8 was
+//   referenced by any file in the tree yet. That is now stale in both directions - 0x005C10F0 is referenced by core/native_47cf10.cpp (which
+//   returns &g_5c10f0[0] and link-depends on this file for its single definition), core/native_46db40.cpp and core/native_46d420.cpp; and
+//   0x005C10E8 is referenced by 0x0047CDC0, which is not transcribed yet. The pattern
 //   string is a retail .rdata literal at 0x005408EC, so it is passed as a pointer to the byte-identical literal. 0x004F1DB0 is NOT transcribed
 //   anywhere in the tree: it is a real routine (it allocates 0x480C bytes through 0x004B0C60, stores its second argument at +0x4808, zeroes
 //   +0x00 and +0x04, calls 0x004AF9D0 on +0x08/+0x2808 and 0x004AF8F0 on (head, record)) and is declared here as a native gap with a

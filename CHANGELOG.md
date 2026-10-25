@@ -11,6 +11,30 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - the startup-chain keystone lands and the hold-out drops from ten files to two
+
+- **`0x004AF9D0` is transcribed and in the build** (`sys/native_4af9d0.cpp`, 1190 bytes / 68 blocks / 329 instructions / 97 edges).
+  It is a **pattern compiler**: it hands the pattern to `0x004AFFB0` for translation, fills the class-record area through
+  `0x004AFF90`, then compiles the translated pattern into 0x14-byte nodes in argument 1, with two switches decoded from the image -
+  ten metacharacter classes (`^ $ . * ? [ ] ( ) { } / \`) and a backslash-escape handler (`N/n`, `R/r`, `T/t`), plus a character-class
+  parser with `~` negation and `x-y` ranges and a 32-entry deduplicated class-record table.
+- **The hold-out falls from ten files to two.** The linker, not a guess, released them one by one: `0x004AF9D0` released
+  `sys/native_4f1db0.cpp`, `core/native_413df0.cpp` and `core/native_47cf20.cpp`, and through them `413b50`/`413b60`/`413de0` and
+  `477e30`; `0x0047CF10` released `core/native_46db40.cpp` and `core/native_46d420.cpp`. Remaining: `core/native_412420.cpp`
+  (needs `0x0045E060`) and `core/native_4696b0.cpp` (needs `0x004B7F40`, a new gap).
+- **A name mismatch caught by the linker, which is the only thing that could have caught it.** `sys/native_4f1db0.cpp` declared the
+  keystone as `Sys_InitRecordPattern_4AF9D0` returning `void` while the owner file defines `Sys_CompilePattern_4AF9D0` returning
+  `std::int32_t`. C linkage made both silently plausible; the link failed on the name. The caller is aligned to the owner's
+  evidence-derived name and the return type corrected, because the body returns 1 on success and 0 at its fail block and a `void`
+  declaration would have dropped that silently.
+- **The parked `413b20/413b30/413b40` fix is applied.** Those three had been reading a private `0xFF` byte where retail reads the
+  global `g_5391ac` owned by `413df0`; with `413df0` linking, the fix is committable and the patch file that carried it is retired.
+- **Honest CFG position on the keystone, recorded rather than smoothed over**: the object is 88 blocks / 396 instructions / 130 edges
+  against retail's 68 / 329 / 97. That is **not** structural equivalence and no such claim is made. What is shown is a per-case
+  constant signature proving all fifteen case bodies appear exactly once each, and an instruction-level explanation for every
+  constant divergence. The keystone is `BUILD_VERIFIED`, not `STRUCTURALLY_VERIFIED`.
+- **Build green, 14,340,995 bytes.** Also added: `core/native_46cb70.cpp` (GunPickup) and `core/native_46c0c0.cpp` (GenericPickup).
+
 ### 2026-10-25 - `0x004F1A80` six-argument backfill, and three new natives
 
 - **Backfill complete**: 11 caller files, 52 call sites, all now passing the sixth argument. Nine files were mechanical; the two `%eax`

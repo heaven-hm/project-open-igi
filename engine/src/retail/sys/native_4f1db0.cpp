@@ -20,10 +20,15 @@ extern "C" {
 // 0x004AF8F0: the list-tail insert half, transcribed as Sys_InsertListTail_4AF8F0 in engine/src/retail/sys/native_4af8f0.cpp.
 void Sys_InsertListTail_4AF8F0(void* head, void* node);
 
-// 0x004AF9D0: NATIVE GAP - not transcribed (1190 bytes, 68 blocks, 97 edges, 329 instructions). It receives the record's two
-// sub-object addresses and the pattern, reads the pattern argument first, uses a 0xB30-byte frame and calls only 0x004AFFB0 and
-// 0x004AFF90; its semantics are not established, so the name is derived from the call shape and is not a retail symbol.
-void Sys_InitRecordPattern_4AF9D0(void* first, void* second, char const* pattern);
+// 0x004AF9D0: transcribed in sys/native_4af9d0.cpp (1190 bytes, 68 blocks, 97 edges, 329 instructions). The declaration that
+// stood here read Sys_InitRecordPattern_4AF9D0 and returned void; both are corrected to match the definition. The name follows
+// the owner file, which is evidence-derived: its two switches are a metacharacter class table (^ $ . * ? [ ] ( ) { } / \) and a
+// backslash-escape handler (N/n, R/r, T/t), so the function compiles the pattern into 0x14-byte nodes in its first argument. The
+// return type is std::int32_t because the body returns 1 on success and 0 at its fail block 0x004AFE69 - a void declaration
+// would have dropped that result silently. Argument 2 is the class-record area this call passes as record+0x2808, which matches
+// the owner's description of it as the class-record array handed to 0x004AFF90. The result is unused at this call site in retail
+// too (the next instruction at 0x004F1DE7 reads 0x1c(%esp) without testing eax), so discarding it here is faithful.
+std::int32_t Sys_CompilePattern_4AF9D0(std::uint8_t* node_array, std::uint8_t* class_records, char const* pattern);
 
 void NATIVE_DECL Sys_NewListRecord_4F1DB0(void* head, char const* pattern)
 {
@@ -31,7 +36,7 @@ void NATIVE_DECL Sys_NewListRecord_4F1DB0(void* head, char const* pattern)
     *reinterpret_cast<char const**>(record + 0x4808U) = pattern;           // 0x004F1DC3: push %eax; 0x004F1DC4: mov %eax,0x4808(%esi)
     *reinterpret_cast<std::uint32_t*>(record + 0x0004U) = 0U;              // 0x004F1DD5: movl $0x0,0x4(%esi)
     *reinterpret_cast<std::uint32_t*>(record + 0x0000U) = 0U;              // 0x004F1DDC: movl $0x0,(%esi)
-    Sys_InitRecordPattern_4AF9D0(record + 0x0008U, record + 0x2808U, pattern); // 0x004F1DD0/0x004F1DD3/0x004F1DD4: lea 0x8(%esi),%ecx; lea 0x2808(%esi),%eax; push %eax; push %ecx; 0x004F1DE2: call 0x004AF9D0
+    Sys_CompilePattern_4AF9D0(record + 0x0008U, record + 0x2808U, pattern); // 0x004F1DD0/0x004F1DD3/0x004F1DD4: lea 0x8(%esi),%ecx; lea 0x2808(%esi),%eax; push %eax; push %ecx; 0x004F1DE2: call 0x004AF9D0
     Sys_InsertListTail_4AF8F0(head, record);                               // 0x004F1DE7: mov 0x1c(%esp),%edx; 0x004F1DEB: push %esi; 0x004F1DEC: push %edx; 0x004F1DED: call 0x004AF8F0
 }                                                                          // 0x004F1DF2: add $0x1c,%esp; 0x004F1DF5: pop %esi; 0x004F1DF6: ret
 

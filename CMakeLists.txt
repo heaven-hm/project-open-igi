@@ -589,25 +589,33 @@ add_executable(igi WIN32
     engine/src/retail/render/native_491ea0.cpp
     engine/src/retail/script/native_4b88f0.cpp
     engine/src/retail/sys/native_4f1cb0.cpp
-    # Held out of the build until retail 0x004AF9D0 and 0x0045E060 are transcribed. The full chain, measured:
-    #   native_46db40.cpp -> Sys_GetGlobalPointer_47CF10 (core/native_47cf10.cpp, transcribed)
-    #   core/native_47cf10.cpp -> g_5c10f0, whose single definition is in core/native_47cf20.cpp (held below)
-    #   core/native_47cf20.cpp -> Sys_NewListRecord_4F1DB0 -> 0x004AF9D0 (in progress)
-    # native_46d420.cpp and core/native_47cf10.cpp sit on the same chain and are not in the build target yet.
-    # Each file below is a finished transcription; they are excluded only because a callee
-    # they call by name has no implementation, so including them breaks the link:
-    #   0x004AF9D0 (1190 bytes, untranscribed) -> sys/native_4f1db0.cpp
-    #     -> core/native_413df0.cpp, core/native_47cf20.cpp (call Sys_NewListRecord_4F1DB0)
-    #     -> core/native_413b50/413b60/413de0.cpp (read g_5391ac / g_56e228 owned by 413df0)
-    #     -> core/native_477e30.cpp (calls Sys_GetSettingByte_413B60, Sys_GetGlobalPtr_413DE0)
-    # The set below is the exact link closure computed from nm on every new file, not a guess.
-    #   0x0045E060 (858 bytes, untranscribed) -> core/native_412420.cpp
-    # 413b20/413b30/413b40 stay in the build only because their fix (reading g_5391ac
-    # instead of a private byte) is not committable until 413df0 links. Remove this block
-    # in the commit that lands 0x004AF9D0 and 0x0045E060, which releases this entire chain.
+    # Hold-out: exactly ONE file remains outside the build target.
+    #   core/native_412420.cpp calls 0x0045E060 (858 bytes, 7 blocks, 237 instructions), which has no
+    #   core/native_4696b0.cpp calls 0x004B7F40 (Sys_RegisterNamedWord_4B7F40), a single-caller wrapper above
+    #     0x0048FFFF that has no implementation yet - a new gap, not a transcription error.
+    #   implementation. Everything else that was held is now released and links:
+    #     0x004AF9D0 landed (sys/native_4af9d0.cpp) -> released sys/native_4f1db0.cpp, core/native_413df0.cpp,
+    #       core/native_47cf20.cpp, and through them core/native_413b50/413b60/413de0.cpp and core/native_477e30.cpp
+    #     0x0047CF10 landed (core/native_47cf10.cpp) -> released core/native_46db40.cpp and core/native_46d420.cpp
+    #   The 413b20/413b30/413b40 fix (reading g_5391ac instead of a private 0xFF byte) is applied in the same
+    #   commit as this block, since 413df0 now links and owns that global.
+    # Measured, not assumed: the linker rejected each of these by name until its callee existed.
     engine/src/retail/core/native_46e370.cpp
     engine/src/retail/sys/native_4aff90.cpp
     engine/src/retail/sys/native_4affb0.cpp
+    engine/src/retail/sys/native_4af9d0.cpp
+    engine/src/retail/sys/native_4f1db0.cpp
+    engine/src/retail/core/native_413df0.cpp
+    engine/src/retail/core/native_413b50.cpp
+    engine/src/retail/core/native_413b60.cpp
+    engine/src/retail/core/native_413de0.cpp
+    engine/src/retail/core/native_47cf20.cpp
+    engine/src/retail/core/native_47cf10.cpp
+    engine/src/retail/core/native_46db40.cpp
+    engine/src/retail/core/native_46d420.cpp
+    engine/src/retail/core/native_477e30.cpp
+    engine/src/retail/core/native_46cb70.cpp
+    engine/src/retail/core/native_46c0c0.cpp
     engine/platform/windows/retail_native_verification_support.cpp)
 target_include_directories(igi PRIVATE engine/include)
 target_compile_features(igi PRIVATE cxx_std_20)
