@@ -11,6 +11,24 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - QVM evaluator cluster and its transcription set link into the candidate (27 natives, internal build)
+
+- **27 natives listed in one batch** and linked: `igi1.exe` grows 14,206,798 -> 14,222,891 bytes, build green. This closes the QVM closure that had
+  blocked the script layer since the accessor work started: the last three undefined symbols (`0x004B9120`, `0x004B8CE0`, `0x004B9660`) now have
+  in-tree definitions, and the accessor trio (`0x004B8A20`, `0x004B8A50`, `0x004B8A80`) links with them. Piecemeal integration was never possible -
+  tracked TUs already reference all three accessors, which a link test proved before this batch.
+- **Two CRT routines identified instead of transcribed**: `0x005169B0` is statically linked MSVC `strncat` (291 B, leaf, zero callees and data
+  references, one call site in the whole `.text`) and `0x004A5500` is MSVC `strncpy` (254 B, 35 blocks); both join `0x004A53B3` sprintf as CRT
+  closure reductions with no implementation unit.
+- **ABI correction from bytes**: `0x004B8CE0` takes three arguments, not four. `0x004B9040` pushes four words but the first is a retained stack word
+  consumed by the following `strncpy` after retail's deliberately short `add $0xc`; the declaration, the call and the comment were corrected rather
+  than silently changed.
+- **Cross-file name mismatch fixed**: `native_4b8a80.cpp` still declared `0x004B8CE0` under its previous placeholder name and passed an untyped
+  destination; the declaration now matches the definition, so the batch links instead of failing with one undefined symbol.
+- Verification status for every native in the batch is `BUILD_VERIFIED` with `runtime UNOBSERVED` recorded in its limitations. The changed-native gate
+  still blocks them, and correctly so: its behavioral runner reports `unsupported native address` for these VAs because no paired runtime observation
+  exists - these functions execute from script and QTask dispatch that the candidate does not reach yet. A successful link is not behavioral evidence.
+
 ### 2026-10-25 - QTask_DeleteQTaskType (0x00401A20) transcribed and linked (internal build, no release)
 
 - `engine/src/retail/core/native_401a20.cpp` (50 B, 15 instructions, 3 blocks, 3 edges) is listed in `CMakeLists.txt` and links into the candidate;

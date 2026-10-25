@@ -3395,10 +3395,11 @@
           "rationale": "Retail is cdecl int32_t(void) with no arguments and a 32-bit int result; the candidate is extern \"C\" __cdecl int QTask_CreateTask() with no arguments and the same 32-bit result."
         },
         "limitations": [
-        "Build evidence only: the native compiles and links into igi1.exe after the duplicate definition in task_types.cpp was removed; runtime UNOBSERVED until the startup chain reaches the registration path.",
-        "Static CFG (radare2 6.2.0): 273 B, 18 blocks, 23 edges, 77 instructions; 279 level-1 registrations captured from retail.",
-        "The two tail consumers 0x00401A20/0x004012F0 and the 0x004B0B70 free path are not transcribed yet."
-      ], "behavioral_runner": {
+          "Build evidence only: the native compiles and links into igi1.exe after the duplicate definition in task_types.cpp was removed; runtime UNOBSERVED until the startup chain reaches the registration path.",
+          "Static CFG (radare2 6.2.0): 273 B, 18 blocks, 23 edges, 77 instructions; 279 level-1 registrations captured from retail.",
+          "The two tail consumers 0x00401A20/0x004012F0 and the 0x004B0B70 free path are not transcribed yet."
+        ],
+        "behavioral_runner": {
           "path": "scripts/native_unicorn_runner.py",
           "args": [
             "--address",
@@ -4525,8 +4526,8 @@
       "verification": {
         "status": "BUILD_VERIFIED",
         "limitations": [
-        "Transcribed from the retail bytes into the engine tree and linked into igi1.exe; runtime UNOBSERVED.",
-        "The prior catalog record claimed 100% human verification for the external EU candidate - that claim applies to that candidate, not to this transcription.",
+          "Transcribed from the retail bytes into the engine tree and linked into igi1.exe; runtime UNOBSERVED.",
+          "The prior catalog record claimed 100% human verification for the external EU candidate - that claim applies to that candidate, not to this transcription.",
           "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md)."
         ],
         "evidence": [
@@ -56878,7 +56879,7 @@
         "signature": "extern \"C\" long double IGI_RETAIL_CDECL Qvm_GetFloatArg(void* argument_frame, std::int32_t index)"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "BUILD_VERIFIED",
         "recorded_at": "2026-10-23T16:42:18+05:30",
         "selected_decompiler": "binary_ninja",
         "cfg_similarity": 1.0,
@@ -56940,7 +56941,8 @@
           "The long double return type is established from the call sites (for example 0x00410082 `fstp dword [0x0056E1E8]` after the 0x004B8A50 call at 0x0041007D) and from both callees' x87 loads; it is not recorded by Binary Ninja or Radare2.",
           "The pre-existing scripts/GameNatives/profile/004B8A50-Profile_ValueSet.cpp candidate is a raw decompiler dump with the stale int(float,float) signature and an uninitialized return on the indexed branch; it was not used. The retail body and the call sites are the source for this transcription.",
           "2026-10-23 Task B canonical-reference repair: game_natives now points at scripts/GameNatives/qvm/004B8A50-Qvm_GetFloatArg.cpp, a reconstruction of the retail body that is explicitly labelled as a reconstruction and not a verbatim original. This file is a reconstruction of the retail body, explicitly not a verbatim original; it replaces the stale profile-path dump at scripts/GameNatives/profile/004B8A50-Profile_ValueSet.cpp, which carried the int(float,float) prototype and an uninitialised return on the indexed branch. The canonical implementation stays engine/src/retail/script/qvm_execute.cpp.",
-          "2026-10-23 Task B semantic-review repair: the checks array was completed with the gate-required names (calls_and_side_effects among them) using evidence already recorded in the report. The verdict, implementation digest and verification status are unchanged."
+          "2026-10-23 Task B semantic-review repair: the checks array was completed with the gate-required names (calls_and_side_effects among them) using evidence already recorded in the report. The verdict, implementation digest and verification status are unchanged.",
+          "Linked into igi1.exe (14,222,891 bytes) in the QVM/startup cluster batch; runtime UNOBSERVED - no behavioral observation exists for this native yet."
         ],
         "rebind": {
           "recorded_at": "2026-10-23T11:58:00Z",
@@ -72054,9 +72056,10 @@
         "sha256": "c1d5f2110b979382a38fd2e71cf247da269cf0162d09005fc32ed61ad7e3b348"
       },
       "verification": {
-        "status": "VERIFIED",
+        "status": "BUILD_VERIFIED",
         "limitations": [
-          "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md)."
+          "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md).",
+          "Linked into igi1.exe (14,222,891 bytes) in the QVM/startup cluster batch; runtime UNOBSERVED - no behavioral observation exists for this native yet."
         ],
         "evidence": [
           "scripts/GameNatives/EU_NATIVES_BN_COPY.md"
@@ -80839,6 +80842,1991 @@
         "cfg_similarity": 1.0
       },
       "notes": "Renamed from `FreeCamera_Init_5310E0` when the address suffix was stripped; the retail VA in this record is unchanged."
+    },
+    {
+      "address": "0x004AF930",
+      "name": "HeapList_PopFront_4AF930",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/mem/native_4af930.cpp",
+        "sha256": "7e6b0361f54a0490e65192ef21dfe4d171377c1920d3698dfe5839e2760c82b1",
+        "signature": "unresolved"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/camera/004AF930-Camera_ApplyBandFilter_33.cpp",
+        "sha256": "c63d61620c9f21667f14befaa8eca0730c3cdb87ddd5ab5055d25dbb1dd209fc",
+        "signature": "unresolved"
+      },
+      "verification": {
+        "status": "BUILD_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
+          "Linked into igi1.exe (14,222,891 bytes) in the QVM/startup cluster batch; runtime UNOBSERVED - no behavioral observation exists for this native yet."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x004AF930-radare2.json",
+          "evidence_sha256": "af095c1237abac46feca87886507e75ad75db207f308d59d26acf2f5e7b1ed53",
+          "evidence_id": "r2:live:0x004AF930",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x004AF930-binaryninja.json",
+          "evidence_sha256": "4450d1d4cb69efac8b0f685526d2b0be9ec5034260b0f738285f86c86af630c8",
+          "evidence_id": "bn:live:0x004AF930",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004AF930-semantic-review.json",
+          "evidence_sha256": "0951ac68fc3611d9677e16990e1ea0935b73e34e492e50d0265cbd96a2e8378b"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004AF930-build.json",
+          "evidence_sha256": "a7fbcee39682809d69b78212983959dd02636ad6ca337599bb06dd7ce0830793"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x004AF930-behavioral.json",
+          "evidence_sha256": "a1f8ccd8d566be019f11478c70581279053b7505c1e845f8537720a5ca8a0c36"
+        }
+      }
+    },
+    {
+      "address": "0x004BAC30",
+      "name": "Script_QHashSymbolPoolRefill_4BAC30",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/script/native_4bac30.cpp",
+        "sha256": "caf112d9e01bbd2310912f0e40a1f79506db371d99d61d94e1a6fa098b0f35ae",
+        "signature": "unresolved"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/sys/004BAC30-Sys_DispatchOpcode_25.cpp",
+        "sha256": "5ede4524ca4a771910a0801e53835246eef27c1cc26985df0db421ceac7cde08",
+        "signature": "unresolved"
+      },
+      "verification": {
+        "status": "BUILD_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
+          "Linked into igi1.exe (14,222,891 bytes) in the QVM/startup cluster batch; runtime UNOBSERVED - no behavioral observation exists for this native yet."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x004BAC30-radare2.json",
+          "evidence_sha256": "d5d766f776e186a458b8467049d14b209f5d8d14de60495688837aa686f430ac",
+          "evidence_id": "r2:live:0x004BAC30",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x004BAC30-binaryninja.json",
+          "evidence_sha256": "a237a55ab811afe1e22274d1a6e7580dd7e11287b31768ee32cf18510864010c",
+          "evidence_id": "bn:live:0x004BAC30",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004BAC30-semantic-review.json",
+          "evidence_sha256": "5d3196cfbd11884d9663a7a1f34ea58acac609384bf2f508c58cdd5263baa352"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004BAC30-build.json",
+          "evidence_sha256": "fcb7ca125fe1170be3840770bbb6f0c47ae80e9fa85e36d36b67f795a1a5d9c1"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x004BAC30-behavioral.json",
+          "evidence_sha256": "a1acdad9a141e175cbad0a02a75515a7cb5c474b85076fd46fb790ed6ae4b8e1"
+        }
+      }
+    },
+    {
+      "address": "0x004BABB0",
+      "name": "Script_QHashSymbolNodeCreate_4BABB0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/script/native_4babb0.cpp",
+        "sha256": "f04ac0fca7a603e0feb75dbeb116830e7be18764fa118ac482d4c76221af5512",
+        "signature": "unresolved"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/sys/004BABB0-Sys_ExecuteBytecode_25.cpp",
+        "sha256": "b7d1627999337f4ebfb00db355f1d566b02ea3d8fbad4bd43918f83b71b5ff1b",
+        "signature": "unresolved"
+      },
+      "verification": {
+        "status": "BUILD_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
+          "Linked into igi1.exe (14,222,891 bytes) in the QVM/startup cluster batch; runtime UNOBSERVED - no behavioral observation exists for this native yet."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x004BABB0-radare2.json",
+          "evidence_sha256": "897f41c1d69daa13e5b970e263b32ad913dec3c3b6b458c5c9237e60c7b20b65",
+          "evidence_id": "r2:live:0x004BABB0",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x004BABB0-binaryninja.json",
+          "evidence_sha256": "85a7b2066e05fad54a72273d201b1c60d7af54445341881f8fad09d6c28d95f5",
+          "evidence_id": "bn:live:0x004BABB0",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004BABB0-semantic-review.json",
+          "evidence_sha256": "049917c65f6a9c0bc85a3a555a41feccf9c2c9f227ec7b403bc8908aef59a172"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004BABB0-build.json",
+          "evidence_sha256": "b4fae62634959a0dbc187d92490079d6aab4010281d2d7e79962054b046eead3"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x004BABB0-behavioral.json",
+          "evidence_sha256": "61b13602c2f15c390a1b7b79bbe08ff9ce06b33c1aabbb35d8babea75f3e113e"
+        }
+      }
+    },
+    {
+      "address": "0x004BAB80",
+      "name": "Script_QHashSymbolLookup_4BAB80",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/script/native_4bab80.cpp",
+        "sha256": "e87b0bc40843dc9e8eec16f030ecf12a3eee4bdd78ae6950b3d65ec62cd61a7e",
+        "signature": "unresolved"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/sys/004BAB80-Sys_ReadFileBlock_25 2.cpp",
+        "sha256": "c57ae3025fcba1918849719243f897a724f10a8d39fa4c35ddc49ebdcbc5d012",
+        "signature": "unresolved"
+      },
+      "verification": {
+        "status": "BUILD_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
+          "Linked into igi1.exe (14,222,891 bytes) in the QVM/startup cluster batch; runtime UNOBSERVED - no behavioral observation exists for this native yet."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x004BAB80-radare2.json",
+          "evidence_sha256": "f7e99571ecffddf70cf0f65c50ae3db7199cb8d0ad82aeb98922fcf1916d1a3a",
+          "evidence_id": "r2:live:0x004BAB80",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x004BAB80-binaryninja.json",
+          "evidence_sha256": "4a37b573a3d61f21f93567414fb7cb2880ac9343186aea957f69b53965d12488",
+          "evidence_id": "bn:live:0x004BAB80",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004BAB80-semantic-review.json",
+          "evidence_sha256": "36a7ce30b554751574167b2c44ad82034ce525dd5e4028330627ad983811a5b3"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004BAB80-build.json",
+          "evidence_sha256": "f005aea1ea471032729446adcab2d22648c9f453abcd96cc07dd0af686cb68f0"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x004BAB80-behavioral.json",
+          "evidence_sha256": "1f3f928eb6980a300b07c468af4bd678fa2bae5afbb5067c600a8e12fe18657d"
+        }
+      }
+    },
+    {
+      "address": "0x004C0620",
+      "name": "Script_QHashSymbolLookup_4C0620",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/script/native_4c0620.cpp",
+        "sha256": "6cd44af51194cb15940a4d25f6477a6c6de159a8f6e53cbd507208df44d8d673",
+        "signature": "unresolved"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/004C0620-DynObj_CreateMagicObject_2 2.cpp",
+        "sha256": "648fa15997f195ccce992cbd151f9877d74b086e302123667aaa12953976fecc",
+        "signature": "unresolved"
+      },
+      "verification": {
+        "status": "BUILD_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
+          "Linked into igi1.exe (14,222,891 bytes) in the QVM/startup cluster batch; runtime UNOBSERVED - no behavioral observation exists for this native yet."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x004C0620-radare2.json",
+          "evidence_sha256": "9966bed5b5cbaf450dde76701519ddbd1d3a9e960441a1b500fb65d3a13915d7",
+          "evidence_id": "r2:live:0x004C0620",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x004C0620-binaryninja.json",
+          "evidence_sha256": "216af4b673bf6e41c2167c3171d40d1e47f27dc75771e23e4c42b0f1007f073e",
+          "evidence_id": "bn:live:0x004C0620",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004C0620-semantic-review.json",
+          "evidence_sha256": "b1e48a7381ee268661a749fdd4722a28512072daaf29b0e70f13bc4cf9ffdef4"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004C0620-build.json",
+          "evidence_sha256": "eb007f0a366cc75f37a7251789bbc84c200ff20d655cc19225e9f469b70d9a3e"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x004C0620-behavioral.json",
+          "evidence_sha256": "357bd9990d2227ea9013270f31eef128d8c0d6cbd70e5d29df5f569394287522"
+        }
+      }
+    },
+    {
+      "address": "0x004B9040",
+      "name": "Qvm_StoreArgumentValue_4B9040",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/script/native_4b9040.cpp",
+        "sha256": "67ab307b8e2ad0942a13daa2c58aec7908c13cd13daba5015441ebe1c39415ac",
+        "signature": "unresolved"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/sys/004B9040-Sys_OpenFileStream_24 2.cpp",
+        "sha256": "38e055796a28b2ada0675097436c8e84f4f83f4cad721efd4bac957cd6ee781d",
+        "signature": "unresolved"
+      },
+      "verification": {
+        "status": "BUILD_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
+          "Linked into igi1.exe (14,222,891 bytes) in the QVM/startup cluster batch; runtime UNOBSERVED - no behavioral observation exists for this native yet."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x004B9040-radare2.json",
+          "evidence_sha256": "c740f2f116e439e8db844ad7a5e48289b7616f0da558332c204315d2d2d02af3",
+          "evidence_id": "r2:live:0x004B9040",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x004B9040-binaryninja.json",
+          "evidence_sha256": "2d2a9640b86130b7a44b5492a0d54481e00226670bf63cf8928999997ad284c9",
+          "evidence_id": "bn:live:0x004B9040",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004B9040-semantic-review.json",
+          "evidence_sha256": "1a736062571b0c8f26dc69e7a10fe5acaae51c6c467b9b928bbc779d7717f1b1"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004B9040-build.json",
+          "evidence_sha256": "b01971a66ac29e4f50068a81e888667aa9fb565d9ee45f6cfc54b3c3777c1658"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x004B9040-behavioral.json",
+          "evidence_sha256": "6cd120dc519a7fd2d512e3b1fc749e06d2040d44ed9635c61f7af22a496d72cb"
+        }
+      }
+    },
+    {
+      "address": "0x004192e0",
+      "name": "BackgroundFX_BuildRotation_4192E0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_4192e0.cpp",
+        "sha256": "4d6c599604dea12754f4980089708e99d23d278821bc17222df667ca22abec92",
+        "signature": "unresolved"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/menu/004192E0-Menu_PlayMusic_5.cpp",
+        "sha256": "c0f606dcdb2ea56cd846301979aa301d24977b0f8750e3db96a0060c4f7a894b",
+        "signature": "unresolved"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x004192e0-radare2.json",
+          "evidence_sha256": "7ae5a1098b879c0842c43e11b6873ce8070debe08404faa6119dfb63b4c12b99",
+          "evidence_id": "r2:live:0x004192e0",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x004192e0-binaryninja.json",
+          "evidence_sha256": "c3841310e452020c4d5462bc2ff74e81195a10bcb5e47ae685edef10247b7efb",
+          "evidence_id": "bn:live:0x004192e0",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004192e0-semantic-review.json",
+          "evidence_sha256": "a6b8648bec9317db4e6b9119e3ab59bfdf5a03f0074ed8a0143b84e338daf942"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004192e0-build.json",
+          "evidence_sha256": "6d4569a739ddaf3330347d239807d8165d9220a04345b3b7c98371e8db2c0cf7"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x004192e0-behavioral.json",
+          "evidence_sha256": "0b4c33d72eeaeb33501f1f822cf2bf2f80d5024d9fa1f99f818cae7b03af3e07"
+        }
+      }
+    },
+    {
+      "address": "0x004197f0",
+      "name": "BackgroundFX_ZeroField20_4197F0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_4197f0.cpp",
+        "sha256": "76c72a614981d50ac5485e44e1d072ee866b82a2c657c74360215ff7e47f5c51",
+        "signature": "unresolved"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/menuui/004197F0-MenuUI_GetContext_4197F0 2.cpp",
+        "sha256": "736697daeee36cac61e881f4203f8c203d24edf19a6aa90d0719fe3409ecb4da",
+        "signature": "unresolved"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x004197f0-radare2.json",
+          "evidence_sha256": "545037892cf82d72a490e0faf5b7fec8d10bb0862b1190ad4c3af52ba2769861",
+          "evidence_id": "r2:live:0x004197f0",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x004197f0-binaryninja.json",
+          "evidence_sha256": "fae0cd68b3f52a4c1249611b8b3dcc76a5a456ba31ce5021ec1c8e586cea3c39",
+          "evidence_id": "bn:live:0x004197f0",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004197f0-semantic-review.json",
+          "evidence_sha256": "078f74da3c8f2a6722a33a3ae7dafc8c2d76a7f1b43fbf96dc96b9714ee23b53"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004197f0-build.json",
+          "evidence_sha256": "a4f44430a0fdceb9838f2ed842e132bdc550e3739e6ded090afcc229a554c9e1"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x004197f0-behavioral.json",
+          "evidence_sha256": "d7e2bccaf90c3516d7ebbb99d47ed96dc9e4ed98bccfc45f4394238a03304601"
+        }
+      }
+    },
+    {
+      "address": "0x00419800",
+      "name": "BackgroundFX_AdvanceField20_419800",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_419800.cpp",
+        "sha256": "a52308633a84d9f15e7bbcc64039c92ec850fb69d98bc1426f0a57d19578bf7c",
+        "signature": "unresolved"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/menuui/00419800-MenuUI_GetContext_419800 2.cpp",
+        "sha256": "f856a59fbc5ec54df3abeeb9309b92fa9421cb9ebb140d5fb7784d2bf46522df",
+        "signature": "unresolved"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x00419800-radare2.json",
+          "evidence_sha256": "41f69f97f5a4fca906e1113db4edaac5de368809f0b0cd7cf724ad5888610d35",
+          "evidence_id": "r2:live:0x00419800",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x00419800-binaryninja.json",
+          "evidence_sha256": "25c555ba41895112f057790d9abf3fc9a0e62115b413e5bc4edb70f80cf6fac3",
+          "evidence_id": "bn:live:0x00419800",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x00419800-semantic-review.json",
+          "evidence_sha256": "b364b6f7ae120599c2e835fd3c43f30f21a598cd95fc89957549acf68ada587f"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x00419800-build.json",
+          "evidence_sha256": "64578ff6552aa16bd28eb8ff6d892b6a530198f68c979212aa8ffd2eccafdecc"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x00419800-behavioral.json",
+          "evidence_sha256": "c46649dcb2338712afa4e8de465ee263981ecc518584bbe7d0db0343fa62c33e"
+        }
+      }
+    },
+    {
+      "address": "0x0042dac0",
+      "name": "QTask_LinkClassHandlersA_42DAC0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_42dac0.cpp",
+        "sha256": "80bdd21c8704ebfc7f9492b3d46d26326af2087d46c675f39a123c5c9b8894dd",
+        "signature": "unresolved"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/menu/0042DAC0-Menu_RequestScreen_22 2.cpp",
+        "sha256": "3abac5c367311315e9b02d1da870d54bf71ffb16620922d4f8883ab6318fb43e",
+        "signature": "unresolved"
+      },
+      "verification": {
+        "status": "BUILD_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
+          "Linked into igi1.exe (14,222,891 bytes) in the QVM/startup cluster batch; runtime UNOBSERVED - no behavioral observation exists for this native yet."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x0042dac0-radare2.json",
+          "evidence_sha256": "672727bc7cac2739ea063c81bcbd06b719a776a53db746b68b295a1dc82eb95f",
+          "evidence_id": "r2:live:0x0042dac0",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x0042dac0-binaryninja.json",
+          "evidence_sha256": "3cb4f42d685f31bf881492da3d674ed1eaf1758d0cd507389eb2f0d83042e480",
+          "evidence_id": "bn:live:0x0042dac0",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x0042dac0-semantic-review.json",
+          "evidence_sha256": "20e22f10f1c3fc0e7264ef78ca3e45ba4991db2fa6ff42472c6668545d8d08f3"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x0042dac0-build.json",
+          "evidence_sha256": "c24b60f3044e4969b3a22625e349c8fbe42275ae7ba19110ee53514cb663d7ee"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x0042dac0-behavioral.json",
+          "evidence_sha256": "bd8682d1df1ca9d0aa0007e5688c14f6b9301138ae7cb385cf5942bab69871ff"
+        }
+      }
+    },
+    {
+      "address": "0x0042db00",
+      "name": "QTask_HandlerA_42DB00",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_42db00.cpp",
+        "sha256": "f46fc6d7b45e92a4254f766b0d1bcdcd7da024ba26065106103911238669b812",
+        "signature": "unresolved"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/menu/0042DB00-Menu_LeaveMenus_22 2.cpp",
+        "sha256": "1c521d6b63c055a2ca7ca2db3cfbba4dd3356cbfab382c0888a26e0eba4aea7e",
+        "signature": "unresolved"
+      },
+      "verification": {
+        "status": "BUILD_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
+          "Linked into igi1.exe (14,222,891 bytes) in the QVM/startup cluster batch; runtime UNOBSERVED - no behavioral observation exists for this native yet."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x0042db00-radare2.json",
+          "evidence_sha256": "87cea4bf7c05d5854747017a5611cdd35924a5ead8f37c61cc496ecb38fe138e",
+          "evidence_id": "r2:live:0x0042db00",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x0042db00-binaryninja.json",
+          "evidence_sha256": "1375dcef34e2625790af6316d8313a50337b4ba408ff37808883642f107243ba",
+          "evidence_id": "bn:live:0x0042db00",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x0042db00-semantic-review.json",
+          "evidence_sha256": "d9751cd88a2505b861c077554f6bf17fe6b795fc9f4d8d070ed1ca582ad398b6"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x0042db00-build.json",
+          "evidence_sha256": "6e845002114030ce94a91d8fbb2e24d17b2a6b07ab477d98d6dc48c1de522369"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x0042db00-behavioral.json",
+          "evidence_sha256": "6dceaf3558f265d24be19429c237941e5ef4b262144ccfc1b1d6b8c885ede1b6"
+        }
+      }
+    },
+    {
+      "address": "0x0042dce0",
+      "name": "QTask_HandlerB_42DCE0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_42dce0.cpp",
+        "sha256": "ca36b289b208ebe889432836f1e572faf55a35402314e9ed25b499b5c5a40812",
+        "signature": "unresolved"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/vehiclephysics/0042DCE0-VehiclePhysics_Invoke5 2.cpp",
+        "sha256": "bae68d8d5c55b4f51ff12b53c025c1a035d9830bff0cb139f2760c72aeb4d2be",
+        "signature": "unresolved"
+      },
+      "verification": {
+        "status": "BUILD_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
+          "Linked into igi1.exe (14,222,891 bytes) in the QVM/startup cluster batch; runtime UNOBSERVED - no behavioral observation exists for this native yet."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x0042dce0-radare2.json",
+          "evidence_sha256": "1b6dfd76957419f6e3fa16cb8120a646954017e784b3e080fc3bec5887f6bd6f",
+          "evidence_id": "r2:live:0x0042dce0",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x0042dce0-binaryninja.json",
+          "evidence_sha256": "74e7c0abe0d50bacc007848a79a330372c307c177ecabe1bd048a982d18c8bc3",
+          "evidence_id": "bn:live:0x0042dce0",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x0042dce0-semantic-review.json",
+          "evidence_sha256": "884242c218e2af075c7701f70be1eb4208cade92762d1978669748813e490e82"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x0042dce0-build.json",
+          "evidence_sha256": "1daecd2559cc9679e5ce0ad7e8b7fefdc91b0a6681db1f7c7189cb124c5bf24d"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x0042dce0-behavioral.json",
+          "evidence_sha256": "573014a16f449f5b00b352ec26c55431aed9d6cc3053eca6e154b509a0a0624a"
+        }
+      }
+    },
+    {
+      "address": "0x0042fe40",
+      "name": "QTask_LinkClassHandlersB_42FE40",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_42fe40.cpp",
+        "sha256": "e859818d63ad02666457e4f148136558f5e41a05c9b601173d832c012fa376d8",
+        "signature": "unresolved"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/menu/0042FE40-Menu_PlayMusic_23 2.cpp",
+        "sha256": "26650418b7b80f17481b76cb39431b1029247e1987d02f44bc7b7766c4bcf2a6",
+        "signature": "unresolved"
+      },
+      "verification": {
+        "status": "BUILD_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
+          "Linked into igi1.exe (14,222,891 bytes) in the QVM/startup cluster batch; runtime UNOBSERVED - no behavioral observation exists for this native yet."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x0042fe40-radare2.json",
+          "evidence_sha256": "ee2816b6517ac920c3fed68959c9f807865dbe5df9519a1e6d108e6c668ffc44",
+          "evidence_id": "r2:live:0x0042fe40",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x0042fe40-binaryninja.json",
+          "evidence_sha256": "5d4d4e901033058c786a9edb39abb18469e2515c0c43fc6d129f0972e35914eb",
+          "evidence_id": "bn:live:0x0042fe40",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x0042fe40-semantic-review.json",
+          "evidence_sha256": "aa0bdbad466b21f892b7ac2c54a8c121edcae1ea7f38cef4072b4fbaa8ea414e"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x0042fe40-build.json",
+          "evidence_sha256": "f053bcc64ed32c29e85ea5b56ee798e968d7c9b4deae9df8801027a158dcddfc"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x0042fe40-behavioral.json",
+          "evidence_sha256": "b841c0492aa5c89745f5e6e980abb1a73a545d0c4485baac3b26923143af34f5"
+        }
+      }
+    },
+    {
+      "address": "0x0042fe80",
+      "name": "QTask_HandlerC_42FE80",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_42fe80.cpp",
+        "sha256": "f2347d4ad400facad1cd8dc1ea5b7f9ddbb9a35720432ea9c61bf8e2e98036ad",
+        "signature": "unresolved"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/0042FE80-VehiclePhysics_Invoke23 2.cpp",
+        "sha256": "8b563e3235e4cb218dbd6ce17c91bc6aa043fb16ab8face5d5f538cf0c5f4a86",
+        "signature": "unresolved"
+      },
+      "verification": {
+        "status": "BUILD_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
+          "Linked into igi1.exe (14,222,891 bytes) in the QVM/startup cluster batch; runtime UNOBSERVED - no behavioral observation exists for this native yet."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x0042fe80-radare2.json",
+          "evidence_sha256": "f5bfc2eca23731c288aa8d3f06b72ab3f29b196cf4f7b0ffcf2d716e4142a297",
+          "evidence_id": "r2:live:0x0042fe80",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x0042fe80-binaryninja.json",
+          "evidence_sha256": "ac5b1b2ffd24aa3168473292ee1dab7d4d887e8e526462d516eede1fd33ae323",
+          "evidence_id": "bn:live:0x0042fe80",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x0042fe80-semantic-review.json",
+          "evidence_sha256": "8ad5278f48142d066141b096c309109ab1350f34a14170ebd6902c52d705671d"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x0042fe80-build.json",
+          "evidence_sha256": "41832bd37aadb8e242f1dee006fbf402083ee7a5bb305fc1d10cb49bc44f3279"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x0042fe80-behavioral.json",
+          "evidence_sha256": "4d49c092a70d4d2cb3fb1d288b79bf75257623606f17363c8c2fc506b691b922"
+        }
+      }
+    },
+    {
+      "address": "0x0042fef0",
+      "name": "QTask_HandlerD_42FEF0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_42fef0.cpp",
+        "sha256": "045cb8a56bcf5bc64d060d410d44160dfc583ef8f68cae2d295336514e95e0b3",
+        "signature": "unresolved"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/vehiclephysics/0042FEF0-VehiclePhysics_ProcessWheel 2.cpp",
+        "sha256": "e4f87024006d30f7b08049251cbb90038d2db7872fb3c36f9111b3a663dfd166",
+        "signature": "unresolved"
+      },
+      "verification": {
+        "status": "BUILD_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
+          "Linked into igi1.exe (14,222,891 bytes) in the QVM/startup cluster batch; runtime UNOBSERVED - no behavioral observation exists for this native yet."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x0042fef0-radare2.json",
+          "evidence_sha256": "de2ea4de471d5ac36e386d534db5aa3dda348074c80f94d3adbfc726607e559d",
+          "evidence_id": "r2:live:0x0042fef0",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x0042fef0-binaryninja.json",
+          "evidence_sha256": "8e4aabc73d7f600591c4739cd52c151659b437c58a6902ea7b18c3d10aebfcc6",
+          "evidence_id": "bn:live:0x0042fef0",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x0042fef0-semantic-review.json",
+          "evidence_sha256": "84dcf2bfb65e84b1bbd1fbd35a5929c651214ac99d428d40a2506863f7b996bd"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x0042fef0-build.json",
+          "evidence_sha256": "a98e4b93d15980de02de2feb6beb43dfcc4d3850ee8f0d8010fa9d49c6985bb9"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x0042fef0-behavioral.json",
+          "evidence_sha256": "08667c580d644a01311eaf1685ddc30068c7035d39a8f9cde102c16502b7eb79"
+        }
+      }
+    },
+    {
+      "address": "0x004b8a80",
+      "name": "Sys_ResolveSymbol_23_4B8A80",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/script/native_4b8a80.cpp",
+        "sha256": "6c8f4cdd1fb1ef3c60e0142714091f48b18217f0d44c3812e8097b3aa3a44b78",
+        "signature": "unresolved"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/sys/004B8A80-Sys_ResolveSymbol_23 2.cpp",
+        "sha256": "d0353417f7f1ad08a925bd1842a925eabce8ae28067b41ebe8b2f3fae80862b9",
+        "signature": "unresolved"
+      },
+      "verification": {
+        "status": "BUILD_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
+          "Linked into igi1.exe (14,222,891 bytes) in the QVM/startup cluster batch; runtime UNOBSERVED - no behavioral observation exists for this native yet."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x004b8a80-radare2.json",
+          "evidence_sha256": "257a427c1646329534cc47a59815ec30d9b78b90b513e2503f04d2df1c17826e",
+          "evidence_id": "r2:live:0x004b8a80",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x004b8a80-binaryninja.json",
+          "evidence_sha256": "4a583485528ad2854ccc869a9509a8cfb59b5d41fffaae4275f39025607d9597",
+          "evidence_id": "bn:live:0x004b8a80",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004b8a80-semantic-review.json",
+          "evidence_sha256": "f90dc5403cdab14b19154c30b42f919aee9e34ecc1819f52fbac306430af51f8"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004b8a80-build.json",
+          "evidence_sha256": "1ef05544dbf5d8596c9158ae84fec97d435849f714cee09e2dd348a796bd904c"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x004b8a80-behavioral.json",
+          "evidence_sha256": "6ad085d6114a8ab24b37de1d92eb4c8e6a0213a106431d29b7970721c2fb5be4"
+        }
+      }
+    },
+    {
+      "address": "0x004b9120",
+      "name": "Qvm_EvaluateIntegerNode_4B9120",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/script/native_4b9120.cpp",
+        "sha256": "e283330e066953c4ad497aa74b51343b9ff7459e91ba24d4546c4a0852915068",
+        "signature": "unresolved"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/sys/004B9120-Sys_ReadFileBlock_24 2.cpp",
+        "sha256": "a1b58ffdfda5f03a5f8e47d7b602bf13f34ff061fbe25ad5fdec803151ef1943",
+        "signature": "unresolved"
+      },
+      "verification": {
+        "status": "BUILD_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
+          "Linked into igi1.exe (14,222,891 bytes) in the QVM/startup cluster batch; runtime UNOBSERVED - no behavioral observation exists for this native yet."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x004b9120-radare2.json",
+          "evidence_sha256": "818bde87bf466964d457e3c0a76e26df3731e72808603cb6dc74fc749083874c",
+          "evidence_id": "r2:live:0x004b9120",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x004b9120-binaryninja.json",
+          "evidence_sha256": "0898cc7aebb4a6d499a94ffdb9f4585905cafe97286ab03e2013a8c3b94c4980",
+          "evidence_id": "bn:live:0x004b9120",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004b9120-semantic-review.json",
+          "evidence_sha256": "1969a2b787ec270431906087b3eba4387b8007fc35eda1496a4f080f6d0d1b6e"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004b9120-build.json",
+          "evidence_sha256": "322159b04195d8b4d0724f3357b52b8f4d673767793e07e45191d46627ca7b52"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x004b9120-behavioral.json",
+          "evidence_sha256": "5e25644b432a805e7efa0d702e3344a4360137d9e4e04b9403baa9b2533ed7c7"
+        }
+      }
+    },
+    {
+      "address": "0x004bcab0",
+      "name": "Qvm_ReadIndexedInteger_4BCAB0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/script/native_4bcab0.cpp",
+        "sha256": "9faf670498e56e9a5b67a0a747ad18456b1266e974e89b130120fdf70ad5d322",
+        "signature": "unresolved"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/sys/004BCAB0-Sys_AllocateMemory_28 2.cpp",
+        "sha256": "4c1a4e32cf461422a763217542751109dd63700f0f414169c47ddff57c7b0a0a",
+        "signature": "unresolved"
+      },
+      "verification": {
+        "status": "BUILD_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
+          "Linked into igi1.exe (14,222,891 bytes) in the QVM/startup cluster batch; runtime UNOBSERVED - no behavioral observation exists for this native yet."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x004bcab0-radare2.json",
+          "evidence_sha256": "b53aa33a9c30a8dd7fc017f70a050f03663870280183c9e24718421a016fd04e",
+          "evidence_id": "r2:live:0x004bcab0",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x004bcab0-binaryninja.json",
+          "evidence_sha256": "f6d6febd5c458118c7b8c9e9d3a95e855c004755d0a381f2e755c8a1cc432750",
+          "evidence_id": "bn:live:0x004bcab0",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004bcab0-semantic-review.json",
+          "evidence_sha256": "ce2581a7a83d04a62ea6f85d3cef437edc371224346bfc2728e051f30118acd3"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004bcab0-build.json",
+          "evidence_sha256": "1385af3d940a58539397974c0455835bd71f6daedf981c34147681edab7e0513"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x004bcab0-behavioral.json",
+          "evidence_sha256": "8bb63a5969847481b66b92af07c9ad4f7b2c5d8142a89ebf0c7e90170f1281d2"
+        }
+      }
+    },
+    {
+      "address": "0x004bcae0",
+      "name": "Qvm_ReadArgumentValue_4BCAE0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/script/native_4bcae0.cpp",
+        "sha256": "28d874087effdfaa8f311005bfe20efecddd0d3970b022f0986be26298a9556f",
+        "signature": "unresolved"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/sys/004BCAE0-Sys_UnknownDataType_2 2.cpp",
+        "sha256": "643f7a8e91f5460b561097f20759a032cf5e5b9dd1fe076e723dd801ff8e2b03",
+        "signature": "unresolved"
+      },
+      "verification": {
+        "status": "BUILD_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
+          "Linked into igi1.exe (14,222,891 bytes) in the QVM/startup cluster batch; runtime UNOBSERVED - no behavioral observation exists for this native yet."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x004bcae0-radare2.json",
+          "evidence_sha256": "ae8d8befbccafad53cb9a3b39bcaba0532b9cb0bb68e28ff35e8ee6d03b3574e",
+          "evidence_id": "r2:live:0x004bcae0",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x004bcae0-binaryninja.json",
+          "evidence_sha256": "4b81b9397f4f1d13ece85472f7343f7643b244757072e70dce7250bec60ad711",
+          "evidence_id": "bn:live:0x004bcae0",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004bcae0-semantic-review.json",
+          "evidence_sha256": "e26c70c50834ba22a10e377e30eac9c75395eb97bf496f8ec9fa4ef7a25eec19"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004bcae0-build.json",
+          "evidence_sha256": "dbcb15cd59d990044e19efb83e155508fd100176a1a4d75614099be52478c921"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x004bcae0-behavioral.json",
+          "evidence_sha256": "17d22bde599cb4e5f4354a2021cd7dc009e6c486ae31f370ea69ee17f82c5810"
+        }
+      }
+    },
+    {
+      "address": "0x004bcc00",
+      "name": "Qvm_PopStringOperand_4BCC00",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/script/native_4bcc00.cpp",
+        "sha256": "a665f782aab882edff4d588e006c9549c265123af092419b0a625cb960df7d7f",
+        "signature": "unresolved"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/sys/004BCC00-Sys_FreeMemory_28.cpp",
+        "sha256": "dad872fda4a5476db875c0cba48f7a318c76681a4c9ba5540c0efac86d15e448",
+        "signature": "unresolved"
+      },
+      "verification": {
+        "status": "BUILD_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
+          "Linked into igi1.exe (14,222,891 bytes) in the QVM/startup cluster batch; runtime UNOBSERVED - no behavioral observation exists for this native yet."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x004bcc00-radare2.json",
+          "evidence_sha256": "22f4ca3bd42633d800b1597b50db8b67614e97375ccb12b04615f9b6344ecc94",
+          "evidence_id": "r2:live:0x004bcc00",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x004bcc00-binaryninja.json",
+          "evidence_sha256": "7e13153fb35ce93a12e7e23c2866b7d66341abdf6599bf28873ff93a4dffedae",
+          "evidence_id": "bn:live:0x004bcc00",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004bcc00-semantic-review.json",
+          "evidence_sha256": "5e71bd8fe4551c2f1bb32d639cdaea88a37a2da704053bd5415a597ab9ce063c"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004bcc00-build.json",
+          "evidence_sha256": "71f2cc30239c62f37c32ec174e446c36a2bf44bfd2c7a47acb8f5e5ed2dc665f"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x004bcc00-behavioral.json",
+          "evidence_sha256": "f2349e871b158464d8ddd2eda7a8de9b2678e06bc9237e04c3b961dadc7ebe5a"
+        }
+      }
+    },
+    {
+      "address": "0x004bccc0",
+      "name": "Qvm_PopOperand_4BCCC0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/script/native_4bccc0.cpp",
+        "sha256": "065844c9cf4b1445dcc5abaad601fc80437aa02ee5c1565a139bc511f6545472",
+        "signature": "unresolved"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/sys/004BCCC0-Sys_UnknownDataType_3.cpp",
+        "sha256": "1f9c22d9a8f6e43e2665f583a475620d814cbbbed724b535d2e148c5312b323c",
+        "signature": "unresolved"
+      },
+      "verification": {
+        "status": "BUILD_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
+          "Linked into igi1.exe (14,222,891 bytes) in the QVM/startup cluster batch; runtime UNOBSERVED - no behavioral observation exists for this native yet."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x004bccc0-radare2.json",
+          "evidence_sha256": "417dfef3a997a4f4e0bfe843d406c5becde0e9cb5e656e2c1b8d4c9d9c6128e9",
+          "evidence_id": "r2:live:0x004bccc0",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x004bccc0-binaryninja.json",
+          "evidence_sha256": "9a370f4c71cb77a8e2961587f1698dea0019afe63a720ba2a2d81a04defc2723",
+          "evidence_id": "bn:live:0x004bccc0",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004bccc0-semantic-review.json",
+          "evidence_sha256": "778000df8a406965390fc2ddc615772d97ee26011256eaa12f6e5fb5e19b1cf8"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004bccc0-build.json",
+          "evidence_sha256": "190bc10d8d7e9f47ce6a88b9761aec1d9cae8061d24e7280394a6c0b57dccf80"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x004bccc0-behavioral.json",
+          "evidence_sha256": "ef1819547914a4fb3d7ced94f4e20cdca034e1672fac274af74ce7c114e2ea95"
+        }
+      }
+    },
+    {
+      "address": "0x004bcd90",
+      "name": "Qvm_ResolveOperand_4BCD90",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/script/native_4bcd90.cpp",
+        "sha256": "81fc3b211d89092fc21dd1c14e9a296b504d9a855e5e3273da9e797432cd7d86",
+        "signature": "unresolved"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/sys/004BCD90-Sys_OpenFileStream_28 2.cpp",
+        "sha256": "8aea0ab9b05cc091ed18e7b4ebfe5de1bff894b4526cb7dcaf99c9daa50ca98d",
+        "signature": "unresolved"
+      },
+      "verification": {
+        "status": "BUILD_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
+          "Linked into igi1.exe (14,222,891 bytes) in the QVM/startup cluster batch; runtime UNOBSERVED - no behavioral observation exists for this native yet."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x004bcd90-radare2.json",
+          "evidence_sha256": "acb586adb42185a499cc158c704dd4045e5d6cc3d7e12fd7b947ae5f2ace4947",
+          "evidence_id": "r2:live:0x004bcd90",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x004bcd90-binaryninja.json",
+          "evidence_sha256": "3a1a4c5e827aa9d4921232016ba188cf0f8a98e58e0d8dfec3a40ca01d6eeb73",
+          "evidence_id": "bn:live:0x004bcd90",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004bcd90-semantic-review.json",
+          "evidence_sha256": "ce3995d43ec27dccf767b08790d5c467c9ab8f548e661576989ceb325b9abbbd"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004bcd90-build.json",
+          "evidence_sha256": "79a55085faab77bf972e2a0e7c4cd1a7a5cff07015ecc9d1baa8881285e308d0"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x004bcd90-behavioral.json",
+          "evidence_sha256": "9b5eb7063dc07f2eb9cea3308c805a412bc6e7cf0d7be435d2e33e0dcd31b4d3"
+        }
+      }
+    },
+    {
+      "address": "0x004bce40",
+      "name": "Qvm_PushStringOperand_4BCE40",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/script/native_4bce40.cpp",
+        "sha256": "7b3e859e15e4da1a664a3fcfe0564ad780032a5125405ba2f27c4af0397ed08f",
+        "signature": "unresolved"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/sys/004BCE40-Sys_ReadFileBlock_28 2.cpp",
+        "sha256": "49f5fd897fb3bd6555ee30f494119d4f3b2de17536dac521ad23c1a67573580a",
+        "signature": "unresolved"
+      },
+      "verification": {
+        "status": "BUILD_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
+          "Linked into igi1.exe (14,222,891 bytes) in the QVM/startup cluster batch; runtime UNOBSERVED - no behavioral observation exists for this native yet."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x004bce40-radare2.json",
+          "evidence_sha256": "a642de1e8b6d6ac4e3489ed9a5d30b0076d983897e8261569e78bf280a810371",
+          "evidence_id": "r2:live:0x004bce40",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x004bce40-binaryninja.json",
+          "evidence_sha256": "94b86fe8b2e9c5d11aaa2bffb9a37c14ea9cd7a303c3cb7014c07a7a45ff3610",
+          "evidence_id": "bn:live:0x004bce40",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004bce40-semantic-review.json",
+          "evidence_sha256": "1c24273809e444ce4705c0bb9684bbba1313aefc6b77f5be01dff3f389197045"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004bce40-build.json",
+          "evidence_sha256": "6d669e1e2aed4dd777eec435d40c2c09941c14fec539773b6e4dc8b9d8ba4e48"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x004bce40-behavioral.json",
+          "evidence_sha256": "cb3ebb8f71ec087807a0b377c97f986d0b56daee3d0ae9a13e1cb1b76a0845e1"
+        }
+      }
+    },
+    {
+      "address": "0x004bcec0",
+      "name": "Qvm_EvaluateOperandPair_4BCEC0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/script/native_4bcec0.cpp",
+        "sha256": "7228d79a70baf3ac8aa255b03bfa67e8a1afdaaf0109e2b7f084c230dfa3c8dd",
+        "signature": "unresolved"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/sys/004BCEC0-Sys_CloseFileStream_28 2.cpp",
+        "sha256": "554fea719c922bd147ea819a3ca1a7f762980a7793e770fde6b55ad21d220bf4",
+        "signature": "unresolved"
+      },
+      "verification": {
+        "status": "BUILD_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
+          "Linked into igi1.exe (14,222,891 bytes) in the QVM/startup cluster batch; runtime UNOBSERVED - no behavioral observation exists for this native yet."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x004bcec0-radare2.json",
+          "evidence_sha256": "5bed7a809994ecd4105c33e74afe38c6ae7430298c6bd0fa401597c7ae3f35c8",
+          "evidence_id": "r2:live:0x004bcec0",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x004bcec0-binaryninja.json",
+          "evidence_sha256": "4e4d9b836b5906ca4e006278f49c329dbab67836b0fc573c7a431fdf31cfe285",
+          "evidence_id": "bn:live:0x004bcec0",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004bcec0-semantic-review.json",
+          "evidence_sha256": "83d943c42bda3c42ea868e4ea15c0a8c3275b7a546a22773db9fa0c50c80aaa0"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004bcec0-build.json",
+          "evidence_sha256": "079aa7fc0e536bb7967ad01ae2bb1f74aa681a5196f2c253db73b14463361c4a"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x004bcec0-behavioral.json",
+          "evidence_sha256": "cc25384b5912f26c2987552935bcc7d5e57e0352c0b90987615bf42929999e8a"
+        }
+      }
+    },
+    {
+      "address": "0x004bd010",
+      "name": "Qvm_ReadIndexedArgument",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/script/native_4bd010.cpp",
+        "sha256": "aba17681a04df7959c905a9fbefb07c8304d8e918c2f9bf08e0a5900ab72eb2b",
+        "signature": "unresolved"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/sys/004BD010-Sys_DispatchOpcode_28 2.cpp",
+        "sha256": "6a9ed743ad3d4028627ad66f1c32acfbf6949ff06bcea2db146e69e324671076",
+        "signature": "unresolved"
+      },
+      "verification": {
+        "status": "BUILD_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
+          "Linked into igi1.exe (14,222,891 bytes) in the QVM/startup cluster batch; runtime UNOBSERVED - no behavioral observation exists for this native yet."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x004bd010-radare2.json",
+          "evidence_sha256": "eed5b43996495ee337bc8d17fca8dc2a83a1e838bb006ca98461c78d372e3ee0",
+          "evidence_id": "r2:live:0x004bd010",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x004bd010-binaryninja.json",
+          "evidence_sha256": "bb82d4a5bf2c88b2713e243a6897596b44fb5d7599f42f6c43787d9983da0e91",
+          "evidence_id": "bn:live:0x004bd010",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004bd010-semantic-review.json",
+          "evidence_sha256": "703889f84bbf0a757e6410a177cfcab5ebaead759ce45e7bd2289ea43c57d656"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004bd010-build.json",
+          "evidence_sha256": "9b35a15edf655a415fb139312d3a66cc8156b92b842c9252d0a1d27931d91473"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x004bd010-behavioral.json",
+          "evidence_sha256": "1f141ddcb39a1b35abe51bd332a121c8c37c6a2f3727b7393426cf2a5afae5b9"
+        }
+      }
+    },
+    {
+      "address": "0x004bd040",
+      "name": "Qvm_ReadIndexedBlock_4BD040",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/script/native_4bd040.cpp",
+        "sha256": "1ab58bf110bcfefd717aa819df8cfc6ad7ff56812a0e787015d4bd786b6b1064",
+        "signature": "unresolved"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/sys/004BD040-Sys_PushStack_28.cpp",
+        "sha256": "6145cc622a1a32e30784f9d5b283e357be8c7051cf04bc58b03af4737c0fcd2a",
+        "signature": "unresolved"
+      },
+      "verification": {
+        "status": "BUILD_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
+          "Linked into igi1.exe (14,222,891 bytes) in the QVM/startup cluster batch; runtime UNOBSERVED - no behavioral observation exists for this native yet."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x004bd040-radare2.json",
+          "evidence_sha256": "7a5b548a81590544d74be874add0242824372e4a7c11810d7841a2ef681bf438",
+          "evidence_id": "r2:live:0x004bd040",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x004bd040-binaryninja.json",
+          "evidence_sha256": "21620f2228427858a4f4e240003b39e148b26bab1ed6d5ad4d9e8309cbdad45f",
+          "evidence_id": "bn:live:0x004bd040",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004bd040-semantic-review.json",
+          "evidence_sha256": "0117d7d18e16a31c667150e55d3432b4f86841e50227e4044ed512b54d7c9932"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004bd040-build.json",
+          "evidence_sha256": "4b59afa054cd962958c54fa545702f2055d72ed537682b602443db06d3af0daa"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x004bd040-behavioral.json",
+          "evidence_sha256": "3cf988e8bd2879fcd22be4854d05abf7aecd62423adac7e3d8f7aae167f76552"
+        }
+      }
+    },
+    {
+      "address": "0x004B8CE0",
+      "name": "Qvm_RenderNodeText_4B8CE0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/script/native_4b8ce0.cpp",
+        "sha256": "30c16379b8e9e7ea47294ad0b4e8d014311ca21c4e9488e164dd93f1fbe16ae4",
+        "signature": "unresolved"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/sys/004B8CE0-Sys_SyntaxErrorInStringE 2.cpp",
+        "sha256": "00685441d3548ff1de2844bdc0f20e461bede6a78cff285d07c4592406b1b2bc",
+        "signature": "unresolved"
+      },
+      "verification": {
+        "status": "BUILD_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
+          "Linked into igi1.exe (14,222,891 bytes) in the QVM/startup cluster batch; runtime UNOBSERVED - no behavioral observation exists for this native yet."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x004B8CE0-radare2.json",
+          "evidence_sha256": "83e0b78021e19400bd7ab0e25f5b86d5347413c29a2a6a96ab79807b22f6d50d",
+          "evidence_id": "r2:live:0x004B8CE0",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x004B8CE0-binaryninja.json",
+          "evidence_sha256": "e8b61fa1a06328b050da4d91f417e79b1355e0c1f2b784440b159c4271b67a7a",
+          "evidence_id": "bn:live:0x004B8CE0",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004B8CE0-semantic-review.json",
+          "evidence_sha256": "7e1f94c272ed97aace16e56182e7745daa73411cb7c1a0a4cb992c9832880134"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004B8CE0-build.json",
+          "evidence_sha256": "775bf123a35aee1a2742bf2410f3eab3bc6b5c1e0f6b157fc222878fc9b0f347"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x004B8CE0-behavioral.json",
+          "evidence_sha256": "6cd47b63ed5f2eea7589b746fb92f7c4052b7bfd98f173629f6acb9758025847"
+        }
+      }
+    },
+    {
+      "address": "0x004B9660",
+      "name": "Qvm_EvaluateArgumentValue",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/script/native_4b9660.cpp",
+        "sha256": "6c03b9721c39409781934d0709640a384537a0e0cc6c7fe153c063d014080d87",
+        "signature": "unresolved"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/sys/004B9660-Sys_DispatchOpcode_24.cpp",
+        "sha256": "bd4821a5cfad4f7217afd47aca57332023f478cb9eb94c0e06a5f598b69f643b",
+        "signature": "unresolved"
+      },
+      "verification": {
+        "status": "BUILD_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
+          "Linked into igi1.exe (14,222,891 bytes) in the QVM/startup cluster batch; runtime UNOBSERVED - no behavioral observation exists for this native yet."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x004B9660-radare2.json",
+          "evidence_sha256": "d4d23a660913bd679a1b10a0045403b1b98deee31ad068112bf8ad02e381b1f3",
+          "evidence_id": "r2:live:0x004B9660",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x004B9660-binaryninja.json",
+          "evidence_sha256": "86e5356c4c770b9796fc8854fce5e9b45ba1611f78a00ae6ae4fec74bdcbb541",
+          "evidence_id": "bn:live:0x004B9660",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004B9660-semantic-review.json",
+          "evidence_sha256": "952c2bc626c4dfd095cbd74e8fa8c46bf9911f096d7b78eb9523868ae181ffdf"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004B9660-build.json",
+          "evidence_sha256": "7b549547912ffd50b876a4d16f0cb8dd40f277f4f6058ef84b0a090b276a4024"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x004B9660-behavioral.json",
+          "evidence_sha256": "3d1792a0c569ad07ab831345367e619b6b790c7f10c14e8558021900928e7c70"
+        }
+      }
     }
   ],
   "integration": {
