@@ -3089,3 +3089,68 @@ module where `0x004A2A00` registers `"CAMERAFILTER_TYPE_NONE"`. **They are assig
 (`Render_StoreArgs<first-global>_<VA>`) because the values `Game_Init` passes them are a font
 path and a sprite path, which is not a camera filter - so the module and the call site
 disagree and the name must not paper over it.**
+
+## Object path: `0x004CEFA0` and `Resource_Flush 0x004B63D0` (2026-10-25)
+
+Both transcribed by flow-analyst, both compile clean, both fail-closed on named symbols and
+both deliberately absent from `CMakeLists.txt`.
+
+**`dynobj/native_4cefa0.cpp` - `DynObj_OpenModelTexturePackage_4CEFA0`.** Extent
+`0x004CEFA0`-`0x004CF043` (164 B, 0xA4), `ret` at `0x004CF043`, **exactly twelve `90` nops
+after it** - my own measurement confirmed to the byte. 51 instructions, 1 block / 0 edges,
+straight line. The body allocates 0x4C bytes, inserts into `g_a4ec60`, writes three twelve-byte
+sentinels, `sprintf`s `"%s%s.mtp"` into a 0x40-byte frame local, `Resource_Load`s it, calls the
+already-transcribed `DynObj_LoadModelTexturePackage 0x004CF080`, then `0x004CF050()`. One
+`add esp,0x34` = 13 dwords, matching the push census exactly.
+
+**The missing-link claim is confirmed by measurement: `0x004CF080` has exactly one call site
+image-wide, `0x004CF02F`, inside this body.** So the object loader was transcribed and
+unreachable, and this file is the caller.
+
+Two corrections to existing tree notes: `0x004CEFA0` has **two** call sites (`0x00415C9E` *and*
+`0x00415CE1`; `core/game_flow.cpp:80` records only the first), and `0x00A4ED6C` is **zero bytes
+in the image** (BSS) while the tree's owner copy is initialised to `"LOCAL:"`.
+
+**`resource/native_4b63D0.cpp` - `Resource_Flush`.** 25 instructions, extent
+`0x004B63D0`-`0x004B6413` (68 B), 9 blocks / 15 edges, `ret` at `0x004B6413` with twelve nops
+after, string `0x00547150` byte-exact, fatal spin preserved. **26 call sites image-wide.** Two
+retail quirks kept verbatim: the null test precedes the key comparison, so a one-element list
+can never be found, and the walk advances through the node it just compared.
+
+**Blockers, measured, with exit status - nothing stubbed to force a link:**
+
+| file | undefined in tree |
+| --- | --- |
+| `native_4cefa0.cpp` | `DynObj_SweepPackageRecords_4CF050`, `g_a4ec60`, `g_a4ed6c` |
+| `native_4b63d0.cpp` | `g_943e38` - and nothing else |
+
+**The two `dynobj` globals have internal linkage, and that is verified, not inferred.**
+`mtp_package_loader.cpp:15` opens `namespace { ... }`; `nm` on the object shows
+`g_a4ed6c` mangling to `__ZN3igi6retail6dynobj12_GLOBAL__N_1L8g_a4ed6cE` with type `d` (local)
+while `DynObj_LoadModelTexturePackage` is `T` (external). The `L` and `_GLOBAL__N_1` are the
+unnamed namespace. **Exposing those two names is the one-line fix that lets the object path
+link**; flow-analyst did not stub around it and did not edit the owning file.
+
+**Manifest inconsistency, flagged not hidden.** `build_native_records.py` resolved `0x004B63D0`
+to `scripts/GameNatives/resource/004B63D0-Resource_Flush.cpp` - the **candidate** - and not to
+the new `engine/src/retail/resource/native_4b63d0.cpp`. `0x004CEFA0` and `0x004BD380` resolved
+to their `engine/` files correctly. **A VA -> file index that points at a candidate while a
+transcription exists is the same class of defect as a record wrong about itself**: it is not
+that the answer is missing, it is that the answer is confidently the wrong file. To be fixed
+by the manifest owner.
+
+**Sizing warning recorded, nothing written:** `0x004CF050` (13 ins) does **not** stand alone -
+`0x004CED50` (84 ins) pulls `0x004A5BB0` (66 ins, no manifest record) and `0x004CEE30` (54 ins,
+manifest name `DynObj_ParseConfigFile_13`, path outside the tree). **The minimum closed unit is
+217 instructions across four functions, two of them unimplemented.** Its `lea eax,[esi+0x14];
+test eax,eax; je` guard is dead - a computed address that can never be null - so every record
+is always passed on, and it has a second call site at `0x004CFB1F`.
+
+**A process failure of mine, recorded because the outcome was correct and the method was not.**
+Commit `3d4ae00c` (originally `709ce969`) added these three files without naming them in its
+message: `git add -f engine/src/retail` is too broad an add for a change of this size. **All
+three are correctly absent from `CMakeLists.txt`, so the build is unaffected and my standing
+"committed but not built" check does not catch it.** The check that would catch it is comparing
+a commit's added-file list against the files its message names. Amended to name all three.
+**This is the second time in this session a broad `git add -f` swept unmentioned files into a
+commit; the first was `e6773008`.**
