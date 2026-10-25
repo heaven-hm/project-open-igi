@@ -920,7 +920,12 @@ def crosscheck_ndisasm(va, obj_bytes=None):
                              capture_output=True, text=True).stdout
     finally:
         os.unlink(path)
-    nd = sum(1 for ln in out.splitlines() if ln.strip())
+    # ndisasm prints a header/sync line (e.g. `-0000`) that is NOT an instruction.
+    # Counting all non-blank lines added 1 to every count and made this check report a
+    # disagreement on every body - a tool that cries wolf on all input is worse than one
+    # that says nothing. Count only lines in ndisasm's instruction format.
+    nd = sum(1 for ln in out.splitlines()
+             if re.match(r'^\s*[0-9A-Fa-f]{8}\s', ln))
     if nd == cs_count:
         return cs_count, nd, True, 'agree'
     return cs_count, nd, False, ('DISAGREE - capstone %d vs ndisasm %d over %d bytes; '
