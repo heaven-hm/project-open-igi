@@ -14,7 +14,7 @@
 //   and handler 0x0046B5A0 on event 2 through 0x00401530, then to handler 0x0046B5C0 on the event id from 0x004E7530 through 0x00401530, and finally
 //   to handler 0x0046B940 on the event id from 0x00504DF0 through 0x00401400 - five links, and the last one returns to the full-context variant after
 //   three no-context links. No 0x004B8810 call (no "TASKTYPE_..." name). Straight-line, no branch, no loop.
-// Status/limits: TRANSCRIBED; runtime UNOBSERVED. Handlers 0x004D3710, 0x0046B5A0, 0x0046B5C0 and 0x0046B940 are raw code immediates in retail and are
+// Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. Handlers 0x004D3710, 0x0046B5A0, 0x0046B5C0 and 0x0046B940 are raw code immediates in retail and are
 //   not transcribed yet (native gaps; 0x004D3710 is the address of the Lead's open cosmetic symbol-swap note, untouched here). 0x005BE2B4 has no other
 //   owner and image value 0, so this file defines it. The class id pushed at 0x0046B530 is TaskType_Register's return value in EAX, whose meaningful
 //   part is the 16-bit id; the port passes the zero-extended word, matching every later read of 0x005BE2B4. Note that the same handler address

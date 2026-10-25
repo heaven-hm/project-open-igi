@@ -11,6 +11,20 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - Three more task classes, one with no event-0 link at all
+
+- Linked: `0x0046B510` (ComputerButtonItem), `0x0046B7F0` (ComputerTextItem) and `0x0043E4F0` (GenericPhysicsMagicObj, filed under `dynobj/` because it
+  is a dynamic-object class and that folder already hosts the other DynCube classes). `igi1.exe` 14,273,177 -> **14,274,624** bytes, green.
+- **Verified independently rather than taken on report**: `0x0046B510` links the same handler `0x004D3710` twice, to event 0 and event 1. The lane
+  flagged it as looking like its own copy-paste slip and checked twice; I read the image as well (`push 0x4d3710; push 0; push eax; call 0x401400` at
+  `0x0046B529`, then `push 0x4d3710; push 1; push eax; call 0x401400` at `0x0046B542`). Retail really does register one handler for two events, and it
+  is reproduced as-is.
+- Observations recorded without promoting them to rules: the parent type comes from a different getter in every family (never hardcoded); the event id
+  comes from a getter whose pushed argument the getter ignores, so it is neither constant nor always the same width; and `0x0043E4F0` is the first
+  registrar with no event-0 link, so event numbers are read per file.
+- Noted for one deliberate look later, not guessed at now: two of these id globals hold `0x00000181` (385) in the image (`0x00540B08`, `0x0053C46C`).
+  If that value keeps recurring it is likely a retail build-time task-type constant.
+
 ### 2026-10-25 - Six task-class registrars linked, and the playable block observed at runtime
 
 - Linked: `0x00472A70` (GunSPAS12), `0x004688B0` (ComputerLog), `0x00468E20` (ComputerObjectives), `0x004851B0` (GameScreen), `0x00446AB60`-family

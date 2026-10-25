@@ -15,7 +15,7 @@
 //   handler 0x0046B940 on the event id from 0x00504DF0 through 0x00401400. No 0x004B8810 call (no "TASKTYPE_..." name). Straight-line, no branch,
 //   no loop. This is the ComputerButtonItem registrar's twin apart from the string, the object size, the global and handlers 0x0046B5A0/0x0046B5C0;
 //   both share the double-linked 0x004D3710 and the final 0x0046B940 link.
-// Status/limits: TRANSCRIBED; runtime UNOBSERVED. Handlers 0x004D3710, 0x0046B880, 0x0046B890 and 0x0046B940 are raw code immediates in retail and are
+// Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. Handlers 0x004D3710, 0x0046B880, 0x0046B890 and 0x0046B940 are raw code immediates in retail and are
 //   not transcribed yet (native gaps; 0x004D3710 is the address of the Lead's open cosmetic symbol-swap note, untouched here). 0x005BE2BC has no other
 //   owner and image value 0, so this file defines it. The class id pushed at 0x0046B810 is TaskType_Register's return value in EAX, whose meaningful
 //   part is the 16-bit id; the port passes the zero-extended word, matching every later read of 0x005BE2BC. Domain: core/, because it is one of the

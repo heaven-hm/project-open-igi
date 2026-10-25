@@ -16,7 +16,7 @@
 //   the second is handler 0x0043E650 on event 2 through 0x00401530, then handler 0x0043E670 on the event id from 0x00416840 and handler 0x0043E7A0
 //   on the event id from 0x00416860, both through 0x00401400; finally registers the script name "TASKTYPE_GENERICPHYSICSMAGICOBJ" for the id through
 //   0x004B8810. Straight-line, no branch, no loop.
-// Status/limits: TRANSCRIBED; runtime UNOBSERVED. Handlers 0x0043E580, 0x0043E650, 0x0043E670 and 0x0043E7A0 are raw code immediates in retail and
+// Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. Handlers 0x0043E580, 0x0043E650, 0x0043E670 and 0x0043E7A0 are raw code immediates in retail and
 //   are not transcribed yet (native gaps). 0x0053C46C has no other owner in the tree, so this file defines it with its image value. The class id
 //   pushed at 0x0043E510 is TaskType_Register's return value in EAX, whose meaningful part is the 16-bit id; retail stores it to 0x0053C46C at
 //   0x0043E511 after pushing it, and the port reads the stored word back, which is the same value. Domain: dynobj/, because this is a dynamic object
