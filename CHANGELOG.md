@@ -11,6 +11,21 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - The 17-registrar unblocker, and two config tables that are not leaf getters
+
+- `igi1.exe` 14,254,193 -> **14,255,796** bytes, green. Four natives linked, all `BUILD_VERIFIED`, runtime UNOBSERVED:
+  `0x00467D90 Task_GetCachedEventId_467D90`, `0x00416930` / `0x004169D0 Sys_LookupOrAppendRecord_*`, `0x00416870 Sys_GetSettingByte_416870`.
+- `0x00467D90` is 28 bytes / 3 blocks: load `0x0053F582`, and only if it is still retail's `0xFF` sentinel call `QTask_AllocateEvent(0x181)` and
+  store the low byte back. Verified against the image directly, so the "blocks 17 registrars" entry is a cheap lazy initialiser, not a knot.
+- `0x00416930` (table `0x0057B5E8`, stride `0x3C`, count `0x0057BAB4`) and `0x004169D0` (table `0x0057B1A8`, stride `0x30`, count `0x0057BAB8`) are
+  13-block record lookups with an append path, not config leaves - both spot-verified against the image's own table/count references. The
+  `0x00416xxx` range is therefore not uniform, and prior sizing assumptions there are not to be reused.
+- **Declared deviation, recorded rather than hidden**: retail inlines `strlen` (`repne scasb`) and the record copy (`rep movsd` + `rep movsb`); the
+  transcriptions call `std::strlen`/`std::memcpy` with byte count `strlen+1`. Behaviourally equivalent, not instruction-equivalent. The record is
+  marked with that limitation, and neither table is given an invented bound because their extents are not statically established.
+- Closure moved: `0x0047E700` and `0x00476110` are now closed (every callee transcribed), and the four registrars previously blocked only by the
+  config range are unblocked.
+
 ### 2026-10-25 - GunShot and HumanCamera registrars, plus two self-corrections from the lane
 
 - `igi1.exe` 14,252,981 -> **14,254,193** bytes, green. `0x0047B4B0 Task_DefineGunShot` ("GunShot", 0xC38, id 0x005BE3CE,
