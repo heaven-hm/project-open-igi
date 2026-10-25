@@ -71,3 +71,41 @@ The routine is 246 instructions and 870 bytes. Writing it requires reading the
 whole body; a partial transcription is worse than none, and the standing rule is
 to stop when the middle of a body is unread rather than guess. Recon is captured
 so the next writer starts from evidence rather than from scratch.
+
+## Slot census for the blocked teardown 0x0042BC00 (measured 2026-10-25)
+
+`0x0042ACC0` is the **"Train"** registrar (`push str.Train` = 0x0053BD1C, size 0x8E0
+at 0x0042ACD0, parent getter `0x004F45F0`, handler `0x00429F80`, class entry
+`0x0042A100`). It **does** own both globals the teardown `0x0042BC00` reads, so
+analyst's expectation was correct on both:
+
+| slot | width | evidence | hits in body |
+|---|---|---|---|
+| `0x0057BCB8` | **uint16_t** | written once at `0x0042ACE7` `mov word [0x57bcb8],ax`; read 16-bit (`66`-prefixed) throughout | 16 |
+| `0x0057BCBC` | **uint32_t** | `dword` accesses | 11 |
+
+And `0x0042BC00` reads exactly those two:
+```
+0x0042bc00  66a1b8bc5700   mov ax, word [0x57bcb8]
+0x0042bc06  50             push eax
+0x0042bc07  e8145efdff     call 0x00401A20   ; TaskType_Clear
+0x0042bc0c  8b0dbcbc5700   mov ecx, dword [0x57bcbc]
+0x0042bc12  51             push ecx
+0x0042bc13  e8185c0900     call 0x004C1830   ; QTaskList_Delete
+0x0042bc18  83c408         add esp, 8
+0x0042bc1b  c3             ret
+```
+**No `0x0181` reset** - and `0x0042BC00` is above `0x00424790`, so analyst's Law 2
+(no reset above MenuWindow) predicts exactly this. Second independent confirmation.
+
+**LINKAGE DECISION, so analyst can declare them now:** when `native_42acc0.cpp` lands
+it will define `g_57bcb8` (`std::uint16_t`) and `g_57bcbc` (`std::uint32_t`) with
+**C linkage**, matching the ten-of-eleven owners in the band. Declare them
+`extern "C"`.
+
+### A correction I made to myself while measuring this
+My first check for `0x57BCBC` piped a grep through `head -12` and printed only
+`57BCB8` lines; I read that truncated output as "0x57BCBC does not appear in this
+body" and stated it as a contradiction of analyst's expectation. It appears 11 times.
+**A truncated output read as a complete one is the same failure as a count of zero
+from an unverified pattern** - the sixth instrument fault of this shape this session.
