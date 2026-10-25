@@ -12499,7 +12499,7 @@
     },
     {
       "address": "0x00407D60",
-      "name": "HumanPlayer_Setactivematerial",
+      "name": "Material_DefineScriptNatives",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/render/native_00407d60.cpp",
