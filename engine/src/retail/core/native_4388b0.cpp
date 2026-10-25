@@ -40,7 +40,7 @@ extern "C" std::uint32_t Sys_GetGlobal32_448560(void);            // 0x00448560:
 extern "C" std::uint8_t Sys_GetSettingByte_4167F0(void);          // 0x004167F0: argument-less byte getter (config/native_4167f0.cpp)
 extern "C" std::uint8_t Sys_GetSettingByte_416810(void);          // 0x00416810: argument-less byte getter (config/native_416810.cpp)
 extern "C" std::uint32_t Sys_GetGlobal32_4F0F50(void);            // 0x004F0F50: `mov eax,[0xA71870]; ret`
-extern "C" std::uint32_t Core_GetRenderWordA_4F0FA0(void);        // 0x004F0FA0: `mov eax,[0xA71944]; ret` (core/native_4f0fa0.cpp)
+extern "C" std::uint32_t Core_GetRenderWordA_4F0FA0(void);        // 0x004F0FA0: `mov eax,[0xA70C7C]; ret` (core/native_4f0fa0.cpp)
 extern "C" std::uint8_t Script_PhaseIdGetE4_4F1A60(void);         // 0x004F1A60: argument-less byte getter (script/native_4f1a60.cpp)
 // 0x004F1980 (script/native_4f1980.cpp): takes the container and a count, returns the container pointer.
 extern "C" void* Script_TaskContainer_Grow(std::int32_t* container, std::int32_t count);

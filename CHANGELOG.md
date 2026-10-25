@@ -11,6 +11,35 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - 21 provenance comments asserted load addresses the image does not contain
+
+A real evidence defect, found by the agent that introduced it and verified here against
+the image before being accepted. Twenty-one getter provenance comments claimed a global
+address that retail does not load:
+
+| native | claimed | actual |
+|---|---|---|
+| `Core_GetRenderWordA_4F0FA0` | `0xA71944` | `0xA70C7C` |
+| `Sys_GetGlobal32_4F1010` | `0xA70D10` | `0xA70C88` |
+| `Sys_GetGlobal32_4F0F70` | `0xA71878`/`0xA718D0` | `0xA70C6C` |
+| `Sys_GetGlobal32_4F0F60` | `0xA71880` | `0xA70C68` |
+| `Sys_GetGlobal32_4F0F20` | `0xA71730` | `0xA70C84` |
+
+The cause was writing the comments from a memorised table instead of reading each
+getter's bytes. One claim was literally its neighbour's address — an off-by-one in a
+memorised table, which is how this class of error is born.
+
+**Scope: comment-only, independently verified.** The port bodies load the correct
+globals, so no port code was wrong, no call census was affected and no build changed.
+But a reviewer asking "does this getter match retail" would have read a false answer
+from the provenance block, and the provenance block is the evidence trail. A wrong
+comment is not a wrong program, but it is a wrong record, and this project's acceptance
+depends on the record.
+
+All 21 corrected, and all 89 getter comments across that lane's 30 files are now
+machine-checked against r2 with zero mismatches. That check is now part of the pre-write
+routine rather than something done after a defect is found.
+
 ### 2026-10-25 - scoped angr evidence reuse, and the guard tests it broke
 
 Five gate scripts gained a **scoped angr reuse** path. It does not skip verification:

@@ -53,14 +53,14 @@ extern "C" std::uint16_t Sys_GetGlobal16_5034D0(void);            // 0x005034D0:
 extern "C" std::uint8_t* MTP_AddLODVirModel_4CEBA0(const char* name); // 0x004CEBA0 (model/native_4ceba0.cpp)
 extern "C" void* Sys_LookupOrAppendRecord_4169D0(char const* name);   // 0x004169D0 (config/native_4169d0.cpp)
 extern "C" std::uint8_t DynObj_GetByte_4C5800(void);              // 0x004C5800: argument-less byte accessor (dynobj/native_4c5800.cpp)
-extern "C" std::uint32_t Sys_GetGlobal32_4F0F20(void);            // 0x004F0F20: `mov eax,[0xA71730]; ret`
-extern "C" std::uint32_t Sys_GetGlobal32_4F0F40(void);            // 0x004F0F40: `mov eax,[0xA71820]; ret`
+extern "C" std::uint32_t Sys_GetGlobal32_4F0F20(void);            // 0x004F0F20: `mov eax,[0xA70C84]; ret`
+extern "C" std::uint32_t Sys_GetGlobal32_4F0F40(void);            // 0x004F0F40: `mov eax,[0xA71880]; ret`
 extern "C" std::uint32_t Sys_GetGlobal32_4F0F50(void);            // 0x004F0F50: `mov eax,[0xA71870]; ret`
-extern "C" std::uint32_t Camera_Get_4F0F80(void);                 // 0x004F0F80: `mov eax,[0xA71904]; ret` (render/native_4f0f80.cpp)
-extern "C" std::uint32_t Core_GetRenderWordA_4F0FA0(void);        // 0x004F0FA0: `mov eax,[0xA71944]; ret` (core/native_4f0fa0.cpp)
+extern "C" std::uint32_t Camera_Get_4F0F80(void);                 // 0x004F0F80: `mov eax,[0xA71874]; ret` (render/native_4f0f80.cpp)
+extern "C" std::uint32_t Core_GetRenderWordA_4F0FA0(void);        // 0x004F0FA0: `mov eax,[0xA70C7C]; ret` (core/native_4f0fa0.cpp)
 extern "C" std::uint32_t Sys_GetGlobal32_4F0FC0(void);            // 0x004F0FC0: `mov eax,[0xA70C9C]; ret`
 extern "C" std::uint32_t Camera_Get_4F1000(void);                 // 0x004F1000: `mov eax,[0xA70C90]; ret` (render/native_4f1000.cpp)
-extern "C" std::uint32_t Sys_GetGlobal32_4F1010(void);            // 0x004F1010: `mov eax,[0xA70D10]; ret`
+extern "C" std::uint32_t Sys_GetGlobal32_4F1010(void);            // 0x004F1010: `mov eax,[0xA70C88]; ret`
 extern "C" std::uint32_t Sys_GetGlobal32_4F1210(void);            // 0x004F1210: `mov eax,[0x54DDA8]; ret` (image 255)
 extern "C" std::uint32_t Sys_GetGlobal32_4F1220(void);            // 0x004F1220: `mov eax,[0x54DDAC]; ret` (image 255)
 extern "C" void* Script_TaskContainer_Alloc(std::int32_t count);  // 0x004F1950 (script/native_4f1950.cpp)

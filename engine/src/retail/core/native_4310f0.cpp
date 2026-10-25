@@ -75,7 +75,7 @@ extern "C" std::uint8_t QTask_PhaseIdGet548177_4CEA20(void);      // 0x004CEA20:
 extern "C" std::uint32_t Sys_GetGlobal32_4F1010(void);            // 0x004F1010: `mov eax,[0xA70C88]; ret`
 extern "C" std::uint32_t Sys_GetGlobal32_4F0F70(void);            // 0x004F0F70: `mov eax,[0xA70C6C]; ret`
 extern "C" std::uint32_t Sys_GetGlobal32_4F0F50(void);            // 0x004F0F50: `mov eax,[0xA71870]; ret`
-extern "C" std::uint32_t Sys_GetGlobal32_4F0F60(void);            // 0x004F0F60: `mov eax,[0xA71880]; ret`
+extern "C" std::uint32_t Sys_GetGlobal32_4F0F60(void);            // 0x004F0F60: `mov eax,[0xA70C68]; ret`
 extern "C" std::uint32_t Sys_GetGlobal32_4F0F30(void);            // 0x004F0F30: `mov eax,[0xA70CA4]; ret`
 extern "C" std::uint32_t Sys_GetGlobal32_4F0FC0(void);            // 0x004F0FC0: `mov eax,[0xA70C9C]; ret`
 extern "C" std::uint32_t Core_GetRenderWordB_4F0FD0(void);        // 0x004F0FD0: `mov eax,[0xA71884]; ret` (core/native_4f0fd0.cpp)
