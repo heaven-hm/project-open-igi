@@ -44,8 +44,12 @@ std::uint32_t Render_GetByte_4D14D0(std::uint32_t a1);
 std::uint32_t Script_TaskContainer_Alloc(std::uint32_t a1);
 // 0x004F1010: 2 slots (push 0 0x0052C235, push 7 0x0052C237). Named from its manifest record.
 std::uint32_t Sys_GetGlobal32_4F1010(std::uint32_t a1, std::uint32_t a2);
-// 0x004F1A80: 4 slots (push eax 0x0052C244, push edx 0x0052C250, push eax 0x0052C251, push ecx 0x0052C252).
-std::uint32_t Script_TaskContainer_Append(std::uint32_t a1, void* a2, void* a3, std::uint32_t a4);
+// 0x004F1A80: SIX slots, because the callee's prologue reads arg6 (the Lead's ruling at
+// docs/fidelity/evidence/script-taskcontainer-append-arity-ruling.md). Each site here pushes four, and arg5/arg6 are
+// the preceding getter's own two deferred pushes, still live above them: the getter was called as (7, 0), so arg5 = 7
+// and arg6 = 0 at both sites. Derived from the push sequence, not omitted and not invented.
+extern "C" void* Script_TaskContainer_Append(std::uint32_t container, void* block, void* slot,
+                                             std::uint32_t value, std::uint32_t arg5, std::uint32_t arg6);
 // 0x004F0FA0: 2 slots (push 0 0x0052C25B, push 7 0x0052C25D). Named from its manifest record.
 std::uint32_t Core_GetRenderWordA_4F0FA0(std::uint32_t a1, std::uint32_t a2);
 // 0x004F1A60 / 0x004F1A70: 1 slot each (push 0x0052C500 0x0052C146, push 0x0052C290 0x0052C161). script_state.hpp
@@ -107,14 +111,15 @@ void NATIVE_DECL DiscardTerrain_Init(void)
     g_a84550 = Script_TaskContainer_Alloc(2U);
 
     // 0x0052C235-0x0052C253: push 0; push 7; call 0x4f1010; then push eax (value), push edx (&frame[0xf0] = E-104),
-    // push eax (&frame[0x00] = E-344), push ecx (the container); call 0x4f1a80.
+    // push eax (&frame[0x00] = E-344), push ecx (the container); call 0x4f1a80. The getter's two pushes are still
+    // live, so they are arg5 and arg6: 7 and 0.
     const std::uint32_t value_a = Sys_GetGlobal32_4F1010(7U, 0U);
-    Script_TaskContainer_Append(g_a84550, frame + 0x00, frame + 0xF0, value_a); // 0x0052C258: add esp,0x18
+    Script_TaskContainer_Append(g_a84550, frame + 0x00, frame + 0xF0, value_a, 7U, 0U); // 0x0052C258: add esp,0x18
 
     // 0x0052C25B-0x0052C279: push 0; push 7; call 0x4f0fa0; then the same container and first block, with the
-    // companion block at &frame[0x150] = E-8.
+    // companion block at &frame[0x150] = E-8. Same deferred pushes: arg5 = 7, arg6 = 0.
     const std::uint32_t value_b = Core_GetRenderWordA_4F0FA0(7U, 0U);
-    Script_TaskContainer_Append(g_a84550, frame + 0x00, frame + 0x150, value_b);
+    Script_TaskContainer_Append(g_a84550, frame + 0x00, frame + 0x150, value_b, 7U, 0U);
 
     // 0x0052C27E: add esp,0x170 (0x158 frame + the 6 argument dwords still pushed); 0x0052C284: ret.
     // The caller declares this native void, and the listing sets no deliberate return value.

@@ -127,6 +127,29 @@ class RetailImage:
         self._call_index = index
         return index
 
+    def raw_call_hits(self, target: int) -> list:
+        """Every offset where the bytes `E8 <rel32>` compute `target`. SOUND for absence.
+
+        A real call to `target` necessarily encodes as E8 followed by a 4-byte displacement
+        that resolves to it, so an EMPTY result proves the address is never called. A non-empty
+        result may include phantoms (an E8 byte can occur inside another instruction or in
+        data), so hits are CANDIDATES to confirm at instruction boundaries - never proof alone.
+
+        This is the direction `call_index()` cannot serve: its single linear sweep desyncs on
+        embedded data and silently drops real call sites, which reads a real call edge as
+        "address-taken only" - a false negative, the dangerous direction.
+        """
+        hits = []
+        vaddr, vsize, paddr, psize = next(s for s in self.sections if s[0] == self.base + 0x1000)
+        blob = self.data[paddr:paddr + psize]
+        for off in range(len(blob) - 5):
+            if blob[off] != 0xE8:
+                continue
+            rel = int.from_bytes(blob[off + 1:off + 5], 'little', signed=True)
+            if (vaddr + off + 5 + rel) & 0xFFFFFFFF == target:
+                hits.append(vaddr + off)
+        return hits
+
     # -- extent recovery ----------------------------------------------------------------------
     def _traverse(self, va: int, blocked_jmp: int | None, max_instructions: int):
         """One traversal pass. `blocked_jmp` is a jmp site whose edge is NOT followed, used to

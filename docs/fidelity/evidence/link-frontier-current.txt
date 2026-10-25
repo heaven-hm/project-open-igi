@@ -51,7 +51,6 @@
 `Sub_4675B0
 `Sub_498040
 `Sub_4B3C50
-`Sub_4B47E0
 `Sub_4B5860
 `Sub_4B9BE0
 `Sub_4C6CE0
@@ -63,4 +62,3 @@
 `Sub_530960
 `Sub_5309C0
 `Sys_GetGlobal8_4F11F0
-`TextureModifier_Init
