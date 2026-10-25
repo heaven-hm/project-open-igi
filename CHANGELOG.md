@@ -607,6 +607,51 @@ number and never counts as a release.
   `0x00508F80` so `QTask_CreateTask` returns and the window stays alive.
 
 
+## 2026-10-25 - handler/AIGraph closure linked; reachability audited
+
+- **Change**: 23 natives added to the Windows x86 target: the 22-file handler/AIGraph
+  closure (`0x004663D0`, `0x004F9CD0`, `0x004F9EB0`, `0x004FA4E0`-`0x004FAA10`) plus the
+  surviving `0x004F9E70` implementation.
+- **Build**: `build-win32-no-verify-gate/igi1.exe`, 14,283,882 bytes, sha256
+  `8f0de1c9fe0448538613975cf44b6c4be89368c32c71f6d3f34cba2f4a14eeb6`. All 23 symbols
+  resolve in the linked image; the deleted duplicate `Script_StringHash` is gone.
+- **Defects found by compiling, not by reading**: 20 of the 22 files declared their callees
+  outside `extern "C"` and so referenced C++-mangled names
+  (`__Z29QFile_InvokeDriverSlot_4B1700Piiii`) against C-linkage definitions; 21 declared
+  with `NATIVE_DECL` before that macro was defined; 20 included `<cstdint>` after first use.
+  All 22 now compile clean with zero mangled undefined symbols.
+- **Corrected in the same change**: `0x004B1700` now forwards `argument2`/`argument3`
+  instead of `argument3`/`argument4` (retail `0x004B170C` loads arg2 and `0x004B1717`
+  pushes it); its provenance line had claimed arg2 was never read, which was false. The 11
+  AIGraph tag writers were shifted to `(context, record, length, 0)` with the length
+  recovered from each retail push (`0x004FA503` push 2, `0x004FA786` push %ebx, `0x004FA7C9`
+  push %edi, ...). `Sys_AddSlot_4B0E70` and `Sys_AddSlotName_4978D0` now return
+  `std::uint32_t` (the slot index in EAX) instead of `void`.
+- **Deletion**: `engine/src/retail/script/native_4f9e70.cpp` removed under rules 13/15/16 -
+  duplicate VA of `engine/src/retail/core/native_4f9e70.cpp`, zero callers, wrong domain.
+  The manifest record was rebound to the core file and keeps `Script_StringHash` as an
+  alias.
+- **Reachability audit** (`docs/fidelity/evidence/link-reachability-audit-20261025.md`):
+  20 of 23 are statically reachable; 3 are linked but unreferenced anywhere in the image
+  (`0x004F9EB0`, `0x004F9CD0`, `0x004663D0`), each with its retail caller recorded. A first
+  pass that counted only direct `call`s wrongly reported 17 unreachable: the AIGraph writer
+  dispatches through the jump table at `0x574ED4` with tail jumps, so calls alone are not a
+  reachability measure.
+- **Blocker identified**: `0x00402930`, the retail startup init sequence (155 ordered calls
+  plus `jmp 0x004CEF30`), is implemented as a fail-closed stub that throws. Every
+  transcribed registrar has **zero** references in the candidate image
+  (`QTask_Register_4688B0`, `QTask_Register_46B510`, `QTask_Register_468E20`), so the
+  candidate throws before any registrar runs and creates no window. Transcribing that
+  sequence in retail order is the frontier for playable Level 1.
+- **Status**: all 23 records at `BUILD_VERIFIED` with fresh source hashes, build evidence
+  (`docs/fidelity/evidence/<addr>-build.json`), candidate address, call/tail/pointer
+  counts, and the limitation that runtime is UNOBSERVED.
+- **Autoverify**: `python3 scripts/native_autoverify.py run --scope changed --retry
+  --max-attempts 3 --level 1` ran the 22-file scope before this change and returned
+  `passed_count: 0`, every attempt blocked with `required source is absent from the build
+  receipt` - correct behaviour for sources that were not yet in the target. Re-run after
+  this change.
+
 ### Planned
 
 - Follow the Level 1 playable-demo sequence in MVP.md and plan.md: Windows x86 build, OBJECTS.QVM model placement, textured terrain, complete visual verification, then playable simulation and gameplay systems including sound.

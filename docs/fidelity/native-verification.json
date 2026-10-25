@@ -41978,7 +41978,8 @@
           "2026-10-23 startup call-site change: retail_main.cpp now calls AppContext_SetIsActive(1) at 0x0041FDD4, so the linked image has two call sites (0x0041FDD4 Main and 0x004824E1 RunRetailModelScene). The setter body in frame_natives.cpp is byte-unchanged (sha256 3354340eacc3) and the previously recorded paired typed capture remains bound to candidate 8e25dcde3e2ebbbcb6c8593974d4fd34ce14cec3775e00cacfbae8b4e92ca885, not to the new image 846ce507d42d. The runtime scope is not extended by the new call site.",
           "The new Main call site is proven statically by objdump on the linked image; no paired runtime capture covers it. RUNTIME_TESTED remains supported only for the previously captured scope.",
           "Paired retail/candidate batch on candidate dee2974c (window level1 WinInput Germany USA): retail-then-candidate sequential, ordered calls/args/returns MATCH for this native; candidate terminates at the documented QTask_RegisterClasses throw, so any later calls remain UNOBSERVED rather than failed.",
-          "Linked into igi1.exe (14,266,312 bytes); runtime UNOBSERVED."
+          "Linked into igi1.exe (14,266,312 bytes); runtime UNOBSERVED.",
+          "Linked into build-win32-no-verify-gate/igi1.exe; candidate symbol AppContext_SetIsActive resolves at 0x0041F800 with 0 call site(s) in the linked image."
         ],
         "behavioral_runner": {
           "path": "scripts/native_unicorn_runner.py",
@@ -42194,7 +42195,7 @@
           "object_emitted": true,
           "linked_image_emitted": true,
           "linked_image_vaddr": "0x0041F800",
-          "call_sites_in_image": 2,
+          "call_sites_in_image": 0,
           "callers_in_image": [
             "Main",
             "RunRetailModelScene(HINSTANCE__*, int, std::filesystem::__cxx11::path const&, unsigned int, std::filesystem::__cxx11::path const&, bool, bool, bool)"
@@ -42207,7 +42208,7 @@
             "Main": 1,
             "RunRetailModelScene(HINSTANCE__*, int, std::filesystem::__cxx11::path const&, unsigned int, std::filesystem::__cxx11::path const&, bool, bool, bool)": 1
           },
-          "reachable_statically": true,
+          "reachable_statically": false,
           "evidence_path": "docs/fidelity/evidence/engine-defect-fixes-addressability-20261023.json",
           "evidence_sha256": "2efcf9b5af0504d636f9b2b186b60d8e01b4ea0a8c8b8023babe8c72f56d1a30",
           "note": "The setter body is unchanged; the new Main call site at 0x0041FDD4 pushes 1 and follows the retail 0x0048F613/0x0048F615 placement."
@@ -43446,7 +43447,8 @@
           "2026-10-23 startup call-site change: Main now calls AppContext_SetTerrainLightmapsUsed(1) at 0x0041FDE0, matching retail 0x0048F63B/0x0048F63D. The body in app_context.cpp is byte-identical (object sha256 ea0e9e52e3a0) and the call is proven statically, not by runtime observation; STRUCTURALLY_VERIFIED is unchanged.",
           "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md).",
           "Static axis PASS on the current manifest digest; runtime outcome recorded in the batch session scope.",
-          "Linked into igi1.exe (14,266,312 bytes); runtime UNOBSERVED."
+          "Linked into igi1.exe (14,266,312 bytes); runtime UNOBSERVED.",
+          "Linked into build-win32-no-verify-gate/igi1.exe; candidate symbol AppContext_SetTerrainLightmapsUsed resolves at 0x0041E800 with 0 call site(s) in the linked image."
         ],
         "behavioral_runner": {
           "path": "scripts/native_unicorn_runner.py",
@@ -43502,8 +43504,8 @@
           "object_emitted": true,
           "linked_image_emitted": true,
           "linked_image_vaddr": "0x0041E800",
-          "call_sites_in_image": 3,
-          "reachable_statically": true,
+          "call_sites_in_image": 0,
+          "reachable_statically": false,
           "evidence_path": "docs/fidelity/evidence/engine-defect-fixes-addressability-20261023.json",
           "evidence_sha256": "2efcf9b5af0504d636f9b2b186b60d8e01b4ea0a8c8b8023babe8c72f56d1a30",
           "note": "The new Main call site at 0x0041FDE0 pushes 1 and follows the other startup stores in retail order.",
@@ -61461,7 +61463,8 @@
           "The candidate ABI is host-adapted (std::filesystem::path argument, std::optional<IffSkeleton> return) and is not the retail int32_t(int32_t*) ABI.",
           "The strict gate remains blocked for this address by its live behavioral runner: scripts/native_iff_diff_runner.py needs a sequential retail/candidate game session (not re-executed in this task), and its report shape is already below the gate floor (1 case versus the required 8, observable_fields ordered_calls/query_tag/return_nonnull instead of return_value/state_delta/side_effects). The saved behavioral artifact records one chunk-walk case and is supplementary only.",
           "The saved differential is retained as supplementary evidence only.",
-          "Linked into igi1.exe (14,269,528 bytes); runtime UNOBSERVED."
+          "Linked into igi1.exe (14,269,528 bytes); runtime UNOBSERVED.",
+          "Linked into build-win32-no-verify-gate/igi1.exe; candidate symbol AnimIff_LoadAnimationFile resolves at 0x00424620 with 0 call site(s) in the linked image."
         ],
         "behavioral_runner": {
           "path": "scripts/native_iff_diff_runner.py",
@@ -61517,8 +61520,8 @@
           "object_emitted": true,
           "linked_image_emitted": true,
           "linked_image_vaddr": "0x00424620",
-          "call_sites_in_image": 1,
-          "reachable_statically": true,
+          "call_sites_in_image": 0,
+          "reachable_statically": false,
           "evidence_path": "docs/fidelity/evidence/iff-addressable-20261023.json",
           "evidence_sha256": "15ffaedcc573a2f61fd76a1598f3c29fe1ce85d49f38dedfddecae657904e3ba",
           "note": "Addressability is proven by nm on the TU object and the linked candidate. The declaration-level asm-label makes the emitted symbol the retail catalog name AnimIff_LoadAnimationFile; the C++ source identifier remains IffSkeleton_Read. No linkage or body change was needed or made.",
@@ -71477,8 +71480,8 @@
       "name": "Script_StringHash",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
-        "path": "engine/src/retail/script/native_4f9e70.cpp",
-        "sha256": "ec0e0fa4b37c02a59180a741dd389e2edff915a9e8deb3bfbb60b7a5a4b02db9",
+        "path": "engine/src/retail/core/native_4f9e70.cpp",
+        "sha256": "e32e8b4b7ca6e660f4553a713f88524a7153580deb096d701024245d3bb578a7",
         "signature": "unknown"
       },
       "game_natives": {
@@ -71507,8 +71510,27 @@
         },
         "cfg_similarity": 1.0,
         "limitations": [
-          "Linked into igi1.exe (14,269,528 bytes); runtime UNOBSERVED."
-        ]
+          "Runtime UNOBSERVED: no paired retail/candidate capture exists for this address; BUILD_VERIFIED is the honest ceiling here.",
+          "Linked into build-win32-no-verify-gate/igi1.exe; GraphStream_HashName_4F9E70 at 0x004219C0 has 1 direct call site(s), 0 tail jump(s) and 0 .rdata pointer(s) in the linked image."
+        ],
+        "candidate_sha256": "8f0de1c9fe0448538613975cf44b6c4be89368c32c71f6d3f34cba2f4a14eeb6",
+        "candidate_symbol": "GraphStream_HashName_4F9E70",
+        "candidate_address": "0x004219C0",
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004F9E70-build.json",
+          "evidence_sha256": "0f8c2845b7c5f9e1195a848786c99bdb284763cfa2c484a9d9672d74823618cd"
+        },
+        "addressability": {
+          "linkage": "external",
+          "object_emitted": true,
+          "linked_image_emitted": true,
+          "linked_image_vaddr": "0x004219C0",
+          "direct_call_sites": 1,
+          "tail_jumps": 0,
+          "data_pointers_in_rdata": 0,
+          "reachable_statically": true
+        },
+        "recorded_at": "2026-10-25T02:44:21Z"
       },
       "notes": "Renamed from `Script_StringHash_4F9E70` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -76621,7 +76643,8 @@
           "Addressability is a symbol-level property, not behavioural evidence, and it does not raise the status.",
           "The port holds the tree by value/unique_ptr; raw retail link addresses are not reproduced, and the differential that exists uses generated graphs rather than original game assets.",
           "The bound differential (retail bytes under unicorn x86-32 versus the compiled candidate tree) was re-executed against the current implementation and passed 9/9; it is emulator/host evidence, not runtime_tests.",
-          "Linked into igi1.exe (14,269,528 bytes); runtime UNOBSERVED."
+          "Linked into igi1.exe (14,269,528 bytes); runtime UNOBSERVED.",
+          "Linked into build-win32-no-verify-gate/igi1.exe; candidate symbol Iff_FindFormChunk resolves at 0x004232A0 with 0 call site(s) in the linked image."
         ],
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -76693,8 +76716,8 @@
           "object_emitted": true,
           "linked_image_emitted": true,
           "linked_image_vaddr": "0x004232A0",
-          "call_sites_in_image": 4,
-          "reachable_statically": true,
+          "call_sites_in_image": 0,
+          "reachable_statically": false,
           "evidence_path": "docs/fidelity/evidence/iff-addressable-20261023.json",
           "evidence_sha256": "15ffaedcc573a2f61fd76a1598f3c29fe1ce85d49f38dedfddecae657904e3ba",
           "note": "Addressability is proven by nm on the TU object and the linked candidate. The declaration-level asm-label makes the emitted symbol the retail catalog name Iff_FindFormChunk; the C++ source identifier remains IffChunk_FindByTag. No linkage or body change was needed or made.",
@@ -76865,7 +76888,8 @@
           "Addressability is a symbol-level property, not behavioural evidence, and it does not raise the status.",
           "The port holds the tree by value/unique_ptr; raw retail link addresses are not reproduced, and the differential that exists uses generated graphs rather than original game assets.",
           "The bound differential (retail bytes under unicorn x86-32 versus the compiled candidate tree) was re-executed against the current implementation and passed 9/9; it is emulator/host evidence, not runtime_tests.",
-          "Linked into igi1.exe (14,266,312 bytes); runtime UNOBSERVED."
+          "Linked into igi1.exe (14,266,312 bytes); runtime UNOBSERVED.",
+          "Linked into build-win32-no-verify-gate/igi1.exe; candidate symbol Iff_FindChunk resolves at 0x004235B0 with 0 call site(s) in the linked image."
         ],
         "behavioral_runner": {
           "path": "scripts/iff_chunk_tree_diff_runner.py",
@@ -76937,8 +76961,8 @@
           "object_emitted": true,
           "linked_image_emitted": true,
           "linked_image_vaddr": "0x004235B0",
-          "call_sites_in_image": 4,
-          "reachable_statically": true,
+          "call_sites_in_image": 0,
+          "reachable_statically": false,
           "evidence_path": "docs/fidelity/evidence/iff-addressable-20261023.json",
           "evidence_sha256": "15ffaedcc573a2f61fd76a1598f3c29fe1ce85d49f38dedfddecae657904e3ba",
           "note": "Addressability is proven by nm on the TU object and the linked candidate. The declaration-level asm-label makes the emitted symbol the retail catalog name Iff_FindChunk; the C++ source identifier remains IffChunk_FindChildByTag. No linkage or body change was needed or made.",
@@ -77059,7 +77083,8 @@
           "Addressability is a symbol-level property, not behavioural evidence, and it does not raise the status.",
           "The port holds the tree by value/unique_ptr; raw retail link addresses are not reproduced, and the differential that exists uses generated graphs rather than original game assets.",
           "The bound differential (retail bytes under unicorn x86-32 versus the compiled candidate tree) was re-executed against the current implementation and passed 9/9; it is emulator/host evidence, not runtime_tests.",
-          "Linked into igi1.exe (14,266,312 bytes); runtime UNOBSERVED."
+          "Linked into igi1.exe (14,266,312 bytes); runtime UNOBSERVED.",
+          "Linked into build-win32-no-verify-gate/igi1.exe; candidate symbol Iff_GetChunkPayload resolves at 0x00423880 with 0 call site(s) in the linked image."
         ],
         "behavioral_runner": {
           "path": "scripts/iff_chunk_tree_diff_runner.py",
@@ -77131,8 +77156,8 @@
           "object_emitted": true,
           "linked_image_emitted": true,
           "linked_image_vaddr": "0x00423880",
-          "call_sites_in_image": 3,
-          "reachable_statically": true,
+          "call_sites_in_image": 0,
+          "reachable_statically": false,
           "evidence_path": "docs/fidelity/evidence/iff-addressable-20261023.json",
           "evidence_sha256": "15ffaedcc573a2f61fd76a1598f3c29fe1ce85d49f38dedfddecae657904e3ba",
           "note": "Addressability is proven by nm on the TU object and the linked candidate. The declaration-level asm-label makes the emitted symbol the retail catalog name Iff_GetChunkPayload; the C++ source identifier remains IffChunk_GetPayload. No linkage or body change was needed or made.",
@@ -89203,6 +89228,801 @@
           "evidence_path": "docs/fidelity/evidence/0x0043E4F0-behavioral.json",
           "evidence_sha256": "aa5eeed6abb1005c5b85791644b7fbb4090f2b8844dea7f8d5686ba5fea2956b"
         }
+      }
+    },
+    {
+      "address": "0x004663D0",
+      "name": "Task_DefineComputerStartup",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_4663d0.cpp",
+        "sha256": "d9da76873deb743cd44bf1ccbeb4a7d7114ea6a635fb9d03dac5a47a46fece6b"
+      },
+      "verification": {
+        "status": "BUILD_VERIFIED",
+        "selected_decompiler": "binary_ninja",
+        "candidate_symbol": "Task_DefineComputerStartup",
+        "limitations": [
+          "Automatically registered from a unique source provenance VA and definition; ABI, static semantics and paired runtime remain unverified.",
+          "Runtime UNOBSERVED: no paired retail/candidate capture exists for this address; BUILD_VERIFIED is the honest ceiling here.",
+          "Linked into build-win32-no-verify-gate/igi1.exe; Task_DefineComputerStartup at 0x00420DF0 has 0 direct call site(s), 0 tail jump(s) and 0 .rdata pointer(s) in the linked image.",
+          "Retail calls this at 0x00402A66 inside the startup init sequence 0x00402930, which the candidate implements as a fail-closed stub that throws instead of running the 155 ordered calls: that stub is why this native is linked but unreachable."
+        ],
+        "candidate_sha256": "8f0de1c9fe0448538613975cf44b6c4be89368c32c71f6d3f34cba2f4a14eeb6",
+        "candidate_address": "0x00420DF0",
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004663D0-build.json",
+          "evidence_sha256": "003c14eb482351cb8c6e04e9a84334d1d76eb46164c4d7c82e66a9a1a23b423f"
+        },
+        "addressability": {
+          "linkage": "external",
+          "object_emitted": true,
+          "linked_image_emitted": true,
+          "linked_image_vaddr": "0x00420DF0",
+          "direct_call_sites": 0,
+          "tail_jumps": 0,
+          "data_pointers_in_rdata": 0,
+          "reachable_statically": false
+        },
+        "recorded_at": "2026-10-25T02:44:21Z"
+      }
+    },
+    {
+      "address": "0x004F9CD0",
+      "name": "GraphNode_Process_4F9CD0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_4f9cd0.cpp",
+        "sha256": "6af947ab712a80c916aaa1ffe6c447096acca2547360eaef8f9a197543d7a29a"
+      },
+      "verification": {
+        "status": "BUILD_VERIFIED",
+        "selected_decompiler": "binary_ninja",
+        "candidate_symbol": "GraphNode_Process_4F9CD0",
+        "limitations": [
+          "Automatically registered from a unique source provenance VA and definition; ABI, static semantics and paired runtime remain unverified.",
+          "Runtime UNOBSERVED: no paired retail/candidate capture exists for this address; BUILD_VERIFIED is the honest ceiling here.",
+          "Linked into build-win32-no-verify-gate/igi1.exe; GraphNode_Process_4F9CD0 at 0x00420EC0 has 0 direct call site(s), 0 tail jump(s) and 0 .rdata pointer(s) in the linked image.",
+          "Retail calls this at 0x004FAF0F, 0x004FAF72, 0x004FAF8C and 0x004FAFAC from the function starting 0x004FAEE0 (untranscribed): the candidate links it but no candidate path reaches it."
+        ],
+        "candidate_sha256": "8f0de1c9fe0448538613975cf44b6c4be89368c32c71f6d3f34cba2f4a14eeb6",
+        "candidate_address": "0x00420EC0",
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004F9CD0-build.json",
+          "evidence_sha256": "27f0d25ec88c67ec838f2174ad21fb73884c2ad0bb1dbae5e0ad2565f62cd1a6"
+        },
+        "addressability": {
+          "linkage": "external",
+          "object_emitted": true,
+          "linked_image_emitted": true,
+          "linked_image_vaddr": "0x00420EC0",
+          "direct_call_sites": 0,
+          "tail_jumps": 0,
+          "data_pointers_in_rdata": 0,
+          "reachable_statically": false
+        },
+        "recorded_at": "2026-10-25T02:44:21Z"
+      }
+    },
+    {
+      "address": "0x004F9EB0",
+      "name": "GraphStream_AddNode_4F9EB0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_4f9eb0.cpp",
+        "sha256": "204a5f61b9d97f399dc00ffc9e26a877bb336238eadb1cc0bc6014b489e210d5"
+      },
+      "verification": {
+        "status": "BUILD_VERIFIED",
+        "selected_decompiler": "binary_ninja",
+        "candidate_symbol": "GraphStream_AddNode_4F9EB0",
+        "limitations": [
+          "Automatically registered from a unique source provenance VA and definition; ABI, static semantics and paired runtime remain unverified.",
+          "Runtime UNOBSERVED: no paired retail/candidate capture exists for this address; BUILD_VERIFIED is the honest ceiling here.",
+          "Linked into build-win32-no-verify-gate/igi1.exe; GraphStream_AddNode_4F9EB0 at 0x00420FD0 has 0 direct call site(s), 0 tail jump(s) and 0 .rdata pointer(s) in the linked image.",
+          "Retail calls this at 0x00509559 from the function starting 0x00509520 (untranstribed): the candidate links it but no candidate path reaches it, because that caller is not transcribed."
+        ],
+        "candidate_sha256": "8f0de1c9fe0448538613975cf44b6c4be89368c32c71f6d3f34cba2f4a14eeb6",
+        "candidate_address": "0x00420FD0",
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004F9EB0-build.json",
+          "evidence_sha256": "973bc1161609a9cca05656fa02d774f9edbc93d3b3a7416191e5502bd108d03e"
+        },
+        "addressability": {
+          "linkage": "external",
+          "object_emitted": true,
+          "linked_image_emitted": true,
+          "linked_image_vaddr": "0x00420FD0",
+          "direct_call_sites": 0,
+          "tail_jumps": 0,
+          "data_pointers_in_rdata": 0,
+          "reachable_statically": false
+        },
+        "recorded_at": "2026-10-25T02:44:21Z"
+      }
+    },
+    {
+      "address": "0x004FA4E0",
+      "name": "GraphStream_WriteTag0Byte_4FA4E0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_4fa4e0.cpp",
+        "sha256": "298336b0ebb74185a7a3c9dbc992b1671dee61374e072b4206c0658b8143ac09"
+      },
+      "verification": {
+        "status": "BUILD_VERIFIED",
+        "selected_decompiler": "binary_ninja",
+        "candidate_symbol": "GraphStream_WriteTag0Byte_4FA4E0",
+        "limitations": [
+          "Automatically registered from a unique source provenance VA and definition; ABI, static semantics and paired runtime remain unverified.",
+          "Runtime UNOBSERVED: no paired retail/candidate capture exists for this address; BUILD_VERIFIED is the honest ceiling here.",
+          "Linked into build-win32-no-verify-gate/igi1.exe; GraphStream_WriteTag0Byte_4FA4E0 at 0x00421180 has 2 direct call site(s), 1 tail jump(s) and 0 .rdata pointer(s) in the linked image."
+        ],
+        "candidate_sha256": "8f0de1c9fe0448538613975cf44b6c4be89368c32c71f6d3f34cba2f4a14eeb6",
+        "candidate_address": "0x00421180",
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004FA4E0-build.json",
+          "evidence_sha256": "0ee1466e011e77b5ec11f45b309951250303942a4618cd33d559ec958c319f5c"
+        },
+        "addressability": {
+          "linkage": "external",
+          "object_emitted": true,
+          "linked_image_emitted": true,
+          "linked_image_vaddr": "0x00421180",
+          "direct_call_sites": 2,
+          "tail_jumps": 1,
+          "data_pointers_in_rdata": 0,
+          "reachable_statically": true
+        },
+        "recorded_at": "2026-10-25T02:44:21Z"
+      }
+    },
+    {
+      "address": "0x004FA520",
+      "name": "GraphStream_WriteTag1Byte_4FA520",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_4fa520.cpp",
+        "sha256": "87d148790727ccf7302d6c7a3f579b39c29bc1b54799e8b78ab3b50b271e93c6"
+      },
+      "verification": {
+        "status": "BUILD_VERIFIED",
+        "selected_decompiler": "binary_ninja",
+        "candidate_symbol": "GraphStream_WriteTag1Byte_4FA520",
+        "limitations": [
+          "Automatically registered from a unique source provenance VA and definition; ABI, static semantics and paired runtime remain unverified.",
+          "Runtime UNOBSERVED: no paired retail/candidate capture exists for this address; BUILD_VERIFIED is the honest ceiling here.",
+          "Linked into build-win32-no-verify-gate/igi1.exe; GraphStream_WriteTag1Byte_4FA520 at 0x004211D0 has 0 direct call site(s), 1 tail jump(s) and 0 .rdata pointer(s) in the linked image."
+        ],
+        "candidate_sha256": "8f0de1c9fe0448538613975cf44b6c4be89368c32c71f6d3f34cba2f4a14eeb6",
+        "candidate_address": "0x004211D0",
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004FA520-build.json",
+          "evidence_sha256": "e34fc40a43f61ba2f1aadcab10625dfc721219c85ea02dd08e53e423bedf78da"
+        },
+        "addressability": {
+          "linkage": "external",
+          "object_emitted": true,
+          "linked_image_emitted": true,
+          "linked_image_vaddr": "0x004211D0",
+          "direct_call_sites": 0,
+          "tail_jumps": 1,
+          "data_pointers_in_rdata": 0,
+          "reachable_statically": true
+        },
+        "recorded_at": "2026-10-25T02:44:21Z"
+      }
+    },
+    {
+      "address": "0x004FA560",
+      "name": "GraphStream_WriteTag2Word_4FA560",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_4fa560.cpp",
+        "sha256": "46a6f46fb7aa34289f7d616109d10b9a5532c87af3d70f54704725fc2c1e0765"
+      },
+      "verification": {
+        "status": "BUILD_VERIFIED",
+        "selected_decompiler": "binary_ninja",
+        "candidate_symbol": "GraphStream_WriteTag2Word_4FA560",
+        "limitations": [
+          "Automatically registered from a unique source provenance VA and definition; ABI, static semantics and paired runtime remain unverified.",
+          "Runtime UNOBSERVED: no paired retail/candidate capture exists for this address; BUILD_VERIFIED is the honest ceiling here.",
+          "Linked into build-win32-no-verify-gate/igi1.exe; GraphStream_WriteTag2Word_4FA560 at 0x00421220 has 0 direct call site(s), 1 tail jump(s) and 0 .rdata pointer(s) in the linked image."
+        ],
+        "candidate_sha256": "8f0de1c9fe0448538613975cf44b6c4be89368c32c71f6d3f34cba2f4a14eeb6",
+        "candidate_address": "0x00421220",
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004FA560-build.json",
+          "evidence_sha256": "4f5f2e48f35ddf2ca549ce0778b87207d0a6bbbead7426e1bf6d4cc042530956"
+        },
+        "addressability": {
+          "linkage": "external",
+          "object_emitted": true,
+          "linked_image_emitted": true,
+          "linked_image_vaddr": "0x00421220",
+          "direct_call_sites": 0,
+          "tail_jumps": 1,
+          "data_pointers_in_rdata": 0,
+          "reachable_statically": true
+        },
+        "recorded_at": "2026-10-25T02:44:21Z"
+      }
+    },
+    {
+      "address": "0x004FA5A0",
+      "name": "GraphStream_WriteTag3Word_4FA5A0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_4fa5a0.cpp",
+        "sha256": "16aaf777ddaa271882c4308f5551a14d8ec6022c39da0dcde19b34d8d19cd032"
+      },
+      "verification": {
+        "status": "BUILD_VERIFIED",
+        "selected_decompiler": "binary_ninja",
+        "candidate_symbol": "GraphStream_WriteTag3Word_4FA5A0",
+        "limitations": [
+          "Automatically registered from a unique source provenance VA and definition; ABI, static semantics and paired runtime remain unverified.",
+          "Runtime UNOBSERVED: no paired retail/candidate capture exists for this address; BUILD_VERIFIED is the honest ceiling here.",
+          "Linked into build-win32-no-verify-gate/igi1.exe; GraphStream_WriteTag3Word_4FA5A0 at 0x00421270 has 0 direct call site(s), 1 tail jump(s) and 0 .rdata pointer(s) in the linked image."
+        ],
+        "candidate_sha256": "8f0de1c9fe0448538613975cf44b6c4be89368c32c71f6d3f34cba2f4a14eeb6",
+        "candidate_address": "0x00421270",
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004FA5A0-build.json",
+          "evidence_sha256": "ad8edead5ad8cc46857350c56617f42310017714a21631f2b58efcd83f438fef"
+        },
+        "addressability": {
+          "linkage": "external",
+          "object_emitted": true,
+          "linked_image_emitted": true,
+          "linked_image_vaddr": "0x00421270",
+          "direct_call_sites": 0,
+          "tail_jumps": 1,
+          "data_pointers_in_rdata": 0,
+          "reachable_statically": true
+        },
+        "recorded_at": "2026-10-25T02:44:21Z"
+      }
+    },
+    {
+      "address": "0x004FA5E0",
+      "name": "GraphStream_WriteTag4Dword_4FA5E0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_4fa5e0.cpp",
+        "sha256": "81127c3ea4d7e3f8a897aea17ef1a368190b880a89f96ac4ebab7ca0b52b82c4"
+      },
+      "verification": {
+        "status": "BUILD_VERIFIED",
+        "selected_decompiler": "binary_ninja",
+        "candidate_symbol": "GraphStream_WriteTag4Dword_4FA5E0",
+        "limitations": [
+          "Automatically registered from a unique source provenance VA and definition; ABI, static semantics and paired runtime remain unverified.",
+          "Runtime UNOBSERVED: no paired retail/candidate capture exists for this address; BUILD_VERIFIED is the honest ceiling here.",
+          "Linked into build-win32-no-verify-gate/igi1.exe; GraphStream_WriteTag4Dword_4FA5E0 at 0x004212C0 has 1 direct call site(s), 1 tail jump(s) and 0 .rdata pointer(s) in the linked image."
+        ],
+        "candidate_sha256": "8f0de1c9fe0448538613975cf44b6c4be89368c32c71f6d3f34cba2f4a14eeb6",
+        "candidate_address": "0x004212C0",
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004FA5E0-build.json",
+          "evidence_sha256": "36243a25f0a5d4ded00d883eb9e5b6daf8a161e47677f152932e9d218377b65a"
+        },
+        "addressability": {
+          "linkage": "external",
+          "object_emitted": true,
+          "linked_image_emitted": true,
+          "linked_image_vaddr": "0x004212C0",
+          "direct_call_sites": 1,
+          "tail_jumps": 1,
+          "data_pointers_in_rdata": 0,
+          "reachable_statically": true
+        },
+        "recorded_at": "2026-10-25T02:44:21Z"
+      }
+    },
+    {
+      "address": "0x004FA620",
+      "name": "GraphStream_WriteTag5Dword_4FA620",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_4fa620.cpp",
+        "sha256": "2e451888aec6ea2f8c5e7df05d524dfd6f2b63536136dd58bec6b92f133815ab"
+      },
+      "verification": {
+        "status": "BUILD_VERIFIED",
+        "selected_decompiler": "binary_ninja",
+        "candidate_symbol": "GraphStream_WriteTag5Dword_4FA620",
+        "limitations": [
+          "Automatically registered from a unique source provenance VA and definition; ABI, static semantics and paired runtime remain unverified.",
+          "Runtime UNOBSERVED: no paired retail/candidate capture exists for this address; BUILD_VERIFIED is the honest ceiling here.",
+          "Linked into build-win32-no-verify-gate/igi1.exe; GraphStream_WriteTag5Dword_4FA620 at 0x00421310 has 1 direct call site(s), 1 tail jump(s) and 0 .rdata pointer(s) in the linked image."
+        ],
+        "candidate_sha256": "8f0de1c9fe0448538613975cf44b6c4be89368c32c71f6d3f34cba2f4a14eeb6",
+        "candidate_address": "0x00421310",
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004FA620-build.json",
+          "evidence_sha256": "542baed9473a930ce860d76d457856aeb323c342fa352f69f441e4dfa9a37b9d"
+        },
+        "addressability": {
+          "linkage": "external",
+          "object_emitted": true,
+          "linked_image_emitted": true,
+          "linked_image_vaddr": "0x00421310",
+          "direct_call_sites": 1,
+          "tail_jumps": 1,
+          "data_pointers_in_rdata": 0,
+          "reachable_statically": true
+        },
+        "recorded_at": "2026-10-25T02:44:21Z"
+      }
+    },
+    {
+      "address": "0x004FA660",
+      "name": "GraphStream_WriteTag6Dword_4FA660",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_4fa660.cpp",
+        "sha256": "57872e3ccce94594d1b6dfd6bdec53540c46a8464a116285d03df3e31cfc0ffb"
+      },
+      "verification": {
+        "status": "BUILD_VERIFIED",
+        "selected_decompiler": "binary_ninja",
+        "candidate_symbol": "GraphStream_WriteTag6Dword_4FA660",
+        "limitations": [
+          "Automatically registered from a unique source provenance VA and definition; ABI, static semantics and paired runtime remain unverified.",
+          "Runtime UNOBSERVED: no paired retail/candidate capture exists for this address; BUILD_VERIFIED is the honest ceiling here.",
+          "Linked into build-win32-no-verify-gate/igi1.exe; GraphStream_WriteTag6Dword_4FA660 at 0x00421360 has 0 direct call site(s), 1 tail jump(s) and 0 .rdata pointer(s) in the linked image."
+        ],
+        "candidate_sha256": "8f0de1c9fe0448538613975cf44b6c4be89368c32c71f6d3f34cba2f4a14eeb6",
+        "candidate_address": "0x00421360",
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004FA660-build.json",
+          "evidence_sha256": "83694fc13a6f6add14fc39cab7d94ed4b5e2acb970680d9a0b42078c5d8d88c5"
+        },
+        "addressability": {
+          "linkage": "external",
+          "object_emitted": true,
+          "linked_image_emitted": true,
+          "linked_image_vaddr": "0x00421360",
+          "direct_call_sites": 0,
+          "tail_jumps": 1,
+          "data_pointers_in_rdata": 0,
+          "reachable_statically": true
+        },
+        "recorded_at": "2026-10-25T02:44:21Z"
+      }
+    },
+    {
+      "address": "0x004FA6A0",
+      "name": "GraphStream_WriteTag7Pair_4FA6A0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_4fa6a0.cpp",
+        "sha256": "71a2776de35a5aa8bf568bd71c4e0641c5b64ba1f2799059804b282368c4eca1"
+      },
+      "verification": {
+        "status": "BUILD_VERIFIED",
+        "selected_decompiler": "binary_ninja",
+        "candidate_symbol": "GraphStream_WriteTag7Pair_4FA6A0",
+        "limitations": [
+          "Automatically registered from a unique source provenance VA and definition; ABI, static semantics and paired runtime remain unverified.",
+          "Runtime UNOBSERVED: no paired retail/candidate capture exists for this address; BUILD_VERIFIED is the honest ceiling here.",
+          "Linked into build-win32-no-verify-gate/igi1.exe; GraphStream_WriteTag7Pair_4FA6A0 at 0x004213B0 has 0 direct call site(s), 1 tail jump(s) and 0 .rdata pointer(s) in the linked image."
+        ],
+        "candidate_sha256": "8f0de1c9fe0448538613975cf44b6c4be89368c32c71f6d3f34cba2f4a14eeb6",
+        "candidate_address": "0x004213B0",
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004FA6A0-build.json",
+          "evidence_sha256": "7c57b7dd528de8290f4e379889fad680913f4a29f9638ff067ee82255539b986"
+        },
+        "addressability": {
+          "linkage": "external",
+          "object_emitted": true,
+          "linked_image_emitted": true,
+          "linked_image_vaddr": "0x004213B0",
+          "direct_call_sites": 0,
+          "tail_jumps": 1,
+          "data_pointers_in_rdata": 0,
+          "reachable_statically": true
+        },
+        "recorded_at": "2026-10-25T02:44:21Z"
+      }
+    },
+    {
+      "address": "0x004FA6E0",
+      "name": "GraphStream_WriteTag8Block_4FA6E0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_4fa6e0.cpp",
+        "sha256": "fd22d9a2fcaaf7537e2c8c3300ee59c6781810054bd9e9ffa2a2053e58090826"
+      },
+      "verification": {
+        "status": "BUILD_VERIFIED",
+        "selected_decompiler": "binary_ninja",
+        "candidate_symbol": "GraphStream_WriteTag8Block_4FA6E0",
+        "limitations": [
+          "Automatically registered from a unique source provenance VA and definition; ABI, static semantics and paired runtime remain unverified.",
+          "Runtime UNOBSERVED: no paired retail/candidate capture exists for this address; BUILD_VERIFIED is the honest ceiling here.",
+          "Linked into build-win32-no-verify-gate/igi1.exe; GraphStream_WriteTag8Block_4FA6E0 at 0x00421410 has 0 direct call site(s), 1 tail jump(s) and 0 .rdata pointer(s) in the linked image."
+        ],
+        "candidate_sha256": "8f0de1c9fe0448538613975cf44b6c4be89368c32c71f6d3f34cba2f4a14eeb6",
+        "candidate_address": "0x00421410",
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004FA6E0-build.json",
+          "evidence_sha256": "f762a3985d655f40c339a7ae3635154dd89f9d331c9adcdee54a96e41e8f757a"
+        },
+        "addressability": {
+          "linkage": "external",
+          "object_emitted": true,
+          "linked_image_emitted": true,
+          "linked_image_vaddr": "0x00421410",
+          "direct_call_sites": 0,
+          "tail_jumps": 1,
+          "data_pointers_in_rdata": 0,
+          "reachable_statically": true
+        },
+        "recorded_at": "2026-10-25T02:44:21Z"
+      }
+    },
+    {
+      "address": "0x004FA730",
+      "name": "GraphStream_WriteTag9String_4FA730",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_4fa730.cpp",
+        "sha256": "30c5d2e8abf05b3d01f35c260e9a8bd711393e34a67aba7e667eefbcd3bd99c4"
+      },
+      "verification": {
+        "status": "BUILD_VERIFIED",
+        "selected_decompiler": "binary_ninja",
+        "candidate_symbol": "GraphStream_WriteTag9String_4FA730",
+        "limitations": [
+          "Automatically registered from a unique source provenance VA and definition; ABI, static semantics and paired runtime remain unverified.",
+          "Runtime UNOBSERVED: no paired retail/candidate capture exists for this address; BUILD_VERIFIED is the honest ceiling here.",
+          "Linked into build-win32-no-verify-gate/igi1.exe; GraphStream_WriteTag9String_4FA730 at 0x00421490 has 0 direct call site(s), 1 tail jump(s) and 0 .rdata pointer(s) in the linked image."
+        ],
+        "candidate_sha256": "8f0de1c9fe0448538613975cf44b6c4be89368c32c71f6d3f34cba2f4a14eeb6",
+        "candidate_address": "0x00421490",
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004FA730-build.json",
+          "evidence_sha256": "27aa34ec450db7efd8e8bf3bcac1fa96be4a0814fb15ddf0a8517a0fde7f5b61"
+        },
+        "addressability": {
+          "linkage": "external",
+          "object_emitted": true,
+          "linked_image_emitted": true,
+          "linked_image_vaddr": "0x00421490",
+          "direct_call_sites": 0,
+          "tail_jumps": 1,
+          "data_pointers_in_rdata": 0,
+          "reachable_statically": true
+        },
+        "recorded_at": "2026-10-25T02:44:21Z"
+      }
+    },
+    {
+      "address": "0x004FA7A0",
+      "name": "GraphStream_WriteTagABlob_4FA7A0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_4fa7a0.cpp",
+        "sha256": "f0f1933f5e842555957e2cd90badb18345d18ef2d63088377d29b53d48e227ae"
+      },
+      "verification": {
+        "status": "BUILD_VERIFIED",
+        "selected_decompiler": "binary_ninja",
+        "candidate_symbol": "GraphStream_WriteTagABlob_4FA7A0",
+        "limitations": [
+          "Automatically registered from a unique source provenance VA and definition; ABI, static semantics and paired runtime remain unverified.",
+          "Runtime UNOBSERVED: no paired retail/candidate capture exists for this address; BUILD_VERIFIED is the honest ceiling here.",
+          "Linked into build-win32-no-verify-gate/igi1.exe; GraphStream_WriteTagABlob_4FA7A0 at 0x00421540 has 0 direct call site(s), 1 tail jump(s) and 0 .rdata pointer(s) in the linked image."
+        ],
+        "candidate_sha256": "8f0de1c9fe0448538613975cf44b6c4be89368c32c71f6d3f34cba2f4a14eeb6",
+        "candidate_address": "0x00421540",
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004FA7A0-build.json",
+          "evidence_sha256": "7dc6566c88a5a13b14f2a96bdf7439fa4ce80292fdf26839b811fa28f8a3d047"
+        },
+        "addressability": {
+          "linkage": "external",
+          "object_emitted": true,
+          "linked_image_emitted": true,
+          "linked_image_vaddr": "0x00421540",
+          "direct_call_sites": 0,
+          "tail_jumps": 1,
+          "data_pointers_in_rdata": 0,
+          "reachable_statically": true
+        },
+        "recorded_at": "2026-10-25T02:44:21Z"
+      }
+    },
+    {
+      "address": "0x004FA7E0",
+      "name": "GraphStream_ReadTag0Byte_4FA7E0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_4fa7e0.cpp",
+        "sha256": "e43880b5b3095887bfff93db6c9bb471e232de2819c8f228ad19e032e6a44f85"
+      },
+      "verification": {
+        "status": "BUILD_VERIFIED",
+        "selected_decompiler": "binary_ninja",
+        "candidate_symbol": "GraphStream_ReadTag0Byte_4FA7E0",
+        "limitations": [
+          "Automatically registered from a unique source provenance VA and definition; ABI, static semantics and paired runtime remain unverified.",
+          "Runtime UNOBSERVED: no paired retail/candidate capture exists for this address; BUILD_VERIFIED is the honest ceiling here.",
+          "Linked into build-win32-no-verify-gate/igi1.exe; GraphStream_ReadTag0Byte_4FA7E0 at 0x004215A0 has 1 direct call site(s), 1 tail jump(s) and 0 .rdata pointer(s) in the linked image."
+        ],
+        "candidate_sha256": "8f0de1c9fe0448538613975cf44b6c4be89368c32c71f6d3f34cba2f4a14eeb6",
+        "candidate_address": "0x004215A0",
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004FA7E0-build.json",
+          "evidence_sha256": "84327765c60b579c707e9d8e9416ac73d4fcd8b8573c8b35da00dd39d1832bfd"
+        },
+        "addressability": {
+          "linkage": "external",
+          "object_emitted": true,
+          "linked_image_emitted": true,
+          "linked_image_vaddr": "0x004215A0",
+          "direct_call_sites": 1,
+          "tail_jumps": 1,
+          "data_pointers_in_rdata": 0,
+          "reachable_statically": true
+        },
+        "recorded_at": "2026-10-25T02:44:21Z"
+      }
+    },
+    {
+      "address": "0x004FA810",
+      "name": "GraphStream_ReadTag2Word_4FA810",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_4fa810.cpp",
+        "sha256": "d51c7a661d38268acae7b2c6ed3539ad4ebf64195f2dbd8044cfafe9179d1f99"
+      },
+      "verification": {
+        "status": "BUILD_VERIFIED",
+        "selected_decompiler": "binary_ninja",
+        "candidate_symbol": "GraphStream_ReadTag2Word_4FA810",
+        "limitations": [
+          "Automatically registered from a unique source provenance VA and definition; ABI, static semantics and paired runtime remain unverified.",
+          "Runtime UNOBSERVED: no paired retail/candidate capture exists for this address; BUILD_VERIFIED is the honest ceiling here.",
+          "Linked into build-win32-no-verify-gate/igi1.exe; GraphStream_ReadTag2Word_4FA810 at 0x004215F0 has 0 direct call site(s), 1 tail jump(s) and 0 .rdata pointer(s) in the linked image."
+        ],
+        "candidate_sha256": "8f0de1c9fe0448538613975cf44b6c4be89368c32c71f6d3f34cba2f4a14eeb6",
+        "candidate_address": "0x004215F0",
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004FA810-build.json",
+          "evidence_sha256": "d8474a5726cec9e2c1b3b1cb586c110b2ad6e87d94a75a7f2fe78de4db0ae5f1"
+        },
+        "addressability": {
+          "linkage": "external",
+          "object_emitted": true,
+          "linked_image_emitted": true,
+          "linked_image_vaddr": "0x004215F0",
+          "direct_call_sites": 0,
+          "tail_jumps": 1,
+          "data_pointers_in_rdata": 0,
+          "reachable_statically": true
+        },
+        "recorded_at": "2026-10-25T02:44:21Z"
+      }
+    },
+    {
+      "address": "0x004FA890",
+      "name": "GraphStream_ReadTag4Float_4FA890",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_4fa890.cpp",
+        "sha256": "7a5b3734363f42bdaefdb3c41d771c7f7df87f694fe5d22b1df62654fe851847"
+      },
+      "verification": {
+        "status": "BUILD_VERIFIED",
+        "selected_decompiler": "binary_ninja",
+        "candidate_symbol": "GraphStream_ReadTag4Float_4FA890",
+        "limitations": [
+          "Automatically registered from a unique source provenance VA and definition; ABI, static semantics and paired runtime remain unverified.",
+          "Runtime UNOBSERVED: no paired retail/candidate capture exists for this address; BUILD_VERIFIED is the honest ceiling here.",
+          "Linked into build-win32-no-verify-gate/igi1.exe; GraphStream_ReadTag4Float_4FA890 at 0x00421640 has 0 direct call site(s), 1 tail jump(s) and 0 .rdata pointer(s) in the linked image."
+        ],
+        "candidate_sha256": "8f0de1c9fe0448538613975cf44b6c4be89368c32c71f6d3f34cba2f4a14eeb6",
+        "candidate_address": "0x00421640",
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004FA890-build.json",
+          "evidence_sha256": "131a6181adfbd3ef7cb6dcec9130a34d6f7fb798c5694b07d6bb4e23cb38e5a6"
+        },
+        "addressability": {
+          "linkage": "external",
+          "object_emitted": true,
+          "linked_image_emitted": true,
+          "linked_image_vaddr": "0x00421640",
+          "direct_call_sites": 0,
+          "tail_jumps": 1,
+          "data_pointers_in_rdata": 0,
+          "reachable_statically": true
+        },
+        "recorded_at": "2026-10-25T02:44:21Z"
+      }
+    },
+    {
+      "address": "0x004FA8D0",
+      "name": "GraphStream_ReadTag8Double_4FA8D0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_4fa8d0.cpp",
+        "sha256": "e2d2412d63b42d815a95713d13a7d6973a9125910433d1e56240efadcb64646a"
+      },
+      "verification": {
+        "status": "BUILD_VERIFIED",
+        "selected_decompiler": "binary_ninja",
+        "candidate_symbol": "GraphStream_ReadTag8Double_4FA8D0",
+        "limitations": [
+          "Automatically registered from a unique source provenance VA and definition; ABI, static semantics and paired runtime remain unverified.",
+          "Runtime UNOBSERVED: no paired retail/candidate capture exists for this address; BUILD_VERIFIED is the honest ceiling here.",
+          "Linked into build-win32-no-verify-gate/igi1.exe; GraphStream_ReadTag8Double_4FA8D0 at 0x004216A0 has 0 direct call site(s), 1 tail jump(s) and 0 .rdata pointer(s) in the linked image."
+        ],
+        "candidate_sha256": "8f0de1c9fe0448538613975cf44b6c4be89368c32c71f6d3f34cba2f4a14eeb6",
+        "candidate_address": "0x004216A0",
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004FA8D0-build.json",
+          "evidence_sha256": "4205cc720a768503a003a2ac12151ce8a297ce6a9ca0c37edd163e96124c0eba"
+        },
+        "addressability": {
+          "linkage": "external",
+          "object_emitted": true,
+          "linked_image_emitted": true,
+          "linked_image_vaddr": "0x004216A0",
+          "direct_call_sites": 0,
+          "tail_jumps": 1,
+          "data_pointers_in_rdata": 0,
+          "reachable_statically": true
+        },
+        "recorded_at": "2026-10-25T02:44:21Z"
+      }
+    },
+    {
+      "address": "0x004FA910",
+      "name": "GraphStream_ReadTag8Block_4FA910",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_4fa910.cpp",
+        "sha256": "f8b41d0658eb86c6e7d4aa3a47eb9cf959e79129e40dbbe7254f7546645c6627"
+      },
+      "verification": {
+        "status": "BUILD_VERIFIED",
+        "selected_decompiler": "binary_ninja",
+        "candidate_symbol": "GraphStream_ReadTag8Block_4FA910",
+        "limitations": [
+          "Automatically registered from a unique source provenance VA and definition; ABI, static semantics and paired runtime remain unverified.",
+          "Runtime UNOBSERVED: no paired retail/candidate capture exists for this address; BUILD_VERIFIED is the honest ceiling here.",
+          "Linked into build-win32-no-verify-gate/igi1.exe; GraphStream_ReadTag8Block_4FA910 at 0x00421700 has 0 direct call site(s), 1 tail jump(s) and 0 .rdata pointer(s) in the linked image."
+        ],
+        "candidate_sha256": "8f0de1c9fe0448538613975cf44b6c4be89368c32c71f6d3f34cba2f4a14eeb6",
+        "candidate_address": "0x00421700",
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004FA910-build.json",
+          "evidence_sha256": "60216c0d66d822b8cab40c2b961c6844b5289c260f73ba23164f0c33600ae143"
+        },
+        "addressability": {
+          "linkage": "external",
+          "object_emitted": true,
+          "linked_image_emitted": true,
+          "linked_image_vaddr": "0x00421700",
+          "direct_call_sites": 0,
+          "tail_jumps": 1,
+          "data_pointers_in_rdata": 0,
+          "reachable_statically": true
+        },
+        "recorded_at": "2026-10-25T02:44:21Z"
+      }
+    },
+    {
+      "address": "0x004FA950",
+      "name": "GraphStream_ReadTag9String_4FA950",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_4fa950.cpp",
+        "sha256": "61d1543f592f6b9fd423195fca654d46d29bb81857ef543297680844a4ee5891"
+      },
+      "verification": {
+        "status": "BUILD_VERIFIED",
+        "selected_decompiler": "binary_ninja",
+        "candidate_symbol": "GraphStream_ReadTag9String_4FA950",
+        "limitations": [
+          "Automatically registered from a unique source provenance VA and definition; ABI, static semantics and paired runtime remain unverified.",
+          "Runtime UNOBSERVED: no paired retail/candidate capture exists for this address; BUILD_VERIFIED is the honest ceiling here.",
+          "Linked into build-win32-no-verify-gate/igi1.exe; GraphStream_ReadTag9String_4FA950 at 0x004217A0 has 0 direct call site(s), 1 tail jump(s) and 0 .rdata pointer(s) in the linked image."
+        ],
+        "candidate_sha256": "8f0de1c9fe0448538613975cf44b6c4be89368c32c71f6d3f34cba2f4a14eeb6",
+        "candidate_address": "0x004217A0",
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004FA950-build.json",
+          "evidence_sha256": "0cad81bf9ccc3b3cfe5ac629d15e8066e3535878787acb8f3dbb0e24a4ce9e90"
+        },
+        "addressability": {
+          "linkage": "external",
+          "object_emitted": true,
+          "linked_image_emitted": true,
+          "linked_image_vaddr": "0x004217A0",
+          "direct_call_sites": 0,
+          "tail_jumps": 1,
+          "data_pointers_in_rdata": 0,
+          "reachable_statically": true
+        },
+        "recorded_at": "2026-10-25T02:44:21Z"
+      }
+    },
+    {
+      "address": "0x004FA9D0",
+      "name": "GraphList_Insert_4FA9D0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_4fa9d0.cpp",
+        "sha256": "bf68cef12c613dd57772a38cceeaf173d0aac20ee42479fa00be39fc8cc1bf93"
+      },
+      "verification": {
+        "status": "BUILD_VERIFIED",
+        "selected_decompiler": "binary_ninja",
+        "candidate_symbol": "GraphList_Insert_4FA9D0",
+        "limitations": [
+          "Automatically registered from a unique source provenance VA and definition; ABI, static semantics and paired runtime remain unverified.",
+          "Runtime UNOBSERVED: no paired retail/candidate capture exists for this address; BUILD_VERIFIED is the honest ceiling here.",
+          "Linked into build-win32-no-verify-gate/igi1.exe; GraphList_Insert_4FA9D0 at 0x004218E0 has 0 direct call site(s), 1 tail jump(s) and 0 .rdata pointer(s) in the linked image."
+        ],
+        "candidate_sha256": "8f0de1c9fe0448538613975cf44b6c4be89368c32c71f6d3f34cba2f4a14eeb6",
+        "candidate_address": "0x004218E0",
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004FA9D0-build.json",
+          "evidence_sha256": "c4c58bd62040cb6c614a8c2a9fa9768af611d29869013685e92455d865d243e3"
+        },
+        "addressability": {
+          "linkage": "external",
+          "object_emitted": true,
+          "linked_image_emitted": true,
+          "linked_image_vaddr": "0x004218E0",
+          "direct_call_sites": 0,
+          "tail_jumps": 1,
+          "data_pointers_in_rdata": 0,
+          "reachable_statically": true
+        },
+        "recorded_at": "2026-10-25T02:44:21Z"
+      }
+    },
+    {
+      "address": "0x004FAA10",
+      "name": "GraphStream_PeekByte_4FAA10",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_4faa10.cpp",
+        "sha256": "ce631dc6c32ea17fbf59bf4a2240f79c5003929894261a949d340656fd111304"
+      },
+      "verification": {
+        "status": "BUILD_VERIFIED",
+        "selected_decompiler": "binary_ninja",
+        "candidate_symbol": "GraphStream_PeekByte_4FAA10",
+        "limitations": [
+          "Automatically registered from a unique source provenance VA and definition; ABI, static semantics and paired runtime remain unverified.",
+          "Runtime UNOBSERVED: no paired retail/candidate capture exists for this address; BUILD_VERIFIED is the honest ceiling here.",
+          "Linked into build-win32-no-verify-gate/igi1.exe; GraphStream_PeekByte_4FAA10 at 0x00421950 has 1 direct call site(s), 0 tail jump(s) and 0 .rdata pointer(s) in the linked image."
+        ],
+        "candidate_sha256": "8f0de1c9fe0448538613975cf44b6c4be89368c32c71f6d3f34cba2f4a14eeb6",
+        "candidate_address": "0x00421950",
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004FAA10-build.json",
+          "evidence_sha256": "70211f079de566fa94f72bdbb516231ca1fa5bc650377b64552b05b2db4ae568"
+        },
+        "addressability": {
+          "linkage": "external",
+          "object_emitted": true,
+          "linked_image_emitted": true,
+          "linked_image_vaddr": "0x00421950",
+          "direct_call_sites": 1,
+          "tail_jumps": 0,
+          "data_pointers_in_rdata": 0,
+          "reachable_statically": true
+        },
+        "recorded_at": "2026-10-25T02:44:21Z"
       }
     }
   ],
