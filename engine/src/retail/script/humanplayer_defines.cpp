@@ -47,7 +47,7 @@ igi::retail::script::HumanPlayerScriptParameter HumanPlayer_GeneralParameterTabl
 void* NATIVE_DECL DefineHumanPlayerGeneral(void* context, std::int32_t argument_slot,
                                                 void* frame)
 {
-    NATIVE_LOG_ENTER("DefineHumanPlayerGeneral", "0x00410070");
+    NATIVE_LOG_ENTER("DefineHumanPlayerGeneral", "~0x00410070");
     // The second stack argument is passed by the script VM but never read by the retail body
     // (0x00410070-0x004101B5 reads only [esp+0x34] at the entry and [esp+0x30] at the exit).
     (void)argument_slot;
@@ -141,7 +141,7 @@ void* NATIVE_DECL DefineHumanPlayerGeneral(void* context, std::int32_t argument_
 //                 path has no return.
 std::int32_t NATIVE_DECL HumanPlayer_LoadParameters()
 {
-    NATIVE_LOG_ENTER("HumanPlayer_LoadParameters", "0x00410070");
+    NATIVE_LOG_ENTER("HumanPlayer_LoadParameters", "~0x00410070");
     void* const qvm = igi::retail::script::Qvm_Load("LOCAL:humanplayer/humanplayer.qsc");
     if (qvm == nullptr) {
         Debug_Error("HumanPlayer_LoadParameters: Couldn't load script \"%s\"",
@@ -185,7 +185,7 @@ std::int32_t NATIVE_DECL Config_Language_2();
 //                 arguments at 0x00405870.
 std::int32_t NATIVE_DECL Config_Read(const char* path)
 {
-    NATIVE_LOG_ENTER("Config_Read", "0x00410070");
+    NATIVE_LOG_ENTER("Config_Read", "~0x00410070");
     void* const qvm = igi::retail::script::Qvm_Load(path);
     if (qvm == nullptr) {
         Config_SaveGraphicOptions();

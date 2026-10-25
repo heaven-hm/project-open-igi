@@ -30,7 +30,7 @@ igi::retail::core::FrameDispatchRecordView* Game_FrameDispatchRecord = nullptr;
 // Status/limits: VERIFIED; x86 global pointer load and EAX return, with no caller-visible writes; checked against the retail's own bytes under unicorn in 8 of 8 cases, not a live game process.
 igi::retail::core::FrameDispatchRecordView* NATIVE_DECL Game_GetContext()
 {
-    NATIVE_LOG_ENTER("Game_GetContext", "0x00402880");
+    NATIVE_LOG_ENTER("Game_GetContext", "~0x00402880");
     return Game_FrameDispatchRecord;
 }
 
@@ -41,7 +41,7 @@ igi::retail::core::FrameDispatchRecordView* NATIVE_DECL Game_GetContext()
 // Status/limits: VERIFIED; valid x86 context, exact DWORD store and EAX bits; original source type unknown; checked against the retail's own bytes under unicorn in 8 of 8 cases.
 std::uint32_t NATIVE_DECL Flow_SetState(std::uint32_t value)
 {
-    NATIVE_LOG_ENTER("Flow_SetState", "0x00402880");
+    NATIVE_LOG_ENTER("Flow_SetState", "~0x00402880");
     Game_FrameDispatchRecord->unknown_0x2C = value;
     return value;
 }
@@ -55,7 +55,7 @@ std::uint32_t NATIVE_DECL Flow_SetState(std::uint32_t value)
 //           zero-extended byte. No paired runtime observation exists for this native.
 std::uint32_t NATIVE_DECL Loop_SetStatusByte(std::uint8_t value)
 {
-    NATIVE_LOG_ENTER("Loop_SetStatusByte", "0x00402880");
+    NATIVE_LOG_ENTER("Loop_SetStatusByte", "~0x00402880");
     // 0x0048F480 mov al,byte [esp+4] / 0x0048F484 mov byte [0x5C8DE8],al / 0x0048F489 ret - the loaded
     // byte stays in EAX, so the value is returned as the function's result as well as stored.
     Loop_StatusByte = value;
@@ -69,7 +69,7 @@ std::uint32_t NATIVE_DECL Loop_SetStatusByte(std::uint8_t value)
 // Status/limits: VERIFIED; high for exact control flow, offsets, and call order, checked against the retail's own bytes under unicorn in 5 of 5 cases.
 void NATIVE_DECL QTask_OpenEvent()
 {
-    NATIVE_LOG_ENTER("QTask_OpenEvent", "0x00402880");
+    NATIVE_LOG_ENTER("QTask_OpenEvent", "~0x00402880");
     if (setjmp(QTask_SetjmpFrame) == 0) {
         const std::uint16_t dispatch_index = Game_GetContext()->dispatch_table_index;
         const igi::retail::core::FrameDispatchCallback dispatch_callback =
@@ -88,7 +88,7 @@ void NATIVE_DECL QTask_OpenEvent()
 // Status/limits: VERIFIED; the handler globals are read exactly as the retail reads them, checked against the retail's own bytes under unicorn in 8 of 8 cases.
 std::int32_t NATIVE_DECL AppContext_SetIsActive(std::int32_t value)
 {
-    NATIVE_LOG_ENTER("AppContext_SetIsActive", "0x00402880");
+    NATIVE_LOG_ENTER("AppContext_SetIsActive", "~0x00402880");
     AppContext_IsActive = static_cast<std::int8_t>(value);
     if (AppContext_OptionalHandler == nullptr)
     {
@@ -104,7 +104,7 @@ std::int32_t NATIVE_DECL AppContext_SetIsActive(std::int32_t value)
 // Status/limits: VERIFIED; the load and the EAX return match the retail exactly, checked against the retail's own bytes under unicorn in 8 of 8 cases.
 std::int32_t NATIVE_DECL AppContext_GetIsActive()
 {
-    NATIVE_LOG_ENTER("AppContext_GetIsActive", "0x00402880");
+    NATIVE_LOG_ENTER("AppContext_GetIsActive", "~0x00402880");
     return AppContext_IsActive;
 }
 

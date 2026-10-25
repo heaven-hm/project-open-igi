@@ -31,7 +31,7 @@ extern "C" std::uint16_t g_57bd30;
 // Status/limits: STRUCTURALLY_VERIFIED. All eight links, the registration and the hash registration are transcribed from their own pushes, and the cleanup sums reconcile with zero slack. Limits: no runtime observation of this native in either binary. 0x004D3710 is used as the handler of two different links here, which is the same shared-handler pattern as 0x0051B940 across three types. Five of the eight links take their event id from an argument-less getter, and in each the handler immediate is pushed before that getter, so the port writes each as one nested call: argument values and call order are preserved, the literal instruction order is not. 0x0057BD30 is written at 16-bit width and read once at 32-bit width with `and ecx,0xffff` at 0x0042FFDE, so it is declared std::uint16_t on the strength of the writer.
 std::int32_t NATIVE_DECL Task_DefineWheel()
 {
-    NATIVE_LOG_ENTER("Task_DefineWheel", "0x0042FF00");
+    NATIVE_LOG_ENTER("Task_DefineWheel", "~0x0042FF00");
     // 0x0042FF00/0x0042FF02: the two surplus zeros of the argument-less 0x004D9FA0.
     g_57bd30 = TaskType_Register("Wheel", 0x158U, Sys_GetGlobal16_4D9FA0(), 0U);        // 0x0042FF14
 

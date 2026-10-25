@@ -16,7 +16,7 @@ extern "C" {
 std::uint32_t g_54391c = 30; // Retail initialized data DWORD is 30; original identifier unknown.
 std::uint32_t NATIVE_DECL Native_00495CC0(std::uint32_t value)
 {
-    NATIVE_LOG_ENTER("Native_00495CC0", "0x00495CC0");
+    NATIVE_LOG_ENTER("Native_00495CC0", "~0x00495CC0");
     g_54391c = value;
     return value;
 }

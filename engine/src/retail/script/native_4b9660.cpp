@@ -37,7 +37,7 @@ long double NATIVE_DECL Qvm_EvaluateArgumentValue(const void* node);
 
 long double NATIVE_DECL Qvm_EvaluateArgumentValue(const void* node_pointer)
 {
-    NATIVE_LOG_ENTER("Qvm_EvaluateArgumentValue", "0x004B9660");
+    NATIVE_LOG_ENTER("Qvm_EvaluateArgumentValue", "~0x004B9660");
     const std::uint8_t* const node = static_cast<const std::uint8_t*>(node_pointer);          // esi throughout, as in retail
     if (node == nullptr) {                                                                    // 0x004B966B/0x004B966D (cmp edi=0)
         return 0.0L;                                                                          // 0x004B9B45: fldl 0x005333B0

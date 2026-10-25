@@ -53,6 +53,15 @@ void Shutdown() noexcept;
 //
 // It must never be placed where retail has no statement, and it must never be the only
 // statement in a branch, because adding it must not change which branch retail takes.
+//
+// The `va` argument is the function's OWN retail VA where the function name carries it as an
+// address suffix, which is the case for every address-suffixed placeholder. Where the name
+// carries no address - a behavior-derived name in a file with several functions - the value
+// is passed with a LEADING `~`, meaning "this is the file's provenance VA, not this function's
+// own". The logger prints it as "~0x..." so a reader cannot mistake it for the function's
+// address. The first version of this instrumentation stamped the file's first provenance VA
+// on every function in the file, which was right for single-function files and confidently
+// wrong for the rest; a runtime log showed six different natives all reporting 0x0048F120.
 #define NATIVE_LOG_ENTER(name, va)                       \
     do {                                                 \
         if (::igi::devlog::Enabled()) {                  \

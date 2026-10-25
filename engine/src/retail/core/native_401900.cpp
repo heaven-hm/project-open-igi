@@ -31,7 +31,7 @@ std::uint16_t NATIVE_DECL TaskType_Register(const char* name, std::uint32_t obje
                                             std::uint16_t parent_type,
                                             std::uint32_t task_list_count)
 {
-    NATIVE_LOG_ENTER("TaskType_Register", "0x00401900");
+    NATIVE_LOG_ENTER("TaskType_Register", "~0x00401900");
     // 0x00401903-0x00401916: eax starts at the in_use byte of type 0 and advances 0x30 per slot; the loop keeps
     // going while the in_use byte is set and the slot address stays below 0x00AFA705.
     std::uint32_t type_id = 0U;

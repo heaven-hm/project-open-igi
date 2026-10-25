@@ -26,7 +26,7 @@ void NATIVE_DECL Qvm_FormatOperandText_4BC960(igi::retail::script::QvmNativeStat
 
 std::int32_t NATIVE_DECL Qvm_RunProgram(std::uint32_t program)
 {
-    NATIVE_LOG_ENTER("Qvm_RunProgram", "0x004BD080");
+    NATIVE_LOG_ENTER("Qvm_RunProgram", "~0x004BD080");
     igi::retail::script::QvmNativeStatePrefix* const state =
         reinterpret_cast<igi::retail::script::QvmNativeStatePrefix*>(static_cast<std::uintptr_t>(program));
 

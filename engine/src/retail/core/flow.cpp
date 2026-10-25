@@ -269,7 +269,7 @@ std::uint8_t AppContext_PausedFlag = 0U;
 // Verified: 100% human-verified by BlankNameES (EU native set, scripts/GameNatives/EU_NATIVES_BN_COPY.md).
 void NATIVE_DECL Flow_Init()
 {
-    NATIVE_LOG_ENTER("Flow_Init", "0x00401FC0");
+    NATIVE_LOG_ENTER("Flow_Init", "~0x00401FC0");
     // 0x00401FC0/0x00401FC2: two zero pushes. 0x004018F0 is seven bytes, `mov ax,[0x0054F928];
     // ret`, and reads no arguments, so they are inert for it. Their consumer is the fourth
     // argument of 0x00401900 below, which the stack still carries when that call is made; the
@@ -311,7 +311,7 @@ void NATIVE_DECL Flow_Init()
 // Status/limits: STRUCTURALLY_VERIFIED for the two stores and the call. The record link and the +0x48 store are not transcribed yet (see the TODO above).
 void NATIVE_DECL Flow_Start(void* flow)
 {
-    NATIVE_LOG_ENTER("Flow_Start", "0x00401FC0");
+    NATIVE_LOG_ENTER("Flow_Start", "~0x00401FC0");
     Game_FrameDispatchRecord = static_cast<igi::retail::core::FrameDispatchRecordView*>(flow);
     QTask_RegisterInputPortHandler(static_cast<std::uint32_t>(
                                        reinterpret_cast<std::uintptr_t>(flow)),
@@ -342,7 +342,7 @@ void NATIVE_DECL Flow_Start(void* flow)
 //           those states are not_solved rather than invented.
 void NATIVE_DECL Flow_RunHandler(void* flow)
 {
-    NATIVE_LOG_ENTER("Flow_RunHandler", "0x00401FC0");
+    NATIVE_LOG_ENTER("Flow_RunHandler", "~0x00401FC0");
     const std::uint32_t ticks = ElapsedTicks(); // 0x00402267, 0x00490370
     auto* const object = (Game_FrameDispatchRecord != nullptr)
                              ? Game_FrameDispatchRecord
@@ -510,7 +510,7 @@ void NATIVE_DECL Flow_RunHandler(void* flow)
 // Status/limits: STRUCTURALLY_VERIFIED; the load, the three pushes and the call are the retail's.
 void NATIVE_DECL Flow_CreateHandler(void* flow)
 {
-    NATIVE_LOG_ENTER("Flow_CreateHandler", "0x00401FC0");
+    NATIVE_LOG_ENTER("Flow_CreateHandler", "~0x00401FC0");
     QTask_RegisterInputPortHandler(static_cast<std::uint32_t>(
                                        reinterpret_cast<std::uintptr_t>(flow)),
                                    QTask_FlowClassId, 0U);
@@ -524,7 +524,7 @@ void NATIVE_DECL Flow_CreateHandler(void* flow)
 // Verified: 100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).
 void NATIVE_DECL Flow_Delete(void* flow)
 {
-    NATIVE_LOG_ENTER("Flow_Delete", "0x00401FC0");
+    NATIVE_LOG_ENTER("Flow_Delete", "~0x00401FC0");
     (void)flow;
     // The retail loads the configuration script and then reads the flow
     // object's state. The script load runs through the script loader, which

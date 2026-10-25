@@ -34,7 +34,7 @@ std::uint32_t g_bc2364 = 0U;   // retail 0x00BC2364: the 0x004978D0 return
 
 std::int32_t NATIVE_DECL Task_DefineAfterburner()
 {
-    NATIVE_LOG_ENTER("Task_DefineAfterburner", "0x0042BEB0");
+    NATIVE_LOG_ENTER("Task_DefineAfterburner", "~0x0042BEB0");
     // 0x0042BEB0/0x0042BEB2: the two surplus zeros of the argument-less 0x004D9FA0
     // getter. They are pushed first, so they land as the registration's fourth and
     // fifth slots; the function takes four, and the fifth is the surplus.

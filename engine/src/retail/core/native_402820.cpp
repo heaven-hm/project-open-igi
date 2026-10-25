@@ -18,7 +18,7 @@ std::uint32_t NATIVE_DECL Native_00490370();
 std::uint32_t NATIVE_DECL Native_004E6030(std::uint32_t);
 std::uint32_t NATIVE_DECL Native_00402820(std::uint32_t value)
 {
-    NATIVE_LOG_ENTER("Native_00402820", "0x00402820");
+    NATIVE_LOG_ENTER("Native_00402820", "~0x00402820");
     Game_FrameDispatchRecord->base_low = Native_00490370();
     Game_FrameDispatchRecord->base_high = 0;
     Game_FrameDispatchRecord->counter = 0;
