@@ -1,0 +1,48 @@
+"""Repair-controller fixtures only; these never verify a game native."""
+import argparse
+import json
+from pathlib import Path
+import sys
+import tempfile
+import unittest
+from unittest.mock import patch
+sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
+import native_autoverify as agent
+from native_runtime_discovery import getter_probe
+
+
+class NativeRepairController(unittest.TestCase):
+    def test_transient_failure_retries_and_retains_attempts(self):
+        with tempfile.TemporaryDirectory() as folder:
+            args=argparse.Namespace(max_attempts=3)
+            job=dict(address='0x00400000',source_sha256='fixture')
+            failures=[dict(job,status='blocked',verified=False,error='Frida timed out'),
+                      dict(job,status='blocked',verified=False,error='semantic evidence gap')]
+            with patch.object(agent,'verify_once',side_effect=failures) as once,patch.object(agent.time,'sleep'):
+                result=agent.verify(Path(folder),job,{},Path(folder)/'job',args)
+            self.assertEqual(once.call_count,2)
+            self.assertFalse(result['verified'])
+            self.assertEqual(len(result['attempts']),2)
+            self.assertTrue((Path(folder)/'job/result.json').is_file())
+
+    def test_behavior_gap_does_not_get_repaired_into_pass(self):
+        with tempfile.TemporaryDirectory() as folder:
+            failed=dict(address='0x00400000',status='blocked',verified=False,error='semantic evidence gap')
+            with patch.object(agent,'verify_once',return_value=failed) as once:
+                result=agent.verify(Path(folder),failed,{},Path(folder)/'job',argparse.Namespace(max_attempts=3))
+            self.assertEqual(once.call_count,1)
+            self.assertFalse(result['verified'])
+
+    def test_typed_generator_requires_exact_opcode_rule_in_both_images(self):
+        retail=bytes.fromhex('a18c7c56008b403cc3')
+        candidate=bytes.fromhex('a1000050008b403cc3')
+        with patch('native_runtime_discovery.image_bytes',side_effect=[retail,candidate]):
+            code,proof=getter_probe(Path('fixture'),Path('fixture'),0x400000,0x500000)
+        self.assertEqual(proof['field_offset'],0x3c)
+        self.assertIn('typedState',code)
+        self.assertFalse(proof['writes_in_native'])
+        with patch('native_runtime_discovery.image_bytes',side_effect=[retail,bytes(9)]):
+            self.assertIsNone(getter_probe(Path('fixture'),Path('fixture'),0x400000,0x500000))
+
+
+if __name__=='__main__':unittest.main()

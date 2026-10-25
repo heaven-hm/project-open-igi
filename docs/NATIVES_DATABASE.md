@@ -1,3 +1,16 @@
+> **SQLite:** `build/native-auto/natives.db` is the automatically refreshed evidence ledger.
+> Read-only table: `python3 scripts/native_database_read.py --verified`.
+> Full `.db` → Markdown export: `python3 scripts/native_database_read.py > build/native-auto/export.md`.
+> Table exports never approve natives; exact tested hashes and strict verification remain required.
+
+> **Live verification database:** `docs/fidelity/native-verification.json` is the machine catalog.
+> Run `python3 scripts/native_database.py` to regenerate the complete Markdown ledger at
+> `build/native-auto/database.md` and JSON at `build/native-auto/database.json`.
+> Commit verification and automatic scans regenerate it too. Historical claims below are
+> reference notes, not acceptance. CFG >= 0.85 AND source-semantic/angr evidence AND
+> native-specific paired Frida comparisons are required. Evidence for an older executable
+> never approves the currently built `igi1.exe`. See [automatic workflow](fidelity/native-feature-verification.md).
+
 > **2026-10-17 terrain correction:** The old 512x512/int16 HMP description below is superseded.
 > Retail 0x004C6240 walks 256 12-byte records and optional `(dimension + 1)^2` byte HMP blocks.
 > 0x00510010 reads signed-byte heights and applies bias 64 / scale 256. CTR relocation uses 32-byte

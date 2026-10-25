@@ -16,7 +16,7 @@ def capture_lease(device, process_names, *, timeout=60, directory=None):
     This coordinates cooperating local drivers, not other machines/Frida clients.
     """
     host = os.environ.get('FRIDA_HOST', '127.0.0.1:27042')
-    key = hashlib.sha256(host.encode()).hexdigest()[:20]
+    key = hashlib.sha256(host.rsplit(':', 1)[0].encode()).hexdigest()[:20]
     folder = Path(directory or tempfile.gettempdir())
     deadline = time.monotonic() + timeout
     with (folder / ('igi-frida-capture-' + key + '.lock')).open('a') as stream:

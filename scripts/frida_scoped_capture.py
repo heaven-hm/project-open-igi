@@ -10,6 +10,7 @@ from datetime import datetime, timezone
 import hashlib
 import json
 import os
+from native_test_config import load_config
 from pathlib import Path
 import struct
 import subprocess
@@ -115,7 +116,7 @@ def main():
     parser.add_argument('--out',required=True,type=Path)
     args=parser.parse_args()
     if args.observe<2 or args.settle<0: parser.error('observe must be >=2s; settle must be nonnegative')
-    config=json.loads((ROOT/'scripts/igi-workflow.json').read_text())
+    config=load_config(ROOT)
     try: import frida
     except ImportError:
         python=config['frida_python']

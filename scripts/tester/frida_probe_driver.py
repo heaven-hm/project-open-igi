@@ -137,6 +137,7 @@ def main() -> int:
     ap.add_argument("--mode", choices=("spawn", "attach"), default="spawn")
     ap.add_argument("--game-dir", type=Path, default=GAME_DIR)
     ap.add_argument("--expect-exe-sha256", help="refuse to capture when the executable differs")
+    ap.add_argument("--startup-escape", action="store_true", help="Diagnostic scenario: send Escape once after 2 seconds to the owned game window")
     ap.add_argument("--arg-words", type=int, default=4)
     ap.add_argument("--native-size", type=lambda value: int(value, 0),
                     help="Reviewed native extent in bytes for probes that require an exact caller range")
@@ -370,7 +371,16 @@ def main() -> int:
         observe_started = time.time()
         observe_deadline = observe_started + args.observe
         exited_at = None
+        action_script = None
+        if args.startup_escape:
+            action_script = session.create_script((ROOT / 'scripts/frida_scenario_actions.js').read_text())
+            action_script.load()
+            report['scripted_actions'] = 'owned-window Escape once after 2 seconds'
+        action_sent = False
         while time.time() < observe_deadline:
+            if action_script is not None and not action_sent and time.time()-observe_started >= 2:
+                report['startup_escape'] = action_script.exports_sync.press_escape()
+                action_sent = True
             time.sleep(min(0.5, max(0.0, observe_deadline - time.time())))
             try:
                 if not any(proc.pid == pid for proc in device.enumerate_processes()):

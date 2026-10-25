@@ -7,11 +7,14 @@ No phase promotes manifest statuses. Partial checks never print True.
 """
 from __future__ import annotations
 import argparse
+from contextlib import ExitStack
+from native_test_runtime import runtime_endpoint
 from datetime import datetime, timezone
 import hashlib
 import json
 import os
 import re
+from native_test_config import load_config
 from pathlib import Path
 import subprocess
 import sys
@@ -26,7 +29,7 @@ def digest(path):
 
 
 def read_config():
-    return json.loads((ROOT / 'scripts/igi-workflow.json').read_text())
+    return load_config(ROOT)
 
 
 def invoke(command, env, timeout=1200):
@@ -46,6 +49,7 @@ def run(address: str, args) -> tuple[dict, int]:
     env = dict(os.environ, LC_ALL='C', LANG='C')
     env.setdefault('IGI_ANGR_PYTHON', config['angr_python'])
     env.setdefault('FRIDA_HOST', config['frida_host'])
+    runtime = ExitStack()
     try:
         binary = (args.binary or Path(config['retail_exe'])).resolve()
         candidate = (args.candidate or ROOT / config['candidate']).resolve()
@@ -79,6 +83,8 @@ def run(address: str, args) -> tuple[dict, int]:
             validate_receipt(receipt, ROOT, candidate, [implementation])
             env.update(IGI_CANDIDATE_EXE=str(candidate), IGI_CANDIDATE_BUILD_RECEIPT=str(receipt))
             report['candidate_sha256'] = digest(candidate)
+        if not args.static_only:
+            env['FRIDA_HOST'] = runtime.enter_context(runtime_endpoint(config, folder))
         command = [sys.executable, str(ROOT / 'scripts/native_gate.py'), '--root', str(ROOT),
             '--address', address, '--file', str(implementation.relative_to(ROOT)), '--binary', str(binary),
             '--threshold', 'VERIFIED', '--cfg-threshold', '0.85', '--require-semantic-evidence',
@@ -129,6 +135,7 @@ def run(address: str, args) -> tuple[dict, int]:
         report['error'] = str(error)
         return report, 1
     finally:
+        runtime.close()
         output.parent.mkdir(parents=True, exist_ok=True)
         output.write_text(json.dumps(report, indent=2) + '\n')
         print('True' if report['verified'] else 'False')
@@ -156,7 +163,20 @@ def main():
     parser.add_argument('--auto', action='store_true', help='Scan changed/new source files for address-bound natives and run the full end-to-end static+runtime verification for each changed native')
     parser.add_argument('--report', type=Path)
     args = parser.parse_args()
-    addresses = [args.address] if not args.auto else scan_changed_native_addresses()
+    if args.auto:
+        # One captain/worker lock and one chronological queue for every entry.
+        # The lower-level one-address strict checker is called by that worker.
+        if args.static_only or args.probe or args.skip_build or args.binary or args.candidate or args.receipt:
+            parser.error('--auto uses the canonical configured build and per-native probes; use --address for low-level overrides')
+        command = [sys.executable, str(ROOT / 'scripts/native_autoverify.py'), 'run',
+                   '--scope', 'changed', '--level', str(args.level), '--retry']
+        code = subprocess.run(command, cwd=ROOT).returncode
+        if args.report:
+            state = ROOT / 'build/native-auto/state.json'
+            args.report.parent.mkdir(parents=True,exist_ok=True)
+            args.report.write_bytes(state.read_bytes())
+        return code
+    addresses = [args.address] if args.address else []
     if not addresses:
         report = dict(schema_version=1, kind='igi-one-native-verification', address=args.address, run_id='', result='blocked', verified=False, phases={}, error='no address-bound changed native detected; new code must map to a retail address before static+runtime comparison')
         output = args.report or (ROOT / 'build/native-one' / 'auto' / 'report.json')

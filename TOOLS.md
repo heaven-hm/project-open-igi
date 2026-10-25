@@ -337,3 +337,26 @@ cmake --build build -j 8      # produces build/igi1.exe (Windows x86)
 ```
 
 Verified 2026-10-24: `cmake --build build` completes and links `build/igi1.exe` (16,062,981 bytes).
+
+## 11. Autonomous native verification entry point
+
+`python3 scripts/native_autoverify.py run --address 0x00402820 --address 0x00402870 --retry`
+selects, analyzes, generates probes, builds, launches and compares sequentially.
+No subcommand defaults to changed/new native verification. `--max-attempts 3`
+bounds repair attempts and preserves every attempt directory.
+
+Verification owns `build-native-auto-win32/igi1.exe`, separate from legacy build
+outputs. It starts a private Frida 17.24 Windows x86 server on a temporary local
+port, validates its executable hash and actual RPC health, stages the compiled
+candidate, and cleans up only its own processes. The global game-runtime lease
+is keyed by host, so private Frida ports do not permit concurrent game captures.
+
+`scripts/native_probe_agent.py` uses installed `/opt/homebrew/bin/codex exec`
+with `--ignore-user-config --ephemeral --sandbox read-only --output-schema` for
+sequential proposer/critic requests when exact instruction-rule generation is
+unavailable. It supplies the selected BN capture, candidate disassembly and source;
+model output is a proposal, never proof or an acceptance status. Rejected/unknown
+proposals retain diagnostic observation capture. No generated game edits, active
+NativeFunction calls, memory writes, gate changes or status promotions are applied.
+Authentication/provider failures are retained as backend failures. The backend
+has not yet been demonstrated to produce an accepted arbitrary-native contract.

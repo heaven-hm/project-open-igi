@@ -1,0 +1,1228 @@
+{
+  "kind": "igi-autonomous-verifier-infrastructure-validation",
+  "native_acceptance": false,
+  "infrastructure_tests": 13,
+  "natives": [
+    {
+      "address": "0x00402820",
+      "static": {
+        "cfg_similarity": 1.0,
+        "binary_ninja_blocks": 1,
+        "radare2_blocks": 1,
+        "angr_exact_entry": true,
+        "entry_bytes_match": true
+      },
+      "runtime_captures": {
+        "retail": {
+          "exit_code": 0,
+          "report": "/Users/haseeb-mir/Documents/Code/project-open-igi/build/native-auto/runs/20261025T005906Z-f680e887/0x00402820/attempt-2/runtime-discovery/retail.json",
+          "capture_result": "observed",
+          "entries": 3,
+          "returns": 3,
+          "cleanup": {
+            "owned_process_exited": true
+          }
+        },
+        "candidate": {
+          "exit_code": 0,
+          "report": "/Users/haseeb-mir/Documents/Code/project-open-igi/build/native-auto/runs/20261025T005906Z-f680e887/0x00402820/attempt-2/runtime-discovery/candidate.json",
+          "capture_result": "unobserved",
+          "entries": 0,
+          "returns": 0,
+          "cleanup": {
+            "owned_process_exited": true
+          }
+        }
+      },
+      "runtime_result": "blocked",
+      "runtime_error": "candidate compiler inputs differ from its build receipt; rebuild",
+      "generated_contract": null,
+      "comparison": null,
+      "static_report_sha256": "c678e8bdfedd1c757ddda4d459b4258ab884d72d72cff949d293c675f2e6b446",
+      "runtime_report_sha256": "177b851f60b598c1a126018d3dafb6576e6bd1b649339abfc47d11b36443eb17",
+      "verified": false
+    },
+    {
+      "address": "0x00402870",
+      "static": {
+        "cfg_similarity": 1.0,
+        "binary_ninja_blocks": 1,
+        "radare2_blocks": 1,
+        "angr_exact_entry": true,
+        "entry_bytes_match": true
+      },
+      "runtime_captures": {
+        "retail": {
+          "exit_code": 0,
+          "report": "/Users/haseeb-mir/Documents/Code/project-open-igi/build/native-auto/runs/20261025T005906Z-f680e887/0x00402870/attempt-2/runtime-discovery/retail.json",
+          "capture_result": "observed",
+          "entries": 221,
+          "returns": 221,
+          "cleanup": {
+            "owned_process_exited": true
+          }
+        },
+        "candidate": {
+          "exit_code": 0,
+          "report": "/Users/haseeb-mir/Documents/Code/project-open-igi/build/native-auto/runs/20261025T005906Z-f680e887/0x00402870/attempt-2/runtime-discovery/candidate.json",
+          "capture_result": "unobserved",
+          "entries": 0,
+          "returns": 0,
+          "cleanup": {
+            "owned_process_exited": true
+          }
+        }
+      },
+      "runtime_result": "blocked",
+      "runtime_error": "candidate compiler inputs differ from its build receipt; rebuild",
+      "generated_contract": {
+        "rule": "x86-a1-8b40-disp8-c3",
+        "retail_bytes": "a18c7c56008b403cc3",
+        "candidate_bytes": "a180255c008b403cc3",
+        "field_offset": 60,
+        "access_width": 4,
+        "no_arguments": true,
+        "no_callees": true,
+        "writes_in_native": false,
+        "scope": "two-load-u32-getter"
+      },
+      "comparison": {
+        "kind": "igi-generated-probe-comparison",
+        "verified": false,
+        "result": "inconclusive_or_mismatched",
+        "checks": [
+          {
+            "side": "retail",
+            "check": "complete_observed_calls",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "retail",
+            "check": "getter_input_return_and_unchanged_field",
+            "passed": true
+          },
+          {
+            "side": "candidate",
+            "check": "complete_observed_calls",
+            "passed": false
+          },
+          {
+            "check": "same_ordered_inputs_outputs_and_field_effects",
+            "passed": false
+          }
+        ],
+        "typed_probe": true,
+        "limitation": "Generated comparison never bypasses the strict source-semantic acceptance gate."
+      },
+      "static_report_sha256": "5463ab69ff4d76951707290454c14acb4ea08468fbfa7b58054643fcc5bfd1fd",
+      "runtime_report_sha256": "658b56f806c2476341475b95fd180177f9d4b045799728ce4a46a1a03224a31f",
+      "verified": false
+    }
+  ],
+  "limitations": [
+    "Live run used a changing shared checkout; build receipts were invalidated.",
+    "No native promoted, no release attestation or gameplay parity.",
+    "Model proposer/critic adapter added; no accepted arbitrary-native model contract demonstrated.",
+    "Tool repair is bounded; unsupported semantics or missing candidate calls remain failures."
+  ]
+}

@@ -77,13 +77,29 @@ class AutomaticNativeVerification(unittest.TestCase):
         self.assertEqual(auto.work_order(self.root,{'0x0048F0C0','0x0048F530'}),
                          ['0x0048F530','0x0048F0C0'])
 
+    def test_changed_inputs_do_not_skip_later_requested_native(self):
+        from unittest.mock import patch
+        second=dict(self.record,address='0x0048F0D0',name='FixtureSecond')
+        self.manifest.write_text(json.dumps({'natives':[self.record,second]}))
+        args=argparse.Namespace(state=None,scope='all',base=None,head='HEAD',address=[],
+            command='run',level=1,timeout=1,retry=True)
+        visited=[]
+        def verify(root,job,record,folder,args):
+            visited.append(job['address'])
+            if len(visited)==1:
+                self.source.write_text(self.source.read_text()+'// concurrent fixture edit\n')
+            return dict(job,status='blocked',verified=False,error='infrastructure fixture')
+        with patch.object(auto,'verify',side_effect=verify), patch.object(auto,'refresh_ledger'), contextlib.redirect_stdout(io.StringIO()):
+            self.assertEqual(auto.cycle(self.root,args),1)
+        self.assertEqual(visited,['0x0048F0C0','0x0048F0D0'])
+
     def test_partial_staging_is_blocked(self):
         self.source.write_text(self.source.read_text()+'// staged\n')
         subprocess.run(['git','add','.'],cwd=self.root,check=True)
         self.source.write_text(self.source.read_text()+'// unstaged\n')
         args=argparse.Namespace(state=None,scope='staged',base=None,head='HEAD',address=[],
             command='scan',level=1,timeout=1,retry=False)
-        with contextlib.redirect_stdout(io.StringIO()):
+        with contextlib.redirect_stdout(io.StringIO()), __import__("unittest.mock", fromlist=["patch"]).patch.object(auto, "refresh_ledger"):
             code=auto.cycle(self.root,args)
         self.assertEqual(code,1)
         data=json.loads((self.root/'build/native-auto/state.json').read_text())

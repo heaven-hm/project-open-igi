@@ -12,6 +12,7 @@ import hashlib
 import json
 import math
 import os
+from native_test_config import load_config
 from pathlib import Path
 import re
 import signal
@@ -197,7 +198,7 @@ def execute(root, command, folder, label, timeout):
             'log_sha256': digest(log), 'seconds': round(time.monotonic() - started, 2)}
 
 
-def verify(root, job, record, folder, args):
+def verify_once(root, job, record, folder, args):
     folder.mkdir(parents=True)
     result = dict(job, status='blocked', verified=False, phases=[])
     try:
@@ -218,7 +219,17 @@ def verify(root, job, record, folder, args):
         # probes or guessed pointer dereferences to make an intake turn green.
         probe_name = record.get('verification', {}).get('runtime_probe', {}).get('path')
         if not probe_name or not (root / probe_name).is_file():
-            raise ValueError('missing per-native reviewed runtime_probe.path; runtime blocked')
+            # Generate and attempt live evidence discovery instead of stopping
+            # before runtime. Discovery never substitutes for typed acceptance.
+            phase = execute(root, [sys.executable, str(root / 'scripts/native_runtime_discovery.py'),
+                '--address', job['address'], '--level', str(args.level),
+                '--out', str(folder / 'runtime-discovery')], folder, 'runtime-discovery', args.timeout)
+            result['phases'].append(phase)
+            discovery_path = folder / 'runtime-discovery/result.json'
+            discovery = json.loads(discovery_path.read_text()) if discovery_path.is_file() else {}
+            if phase['exit_code'] or discovery.get('result') != 'observations_collected':
+                raise ValueError('generated runtime capture failed: ' + discovery.get('error', 'see runtime-discovery.log'))
+            raise ValueError('live discovery collected; typed source-semantic side-effect comparison remains incomplete; see runtime-discovery/result.json')
         if digest(root / job['source']) != record['implementation'].get('sha256'):
             raise ValueError('source differs from reviewed record; semantic review required')
         full = folder / 'end-to-end.json'
@@ -228,7 +239,7 @@ def verify(root, job, record, folder, args):
         # Reuse one unchanged freshly compiled candidate across a batch. A
         # separate rebuild per native would invalidate the preceding image.
         from candidate_build_receipt import validate_receipt
-        config = json.loads((root / 'scripts/igi-workflow.json').read_text())
+        config = load_config(root)
         candidate = root / config['candidate']
         receipt = root / config['build_directory'] / 'candidate-receipt.json'
         try:
@@ -251,6 +262,43 @@ def verify(root, job, record, folder, args):
         result['error'] = str(error)
     save(folder / 'result.json', result)
     return result
+
+
+def repair_policy(result):
+    """Bounded recovery, never status/probe-contract weakening."""
+    message=result.get('error','').lower()
+    if any(word in message for word in ('timeout','timed out','frida','build/receipt',
+                                       'inputs changed','compiler inputs','analysis failed')):
+        return 'retry_fresh_tools_build_and_capture'
+    if 'unobserved' in message:
+        return 'retry_longer_same_scenario'
+    return 'evidence_or_behavior_gap_no_automatic_promotion'
+
+
+def verify(root, job, record, folder, args):
+    folder.mkdir(parents=True)
+    attempts=[]
+    maximum=getattr(args,'max_attempts',3)
+    result=None
+    for number in range(1,maximum+1):
+        attempt=folder/f'attempt-{number}'
+        print(f"ATTEMPT {number}/{maximum} {job['address']}",flush=True)
+        result=verify_once(root,job,record,attempt,args)
+        policy=repair_policy(result)
+        attempts.append(dict(number=number,result=result['status'],error=result.get('error'),
+                             repair=policy,report=str(attempt/'result.json')))
+        if result.get('verified') or policy=='evidence_or_behavior_gap_no_automatic_promotion':
+            break
+        # Bounded exponential backoff; no deletion of evidence, edits to game
+        # logic, status promotion or parallel native execution as a repair.
+        if number<maximum:time.sleep(min(2**(number-1),4))
+    result['attempts']=attempts
+    save(folder/'result.json',result)
+    return result
+
+
+def refresh_ledger(root):
+    subprocess.run([sys.executable, str(root / "scripts/native_database.py")], cwd=root, check=True, stdout=subprocess.DEVNULL)
 
 
 def cycle(root, args):
@@ -280,7 +328,7 @@ def cycle(root, args):
     relevant_issues = [i for i in issues if (paths is None and not args.address) or
                       i.get('path') in chosen_sources or i.get('address') in required or
                       (not args.address and paths is not None and i.get('path') in paths)]
-    config = json.loads((root / 'scripts/igi-workflow.json').read_text())
+    config = load_config(root)
     candidate = root / config.get('candidate', 'build/igi1.exe')
     candidate_hash = digest(candidate) if candidate.is_file() else None
     for va, job in jobs.items():
@@ -327,13 +375,18 @@ def cycle(root, args):
                 continue
             print('VERIFY', va, job['name'], flush=True)
             result = verify(root, job, records[va], root / 'build/native-auto/runs' / run_id / va, args)
-            fresh, _, _, current = inventory(root)
+            fresh, fresh_records, _, current = inventory(root)
             if current != context or fresh.get(va, {}).get('fingerprint') != job['fingerprint']:
                 result.update(status='pending', verified=False, error='inputs changed during verification; result invalidated')
-                jobs[va] = result
-                break
+                # Reject this snapshot but continue the requested sequential
+                # queue against fresh inputs; never silently skip later VAs.
+                for next_va, next_job in fresh.items():
+                    if jobs.get(next_va, {}).get('fingerprint') != next_job['fingerprint']:
+                        jobs[next_va] = next_job
+                records, context = fresh_records, current
             jobs[va] = result
             save(state_path, {'schema_version': 1, 'kind': 'igi-native-auto-state', 'tasks': jobs})
+            refresh_ledger(root)
             print(result['status'].upper(), va, result.get('error', ''), flush=True)
     passed = [va for va in required if jobs[va]['status'] == 'passed' and jobs[va]['verified']]
     result = {'schema_version': 1, 'kind': 'igi-native-auto-state', 'scope': args.scope,
@@ -343,6 +396,8 @@ def cycle(root, args):
                   ('passed' if required and len(passed) == len(required) and not relevant_issues else 'pending'),
         'verified': bool(required) and len(passed) == len(required) and not relevant_issues}
     save(state_path, result)
+    # Derived ledger only; never changes acceptance or native manifest status.
+    refresh_ledger(root)
     print(json.dumps({k:result[k] for k in ('scope', 'selected_count', 'passed_count', 'result', 'verified')} |
                      {'issue_count':len(relevant_issues), 'issues':relevant_issues[:8],
                       'state':str(state_path)}), flush=True)
@@ -374,7 +429,7 @@ def audit_demo(root, args):
         cursor += size + 1
     state_path = args.state or root / 'build/native-auto/state.json'
     state = json.loads(state_path.read_text()) if state_path.is_file() else {}
-    config = json.loads((root / 'scripts/igi-workflow.json').read_text())
+    config = load_config(root)
     image = args.demo_candidate.resolve() if args.demo_candidate else None
     image_hash = digest(image) if image and image.is_file() else None
     rows = []
@@ -414,7 +469,7 @@ def audit_demo(root, args):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('command', choices=['scan', 'run', 'watch', 'audit-demo'])
+    parser.add_argument('command', nargs='?', default='run', choices=['scan', 'run', 'watch', 'audit-demo'])
     parser.add_argument('--root', type=Path, default=ROOT)
     parser.add_argument('--scope', choices=['changed', 'all', 'staged', 'range'])
     parser.add_argument('--base')
@@ -424,6 +479,7 @@ def main():
     parser.add_argument('--state', type=Path)
     parser.add_argument('--timeout', type=float, default=600)
     parser.add_argument('--interval', type=float, default=5)
+    parser.add_argument('--max-attempts', type=int, choices=range(1,6), default=3, help='Bounded autonomous repair attempts per native')
     parser.add_argument('--retry', action='store_true', help='Retry unchanged blocked jobs once')
     parser.add_argument('--demo-ref', default='game-engine-flow')
     parser.add_argument('--demo-candidate', type=Path, help='Exact preserved demo executable; never substitute the retail image')

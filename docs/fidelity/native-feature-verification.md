@@ -3,7 +3,11 @@
 ## Automatic entry point
 
 Use `python3 scripts/native_autoverify.py` for discovery, persistent tasks and
-strict sequential verification. It does not modify manifest statuses.
+strict sequential verification. It does not modify manifest statuses. Every completed scan/run
+also regenerates `build/native-auto/database.md` and `database.json`, listing every
+manifest native, evidence gaps, hash-checked scoped acceptance and exact current-image
+acceptance separately. Regenerate independently with `python3 scripts/native_database.py`.
+These reports never grant new acceptance; the strict runner/checker does that.
 
 | Command | Scope |
 | --- | --- |
@@ -180,3 +184,75 @@ digest, native addresses, source hashes, level, script, config, inputs, capture
 boundaries, comparison tolerances and unresolved behavior. A feature pass is
 valid only for that recorded scope. RE-Agent coordinates evidence and review;
 REA is a separate upstream tool and must not be conflated with it.
+
+## SQLite evidence database and read-only tables
+
+`build/native-auto/natives.db` contains verified natives ONLY: complete hash-checked
+static and paired-runtime acceptance for the current source and candidate image,
+with CFG >= 0.85. Pending, stale, historical and old-image scoped records are excluded
+from every database table, including embedded JSON.
+`native_autoverify.py` refreshes it after each native job and each completed scan.
+`python3 scripts/native_database.py` explicitly refreshes it from hash-checked
+evidence; it never promotes native status. Each refresh atomically replaces the database and removes stale approvals.
+Markdown is generated **from SQLite**, not used as editable verification input.
+
+```sh
+python3 scripts/native_database_read.py --verified
+python3 scripts/native_database_read.py --address 0x0048F0C0
+python3 scripts/native_database_read.py > build/native-auto/export.md
+```
+
+The reader opens SQLite with `mode=ro` and `query_only=ON`; it exposes no SQL or
+write command. Automatic full export is `build/native-auto/database.md`.
+SQLite is structured storage, not tamper-proof security: a machine owner can
+modify a local database. The strict acceptance gate still independently checks
+source, probe, executable and evidence hashes; it never trusts a database flag.
+The JSON manifest remains the native discovery catalog for existing tools.
+
+## Automatic probe discovery when a typed probe is missing
+
+The runner now generates a native-specific natural-call entry/return probe and
+attempts live sequential retail/candidate capture through
+`scripts/native_runtime_discovery.py`. It validates or builds the candidate receipt,
+resolves its actual native symbol and hooks before resume. Captures and generated
+probe hashes are retained under the native job's `runtime-discovery/` directory.
+Unknown argument semantics and side effects are not guessed or dereferenced.
+Generated observations are input to typed-contract review, never acceptance.
+A capture/tool/build failure is retained, not reported as runtime success.
+
+## One main command, strictly sequential
+
+```sh
+python3 scripts/native_autoverify.py                             # changed/new natives
+python3 scripts/native_autoverify.py run --address 0x00401000 --retry
+python3 scripts/native_autoverify.py run --scope all --retry
+```
+
+`smart_end_to_end_verification.py --auto` delegates to the same worker. The
+worker lock serializes every native; the shared runtime lease serializes both
+games across cooperating tools. The game mutex is not removed or patched.
+Each native receives fresh BN/r2/angr analysis, then either the reviewed typed
+acceptance path or generated live evidence discovery. Discovery validates/builds
+the candidate, installs before resume, captures retail first and candidate second,
+and revalidates build inputs. Its diagnostic startup scenario sends Escape once
+after two seconds to the owned window and observes for twenty seconds in both.
+Unknown ABI/effects still require semantic review; discovery is never a pass.
+Complete strict worker passes automatically feed the verified-only SQLite writer;
+source/image/report/receipt mismatches exclude them again on refresh.
+
+## Autonomous repair controller
+
+The single main script is `scripts/native_autoverify.py`. It owns the complete
+sequential queue and has bounded retries (`--max-attempts`, default 3), per-attempt
+reports, source snapshot invalidation, a dedicated compilation directory,
+automatic private Frida lifecycle, staged candidate bytes and generated probes.
+Transient tool/build failures retry with fresh analysis/build/capture. Evidence
+or actual behavior gaps are never converted into passes by retrying or dropping
+checks. Every attempt remains inspectable under `build/native-auto/runs/`.
+
+Exact supported instruction rules generate typed probes deterministically. For
+other patterns, a read-only Codex proposer and separate critic can generate
+observation tooling from the selected decompiler and candidate evidence. They
+cannot change engine files, relax gates or approve a native. Unknown ABI/effects,
+missing calls, unsupported comparisons and rejected proposals remain inconclusive.
+This is not a guarantee of autonomous repair or equivalence for arbitrary natives.
