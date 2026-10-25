@@ -109,3 +109,61 @@ My first check for `0x57BCBC` piped a grep through `head -12` and printed only
 body" and stated it as a contradiction of analyst's expectation. It appears 11 times.
 **A truncated output read as a complete one is the same failure as a count of zero
 from an unverified pattern** - the sixth instrument fault of this shape this session.
+
+## COMPLETE STRUCTURAL ANALYSIS (measured 2026-10-25, transcription NOT yet written)
+
+### Identity
+Class **"Train"**, string `0x0053BD1C`, class size `0x8E0` (`push 0x8E0` at 0x0042ACD0),
+parent getter `0x004F45F0` (called at 0x0042ACCA), class-alloc `0x00401900` at
+0x0042ACDA. Extent 0x0042ACC0-0x0042B025 = 870 bytes, 246 instructions, 1 block,
+0 edges, frame `0x8E0`, final cleanup `add esp, 0x8f8` at 0x0042B01F, `ret` at
+0x0042B025. No stack probe.
+
+### Call census (decoded from `call` instructions, not from immediates)
+| target | sites | role |
+|---|---|---|
+| `0x00401400` | **15** | the handler-registration call |
+| `0x004F1A80` | 10 | event registration |
+| `0x004F0F50` | 6 | event registration |
+| `0x00401530` | 2 | second registration call |
+| `0x004F45F0` | 1 | parent class getter |
+| `0x004F4140 0x004F4130 0x004F4120 0x004F4110 0x004F40E0 0x004F40D0` | 1 each | |
+| `0x004F1A70 0x004F1A60 0x004F1950` | 1 each | |
+| `0x004F1000 0x004F0FF0 0x004F0FC0 0x004F0FA0` | 1 each | |
+| `0x004E6610 0x004CEA20 0x004CEA10 0x004C5800` | 1 each | |
+| `0x00416890` | 1 | |
+| `0x00401900` | 1 | class allocation |
+**30 distinct targets.** `0x0042A2C0` is NOT among them (the earlier recon note said it
+was; the decoded census shows it is not - correct the earlier line).
+
+### The 17 handler immediates pushed (`push 0x4xxxxx`)
+```
+0x429F80 0x42A100 0x42A150 0x42AC20 0x42B030 0x42B040 0x42B220 0x42B240
+0x42B280 0x42B2C0 0x42B2F0 0x42B500 0x42B700 0x42B930 0x42BB60 0x42BBA0
+0x4EFF20
+```
+15 go to `0x00401400`, 2 to `0x00401530` (`0x42A100` at 0x0042ACF8 with `push 2`, and
+`0x42B500` at 0x0042AD41 with `push 7`).
+
+### Two globals this file MUST define (analyst's 0x0042BC00 declares them extern)
+- `0x0057BCB8` **`std::uint16_t`** - written ONCE at `0x0042ACE7`
+  `mov word [0x57bcb8],ax`, then read 16-bit throughout (17 accesses).
+- `0x0057BCBC` **`std::uint32_t`** - `mov dword [0x57bcbc],eax` at `0x0042AE91`
+  (11 accesses).
+**LINKAGE: C linkage** (matches ten of eleven owners in the band). Analyst declares
+both `extern "C"`.
+
+### The body's shape
+The routine reads `g_57bcb8` into ax/cx/dx repeatedly and passes it as the FIRST
+argument of each registration: `push <handler>; push <literal>; push <id>` then
+`call 0x00401400`. The pattern repeats 15 times with different handlers and literals.
+**It is highly patterned but the literals and handler order must each be read from
+retail, not copied from a sibling** - the band has no canonical append shape (four
+distinct `lea` orderings were measured across the other registrars).
+
+### Why this note exists rather than a file
+The transcription is 246 instructions. Writing it at the end of a context budget,
+from a pattern rather than from the instructions one at a time, is precisely how an
+invented constant gets in - and this file's whole purpose is to define two globals
+another native depends on. The analysis above is complete and durable; the
+transcription needs a fresh budget.
