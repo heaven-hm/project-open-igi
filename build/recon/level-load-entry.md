@@ -108,3 +108,29 @@ render loader.
 runtime or by finding the structure it is copied from. **A static search has now been run
 and has returned zero writes; recording that as the result rather than concluding the
 table is never populated.**
+
+---
+
+## The six terrain targets are SMALL - measured, 2026-10-25
+
+flow-analyst's terrain increment (`Terrain_Load 0x004C6240`'s depth-1 closure, 6 targets
+without a file) is not a large unit of work:
+
+| VA | extent to the `ret` |
+|---|---|
+| `0x004CE3D0` | **3 instructions** - a leaf |
+| `0x004D11C0` | **24 instructions** |
+
+Measured with the loose line pattern (which counts branch-marked lines the strict one
+drops) over a 400-line window, first `ret` taken as the bound and the alignment nops
+after it checked.
+
+**`0x004017C0`, also on this path, is 22 instructions to its `ret`** - and its exhaustion
+branch pushes `"Unable to allocate event"` (`0x005361A8`) then `jmp`s to itself: **a fatal
+hang, not a return.** Preserve it. The guard's own local helper has the same shape at
+`0x00402FE4`.
+
+**So the first increment on the visibility path is on the order of tens of instructions
+across a handful of leaves**, in contrast to the 246-instruction `0x0042ACC0` that took a
+fresh worker a full turn. **Recording the sizes so the next writer starts from them rather
+than re-measuring, and so the increment is not mis-sized as large.**
