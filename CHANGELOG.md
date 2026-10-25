@@ -1,5 +1,30 @@
 ## Unreleased
 
+### Binary Ninja evidence records: content verified, provenance not
+
+`scripts/build_native_records.py` writes `<addr>-binaryninja.json` and
+`<addr>-radare2.json`. For `0x004FDEF0`, `0x004F0F10` and `0x00450C80` the
+manifest records now point at the real port paths instead of
+`scripts/GameNatives/...` candidate paths, and the CFG shape in both files
+(1 node, 0 edges) matches an **independent** r2 measurement of the same entry
+(`size: 6`, 1 block, 0 edges) - so the content is consistent with reality.
+
+**But I could not confirm Binary Ninja produced the `binary_ninja` records**, and
+am recording that rather than letting the filename stand as the claim:
+
+- `python3 -c "import binaryninja"` fails locally.
+- `scripts/bn_mcp.py call bn_function_basic_blocks '{"function":"0x004FDEF0"}'`
+  prints what is a **parameter echo** - `tool`, `function`, `arch`, `name`,
+  `platform`, `offset`, `limit` - and no CFG. That is a request, not a result.
+
+So `"tool": "binary_ninja"` in those files is a provenance claim I have not
+verified, on a target where the preferred decompiler may be unavailable. The
+record is still useful - its shape agrees with r2 - but it is **not** independent
+decompiler evidence, and no native should be promoted on it as though it were.
+Resolve before any status above `BUILD_VERIFIED` depends on it.
+
+## Unreleased
+
 ### A transient snapshot is not the state: I reported two false facts from one
 
 Two claims in this session came from a `git diff` and a build run taken while
