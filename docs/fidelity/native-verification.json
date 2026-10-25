@@ -41212,10 +41212,10 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/core/app_startup_natives.cpp",
-        "sha256": "0cd758f2ad54db1e376f379e730f907a4c5dfb986d519302642cb948d41fdc08",
+        "sha256": "1880d321546bd9372e5ed72647b562c9fb45a80b8f7feb5389b45d388713aceb",
         "header": {
           "path": "engine/include/igi/retail/core/app_startup_natives.hpp",
-          "sha256": "790a989331d01be1a96fe9e7136374f2f524d6f5f216a9f3e1a534c0ad026b50"
+          "sha256": "cfc2817e345271be988c2f701602ae136aa7a737d5c2c2dff47f0ff2e105e242"
         },
         "signature": "char const* __cdecl(char const*)"
       },
@@ -41264,8 +41264,8 @@
           "evidence_sha256": "359fec132d0c41f7f83a553f97b5226d52f170a1ee22a5d4a92eaacdc0db02ec"
         },
         "semantic_review": {
-          "evidence_path": "docs/fidelity/evidence/store-command-line-unified-20261025/semantic-review.json",
-          "evidence_sha256": "4eb72d7ee8025568e728f147db8870a2e546358a4538135d482e7561c6838d9d"
+          "evidence_path": "docs/fidelity/evidence/annotation-review-0x0048F0C0-1880d321546bd937/semantic-review.json",
+          "evidence_sha256": "e81a137fe39ddb00b2213cfc02075dfcd221265b3c6acbb043567fa8d2a15752"
         },
         "runtime_contract": {
           "scope": "startup-scalar-store",
@@ -41337,7 +41337,8 @@
           "The conservative source provenance comment still says STRUCTURALLY_VERIFIED; this is a gate warning. Source bytes were kept identical to the tested build.",
           "No engine source changed, no new game native added, no release attestation or deployment.",
           "Linked into igi1.exe (14,266,312 bytes); runtime UNOBSERVED.",
-          "Unified probe validation is pending; historical acceptance below remains bound to its original tested image and probe."
+          "Unified probe validation is pending; historical acceptance below remains bound to its original tested image and probe.",
+          "Only Verified annotation positions changed; previous runtime artifacts remain historical. Fresh build/live comparison still required."
         ],
         "frida_runtime": {
           "evidence_path": "docs/fidelity/evidence/main-first-native-20261025-sol/frida-final.json",
@@ -41362,6 +41363,10 @@
         "runtime_probe": {
           "path": "scripts/probes/store_command_line.js",
           "sha256": "d693078ffd742d9bbc8459e2b3aa708ba6a11d10d42e54966f2b8b5b5b24f3f6"
+        },
+        "source_identity_proof": {
+          "evidence_path": "docs/fidelity/evidence/annotation-review-0x0048F0C0-1880d321546bd937/proof.json",
+          "evidence_sha256": "48d917e92abdf32c4d121c31d9f6bc95630e975ce2b08c192c3660eb2e4e3fde"
         }
       }
     },
