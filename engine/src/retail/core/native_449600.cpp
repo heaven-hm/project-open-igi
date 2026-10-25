@@ -3,9 +3,11 @@
 //   4 instructions, counted over the exact image. The body ends at the `ret` at 0x0044960C; the next function starts at 0x00449610.
 // Tools/evidence: build/retail-dis.txt, the complete extent: `mov 0x8(%esp),%eax` (0x00449600 - the SECOND stack argument),
 //   `mov 0x57c21c,%ecx` (0x00449604), `mov %ecx,(%eax)` (0x0044960A), `ret` (0x0044960C). No branch, no call, no other data reference.
-// Behavior/CFG: no loop, no call, no return value. It reads the 32-bit global 0x0057C21C and stores it through the pointer passed as the
-//   second argument. The first argument is never read by this body, which is why it is carried as an unnamed parameter rather than dropped:
-//   the caller supplies a dword stack slot and this routine simply does not use it.
+// Behavior/CFG: no loop, no call, no return value. THE SECOND ARGUMENT IS THE DESTINATION: the single load is `mov 0x8(%esp),%eax`, so the
+//   pointer this routine writes through is the SECOND stack argument, and the first argument is never read at all. A reader who assumes the
+//   first argument is the context (as it is in almost every other body in this band) will misread the whole routine, so it is stated here
+//   explicitly and the first parameter is kept unnamed-but-present rather than dropped: the caller does supply that dword slot, this routine
+//   simply never touches it. The 32-bit global 0x0057C21C is stored through the second argument.
 // Status/limits: TRANSCRIBED; STRUCTURALLY_VERIFIED against the 4-instruction listing; runtime UNOBSERVED. Recorded limits: (a) the name is a
 //   behavior-derived placeholder with the address kept as its suffix; the retail symbol is not established. (b) 0x0057C21C is declared here
 //   but not defined: its writer is an untranscribed class registrar, so this file reports it undefined until that registrar lands. (c) The
