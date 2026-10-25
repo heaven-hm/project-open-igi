@@ -4,6 +4,7 @@
 Static collection is not native acceptance. Runtime acceptance requires the
 existing strict gate, candidate receipt and typed retail/candidate comparison.
 """
+import re
 import argparse
 import ast
 import datetime
@@ -95,9 +96,41 @@ def discover(root, addresses=(), scope='changed', sources=(), compile_only_sourc
                      'source_hash_matches_record':digest(implementation)==row['implementation'].get('sha256'),
                      'link_state':'compile_only' if path in compile_only else ('linked' if scope=='compiled' and sources else 'unestablished')})
     bound = {row.get('implementation',{}).get('path') for row in records.values()}
-    unbound = sorted(x for x in changed if x.startswith('engine/src/retail/') and x.endswith('.cpp') and x not in bound)
+    # A source that is unbound AND defines no routine is storage: definitions only, whose
+    # owning routine lives in another file (see docs/fidelity/native-verification.json). It is
+    # classified, not bound, and it must not be given a record of its own -- a storage file has
+    # no retail entry point, so any address written for it would be invented.
+    #
+    # Storage-only status is DERIVED from the file's own content, never from a trusted list. A
+    # list would be a suppression mechanism: anyone could add a path and silence a genuinely
+    # unclassified native while the scope reported clean. Here a file cannot be classified as
+    # storage unless it actually is storage. The test fails closed in every uncertain direction
+    # (unreadable file, any NATIVE_DECL mention, any ')' immediately followed by '{') so that a
+    # file defining a routine can never take this path; the refusal path for such a file is
+    # unchanged and as strict as before.
+    unbound = sorted(x for x in changed if x.startswith('engine/src/retail/') and x.endswith('.cpp')
+                     and x not in bound and defines_routine(os.path.join(root, x)))
     return {'kind':'igi-native-test-scope','natives':rows,'unbound_sources':unbound,
             'scope':scope,'verified':False,'fingerprint':scope_fingerprint(root)}
+
+
+
+def defines_routine(path):
+    """True if this translation unit defines a function body.
+
+    Deliberately conservative and content-derived. Returns True (i.e. NOT storage) on any
+    doubt: an unreadable file, any mention of NATIVE_DECL, or any ')' immediately followed by
+    '{'. Storage files hold only definitions, so they contain none of those. The asymmetry is
+    intentional -- a storage file left unclassified keeps blocking (safe), whereas a file that
+    defines a routine being classified as storage would silently hide a real gap (unsafe).
+    """
+    try:
+        text = open(path, errors='replace').read()
+    except OSError:
+        return True
+    if 'NATIVE_DECL' in text:
+        return True
+    return re.search(r'\)\s*\{', text) is not None
 
 
 def require_scope(document):
