@@ -3300,3 +3300,40 @@ sequences, 11 have a file and 57 do not.
 **Noted for effort calibration:** this is not extending something half-built; it is building
 most of it. The worker has been asked to report the cluster's measured size rather than the
 estimated 68.
+
+## The sweep unit: two files pass, one fails the CFG gate, and 34 natives have no record
+
+**`0x004A5BB0` FAILS at 0.413 against the 0.85 threshold.** Binary Ninja recovers 18 blocks /
+25 edges; radare2 recovers 43 blocks / 61 edges from the same bytes. **The two tools disagree by
+more than a factor of two, and the transcription matches the smaller one.** Not integrated into
+`CMakeLists.txt`; the worker has been asked to reconcile it, with the three candidate causes
+named (collapsed control flow, Binary Ninja under-recovery through a tail `jmp` or jump table,
+or a real extent larger than either tool assumed).
+
+**A 0.413 body in the tree is worse than a missing one, because it looks done.**
+
+| VA | file | bn | r2 | score |
+| --- | --- | --- | --- | --- |
+| `0x004CF050` | `dynobj/native_4cf050.cpp` | 5/6 | 5/6 | **1.000** |
+| `0x004CED50` | `dynobj/native_4ced50.cpp` | 5/5 | 5/5 | **1.000** |
+| `0x004A5BB0` | `script/native_4a5bb0.cpp` | 18/25 | 43/61 | **0.413 FAIL** |
+
+Both passing files fail-closed on measured symbols, which is expected and correct: `0x004CF050`
+needs `DynObj_LoadRecordVariants_4CED50`; `0x004CED50` needs `DynObj_ParseConfigFile_13` and
+`Str_FindSubstring_4A5BB0`. Neither is stubbed.
+
+**Second manifest inconsistency of the same kind.** `0x004CEE30` resolves to
+`scripts/GameNatives/dynobj/004CEE30-DynObj_ParseConfigFile_13.cpp` - the candidate - and not to
+the `native_4cee30.cpp` that now exists in the tree. **Same defect as `0x004B63D0`: the VA -> file
+index prefers a candidate while a transcription exists.** The index is Lead-owned; the workers
+were told not to rename or move files to work around it.
+
+**34 natives in the tree have NO manifest record at all.** Found because the new logger prints
+"(VA not in the manifest)" instead of a fabricated zero - **the honest marker surfaced the gap
+that a guessed address would have concealed.** They include `Game_Setup`, `Game_DeleteHandler`,
+`GameCommandLine`, `Sys_InsertListTail_4AF8F0`, `Sys_UnlinkListNode_4AF960`,
+`Config_RegisterGameOptions_402FF0`, `QFile_DispatchDirectory_4E68D0` and 27 others. **This is a
+gap in the index, not necessarily in the code**: `Sys_InsertListTail_4AF8F0` is called by
+`native_4cefa0.cpp` and plainly has an implementation, so at least some of the 34 are naming
+mismatches between the call site and the manifest rather than missing transcriptions. **To be
+resolved by the manifest owner, not by renaming call sites to fit.**
