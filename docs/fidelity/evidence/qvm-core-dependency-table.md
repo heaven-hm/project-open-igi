@@ -187,3 +187,87 @@ sanctioned way to keep the handler files compile-checked without linking them.
 - Manifest "VERIFIED"/"STRUCTURALLY_VERIFIED" entries whose implementation path is a
   `scripts/GameNatives/...` or catalogue file are **not** engine definitions and do not remove a link
   dependency; the table marks them as script candidates.
+
+## 9. Corrections appended after Lead review (2026-10-25)
+
+1. **The closure is eleven retail VAs, not ten.** `0x004BCAE0` was never in the ten-VA list in the
+   `CMakeLists.txt` comment; it is the unlisted eleventh member of the accessor→evaluator closure.
+   The three accessors (`0x004BD010`, `0x004BCAB0`, `0x004BD040`) all call it, and it calls
+   `0x004BCFD0`, so it belongs to the closure even though the CMake comment omits it.
+2. **`0x005169B0` stays unnamed.** The catalogue name `Terrain_RenderQuadtree_4` is not accepted as
+   evidence for its behaviour: nothing in this pass derives its arguments, return value or side
+   effects. Record it as an unnamed VA whose behaviour still needs derivation. The earlier
+   `(source, destination)` shape comparison with `0x004A5500` is **superseded**: `0x004A5500` is the
+   statically linked MSVC `strncpy` (its third argument is a count and it returns the destination; see
+   `docs/fidelity/evidence/qvm-4a5500-strncpy.md`), so the two VAs cannot be compared on that shape.
+   New evidence: `0x004B8CE0` contains a direct `call 0x5169B0` at `0x004B8Fxx` range, so the routine
+   is reachable from the string-expression renderer; that call site is the entry point for deriving it.
+3. **Wave A result (six transcription units + one CRT identification).** Files added:
+   `native_4bce40.cpp` (`0x004BCE40`), `native_4bccc0.cpp` (`0x004BCCC0`), `native_4bcc00.cpp`
+   (`0x004BCC00`), `native_4bcd90.cpp` (`0x004BCD90`), `native_4bcec0.cpp` (`0x004BCEC0`),
+   `native_4bcae0.cpp` (`0x004BCAE0`). `0x004A5500` deliberately has **no** implementation unit: it is
+   the linked MSVC `strncpy`, handled exactly like `0x004A53B3` `sprintf` in
+   `engine/src/retail/error/error_show.cpp` (identification + binding to the CRT symbol).
+4. **QVM state pointer naming inversion (finding, not fixed here).**
+   `engine/include/igi/retail/script/qvm_native_state.hpp` names `+0x00` `code_base` and `+0x14`
+   `instruction_offset`, but `0x004BCFD0` computes the opcode byte as `*(+0x14 + *(uint32*)+0x00)`
+   (`0x004BCFE3`: `mov 0x14(%esi),%eax`; `0x004BCFE6`: `mov (%esi),%ecx`; `0x004BCFEC`:
+   `mov (%eax,%ecx,1),%dl`), and `0x004BCAE0` stores a node pointer into `+0x14` and saves/restores it
+   around the call. So `+0x14` is the pointer slot and `+0x00` is the offset; the two names are swapped
+   relative to the byte use. The address arithmetic is symmetric, so the existing transcription is
+   still correct; only the names are misleading. Wave A files therefore read `+0x14` as a pointer and
+   document the inversion instead of using the inverted name.
+
+## 10. Decoded dispatch tables needed by the two remaining evaluators
+
+Measured from the retail image; both are read as 32-bit little-endian code addresses.
+
+**`0x004B9120` (`Qvm_EvaluateIntegerNode_4B9120`)** - 1188 bytes, 65 blocks, 52 edges, 484
+instructions, 3 args, 48-byte frame. Dispatch: `node[+1]` as signed byte, `> 0x1D` -> return 0
+(`0x004B9135`/`0x004B9138`), jump table **`0x004B95C4`**, 30 entries:
+
+| node[1] | target | node[1] | target | node[1] | target |
+| --- | --- | --- | --- | --- | --- |
+| 0 | `0x004B9160` | 10 | `0x004B9363` | 20 | `0x004B9277` |
+| 1 | `0x004B928E` | 11 | `0x004B9382` | 21 | `0x004B91E5` (return 0) |
+| 2 | `0x004B92AD` | 12 | `0x004B93A3` | 22 | `0x004B91E5` |
+| 3 | `0x004B923D` | 13 | `0x004B9263` | 23 | `0x004B91E5` |
+| 4 | `0x004B924F` | 14 | `0x004B945C` | 24 | `0x004B9145` |
+| 5 | `0x004B92CC` | 15 | `0x004B9482` | 25 | `0x004B9501` |
+| 6 | `0x004B92EC` | 16 | `0x004B93C4` | 26 | `0x004B91E5` |
+| 7 | `0x004B91E5` | 17 | `0x004B93EA` | 27 | `0x004B94A8` |
+| 8 | `0x004B9325` | 18 | `0x004B9410` | 28 | `0x004B94CE` |
+| 9 | `0x004B9344` | 19 | `0x004B9436` | 29 | `0x004B9209` |
+
+Second dispatch inside the same function: `node[0]` signed byte minus 1, `> 5` -> error path
+`0x004B8E79`-equivalent `0x004B91E5`, jump table **`0x004B963C`**, 6 entries: 1 -> `0x004B9170`,
+2 -> `0x004B91E5`, 3 -> `0x004B9179`, 4 -> `0x004B918A`, 5 -> `0x004B918A`, 6 -> `0x004B91F7`.
+Callees: itself (45 recursion sites), `0x004BABB0` (2), `0x004B7E10` `Qvm_ReportError` (3),
+`0x004B9040` (1), `0x004AF7B0` `Debug_Error` (1). Indirect call through `node->[0x10]` at
+`0x004B91BB`.
+
+**`0x004B8CE0` (`Qvm_RenderNodeText_4B8CE0`)** - 778 bytes, 41 blocks, 47 edges, 262 instructions,
+9 args reported by radare2, 2104-byte frame. Arguments from the prologue and the `0x004B9040` call
+site: `(node, char* buffer, uint32 buffer_size, uint32 limit)`; a null node writes the two bytes
+`20 00` from `0x005474D8` into the buffer and returns 0 (`0x004B8CF4`-`0x004B8D05`). Dispatch on
+`node[+1]` signed byte, `> 0x19` -> error path `0x004B8FBD`, then a **26-byte index table at
+`0x004B9000`** `[0,1,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,2,3]` into jump table
+**`0x004B8FEC`** (5 entries): slot 0 -> `0x004B8D5E`, 1 -> `0x004B8E96`, 2 -> `0x004B8D2D`,
+3 -> `0x004B8EFC`, 4 -> `0x004B8FBD`. Second dispatch: `node[0]` signed byte minus 1, `> 5` ->
+`0x004B8E79`, jump table **`0x004B901C`** (6 entries): 1 -> `0x004B8D72`, 2 -> `0x004B8DA0`,
+3 -> `0x004B8D72`, 4 -> `0x004B8DB3`, 5 -> `0x004B8DB3`, 6 -> `0x004B8E36`.
+Callees: itself (6), `0x004B7E10` `Qvm_ReportError` (5), `0x004BABB0` (2), `0x004A5500` MSVC
+`strncpy` (2), `0x005169B0` (1), `0x004AF7B0` `Debug_Error` (1), `0x004B9040` (1); indirect call
+through `node->[0x10]` at `0x004B8DEF`.
+Byte-identical literals it passes to `Qvm_ReportError`, read from the image:
+
+| VA | bytes | text |
+| --- | --- | --- |
+| `0x005473C4` | `53 79 ... 25 64 00` | `Syntax error in string expression, line %d` |
+| `0x005473F0` | | `Syntax error in assignment, line %d` |
+| `0x00547414` | | `Expression: Cannot assign to constant, line %d` |
+| `0x00547444` | | `Internal script error. Invalid assignment, line %d` |
+| `0x00547478` | | `Unknown identifier '%s' in expression, line %d` |
+| `0x005474A8` | | `Numeric member in string expression. Line %d.` |
+| `0x005474D8` | `20 00` | two-byte space + NUL pair |
+| `0x00547AB4` | `55 6e ... 2e 00` | `Unknown data type.` |

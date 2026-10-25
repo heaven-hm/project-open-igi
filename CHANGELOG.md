@@ -11,6 +11,23 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - BackgroundFX wave linked (10 natives) and the 0x00A94E84 dispatch blocker closed
+
+- `igi1.exe` 14,231,896 -> **14,244,376** bytes, build green with no undefined and no duplicate symbols. The wave adds `BackgroundFX_EmitAxisRuns_419330`
+  (520 B/144 instrs), `EmitFan_419630` (290/90), `EmitSegments_419540` (230/77), `BuildAxes_419860`, `UpdateRecord_419820`, `EmitRecord_419950`,
+  `Init_419760` (the class registrar itself), `ZeroField20_4197F0`, `AdvanceField20_419800` and `BuildRotation_4192E0`.
+- The `0x00A94E84` render-backend dispatch that blocked this wave is now usable from transcribed code through the external-`extern "C"` table, with the retail
+  form `g_a94e84[g_a84a54]`. The index word `0x00A84A54` is loaded as a defined zero dword rather than folded to a literal, so the memory access retail
+  performs is still present.
+- **Data increment transcribed**: `0x00539AF0`-`0x00539C17` as typed objects with real pointers - two 5-entry draw lists, the circle/axis-pair arrays, and
+  the three draw records. A throwaway host check that *executed* the compiled initialisers against the image dump caught two wrong `g_539b50` entries
+  (`{200,100,200,-100}`, `{0,-400,0,150}`) before they reached a commit. Reading the table was not enough; running it was.
+- Recorded limits, not smoothed over: `0x00419630`'s x87 `fistpll` is modelled with `std::llrintl` and low-32-bit truncation, GCC folds `cos`/`sin` into one
+  `_sincosl` import where retail has separate `fcos`/`fsin`, so **last-bit equality is not claimed**; and retail leaves one value on the x87 register stack on
+  that function's `count > 0` path (unobservable through memory, return or ABI).
+- Statuses are `BUILD_VERIFIED` with runtime UNOBSERVED: `0x00419760` is entry #153 of the `0x00402930` sequence, so the startup pass still cannot reach the
+  wave even though it now executes in the binary.
+
 ### 2026-10-25 - 23 orphaned natives linked; two duplicate class-id owners fixed
 
 - 23 engine sources that no build target contained are now compiled and linked (`igi1.exe` 14,222,853 -> **14,231,896** bytes, build green). They cover the
