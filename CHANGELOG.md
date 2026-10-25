@@ -2222,3 +2222,46 @@ returns more than one record for some files (`native_4c5900.cpp` returns three:
 its own VA plus `0x00401860` and `0x00401D30`; `native_4d9730.cpp` returns two).
 Those two are false positives of the sweep, not collisions. Any per-VA census
 must use each file's *own* native, not every record the extractor returns.
+
+## RESOLVED: sys/native_4eee0.cpp and sys/native_4eef0.cpp are unsupported
+
+The open defect above is now established from retail rather than from filenames,
+by searching the image for each getter's byte pattern. A byte getter here is
+`mov al,[imm32]; ret` = `A0 <disp32> C3`.
+
+**The two files that legitimately own the VAs match retail exactly:**
+
+| global | pattern found at | matches file? |
+|---|---|---|
+| `0x0054DC30` | `0x004EE0E0` | yes - `sys/native_4ee0e0.cpp` |
+| `0x0054DC31` | `0x004EE0F0` | yes - `sys/native_4ee0f0.cpp` |
+
+**The other two files' globals are referenced by nothing in the image:**
+
+- `mov al,[0x0054DC92]; ret` -> **0 hits** in `.text`
+- `mov al,[0x0054DC93]; ret` -> **0 hits** in `.text`
+- the raw 4-byte operand `92 DC 54 00` -> **0 hits anywhere in the image**
+- the raw 4-byte operand `93 DC 54 00` -> **0 hits anywhere in the image**
+
+Any instruction that referenced those addresses as a disp32 would contain those
+four bytes, so no instruction in `igi.exe` reads either address.
+
+**And their declared image values are wrong.** Both files initialise their global
+to `0xFFU`. The actual bytes in `.data` are `0x6E` at `0x0054DC92` and `0x66` at
+`0x0054DC93`.
+
+So `sys/native_4eee0.cpp` and `sys/native_4eef0.cpp` fail three independent
+tests: they declare a retail VA another file already owns (rule 13), the
+addresses they read are referenced by no instruction in the binary, and the
+image values they assert are not the image's values. **They transcribe nothing.**
+Removal is the rule-mandated action; recorded here first so the evidence survives
+the deletion.
+
+This is the "an invented constant that makes a read work is worse than an unmapped
+read" rule paying out: a body that looks exactly like its correct siblings, with a
+plausible VA and a plausible constant, and nothing behind it.
+
+**Method note:** searching for the operand bytes of a `mov` is legitimate because
+`mov` encodes its target as an absolute disp32. It is NOT legitimate for a `call`,
+whose displacement is relative - the same distinction that produced the phantom
+callee and the false "no caller" zero earlier in this session.
