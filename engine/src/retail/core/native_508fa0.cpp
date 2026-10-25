@@ -21,23 +21,23 @@
 
 extern "C" {
 
-// 0x004F9DF0: the graph-stream node registrar this class registers "RouteTable" through. Not transcribed yet (120 bytes, 7 blocks,
-// 9 edges, 40 instructions; its own failure string is "GraphStream - collision in hash for %s" at 0x0054E3E8). Declared with the
-// observed three-word call shape (name, value, handler); the transcription of 0x004F9DF0 will fix the parameter types.
-void NATIVE_DECL GraphStream_RegisterNode_4F9DF0(const char* name, std::int32_t value,
-                                                 igi::retail::core::FrameHandler handler);
+// 0x004F9DF0: the graph-stream node registrar this class registers "RouteTable" through, transcribed in
+// engine/src/retail/core/native_4f9df0.cpp. Three words: the name, the 0xA value and the handler address, which retail passes as a
+// plain dword (the third parameter is a code address, not a typed pointer).
+void NATIVE_DECL GraphStream_RegisterNode_4F9DF0(char const* name, std::uint32_t value, std::uint32_t handler);
 
-// The handler bodies this registrar links or hands to 0x004F9DF0. None is transcribed yet, so these are declarations without
-// definitions: the registrar references their addresses exactly as retail pushes the same code words. Sizes from r2 6.2.0.
-void NATIVE_DECL AIGraph_Handler_509570(void* object);   // 0x00509570: 151 bytes, 1 block, 28 instructions (context handler)
-void NATIVE_DECL AIGraph_Handler_509610();               // 0x00509610:  59 bytes, 3 blocks, 17 instructions (no-context handler)
-void NATIVE_DECL AIGraph_Handler_5093B0(void* object);   // 0x005093B0:  12 bytes, 1 block,  5 instructions
-void NATIVE_DECL AIGraph_Handler_509520(void* object);   // 0x00509520:  67 bytes, 3 blocks, 24 instructions
-void NATIVE_DECL AIGraph_Handler_509450(void* object);   // 0x00509450:  39 bytes, 1 block, 14 instructions
-void NATIVE_DECL AIGraph_Handler_509480(void* object);   // 0x00509480: 149 bytes, 5 blocks, 58 instructions
-void NATIVE_DECL AIGraph_Handler_5093C0(void* object);   // 0x005093C0: 124 bytes, 7 blocks, 35 instructions
-void NATIVE_DECL AIGraph_Handler_509440(void* object);   // 0x00509440:  13 bytes, 1 block,  4 instructions
-void NATIVE_DECL AIGraph_Handler_5092A0(void* object);   // 0x005092A0:  53 bytes, 3 blocks, 22 instructions (RouteTable handler)
+// The handler bodies this registrar links or hands to 0x004F9DF0, transcribed one file per native in this directory
+// (native_5092a0.cpp .. native_509610.cpp). The argument counts are the ones each retail body actually reads; retail stores only
+// the code address in the handler table, so the calls below cast the differently-shaped bodies to the table's pointer type.
+void NATIVE_DECL AIGraph_Handler_509570(void* object, void* arg2);   // 0x00509570: 151 bytes, 1 block, 28 instructions (context handler)
+void NATIVE_DECL AIGraph_Handler_509610(void* object);              // 0x00509610:  59 bytes, 3 blocks, 17 instructions (no-context handler)
+void NATIVE_DECL AIGraph_Handler_5093B0(void* object);              // 0x005093B0:  12 bytes, 1 block,  5 instructions
+void NATIVE_DECL AIGraph_Handler_509520(void* object, std::uint32_t const* arg2); // 0x00509520: 67 bytes, 3 blocks, 24 instructions
+void NATIVE_DECL AIGraph_Handler_509450(void* object, std::uint32_t const* arg2); // 0x00509450: 39 bytes, 1 block, 14 instructions
+void NATIVE_DECL AIGraph_Handler_509480(void* task, void* object);  // 0x00509480: 149 bytes, 5 blocks, 58 instructions
+void NATIVE_DECL AIGraph_Handler_5093C0(void* object, void* arg2);  // 0x005093C0: 124 bytes, 7 blocks, 35 instructions
+void NATIVE_DECL AIGraph_Handler_509440(void* context, void** out); // 0x00509440:  13 bytes, 1 block,  4 instructions
+void NATIVE_DECL AIGraph_Handler_5092A0(void* context);             // 0x005092A0:  53 bytes, 3 blocks, 22 instructions (RouteTable handler)
 
 // 0x004D3710: the one-byte QTask_NoOpHandler, transcribed in engine/src/retail/script/native_4d3710.cpp.
 void NATIVE_DECL QTask_NoOpHandler();
@@ -92,7 +92,7 @@ void NATIVE_DECL AIGraph_Register_508FA0()
 
     // 0x00508FBF-0x00508FCD: `push $0x00509570; push $0x0; push %eax; mov %ax,0x0054E83C; call 0x00401400` - event 0 -> 0x00509570.
     QTask_LinkQTaskEventHandler(
-        g_54e83c, 0U, reinterpret_cast<igi::retail::core::FrameHandler>(&AIGraph_Handler_509570));
+        g_54e83c, 0U, reinterpret_cast<igi::retail::core::FrameHandler>(reinterpret_cast<std::uintptr_t>(&AIGraph_Handler_509570)));
 
     // 0x00508FD2-0x00508FE0: `mov 0x0054E83C,%ax; push $0x004D3710; push $0x1; push %eax; call 0x00401530` - event 1 -> NoOp.
     QTask_LinkQTaskEventHandlerNoContextFn(
@@ -100,19 +100,19 @@ void NATIVE_DECL AIGraph_Register_508FA0()
 
     // 0x00508FE5-0x00508FF4: `mov 0x0054E83C,%cx; push $0x00509610; push $0x2; push %ecx; call 0x00401530` - event 2 -> 0x00509610.
     QTask_LinkQTaskEventHandlerNoContextFn(
-        g_54e83c, 2U, reinterpret_cast<igi::retail::core::FrameHandler>(&AIGraph_Handler_509610));
+        g_54e83c, 2U, reinterpret_cast<igi::retail::core::FrameHandler>(reinterpret_cast<std::uintptr_t>(&AIGraph_Handler_509610)));
     // 0x00508FF9: `add $0x38,%esp` - the fourteen pushed words from the prologue to here (compiler-generated in C++).
 
     // 0x00508FFC-0x00509014: `push $0x005093B0; call 0x004F9280; mov 0x0054E83C,%dx; push %eax; push %edx; call 0x00401400` -
     // event = 0x004F9280() -> 0x005093B0.
     QTask_LinkQTaskEventHandler(
         g_54e83c, Graph_Get_4F9280(),
-        reinterpret_cast<igi::retail::core::FrameHandler>(&AIGraph_Handler_5093B0));
+        reinterpret_cast<igi::retail::core::FrameHandler>(reinterpret_cast<std::uintptr_t>(&AIGraph_Handler_5093B0)));
 
     // 0x00509017-0x0050902E: `push $0x00509520; call 0x004F9230; ...` - event = 0x004F9230() -> 0x00509520.
     QTask_LinkQTaskEventHandler(
         g_54e83c, Graph_Get_4F9230(),
-        reinterpret_cast<igi::retail::core::FrameHandler>(&AIGraph_Handler_509520));
+        reinterpret_cast<igi::retail::core::FrameHandler>(reinterpret_cast<std::uintptr_t>(&AIGraph_Handler_509520)));
 
     // 0x00509031-0x00509049: `push $0x004D3710; call 0x004F9250; ...` - event = 0x004F9250() -> NoOp.
     QTask_LinkQTaskEventHandler(
@@ -125,22 +125,22 @@ void NATIVE_DECL AIGraph_Register_508FA0()
     // 0x00509067-0x0050907E: `push $0x00509450; call 0x004F9220; ...` - event = 0x004F9220() -> 0x00509450.
     QTask_LinkQTaskEventHandler(
         g_54e83c, Graph_Get_4F9220(),
-        reinterpret_cast<igi::retail::core::FrameHandler>(&AIGraph_Handler_509450));
+        reinterpret_cast<igi::retail::core::FrameHandler>(reinterpret_cast<std::uintptr_t>(&AIGraph_Handler_509450)));
 
     // 0x00509081-0x00509099: `push $0x00509480; call 0x004F9240; ...` - event = 0x004F9240() -> 0x00509480.
     QTask_LinkQTaskEventHandler(
         g_54e83c, Graph_Get_4F9240(),
-        reinterpret_cast<igi::retail::core::FrameHandler>(&AIGraph_Handler_509480));
+        reinterpret_cast<igi::retail::core::FrameHandler>(reinterpret_cast<std::uintptr_t>(&AIGraph_Handler_509480)));
 
     // 0x0050909C-0x005090B4: `push $0x005093C0; call 0x004F1A70; ...` - event = 0x004F1A70() -> 0x005093C0.
     QTask_LinkQTaskEventHandler(
         g_54e83c, Script_PhaseIdGetE5_4F1A70(),
-        reinterpret_cast<igi::retail::core::FrameHandler>(&AIGraph_Handler_5093C0));
+        reinterpret_cast<igi::retail::core::FrameHandler>(reinterpret_cast<std::uintptr_t>(&AIGraph_Handler_5093C0)));
 
     // 0x005090B7-0x005090CE: `push $0x00509440; call 0x004F1A60; ...` - event = 0x004F1A60() -> 0x00509440.
     QTask_LinkQTaskEventHandler(
         g_54e83c, Script_PhaseIdGetE4_4F1A60(),
-        reinterpret_cast<igi::retail::core::FrameHandler>(&AIGraph_Handler_509440));
+        reinterpret_cast<igi::retail::core::FrameHandler>(reinterpret_cast<std::uintptr_t>(&AIGraph_Handler_509440)));
 
     // 0x005090D1-0x00509123: the parameter doubles, in retail's store order (0x00A7B2C0 first, then 0xB8, 0xB0, 0xA8). Each retail
     // store is one 32-bit immediate; the pair per value is recorded in the definition comments above.
@@ -209,7 +209,8 @@ void NATIVE_DECL AIGraph_Register_508FA0()
     // 0x00509276-0x00509287: `push $0x005092A0; push $0xA; push $0x0054E840; call 0x004F9DF0` -
     // registers "RouteTable" with argument 0xA and handler 0x005092A0.
     GraphStream_RegisterNode_4F9DF0(
-        "RouteTable", 0xA, reinterpret_cast<igi::retail::core::FrameHandler>(&AIGraph_Handler_5092A0));
+        "RouteTable", 0xA,
+        static_cast<std::uint32_t>(reinterpret_cast<std::uintptr_t>(&AIGraph_Handler_5092A0)));
 
     // 0x0050928C: `add $0xF8,%esp` (0xC0 frame + 0x38 deferred words); 0x00509292: `ret`.
 }
