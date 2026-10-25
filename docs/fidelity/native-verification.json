@@ -30508,6 +30508,42 @@
       }
     },
     {
+      "address": "0x00427FF0",
+      "name": "Missile_Register_427FF0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_427ff0.cpp",
+        "sha256": "93bd384d235ef41b65d0dd49dce9dbdcfde18561c524386afe9a2187bbb579a1",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/00427FF0-Missile_Init 2.cpp",
+        "sha256": "8706db245566a8cb2c85c8894e369451bb209eb346fa9899d0ff72d672102bc8",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x00427FF0",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x00427FF0-binaryninja.json",
+          "evidence_sha256": "dc58625fbaa113727265175ea6c81ad313b5946da5d843c352e5884ba32d5be9"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x00427FF0",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x00427FF0-radare2.json",
+          "evidence_sha256": "9035c022a018237556117fd2cc4cd92ec9e4d8e276f32013b364d52c80c5c3f1"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0
+      }
+    },
+    {
       "address": "0x0042FDC0",
       "name": "Sys_GetGlobal16_42FDC0",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
