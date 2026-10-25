@@ -35,6 +35,26 @@ Re-measured against `retail VA 0x...` provenance blocks in *every* source file:
 | have a provenance claim in some file | 121 |
 | **no file claims the VA** | **33** |
 
+**That figure was wrong too, and correcting it is the useful part.** A fourth
+measurement, using the union of three independent populations, gives the answer.
+"In build" = (a CMake-listed `native_<hex>.cpp`, VA from the filename) OR (a
+CMake-listed file whose provenance says `VA 0x...`) OR (a bare
+`0x00XXXXXX-0x00XXXXXX` range on a provenance line). Each measure alone misses a
+real file:
+
+- filename-only missed `flow.cpp` and `game_flow.cpp` — named files, implemented and built;
+- provenance-only missed `native_440710.cpp` and `native_440c20.cpp`, which carry their
+  VA **only in the filename** and on a bare `0x00440710-0x0044083B.` line, never as
+  `VA 0x00440710`. Those two files' only `VA 0x` tokens are section addresses —
+  `0x00533000` and `0x00536000` — mentioned in prose, which is how a pattern-based
+  reader gets a confident wrong answer from a real file.
+
+**Final: 122 of 154 in build, 32 missing** — 27 in the `0x00400000`-`0x0042FFFF`
+band, `0x0042ACC0` for the Lead, and `0x00449D30` / `0x0044C8D0` / `0x0045E450` /
+`0x00508F80` for the `0x00430000`+ band. `0x00508F80` is blocked rather than
+assigned: its file is tracked and compiles, but its body calls `0x005183D0` and
+`0x00508FA0`, both absent, so adding it to CMake would break the link.
+
 Of the four I had flagged that did have a file: `0x00401FC0` and `0x00415530` are
 tracked and built; `0x0044C8D0` is untracked; `0x00508F80` is tracked but its
 `native_508f80.cpp` is **not in CMakeLists.txt** and so is not in the build.
