@@ -5215,13 +5215,13 @@
       }
     },
     {
-      "address": "0x00402FF0",
+      "address": "0x00402ff0",
       "name": "Config_FillPlayerProfileListBox_2",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
-        "path": "scripts/GameNatives/config/00402FF0-Config_FillPlayerProfileListBox_2.cpp",
-        "sha256": "98472e7b8929508f636e297b518d20922df064664829cb960943d6e250aec73f",
-        "signature": "int Config_FillPlayerProfileListBox_2(void)"
+        "path": "engine/src/retail/core/native_402ff0.cpp",
+        "sha256": "88687b423ca2870e7e98a671882c178b435bf064724a5f811dc61ffd03817068",
+        "signature": "unknown"
       },
       "game_natives": {
         "path": "scripts/GameNatives/config/00402FF0-Config_FillPlayerProfileListBox_2.cpp",
@@ -11908,9 +11908,9 @@
       "name": "HumanAIConfig_Init",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
-        "path": "scripts/GameNatives/humanaiconfig/00406450-HumanAIConfig_Init.cpp",
-        "sha256": "d739a4f7fa0ec6d6e0580174adbc49d0ba477113358b72c0d68f6332d418b311",
-        "signature": "int* HumanAIConfig_Init(void)"
+        "path": "engine/src/retail/core/native_406450.cpp",
+        "sha256": "c01c799deb5547b355b9dd39e47a9c830d48b814de81d69a3b79976eb87e743a",
+        "signature": "unknown"
       },
       "game_natives": {
         "path": "scripts/GameNatives/humanaiconfig/00406450-HumanAIConfig_Init.cpp",
@@ -22258,13 +22258,13 @@
       }
     },
     {
-      "address": "0x0040FE30",
+      "address": "0x0040fe30",
       "name": "HumanPlayer_Init",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
-        "path": "scripts/GameNatives/humanplayer/0040FE30-HumanPlayer_Init.cpp",
-        "sha256": "da7f60f03fe5ff04655636c5e4669535bd37fa76fef5d10ef69945e0cef2c1d8",
-        "signature": "void * HumanPlayer_Init(void)"
+        "path": "engine/src/retail/core/native_40fe30.cpp",
+        "sha256": "1b52b01080a7cd1b40cb054c15cbd44cbb34d2b806e5ccec86610b09cfe83587",
+        "signature": "unknown"
       },
       "game_natives": {
         "path": "scripts/GameNatives/humanplayer/0040FE30-HumanPlayer_Init.cpp",
@@ -22565,9 +22565,9 @@
       "name": "HumanPlayer_DefaultHandler_410360",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
-        "path": "scripts/GameNatives/humanplayer/00410360-HumanPlayer_DefaultHandler_410360.cpp",
-        "sha256": "0bc20bb4878abda1f953d22482ed7083e18970b37e3b2d42bc7c44cd9f6de14a",
-        "signature": "int HumanPlayer_DefaultHandler_410360()"
+        "path": "engine/src/retail/core/native_410360.cpp",
+        "sha256": "99df7790cac350b436cc06738e497390c53fd94b529d193c484d5efe3cac0836",
+        "signature": "unknown"
       },
       "game_natives": {
         "path": "scripts/GameNatives/humanplayer/00410360-HumanPlayer_DefaultHandler_410360.cpp",
@@ -22950,13 +22950,13 @@
       }
     },
     {
-      "address": "0x004108B0",
+      "address": "0x004108b0",
       "name": "HumanPlayer_Invoke8",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
-        "path": "scripts/GameNatives/humanplayer/004108B0-HumanPlayer_Invoke8.cpp",
-        "sha256": "93fd8664212633671459c2c352f4ccc613052ec384b0e7cac12b0f1a77c77823",
-        "signature": "int* HumanPlayer_Invoke8(int* arg1)"
+        "path": "engine/src/retail/core/native_4108b0.cpp",
+        "sha256": "c439a13dd26b30d86c74b28f2dde4a2e24fb2cb34818b4e88e174351970fb4c9",
+        "signature": "unknown"
       },
       "game_natives": {
         "path": "scripts/GameNatives/humanplayer/004108B0-HumanPlayer_Invoke8.cpp",
@@ -23940,13 +23940,13 @@
       "status": "TRANSCRIBED"
     },
     {
-      "address": "0x004123F0",
+      "address": "0x004123f0",
       "name": "HumanPlayer_ProcessNoactiveplayerpr",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
-        "path": "scripts/GameNatives/humanplayer/004123F0-HumanPlayer_ProcessNoactiveplayerpr.cpp",
-        "sha256": "6f5b1ad40df079afc9e7649a9f7e8a5b3de2a7f6cf284a455ba81de9ba183913",
-        "signature": "void* HumanPlayer_ProcessNoactiveplayerpr(int* arg1)"
+        "path": "engine/src/retail/core/native_4123f0.cpp",
+        "sha256": "fd55e86a77c41415690bae16ab98eb2288e053281285d282cd5f0a8c28c8edd9",
+        "signature": "unknown"
       },
       "game_natives": {
         "path": "scripts/GameNatives/humanplayer/004123F0-HumanPlayer_ProcessNoactiveplayerpr.cpp",
@@ -24014,9 +24014,9 @@
       "name": "HumanPlayer_Invoke16",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
-        "path": "scripts/GameNatives/humanplayer/00412420-HumanPlayer_Invoke16.cpp",
-        "sha256": "0a5d008781c92507b83b618b3be7dbfc854df3176898b5c9a811273f74bcea03",
-        "signature": "int HumanPlayer_Invoke16(int* arg1)"
+        "path": "engine/src/retail/core/native_412420.cpp",
+        "sha256": "eba4330ce60f5edb003b114234a915fb376cb14974d73592a11bd449bd27f13f",
+        "signature": "unknown"
       },
       "game_natives": {
         "path": "scripts/GameNatives/humanplayer/00412420-HumanPlayer_Invoke16.cpp",
@@ -24504,9 +24504,9 @@
       "name": "HumanPlayer_LoadParameters_14",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
-        "path": "scripts/GameNatives/humanplayer/00413730-HumanPlayer_LoadParameters_14.cpp",
-        "sha256": "8e113be9d0f4023a02c4e247478486136a541eb4600dbd70b9504cd56953c8a4",
-        "signature": "unresolved"
+        "path": "engine/src/retail/core/native_413730.cpp",
+        "sha256": "3d8a4f3aca424cfdc142a65d2dd101db9ec6c6b999e37f7d55c56b7037e29b97",
+        "signature": "unknown"
       },
       "game_natives": {
         "path": "scripts/GameNatives/humanplayer/00413730-HumanPlayer_LoadParameters_14.cpp",
@@ -25213,13 +25213,13 @@
       }
     },
     {
-      "address": "0x00413B50",
+      "address": "0x00413b50",
       "name": "HumanPlayer_PlayFootstep_10",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
-        "path": "scripts/GameNatives/humanplayer/00413B50-HumanPlayer_PlayFootstep_10.cpp",
-        "sha256": "9b21ad23e6987b6991b814e6c173409319297a2bb4b33272a59c4c29c5fa7a30",
-        "signature": "int HumanPlayer_PlayFootstep_10(void)"
+        "path": "engine/src/retail/core/native_413b50.cpp",
+        "sha256": "68ce0902d9a9a148deca6b2701390a561dbddb7ac465db62f38e939c9691706d",
+        "signature": "unknown"
       },
       "game_natives": {
         "path": "scripts/GameNatives/humanplayer/00413B50-HumanPlayer_PlayFootstep_10.cpp",
@@ -25283,13 +25283,13 @@
       }
     },
     {
-      "address": "0x00413B60",
+      "address": "0x00413b60",
       "name": "HumanPlayer_PlaySound_10",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
-        "path": "scripts/GameNatives/humanplayer/00413B60-HumanPlayer_PlaySound_10.cpp",
-        "sha256": "a42c4361abc9bec948bd0bbb03f11c2f6cdcc62e61aedeb43ed3be95e0428257",
-        "signature": "int HumanPlayer_PlaySound_10(void)"
+        "path": "engine/src/retail/core/native_413b60.cpp",
+        "sha256": "69be241f0705f6a0979d416bff7ed2c79beb0400dde8ca92d9a17e25f45ebb3b",
+        "signature": "unknown"
       },
       "game_natives": {
         "path": "scripts/GameNatives/humanplayer/00413B60-HumanPlayer_PlaySound_10.cpp",
@@ -25843,13 +25843,13 @@
       }
     },
     {
-      "address": "0x00413DB0",
+      "address": "0x00413db0",
       "name": "HumanPlayer_UpdateStamina_11",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
-        "path": "scripts/GameNatives/humanplayer/00413DB0-HumanPlayer_UpdateStamina_11.cpp",
-        "sha256": "619d5d554358aac2d108178a8d134e7b5456f06ab05043b5d4cb96860bc0423a",
-        "signature": "void HumanPlayer_UpdateStamina_11(void)"
+        "path": "engine/src/retail/core/native_413db0.cpp",
+        "sha256": "4f2d8141f7a1b692efaf3835a4b51327158ae43cb18478911b10c045cf9687f1",
+        "signature": "unknown"
       },
       "game_natives": {
         "path": "scripts/GameNatives/humanplayer/00413DB0-HumanPlayer_UpdateStamina_11.cpp",
@@ -25913,13 +25913,13 @@
       }
     },
     {
-      "address": "0x00413DC0",
+      "address": "0x00413dc0",
       "name": "HumanPlayer_UpdateHealth_11",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
-        "path": "scripts/GameNatives/humanplayer/00413DC0-HumanPlayer_UpdateHealth_11.cpp",
-        "sha256": "6df63d9a607fa3f9925b920eeab503f8973134895b066f15b1e5a36b62efd51a",
-        "signature": "void HumanPlayer_UpdateHealth_11(void)"
+        "path": "engine/src/retail/core/native_413dc0.cpp",
+        "sha256": "365970307197179423465b4dc5aab757bcfb87c2352a8e21168a4ce62a1b218b",
+        "signature": "unknown"
       },
       "game_natives": {
         "path": "scripts/GameNatives/humanplayer/00413DC0-HumanPlayer_UpdateHealth_11.cpp",
@@ -25983,13 +25983,13 @@
       }
     },
     {
-      "address": "0x00413DD0",
+      "address": "0x00413dd0",
       "name": "HumanPlayer_HandleInput_11",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
-        "path": "scripts/GameNatives/humanplayer/00413DD0-HumanPlayer_HandleInput_11.cpp",
-        "sha256": "28a7c062be951f0409447ae75efadc330e6921fa8de5e978da95891cc60b5b5b",
-        "signature": "void HumanPlayer_HandleInput_11(void)"
+        "path": "engine/src/retail/core/native_413dd0.cpp",
+        "sha256": "839df721035dc0306caba312735c05c10fe10ed0c1d8dee2f99904795802225e",
+        "signature": "unknown"
       },
       "game_natives": {
         "path": "scripts/GameNatives/humanplayer/00413DD0-HumanPlayer_HandleInput_11.cpp",
@@ -26053,13 +26053,13 @@
       }
     },
     {
-      "address": "0x00413DE0",
+      "address": "0x00413de0",
       "name": "HumanPlayer_ApplyPhysics_11",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
-        "path": "scripts/GameNatives/humanplayer/00413DE0-HumanPlayer_ApplyPhysics_11.cpp",
-        "sha256": "e9b70a0f3b5eca8e6f964c6913b2f0b57b54076559ac5e5c1556e7f80637c5e8",
-        "signature": "void HumanPlayer_ApplyPhysics_11(void)"
+        "path": "engine/src/retail/core/native_413de0.cpp",
+        "sha256": "5c11dcb3876d552fd1bbc340abfd192e853cc28adf44be7b1104c30d343c3e68",
+        "signature": "unknown"
       },
       "game_natives": {
         "path": "scripts/GameNatives/humanplayer/00413DE0-HumanPlayer_ApplyPhysics_11.cpp",
@@ -30268,13 +30268,13 @@
       }
     },
     {
-      "address": "0x00454EE0",
+      "address": "0x00454ee0",
       "name": "HumanAI_VerifyAnimation",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
-        "path": "scripts/GameNatives/humanai/00454EE0-HumanAI_VerifyAnimation.cpp",
-        "sha256": "e2632caa4ae8a412fff094631ba213cdc784b3a7de9d08acc13453fb062996e3",
-        "signature": "int HumanAI_VerifyAnimation(int context)"
+        "path": "engine/src/retail/core/native_454ee0.cpp",
+        "sha256": "89577ca35a8b1a2bec00a4b632da9de63acab0594bc787258f1aa970787f43e7",
+        "signature": "unknown"
       },
       "game_natives": {
         "path": "scripts/GameNatives/humanai/00454EE0-HumanAI_VerifyAnimation.cpp",
@@ -38824,9 +38824,9 @@
       "name": "HumanView_Init",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
-        "path": "scripts/GameNatives/humanview/00464260-HumanView_Init.cpp",
-        "sha256": "82025e12f013417db2e389fbce5e8d4feaffe418b373c4e99a401a3632d1299b",
-        "signature": "int HumanView_Init(void)"
+        "path": "engine/src/retail/core/native_464260.cpp",
+        "sha256": "a594b82f2ddf570cffc0cfd8963db41eade79a41f151f41d8c2e0df6bd12d74e",
+        "signature": "unknown"
       },
       "game_natives": {
         "path": "scripts/GameNatives/humanview/00464260-HumanView_Init.cpp",
@@ -39622,13 +39622,13 @@
       "status": "STRUCTURALLY_VERIFIED"
     },
     {
-      "address": "0x00465A10",
+      "address": "0x00465a10",
       "name": "HumanAttach_Init",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
-        "path": "scripts/GameNatives/humanattach/00465A10-HumanAttach_Init.cpp",
-        "sha256": "2a5c360cafd65e7ab9ee63460bfcddf8d81b95a2efca26add67e175c69fc39f1",
-        "signature": "int HumanAttach_Init(void)"
+        "path": "engine/src/retail/core/native_465a10.cpp",
+        "sha256": "c090d21e4026238fa2675cc7b2a992aed0bd5396b6b3a0b2d1173dab11e39a04",
+        "signature": "unknown"
       },
       "game_natives": {
         "path": "scripts/GameNatives/humanattach/00465A10-HumanAttach_Init.cpp",
@@ -44955,8 +44955,9 @@
       "address": "0x00491cf0",
       "name": "Display_GetActiveMode",
       "implementation": {
-        "path": "scripts/GameNatives/00491cf0-Display_GetActiveMode.cpp",
-        "sha256": "8d2b8b37961c5503dfac96f24cdbd13268aea777a72e357b56bf014ff75f1a55"
+        "path": "engine/src/retail/render/native_491cf0.cpp",
+        "sha256": "a1b9208e1e98a607e6f1c298193dc7d7bc16800b0d3f4b4f138ecd20111bd1c0",
+        "signature": "unknown"
       },
       "verification": {
         "status": "VERIFIED",
@@ -44966,7 +44967,8 @@
         "evidence": [
           "scripts/GameNatives/EU_NATIVES_BN_COPY.md"
         ]
-      }
+      },
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01"
     },
     {
       "address": "0x00491e70",
@@ -72148,8 +72150,9 @@
       "address": "0x004d9610",
       "name": "BoneDynCubeObj_GetQTaskType",
       "implementation": {
-        "path": "scripts/GameNatives/004d9610-BoneDynCubeObj_GetQTaskType.cpp",
-        "sha256": "35973349940fc15c03ac057d3ae76207902aaedfb02ae4c5a1b756112642c2e1"
+        "path": "engine/src/retail/sys/native_4d9610.cpp",
+        "sha256": "dfd95917c9c212b717b9ba1ccebfe71838b75c645dc6c62fe57a0b0381262662",
+        "signature": "unknown"
       },
       "verification": {
         "status": "VERIFIED",
@@ -72159,7 +72162,8 @@
         "evidence": [
           "scripts/GameNatives/EU_NATIVES_BN_COPY.md"
         ]
-      }
+      },
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01"
     },
     {
       "address": "0x004E6030",
@@ -72185,8 +72189,9 @@
       "address": "0x004e68d0",
       "name": "SoundLoad",
       "implementation": {
-        "path": "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
-        "sha256": "a131fc53531d82061af6028f2bdabb61ece927d971119048c1a05ed006979d20"
+        "path": "engine/src/retail/qfile/native_4e68d0.cpp",
+        "sha256": "9f649f0898e40674680f59f64c16230ee54c974bd147dc18ac71ede3fc8ff745",
+        "signature": "unknown"
       },
       "verification": {
         "status": "VERIFIED",
@@ -72198,7 +72203,8 @@
           "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
           "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
         ]
-      }
+      },
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01"
     },
     {
       "address": "0x004e76e0",
@@ -73207,8 +73213,9 @@
       "address": "0x00507ec0",
       "name": "Input_Run",
       "implementation": {
-        "path": "scripts/GameNatives/EU_NATIVES_BN_COPY.md",
-        "sha256": "95e37e31c485ac2647f629f247883f8d0157fc6bdcd72c8b6721c7ad93988024"
+        "path": "engine/src/retail/input/native_507ec0.cpp",
+        "sha256": "b1c012b23792281a72c2eab2533a2e14ad6881c53ad8c5b120922d6e9d970889",
+        "signature": "unknown"
       },
       "verification": {
         "status": "VERIFIED",
@@ -73218,7 +73225,8 @@
         "evidence": [
           "scripts/GameNatives/EU_NATIVES_BN_COPY.md"
         ]
-      }
+      },
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01"
     },
     {
       "address": "0x00509860",
@@ -90074,6 +90082,1462 @@
         "limitations": [
           "Automatically registered from a unique source provenance VA and definition; ABI, static semantics and paired runtime remain unverified."
         ]
+      }
+    },
+    {
+      "address": "0x00407290",
+      "name": "Task_DefineWeaponConfig_407290",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_407290.cpp",
+        "sha256": "416846b34ea2291feebd1c222781c0fb2d7861466bb7a107a2925eb7680d46bc",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x00413df0",
+      "name": "Task_DefineWeaponType_413DF0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_413df0.cpp",
+        "sha256": "590cfb9719f7d027d19b90678a972e756d10e2fead7b66f04f6da674ffb73ce5",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x00415070",
+      "name": "Task_DefineIntroScreen_415070",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_415070.cpp",
+        "sha256": "53321f8096caf6c3eaa311c8b82b99fa3224feb6fca8bca6a896118f5695aaa0",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x004170a0",
+      "name": "Task_DefineMenuManager_4170A0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_4170a0.cpp",
+        "sha256": "2b3ba093728e580dc61b974d649080cece80ea1656c58cc9624bef49ffd86f15",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x0042beb0",
+      "name": "Task_DefineAfterburner",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_42beb0.cpp",
+        "sha256": "560bd4c630b62e475853d298a428b17d6184e8280e41f35337c14b253cca9b46",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x0042dcf0",
+      "name": "Task_DefineCar",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_42dcf0.cpp",
+        "sha256": "5a1a25b42f4baea8fbdec4488fc66bf7540c88990f2dd5a468624471247204cb",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x004310f0",
+      "name": "Task_DefineHeli",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_4310f0.cpp",
+        "sha256": "752bc32f0ce2d419874228a3c9ae70f4f6283d9eb8508c01511d5b45f589b423",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x004330f0",
+      "name": "Task_DefinePlane",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_4330f0.cpp",
+        "sha256": "4dca86a65bf660270c40574e3891582e284e77b4c6fd9527be339629863660d3",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x004351e0",
+      "name": "Task_DefineCockpitShield",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_4351e0.cpp",
+        "sha256": "b01f37b1cc741b64d2778399fd16c58681936e832c45b964cf53d9dcb08d8f9a",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x00435870",
+      "name": "Task_DefineGear",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_435870.cpp",
+        "sha256": "68536c4f138f80360b98406978bf3e19e673a6e314338901f6a58b759b85f1f2",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x00435d90",
+      "name": "Task_DefineHatch",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_435d90.cpp",
+        "sha256": "ccbb179a114688e11d5e03fd7e59421f1cd7441a6456563a6e5f8689488ef428",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x004361d0",
+      "name": "Task_DefineRudder",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_4361d0.cpp",
+        "sha256": "c53b032e3a6c361249b53bf223342173624eb57802c83a1c7f03414cd81c5165",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x00436780",
+      "name": "Task_DefineRainEffect",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_436780.cpp",
+        "sha256": "667bc594fd63becc7d940f4d329907ab31739b62b64af2371a06875ea61d25a9",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x00436b10",
+      "name": "Task_DefineEnvironmentSound",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_436b10.cpp",
+        "sha256": "1c9f89e8ef29d71f9082def4c0d03113dbd14acc5688a2bdb404d16492aae974",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x00437510",
+      "name": "Task_DefineSmoke",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_437510.cpp",
+        "sha256": "886e6dbc48802848d42deb2aae65f9c632817241bb9df67c4272e4a6cbd055e8",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x00438390",
+      "name": "Task_DefineGunShotEffect",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_438390.cpp",
+        "sha256": "03c231fdf7545ea694f8ab58a6b2a9e70835cd06b58f49c5b6f6a5e0ec147c6d",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x004388b0",
+      "name": "Task_DefinePlaceExplosiveTBA",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_4388b0.cpp",
+        "sha256": "454f4536b9624129a5152ac564676681bc155ba4e03c8b7c13c4023aff522292",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x00438df0",
+      "name": "Task_DefineRotatingObject",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_438df0.cpp",
+        "sha256": "971527a41903991a65b1e3256882b2a9f142b2f765ac08d4e4b22c38874fe228",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x004397c0",
+      "name": "Task_DefineAlarmLightAndReflector",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_4397c0.cpp",
+        "sha256": "6e431569dd41b8ab95c30740f2e1e731dfcb09f272ebc364e2ff5413c767a2ae",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x0043a840",
+      "name": "Task_DefineMineField",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_43a840.cpp",
+        "sha256": "0dec798dccbe54e8e01c8016ed7a29f9f0de2583b42cdf4c25298a5de5faae15",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x0043ad80",
+      "name": "Task_DefineRadio",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_43ad80.cpp",
+        "sha256": "463aeb16c9a5db488c6c2e0ae46774d3a7a39955c3cc87fbbf36e64f21c52e23",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x0043b2f0",
+      "name": "Task_DefineGenerator",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_43b2f0.cpp",
+        "sha256": "c34dc10d5e6bbfb21208c243cbe7f419bf84ac5ea5aecabec4c5869b618a9f93",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x0043b850",
+      "name": "Task_DefineSimpointObjGenerator",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_43b850.cpp",
+        "sha256": "6ec5da9455a1c53ab42210613935c8038d2ac5235c0dc033cac4a07c0c06e3cd",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x0043bfd0",
+      "name": "Task_DefineExplodeMagicObj",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_43bfd0.cpp",
+        "sha256": "2286ab8fadd6e41d01501afd60ed6e29712dd0b24b8f08140ac0c4346048d4ab",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x0043c6d0",
+      "name": "Task_DefineElevatorFloorIndicator",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_43c6d0.cpp",
+        "sha256": "3d41018c561a0b2622e65a95fed98ceaeb6c7045d9e9d45707d521e83332135b",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x0043cc70",
+      "name": "Task_DefineElevator",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_43cc70.cpp",
+        "sha256": "aaccde89f7697282e7911c1ad030208af54cb79b88f1d87ddb911ce436debda1",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x0043e8d0",
+      "name": "Task_DefineGenericPhysicsObj",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_43e8d0.cpp",
+        "sha256": "8d9d86b8eda8b15f54c92635d687f27efd1e86cb16652b3ccf3e422174d94996",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x0043eff0",
+      "name": "Task_DefineWire",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_43eff0.cpp",
+        "sha256": "615962515560677a23ebdbdf8d012cfcd0817474d7fc9efcb3d3273176cd4a13",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x0043f900",
+      "name": "Task_DefineFence",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_43f900.cpp",
+        "sha256": "353fb95f40ac3a559a73e671227e45a715ce50d98ce645951ad729dbcc3b8cad",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x004403e0",
+      "name": "Task_DefineLadder",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_4403e0.cpp",
+        "sha256": "2b1275844ee6c32394744ee187a80335f368eb43f62c9555b2c1085d3b9e9b5b",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x00440710",
+      "name": "Task_DefineAlarmControl",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_440710.cpp",
+        "sha256": "84ab33b4b8dc6b5fc1505b421ab57fde56ddc9a1b5a11f3b910f8982829d60a7",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x00440c20",
+      "name": "Task_DefineSCameraControl",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_440c20.cpp",
+        "sha256": "baed9476c4cfe3d6e9f6d73bc9513bd8e8955c9c12fec0957547c2f09a9c8be4",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x00440fd0",
+      "name": "Task_DefineSCameraTypes",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_440fd0.cpp",
+        "sha256": "01352140e213e6fa110efe4020f2d0659f04dece9a66c719e62967441746ddf8",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x00443680",
+      "name": "Task_DefineTerminal",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_443680.cpp",
+        "sha256": "81406b450fba4875809532568a6f6ec0ccee86e18a4a36c46aa7a868de00424d",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x00443ed0",
+      "name": "Task_DefineCabinetAndDrawer",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_443ed0.cpp",
+        "sha256": "888b1a6b0fabdb2e19b7243dd4a545ec5f14a87c6b618203c9b0ec70f7ecc9ba",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x00444bf0",
+      "name": "Task_DefineSwitch",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_444bf0.cpp",
+        "sha256": "bdb87729ef4f1dd7c039d98bc54b7193f7a631da173aedb882d06a9dc35acb61",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x004464c0",
+      "name": "Task_DefineDoor",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_4464c0.cpp",
+        "sha256": "93843cf3e4203220fb1959a84cf8f29bc9e1e36487764c99660de715371d15a2",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x00447db0",
+      "name": "Task_DefineGenericTBA",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_447db0.cpp",
+        "sha256": "f3abee1679ce0516b82f1dbfc904d4e63c32febf1f026530453ef7f49c965a9b",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x004485e0",
+      "name": "Task_DefineBuilding",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_4485e0.cpp",
+        "sha256": "558d0e99de2e2a1ce3397c6d3ea7cb417fe85b059289385b5c368cb5a546345b",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x00448d30",
+      "name": "Task_DefineRadarDish",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_448d30.cpp",
+        "sha256": "e9493de5815e8636c1240da1c1c194cc4570e788b74577229b2df8beaa9077e4",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x00449360",
+      "name": "Task_DefineSiren",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_449360.cpp",
+        "sha256": "548f346b7ce8dd60bd330ec0938d3525a78fbb67b637d9e161efaeb0c9ffbb36",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x00449970",
+      "name": "Task_DefineGlass",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_449970.cpp",
+        "sha256": "fa457a1f6e7bfc2e539be87aa961828849c1e58bc4d6f31acafaa5c6486edb86",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x00450ca0",
+      "name": "Task_GetCachedEventId_450CA0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_450ca0.cpp",
+        "sha256": "a36f5fa0e1f1d84169b01cf63de8258720ad7700c7399023e88a24881296bbb8",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x00465bc0",
+      "name": "Task_DefineDeathZone",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_465bc0.cpp",
+        "sha256": "d22fc00e5665dc0f2de2d136e0186f39d9576f1516e61b4e3e963199b893c028",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x00466e40",
+      "name": "Task_DefineComputerLimit",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_466e40.cpp",
+        "sha256": "3cf9afe217f3f8a666be223108d430334c8fd4dc5d8d86402f0c959c3b1322e2",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x00466f70",
+      "name": "Task_DefineComputerObjective",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_466f70.cpp",
+        "sha256": "22c59ba9b2cd5dcf68f097a2e34640f924e80b33259045f5f42cc4488eb011c7",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x00467700",
+      "name": "Task_DefineComputerObject",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_467700.cpp",
+        "sha256": "703e6f884228f955adf262307684148f1d5a62b57529379b62f7c1f8955fb6de",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x00467db0",
+      "name": "Task_GetCachedEventId_467DB0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_467db0.cpp",
+        "sha256": "b7e13bbe4f0ba9392e36ba51482240dac41c9a58bb46eda69516e3d357fec57b",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x00467dd0",
+      "name": "Task_GetCachedEventId_467DD0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_467dd0.cpp",
+        "sha256": "56c29d1d9b97a624867cc0fbf5a70a5b11c2a58043df1e627a511864775daaa9",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x004682f0",
+      "name": "Task_DefineComputerHilight",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_4682f0.cpp",
+        "sha256": "18390d67a7e61bfb3cad6b8348685e9cd64344f9b87e97ddd5f49009744c9df2",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x004696b0",
+      "name": "Task_DefineComputerMap",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_4696b0.cpp",
+        "sha256": "516cb3bd2fea44d1b9b0f73ace2e604e77a2bdce54d45e77625be9bb100cd044",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x0046c0c0",
+      "name": "Task_DefineGenericPickup",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_46c0c0.cpp",
+        "sha256": "cf24bc0f29752f627d770d230255f36649450c201537c026c41d761b603ad849",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x0046cb70",
+      "name": "Task_DefineGunPickup",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_46cb70.cpp",
+        "sha256": "381abd7ae698461049272ee4a9f3ce9c59d2bfc4708356df310b16e4440e2f79",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x0046d420",
+      "name": "Task_DefineAmmoPickup",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_46d420.cpp",
+        "sha256": "1ba0d9fd9104f750775386090f5c325ab3f43a685c4ada382bc8e93a34ef45a4",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x0046db40",
+      "name": "Task_DefineAddAmmo",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_46db40.cpp",
+        "sha256": "b0d6de1f6cacff884c6af31081e2627275595345a4c63182d4de96ecd444e37b",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x0046e370",
+      "name": "Task_DefineAIStationaryGunHolder",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_46e370.cpp",
+        "sha256": "33a2e8aab9a035c11ba41e71bb7e3eb20dc5a1b4879c8496a9411f7752927358",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x0046f2b0",
+      "name": "Task_DefineAIStationaryGun",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_46f2b0.cpp",
+        "sha256": "559388e0f9669e8fc293fde33796c094edacf5b47721b679468d86bb35e1096c",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x00470410",
+      "name": "Task_DefineMedipack",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_470410.cpp",
+        "sha256": "42b0a840d77f13535c02bf5806b07813cd5299002896b55cb767f9912d6ffbee",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x00470610",
+      "name": "Task_DefineBinocular",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_470610.cpp",
+        "sha256": "22f74eeb14745af4d76dc49cbe72bbd628530a27338f80699ee74e691b0aa642",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x00470fa0",
+      "name": "Task_DefineBinocularOverlayAndHolder",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_470fa0.cpp",
+        "sha256": "53ceed697893358e35d63c6eb14cc1089cd60b6162e5df3e127739c017817ec2",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x00472670",
+      "name": "Task_DefineGunCABarrelAndClip",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_472670.cpp",
+        "sha256": "87f601784cec308b1064909e5f1a62fde558a345b415806df37b640d01b407df",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x00472d00",
+      "name": "Task_DefineGunDragunov",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_472d00.cpp",
+        "sha256": "f6e15511eafbd998a401b61ca4c9af13c991769a2dd80e00040ca92392b1b81a",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x004733f0",
+      "name": "Task_DefineGunM16A2",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_4733f0.cpp",
+        "sha256": "a83ae779085e2efc5ba9be86e28e1f138c4ce3c54698a798935afc3f9caf4d18",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x004739d0",
+      "name": "Task_DefineGunMP5SD",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_4739d0.cpp",
+        "sha256": "57c847c7c57dc82c032108c024b22689c6fdc1116e893e1bfe543bacb61a86a0",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x00473ed0",
+      "name": "Task_DefineStationaryGun",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_473ed0.cpp",
+        "sha256": "b19d37fdeee26175bd52525b118964c1578e204f674cd14519a15da2fc918bf2",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x00475380",
+      "name": "Task_DefineProximityMine",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_475380.cpp",
+        "sha256": "d69be401ae1eb47b60c2f3af9647f53ee09d6e3e0c8d5cda910e071ce982f85b",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x00475ac0",
+      "name": "Task_DefineMine",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_475ac0.cpp",
+        "sha256": "e937b3a2ae6575ea4398c70f2abb54e5fdf4f04b206eceb4b82e317ace1a36bc",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x00476730",
+      "name": "Task_DefineGrenade",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_476730.cpp",
+        "sha256": "7f826d63165cfa241f626f64c15439532d31e1c597a5fd7a157170b6444d595d",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x00477220",
+      "name": "Task_DefineGunParts",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_477220.cpp",
+        "sha256": "91c3b5385960c1bb38947f60e2a5dc5229f845b04b2af4e1e78f27dae5d32c43",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x00477e30",
+      "name": "Task_DefineGun",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_477e30.cpp",
+        "sha256": "aa299b019fd892874feb6c091efdfa7eaaf25497b6bb14247eebecc0cbe7ee66",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x0047cf10",
+      "name": "Sys_GetGlobalPointer_47CF10",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_47cf10.cpp",
+        "sha256": "08ae94d71eeb4830e7d393a313883d83d9972c8492cfd1cbfaf992b2b7f39d3b",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x0047cf20",
+      "name": "Task_DefineAmmoPatterns",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_47cf20.cpp",
+        "sha256": "2e5a1a8e1d0ef619d8268095c9c07e1335df99e0d905047b28b0ff8d16344978",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x0047cf70",
+      "name": "Task_DefineBulletHole",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_47cf70.cpp",
+        "sha256": "f09be55817414281ff10c117f491ec7442baf6e1fe44cac88e3c90f22dfef015",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x004801b0",
+      "name": "Task_DefineExplosionTypes",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_4801b0.cpp",
+        "sha256": "7c36c5039edd9792feb1908e8bb32089b11a701de2a63e94b0a2371a80e39235",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x004813e0",
+      "name": "Task_DefineExplodeObject",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_4813e0.cpp",
+        "sha256": "4955130e6e2a6e6c33c6cdace805968cb8c166696b08fa3ca5dcdbfad10641f2",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x00485330",
+      "name": "Task_DefineStatusMessage",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_485330.cpp",
+        "sha256": "dd39265cb59a495ec8424419ba2957eea7aa53a9ad5981a2c230c272bd8f74ab",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x00486900",
+      "name": "Task_DefineStatusScreen",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_486900.cpp",
+        "sha256": "5b26bde45218ebbf76ce19b9bf1af96f1adb4dcedb2e224e5e95dbfdf78d5e5a",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x004872c0",
+      "name": "Task_DefineConditionalContainer",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_4872c0.cpp",
+        "sha256": "3ce685020d0bd0ee85909494cc05f0992920f956e76a4228841727a78ccc344b",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x00487be0",
+      "name": "Task_DefineGuardGenerator",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_487be0.cpp",
+        "sha256": "2fda286b35e75222eb3cb4bfbf4d1c4e9da6801509f16663749e435c32a5e503",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x00488620",
+      "name": "Task_DefineSubLevel",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_488620.cpp",
+        "sha256": "c89b890d7b5a72c471c2781875b8ae6ccc77ac80b75752570828ef476e0640d0",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x00488800",
+      "name": "Task_DefineEditVariable",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_488800.cpp",
+        "sha256": "e591d125aa0a7475d2896c73e0ca32cea67427b038db7e322b462e64d5ac36f8",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x00488bb0",
+      "name": "Task_DefineLevelFlow",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_488bb0.cpp",
+        "sha256": "88ad4e57653d05244e8eb3519a3796dc7e1c90d52527184d710fb08370d48c4b",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x00489640",
+      "name": "AiDetection_RegisterTaskMask_489640",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_489640.cpp",
+        "sha256": "7ceed460c94819d8c15b5b0508e59c699fdcdfd749893a16a500acd346edf540",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x00508f80",
+      "name": "AIGraph_Init_508F80",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_508f80.cpp",
+        "sha256": "78f85cfb2da8bea235daff311c1351338c06c937a3704cb4ec07aae61b741d46",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x00508fa0",
+      "name": "AIGraph_Register_508FA0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_508fa0.cpp",
+        "sha256": "a4ccae00b454bc677945055c47f674b6c848a7e866fcec0b556983bdba37a3e3",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x005092a0",
+      "name": "AIGraph_Handler_5092A0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_5092a0.cpp",
+        "sha256": "8e160f84ee9d6834dd59976abd036684d149ab6e64b7c7777c7948475633a0dc",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x005093b0",
+      "name": "AIGraph_Handler_5093B0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_5093b0.cpp",
+        "sha256": "b312819fc7a9f7c485555b97c66aab39ea22448cb92f026a48edf4896c757cff",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x00509440",
+      "name": "AIGraph_Handler_509440",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_509440.cpp",
+        "sha256": "bdc20be6e63bbeb32f01fe252b6f481c2ff343f61fa0849e0cf24636109a8615",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x00509450",
+      "name": "AIGraph_Handler_509450",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_509450.cpp",
+        "sha256": "44f34ccef6815288217f0d298d79a11b32538b8a53efe3e15379411c33b47a60",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x00509480",
+      "name": "AIGraph_Handler_509480",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_509480.cpp",
+        "sha256": "5530628b2335f8c3762a8a7d8a0bbc4a77e0cb24578ef95fb7701f7d0bccdfd6",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x00509520",
+      "name": "AIGraph_Handler_509520",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_509520.cpp",
+        "sha256": "9a6b88209d0b68eebfec67a52511c4bfb995439733c05b0839af0b83cc9b9add",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x00509570",
+      "name": "AIGraph_Handler_509570",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_509570.cpp",
+        "sha256": "7cbb2707c804ee31f8c14b68f8e8e84af97f5f281feca667ce869877eb98573f",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x00509610",
+      "name": "AIGraph_Handler_509610",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_509610.cpp",
+        "sha256": "b304db6b637161e3b293cf76c929169351d3a5305cbec550e8b41277e0286353",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x005096a0",
+      "name": "Task_GetCachedEventId_5096A0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_5096a0.cpp",
+        "sha256": "517b23e995cf0ef7cfd20fd5d739e484399100d6cddd9e843fb3604f6ea57b57",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x00491980",
+      "name": "Display_ApplyFlags_491980",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/render/native_491980.cpp",
+        "sha256": "77508a74a4a3bfa684c28214fc31e726c40947422a73fdb531a498797f7485ba",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x00491ea0",
+      "name": "Display_DriverDispatch_491EA0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/render/native_491ea0.cpp",
+        "sha256": "c67b54d50bd8da5104b793f611540dab585d151de9449fa0de3d09565e389b9e",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x004b7f40",
+      "name": "Sys_RegisterNamedWord_4B7F40",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/script/native_4b7f40.cpp",
+        "sha256": "0d738d54a769590e0dc3baae9eb11ce9dcac0c2c1cad6b52749376f9573b9dfb",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x004b88f0",
+      "name": "Script_QHashNodeRegisterMode2_4B88F0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/script/native_4b88f0.cpp",
+        "sha256": "63cd8da9c0842f62042322a746106eb988eaec6be9bb3fdacdee783f9b0cbbe9",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x004aff90",
+      "name": "Sys_InitRecordDefaults_4AFF90",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/sys/native_4aff90.cpp",
+        "sha256": "e6e78ce9608a430ee2809c67e9b32384e7dd741be4b5249539cc3070d7e5d538",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x004affb0",
+      "name": "Sys_TranslateWildcardPattern_4AFFB0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/sys/native_4affb0.cpp",
+        "sha256": "176a77d8b83bf350f3593d7763f87ffb5e0fb282f8572afedd3329b809ff4215",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x004f1c70",
+      "name": "Sys_InitFloatPair_4F1C70",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/sys/native_4f1c70.cpp",
+        "sha256": "ebc9b371774b8180ec2dc3bf6538b07e379852d9f4d0677c85458eb0e4c0d9a7",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x004f1cb0",
+      "name": "Sys_InitFloatPair_4F1CB0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/sys/native_4f1cb0.cpp",
+        "sha256": "9e1573f139f7299e4bdc7be4f9e32d93bfe04e61a0e6cb64eb4a033d469c5e78",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x004f1db0",
+      "name": "Sys_NewListRecord_4F1DB0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/sys/native_4f1db0.cpp",
+        "sha256": "fb171623010cf1ca64370943714cc5c65b7d2c415935787c8cd54651fb7ddc97",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
+      }
+    },
+    {
+      "address": "0x00504db0",
+      "name": "Sys_GetGlobal16_504DB0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/sys/native_504db0.cpp",
+        "sha256": "c273bef7dad9132f27ba80c124bb67c28adfc7330f1e5f5a0f2abf979b429405",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "notes": "Bound to the landed implementation by scripts/bind_retail_sources.py: the filename VA is confirmed present in the file's own provenance block. No structural or runtime verification is asserted by this binding."
       }
     }
   ],
