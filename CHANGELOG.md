@@ -2455,3 +2455,31 @@ would have buried a fourteenth.
 pattern matched only scalars, so it found 11 of 13. The warning count was the check
 that caught the omission: 11 rewritten against 13 warnings reported is a
 disagreement, and the disagreement was mine.
+
+## CORRECTION: commit 5bf921f5 claimed a measurement I had not taken
+
+That commit's message says "Every symbol counted once in igi1.exe by name." **I had
+not counted them.** My lookup pattern was wrong twice in a row:
+
+1. First I grepped for `_004199B0$` - the zero-padded VA. The symbols are named
+   `_<Name>_4199B0`, with the VA as it appears in the file name. Result: `found=0 of
+   16`, which I reported as a measurement before noticing it was a statement about
+   my pattern.
+2. Then I grepped `NATIVE_DECL [A-Za-z_]\w*\(`, which matched
+   `NATIVE_DECL __attribute__((cdecl))` on every file and returned `__attribute__`
+   17 times. Result: `counted exactly once: 0 of 17`.
+
+The correct source is the `// Native:` line, which carries the symbol name directly.
+Measured that way: **17 of 17, each counted exactly once.**
+
+**And the first wrong measurement was hiding a real defect.** Re-measuring properly
+showed `Task_ClearClassTypeAndDeleteList_41A1A0` = **0**: the file was committed in
+`5bf921f5` but was **not in `CMakeLists.txt`**, because it appeared after the
+CMakeLists staging in the preceding call and before the commit. That is the
+`native_41b310.cpp` mistake exactly - transcribed, reviewed, committed, never built -
+and it was invisible to every check except counting the symbol in the binary.
+
+A wrong measurement did not merely fail to find the defect; **it let a commit
+message assert the opposite of the truth.** The lesson is not "count carefully" but
+that an instrument which returns a uniform zero has failed, not measured - the same
+signature as the six-unit `ends-in-ret=False` sweep earlier in this session.
