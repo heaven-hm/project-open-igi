@@ -11,6 +11,20 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - Two sys entrants, and a rule for the calls the compiler adds
+
+- `igi1.exe` 14,260,556 -> **14,261,044** bytes, green. `0x004978D0 Sys_AddSlotName_4978D0` (one-argument forwarder, 14 B) and
+  `0x004978F0 Sys_EnumRenderModesPair_4978F0` (38 B, passes callback `0x00497920` and an 8-byte local to `Sys_EnumRenderModes_4B0EE0`), both
+  `BUILD_VERIFIED`, runtime UNOBSERVED.
+- **New rule recorded in docs/fidelity/evidence/compiler-emitted-symbols.md**, from two independent sightings: a `call` can exist in an object with no
+  counterpart in retail. Retail-side witness: `0x004A54A0` is `__chkstk`, compiler-emitted, must be CRT-classified and never transcribed.
+  Candidate-side witness: a first version of `0x004978F0` used an array local, and taking its address made clang emit `___stack_chk_fail` /
+  `___stack_chk_guard` into our own object. That is a source defect, not a build detail.
+- Rule: every deliverable states its object's undefined-symbol set; every symbol must be either a transcribed native or a declared CRT routine, and
+  anything else must be fixed in the source rather than linked away.
+- Argument order for `0x004978F0` was resolved from the stack at the call (`[esp+4]` = callback, `[esp+8]` = local address), not from naming, since
+  that class of mistake has already happened twice in this lane.
+
 ### 2026-10-25 - The 0x0053F316 byte gets an owner, and the CRT sweep confirms the category does not recur
 
 - `igi1.exe` 14,260,288 -> **14,260,556** bytes, green. `0x00460C30 Core_GetGlobal8_460C30` (`mov al,[0x0053F316]; ret`) linked,
