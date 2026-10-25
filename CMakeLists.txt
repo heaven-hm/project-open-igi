@@ -653,6 +653,7 @@ add_executable(igi WIN32
     engine/src/retail/core/native_413dd0.cpp
     engine/src/retail/core/native_42beb0.cpp
     engine/src/retail/core/native_4170a0.cpp
+    engine/src/retail/core/native_440fd0.cpp
     engine/src/retail/core/native_42dcf0.cpp
     engine/src/retail/core/native_43e8d0.cpp
     engine/src/retail/core/native_43eff0.cpp
