@@ -3,6 +3,13 @@
 // Tools/evidence: radare2 6.2.0 af/pdf and NASM ndisasm over the exact bytes; no call, no global, two arguments.
 // Behavior/CFG: links a node onto the tail of a four-field head. The node's back pointer at +0x04 takes the head's tail pointer from +0x08; the node's forward pointer at +0x00 takes the address of the head's own +0x04 field; the previous tail's forward pointer is rewritten to the node; and the head's tail pointer becomes the node. Straight-line, no branch, no call, no global - it is the insert half of the list pair whose initialiser is 0x004F1D60.
 // Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. The list layout is what this body and 0x004F1D60 jointly establish: +0x00 forward, +0x04 back, +0x08 tail, +0x0C context; the node type beyond its first two fields is not established.
+// Return value: this function RETURNS head in eax. The body loads head into eax at 0x004AF8F0 and never overwrites it - the
+//   last write of the body is `mov %ecx,0x8(%eax)` at 0x004AF908 - so eax still holds head when the `ret` at 0x004AF90B
+//   executes. Callers use that: core/native_48f490.cpp reads the result of the 0x0048F4E2 call site as a pointer. The
+//   declaration here was `void` until 2026-10-25, which was a transcription error in the interface, not a simplification -
+//   a caller reading eax from a void function would have received an unspecified value. This is also the single definition of
+//   0x004AF8F0: the duplicate igi::retail::mem::HeapList_Insert pair (mem/heap_list.cpp and its header) was deleted in the
+//   same change, because a retail VA has exactly one implementation.
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -15,7 +22,7 @@
 
 extern "C" {
 
-void NATIVE_DECL Sys_InsertListTail_4AF8F0(void* head, void* node)
+void* NATIVE_DECL Sys_InsertListTail_4AF8F0(void* head, void* node)
 {
     std::uint8_t* const base = static_cast<std::uint8_t*>(head);           // 0x4AF8F0: mov 0x4(%esp),%eax
     std::uint8_t* const item = static_cast<std::uint8_t*>(node);           // 0x4AF8F4: mov 0x8(%esp),%ecx
@@ -26,7 +33,8 @@ void NATIVE_DECL Sys_InsertListTail_4AF8F0(void* head, void* node)
     previous = *reinterpret_cast<std::uint8_t**>(base + 0x08U);            // 0x4AF903: mov 0x8(%eax),%edx
     *reinterpret_cast<std::uint8_t**>(previous) = item;                    // 0x4AF906: mov %ecx,(%edx)
     *reinterpret_cast<std::uint8_t**>(base + 0x08U) = item;                // 0x4AF908: mov %ecx,0x8(%eax)
-}                                                                         // 0x4AF90B: ret
+    return head;                                                           // 0x4AF90B: ret - eax still holds head
+}
 
 } // extern "C"
 

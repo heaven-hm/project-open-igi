@@ -5,11 +5,12 @@
 // Status/limits: BUILD_VERIFIED; runtime UNOBSERVED. The record type and head storage are shared with native_4b1a90.cpp through loaded_file_record.hpp. The +0x04 field is written by HeapList_Insert; no native in the tree reads it yet. GCC inlines the 0x1C-byte clear and calls CRT strlen/memcpy where retail inlines rep sequences, so the emitted body is larger in bytes with the same call order.
 #include "igi/retail/qfile/loaded_file_record.hpp"
 
-#include "igi/retail/mem/heap_list.hpp"
 #include "igi/retail/mem/mem_alloc.hpp"
 
 #include <cstdint>
 #include <cstring>
+
+extern "C" void* Sys_InsertListTail_4AF8F0(void* head, void* node);   // 0x004AF8F0, engine/src/retail/sys/native_4af8f0.cpp
 
 #if defined(_MSC_VER) && defined(_M_IX86)
 #define NATIVE_DECL __cdecl
@@ -31,7 +32,7 @@ LoadedFileRecord* NATIVE_DECL QFile_CreateLoadedFileRecord_4B19C0(const char* na
     std::memset(record, 0, 0x1CU);                                     // 0x004B19E6-0x004B19EE: mov ecx,7; rep stosd
     record->link_04 = nullptr;                                         // 0x004B19F0: mov dword [ebx+4],eax
     record->next = nullptr;                                            // 0x004B19F3: mov dword [ebx],eax
-    ::igi::retail::mem::HeapList_Insert(                               // 0x004B19F5: push ebx; push 0x00943970; call 0x004AF8F0
+    Sys_InsertListTail_4AF8F0(                               // 0x004B19F5: push ebx; push 0x00943970; call 0x004AF8F0
         static_cast<void*>(&::g_943970), reinterpret_cast<void**>(record));
 
     char* const name_copy = reinterpret_cast<char*>(record) + 0x1CU;  // 0x004B19FA: lea edx,[ebx+0x1C]

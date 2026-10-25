@@ -1,8 +1,9 @@
 #include "igi/retail/mem/mem_alloc.hpp"
-#include "igi/retail/mem/heap_list.hpp"
 #include "igi/retail/core/retail_error.hpp"
 
 #include <cstdlib>
+
+extern "C" void* Sys_InsertListTail_4AF8F0(void* head, void* node);   // 0x004AF8F0, engine/src/retail/sys/native_4af8f0.cpp
 
 namespace igi::retail::mem {
 namespace {
@@ -239,7 +240,7 @@ void* Mem_Alloc(std::int32_t context, std::int32_t arg2)
             Mem_InitHeapState();
         }
 
-        HeapList_Insert(&g_a960f0, source_2);
+        Sys_InsertListTail_4AF8F0(&g_a960f0, source_2);
 
         source_2[2] = result;
         source_2[3] = reinterpret_cast<void*>(static_cast<std::intptr_t>(total_size));

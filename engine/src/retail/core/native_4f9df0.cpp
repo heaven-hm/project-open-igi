@@ -19,7 +19,7 @@
 
 extern "C" {
 
-void Sys_InsertListTail_4AF8F0(void* head, void* node);   // 0x004AF8F0, engine/src/retail/sys/native_4af8f0.cpp
+void* Sys_InsertListTail_4AF8F0(void* head, void* node);   // 0x004AF8F0, engine/src/retail/sys/native_4af8f0.cpp
 
 std::uint32_t NATIVE_DECL GraphStream_HashName_4F9E70(char const* name);   // 0x004F9E70, engine/src/retail/core/native_4f9e70.cpp
 

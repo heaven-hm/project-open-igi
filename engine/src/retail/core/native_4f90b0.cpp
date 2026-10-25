@@ -24,7 +24,7 @@
 
 extern "C" {
 
-void Sys_InsertListTail_4AF8F0(void* head, void* node);   // 0x004AF8F0, engine/src/retail/sys/native_4af8f0.cpp
+void* Sys_InsertListTail_4AF8F0(void* head, void* node);   // 0x004AF8F0, engine/src/retail/sys/native_4af8f0.cpp
 
 // 0x004B0C60: the engine allocator, already transcribed as igi::retail::mem::Mem_Alloc (engine/src/retail/mem/mem_alloc.cpp).
 

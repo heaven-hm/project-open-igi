@@ -3,12 +3,13 @@
 #include "igi/retail/dynobj/hash_lookup.hpp"
 #include "igi/retail/dynobj/local_models_mef.hpp"
 #include "igi/retail/error/error_show.hpp"
-#include "igi/retail/mem/heap_list.hpp"
 #include "igi/retail/mem/mem_alloc.hpp"
 #include "igi/retail/resource/resource_lifecycle.hpp"
 #include "igi/retail/texture/texture_loaders.hpp"
 
 #include <cstring>
+
+extern "C" void* Sys_InsertListTail_4AF8F0(void* head, void* node);   // 0x004AF8F0, engine/src/retail/sys/native_4af8f0.cpp
 
 namespace igi::retail::dynobj {
 namespace {
@@ -225,7 +226,7 @@ void* DynObj_LoadPackageMeshes(void* context)
         do
         {
             auto** const model_node = static_cast<void**>(DynObj_LoadModelMesh(source_1));
-            Camera_SetFieldOfView_33(ctx_bytes + 0x10, model_node);
+            Sys_InsertListTail_4AF8F0(ctx_bytes + 0x10, model_node);
 
             const char* dest_1 = source_1;
             std::uint32_t j = 0xFFFFFFFFU;
@@ -276,7 +277,7 @@ void* DynObj_LoadPackageLovs(void* context)
             {
                 if (g_lovs_entry_loader != nullptr)
                 {
-                    Camera_SetFieldOfView_33(ctx_bytes + 0x1C, g_lovs_entry_loader(source_1));
+                    Sys_InsertListTail_4AF8F0(ctx_bytes + 0x1C, g_lovs_entry_loader(source_1));
                 }
 
                 const char* dest_1 = source_1;
@@ -384,7 +385,7 @@ void* DynObj_LoadModelTexturePackage(void* context, const char* arg2, std::int32
             data_12[6] = reinterpret_cast<void*>(static_cast<std::intptr_t>(context_1));
             data_12[1] = nullptr;
             data_12[0] = nullptr;
-            Camera_SetFieldOfView_33(static_cast<std::uint8_t*>(context) + 0x28, data_12);
+            Sys_InsertListTail_4AF8F0(static_cast<std::uint8_t*>(context) + 0x28, data_12);
             data_12[3] = data_11;
 
             const char* dest_3 = item_104;

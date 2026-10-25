@@ -464,7 +464,6 @@ add_executable(igi WIN32
     engine/src/retail/human/human_camera_eye.cpp
     engine/src/retail/human/human_view.cpp
     engine/src/retail/input/input_port_process.cpp
-    engine/src/retail/mem/heap_list.cpp
     engine/src/retail/mem/task_list.cpp
     engine/src/retail/render/native_4f0f80.cpp
     engine/src/retail/render/native_4f1000.cpp
@@ -589,21 +588,26 @@ add_executable(igi WIN32
     engine/src/retail/render/native_491ea0.cpp
     engine/src/retail/script/native_4b88f0.cpp
     engine/src/retail/sys/native_4f1cb0.cpp
-    # Hold-out: five files remain outside the build target.
-    #   core/native_467700.cpp calls 0x00467DB0 and 0x00467DD0 (byte getters, unimplemented)
-    #   core/native_464260.cpp calls 0x004D9610 and 0x004E6610; core/native_465a10.cpp calls 0x00504DB0
-    #   core/native_465bc0.cpp calls 0x004D14D0
-    #   core/native_467700.cpp calls 0x00467DB0 and 0x00467DD0, two byte getters with no implementation yet
-    #     (chain-worker measured them as reading 0x0053F583 and 0x0053F584).
-    #   core/native_412420.cpp calls 0x0045E060 (858 bytes, 7 blocks, 237 instructions), which has no
-    #   core/native_4696b0.cpp calls 0x004B7F40 (Sys_RegisterNamedWord_4B7F40), a single-caller wrapper above
-    #     0x0048FFFF that has no implementation yet - a new gap, not a transcription error.
-    #   implementation. Everything else that was held is now released and links:
-    #     0x004AF9D0 landed (sys/native_4af9d0.cpp) -> released sys/native_4f1db0.cpp, core/native_413df0.cpp,
-    #       core/native_47cf20.cpp, and through them core/native_413b50/413b60/413de0.cpp and core/native_477e30.cpp
-    #     0x0047CF10 landed (core/native_47cf10.cpp) -> released core/native_46db40.cpp and core/native_46d420.cpp
-    #   The 413b20/413b30/413b40 fix (reading g_5391ac instead of a private 0xFF byte) is applied in the same
-    #   commit as this block, since 413df0 now links and owns that global.
+    # Hold-out. Two separate groups, both measured by the linker rather than guessed.
+    #
+    # GROUP 1 - four finished files, each blocked by one callee that has no implementation:
+    #   core/native_412420.cpp calls 0x0045E060 (858 bytes, 7 blocks, 237 instructions)
+    #   core/native_464260.cpp calls 0x004D9610 and 0x004E6610 (0x004E6610 is now resolved as
+    #     Task_GetCachedEventId_4E6610, a lazy allocator, so only 0x004D9610 still blocks it)
+    #   core/native_465a10.cpp calls 0x00504DB0
+    #   core/native_4f9df0.cpp is intentionally outside until its callee set settles
+    #
+    # GROUP 2 - 32 transcribed files held back together because adding them as a set surfaces 23
+    # undefined symbols. Measured by temporarily adding all 32 and reading the linker's list:
+    #   functions: AIGraph_InitChain_5183D0, Core_Unknown_45E060, Core_Unknown_467F30,
+    #              Sys_GetGlobal16_4D9610, Sys_GetGlobal16_504DB0
+    #   globals:   g_5c8e08 g_5c8e0c g_5c8e10 g_5c8e18 g_5c8e1c g_5c8e24 g_5c8e30
+    #              g_a7b2e0 g_a7b440 g_a7b4e0 g_a7b4f0 g_a7b638 g_bcaa00
+    #              g_c28c62 g_c28d62 g_c28e80 g_c28f80 g_c28f81
+    #   The 32 are mostly the input subsystem (input/native_48f090 .. input/native_509f00) plus
+    #   core/native_4123f0, core/native_413730 and the 0x00509xxx group. The globals are declared
+    #   extern by those files but have no owner anywhere in the tree, which is the real blocker:
+    #   each needs one owner, and the owner is the routine that writes it.
     # Measured, not assumed: the linker rejected each of these by name until its callee existed.
     engine/src/retail/core/native_46e370.cpp
     engine/src/retail/sys/native_4aff90.cpp
@@ -628,6 +632,7 @@ add_executable(igi WIN32
     engine/src/retail/core/native_467db0.cpp
     engine/src/retail/core/native_467dd0.cpp
     engine/src/retail/core/native_467700.cpp
+    engine/src/retail/core/native_465bc0.cpp
     engine/platform/windows/retail_native_verification_support.cpp)
 target_include_directories(igi PRIVATE engine/include)
 target_compile_features(igi PRIVATE cxx_std_20)

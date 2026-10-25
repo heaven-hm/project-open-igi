@@ -18,7 +18,7 @@
 extern "C" {
 
 // 0x004AF8F0: the list-tail insert half, transcribed as Sys_InsertListTail_4AF8F0 in engine/src/retail/sys/native_4af8f0.cpp.
-void Sys_InsertListTail_4AF8F0(void* head, void* node);
+void* Sys_InsertListTail_4AF8F0(void* head, void* node);
 
 // 0x004AF9D0: transcribed in sys/native_4af9d0.cpp (1190 bytes, 68 blocks, 97 edges, 329 instructions). The declaration that
 // stood here read Sys_InitRecordPattern_4AF9D0 and returned void; both are corrected to match the definition. The name follows

@@ -5,8 +5,9 @@
 // Status/limits: BUILD_VERIFIED; STRUCTURALLY_VERIFIED against the instruction listing (3 blocks, 2 edges); runtime UNOBSERVED. Link: Mem_Alloc (transcribed, engine/src/retail/mem/mem_alloc.cpp), HeapList_Insert 0x004AF8F0 (transcribed, mem/heap_list.cpp), sentinel globals g_a43ea0 / g_a43eb0 (defined in native_4bacd0.cpp; the local SymbolSentinel declaration below repeats that file's type token for token so both translation units name one entity). Return: the retail leaves EAX at the last HeapList_Insert result and its only caller ignores it, so the port declares void.
 #include <cstdint>
 
-#include "igi/retail/mem/heap_list.hpp"
 #include "igi/retail/mem/mem_alloc.hpp"
+
+extern "C" void* Sys_InsertListTail_4AF8F0(void* head, void* node);   // 0x004AF8F0, engine/src/retail/sys/native_4af8f0.cpp
 
 #if defined(_MSC_VER) && defined(_M_IX86)
 #define NATIVE_DECL __cdecl
@@ -33,7 +34,7 @@ void NATIVE_DECL Script_QHashSymbolPoolRefill_4BAC30(std::int32_t count)
         igi::retail::mem::Mem_Alloc((count * 3 + 3) * 4, 4));                            // 0x004BAC46
     *reinterpret_cast<std::uint32_t*>(block + 4) = 0;                                    // 0x004BAC4E
     *reinterpret_cast<std::uint32_t*>(block) = 0;                                        // 0x004BAC55
-    igi::retail::mem::HeapList_Insert(&g_a43ea0, reinterpret_cast<void**>(block));       // 0x004BAC5B
+    Sys_InsertListTail_4AF8F0(&g_a43ea0, reinterpret_cast<void**>(block));       // 0x004BAC5B
     std::uint8_t* entry = block + 0x0C;                                                  // 0x004BAC63: lea 0xc(%edi),%esi
     *reinterpret_cast<std::uint8_t**>(block + 8) = entry;                                // 0x004BAC68: mov %esi,0x8(%edi)
     if (count <= 0) {                                                                    // 0x004BAC66/0x004BAC6B: jle
@@ -42,7 +43,7 @@ void NATIVE_DECL Script_QHashSymbolPoolRefill_4BAC30(std::int32_t count)
     do {
         *reinterpret_cast<std::uint32_t*>(entry + 4) = 0;                                // 0x004BAC73
         *reinterpret_cast<std::uint32_t*>(entry) = 0;                                    // 0x004BAC7A
-        igi::retail::mem::HeapList_Insert(&g_a43eb0, reinterpret_cast<void**>(entry));   // 0x004BAC80
+        Sys_InsertListTail_4AF8F0(&g_a43eb0, reinterpret_cast<void**>(entry));   // 0x004BAC80
         entry += 0x0C;                                                                   // 0x004BAC88: add $0xc,%esi
         --count;                                                                         // 0x004BAC8B: dec %ebx
     } while (count != 0);                                                                // 0x004BAC8C: jne
