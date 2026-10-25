@@ -11,6 +11,18 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - The named blocker set is cleared: five more leaves and one owner/extern pair
+
+- `igi1.exe` 14,258,968 -> **14,260,288** bytes, green. Five natives linked, all `BUILD_VERIFIED`, runtime UNOBSERVED:
+  `0x00460BE0` (`mov ax,[0x005BDAF8]`), `0x00460C40` (`[0x0053F317]`), `0x00460C50` (`mov eax,[0x005BDC18]`), `0x0047E990` (`[0x00540914]`) and
+  `0x00460C10` (the fourth lazy event-id allocator with the retail `0xFF` sentinel).
+- Every body was spot-verified against the image before integration, not accepted from the report.
+- `0x0047E990` is the ownership rule demonstrated from the other side: it reads the byte that the FlashBang registrar `0x0047E700` allocates and
+  writes, so it declares that global `extern` and defines nothing. `nm` shows `undefined _g_540914` and no data symbol in the object.
+- Caveat recorded for the block: `0x0053F316` has no reader among the transcribed bodies while `0x0053F314`, `0x0053F315` and `0x0053F317` each have
+  exactly one owner - so if anything consumes that byte it is still unowned, and the gap is named rather than assumed empty.
+- With this, the named leverage blockers from the earlier analysis are all either transcribed or reclassified as CRT (`0x004A54A0` = `__chkstk`).
+
 ### 2026-10-25 - Two config leaf bytes, and a blocker that turned out to be the compiler's stack probe
 
 - `igi1.exe` 14,258,430 -> **14,258,968** bytes, green. `0x00413B30` and `0x00413B40` linked (`mov al,[0x005391AF]; ret` and `[0x005391B0]`),
