@@ -83,6 +83,12 @@ Record timestamp, active packet, owner/reviewer, source-write token holder, buil
   `docs/fidelity/evidence/current-config-20261025/observation.json`.
 
 <!-- progress log (appended by Lead; not a status promotion) -->
+- 2026-10-25 / Codex / P06–P08 dependency ANALYZED: 81 handler calls identify
+  0x004BD880 as the caller; fresh selected BN/r2 CFG=1.0 and exact angr entry.
+  Three machine argument slots, 24-byte result storage, constructed frame offsets
+  and result consumers recorded in `docs/fidelity/evidence/remap-caller-20261025/`.
+  No engine writes or candidate acceptance. Owned capture resources released.
+  Next dependency: indexed argument reader 0x004BCAB0 and registration mapping.
 - 2026-10-25 / Codex / P08–P14 dependency ANALYZED: retail GOInRemap ABI capture
   completed 81 calls and 243 ordered reader calls, confirming caller-buffer
   ownership and nonzero copied stack words that the candidate incorrectly zeros.

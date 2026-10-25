@@ -11,6 +11,16 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - script caller ABI recovery
+
+Traced all 81 retail GOInRemap calls to the indirect dispatch at 0x004BD8FE in
+0x004BD880. Fresh BN/r2 CFG similarity is 1.0 (12 blocks), with exact angr entry
+recovery. Recorded the three machine argument slots, caller-owned 24-byte result,
+frame construction and result-type branches in
+`docs/fidelity/evidence/remap-caller-20261025/`. This establishes why the existing
+simplified config frame cannot substitute for this VM path. Retail-only research;
+the indexed argument reader and candidate implementation remain to be checked.
+
 ### 2026-10-25 - retail input-remap ABI capture
 
 Recorded 81 retail GOInRemap calls and their 243 ordered argument-reader calls.

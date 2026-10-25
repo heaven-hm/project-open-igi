@@ -1,0 +1,36 @@
+{
+  "kind": "igi-retail-configuration-observation",
+  "verified": false,
+  "before": {
+    "/Users/haseeb-mir/Downloads/IGI/igi.exe": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+    "/Users/haseeb-mir/Downloads/IGI/config.qvm": "4743dd505e4bfce8aa50b0f5d281974daf24d21fe2f771a3faaa86e68ca60e0d",
+    "/Users/haseeb-mir/Downloads/IGI/humanplayer/humanplayer.qvm": "6749062f42121bf66c045aa62cc0d93eaab60f81400a5c687f546d0ab57b15ce"
+  },
+  "probe_sha256": "72a71c05c8730547d4e8768ee7184e887fee35399875c95dda68176091fd16e8",
+  "actions_sha256": "995a8e42647c4b5989a6995996664fb3ff55f9dff1d63189371028bd43697dd7",
+  "limitations": [
+    "Retail-only memory observations; no candidate acceptance or claim about effective controls.",
+    "Output buffer, argument-reader calls and remap writes are observed; active-profile input dispatch is not tested."
+  ],
+  "after": {
+    "/Users/haseeb-mir/Downloads/IGI/igi.exe": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+    "/Users/haseeb-mir/Downloads/IGI/config.qvm": "4743dd505e4bfce8aa50b0f5d281974daf24d21fe2f771a3faaa86e68ca60e0d",
+    "/Users/haseeb-mir/Downloads/IGI/humanplayer/humanplayer.qvm": "6749062f42121bf66c045aa62cc0d93eaab60f81400a5c687f546d0ab57b15ce"
+  },
+  "inputs_unchanged": true,
+  "result": "observations_collected",
+  "capture": "retail.json",
+  "observed_calls": 81,
+  "caller_ret_va": "0x004BD901",
+  "caller_entry_va": "0x004BD880",
+  "output_offset_from_handler_entry_esp": 64,
+  "candidate_tested": false,
+  "artifacts": {
+    "caller-disassembly.txt": "4146fe688d79e7c8c4d671268b3bf5dc5e5d401a715e329c68470194675b8dff",
+    "frida-service.json": "1a1c070c7f407dbe3268c017c4e0e800e645322267e1615abf8a156a83e74237",
+    "remap_observation.js": "72a71c05c8730547d4e8768ee7184e887fee35399875c95dda68176091fd16e8",
+    "retail.json": "bca05db15b91596231d8c275445fb68edee274dd39ac4fac692df870378f7126",
+    "retail.jsonl": "105458710156e003855da83011820346a20f97a26e3e7130ecebe2cbb3bde7e8",
+    "static.json": "3e29f180e08ac92ef5724bd404610919aea1d19906b378c1faeab652f9f061eb"
+  }
+}
