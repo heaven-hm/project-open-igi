@@ -33,6 +33,9 @@ add_executable(igi WIN32
     engine/src/retail/core/cam_task.cpp
     engine/src/retail/core/native_4014b0.cpp
     engine/src/retail/core/native_443ed0.cpp
+    engine/src/retail/core/native_444bf0.cpp
+    engine/src/retail/core/native_450ca0.cpp
+    engine/src/retail/core/native_5096a0.cpp
     engine/src/retail/core/native_4014e0.cpp
     engine/src/retail/core/native_4015d0.cpp
     engine/src/retail/core/native_4015f0.cpp
