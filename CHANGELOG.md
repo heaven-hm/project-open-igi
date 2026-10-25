@@ -2629,3 +2629,38 @@ member of it, and every one of these was cheap to check and none was checked.**
 [M] measured / [L] quoted / [D] disagreement, refused to re-derive my numbers silently,
 and left all three standing in the document rather than folding them into a narrative.
 **A summary that absorbs its author's disagreements is worth less than no summary.**
+
+## THE CHAIN WAS A TREE, AND MY TRACE FOLLOWED ONE BRANCH
+
+I reported the blocking chain as three deep: `0x004B8920` -> `0x004BAB30` ->
+`0x004C0460`. analyst measured that **`0x004BAB30` has TWO undefined symbols** -
+`Script_QHashNodeClearRef_4BAA90` **and** `Script_QHashNodeRemove_4C0460` - and that my
+trace followed only the first.
+
+**The fault is a single-value extraction from a multi-value output.** My loop read
+`check_native_linkable.py` through `tail -1 | sed` and then `grep -oE '[0-9A-F]{6}$'`,
+which takes the **last** hex run and silently discards every other symbol on the line.
+A routine with two missing dependencies produced a chain of one, and the second branch
+was invisible. **This is the same shape as reading a `head -12`-truncated list as
+exhaustive: the output contained the truth and my extraction removed it.**
+
+**The true order is four files: `0x4C0460` -> `0x4BAA90` -> `0x4BAB30` -> `0x4B8920`.**
+
+**analyst proved the order instead of asserting it, and that is the better method.**
+Because the checker answers about the **built archive** rather than the filesystem, it
+copied `objects.a`, added candidate objects with `ar`, and re-ran the checker against
+the modified archive to test each step. I then executed the real sequence and every
+prediction held: after adding `4c0460` + `4baa90`, `4bab30` went to exit 0; after
+adding `4bab30`, `4b8920` went to exit 0; and analyst's two blocked teardowns
+`0x004213E0` and `0x00423F90` became linkable with no further change.
+
+**Its archive-age note is also a keeper:** the checker refuses to answer on an archive
+older than 0.5 days (exit 2), and that refusal is correct - a stale archive's NOT
+LINKABLE is a fact about the archive, not about the file. That is rule NINE applied by
+the tool rather than by the reader.
+
+**And one structural finding that would otherwise have been "tidied":** `0x004BAA90`
+is the chain's only loop and its walk is **asymmetric** - it tests the head's forward
+link before examining the head, so the tail is never examined and a one-node list is
+skipped entirely. A conventional `for (node = head; node; node = node->next)` would
+examine both and be a **behaviour change, not a cleanup.**
