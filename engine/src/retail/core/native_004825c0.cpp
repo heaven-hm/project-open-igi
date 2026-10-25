@@ -9,8 +9,8 @@
 
 extern "C" {
 
-std::uint16_t g_540990 = 0U;          // retail 0x00540990: the "HumanCamera" task type id written here (image value 0x0181)
-std::uint8_t g_540992 = 0U;           // retail 0x00540992: the QTask_AllocateEvent id byte written here (image value 0xFF)
+std::uint16_t g_540990 = 0x0181U;     // retail 0x00540990: the "HumanCamera" task type id written here (image value 0x0181)
+std::uint8_t g_540992 = 0xFFU;        // retail 0x00540992: the QTask_AllocateEvent id byte written here (image value 0xFF)
 std::uint8_t g_5c1188[0x405] = {};    // retail 0x005C1188-0x005C158C: the 128-record table below cleared by this routine
 
 void Task_DefineHumanCamera()

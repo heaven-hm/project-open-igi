@@ -12,7 +12,7 @@ extern "C" void* Sys_LookupOrAppendRecord_4169D0(char const* name); // 0x004169D
 
 extern "C" {
 
-std::uint8_t g_540914 = 0U;  // retail 0x00540914: low byte of the event id allocated here (image value 0xFF)
+std::uint8_t g_540914 = 0xFFU; // retail 0x00540914: low byte of the event id allocated here (image value 0xFF)
 std::uint16_t g_5c1144 = 0U; // retail 0x005C1144: the "FlashBang" task type id written here
 std::uint32_t g_5c1148 = 0U; // retail 0x005C1148: record pointer returned by 0x00416930 for "burn1.tex"
 std::uint32_t g_5c114c = 0U; // retail 0x005C114C: record pointer returned by 0x004169D0 for "smoke1.spr"

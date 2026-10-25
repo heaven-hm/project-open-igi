@@ -14,7 +14,10 @@ extern "C" void* Sys_LookupOrAppendRecord_4169D0(char const* name); // 0x004169D
 
 extern "C" {
 
-std::uint16_t g_5be3b0 = 0U; // retail 0x005BE3B0: the "M203" task type id written here (image value 0x0131)
+std::uint16_t g_5be3b0 = 0U; // retail 0x005BE3B0: the "M203" task type id written here. Zero is correct here: 0x005BE3B0
+                              // lies past .data's raw extent (.data VA 0x00536000 raw 0x1A000, so raw ends at 0x00552000),
+                              // which makes it zero fill. 0x0131 is the value this routine WRITES at runtime, not the
+                              // image's initial value - the earlier comment conflated the two.
 std::uint32_t g_5be3ac = 0U; // retail 0x005BE3AC: record pointer returned by 0x004169D0 for "smoke1.spr"
 
 void Task_DefineM203()
