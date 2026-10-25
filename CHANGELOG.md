@@ -11,6 +11,21 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - 23 orphaned natives linked; two duplicate class-id owners fixed
+
+- 23 engine sources that no build target contained are now compiled and linked (`igi1.exe` 14,222,853 -> **14,231,896** bytes, build green). They cover the
+  `0x00491Dxx` render-handler set, the `0x00490xxx` and `0x004E7C50` render entries, the `0x004B6Cxx` model pair, `0x00418xx`-adjacent core entries, the
+  `0x004EBC60` audio entry, `0x0051A1D0` dynobj and `0x005186C0` script. All 23 already had manifest records; status moves to `BUILD_VERIFIED` with runtime
+  UNOBSERVED recorded per record.
+- **Two duplicate owners found, because these files had never been linked together before:** `g_548638` (retail `0x00548638`, parent class id) was defined
+  both by `core/native_4d9730.cpp` (`QObj_Init`, the writer) and by `render/native_004da1d0.cpp` (reader only); `g_54875c` (retail `0x0054875C`, DynCubeObj
+  class id) was defined both by `dynobj/native_004e5370.cpp` (`DynCubeObj_Init`, the writer) and by `dynobj/native_0051a1d0.cpp` (reader only). The readers now
+  declare `extern`, the writers keep the single definition, and the provenance text saying otherwise was corrected.
+- This is exactly the failure mode "not in the build" hides: a duplicate definition is silent while nobody links the files, and it appears as a link error the
+  moment they are integrated. It also means the earlier `0 of 52 duplicate-VA` result was about VAs, not about symbols.
+- The remaining 29 orphans are `input/` (17 files, blocked on the missing half of `InputPort`) and the ten `native_419xxx` files the BackgroundFX wave is
+  still writing.
+
 ### 2026-10-25 - Audit: 52 engine sources are not in the build
 
 - `docs/fidelity/evidence/unbuilt-engine-sources.md`: 52 of 466 engine `.cpp` files are neither compiled nor linked (414 listed). An unbuilt native is not a

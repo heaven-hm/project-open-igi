@@ -69,6 +69,29 @@ add_executable(igi WIN32
     engine/src/retail/script/native_4bd010.cpp
     engine/src/retail/script/native_4bd040.cpp
     engine/src/retail/script/native_4c0620.cpp
+    engine/src/retail/audio/native_004ebc60.cpp
+    engine/src/retail/core/native_00530a80.cpp
+    engine/src/retail/core/native_005310e0.cpp
+    engine/src/retail/dynobj/native_0051a1d0.cpp
+    engine/src/retail/model/native_4b6ce0.cpp
+    engine/src/retail/model/native_4b6d20.cpp
+    engine/src/retail/render/native_00491db0.cpp
+    engine/src/retail/render/native_00491dc0.cpp
+    engine/src/retail/render/native_00491dd0.cpp
+    engine/src/retail/render/native_00491de0.cpp
+    engine/src/retail/render/native_00491df0.cpp
+    engine/src/retail/render/native_00491e00.cpp
+    engine/src/retail/render/native_00491e10.cpp
+    engine/src/retail/render/native_00491e20.cpp
+    engine/src/retail/render/native_00491e30.cpp
+    engine/src/retail/render/native_00491e40.cpp
+    engine/src/retail/render/native_00491e50.cpp
+    engine/src/retail/render/native_00491e60.cpp
+    engine/src/retail/render/native_004da1d0.cpp
+    engine/src/retail/render/native_004e7c50.cpp
+    engine/src/retail/render/native_490340.cpp
+    engine/src/retail/render/native_490350.cpp
+    engine/src/retail/script/native_5186c0.cpp
     engine/src/retail/core/native_424280.cpp
     engine/src/retail/core/native_424b90.cpp
     engine/src/retail/core/native_424c10.cpp

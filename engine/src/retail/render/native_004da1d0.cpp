@@ -8,7 +8,7 @@
 #include <cstdint>
 
 extern "C" {
-std::uint16_t g_548638;  // retail 0x00548638: current parent class id (writer is outside this batch)
+extern std::uint16_t g_548638;  // retail 0x00548638: parent class id, written by QObj_Init 0x004D9730 (native_4d9730.cpp); read-only here
 std::uint16_t g_a5e304;  // retail 0x005AE304: Hazinglayers class id, written here
 
 std::int32_t Hazinglayers_Init()

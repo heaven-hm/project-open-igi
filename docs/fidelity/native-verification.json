@@ -44806,7 +44806,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "BUILD_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x00490340",
           "signature": "unknown",
@@ -44824,7 +44824,10 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": [
+          "Linked into igi1.exe (14,231,896 bytes) in the unbuilt-source integration batch; runtime UNOBSERVED - the startup registration sequence that would call it is not transcribed yet."
+        ]
       },
       "notes": "Renamed from `Display_SetVSyncFlag_490340` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -44843,7 +44846,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "BUILD_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x00490350",
           "signature": "unknown",
@@ -44861,7 +44864,10 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": [
+          "Linked into igi1.exe (14,231,896 bytes) in the unbuilt-source integration batch; runtime UNOBSERVED - the startup registration sequence that would call it is not transcribed yet."
+        ]
       },
       "notes": "Renamed from `Display_SetSwapFlag_490350` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -45023,7 +45029,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "BUILD_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x00491DB0",
           "signature": "unknown",
@@ -45041,7 +45047,10 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": [
+          "Linked into igi1.exe (14,231,896 bytes) in the unbuilt-source integration batch; runtime UNOBSERVED - the startup registration sequence that would call it is not transcribed yet."
+        ]
       },
       "notes": "Renamed from `Display_SetGammaRamp_4_491DB0` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -45060,7 +45069,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "BUILD_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x00491DC0",
           "signature": "unknown",
@@ -45078,7 +45087,10 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": [
+          "Linked into igi1.exe (14,231,896 bytes) in the unbuilt-source integration batch; runtime UNOBSERVED - the startup registration sequence that would call it is not transcribed yet."
+        ]
       },
       "notes": "Renamed from `Display_CreateSurface_4_491DC0` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -45097,7 +45109,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "BUILD_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x00491DD0",
           "signature": "unknown",
@@ -45115,7 +45127,10 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": [
+          "Linked into igi1.exe (14,231,896 bytes) in the unbuilt-source integration batch; runtime UNOBSERVED - the startup registration sequence that would call it is not transcribed yet."
+        ]
       },
       "notes": "Renamed from `Display_OpenDevice_5_491DD0` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -45134,7 +45149,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "BUILD_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x00491DE0",
           "signature": "unknown",
@@ -45152,7 +45167,10 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": [
+          "Linked into igi1.exe (14,231,896 bytes) in the unbuilt-source integration batch; runtime UNOBSERVED - the startup registration sequence that would call it is not transcribed yet."
+        ]
       },
       "notes": "Renamed from `Display_CloseDevice_5_491DE0` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -45171,7 +45189,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "BUILD_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x00491DF0",
           "signature": "unknown",
@@ -45189,7 +45207,10 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": [
+          "Linked into igi1.exe (14,231,896 bytes) in the unbuilt-source integration batch; runtime UNOBSERVED - the startup registration sequence that would call it is not transcribed yet."
+        ]
       },
       "notes": "Renamed from `Display_SetDisplayMode_5_491DF0` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -45208,7 +45229,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "BUILD_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x00491E00",
           "signature": "unknown",
@@ -45226,7 +45247,10 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": [
+          "Linked into igi1.exe (14,231,896 bytes) in the unbuilt-source integration batch; runtime UNOBSERVED - the startup registration sequence that would call it is not transcribed yet."
+        ]
       },
       "notes": "Renamed from `Display_SyncVSync_5_491E00` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -45245,7 +45269,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "BUILD_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x00491E10",
           "signature": "unknown",
@@ -45263,7 +45287,10 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": [
+          "Linked into igi1.exe (14,231,896 bytes) in the unbuilt-source integration batch; runtime UNOBSERVED - the startup registration sequence that would call it is not transcribed yet."
+        ]
       },
       "notes": "Renamed from `Display_SwapBuffers_5_491E10` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -45282,7 +45309,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "BUILD_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x00491E20",
           "signature": "unknown",
@@ -45300,7 +45327,10 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": [
+          "Linked into igi1.exe (14,231,896 bytes) in the unbuilt-source integration batch; runtime UNOBSERVED - the startup registration sequence that would call it is not transcribed yet."
+        ]
       },
       "notes": "Renamed from `Display_ClearSurfaces_5_491E20` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -45319,7 +45349,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "BUILD_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x00491E30",
           "signature": "unknown",
@@ -45337,7 +45367,10 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": [
+          "Linked into igi1.exe (14,231,896 bytes) in the unbuilt-source integration batch; runtime UNOBSERVED - the startup registration sequence that would call it is not transcribed yet."
+        ]
       },
       "notes": "Renamed from `Display_RestoreDevice_5_491E30` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -45356,7 +45389,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "BUILD_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x00491E40",
           "signature": "unknown",
@@ -45374,7 +45407,10 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": [
+          "Linked into igi1.exe (14,231,896 bytes) in the unbuilt-source integration batch; runtime UNOBSERVED - the startup registration sequence that would call it is not transcribed yet."
+        ]
       },
       "notes": "Renamed from `Display_CheckCapabilities_5_491E40` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -45393,7 +45429,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "BUILD_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x00491E50",
           "signature": "unknown",
@@ -45411,7 +45447,10 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": [
+          "Linked into igi1.exe (14,231,896 bytes) in the unbuilt-source integration batch; runtime UNOBSERVED - the startup registration sequence that would call it is not transcribed yet."
+        ]
       },
       "notes": "Renamed from `Display_SetGammaRamp_5_491E50` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -45430,7 +45469,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "BUILD_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x00491E60",
           "signature": "unknown",
@@ -45448,7 +45487,10 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": [
+          "Linked into igi1.exe (14,231,896 bytes) in the unbuilt-source integration batch; runtime UNOBSERVED - the startup registration sequence that would call it is not transcribed yet."
+        ]
       },
       "notes": "Renamed from `Display_CreateSurface_5_491E60` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -55468,7 +55510,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "TRANSCRIBED",
+        "status": "BUILD_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004B6CE0",
           "signature": "unknown",
@@ -55490,7 +55532,10 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B6CE0-semantic-review.json",
           "evidence_sha256": "fab3b0205d2624984bd053d6ba2152966822c89c1ba55e3390a862ae5d289a47"
-        }
+        },
+        "limitations": [
+          "Linked into igi1.exe (14,231,896 bytes) in the unbuilt-source integration batch; runtime UNOBSERVED - the startup registration sequence that would call it is not transcribed yet."
+        ]
       }
     },
     {
@@ -55508,7 +55553,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "TRANSCRIBED",
+        "status": "BUILD_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004B6D20",
           "signature": "unknown",
@@ -55530,7 +55575,10 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B6D20-semantic-review.json",
           "evidence_sha256": "9352cc60f836a0a120bc0b6a5182c571c6bdf98cd6e25501ccf086958e15fded"
-        }
+        },
+        "limitations": [
+          "Linked into igi1.exe (14,231,896 bytes) in the unbuilt-source integration batch; runtime UNOBSERVED - the startup registration sequence that would call it is not transcribed yet."
+        ]
       }
     },
     {
@@ -62366,7 +62414,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "BUILD_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004DA1D0",
           "signature": "unknown",
@@ -62384,7 +62432,10 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": [
+          "Linked into igi1.exe (14,231,896 bytes) in the unbuilt-source integration batch; runtime UNOBSERVED - the startup registration sequence that would call it is not transcribed yet."
+        ]
       },
       "notes": "Renamed from `Hazinglayers_Init_4DA1D0` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -62868,7 +62919,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "BUILD_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004E7C50",
           "signature": "unknown",
@@ -62886,7 +62937,10 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": [
+          "Linked into igi1.exe (14,231,896 bytes) in the unbuilt-source integration batch; runtime UNOBSERVED - the startup registration sequence that would call it is not transcribed yet."
+        ]
       },
       "notes": "Renamed from `CameraControlTask_Init_4E7C50` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -63065,7 +63119,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "BUILD_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004EBC60",
           "signature": "unknown",
@@ -63083,7 +63137,10 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": [
+          "Linked into igi1.exe (14,231,896 bytes) in the unbuilt-source integration batch; runtime UNOBSERVED - the startup registration sequence that would call it is not transcribed yet."
+        ]
       },
       "notes": "Renamed from `SoundSysMicrophone_Init_4EBC60` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -78635,7 +78692,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "BUILD_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x005186C0",
           "signature": "unknown",
@@ -78653,7 +78710,10 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": [
+          "Linked into igi1.exe (14,231,896 bytes) in the unbuilt-source integration batch; runtime UNOBSERVED - the startup registration sequence that would call it is not transcribed yet."
+        ]
       },
       "notes": "Renamed from `Script_NodeCriteriaRegister_5186C0` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -79302,7 +79362,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "BUILD_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x0051A1D0",
           "signature": "unknown",
@@ -79320,7 +79380,10 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": [
+          "Linked into igi1.exe (14,231,896 bytes) in the unbuilt-source integration batch; runtime UNOBSERVED - the startup registration sequence that would call it is not transcribed yet."
+        ]
       },
       "notes": "Renamed from `SplinePathDynCubeObj_Init_51A1D0` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -80784,7 +80847,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "BUILD_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x00530A80",
           "signature": "unknown",
@@ -80802,7 +80865,10 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": [
+          "Linked into igi1.exe (14,231,896 bytes) in the unbuilt-source integration batch; runtime UNOBSERVED - the startup registration sequence that would call it is not transcribed yet."
+        ]
       },
       "notes": "Renamed from `FlashTask_Init_530A80` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
@@ -80821,7 +80887,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "BUILD_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x005310E0",
           "signature": "unknown",
@@ -80839,7 +80905,10 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "limitations": [
+          "Linked into igi1.exe (14,231,896 bytes) in the unbuilt-source integration batch; runtime UNOBSERVED - the startup registration sequence that would call it is not transcribed yet."
+        ]
       },
       "notes": "Renamed from `FreeCamera_Init_5310E0` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
