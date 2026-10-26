@@ -2,7 +2,7 @@
 # Ungated Windows x86 build of the diagnostic executable, copied to ~/Downloads/IGI.
 # Diagnostic only; keep the normal build cache and release gate independent.
 set -euo pipefail
-cd "$(dirname "$0")"
+cd "$(dirname "$0")/.."
 DEST="$HOME/Downloads/IGI"
 BUILD_DIR=build-win32-no-verify-gate
 cmake -S . -B "$BUILD_DIR" -DIGI_TESTING_MUTEX=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_SYSTEM_NAME=Windows -DCMAKE_CXX_COMPILER=i686-w64-mingw32-g++ -DBUILD_TESTING=OFF -DCMAKE_EXPORT_COMPILE_COMMANDS=ON 2>&1 | tail -5

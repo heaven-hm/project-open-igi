@@ -1,182 +1,189 @@
-# Execution plan — first playable Level 1, then staged decompilation
+> **Current staged plan:** [MVP.md](MVP.md), [tasks/plan.md](tasks/plan.md), [task board](tasks/todo.md), and [captain handoff](DEEPSEEK_HANDOFF.md) govern this branch. First accept playable Level 1 world/player controls/physics, then sound, enemies, weapons, full mission, and menus/loading/text. Three active agents total and 30 shared model requests/minute. The older roadmap below is historical; do not use it to require all later features for the first MVP.
 
-## Operating contract
+# Level 1 Playable Demo Plan
 
-[MVP.md](../MVP.md) defines product scope, milestones and evidence requirements. This file defines execution order. [todo.md](todo.md) is the live task state. All tasks begin open; baseline source presence is not task completion. **The current playable MVP ends at P17/M2.** P18 onward is the ordered later roadmap, not prerequisites for the first delivery.
+> **Active execution decision (2026-10-23):** Use `mvp/level1-integration` in the existing main checkout; create no worktrees. [MVP.md](MVP.md) now defines M0–M4, with the Level 1 player loop as the next gameplay milestone and complete Level 1 gameplay as the full product goal. One coordinator writes/builds; parallel subagents investigate without competing source or Git changes. The older numbered roadmap below is reference detail, not permission to expand the current slice or require separate human sign-off.
 
-Only checkout: `/Users/haseeb-mir/Documents/Code/project-open-igi`. One captain owns Git/index, shared configuration/manifests/build and grants one implementation token. Preserve existing worker changes; create no worktree. Other agents research or review concurrently and return packets. The runtime operator owns the global capture lease. No source/probe/candidate changes during a paired capture.
 
-This is a plan to implement and validate the mission; task completion requires the evidence specified below. Do not create artificial expected gameplay outputs just to write a test. Derive fixtures and comparison expectations from recorded retail behavior.
+> **Audit 2026-10-23:** See [current implementation and workflow findings](docs/fidelity/MVP-before-captain-plan.md#workflow-audit-2026-10-23). Older name-only verification, terrain-status and manual-review statements below are historical; current `AGENTS.md` and the acceptance update govern evidence. Models/terrain render diagnostically, but integrated gameplay is not accepted.
 
-## Dependency order
 
-```text
-P00 preservation -> P01 path normalization -> P02 evidence reconciliation
-                 -> P03 tool/build/scope alignment -> P04 native proof pilot
-P05 required direct-Level1 closure research -----------+
-  -> P06–P10 required QVM/config/player linkage
-  -> P11–P13 models/terrain/textures/task/tick/spawn foundation
-  -> P14–P17 player controls/physics/collision/interaction
-       = FIRST PLAYABLE MVP ACCEPTANCE (M0–M2; P25 evidence packet)
-  -> P18 sound (M3)
-  -> P19–P20 enemies: spawn/patrol/navigation/perception (M4)
-  -> P21–P22 weapons/damage/armed encounter (M5)
-  -> P23 authored mission success/failure/restart (M6)
-  -> P24 main menu/loading bar/loading text (M7)
-P25 = repeat the evidence/completion packet for each accepted stage
-```
+> Acceptance update (2026-10-21): Paired Frida probes with the same scripted scenario in retail and the newly built x86 candidate provide the runtime checks. A separate human gameplay sign-off is not required. Retain screenshots for visible increments and record coverage gaps; finite probe coverage does not establish whole-game equivalence. This update supersedes older manual-review prerequisites below.
 
-P05 and static research for later tasks may run in parallel with M0. Source implementation follows dependencies. Addresses below are known candidates to investigate, not claims that their bodies or identities are accepted.
 
-## Task packet and completion rules
+This is the execution sequence for MVP.md, in the agreed build order:
 
-Before editing, the captain creates a packet with:
+1. **Load the 3-D models and their exact positions** (task one).
+2. **Load the terrain with the correct textures** (task two).
+3. **Screenshot each building / each version, add short comments, hand the packet to a human to review and test.**
+4. **Verify every object is at its exact position and orientation.**
+5. **Verify every texture is loaded correctly.**
+6. Only then make it a **playable game** — engine tick, physics, player, enemies.
+7. Finally **weapons, physics movement, AI graph navigation, health, movement, jump, weapon reload/shoot, animations, magic objects, and building interaction (stairs, doors)**.
 
-```yaml
-task_id: Pxx-slice-N
-owner: assigned-agent
-reviewer: different-agent
-milestone: M0|M1|M2|M3|M4|M5|M6|M7
-baseline_commit: actual-current-HEAD
-baseline_worktree_inputs: exact-source-and-manifest-hashes
-behavior: one observable outcome
-retail_call_flow: entry/parent/child/return/branch/cleanup mapping
-implemented_set_and_coverage: explicit-linked-required-static-runtime-counts
-retail_addresses: exact-declared-address-list
-required_dependency_closure: observed-and-statically-justified-dependencies
-allowed_files: explicit-source/header-allowlist
-source_write_token: required-before-editing
-selected_decompiler: binary_ninja-or-recorded-target-fallback
-scenario_and_probe: reviewed-paths-and-hashes-or-explicitly-not-ready
-acceptance: observable-pass-conditions
-verification_command_and_report: actual-command-and-unique-output
-blocking_dependencies: explicit-list
-```
+Only after the whole thing works do we treat it as the playable demo. Nothing is skipped ahead.
 
-If a task requires more than about five implementation files or several independent native behaviors, split it before editing. Each packet is one reviewable increment. The captain serializes shared headers and manifest/config edits and calculates their affected closure. Source changes do not become accepted because a later task needs them.
+> **Scope update (2026-10-17):** Audio, menus, movies/cutscenes, vehicles and decorative smoke remain deferred. Work on terrain and original textures after the model checkpoint; then the playable gameplay systems. Reference projects identify candidates only; retail binary evidence governs every engine routine.
 
-The common verification requirement for native tasks P06–P24 is the native definition of done in MVP.md: static/ABI/semantic/behavioral checks, current linked x86 candidate receipt, typed sequential retail/candidate comparison and independent review. The last column below adds the task-specific observations. Static-only research returns facts/unknowns and remains open for implementation acceptance.
+## Repeatable work loop
 
-## M0 — reliable checkout and verification
+Each task is one small, reviewable increment:
 
-| Task / owner | Work and likely files | Dependencies | Completion / verification |
+1. Inspect the current source, assets, and dirty Git state. Do not overwrite unrelated user changes.
+2. Establish native behavior from retail `igi.exe` with REA/Ghidra. Cross-check boundaries or control flow with Binary Ninja/Radare2 as needed. Use RE-Agent for bounded reconstruction/parity work.
+3. Use C# `open-igi` only to find candidate logic. Validate candidates against the retail binary before using them.
+4. Implement one narrow C++20 slice with readable retail-native names/addresses, structured timestamped logs, and explicit errors for unsupported or unresolved cases.
+5. Add focused tests for that slice, build the Windows x86 executable, and run the relevant scenario under CrossOver.
+6. For each visible milestone, capture the actual game window and retain its run/build identity and logs.
+7. Make a small English local commit after its exact staged snapshot builds and passes focused tests; manual review gates visual/release acceptance. Do not push unless explicitly asked.
+8. At each visual checkpoint, provide the screenshot and test record for owner manual review before advancing.
+
+## Native verification rule (every task)
+
+A Binary Ninja name/address match is an inventory observation only. Native acceptance follows `AGENTS.md` and `docs/fidelity/native-feature-verification.md`: current source/binary binding, signature and semantic evidence, CFG/angr checks, build verification and the scoped behavioral/runtime comparison. Name agreement alone never means `VERIFIED`.
+
+- Machine-readable status for the demo scope: `assets/BinaryNinja/natives/CLEAN/VERIFICATION.md` — **3,050 unique natives, 3,035 name-verified, 15 name conflicts, 0 lookup errors.**
+- **15 name conflicts** are known and must be used by **address only**, never by the catalog label: `0x00413A90`, `0x0043DCF0`, `0x00443840`, `0x00443A00`, `0x00443A10`, `0x004468F0`, `0x00446CE0`, `0x00447A80`, `0x0045DCB0`, `0x00475CC0`, `0x00475D80`, `0x00476EA0`, `0x00476F70`, `0x00482650`, `0x00482700`.
+- Names that fail the CFG gate are marked **NAME UNVERIFIED** (e.g. `0x00510010`, gate FAIL 0.667) and must not be relied on beyond their address.
+- A catalog match, a parser test, or a visually similar screenshot alone is **not** proof of retail parity.
+
+## Task 0 — Build the Windows x86 baseline
+
+**Deliverable:** A reproducible CMake build of `open-igi.exe` and a verified DirectDraw 7 window startup under CrossOver.
+
+**Checks:** Build and CTest; confirm file/PE headers identify x86; record executable hash, invocation, CrossOver bottle/version, stdout/stderr, and application log. Confirm the captured screenshot is from the game window. This is only the build baseline, not a playable scene.
+
+## Task 1 — Render Level 1 models at their exact positions
+
+**Deliverable:** The first in-game 3-D demo. Execute the verified QVM/task/object-creation path for Level 1 and render the actual model instances at their retail positions, orientations, and rotations with their resolved original materials/textures.
+
+**Checks:** REA evidence for the QVM/task/native call path and model/render data; independent boundary checks for selected natives; tests against Level 1 scripts and model assets; logs for every instantiated object (task/native identity, model/resource ID, source transform, resulting world transform, material/texture resolution); CrossOver run and game-window screenshot. Do not hard-code scene coordinates or substitute a metadata-only window for rendered geometry. Do **not** implement the `XTRV`/`DNER` stride from the unverified document claim (see `docs/NATIVES_DATABASE.md` §17).
+
+**Exit gate:** The demo visibly contains Level 1 3-D models placed from the original script path. Submit the screenshot, logs, test/build results, and known gaps for manual review.
+
+## Task 2 — Load and render Level 1 terrain with textures
+
+**Deliverable:** Actual Level 1 terrain rendered with original texture/material bindings and verified lighting inputs — not a placeholder plane.
+
+**Checks:** Derive layouts and transforms from retail native behavior (the `.CTR` layout and the quadtree-renderer name are **unverified** — decode from the binary consumer, do not implement the documented guess); test the Level 1 terrain/texture corpus; log source files, dimensions, tile/material identifiers, and texture resolution; run under CrossOver; capture the actual game window.
+
+**Exit gate:** Terrain and its textures are visible with the Task 1 models still placed correctly. Submit this build and screenshot for manual review.
+
+## Task 3 — Screenshot each building / version and hand it to a human
+
+**Deliverable:** A review packet: for each building and each asset version, a port capture (and, where possible, a matched retail reference), each with a short comment describing what it is, where it comes from, and what to look for.
+
+**Checks:** Captures saved under `screenshots/level1/<building>/` with the run/build identity; a `screenshots/level1/REVIEW.md` that links every capture to its build and test record. A capture that was not actually taken is not listed.
+
+**Exit gate:** A human walks the packet and signs off before any gameplay-system work begins. This is the human review/test gate requested for this stage.
+
+## Task 4 — Verify every object is at its exact position and orientation
+
+**Deliverable:** A reconciliation report for every object emitted by the Level 1 object/task path — model identity, position, orientation, rotation, material.
+
+**Checks:** Compare the port's structured log and runtime state against retail `igi.exe` / `igi-probe` observations and source script execution. Check missing, duplicate, or unresolved objects. Every object either matches within a stated tolerance or is listed as a known difference with the affected evidence. Record unknowns rather than inferring a pass. Positions come from script execution, not handwritten coordinate lists.
+
+**Exit gate:** Every expected renderable object is accounted for and visual differences are listed.
+
+## Task 5 — Verify every texture is loaded correctly
+
+**Deliverable:** A texture reconciliation report for every material in the scene — source archive/`.TEX`, dimensions, format/palette, and whether it bound and displayed.
+
+**Checks:** Corpus test asserting resolved texture names and counts; logs of bind calls and formats; visual check against the Task 3 packet. No missing or misbound texture; every fallback/placeholder is explicitly listed as a difference.
+
+**Exit gate:** Texture report reconciles; differences listed.
+
+## Checkpoint A — Level 1 visual scene signed off
+
+- [ ] Level 1 QVM/task instances are loaded (Task 1).
+- [ ] Terrain and models are visible with original textures (Task 2).
+- [ ] Screenshot packet for every building/version reviewed by a human (Task 3).
+- [ ] Object position/orientation report reconciles (Task 4).
+- [ ] Texture report reconciles (Task 5).
+- [ ] Focused tests and the Windows x86 build pass.
+
+**Gameplay-system work (Tasks 6+) does not advance past this checkpoint until the documented visual/runtime evidence requirements pass; the acceptance update above removes a separate human sign-off prerequisite.**
+
+## Task 6 — QVM/task runtime and simulation tick
+
+**Deliverable:** The verified Level 1 script/task execution closure and retail tick order needed to drive the mission.
+
+**Checks:** Opcode/task unit tests, Level 1 script corpus run, task-count/state logs, native call-flow evidence, matched retail runtime observations. Unknown opcodes or unresolved native calls must fail visibly rather than being skipped.
+
+## Task 7 — Player creation, input, camera, and movement
+
+**Deliverable:** The retail player instance and Level 1 input/camera/movement state path.
+
+**Checks:** Verify native boundaries and configuration-driven controls; deterministic input/tick tests; per-tick player position, velocity, stance, and camera logs; matched movement/jump scenarios in CrossOver. Keep animation state synchronized with the proven movement state.
+
+## Task 8 — Physics, collision, and world interactions
+
+**Deliverable:** Grounding, slopes, edges, walls, buildings, stairs/ladders, doors, and the interactive world objects used by Level 1.
+
+**Checks:** Retail-derived collision query tests and matched runtime traces for walking, jumping, landing, entering a building, stairs/ladders, and door interaction. Report position/state deltas and health effects. No generic FPS constants or guessed collision geometry. Doors must use the authored parameters (Level 1 doors are **sliding**, `Max angle = 0`) and the retail task state machine, not hardcoded motion.
+
+## Task 9 — AI and Level 1 graph navigation
+
+**Deliverable:** Level 1 guard task creation, graph selection by original graph ID, path following, perception, and combat-state transitions.
+
+**Checks:** Graph node/link integrity and AI state tests; source/runtime position reconciliation; CrossOver scenarios for patrol, detection, attack, and target loss. Verify guards move on graph paths rather than sliding or orbiting, and their start positions match Level 1 source/runtime values.
+
+## Task 10 — Health, damage, and death
+
+**Deliverable:** Retail health initialization and player/enemy damage, hit regions, fall damage, difficulty, and death-state handling.
+
+**Checks:** Boundary and fatal/non-fatal tests; before/after health and state logs; verify player-only debug effects do not modify enemy state; compare corresponding retail observations.
+
+## Task 11 — Weapon selection, firing, and reloading
+
+**Deliverable:** Level 1 weapon switching, aiming, fire cadence, spread/recoil, hit/projectile resolution, ammunition, reload, and damage dispatch.
+
+**Checks:** Deterministic input/shot tests and CrossOver shot sequences. Compare tick, ammo, direction/spread, recoil, target hit, damage, and death transition with retail traces. Capture the visible weapon/target result.
+
+## Task 12 — Gameplay animations and magic-object effects
+
+**Deliverable:** Player locomotion, enemy attack/hit/death, weapon equip/fire/reload, and the gameplay-critical magic-object effects the Level 1 script drives.
+
+**Checks:** Verify animation state IDs, transition conditions, completion behavior, and object attachment/update routines against retail. Run repeated movement/combat sequences and capture representative frames. Main-menu and cutscene animation are excluded.
+
+## Task 13 — Audio deferred
+
+No sound implementation is scheduled for this demo checkpoint.
+
+## Task 14 — Integrated playable Level 1 run
+
+**Deliverable:** A repeatable run from executable launch into the Level 1 mission exercising the integrated world, player, physics, AI/navigation, health/damage, weapons, interactions, animations/effects, and scripts.
+
+**Checks:** Clean Windows x86 rebuild, full automated test suite, CrossOver end-to-end run, retained logs and screenshots, and a subsystem-by-subsystem retail parity report. Owner manually reviews the result. Any unobserved branch or unresolved difference remains open.
+
+## Demo native scope
+
+| Step | Native areas | Unique natives | Name-verified |
 |---|---|---|---|
-| P00 / captain | Inventory branch, staged/unstaged/untracked state, existing game processes, current builds and recovery refs. Preserve index/worktree/case-variant blobs and SHA identities without modifying other worktrees. Record a recovery manifest in a unique audit directory. | None | Every variant has a recoverable identity; exact allowed dirty set and rollback route recorded. Audit 273 evidence differences individually; do not assume they are fresh edits. |
-| P01 / captain + path researcher + critic | Resolve case-only path aliases in bounded batches. Use Git tree/blob data, not only the case-insensitive filesystem. Handle identical aliases first; preserve distinct contents under unambiguous archive names with original-path/blob maps. Update references together. | P00 | No active-path alias can overwrite another required file. Full-tree collision audit documents remaining archives/exclusions; required sources/evidence resolve unambiguously. Independent critic verifies no distinct artifact/source variant was lost. Do not mass-stage alias paths. |
-| P02 / evidence researcher + captain | Reconcile `docs/fidelity/native-verification.json` and referenced artifacts after P01. Retain detailed raw static evidence, failures/retractions and actual provenance. Reopen unsupported semantic promotions. Verify file hashes, source hashes, retail/candidate IDs and scope. | P01 | Every active required record resolves; current-source/current-candidate counts are computed reproducibly. Stale/missing artifacts are explicitly blocked. No status is promoted by replacing hashes alone. Partition evidence batches by task rather than rewriting all 885 statuses. |
-| P03 / workflow implementer | Reconcile `scripts/igi-workflow.json`, candidate/build defaults, reference catalog and CMake selection with this checkout. BN URL already correct; auth is disabled. Audit consumers such as `bn_mcp_call.py` rather than assuming the config controls all clients. Fix genuine path/config drift only. | P00; final scope after P01/P02 | Actual doctor checks report each provider separately; selected BN PE bytes match retail; correct configured target builds. Full compiled inventory explains 144 linked/5 compile-only/28 unbound baseline and resolves or blocks each needed item. Missing scope, tools or probes remain failures. |
-| P04 / implementer + runtime operator + critic | Choose one required, small native with understood ABI/effects and a reviewed probe. Run the complete existing verification pipeline against the fresh candidate. Candidate source must be linked. Use `native_ctest.py`, existing semantic/behavioral gate and paired comparator. | P02/P03 | One actual native passes the entire declared contract, with retail and candidate observations, source/build/probe bindings and independent review. Negative controls show stale hash, missing candidate call, missing probe and empty scope fail. Existing validator fixtures are separate. |
+| 1 Models + placement | `dynobj`, `resource`, `magicobj`, `rigid`, `physicsobj`, `origo`, `vec3`, `mat33` | 187 | 187 |
+| 2 Terrain + textures | `terrain`, `physicsterrain`, `discardterrain`, `terradrawtask`, `heightmap`, `create` | 187 | 187 |
+| 4 Placement verify | `origo`, `vec3`, `mat33`, `splineobj`, `worldobject` | 33 | 33 |
+| 5 Texture verify | `dynobj`, `mesh`, `material`, `mipmapcontrol`, `render`, `display` | 514 | 514 |
+| 6 Playable script core | `script`, `qsc`, `qvm`, `qtask`, `qobj`, `symbol` | 568 | 568 |
+| 7 Player/movement | `humanplayer`, `locomotion`, `body`, `bone`, `humancamera`, `ladder`, `collision` | 221 | 221 |
+| 8 Physics | `physics*`, `rigid`, `forceaccumulator` | 190 | 190 |
+| 9 AI navigation | `aigraph`, `graph*`, `patrol*`, `splinepath*`, `ai`, `humanai`, `combatstate` | 637 | 637 |
+| 10 Health | `hitzone`, `medipack`, `human`, `soldier` | 7 | 7 |
+| 11 Weapons | `weapon*`, `gun*`, `ammo*`, `m203`, `grenade`, `mine` | 248 | 248 |
+| 12 Animation | `anim*`, `frames`, `*dyncubeobj` | 71 | 71 |
+| 12 Interaction | `door`, `doorcabinet`, `switch`, `terminal`, `elevator`, `glass` | 192 | 192 |
 
-**M0 checkpoint:** the captain closes M0 only when the workflow can distinguish a real native comparison pass from the diagnostic merge/build. The connected BN endpoint fixes the former reachability blocker, not the remaining evidence/linkage/runtime issues.
+Per-native addresses, gate status, BN verification result and CLEAN path: `assets/BinaryNinja/natives/CLEAN/VERIFICATION.md`. Inventory by subsystem: `docs/NATIVES_DATABASE.md` §23; build-order mapping: §24.
 
-P01 must preserve variants before any deletion/rename. It may canonicalize paths within this existing checkout; a new worktree or a new filesystem is not the default plan. If platform constraints prevent safe materialization, retain the Git blob map and report the exact blocker rather than silently overwriting a variant.
+*Note: 15 catalog names conflict with the binary (see the rule above); they are listed in the manifest and must be used by address.*
 
-## M1 — world, scripts and required startup closure
+## Deferred from this demo
 
-| Task / owner | Work and likely files | Dependencies | Completion / verification |
-|---|---|---|---|
-| P05 / task/asset researcher | Read actual Level 1 task/object scripts, config and `humanplayer/humanplayer.qvm`. First map the minimum retail-supported direct-level world/player route, assets, entity lifecycle, required native calls, dispatch and unknowns. Record later objective/enemy/weapon dependencies as research without making their complete gameplay prerequisites for the first delivery. Consult converter/editor/OpenIGI references for discovery with revision/license provenance. | P00; research may run early | A reviewed first-delivery closure and entry-to-exit/call-order map with source/retail observations; keep later mission-objective research separate. Unknown opcodes/calls explicit. Do not guess objective names or count all catalog entries as required. |
-| P06 / QVM implementer | Resolve `0x004B85B0` QVM execution candidate, its required opcode/callee/state dependencies and linkage. Likely `engine/src/retail/script/qvm_execute.cpp`, its header and explicit CMake link inputs. | P04/P05 | Required script dispatch executes in candidate; instruction/stack/state transitions agree for the selected script path. No silent unsupported-opcode skip. Receipt/link map proves body inclusion. |
-| P07 / QVM implementer | Resolve `0x004B8A50` float-argument candidate and typed argument/return boundary. Likely QVM stack native source/header. | P06 or an independently justified call boundary | Paired relevant argument decoding/stack effects; required source linked. Calling convention and float representation supported. |
-| P08 / configuration implementer | Resolve `0x00405850` Config_Read candidate and actual loader flow. Locate current source from manifest rather than guessing a filename; align required config/global lifecycle. | P05/P06/P07 where required | Actual Level 1 config values and load order reach consumers, with correct failure behavior. Receipt proves this is not a compile-only dependency. |
-| P09 / player-configuration implementer | Resolve `0x00410070` general human-player definition candidate in `humanplayer_defines.cpp/.hpp`. | P08 | Observed player parameters/state transferred through actual QVM/native ABI, including required defaults/overrides supported by retail. |
-| P10 / player-configuration implementer | Resolve `0x004137A0` human-player parameter loading candidate and known evidence retraction. Preserve explicit not-run findings until compared. | P09 | Player parameter data layout/assignments and effects compared; source linked; rejected historical report cannot count as runtime evidence. |
-| P11 / scene implementer | Confirm required model/resource/object loading and authored transforms; likely `local_models_mef.cpp`, associated model data and narrow scene wiring. | P05 and required loader closure | S01/S02 paired entity/transform/material observations; missing resources fail explicitly. Avoid heuristic placement substitutions. |
-| P12 / terrain implementer | Close required Level 1 terrain/texture/material decoding and geometry/collision agreement, in bounded terrain/texture source packets. | P11 and required resource closure | S02 checks of representative terrain, material identity/coordinates and building alignment; screenshots and typed data agree for declared scope. |
-| P13 / lifecycle implementer | Integrate actual task/tick/entity/player spawn lifecycle through `core/flow.cpp`, `core/frame_natives.cpp` and narrowly owned scene call sites. Split shared code changes. | P06–P12 required closure | S01 observes task ordering, stable spawn, required tick calls and entity state. A rendered scene does not substitute for executing the task lifecycle. |
+Main menus, movies and cutscenes, subtitles, vehicles, and non-gameplay smoke/particle effects. Audio, music, sirens and radio remain deferred.
 
-**M1 checkpoint:** Level 1 loads through the supported retail-derived path, required objects/materials/terrain are present in authored positions, config is live and required startup calls are mapped. The exact required closure is versioned with its evidence.
+## Current verified limits
 
-## M2 — player loop, the next gameplay deliverable
-
-| Task / owner | Work and likely files | Dependencies | Completion / verification |
-|---|---|---|---|
-| P14 / player implementer | Bind retail input/controls and player camera; candidate sites include config input bindings, `player_controller.cpp/.hpp` and narrow scene input wiring. Split camera and dispatch if independent. | P13/P09/P10 | S03 compares input, camera orientation/state and tick behavior. Diagnostic free camera is excluded from player acceptance. |
-| P15 / locomotion implementer | Walk/run/crouch, actual movement parameters, animation/root-motion effects and simulation timing. | P14 | S03 paired positions, velocities, stance and animation state for supported inputs; no guessed speed fallback or swallowed motion error. |
-| P16 / collision implementer | Grounding, jump, fall/landing, walls/slopes/building collision and required stairs. Split into separate contact/jump/building packets. | P12/P15 | S04 ground/contact and state transitions match retail within declared measured tolerances; compare building geometry as well as terrain. |
-| P17 / interaction implementer | Implement one actual authored building interaction from P05: task trigger, player state and required door/ladder/other transition. | P16 and actual task dependency | S05 completes the same interaction in retail and candidate; missing required calls/state remain blocked. Repeat movement checks around the interaction. |
-
-**M2 checkpoint:** cold launch -> player spawn -> look -> walk/run/crouch -> jump/land -> collide -> authored interaction works on one frozen candidate. Repeat the route; capture actual output. Keep combat outside the active implementation slice until this checkpoint passes.
-
-## M3 — sound after the playable MVP
-
-| Task / owner | Work and likely files | Dependencies | Completion / verification |
-|---|---|---|---|
-| P18 / sound implementer | Recover original sound initialization, resource/sample handling, voice lifecycle and reachable world/player audio events. Select source/native addresses from retail; split init, playback and spatial/event slices. | Accepted M2 | S06 compares required per-native arguments, sample identity, play/stop/loop state, spatial parameters and event ordering; retain actual audio observations where supported. No synthetic sound behavior. Weapon sound events are integrated later with P21/P22. |
-
-## M4 — enemies after sound
-
-| Task / owner | Work and likely files | Dependencies | Completion / verification |
-|---|---|---|---|
-| P19 / enemy implementer | Recover required enemy spawn/task lifecycle and authored patrol/graph navigation. First select exact VAs/ABIs from the actual mission. | P18 | S07 compares spawn/task/entity state, graph choices, positions and movement/event order. A rendered guard or parsed graph alone does not close it. |
-| P20 / enemy implementer | Recover perception, detection/loss/pursuit and associated animation/state transitions. Split independently observable native paths. | P19 | S07 focused probes compare original state decisions and effects. Weapon-dependent firing/damage behavior remains explicitly pending for M5; do not implement the whole weapon system early to close enemy perception. |
-
-## M5 — weapons and combat after enemies
-
-| Task / owner | Work and likely files | Dependencies | Completion / verification |
-|---|---|---|---|
-| P21 / weapon implementer | One mission-required weapon's equip/fire/ammo/reload and original shot behavior; then remaining required variants. Recover the original native flow and animation/sound callbacks. | P20 | S08 compares equip/ammo/reload state, actual shot events and required effects with per-native static/runtime evidence. No guessed replacement shooting algorithm. |
-| P22 / damage/encounter implementer | Recover hit resolution, health/damage/death, remaining enemy armed states, animation/task callbacks and associated sound events. Split by native behavior. | P21 | S08 compares hit/miss/state/effect/event ordering and a repeatable armed encounter on one candidate. Then cover the required actor/weapon variants. |
-
-## M6 — authored mission after combat
-
-| Task / owner | Work and likely files | Dependencies | Completion / verification |
-|---|---|---|---|
-| P23 / mission-task implementer | Recover actual objective/item/trigger prerequisites and success; then authored failure/death/cleanup and repeatable restart. Split per transition. | P22 | S09 follows the actual authored route to success and failure/restart with typed state/call observations. No synthetic mission-completion toggle. No menus needed to accept the supported direct-launch mission route. |
-
-## M7 — main menu, loading presentation and text last
-
-| Task / owner | Work and likely files | Dependencies | Completion / verification |
-|---|---|---|---|
-| P24 / UI decompilation implementer | Recover original main-menu branch/input/state flow, loading progress presentation, font/string/resource lookup and text draw behavior. Split into distinct original-native packets. | P23 | S10 compares original UI state transitions, resources/strings, progress/draw observables and rendered output with focused native probes. No custom replacement menu or invented progress bar. Earlier required initialization was already reconstructed when needed, without claiming this presentation stage complete. |
-
-## P25 — acceptance packet for the current stage
-
-| Task / owner | Work | Dependencies | Completion / verification |
-|---|---|---|---|
-| P25 / captain + independent critic | Freeze the current source/candidate, replay the stage's scenarios, relevant earlier-stage regressions, frame/simulation measurements and representative shared-system cross-level checks. Assemble source/tree/build receipt, image/probe/scenario identities, native/call-flow/coverage matrix, raw evidence and review findings. Split profiling fixes into owned source packets. | **P17 for the first playable MVP**; repeat after P18, P20, P22, P23 and P24 for the later stages | For first delivery, S01–S05 and M0–M2 pass; later systems stay open. For later stages, add only their declared scenarios and regressions. Every claimed implemented native has static and focused paired Frida evidence; untested linked methods and unexercised branches remain explicit. No universal byte-identical claim from finite tests. |
-
-## Mandatory decompilation and flow rules
-
-Preserve the original retail method bodies' recovered semantics, ABI, memory/data layout, integer/float behavior, branches, callees, event/tick order, side effects and error/cleanup paths. This is decompilation reconstruction; existing ports and generated pseudocode are references/hypotheses, never a substitute for the retail machine instructions and observations.
-
-Create a retail VA to candidate symbol/RVA map from actual retail entry through the supported route and exit. Record call parents/children, deterministic order, branch conditions and indirect dispatch. Use early hooks for startup and per-native focused typed Frida probes for actual inputs/returns/changed state/effects. Retain raw traces and compare the first divergence. Every required implemented helper participates, not only named top-level functions.
-
-Publish separate denominators for all linked implementations, current-path required implementations, static-checked, runtime-observed and accepted natives. The 100% requirement is complete static+runtime evidence for the declared implemented set; do not report 100% for the whole implementation while linked native methods remain untested. A CFG threshold or a single successful hit cannot establish exact behavior across all paths.
-
-The original supported direct-Level1 branch should avoid deferred UI presentation if retail does so. Never skip an unavoidable original native call or add a no-op to force that shortcut. If an enemy/audio/weapon-related initialization method is genuinely required before player spawn, reconstruct and verify that narrow dependency now; record why it is required, while its later gameplay stage remains open. This preserves actual call flow without turning the first delivery into every feature.
-
-## Scheduling and blocker policy
-
-**Hard harness limits:** at most **3 active agents total: 1 captain + 2 worker slots**. Researcher, implementer, reviewer and runtime-operator are roles rotated through those slots, not permission to start one agent for every role. Team members and nested subagents consume the same slots; queue additional work. Maximum simultaneous model requests is 3, never 4.
-
-The provider limit is **30 model API request attempts per rolling 60 seconds shared by the entire harness**, including captain, workers, nested delegation and retries. One shared limiter must reserve capacity immediately before each attempt; never give each agent a separate 30 RPM allowance. Maintain a global request queue and in-flight count. A pacing interval of at least 2.1 seconds between aggregate dispatches stays below the 30 RPM ceiling; also enforce the rolling-window cap. On 429 respect Retry-After and apply central backoff/jitter; retries consume capacity. No worker-local immediate retry loop. Tool requests have their own tool health/locks and do not grant extra model request capacity. This document specifies these limits; the captain must configure or verify them in the actual harness before launching workers.
-
-
-1. Captain grants a task to the implementation writer only when its dependencies and packet are ready. Give other members read-only dependency research, ABI/probe design or review tasks.
-2. Assign the independent critic before implementation starts; it must not be the code author or manufacture missing observations.
-3. Acquire build ownership before changing CMake/config or replacing `igi1.exe`. Freeze tree/candidate/probe/scenario and transfer ownership to the runtime operator for capture.
-4. Run retail then candidate under the shared lease. Validate receipt and hashes before and after. A busy or unavailable game is a blocker; preserve the active process.
-5. Accept only the complete declared feature closure. A one-address pilot cannot approve a multi-native shared-file edit.
-6. After each packet, record accepted scope or the exact earliest divergence. On the same unchanged failure twice, stop identical reruns, open the missing dependency and choose another ready research task. New inputs or an actual repair justify retrying.
-7. Keep queues explicit: READY, IN_PROGRESS, REVIEW, BLOCKED, ACCEPTED. BLOCKED has an owner and a concrete unblock condition; ACCEPTED has a report and reviewer.
-8. No blanket source/evidence staging, forced cleanup, gate weakening or globally exported diagnostic override. Preserve unreviewed variants for later reconciliation. Local commits are small; no push/release is authorized by this plan.
-
-## Task completion report
-
-```text
-Task / owner / independent reviewer:
-Baseline revision + source/manifest fingerprints:
-Files and exact native closure changed:
-Retail facts and unresolved assumptions:
-Probe/scenario and candidate receipt/hash:
-Commands + report/raw-artifact paths:
-Static / semantic / behavioral / per-native paired-Frida outcome:
-Implemented/linked/required/static/runtime/accepted counts and missing VAs:
-Entry-to-exit flow/call-order comparison and uncovered branches:
-Earliest mismatch or blocker:
-Accepted scope (or BLOCKED/INCONCLUSIVE):
-Next ready task / unblock condition:
-```
-
-The captain reports first-delivery progress by accepted M0–M2 scenarios, then later-stage progress in the declared order. Native counts support provenance. More model calls, growing status counters and compilation alone do not complete the playable MVP or any later feature.
+The current Windows x86 diagnostic scene renders textured static MEF models using Direct3D 7,
+with initial transforms read from OBJECTS.QVM. Earlier all-level captures are recorded in
+`docs/TASK1_MODEL_LOADING.md`; they are not proof of complete task execution or gameplay parity.
+Terrain rendering and character/attachment paths now exist in the diagnostic scene; their presence is not complete retail task/lifecycle or visual parity. Player input and host movement code also exist, but motion may be disabled after a root-motion/update exception. Full world collision/interactions, AI/combat, health/ammunition and mission completion remain unaccepted. ATTA accessor evidence covers only its declared layouts/operations. See the dated audit for current source observations rather than inferring completion from this milestone.

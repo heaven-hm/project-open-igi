@@ -6,7 +6,7 @@ set -euo pipefail
 
 export PATH="/opt/homebrew/opt/llvm/bin:${PATH}"
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "${SCRIPT_DIR}"
 
 IFS='\n' read -r -d '' -a SOURCES < <(find engine/src engine/include engine/tools engine/tests \

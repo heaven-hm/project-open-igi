@@ -1,5 +1,10 @@
 # Project I.G.I. Native Engine — Full Working Prompt
 
+> **Current owner decision:** Work on `mvp/level1-integration` in the existing main checkout without creating worktrees. Follow the updated [MVP.md](MVP.md): full Level 1 gameplay, implemented through M0–M4; the next gameplay slice is M2 player movement/interactions after the baseline. Older branch/worktree instructions below are historical.
+
+> **Audit 2026-10-23:** This brief contains stale sound requirements, manual-review language and implementation status. Current scope is [MVP.md](MVP.md); current workflow rules are [AGENTS.md](AGENTS.md). Read the [dated gap/workflow audit](MVP.md#workflow-audit-2026-10-23). Audio is deferred; the scene now renders models/terrain diagnostically, while playable mission acceptance remains open.
+
+
 This document consolidates the project owner's instructions and the current working context for future contributors and coding agents. It is the project brief, not proof that any described feature or analysis is complete. Confirm current source, build output, tool availability, binary identity, and runtime evidence before making claims about status.
 
 ## 1. Main objective
@@ -12,7 +17,7 @@ Build a native Windows x86 open-igi.exe for the original Project I.G.I. using th
 
 The goal is to implement Level 1 engine behavior from the retail executable, using C++20 and the game's DirectDraw 7 / Direct3D 7 platform path. C# open-igi is a candidate source for implementation details only; verify every behavior used against igi.exe through REA/static analysis and runtime observations where possible. CrossOver on this Mac is only the local Windows runtime test environment.
 
-The complete Level 1 MVP includes models and terrain loaded at verified placements with original textures, QVM/task flow, player movement and physics, AI and graph navigation, health/damage, weapons and combat, gameplay animations/effects, interactions, and the sound engine. Its strict order and acceptance gates are maintained in MVP.md and plan.md. Do not substitute a similar-looking game or claim parity without corresponding evidence. Use the original game assets locally and do not redistribute them.
+The complete Level 1 MVP includes models and terrain loaded at verified placements with original textures, QVM/task flow, player movement and physics, AI and graph navigation, health/damage, weapons and combat, gameplay animations/effects, interactions; the sound engine remains deferred. Its strict order and acceptance gates are maintained in MVP.md and plan.md. Do not substitute a similar-looking game or claim parity without corresponding evidence. Use the original game assets locally and do not redistribute them.
 
 ## 2. Priorities and prototype scope
 
@@ -23,7 +28,7 @@ Follow the canonical sequence in MVP.md and plan.md:
 3. Load and render Level 1 terrain with original textures.
 4. Verify all object transforms and model/terrain texture bindings, capture screenshots, and hand the visual build to the owner for manual review.
 5. Integrate the required QVM/task runtime and retail simulation tick.
-6. Add player, physics, collision, building/stair/door interactions, AI and graph navigation, health/damage, weapons, gameplay animations/effects, mission flow, and sound.
+6. Add player, physics, collision, building/stair/door interactions, AI and graph navigation, health/damage, weapons, gameplay animations/effects, mission flow; keep sound deferred.
 7. Run the integrated Level 1 mission, compare it against retail, and keep every unverified difference explicit.
 
 Every increment needs focused tests, timestamped logs, a Windows x86 build, and CrossOver runtime verification when applicable. Capture the actual game window for visual increments. Make small local commits after gates pass; do not push unless explicitly requested.
@@ -78,7 +83,7 @@ keep timestamped diagnostics, compile and run, perform applicable static/runtime
 memory comparisons, and save a small local commit. Report exactly what the owner
 can manually test in the delivered build and what remains unverified.
 
-Current acceptance target is the complete Level 1 playable MVP in MVP.md and plan.md. Sound is required. Movies/cutscenes, subtitles, vehicles, smoke and menu presentation remain outside this playable-demo scope unless a Level 1 dependency is proven; gameplay animation remains required.
+Current acceptance target is the complete Level 1 playable MVP in MVP.md and plan.md. Sound is deferred for this MVP. Movies/cutscenes, subtitles, vehicles, smoke and menu presentation remain outside this playable-demo scope unless a Level 1 dependency is proven; gameplay animation remains required.
 
 ## 5. Reverse-engineering and evidence workflow
 
@@ -138,7 +143,7 @@ This table lists tools and endpoints known in the current working context; it is
 
 Repository: /Users/haseeb-mir/Documents/Code/project-open-igi (branch game-engine-impl).
 
-The target is a Windows x86 C++20 executable using DirectDraw 7 / Direct3D 7. The current Windows entry point opens a diagnostic window and can load a supplied RES archive to report resource and MEF metadata. The project contains focused parsers/tests for RES, MTP, MEF container metadata, and LOOP texture data. It does not yet execute the Level 1 OBJECTS.QVM, render 3D geometry or terrain, place scene objects, or run a playable mission.
+The target is a Windows x86 C++20 executable using DirectDraw 7 / Direct3D 7. The Windows diagnostic scene now loads and draws textured models and terrain, with placement data decoded from the original scripts and partial character/input/host movement paths. This is not complete execution of the retail QVM/task lifecycle or an accepted playable mission. Motion can be disabled following a root-motion/update exception; AI/combat, health/ammunition and mission completion remain open. See MVP.md#workflow-audit-2026-10-23 for the inspected source, evidence gaps and two-worker workflow.
 
 REA currently has the retail PE32 x86 target /Users/haseeb-mir/Downloads/IGI/igi.exe open with SHA-256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; re-check the digest before relying on target identity. The current inspection reports 3,926 procedures and 2,444 strings. This proves analysis availability, not behavior parity.
 

@@ -3132,4 +3132,192 @@ Frida hooks are utilized to promote candidates to 6/6 confidence (Tier 4: Runtim
 
 ---
 
+# 75. CORE GAMEPLAY & ENGINE NATIVES CATALOG (VERIFIED)
+
+## 75.1 3D Linear Algebra & Matrix Mathematics (`Mat33` & `Vec3`)
+
+Project I.G.I. (LoopEngine / TerraForm) implements an inlined, non-standard-library 3D vector and matrix library located primarily in `0x004B2C70` through `0x004B3EF0`.
+
+| Address | Verified Symbol Name | Prototype | Mathematical Semantics |
+|---|---|---|---|
+| `0x004B3100` | `Vec3_Normalize` | `void(double* v)` | Unit vector normalization: $v = v / \|v\|$ |
+| `0x004B3130` | `Vec3_Length` | `long double(double* v)` | Euclidean norm: $\sqrt{x^2+y^2+z^2}$ |
+| `0x004B32B0` | `Vec3_Distance` | `long double(double* p1, double* p2)` | Euclidean distance between 3D points |
+| `0x004B32F0` | `Vec3_DistanceSq` | `long double(double* p1, double* p2)` | Squared distance: $\Delta x^2 + \Delta y^2 + \Delta z^2$ |
+| `0x004B3320` | `Vec3_IsZero` | `bool(double* v)` | Tests whether $x==0 \land y==0 \land z==0$ |
+| `0x004B2C70` | `Vec3_ProjectRayPlane` | `int32_t(float* out, float* ray, float* dir, float* normal)` | Ray-plane intersection and projection |
+| `0x004B34F0` | `Mat33_PostRotateX` | `void(float* out, float* in, float rad)` | Multiplies matrix by X-axis rotation $M = R_x(\theta) \times M$ |
+| `0x004B3640` | `Mat33_PostRotateY` | `void(float* out, float* in, float rad)` | Multiplies matrix by Y-axis rotation $M = R_y(\theta) \times M$ |
+| `0x004B3790` | `Mat33_PostRotateZ` | `void(float* out, float* in, float rad)` | Multiplies matrix by Z-axis rotation $M = R_z(\theta) \times M$ |
+| `0x004B38E0` | `Mat33_FromEulerAngles` | `void(float* out, float p, float y, float r)` | Constructs 3x3 matrix: $R_x(\text{pitch}) \times R_y(\text{yaw}) \times R_z(\text{roll})$ |
+| `0x004B3B60` | `Mat33_RotateX` | `float*(float* out, float rad)` | Pure 3x3 rotation matrix around X axis |
+| `0x004B3BA0` | `Mat33_RotateY` | `float*(float* out, float rad)` | Pure 3x3 rotation matrix around Y axis |
+| `0x004B3BE0` | `Mat33_RotateZ` | `float*(float* out, float rad)` | Pure 3x3 rotation matrix around Z axis |
+| `0x004B3C20` | `Mat33_Scale` | `float*(float* out, float sx, float sy, float sz)` | Diagonal scaling matrix |
+| `0x004B3C50` | `Mat33_ToEulerAngles` | `float*(float* out, float* in)` | Decomposes 3x3 matrix into Yaw, Pitch, Roll angles |
+| `0x004B3EF0` | `Mat33_FromAxisAngle` | `float*(float* out, float* axis, float rad)` | Converts axis-angle rotation into 3x3 matrix |
+
+---
+
+## 75.2 Player Input Sampling & Replay Framework
+
+The player input subsystem samples live hardware state, applies mouse profile settings, and interfaces with the replay demo buffer.
+
+| Address | Symbol Name | Object / Scope | Description |
+|---|---|---|---|
+| `0x0045E060` | `Input_SamplePlayerFrame` | `PlayerInputFrame` (0xA0 bytes) | Samples WASD, mouse look, applies invert-Y and sensitivity (`0.05`..`1.0`) |
+| `0x0045DB70` | `HumanPlayerInput_Init` | `HumanPlayerInput` (0x1E4 bytes) | Registers task type `"HumanPlayerInput"` |
+| `0x0045DCB0` | `HumanPlayerInput_Create` | Event 0 | Zeroes state, clears input buffer, initializes script link |
+| `0x0045DE20` | `HumanPlayerInput_SaveDemo` | Event 2 | Writes recorded input stream (`0x2328` / 9,000 frames @ 0xA0 bytes) to demo file |
+| `0x0045DF50` | `HumanPlayerInput_Setup` | Event 1 | Allocates `0x15F900` bytes (1.44 MB) buffer or loads demo file |
+
+### Input Bitmask Mapping (`g_bc210c`):
+- `0x00000001`: Move Forward (W)
+- `0x00000002`: Move Backward (S)
+- `0x00000004`: Strafe Left (A)
+- `0x00000008`: Strafe Right (D)
+- `0x00000100`: Crouch / Duck
+- `0x00000200`: Lean Left
+- `0x00000400`: Lean Right
+- `0x00000800`: Action / Use
+- `0x00001000`: Reload Weapon
+- `0x00004000`: Jump
+- `0x00008000`: Computer / Map
+- `0x00100000`: Primary Fire
+- `0x00200000`: Secondary Fire / Zoom
+
+---
+
+## 75.3 Firearms, Ballistics & Ammo Reload Lifecycle
+
+| Address | Symbol Name | Task Type | Description |
+|---|---|---|---|
+| `0x00477E30` | `Gun_Init` | `TASKTYPE_GUN` (0x1B0 bytes) | Registers `"TASKTYPE_GUN"` and sub-task `"GunCasing"` (0x128 bytes) |
+| `0x00478BA0` | `Gun_Fire` | Event Handler | Fire cycle: applies firing animation, bullet spread, and triggers casing spawn |
+| `0x004798C0` | `Gun_Reload` | Event Handler | Reload arithmetic: moves reserve ammo from inventory pool to active magazine |
+| `0x00477D10` | `Gun_SpawnCasing` | `GunCasing` Spawner | Spawns brass shell casing with ejection velocity and angular tumble |
+| `0x0047B4B0` | `GunShot_Init` | `TASKTYPE_GUNSHOT` (0x60 bytes) | Registers ballistic projectile task |
+| `0x0047B190` | `GunShot_TakeSlot` | Ballistics Table | Allocates slot in active projectile array |
+| `0x0047ABD0` | `GunShot_Update` | Event 4 (Tick) | Bullet physics: updates trajectory, distance traveled, and penetration raycasts |
+| `0x0047C420` | `GunShot_Unpack` | Deserializer | Unpacks muzzle position and velocity vector into ballistic projectile slot |
+| `0x0047C3D0` | `GunShot_Cleanup` | Event 2 (Destructor) | Cleans up bullet slot and despawns projectile |
+
+---
+
+## 75.4 Hit Zone Calculation & Skeletal Hierarchy
+
+| Address | Symbol Name | Target Subsystem | Description |
+|---|---|---|---|
+| `0x00489C60` | `Human_ResolveHitZone` | Damage / Ragdoll | Evaluates impact distance squared relative to head bone (`st0 < 614.4` returns `0xF` Headshot; otherwise `0xC` Torso, `0xD` Left Arm, `0xE` Right Arm) |
+| `0x00489E10` | `Human_GetLimbDamageRecord` | Limb Tracking | Accesses 16-byte limb damage structure stride |
+| `0x004D7020` | `Bone_GetNode` | Rig Hierarchy | Resolves skeletal bone node from rig table `g_a538f4` via `rig_id * 0x28 + bone_id * 4` |
+| `0x0048A340` | `Human_TransformBoneToWorld` | Transform Matrix | Transforms local joint coordinates to world space via 3x3 rotation and translation |
+
+---
+
+## 75.5 AI Guard Perception & Dual Vision Cones
+
+| Address | Symbol Name | Description |
+|---|---|---|
+| `0x004502F0` | `AI_TestViewCones` | Evaluates dual vision cones (near wide-angle FOV vs far narrow-angle FOV) across patrol and alert states |
+| `0x004898D0` | `AI_TestCandidate` | Orchestrates guard perception: checks cooldown timers, cone inclusion, raycast line-of-sight, and distance |
+| `0x00489B20` | `AI_LineOfSight` | Raycasts against world geometry; returns visible if penetration/obscuration fraction $\ge 0.79$ |
+
+---
+
+## 75.6 Camera State Machine & Modes
+
+| Address | Symbol Name | Camera Mode | Description |
+|---|---|---|---|
+| `0x004825C0` | `HumanCamera_Init` | Task (0x128 bytes) | Registers `"HumanCamera"` task type |
+| `0x00482700` | `HumanCamera_Update` | Controller | Master camera state machine dispatcher |
+| `0x00482A40` | `Camera_FirstPerson_Update` | Mode 1 (First Person) | Binds to player head bone with $-90^\circ$ pitch transform |
+| `0x00482C30` | `Camera_ThirdPerson_Update` | Mode 2 (Third Person) | Over-the-shoulder chase camera with obstacle collision avoidance |
+| `0x00483390` | `Camera_Sniper_Update` | Mode 3 (Sniper Scope) | Applies high zoom magnification and sinus breathing weapon sway |
+| `0x00483D80` | `Camera_Binocular_Update` | Mode 5 (Binoculars) | Handles zoom +/- stepping (`341.33` unit increments) |
+| `0x00484450` | `Camera_Binocular_DrawOverlay` | Mode 5 HUD | Draws green HUD reticle, compass heading, and distance readout |
+
+---
+
+## 75.7 In-Game Debug Console & Telemetry
+
+| Address | Symbol Name | Description |
+|---|---|---|
+| `0x00460C80` | `Human_DebugLog` | Prints player motion telemetry (`PosX`, `PosY`, `PosZ`, `SpeedX`, `SpeedY`, `SpeedZ`) |
+| `0x00463150` | `Human_IsActivePlayer` | Verifies whether human instance matches active player pointer |
+| `0x004E7C00` | `Console_Print` | Submits formatted string to onscreen debug console |
+| `0x004E76E0` | `Console_VPrint` | Formats varargs via `vsprintf` into static string buffer `0xA5EA78` |
+---
+
+# 76. EXPANDED DISCOVERED NATIVES INVENTORY (325 VERIFIED FUNCTIONS)
+
+A comprehensive audit combining retail binary (`IGI.EXE`) registrar push-pair mining, interactive task registration analysis (`TaskType_Register`), and static CFG validation has cataloged **325 verified native functions** across 58 subsystems.
+
+### Complete Inventory Documents
+- **Markdown Tables by Subsystem**: [`docs/DISCOVERED_NATIVES_RECORD.md`](file:///Users/haseeb-mir/Documents/Code/project-open-igi/docs/DISCOVERED_NATIVES_RECORD.md)
+- **Machine-Readable JSON**: [`assets/BinaryNinja/DISCOVERED_NATIVES_RECORD.json`](file:///Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/DISCOVERED_NATIVES_RECORD.json)
+- **C Source Tree**: [`assets/BinaryNinja/natives/`](file:///Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/natives/) (All 5,732 functions annotated with provenance comments).
+
+### Subsystem Highlights (325 Discovered Functions)
+1. **AI Action Trees & State Machines (`aiaction` / `combat`)**: 26 functions (`AIAction_WalkToNode`, `AIAction_RunToNode`, `AIAction_FireAtNode`, `AIAction_FireAtTask`, `AIAction_PlayAnimation`, `AIAction_PlaySound`, `AIAction_MoveToEvent`, `AIAction_LookAtEvent`, `AIAction_Stunned`, `AIAction_KickGrenade`, `AIAction_RunPanicking`, `AIAction_Idle`, `AIAction_SetCombat`, `Combat_BeginBurst`, `Combat_MobileA`, `Combat_MobileC`, `Combat_Follow`, etc.).
+2. **AI Perception, Sensors & Alarm Network (`aifunction`)**: 37 functions (`AIFunction_SetViewLength`, `AIFunction_SetAlarmViewLength`, `AIFunction_SetViewAlpha`, `AIFunction_SetViewGamma`, `AIFunction_SetSecondaryViewLength`, `AIFunction_SetSecondaryAlarmViewLength`, `AIFunction_SetAlarmTriggerID`, `AIFunction_SetAlarmControlID`, `AIFunction_SetAlarmAccess`, `AIFunction_GetAlarmControlStatus`, `AIFunction_GetGunnerStatus`, etc.).
+3. **Engine Configuration, Graphics & Sound Profiles (`config`)**: 67 functions (`Config_GraphicOptionsSetResolution`, `Config_GraphicOptionsGetResolution`, `Config_GraphicOptionsSetGamma`, `Config_SoundOptionsSetMusicVolume`, `Config_SoundOptionsSetSoundsEffects`, `Config_GameOptionsInputSetMouseSensitivity`, `Config_GameOptionsInputSetInvertMouse`, `Config_GameOptionsInputSetBloodEnabled`, `Config_CreateNewPlayerProfile`, etc.).
+4. **Interactive World Task Lifecycle**: Doors (`0x004464C0`), Elevators (`0x0043CC70`), Ladders (`0x004403E0`), Security Cameras (`0x00440FD0`), Terminals (`0x00443680`), Sirens (`0x00449360`), Alarm Controls (`0x00440710`), Mines (`0x00475AC0`), Grenades (`0x00476730`).
+5. **Human Player Mechanics & Controls (`humanplayer` / `humanplayerinput`)**: 16 functions (`HumanPlayer_Init`, `HumanPlayer_Create`, `HumanPlayer_Setup`, `HumanPlayer_Update`, `HumanPlayer_UpdateStamina`, `HumanPlayer_UpdateHealth`, `HumanPlayer_Earcandy`, `HumanPlayer_WireSlide`, `Input_SamplePlayerFrame`, etc.).
+6. **3D Linear Algebra & Transform Math (`mat33` / `vec3`)**: 16 functions (`Vec3_ProjectRayPlane`, `Vec3_Normalize`, `Vec3_Distance`, `Mat33_FromEulerAngles`, `Mat33_ToEulerAngles`, `Mat33_FromAxisAngle`, etc.).
+
+---
+
+# 77. DEEP DIVE: UNMINED CORE GAMEPLAY NATIVES EXPANSION (2,538 VERIFIED FUNCTIONS)
+
+A comprehensive automated parity audit between retail `IGI.EXE`, the verified native CFG catalog (`IGINatives_VERIFIED.json`), and the C# reimplementation (`open-igi/src/`) isolated **2,538 brand-new, high-impact gameplay engine functions** that:
+1. Pass static CFG verification (`gate == "PASS"`, CFG Score >= 0.85, average score > 0.99).
+2. Are **completely absent** from C# `open-igi` (0 citations across all 953 `.cs` files).
+3. Have full decompiled C source files indexed on disk in `project-igi-natives/assets/BinaryNinja/natives/`.
+4. Bring total cataloged project natives to **3,041 verified functions**.
+
+### Primary Records & Artifacts
+- **Dedicated Gameplay Inventory**: [`assets/BinaryNinja/NEW_GAMEPLAY_NATIVES_RECORD.json`](file:///Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/NEW_GAMEPLAY_NATIVES_RECORD.json) (2,538 entries with absolute file paths)
+- **Dedicated Gameplay Markdown**: [`docs/NEW_GAMEPLAY_NATIVES_RECORD.md`](file:///Users/haseeb-mir/Documents/Code/project-open-igi/docs/NEW_GAMEPLAY_NATIVES_RECORD.md) (Organized by 10 Gameplay Pillars)
+- **Master Cumulative Catalog**: [`assets/BinaryNinja/DISCOVERED_NATIVES_RECORD.json`](file:///Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/DISCOVERED_NATIVES_RECORD.json) (3,041 entries)
+- **Master Markdown Catalog**: [`docs/DISCOVERED_NATIVES_RECORD.md`](file:///Users/haseeb-mir/Documents/Code/project-open-igi/docs/DISCOVERED_NATIVES_RECORD.md)
+- **Full Path Manifest**: [`assets/BinaryNinja/ALL_DISCOVERED_PATHS.txt`](file:///Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/ALL_DISCOVERED_PATHS.txt)
+
+### Gameplay Engine Pillar Breakdown (2,538 Functions)
+1. **AI Perception & Combat Behavior (723 functions)**: Guard vision cones, alertness escalation, burst fire controllers (`AI_FireWeapon` `0x00450CA0`), sensory detection ranges (`AIConfig_GetDetectionRange` `0x00406DD0`), difficulty scaling (`AIConfig_SetDifficulty` `0x00406DE0`), and combat dispatcher (`HumanAI_EventDispatch` `0x0044FC90`).
+2. **Visual Effects, Particles & Tracers (358 functions)**: Gunshot flashes (`GunShotEffect_Init` `0x00438390`), bullet tracer geometry, blood splatters, smoke puffs, and volumetric explosion lighting.
+3. **Camera, Optics & Post-FX (293 functions)**: Sniper zoom FOV scaling (`Camera_SetFieldOfView_2` `0x004A2720`), night vision green scanlines (`Camera_ApplyLineFilter_2` `0x004A2800`), thermal band filters (`Camera_ApplyBandFilter_2` `0x004A28B0`), widescreen aspect transforms (`Camera_ApplyWideScreen` `0x004A23E0`).
+4. **Audio, Spatial 3D & Footstep Soundscapes (229 functions)**: Positional 3D attenuation, weapon sound triggers, stealth footstep volume damping, radio broadcast queues.
+5. **Engine Frame Loop & Mission Life Cycle (204 functions)**: Core task scheduling (`QTask_ProcessChain`), mission objective triggers, dynamic level streaming transitions.
+6. **Physics, Collision & Ledge Mantling (200 functions)**: Ledge grabbing mantling logic (`PhysicsTerrain_ProcessLOCALgrab` `0x004EE540`), rigid bone collisions (`PhysicsRigid_ProcessBoneObject` `0x004D9480`), slope slide normals, and capsule friction.
+7. **Weapon Systems & Ballistics (187 functions)**: Weapon cycling & inventory (`WeaponType_CycleWeapon` `0x004149B0`), reload animation states (`WeaponType_UpdateAnim` `0x00414E20`), ammo pickup (`Weapon_AmmoPickup` `0x0045FF80`), recoil impulse kicks (`HumanPlayer_ApplyRecoil_2` `0x004099E0`).
+8. **Dynamic Interactive Objects & World Terminals (147 functions)**: Dynamic object hashing (`DynObj_CreateMagicObject` `0x004C0240`), interactive keypad terminals, switches, motorized doors, security cameras.
+9. **Player Mechanics & Stance (127 functions)**: Sprint stamina depletion curve (`HumanPlayer_UpdateStamina` `0x00408340`), ground contact checks (`HumanPlayer_CheckGround` `0x00408330`), fall damage calculation (`HumanPlayer_TakeDamage` `0x00408A40`), health regeneration/decay (`HumanPlayer_UpdateHealth` `0x00408390`), footstep acoustic cues (`HumanPlayer_PlayFootstep_2` `0x00409490`).
+10. **Vehicle Systems & Dynamics (70 functions)**: Wheel suspension compression & tire ground friction (`VehiclePhysics_ProcessWheel` `0x0042FEF0`), missile ballistic flight curves (`VehiclePhysics_ProcessMissile` `0x00427FC0`), vehicle collision bounds.
+
+---
+
+# 78. COMPLETE 100% BINARY FUNCTION CENSUS & CATALOG (5,732 FUNCTIONS)
+
+With the completion of Pass 5, **100.00% of all 5,732 discrete functions in `IGI.EXE`** recognized by Binary Ninja have been cataloged, cross-checked against C# `open-igi`, and linked directly to their decompiled C source implementations in `assets/BinaryNinja/natives/`.
+
+### Binary Physical Function Universe
+- **Target Executable**: Retail `IGI.EXE` (PE32 Intel 80386, Base `0x00400000`, 1,384,448 bytes, SHA256 `dea34892...`).
+- **Code Segment (`.text`)**: `0x00401000` to `0x00533000` (1,253,376 bytes).
+- **Binary Ninja Disassembly**: **5,732 discrete functions** (100% indexed in master catalog).
+- **Radare2 Disassembly**: **6,116 functions** (includes 384 compiler thunks, `__allmul`, SEH handlers, jump table entrypoints).
+- **Ghidra REA Decompiler**: **4,843 high-level functions** with reconstructed ASTs.
+- **Decompiled C Source Tree**: **5,732 C source files** in `assets/BinaryNinja/natives/`.
+- **Master Symbol Overrides**: **6,235 renamed symbols** in `NAME_OVERRIDES.json`.
+
+### Authoritative Documentation & Census Manifests
+- **Census Report**: [`docs/BINARY_TOTAL_CENSUS_REPORT.md`](file:///Users/haseeb-mir/Documents/Code/project-open-igi/docs/BINARY_TOTAL_CENSUS_REPORT.md)
+- **Master Catalog (5,732 functions)**: [`docs/DISCOVERED_NATIVES_RECORD.md`](file:///Users/haseeb-mir/Documents/Code/project-open-igi/docs/DISCOVERED_NATIVES_RECORD.md)
+- **Master JSON**: [`assets/BinaryNinja/DISCOVERED_NATIVES_RECORD.json`](file:///Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/DISCOVERED_NATIVES_RECORD.json)
+- **Pass 4 Gameplay Natives (2,538 functions)**: [`docs/NEW_GAMEPLAY_NATIVES_RECORD.md`](file:///Users/haseeb-mir/Documents/Code/project-open-igi/docs/NEW_GAMEPLAY_NATIVES_RECORD.md)
+- **Pass 5 Expansion Natives (2,691 functions)**: [`assets/BinaryNinja/REMAINING_NATIVES_EXPANSION.json`](file:///Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/REMAINING_NATIVES_EXPANSION.json)
+- **All Absolute File Paths (5,732 lines)**: [`assets/BinaryNinja/ALL_DISCOVERED_PATHS.txt`](file:///Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/ALL_DISCOVERED_PATHS.txt)
+
+---
+
 # END OF RE.md

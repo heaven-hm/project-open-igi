@@ -13,7 +13,7 @@
 # against it must record this binary's digest and state that the only build
 # difference is the disabled optimisation.
 set -euo pipefail
-cd "$(dirname "$0")"
+cd "$(dirname "$0")/.."
 BUILD_DIR=build-win32-verify-noinline
 cmake -S . -B "$BUILD_DIR" \
     -DIGI_ENABLE_NATIVE_GATE=OFF \
