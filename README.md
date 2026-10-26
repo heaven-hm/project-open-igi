@@ -136,6 +136,7 @@ open-igi.exe window devmode level1
 Explore other community reverse-engineering and preservation projects:
 - [IGI-RE](https://github.com/slickdaddyy/IGI-RE) — Full decompiler project for Project I.G.I. 1.
 - [igi-recomp](https://github.com/HenryKun55/igi-recomp) — Static binary recompilation for Project I.G.I. 1.
+- [igi-vita](https://github.com/HenryKun55/igi-vita) — Native PlayStation Vita source port by @HenryKun55.
 - [igi2-decomp](https://github.com/ShahriyarB/igi2-decomp) — Decompilation project for I.G.I. 2: Covert Strike.
 - [OpenIGI](https://github.com/OpenIGI/OpenIGI) — Clean-room C# reimplementation on .NET 10.
 - [project-igi-reverse-engineering](https://github.com/heaven-hm/project-igi-reverse-engineering) — Directory of I.G.I. reverse engineering and recompilation efforts.
