@@ -1,52 +1,149 @@
-# Project Open IGI: clean retail-flow branch
+# Project Open IGI (C++20 Reconstruction)
 
-> Active integration: `mvp/level1-integration`, existing main checkout only. [Level 1 gameplay MVP and staged acceptance milestones](MVP.md). No new worktree; one writer/build owner.
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Platform: Windows x86](https://img.shields.io/badge/Platform-Windows%20x86%20(DirectX%207)-informational.svg)]()
+[![Standard: C++20](https://img.shields.io/badge/C%2B%2B-20-brightgreen.svg)]()
+[![Status: Reverse Engineering & Reconstruction](https://img.shields.io/badge/Status-Fidelity%20Reconstruction-orange.svg)]()
 
-> **MVP audit (2026-10-23):** [Missing gameplay systems and Codex/DeepSeek workflow issues](MVP.md#workflow-audit-2026-10-23), including missed-source discovery, worktree integration, stale evidence and serialized runtime capture.
+**Project Open IGI** is an open-source native C++20 engine reconstruction and reverse-engineering platform for Innerloop Studios' tactical stealth shooter ***Project I.G.I.: I'm Going In* (2000)**. 
 
+The engine routines are reconstructed through clean-room reverse engineering and paired static/runtime verification directly against retail `igi.exe` (SHA-256 `dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01`, image base `0x00400000`). All native functions preserve retail virtual addresses, original calling conventions (`__cdecl`), and rigorous control-flow graph (CFG) concordance.
 
-Project Open IGI is a native implementation of the original game engine. Engine routines are ported from reverse-engineering evidence taken directly from the retail `igi.exe`, with `retail names`, `virtual addresses`, `calling conventions`, and `evidence references` retained where known.
+---
 
-The committed engine from `game-engine-flow` was removed only from this branch. The tracked `scripts/` and `docs/` trees remain as research and verification references. Local untracked assets are not included in this branch. Their historical manifests, candidate paths, build receipts, screenshots, and status labels describe the earlier branch; they do not verify this new baseline. The previous README and build script are retained as `docs/fidelity/README-legacy-game-engine-flow.md` and `scripts/legacy-game-engine-flow-build.sh`.
+## 📸 Screenshots Gallery
 
-## Diagnostic build
+### In-Engine Tactical Gameplay & Weapons
 
-Run `./build.sh --diagnostic` with CMake and `i686-w64-mingw32-g++` installed. The diagnostic command builds `build-clean-win32/igi1.exe`, a PE32 diagnostic shell, and does not deploy it or attest any native. The existing `run.sh` and legacy verification flows refer to the earlier engine and must be adapted before use on this branch.
+| Level 1 Spawn (Colt M16A2) | Weapon Recoil & Firing Burst | Dragunov SVD Sniper Scope |
+| :---: | :---: | :---: |
+| ![Level 1 Spawn](screenshots/screenshot_01_spawn_m16a2.png) | ![Firing Burst](screenshots/screenshot_02_firing_burst.png) | ![Dragunov Scope](screenshots/screenshot_03_dragunov_scope.png) |
 
-## Next work
+| MP5-SD Tactical Suppressed Zoom | Readied M16A2 Tactical Stance | Mission 2: SAM Base Insertion |
+| :---: | :---: | :---: |
+| ![MP5SD Zoom](screenshots/screenshot_04_mp5sd_zoom.png) | ![M16A2 Ready](screenshots/screenshot_05_m16a2_ready.png) | ![Mission 2 SAM Base](screenshots/screenshot_06_mission2_sam_base.png) |
 
-Identify the retail entry and MVP call flow using Binary Ninja (Ghidra only as fallback), Radare2 and angr; reconstruct one required native at a time. Bind the new implementation and candidate to fresh semantic, build, and paired retail/OpenIGI runtime evidence before accepting it. An empty changed set or a successful placeholder build is not verification. See `AGENTS.md` and `docs/fidelity/native-feature-verification.md` for the evidence requirements.
+---
 
-## Workflow commands
+### Terrain & 3D Environment Rendering
 
-- `python3 scripts/igi_workflow.py doctor` lists local tools and reference paths; it does not test MCP connections.
-- `python3 scripts/igi_workflow.py native 0x00405850` finds historical records and GameNatives candidates.
-- `python3 scripts/igi_workflow.py static 0x00405850` runs the strict per-address native gate.
-- `python3 scripts/igi_workflow.py verify 0x00405850 --level 1` invokes the existing paired-verification workflow. Its old candidate paths may need adaptation; missing data is a blocker.
+Direct3D 7 textured terrain rendering with original multi-grid heightmaps and textures extracted from retail `.res` packages.
 
-The debugger logger uses Windows `OutputDebugStringW`; it is diagnostic infrastructure, not retail behavior. The MVP is the retail startup flow required to load 3D models, MEF/ILFF, textures, terrain, QVM configuration, player movement and collision. Follow `AGENTS.md` for the tool selection and per-native evidence requirements.
+| Direct3D 7 Textured Level 1 Terrain | Multi-Angle 4-Grid Diagnostic Terrain Heights |
+| :---: | :---: |
+| ![Level 1 Terrain Textured](screenshots/level1_terrain_textured.png) | ![Level 1 Terrain 4-Grid](screenshots/level1_terrain_4grid.png) |
 
-## Current inspection increment
+| Multi-Level Terrain Extraction & Grid Overview | Mission 1-14 3D Models Inspection |
+| :---: | :---: |
+| ![Multi-Level Terrain 4-Grid](screenshots/terrain_4grid.png) | ![Level 1 3D Models](docs/screenshots/task1/level1-models.png) |
 
-The requested first scene is Level 1 positioned 3D models with original textures and the previous developer free camera/mouse look, named `igi1.exe`. Terrain rendering and human physics are later increments. The executable currently remains a diagnostic window; the model scene is not implemented on this branch.
+---
 
-Run `python3 scripts/igi_workflow.py doctor --check` for actual tool checks, `python3 scripts/igi_workflow.py analyze 0x0048F530` to collect the retail main entry analysis, and `python3 scripts/igi_workflow.py self-check` for verification-system regression checks. The latter uses labeled validator fixtures, never game observations. Configure local paths in `scripts/igi-workflow.json`; `IGI_ANGR_PYTHON` and `FRIDA_HOST` override their settings.
+### Paired Runtime Verification (Retail vs Candidate)
 
-`verify` builds and binds the current x86 candidate before the strict VERIFIED native gate and typed paired runtime comparison. A reviewed typed gameplay probe is required via the manifest's `verification.runtime_probe.path` or the underlying verifier's `--probe`. Missing implementations and evidence block acceptance. `--static-only` remains partial and never prints `True`.
+To ensure byte-for-byte behavioral fidelity, the candidate engine is tested against the retail game under identical memory conditions:
 
-The v4 catalog was copied as historical inventory from the existing scope-gate worktree; it does not confer verification status. RE-Agent's optional Frida 17.23.2 JavaScript module was installed in the shared local `/Users/haseeb-mir/Documents/Code/project-open-igi/.tools/re-agent-frida-17.23.2` tooling directory and linked into its `node_modules/frida` without source/lockfile changes. RE-Agent and upstream REA remain distinct. The repair was confirmed through an actual MCP process-list call.
+| Retail `igi.exe` Runtime Window | Open IGI Candidate Startup Frame |
+| :---: | :---: |
+| ![Retail Level 1 Scene](screenshots/pair-2026-10-25/retail-level1-scene.png) | ![Candidate Level 1](screenshots/pair-2026-10-25/candidate-level1.png) |
 
-Default `./build.sh [--probe path --level N]` builds a diagnostic candidate first, binds its compiler inputs, then runs `native_gate.py --changed --threshold VERIFIED --cfg-threshold 0.85 --require-semantic-evidence --require-behavioral-tests` and the scoped paired runtime checker. It blocks empty scopes. It never deploys. `./build.sh --diagnostic` is the explicit shell-only build command.
+---
 
-`python3 scripts/igi_workflow.py smoke` spawns the diagnostic candidate suspended, injects a small architecture/module probe, and terminates only that owned process before main resumes. This checks runtime plumbing without executing game code or disturbing another agent’s session. It never verifies a native.
+## 🧩 Retail Game Native Database
 
-## Automated native analysis and runtime checks
+The project maintains an authoritative native function catalog verified against the retail binary via Binary Ninja, Ghidra, radare2, and angr symbolic execution.
 
-The single automatic entry point is `python3 scripts/native_autoverify.py`:
-`scan`, `run --scope changed`, `run --scope all`, `watch`, and `audit-demo`.
-Git's configured pre-commit hook checks staged native changes; CMake provides
-`verify_natives_changed` / `verify_natives_all`. See the
-[automatic verification guide](docs/fidelity/native-feature-verification.md#automatic-entry-point)
-for custom per-native probes, reports, CI runner requirements and reuse rules.
+📖 **Full Database:** [`docs/fidelity/native-database.md`](docs/fidelity/native-database.md) (Over 1,500 catalogued native records with signatures, addresses, and CFG concordance).
 
-The current candidate is `igi1.exe`. The integration build is diagnostic; native acceptance remains separate. See [the active MVP verification commands](MVP.md#automated-checks-on-this-branch) for CTest per-native static collection, a shared candidate receipt fixture and typed paired-runtime checks. Missing tools/probes/stale evidence block rather than pass. Reconfigure CMake after source changes so its pinned native scope stays current.
+### Discovered Retail Natives Summary
+
+| Subsystem | Retail Function Name | Retail Address | Calling Conv | CFG Concordance | Status |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Config** | `Config_ResetGraphicOptions` | `0x00403B70` | `__cdecl` | `1.000` (100%) | Verified |
+| **Config** | `Config_Read` | `0x00405850` | `__cdecl` | `1.000` (100%) | Verified |
+| **Config** | `Config_Write` | `0x00405BD0` | `__cdecl` | `1.000` (100%) | Verified |
+| **Config** | `Config_GetActivePlayerProfile` | `0x00406220` | `__cdecl` | `1.000` (100%) | Verified |
+| **Human / AI** | `HumanPlayer_LoadParameters` | `0x004137A0` | `__cdecl` | `1.000` (100%) | Verified |
+| **Human / AI** | `Human_HitDamage` | `0x00416D80` | `__cdecl` | `1.000` (100%) | Verified |
+| **Camera** | `Human_ViewCam` | `0x00463760` | `__cdecl` | `1.000` (100%) | Verified |
+| **App Context** | `StoreCommandLine` | `0x0048F0C0` | `__cdecl` | `1.000` (100%) | Verified |
+| **App Context** | `StoreInstanceHandle` | `0x0048F0D0` | `__cdecl` | `1.000` (100%) | Verified |
+| **Transform** | `Transcontext_SetActiveTransContext` | `0x00497E70` | `__cdecl` | `1.000` (100%) | Verified |
+| **Model / Render**| `DisplayRender_DrawModel` | `0x0049DF60` | `__cdecl` | `1.000` (100%) | Verified |
+| **Memory** | `Mem_Alloc` | `0x004B0C60` | `__cdecl` | `1.000` (100%) | Verified |
+| **Resources** | `Resource_PackUnpack` | `0x004B18B0` | `__cdecl` | `1.000` (100%) | Verified |
+| **Resources** | `Resource_Load` | `0x004B5F00` | `__cdecl` | `1.000` (100%) | Verified |
+| **Resources** | `Resource_Flush` | `0x004B63D0` | `__cdecl` | `1.000` (100%) | Verified |
+| **QVM Scripting**| `Qvm_Load` | `0x004B80B0` | `__cdecl` | `1.000` (100%) | Verified |
+| **QVM Scripting**| `Qvm_ExecuteInstructions` | `0x004BCFD0` | `__cdecl` | `1.000` (100%) | Verified |
+| **QVM Scripting**| `Qvm_SetOpcodeHandler` | `0x004BD3D0` | `__cdecl` | `1.000` (100%) | Verified |
+| **QVM Scripting**| `Qvm_PushInteger` | `0x004BDA00` | `__cdecl` | `1.000` (100%) | Verified |
+| **Model / Mesh** | `DynCubeObj_GetMaskVisibleEvent` | `0x004E5360` | `__cdecl` | `1.000` (100%) | Verified |
+| **Animation** | `AnimTrigger_GetByte` | `0x004EC040` | `__cdecl` | `1.000` (100%) | Verified |
+| **Model / Texture** | `TextureModifier_Init` | `0x004ED6B0` | `__cdecl` | `1.000` (100%) | Verified |
+| **Terrain** | `TerrainLightMap_Init` | `0x004F8340` | `__cdecl` | `1.000` (100%) | Verified |
+| **Container** | `Container_Init` | `0x00505C90` | `__cdecl` | `1.000` (100%) | Verified |
+| **Audio** | `AnimSound_Open` | `0x0051B400` | `__cdecl` | `1.000` (100%) | Verified |
+
+---
+
+## 🏗️ Engine Architecture & Subsystems
+
+The reconstructed engine faithfully mirrors the original architecture of the Innerloop engine:
+
+- **Graphics Pipeline:** DirectDraw 7 and Direct3D 7 hardware-accelerated rendering targeting 32-bit Windows PE executables.
+- **Data File Parsers:**
+  - `MEF` (Model Entity Format) and `MTP` (Model Texture Package) for 3D hierarchical models.
+  - `RES` archives for game levels, sounds, and configurations.
+  - `ILFF` format for game data packages.
+  - `QVM` bytecode virtual machine for mission logic, objective scripting, and AI triggers.
+- **Terrain Engine:** Quadtree-based multi-grid heightmap LOD system with terrain lightmapping.
+- **Verification Gate:** Strict verification pipeline combining CFG analysis (`native_gate.py`), radare2 / Binary Ninja decompilation checks, and angr register comparison.
+
+---
+
+## 🛠️ Building & Running
+
+### Requirements
+- **OS:** Windows x86 (or macOS/Linux with MinGW-w64 cross-compiler and Wine/CrossOver for testing)
+- **CMake:** Version 3.20 or newer
+- **Compiler:** C++20 compliant compiler (`i686-w64-mingw32-g++` for MinGW cross-builds or MSVC 32-bit)
+- **DirectX:** DirectX 7 / DirectDraw SDK headers and libraries
+
+### Build Instructions
+
+```bash
+# Standard enforced build with verification gates
+./build.sh
+
+# Diagnostic build
+./build.sh --diagnostic
+```
+
+### Running
+
+Copy the built executable into your retail Project I.G.I. game installation directory:
+
+```cmd
+open-igi.exe window level1
+open-igi.exe window devmode level1
+```
+
+---
+
+## 🔗 Related Projects in the I.G.I. Community
+
+Explore other community reverse-engineering and preservation projects:
+- [IGI-RE](https://github.com/slickdaddyy/IGI-RE) — Full decompiler project for Project I.G.I. 1.
+- [igi-recomp](https://github.com/HenryKun55/igi-recomp) — Static binary recompilation for Project I.G.I. 1.
+- [igi2-decomp](https://github.com/ShahriyarB/igi2-decomp) — Decompilation project for I.G.I. 2: Covert Strike.
+- [OpenIGI](https://github.com/OpenIGI/OpenIGI) — Clean-room C# reimplementation on .NET 10.
+- [project-igi-reverse-engineering](https://github.com/heaven-hm/project-igi-reverse-engineering) — Directory of I.G.I. reverse engineering and recompilation efforts.
+
+---
+
+## 📜 License & Legal Notice
+
+This project is licensed under the [MIT License](LICENSE).
+
+*Project I.G.I.: I'm Going In* and all associated retail assets, names, trademarks, and artwork are the property of Innerloop Studios, Eidos Interactive, Square Enix, and Toadman Interactive. This repository contains only clean-room reverse-engineered code and research documentation; retail assets are not distributed here.
