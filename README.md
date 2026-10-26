@@ -13,18 +13,6 @@ The engine routines are reconstructed through clean-room reverse engineering and
 
 ## 📸 Screenshots Gallery
 
-### In-Engine Tactical Gameplay & Weapons
-
-| Level 1 Spawn (Colt M16A2) | Weapon Recoil & Firing Burst | Dragunov SVD Sniper Scope |
-| :---: | :---: | :---: |
-| ![Level 1 Spawn](screenshots/screenshot_01_spawn_m16a2.png) | ![Firing Burst](screenshots/screenshot_02_firing_burst.png) | ![Dragunov Scope](screenshots/screenshot_03_dragunov_scope.png) |
-
-| MP5-SD Tactical Suppressed Zoom | Readied M16A2 Tactical Stance | Mission 2: SAM Base Insertion |
-| :---: | :---: | :---: |
-| ![MP5SD Zoom](screenshots/screenshot_04_mp5sd_zoom.png) | ![M16A2 Ready](screenshots/screenshot_05_m16a2_ready.png) | ![Mission 2 SAM Base](screenshots/screenshot_06_mission2_sam_base.png) |
-
----
-
 ### Terrain & 3D Environment Rendering
 
 Direct3D 7 textured terrain rendering with original multi-grid heightmaps and textures extracted from retail `.res` packages.
@@ -39,13 +27,69 @@ Direct3D 7 textured terrain rendering with original multi-grid heightmaps and te
 
 ---
 
-### Paired Runtime Verification (Retail vs Candidate)
+### Retail Ground-Truth Baseline
 
-To ensure byte-for-byte behavioral fidelity, the candidate engine is tested against the retail game under identical memory conditions:
+Retail `igi.exe` runtime scene capture under Wine/CrossOver used as the ground truth behavioral reference for paired memory and state verification:
 
-| Retail `igi.exe` Runtime Window | Open IGI Candidate Startup Frame |
-| :---: | :---: |
-| ![Retail Level 1 Scene](screenshots/pair-2026-10-25/retail-level1-scene.png) | ![Candidate Level 1](screenshots/pair-2026-10-25/candidate-level1.png) |
+![Retail Level 1 Scene](screenshots/pair-2026-10-25/retail-level1-scene.png)
+
+---
+
+## 📁 Engine Source Directory Layout
+
+The `engine` folder is structured into modular subsystems mirroring the retail architecture:
+
+```
+engine/
+├── CMakeLists.txt
+├── include/igi/retail/              # Retail native API headers & structures
+│   ├── audio/                      # Audio subsystem, ADPCM decoding, sound attenuation
+│   ├── config/                     # Retail game configuration, graphic options & input mapping
+│   ├── core/                       # WinMain lifecycle, QTask scheduler, AppContext & game flow
+│   ├── diagnostics/                # Engine diagnostic logging & trace infrastructure
+│   ├── dynobj/                     # Dynamic objects, MTP packages, hash table lookups
+│   ├── error/                      # Fatal runtime error reporting & exception handling
+│   ├── human/                      # Player controller, camera view & locomotion
+│   ├── input/                      # DirectInput 7 keyboard/mouse port processing
+│   ├── mem/                        # Retail memory pool allocator & task bucket management
+│   ├── model/                      # MEF 3D model entity loader, IFF skeleton & skinning
+│   ├── qfile/                      # Virtual file system, device & driver lookup tables
+│   ├── render/                     # DirectDraw 7 / Direct3D 7 rendering backend & view blocks
+│   ├── resource/                   # RES archive unpacker, cache management & lifecycles
+│   ├── script/                     # QVM bytecode script virtual machine & opcode dispatch
+│   ├── sys/                        # Low-level platform system hooks & window management
+│   ├── terrain/                    # Quadtree terrain LOD system & lightmap processing
+│   └── texture/                    # Texture loading, palette uploading & mipmap management
+├── platform/
+│   └── windows/                    # Win32 PE subsystem & DirectX platform glue
+├── src/retail/                     # Native implementation sources mapped to retail VAs
+│   ├── audio/                      # Retail audio routines (e.g. AnimSound_Open 0x0051B400)
+│   ├── config/                     # Config read/write routines (0x00405850, 0x00405BD0)
+│   ├── core/                       # Entry point, startup sequence & flow controllers
+│   ├── diagnostics/                # Runtime trace collectors
+│   ├── dynobj/                     # Dynamic object visibility & bounding box routines
+│   ├── error/                      # Error display handlers
+│   ├── human/                      # Human player parameter & camera routines (0x004137A0)
+│   ├── input/                      # DirectInput poll & key processing routines
+│   ├── mem/                        # Allocation & bucket routines (0x004B0C60)
+│   ├── model/                      # MEF/IFF model mesh & texture modifier routines (0x004ED6B0)
+│   ├── qfile/                      # File I/O & alias resolution routines
+│   ├── render/                     # Model & scene drawing routines (0x0049DF60)
+│   ├── resource/                   # Resource archive load, unpack & flush (0x004B5F00, 0x004B63D0)
+│   ├── script/                     # QVM opcode execution routines (0x004B80B0, 0x004BCFD0)
+│   ├── sys/                        # Window callback & display context dispatchers
+│   ├── terrain/                    # Terrain mesh & lightmap routines (0x004F8340)
+│   └── texture/                    # Texture upload & pixel format conversions
+└── tests/                          # Component unit & regression test suites
+    ├── config/                     # Config parser verification tests
+    ├── core/                       # Startup & input port tests
+    ├── dynobj/                     # Hash lookup tests
+    ├── error/                      # Error handling tests
+    ├── model/                      # IFF skeleton parser tests
+    ├── platform/                   # Player controller tests
+    ├── render/                     # Transformation context tests
+    └── terrain/                    # Terrain loader tests
+```
 
 ---
 
