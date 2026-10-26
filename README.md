@@ -27,14 +27,6 @@ Direct3D 7 textured terrain rendering with original multi-grid heightmaps and te
 
 ---
 
-### Retail Ground-Truth Baseline
-
-Retail `igi.exe` runtime scene capture under Wine/CrossOver used as the ground truth behavioral reference for paired memory and state verification:
-
-![Retail Level 1 Scene](screenshots/pair-2026-10-25/retail-level1-scene.png)
-
----
-
 ## 📁 Engine Source Directory Layout
 
 The `engine` folder is structured into modular subsystems mirroring the retail architecture:
